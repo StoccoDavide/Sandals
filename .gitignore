@@ -1,3 +1,6 @@
+# VS Code
+.vscode
+
 # Prerequisites
 *.d
 
@@ -30,3 +33,32 @@
 *.exe
 *.out
 *.app
+
+# LaTeX
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.spl
+*.snm
+*.toc
+*.md5
+*.dpth
+*.run.xml
+*.nav
+*.bcf
+*.auxlock
+*.gz
+*.synctex.gz
+*.synctex(busy)
+*.pdf
+
+# Ipe
+*autosave.ipe
+
+# Maple
+*.bak
+
+# Temporary directory
+tmp
