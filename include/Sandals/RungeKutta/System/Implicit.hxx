@@ -22,19 +22,37 @@ namespace Sandals {
   class Implicit
   {
   public:
-    using ptr = std::shared_ptr<Implicit>; //!< Shared pointer to an implicit ODE system.
+    using ptr  = std::shared_ptr<const Implicit>; //!< Shared pointer to an implicit ODE system.
+    using vecN = Implicit<N>; //!< Column vector type.
+    using matN = Implicit<N>; //!< Matrix type.
+    using ODEType = enum class ODEType : integer {
+      IMPLICIT = 0, EXPLICIT = 1, SEMI_EXPLICIT = 2, LINEAR_EXPLICIT = 3
+    }; //!< ODE type enumeration.
 
   private:
-    using matN = Implicit<N>;
-    using vecR = Implicit<N>;
-    using vecC = Implicit<N>;
-
-    std::string m_name; //! Name of the ODE system.
+    ODEType     m_type{ODEType::IMPLICIT}; //!< ODE system type.
+    std::string m_name;                    //! Name of the ODE system.
 
   public:
     //! Class constructor for an implicit ODE system.
     //! \param t_name The name of the implicit ODE system.
     Implicit(std::string t_name) : m_name(t_name) {}
+
+    //! Check if the ODE system is implicit.
+    //! \return True if the ODE system is implicit, false otherwise.
+    bool is_implicit(void) const
+    {
+      return this->m_type == ODEType::IMPLICIT;
+    }
+
+    //! Check if the ODE system is explicit.
+    //! \return True if the ODE system is explicit, false otherwise.
+    bool is_explicit(void) const
+    {
+      return this->m_type == ODEType::EXPLICIT ||
+             this->m_type == ODEType::SEMI_EXPLICIT ||
+             this->m_type == ODEType::LINEAR_EXPLICIT;
+    }
 
     //! Get the ODE system name reference.
     //! \return The ODE system name reference.
@@ -53,7 +71,7 @@ namespace Sandals {
     //! \param x_dot States derivative \f$ \mathbf{x}^{\prime} \f$.
     //! \param t     Independent variable \f$ t \f$.
     //! \return The system function \f$ \mathbf{F} \f$.
-    virtual vecC F(vecC const &x, vecC const &x_dot, real t) const;
+    virtual vecN F(vecN const &x, vecN const &x_dot, real t) const;
 
     //! Evaluate the Jacobian of the ODE system function \f$ \mathbf{F} \f$
     //! with respect to the states \f$ \mathbf{x} \f$$:
@@ -67,7 +85,7 @@ namespace Sandals {
     //! \param x_dot States derivative \f$ \mathbf{x}^{\prime} \f$.
     //! \param t     Independent variable \f$ t \f$.
     //! \return The Jacobian \f$ \mathbf{JF}_{\mathbf{x}}(\mathbf{x}, \mathbf{x}^{\prime}, t) \f$.
-    virtual matN JF_x(vecC const &x, vecC const &x_dot, real t, vecC &lambda) const;
+    virtual matN JF_x(vecN const &x, vecN const &x_dot, real t, vecN &lambda) const;
 
     //! Evaluate the Jacobian of the ODE system function \f$ \mathbf{F} \f$
     //! with respect to the states derivative \f$ \mathbf{x}^{\prime} \f$$:
@@ -81,7 +99,7 @@ namespace Sandals {
     //! \param x_dot States derivative \f$ \mathbf{x}^{\prime} \f$.
     //! \param t     Independent variable \f$ t \f$.
     //! \return The Jacobian \f$ \mathbf{JF}_{\mathbf{x}^{\prime}}(\mathbf{x}, \mathbf{x}^{\prime}, t) \f$.
-    virtual matN JF_x_dot(vecC const &x, vecC const &x_dot, real t, vecC &lambda) const;
+    virtual matN JF_x_dot(vecN const &x, vecN const &x_dot, real t, vecN &lambda) const;
 
     //! Return true if \f$ (\mathbf{x}, t) \f$ is in the domain of the ODE system.
     //! \param x States \f$ \mathbf{x} \f$.

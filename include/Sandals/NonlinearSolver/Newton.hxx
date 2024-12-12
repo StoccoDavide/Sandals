@@ -56,8 +56,8 @@ namespace Sandals
   template <typename vecT, typename matT>
   class Newton : public NonlinearSolver<vecT, matT>
   {
-    using funT = NonlinearSolver<vecT, matT>;
-    using jacT = NonlinearSolver<vecT, matT>;
+    using funT = NonlinearSolver<vecT, matT>; //!< Function type.
+    using jacT = NonlinearSolver<vecT, matT>; //!< Jacobian type.
 
   public:
     //! Class constructor for a quasi-Newton solver.

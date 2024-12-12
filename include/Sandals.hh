@@ -154,7 +154,7 @@ namespace Sandals
 #include "Sandals/RungeKutta/System/Explicit.hxx"
 //#include "Sandals/RungeKutta/System/SemiExplicit.hxx"
 //#include "Sandals/RungeKutta/System/Linear.hxx"
-//#include "Sandals/RungeKutta/RungeKutta.hxx"
-//#include "Sandals/RungeKutta/Tableau/RK4.hxx"
+#include "Sandals/RungeKutta/RungeKutta.hxx"
+#include "Sandals/RungeKutta/Tableau/RK4.hxx"
 
 #endif // INCLUDE_SANDALS_HH

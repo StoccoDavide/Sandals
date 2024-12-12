@@ -22,9 +22,8 @@ namespace Sandals {
   {
   public:
     using ptr = std::shared_ptr<Explicit>; //!< Shared pointer to an explicit ODE system.
-    using matN = Implicit<N>;
-    using vecR = Implicit<N>;
-    using vecC = Implicit<N>;
+    using matN = Implicit<N>; //!< Matrix type.
+    using vecN = Implicit<N>; //!< Column vector type.
 
     //! Class constructor for an explicit ODE system.
     //! \param t_name The name of the explicit ODE system.
@@ -34,7 +33,7 @@ namespace Sandals {
     //! \param x States \f$ \mathbf{x} \f$.
     //! \param t Independent variable \f$ t \f$.
     //! \return The system function \f$ \mathbf{f} \f$.
-    virtual vecC f(vecC const &x, real t) const;
+    virtual vecN f(vecN const &x, real t) const;
 
     //! Evaluate the Jacobian of the explicit ODE system function \f$ \mathbf{F} \f$
     //! with respect to the states \f$ \mathbf{x} \f$$:
@@ -47,7 +46,7 @@ namespace Sandals {
     //! \param x States \f$ \mathbf{x} \f$.
     //! \param t Independent variable \f$ t \f$.
     //! \return The Jacobian \f$ \mathbf{JF}_{\mathbf{x}}(\mathbf{x}, \mathbf{x}^{\prime}, t) \f$.
-    virtual matN Jf_x(vecC const &x, real t) const;
+    virtual matN Jf_x(vecN const &x, real t) const;
 
   }; // class Explicit
 
