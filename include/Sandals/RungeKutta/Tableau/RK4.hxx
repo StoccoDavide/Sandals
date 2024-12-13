@@ -34,6 +34,7 @@ namespace Sandals
     //! Class constructor for the RK4 method.
     RK4Tableau(void) {
       this->name        = "RK4";
+      this->type        = RKType::ERK;
       this->order       = 4;
       this->is_embedded = false;
       this->A << 0.0, 0.0, 0.0, 0.0,
@@ -51,6 +52,8 @@ namespace Sandals
   class RK4 : public RungeKutta<4, N>
   {
   public:
+    using odeN = typename Explicit<N>::ptr; //!< Shared pointer to an ODE system
+
     //! Class constructor for the RK4 method.
     RK4(void) : RungeKutta<4, N>(RK4Tableau()) {}
   }; // class RK4

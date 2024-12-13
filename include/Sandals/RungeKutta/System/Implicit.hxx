@@ -35,8 +35,14 @@ namespace Sandals {
 
   public:
     //! Class constructor for an implicit ODE system.
+    Implicit(void) : m_name("(missing name)") {}
+
+    //! Class constructor for an implicit ODE system.
     //! \param t_name The name of the implicit ODE system.
     Implicit(std::string t_name) : m_name(t_name) {}
+
+    //! Class destructor for an implicit ODE system.
+    virtual ~Implicit(void) {}
 
     //! Check if the ODE system is implicit.
     //! \return True if the ODE system is implicit, false otherwise.
@@ -71,7 +77,7 @@ namespace Sandals {
     //! \param x_dot States derivative \f$ \mathbf{x}^{\prime} \f$.
     //! \param t     Independent variable \f$ t \f$.
     //! \return The system function \f$ \mathbf{F} \f$.
-    virtual vecN F(vecN const &x, vecN const &x_dot, real t) const;
+    virtual vecN F(vecN const &x, vecN const &x_dot, real t) const = 0;
 
     //! Evaluate the Jacobian of the ODE system function \f$ \mathbf{F} \f$
     //! with respect to the states \f$ \mathbf{x} \f$$:
@@ -85,7 +91,7 @@ namespace Sandals {
     //! \param x_dot States derivative \f$ \mathbf{x}^{\prime} \f$.
     //! \param t     Independent variable \f$ t \f$.
     //! \return The Jacobian \f$ \mathbf{JF}_{\mathbf{x}}(\mathbf{x}, \mathbf{x}^{\prime}, t) \f$.
-    virtual matN JF_x(vecN const &x, vecN const &x_dot, real t, vecN &lambda) const;
+    virtual matN JF_x(vecN const &x, vecN const &x_dot, real t) const = 0;
 
     //! Evaluate the Jacobian of the ODE system function \f$ \mathbf{F} \f$
     //! with respect to the states derivative \f$ \mathbf{x}^{\prime} \f$$:
@@ -99,13 +105,13 @@ namespace Sandals {
     //! \param x_dot States derivative \f$ \mathbf{x}^{\prime} \f$.
     //! \param t     Independent variable \f$ t \f$.
     //! \return The Jacobian \f$ \mathbf{JF}_{\mathbf{x}^{\prime}}(\mathbf{x}, \mathbf{x}^{\prime}, t) \f$.
-    virtual matN JF_x_dot(vecN const &x, vecN const &x_dot, real t, vecN &lambda) const;
+    virtual matN JF_x_dot(vecN const &x, vecN const &x_dot, real t) const = 0;
 
     //! Return true if \f$ (\mathbf{x}, t) \f$ is in the domain of the ODE system.
     //! \param x States \f$ \mathbf{x} \f$.
     //! \param t Independent variable \f$ t \f$.
     //! \return True if \f$ \mathbf{f}(\mathbf{x}, t) \f$ is in the domain of the ODE system.
-    virtual bool in_domain(matN const &x, real t) const;
+    virtual bool in_domain(vecN const &x, real t) const = 0;
 
   }; // class Implicit
 

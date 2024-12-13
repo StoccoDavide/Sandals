@@ -69,8 +69,8 @@ namespace Sandals
     //! \return The quasi-Newton solver name.
     std::string name(void) const override {return "Newton";}
 
+    using NonlinearSolver<N>::solve;
     //! Solve non-linear system of equations \f$ \mathbf{F}(\mathbf{x}) = \mathbf{0} \f$.
-    //! \param t_fun The function pointer.
     //! \param x_ini The initialization point.
     //! \param x_sol The solution point.
     bool solve(vecN const &x_ini, vecN &x_sol) override
