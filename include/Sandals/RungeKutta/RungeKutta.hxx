@@ -121,55 +121,73 @@ namespace Sandals {
   template <unsigned S, unsigned N>
   class RungeKutta
   {
-    using matK = Eigen::Matrix<real, N, S>;  //!< Matrix type.
+    using vecK  = Eigen::Matrix<real, N*S, 1>;   //!< Templetized vector type.
+    using matK  = Eigen::Matrix<real, N, S>;     //!< Templetized matrix type.
+    using matJK = Eigen::Matrix<real, N*S, N*S>; //!< Templetized matrix type.
 
   public:
-    using vecS = typename Tableau<S>::vecS;   //!< Vector type.
-    using matS = typename Tableau<S>::matS;   //!< Matrix type.
-    using vecN = typename Implicit<N>::vecN;  //!< Vector type.
-    using matN = typename Implicit<N>::matN;  //!< Matrix type.
-    using odeN = typename Implicit<N>::ptr;   //!< Matrix type.
-    using nlsN = NonlinearSolver<vecN, matN>; //!< Non-linear system solver.
+    using vecS = typename Tableau<S>::vecS;  //!< Templetized vector type.
+    using matS = typename Tableau<S>::matS;  //!< Templetized matrix type.
+    using vecN = typename Implicit<N>::vecN; //!< Templetized vector type.
+    using matN = typename Implicit<N>::matN; //!< Templetized matrix type.
+    using odeN = typename Implicit<N>::ptr;  //!< Shared pointer to an ODE system
+    using matND = Eigen::Matrix<real, N, Eigen::Dynamic>; //!< Templetized matrix type.
     using RKType = enum class RKType : integer {
       ERK = 0, IRK = 1, DIRK = 2
     }; //!< Runge-Kutta type enumeration.
 
   private:
-    nlsN       m_nlsolver;             //!< Non-linear system solver.
-    RKType     m_rk_type;              //!< Runge-Kutta type (explicit, implicit, diagonal implicit).
-    Tableau<S> m_tableau;              //!< Butcher tableau of the Runge-Kutta method.
-    odeN       m_sys;                  //!< ODE system object pointer.
-    real       m_abs_tol{EPSILON_LOW}; //!< Absolute tolerance for adaptive step.
-    real       m_rel_tol{EPSILON_LOW}; //!< Relative tolerance for adaptive step.
-    real       m_sfy_fac{0.9};         //!< Safety factor for adaptive step.
-    real       m_min_sfy_fac{0.2};     //!< Minimum safety factor for adaptive step.
-    real       m_max_sfy_fac{1.5};     //!< Maximum safety factor for adaptive step.
-    real       m_dt_min{EPSILON_HIGH}; //!< minimum step for advancing;
-    bool       m_adaptive_step{false}; //!< Aadaptive step mode boolean.
-    bool       m_verbose{false};       //!< Verbose mode boolean.
-    unsigned   m_order;                //!< Order of the solver.
-    bool       m_is_embedded;          //!< Boolean to check if the method is embedded.
+    Newton<N*S> m_newton;                //!< Newton solver for implicit methods.
+    RKType      m_rk_type;               //!< Runge-Kutta type (explicit, implicit, diagonal implicit).
+    Tableau<S>  m_tableau;               //!< Butcher tableau of the Runge-Kutta method.
+    odeN        m_sys;                   //!< ODE system object pointer.
+    real        m_abs_tol{EPSILON_LOW};  //!< Absolute tolerance for adaptive step.
+    real        m_rel_tol{EPSILON_LOW};  //!< Relative tolerance for adaptive step.
+    real        m_sft_fac{0.9};          //!< Safety factor for adaptive step.
+    real        m_min_sft_fac{0.2};      //!< Minimum safety factor for adaptive step.
+    real        m_max_sft_fac{1.5};      //!< Maximum safety factor for adaptive step.
+    real        m_d_t_min{EPSILON_HIGH}; //!< minimum step for advancing;
+    bool        m_adaptive_step{false};  //!< Aadaptive step mode boolean.
+    bool        m_verbose{false};        //!< Verbose mode boolean.
+    unsigned    m_order;                 //!< Order of the solver.
+    bool        m_is_embedded;           //!< Boolean to check if the method is embedded.
 
   public:
     //! Class constructor for a Runge-Kutta solver given a Tableau reference.
     //! \param t_tableau The Tableau reference.
-    RungeKutta(Tableau<S> t_tableau) : m_tableau(t_tableau) {}
+    RungeKutta(Tableau<S> const &t_tableau) : m_tableau(t_tableau) {
+      //SANDALS_WARNING(
+      //  "RungeKutta::RungeKutta(...): the order of the method " << t_tableau.name << " is " <<
+      //  this->tableau_order(this->m_tableau.A, this->m_tableau.b, this->m_tableau.c));
+    }
 
     //! Class constructor for a Runge-Kutta solver given a namne and a Tableau.
     //! \param t_name The name of the solver.
     //! \param t_tableau The Tableau reference.
-    RungeKutta(std::string t_name, Tableau<S> t_tableau) : m_tableau(t_tableau) {
+    RungeKutta(std::string t_name, Tableau<S> const &t_tableau)
+      : m_tableau(t_tableau) {
       this->m_tableau.name = t_name;
+      this->tableau_order(this->m_tableau.A, this->m_tableau.b, this->m_tableau.c);
+      //SANDALS_WARNING(
+      //  "RungeKutta::RungeKutta(...): the order of the method " << t_name << " is " <<
+      //  this->tableau_order(this->m_tableau.A, this->m_tableau.b, this->m_tableau.c));
     }
 
     //! Class constructor for a Runge-Kutta solver given all Tableau elements.
     //! \param t_name The name of the solver.
+    //! \param t_order The order of the method.
+    //! \param t_is_embedded The embedded method boolean.
     //! \param t_A The matrix \f$ \mathbf{A} \f$ (lower triangular matrix).
     //! \param t_b The weights vector \f$ \mathbf{b} \f$.
     //! \param t_b_e The embedded weights vector \f$ \\mathbf{b}_{e} \f$.
     //! \param t_c The nodes vector \f$ \mathbf{c} \f$.
-    RungeKutta(std::string t_name, matS const &t_A,vecS const &t_b, vecS const &t_b_e,
-      vecS const &t_c) : m_tableau({t_name, t_A, t_b, t_b_e, t_c}) {}
+    RungeKutta(std::string const &t_name, unsigned t_order, bool t_is_embedded,
+      matS const &t_A, vecS const &t_b, vecS const &t_b_e, vecS const &t_c)
+      : m_tableau({t_name, t_order, t_is_embedded, t_A, t_b, t_b_e, t_c}) {
+      //SANDALS_WARNING(
+      //  "RungeKutta::RungeKutta(...): the order of the method " << t_name << " is " <<
+      //  this->tableau_order(this->m_tableau.A, this->m_tableau.b, this->m_tableau.c));
+      }
 
     //! Check if the solver is explicit, implicit or diagonal implicit
     //! \return The type of the solver.
@@ -241,27 +259,27 @@ namespace Sandals {
 
     //! Get the safety factor for adaptive step.
     //! \return The safety factor for adaptive step.
-    real & safety_factor(void) {return this->m_sfy_fac;}
+    real & safety_factor(void) {return this->m_sft_fac;}
 
     //! Set safety factor for adaptive step.
-    //! \param t_sfy_fac The safety factor for adaptive step.
-    void safety_factor(real t_sfy_fac) {this->m_sfy_fac = t_sfy_fac;}
+    //! \param t_sft_fac The safety factor for adaptive step.
+    void safety_factor(real t_sft_fac) {this->m_sft_fac = t_sft_fac;}
 
     //! Get the minimum safety factor for adaptive step.
     //! \return The minimum safety factor for adaptive step.
-    real & min_safety_factor(void) {return this->m_min_sfy_fac;}
+    real & min_safety_factor(void) {return this->m_min_sft_fac;}
 
     //! Set the minimum safety factor for adaptive step.
-    //! \param t_min_sfy_fac The minimum safety factor for adaptive step.
-    void min_safety_factor(real t_min_sfy_fac) {this->m_min_sfy_fac = t_min_sfy_fac;}
+    //! \param t_min_sft_fac The minimum safety factor for adaptive step.
+    void min_safety_factor(real t_min_sft_fac) {this->m_min_sft_fac = t_min_sft_fac;}
 
     //! Get the maximum safety factor for adaptive step.
     //! \return The maximum safety factor for adaptive step.
-    real & max_safety_factor(void) {return this->m_max_sfy_fac;}
+    real & max_safety_factor(void) {return this->m_max_sft_fac;}
 
     //! Set the maximum safety factor for adaptive step.
-    //! \param t_max_sfy_fac The maximum safety factor for adaptive step.
-    void max_safety_factor(real t_max_sfy_fac) {this->m_max_sfy_fac = t_max_sfy_fac;}
+    //! \param t_max_sft_fac The maximum safety factor for adaptive step.
+    void max_safety_factor(real t_max_sft_fac) {this->m_max_sft_fac = t_max_sft_fac;}
 
     //! Enable verbose mode.
     void enable_verbose_mode(void) {this->m_verbose = true;}
@@ -275,15 +293,61 @@ namespace Sandals {
     //! Disable adaptive step mode.
     void disable_adaptive_step(void) {this->m_adaptive_step = false;}
 
-    //! Error estimation function for adaptive step (override in derived classes
-    //! for specific error estimation).
-    //! \param x_h The state vector computed with higher order method.
-    //! \param x_l The state vector computed with lower order method.
-    //! \return The error estimation.
-    real estimate_error(vecN const &x_h, vecN const &x_l) const {
-      return ((x_h - x_l) / (
-          this->m_abs_tol + this->m_rel_tol*std::max(std::abs(x_h), std::abs(x_l))
-        )).abs().maxCoeff();
+    //! Compute adaptive time step for the next advancing step according to the
+    //! error control method. The error control method used is the local truncation
+    //! error method, which is based on the following formula:
+    //!
+    //! \f[
+    //! e = \sqrt{\dfrac{1}{n} \displaystyle\sum_{i=1}{n}\left(\dfrac
+    //!   {\mathbf{x} - \hat{\mathbf{x}}}
+    //!   {s c_i}
+    //! \right)^2}
+    //! \f]
+    //!
+    //! where \f$ \mathbf{x} \f$ is the approximation of the states at computed
+    //! with higher order method of \f$ p \f$, and \f$ \hat{\mathbf{x}} \f$ is the
+    //! approximation of the states at computed with lower order method of \f$
+    //! \hat{p} \f$. To compute the suggested time step for the next advancing step
+    //! \f$ \Delta t_{k+1} \f$, The error is compared to \f$ 1 \f$ in order to find
+    //! an optimal step size. From the error behaviour \f$ e \approx Ch^{q+1} \f$
+    //! and from \f$ 1 \approx Ch_{opt}^{q+1} \f$ (where \f$ q = \min(p,\hat{p}) \f$)
+    //! the optimal step size is obtained as:
+    //!
+    //! \f[
+    //! h_{opt} = h \left( \dfrac{1}{e} \right)^{\frac{1}{q+1}}
+    //! \f]
+    //!
+    //! We multiply the previous quation by a safety factor \f$ f \f$, usually
+    //! \f$ f = 0.8 \f$, \f$ 0.9 \f$, \f$ (0.25)^{1/(q+1)} \f$, or \f$ (0.38)^{1/(q+1)} \f$,
+    //! so that the error will be acceptable the next time with high probability.
+    //! Further, \f$ h \f$ is not allowed to increase nor to decrease too fast.
+    //! So we put:
+    //!
+    //! \f[
+    //! h_{new} = h \min\left(f_{max}, \max\left(f_{max}, f \left(\dfrac{1}{e}\right)^{\frac{1}{q+1}}
+    //! \right) \right)
+    //! \f]
+    //!
+    //! for the new step size. Then, if \f$ e \leq 1 \f$, the computed step is
+    //! accepted and the solution is advanced to \f$ \mathbf{x} \f$ and a new step
+    //! is tried with \f$ h_{new} \f$ as step size. Else, the step is rejected
+    //! and the computations are repeated with the new step size \f$ h_{new} \f$.
+    //! Typially, \f$ f \f$ is set in the interval \f$ [0.8, 0.9] \f$,
+    //! \f$ f_{max} \f$ is set in the interval \f$ [1.5, 5] \f$, and \f$ f_{min} \f$
+    //! is set in the interval \f$ [0.1, 0.2] \f$.
+    //!
+    //! \param x_h Approximation of the states at \f$ k+1 \f$-th time step \f$
+    //!            \mathbf{x_{k+1}}(t_{k}+\Delta t) \f$ with higher order method.
+    //! \param x_l Approximation of the states at \f$ k+1 \f$-th time step \f$
+    //!            \mathbf{x_{k+1}}(t_{k}+\Delta t) \f$ with lower order method.
+    //! \param d_t Actual advancing time step \f$ \Delta t\f$.
+    //! \return The suggested time step for the next advancing step \f$ \Delta
+    //!         t_{k+1} \f$.
+    real estimate_step(vecN const &x_h, vecN const &x_l, real d_t) const {
+      return d_t * std::min(this->m_max_sft_fac, std::max(this->m_min_sft_fac,
+        this->m_safety_factor * ((x_h - x_l) / (
+        this->m_abs_tol + this->m_rel_tol*std::max(std::abs(x_h), std::abs(x_l))
+        )).abs().maxCoeff()));
     }
 
     //! Print the Runge-Kutta method information.
@@ -387,7 +451,7 @@ namespace Sandals {
     //! \param t_k Time step \f$ t_k \f$.
     //! \param d_t Advancing time step \f$ \Delta t\f$.
     //! \param x_o The approximation of the states at \f$ k+1 \f$-th time step
-    //!              \f$ \mathbf{x_{k+1}}(t_{k}+\Delta t) \f$
+    //!            \f$ \mathbf{x_{k+1}}(t_{k}+\Delta t) \f$
     //! \param d_t_star The suggested time step for the next advancing step
     //!                 \f$ \Delta t_{k+1} \f$.
     //! \return True if the step is successfully computed, false otherwise.
@@ -397,14 +461,14 @@ namespace Sandals {
       using Eigen::seqN;
 
       // Compute the K variables in the case of an explicit method and explicit system
-      real t_s;
-      vecS x_s;
+      real t_i;
+      vecS x_i;
       matK K{matK::Zero()};
       for (unsigned i = 0; i < S; ++i)
       {
-        t_s = t_k + m_tableau.c(i) * d_t;
-        x_s = x_k + K(all, seqN(0, i)) * m_tableau.A(i, seqN(0, i)).transpose();
-        K.col(i) = d_t * m_sys->f(x_s, t_s);
+        t_i = t_k + this->m_tableau.c(i) * d_t;
+        x_i = x_k + K(all, seqN(0, i)) * this->m_tableau.A(i, seqN(0, i)).transpose();
+        K.col(i) = d_t * m_sys->f(x_i, t_i);
       }
       if (!K.allFinite()) {return false;}
 
@@ -414,20 +478,198 @@ namespace Sandals {
       // Adapt next time step
       if (this->m_adaptive_step && this->m_is_embedded) {
         vecS x_e = x_k + K * this->m_tableau.b_e.transpose();
-        d_t_star = d_t * std::min(this->m_max_sfy_fac, std::max(this->m_min_sfy_fac,
-          this->m_safety_factor*this->estimate_error(x_o, x_e)
-        ));
+        d_t_star = this->estimate_error(x_o, x_e, d_t);
+      }
+      return true;
+    }
+
+    //! Compute the residual of system to be solved:
+    //!
+    //! \f[
+    //! \mathbf{F}_i\left(\mathbf{x}_k + \Delta t \displaystyle\sum_{j=1}^{s}
+    //!   a_{ij} \mathbf{K}_j, \, \mathbf{K}_i, \, t_k + c_i \Delta t
+    //! \right) = \mathbf{0}.
+    //! \f]
+    //!
+    //! \param x_k States value at \f$ k \f$-th time step \f$ \mathbf{x}(t_k) \f$.
+    //! \param K_k Variables \f$ \mathbf{K} \f$ of the system to be solved.
+    //! \param t_k Time step \f$ t_k \f$.
+    //! \param d_t Advancing time step \f$ \Delta t \f$.
+    //! \return The residual of system to be solved.
+    vecK implicit_residual(vecS const &x_k, vecK const &K_k, real t_k, real d_t) const
+    {
+      // Loop through each equation of the system
+      real t_i;
+      vecS x_i;
+      vecK res{vecK::Zero()};
+      for (unsigned i = 0; i < S; ++i) {
+        t_i = t_k + this->m_tableau.c(i) * d_t;
+        x_i = x_k + K_k * this->m_tableau.A.row(i).transpose();
+        res.segment<N>(i*N) = this->m_sys->F(x_i, K_k.segment<N>(i*N) / d_t, t_i);
+      }
+      return res;
+    }
+
+    //! Compute the Jacobian of the system of equations:
+    //!
+    //! \f[
+    //! \mathbf{F}_i\left(\mathbf{x}_k + \Delta t \displaystyle\sum_{j=1}^s
+    //!   a_{ij} \mathbf{K}_j, \, \mathbf{K}_i, \, t_k + c_i \Delta t
+    //! \right) = \mathbf{0}
+    //! \f]
+    //!
+    //! to be solved in the \f$ \mathbf{K} \f$ variable:
+    //!
+    //! \f[
+    //! \dfrac{\partial \mathbf{F}_i}{\partial \mathbf{K}_i} \left(
+    //!   \mathbf{x}_k + \Delta t \displaystyle\sum_{j=1}^s a_{ij} \mathbf{K}_j,
+    //!   \, \mathbf{K}_i, \, t_k + c_i \Delta t
+    //! \right)
+    //! \f]
+    //!
+    //! \param x_k States value at \f$ k \f$-th time step \f$ \mathbf{x}(t_k) \f$.
+    //! \param K_k Variables \f$ \mathbf{K} \f$ of the system to be solved.
+    //! \param t_k Time step \f$ t_k \f$.
+    //! \param d_t Advancing time step \f$ \Delta t \f$.
+    //! \return The Jacobian of the system of equations to be solved.
+    matJK implicit_jacobian(vecS const &x_k, vecK const &K_k, real t_k, real d_t) const
+    {
+      using Eigen::all;
+      using Eigen::seqN;
+
+      // Loop through each equation of the system
+      matK K{K_k.reshapes(N, S)};
+      vecK x_dot_i;
+      matN JF_x, JF_x_dot;
+      matJK JK;
+      auto idx = seqN(0, N-1);
+      auto jdx = idx;
+      real t_i;
+      vecS x_i;
+      for (unsigned i = 0; i < S; ++i) {
+        t_i = t_k + this->m_tableau.c(i) * d_t;
+        x_i = x_k + K * this->m_tableau.A.rew(i).transpose();
+
+        // Compute the Jacobians with respect to x and x_dot
+        x_dot_i  = K.col(i) / d_t;
+        JF_x     = this->m_sys->JF_x(x_i, x_dot_i, t_i);
+        JF_x_dot = this->m_sys->JF_x_dot(x_i, x_dot_i, t_i);
+
+        // Derivative of F(x_i, K(:,i)/d_t, t_i)
+        jdx = seqN(0, N-1);
+        for (unsigned j = 0; j < S; ++i) {
+          // Combine the Jacobians with respect to x and x_dot to obtain the
+          // Jacobian with respect to K
+          if (i == j) {
+            JK(idx, jdx) = this->m_tableau.A(i,j) * JF_x + JF_x_dot / d_t;
+          } else {
+            JK(idx, jdx) = this->m_tableau.A(i,j) * JF_x;
+          }
+          jdx = jdx + N;
+        }
+        idx = idx + N;
+      }
+      return JK;
+    }
+
+    //! Compute an integration step using the implicit Runge-Kutta method for a
+    //! system of the form \f$ \mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, t) =
+    //! \mathbf{0} \f$.
+    //!
+    //! **Solution Algorithm**
+    //!
+    //! Consider a Runge-Kutta method, written for a system of the form
+    //! \f$ \mathbf{x}^{\prime} = \mathbf{f}(\mathbf{x}, \mathbf{v}, t) \f$:
+    //!
+    //! \f[
+    //! \begin{array}{l}
+    //! \mathbf{K}_i = \mathbf{f} \left(
+    //!   \mathbf{x}_k + \Delta t \displaystyle\sum_{j=1}^{s} a_{ij}
+    //!   \mathbf{K}_j,
+    //!   \, t_k + c_i \Delta t
+    //!   \right), \qquad i = 1, 2, \ldots, s \\
+    //! \mathbf{x}_{k+1} = \mathbf{x}_k + \Delta t \displaystyle\sum_{j=1}^s b_j
+    //! \mathbf{K}_j \, ,
+    //! \end{array}
+    //! \f]
+    //!
+    //! Then the implicit Runge-Kutta method for an implicit system of the form
+    //! \f$\mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, t) = \mathbf{0} \f$ can be written
+    //! as:
+    //!
+    //! \f[
+    //! \begin{array}{l}
+    //! \mathbf{F}_i \left(
+    //!   \mathbf{x}_k + \Delta t \displaystyle\sum_{j=1}^s a_{ij}
+    //!     \mathbf{K}_j, \, \mathbf{K}_i, \, t_k + c_i \Delta t
+    //! \right) = \mathbf{0}, \qquad i = 1, 2, \ldots, s \\
+    //! \mathbf{x}_{k+1} = \mathbf{x}_k + \displaystyle\sum_{j=1}^s b_j \mathbf{K}_j.
+    //! \end{array}
+    //! \f]
+    //!
+    //! Thus, the final system to be solved is the following:
+    //!
+    //! \f[
+    //! \left\{\begin{array}{l}
+    //! \mathbf{F}_1 \left(
+    //!   \mathbf{x}_k + \Delta t \displaystyle\sum_{j=1}^s a_{1j}
+    //!   \mathbf{K}_j, \, \mathbf{K}_1, \, t_k + c_1 \Delta t
+    //! \right) = \mathbf{0} \\
+    //! \mathbf{F}_2 \left(
+    //!   \mathbf{x}_k + \Delta t \displaystyle\sum_{j=1}^s a_{2j}
+    //!   \mathbf{K}_j, \, \mathbf{K}_2, \, t_k + c_2 \Delta t
+    //! \right) = \mathbf{0} \\
+    //! ~~ \vdots \\
+    //! \mathbf{F}_s \left(
+    //!   \mathbf{x}_k + \Delta t \displaystyle\sum_{j=1}^s a_{sj}
+    //!   \mathbf{K}_j, \, \mathbf{K}_s, \, t_k + c_s \Delta t
+    //! \right) = \mathbf{0}
+    //! \end{array}\right.
+    //! \f]
+    //!
+    //! The \f$ \mathbf{K} \f$ variables are computed using the Newton's method.
+    //!
+    //! The suggested time step for the next advancing step
+    //! \f$ \Delta t_{k+1} \f$, is the same as the input time step
+    //! \f$ \Delta t \f$ since in the implicit Runge-Kutta method the time step
+    //! is not modified through any error control method.
+    //!
+    //! \param x_k States value at \f$ k \f$-th time step \f$ \mathbf{x}(t_k) \f$.
+    //! \param t_k Time step \f$ t_k \f$.
+    //! \param d_t Advancing time step \f$ \Delta t\f$.
+    //! \param x_o The approximation of the states at \f$ k+1 \f$-th time step
+    //!            \f$ \mathbf{x_{k+1}}(t_{k}+\Delta t) \f$
+    //! \param d_t_star The suggested time step for the next advancing step
+    //!                 \f$ \Delta t_{k+1} \f$.
+    //! \return True if the step is successfully computed, false otherwise.
+    bool implicit_step(vecS const &x_k, real t_k, real d_t, vecS &x_o, real &d_t_star) const
+    {
+      // Define the function handles
+      auto fun = [&](vecK const &K) {return this->implicit_residual(x_k, K, t_k, d_t);};
+      auto jac = [&](vecK const &K) {return this->implicit_jacobian(x_k, K, t_k, d_t);};
+
+      // Check if the solver converged
+      vecK K;
+      if (!this->m_newton.solve(fun, jac, vecK::Zero(), K)) {return false;}
+
+      // Perform the step and obtain x_k+1
+      x_o = x_k + K.reshaped(N, S) * this->m_tableau.b.transpose();
+
+      // Adapt next time step
+      if (this->m_adaptive_step && this->m_tableau.is_embedded) {
+        vecS x_e{x_k + K.reshaped(N, S) * this->m_tableau.b_e.transpose()};
+        d_t_star = this->estimate_step(x_o, x_e, d_t);
       }
       return true;
     }
 
     //! Compute a step using a generic integration method for a system of the
-    //! form \f$ \mathbf{F}(\mathbf{x}, \mathbf{x}', \mathbf{v}, t) = \mathbf{0}
+    //! form \f$ \mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, \mathbf{v}, t) = \mathbf{0}
     //! \f$. The step is based on the following formula:
     //!
     //! \f[
     //! \mathbf{x}_{k+1}(t_{k}+\Delta t) = \mathbf{x}_k(t_{k}) +
-    //! \mathcal{S}(\mathbf{x}_k(t_k), \mathbf{x}'_k(t_k), t_k, \Delta t)
+    //! \mathcal{S}(\mathbf{x}_k(t_k), \mathbf{x}^{\prime}_k(t_k), t_k, \Delta t)
     //! \f]
     //!
     //! where \f$ \mathcal{S} \f$ is the generic advancing step of the solver.
@@ -449,171 +691,498 @@ namespace Sandals {
       }
     }
 
+    //! Advance using a generic integration method for a system of the form
+    //! \f$ \mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, \mathbf{v}, t) = \mathbf{0} \f$.
+    //! The step is based on the following formula:
+    //!
+    //! \f[
+    //! \mathbf{x}_{k+1}(t_{k}+\Delta t) = \mathbf{x}_k(t_{k}) +
+    //! \mathcal{S}(\mathbf{x}_k(t_k), \mathbf{x}^{\prime}_k(t_k), t_k, \Delta t)
+    //! \f]
+    //!
+    //! where \f$ \mathcal{S} \f$ is the generic advancing step of the solver.
+    //! In the advvancing step, the system solution is also projected on the
+    //! manifold \f$ \mathcal{h}(\mathbf{x}, \mathbf{v}, t) \f$. Substepping is
+    //! also used to ensure that the solution is accurate.
+    //!
+    //! \param x_k States value at \f$ k \f$-th time step \f$ \mathbf{x}(t_k) \f$.
+    //! \param t_k Time step \f$ t_k \f$.
+    //! \param d_t Advancing time step \f$ \Delta t\f$.
+    //! \param x_new The approximation of the states at \f$ k+1 \f$-th time step
+    //!              \f$ \mathbf{x_{k+1}}(t_{k}+\Delta t) \f$
+    //! \param d_t_star The suggested time step for the next advancing step
+    //!                 \f$ \Delta t_{k+1} \f$.
+    //! \return True if the step is successfully computed, false otherwise.
+    bool advance(vecN const &x_k, real t_k, real d_t, vecN &x_new, real &d_t_star) const
+    {
+      #define CMD "Indigo.RungeKutta.advance(...): "
 
-      //! Compute the Jacobian of the system of equations:
-      //!
-      //! \f[
-      //! \mathbf{F}_i\left(\mathbf{x}_k + \Delta t \displaystyle\sum_{j=1}^s
-      //!   a_{ij} \mathbf{K}_j, \, \mathbf{K}_i, \, t_k + c_i \Delta t
-      //! \right) = \mathbf{0}
-      //! \f]
-      //!
-      //! to be solved in the \f$ \mathbf{K} \f$ variable:
-      //!
-      //! \f[
-      //! \dfrac{\partial \mathbf{F}_i}{\partial \mathbf{K}_i} \left(
-      //!   \mathbf{x}_k + \Delta t \displaystyle\sum_{j=1}^s a_{ij} \mathbf{K}_j,
-      //!   \, \mathbf{K}_i, \, t_k + c_i \Delta t
-      //! \right)
-      //! \f]
-      //!
-      //! \param i   Index of the step to be computed.
-      //! \param x_i States value at \f$ i \f$-th node.
-      //! \param K   Variable \f$ \mathbf{K} \f$ of the system to be solved.
-      //! \param t_k Time step \f$ t_k \f$.
-      //! \param dt  Advancing time step \f$ \Delta t\f$.
-      //!
-      //! \return The Jacobian of the system of equations to be solved.
-      // out = K_jacobian( this, K_in, x_k, t_k, dt )
+      // Check step size
+      SANDALS_ASSERT(d_t > real(0.0), CMD "in " << this->m_tableau.name <<
+        "solver, d_t = "<< d_t << ", expected > 0.");
 
-      //! Compute the residual of system to be solved:
-      //!
-      //! \f[
-      //!   \mathbf{F}_i\left(\mathbf{x}_k + \Delta t \displaystyle\sum_{j=1}^{s}
-      //!   a_{ij} \mathbf{K}_j, \, \mathbf{K}_i, \, t_k + c_i \Delta t
-      //! \right) = \mathbf{0}.
-      //! \f]
-      //!
-      //! \param x_k States value at \f$ k \f$-th time step \f$ \mathbf{x}(t_k) \f$.
-      //! \param K   Variable \f$ \mathbf{K} \f$ of the system to be solved.
-      //! \param t_k Time step \f$ t_k \f$.
-      //! \param dt  Advancing time step \f$ \Delta t\f$.
-      //!
-      //! \return The residual of system to be solved.
-      // out = K_residual( this, K_in, x_k, t_k, dt )
+      // If the integration step failed, try again with substepping
+      if (!this->step(x_k, t_k, d_t, x_new, d_t_star))
+      {
+        vecN x_tmp   = x_k;
+        real t_tmp   = t_k;
+        real d_t_tmp = d_t / real(2.0);
 
-      //! Solve the \f$ i \f$-th implicit step of the system to find the
-      //! \f$ \mathbf{K} \f$ variables:
-      //!
-      //! \f[
-      //! \mathbf{F}_i\left(\mathbf{x}_k + \Delta t \displaystyle\sum_{j=1}^s
-      //!   a_{ij} \mathbf{K}_j, \, \mathbf{K}_i, \, t_k + c_i \Delta t
-      //! \right) = \mathbf{0}
-      //! \f]
-      //!
-      //! by Newton's method.
-      //!
-      //! \param x_k States value at \f$ k \f$-th time step \f$
-      //!            \mathbf{x}(t_k) \f$.
-      //! \param K   Initial guess for the \f$ \mathbf{K} \f$ variables to be
-      //!            found.
-      //! \param t_k Time step \f$ t_k \f$.
-      //! \param dt  Advancing time step \f$ \Delta t\f$.
-      //!
-      //! \return The \f$ \mathbf{K} \f$ variables of system to be solved and the
-      //!         error control flag.
-      // [K, ierr] = K_solve( this, x_k, t_k, dt )
+        // Substepping logic
+        unsigned max_substeps = 10;
+        unsigned max_k = max_substeps * max_substeps;
+        unsigned k = 2;
+        real d_t_star_tmp;
+        while (k > 0)
+        {
+          // Calculate the next time step with substepping logic
+          if (this->step(x_tmp, t_tmp, d_t_tmp, x_tmp, d_t_star_tmp)) {
 
-      //! The suggested time step for the next advancing step
-      //! \f$ \Delta t_{k+1} \f$, is the same as the input time step
-      //! \f$ \Delta t \f$ since in the implicit Runge-Kutta method the time step
-      //! is not modified through any error control method.
-      //!
-      //! \param x_k States value at \f$ k \f$-th time step
-      //!            \f$ \mathbf{x}(t_k) \f$.
-      //! \param t_k Time step \f$ t_k \f$.
-      //! \param dt  Advancing time step \f$ \Delta t\f$.
-      //!
-      //! \return The approximation of the states at \f$ k+1 \f$-th time step \f$
-      //!         \mathbf{x_{k+1}}(t_{k}+\Delta t) \f$, the approximation of the
-      //!         states derivatives at \f$ k+1 \f$-th time step
-      //!         \f$ \mathbf{x}^{\prime}_{k+1} (t_{k}+\Delta t) \f$, the suggested time
-      //!         step for the next advancing step \f$ \Delta t_{k+1} \f$, and the
-      //!         error control flag.
-      //
-      // [x_o, d_t_star, ierr] = step( this, x_k, t_k, dt )
+            // Accept the step
+            d_t_tmp = d_t_star_tmp;
 
-      //! Solve the system and calculate the approximate solution over
-      //! the mesh of time points.
-      //!
-      //! \param t   Time mesh points
-      //!            \f$ \mathbf{t} = \left[ t_0, t_1, \ldots, t_n \right]^{\top} \f$.
-      //! \param x_0 Initial states value \f$ \mathbf{x}(t_0) \f$.
-      //!
-      //! \return A matrix
-      //!         \f$ \left[(\mathrm{size}(\mathbf{x}) \times \mathrm{size}(\mathbf{t})\right] \f$
-      //!         containing the approximated solution
-      //!         \f$ \mathbf{x}(t) \f$ and
-      //!         \f$ \mathbf{x}^\prime(t) \f$
-      //!         of the system.
-      // [x_o, t] = solve( this, t, x_0 )
+            // If substepping is enabled, double the step size
+            if (k > 0 && k < max_k) {
+              k = k - 1;
+              // If the substepping index is even, double the step size
+              if (k % 2 == 0) {
+                d_t_tmp = real(2.0) * d_t_tmp;
+                if (this->m_verbose) {
+                  SANDALS_WARNING(CMD "in " << this->m_tableau.name << " solver, at t = " <<
+                  t_tmp << ", integration succedded disable one substepping layer.");
+                }
+              }
+            }
 
-      //! Compute adaptive time step for the next advancing step according to the
-      //! error control method. The error control method used is the local truncation
-      //! error method, which is based on the following formula:
-      //!
-      //! \f[
-      //! e = \sqrt{\dfrac{1}{n} \displaystyle\sum_{i=1}{n}\left(\dfrac
-      //!   {\mathbf{x} - \hat{\mathbf{x}}}
-      //!   {s c_i}
-      //! \right)^2}
-      //! \f]
-      //!
-      //! where \f$ \mathbf{x} \f$ is the approximation of the states at computed
-      //! with higher order method of \f$ p \f$, and \f$ \hat{\mathbf{x}} \f$ is the
-      //! approximation of the states at computed with lower order method of \f$
-      //! \hat{p} \f$. To compute the suggested time step for the next advancing step
-      //! \f$ \Delta t_{k+1} \f$, The error is compared to \f$ 1 \f$ in order to find
-      //! an optimal step size. From the error behaviour \f$ e \approx Ch^{q+1} \f$
-      //! and from \f$ 1 \approx Ch_{opt}^{q+1} \f$ (where \f$ q = \min(p,\hat{p}) \f$)
-      //! the optimal step size is obtained as:
-      //!
-      //! \f[
-      //! h_{opt} = h \left( \dfrac{1}{e} \right)^{\frac{1}{q+1}}
-      //! \f]
-      //!
-      //! We multiply the previous quation by a safety factor \f$ f \f$, usually
-      //! \f$ f = 0.8 \f$, \f$ 0.9 \f$, \f$ (0.25)^{1/(q+1)} \f$, or \f$ (0.38)^{1/(q+1)} \f$,
-      //! so that the error will be acceptable the next time with high probability.
-      //! Further, \f$ h \f$ is not allowed to increase nor to decrease too fast.
-      //! So we put:
-      //!
-      //! \f[
-      //! h_{new} = h \min \left( f_{max}, \max \left( f_{max}, f \left(
-      //!   \dfrac{1}{e} \right)^{\frac{1}{q+1}}
-      //! \right) \right)
-      //! \f]
-      //!
-      //! for the new step size. Then, if \f$ e \leq 1 \f$, the computed step is
-      //! accepted and the solution is advanced to \f$ \mathbf{x} \f$ and a new step
-      //! is tried with \f$ h_{new} \f$ as step size. Else, the step is rejected
-      //! and the computations are repeated with the new step size \f$ h_{new} \f$.
-      //! Typially, \f$ f \f$ is set in the interval \f$ [0.8, 0.9] \f$,
-      //! \f$ f_{max} \f$ is set in the interval \f$ [1.5, 5] \f$, and \f$ f_{min} \f$
-      //! is set in the interval \f$ [0.1, 0.2] \f$.
-      //!
-      //! \param x_h Approximation of the states at \f$ k+1 \f$-th time step \f$
-      //!            \mathbf{x_{k+1}}(t_{k}+\Delta t) \f$ with higher order method.
-      //! \param x_l Approximation of the states at \f$ k+1 \f$-th time step \f$
-      //!            \mathbf{x_{k+1}}(t_{k}+\Delta t) \f$ with lower order method.
-      //! \param dt  Actual advancing time step \f$ \Delta t\f$.
-      //!
-      //! \return The suggested time step for the next advancing step \f$ \Delta
-      //!         t_{k+1} \f$.
-      // out = estimate_step( this, x_h, x_l, dt )
+            // Check the infinity norm of the solution
+            SANDALS_ASSERT(std::isfinite(x_tmp.maxCoeff()), CMD "in " <<
+            this->m_tableau.name << " solver, at t = " << t_tmp <<
+            ", ||x||_inf = inf, computation interrupted.");
 
+          } else {
 
+            // If the substepping index is too high, abort the integration
+            k = k + 2;
+            SANDALS_ASSERT(k < max_k, CMD "in " << this->m_tableau.name <<
+              " solver, at t = " << t_tmp << ", integration failed with d_t = " <<
+              d_t << ", aborting.");
+            return false;
 
+            // Otherwise, try again with a smaller step
+            if (this->m_verbose) {
+              SANDALS_WARNING(CMD "in " << this->m_tableau.name << " solver, at t = " <<
+                t_tmp << ", integration failed, adding substepping layer.");
+            }
+            d_t_tmp = d_t_tmp / real(2.0);
+            continue;
 
-      //! Check Butcher tableau consistency for an explicit Runge-Kutta method.
-      //! \param tbl.A   Matrix \f$ \mathbf{A} \f$.
-      //! \param tbl.b   Weights vector \f$ \mathbf{b} \f$.
-      //! \param tbl.b_e [optional] Embedded weights vector \f$ \\mathbf{b}_{e} \f$.
-      //! \param tbl.c   Nodes vector \f$ \mathbf{c} \f$.
-      //! \return True if the Butcher tableau is consistent, false otherwise.
-      //[out,order,e_order] = check_tableau( this, tbl )
+          }
 
-      //[order,msg] = tableau_order( this, A, b, c )
+          // Store time solution
+          t_tmp = t_tmp + d_t_tmp;
+        }
+
+        // Store output states substepping solutions
+        x_new    = x_tmp;
+        d_t_star = d_t_tmp;
+        return true;
+      } else {
+        return true;
+      }
+      #undef CMD
+    }
+
+    //! Solve the system and calculate the approximate solution over the mesh of
+    //! time points.
+    //!
+    //! \param t Time mesh points \f$ \mathbf{t} = \left[ t_0, t_1, \ldots, t_n
+    //!          \right]^T \f$.
+    //! \param x_0 Initial conditions \f$ \mathbf{x}(t_0) \f$.
+    //! \param x_o A matrix \f$ \left[(\mathrm{size}(\mathbf{x}) \times \mathrm{size}
+    //!            (\mathbf{t})\right] \f$ containing the approximated solution
+    //!            over the mesh of time points.
+    //! \return True if the system is successfully solved, false otherwise.
+    bool solve(vecD const &t, vecN const &x_0, matND &x_o) const
+    {
+      using Eigen::last;
+
+      // Store first step
+      x_o.col(0) = x_0;
+      unsigned s{0};
+
+      // Update the current step
+      vecN x_s{x_0};
+      real t_s{t(0)};
+      real d_t_s{t(1) - t(0)};
+      real d_t_tmp{d_t_s}, d_t_star;
+      bool mesh_point_bool, saturation_bool;
+
+      while (true) {
+        // Integrate system
+        this->advance(x_s, t_s, d_t_s, x_s, d_t_star);
+
+        // Update the current step
+        t_s = t_s + d_t_s;
+
+        // Saturate the suggested timestep
+        mesh_point_bool = std::abs(t_s - t(s)) < SQRT_EPSILON;
+        saturation_bool = t_s + d_t_star > t(s) + SQRT_EPSILON;
+        if (this->m_adaptive_step && !mesh_point_bool && saturation_bool) {
+          d_t_tmp = d_t_star;
+          d_t_s   = t(s) - t_s;
+        } else {
+          d_t_s = d_t_star;
+        }
+
+        // Store solution if the step is a mesh point
+        if (~this->m_adaptive_step || mesh_point_bool) {
+          // Update temporaries
+          s     += 1;
+          d_t_s = d_t_tmp;
+
+          // Update outputs
+          x_o.col(s) = x_s;
+
+          // Check if the current step is the last one
+          if (std::abs(t_s - t(last)) < SQRT_EPSILON) {break;}
+        }
+      }
+    }
+
+    //! Solve the system and calculate the approximate solution over the
+    //! suggested mesh of time points with adaptive step size control.
+    //! \param t Time mesh points \f$ \mathbf{t} = \left[ t_0, t_1, \ldots, t_n
+    //!          \right]^T \f$.
+    //! \param x_0 Initial states value \f$ \mathbf{x}(t_0) \f$.
+    //! \param x_o A matrix \f$ \left[(\mathrm{size}(\mathbf{x}) \times \mathrm{size}
+    //!           (\mathbf{t})\right] \f$ containing the approximated solution
+    //!           over the mesh of time points.
+    //! \return True if the system is successfully solved, false otherwise.
+    bool adaptive_solve(vecD t, vecN const &x_0, matND &x_o) const
+    {
+      using Eigen::last;
+
+      #define CMD "Indigo.RungeKutta.adaptive_solve(...): "
+
+      // Collect optional arguments
+      real d_t{t(1) - t(0)}, d_t_star;
+      real scale{100.0};
+      real t_min{std::max(this->m_d_t_min, d_t/scale)};
+      real t_max{scale*d_t};
+
+      SANDALS_ASSERT(t_max > t_min && t_min > real(0.0), CMD "invalid time bounds detected.");
+      d_t = std::max(std::min(d_t, t_max), t_min);
+
+      // Instantiate output
+      unsigned safety_length = std::ceil(real(1.5)/this->m_min_sft_fac) * t.size();
+      vecN t_o(safety_length);
+
+      // Store first step
+      t_o(0)     = t(0);
+      x_o.col(0) = x_0;
+
+      // Instantiate temporary variables
+      unsigned s{0}; // Current step
+
+      while (true) {
+        // Integrate system
+        this->advance(x_o.col(s), t_o(s), d_t, x_o.col(s+1), d_t_star);
+
+        // Saturate the suggested timestep
+        d_t = std::max(std::min(d_t_star, t_max), t_min);
+
+        // Store solution
+        t_o(s+1) = t_o(s) + d_t;
+
+        // Check if the current step is the last one
+        if (t_o(s+1) + d_t > t(last)) {break;}
+
+        // Update steps counter
+        s += 1;
+      }
+
+      // Resize the output
+      t_o.conservativeResize(s-1);
+      x_o.conservativeResize(Eigen::NoChange, s-1);
+
+      return true;
+
+      #undef CMD
+    }
+
+    //! Check Butcher tableau consistency for an explicit Runge-Kutta method.
+    //! \param tbl.A   Matrix \f$ \mathbf{A} \f$.
+    //! \param tbl.b   Weights vector \f$ \mathbf{b} \f$.
+    //! \param tbl.b_e [optional] Embedded weights vector \f$ \\mathbf{b}_{e} \f$.
+    //! \param tbl.c   Nodes vector \f$ \mathbf{c} \f$.
+    //! \return True if the Butcher tableau is consistent, false otherwise.
+    //[out,order,e_order] = check_tableau( this, tbl )
+
+    //! Check the order of a Runge-Kutta tableau according to the conditions taken from:
+    //! *A family of embedded Runge-Kutta formulae*, J. R. Dormand and P. J. Prince,
+    //! Journal of Computational and Applied Mathematics, volume 6(1), 1980.
+    //! Doi: [10.1016/0771-0509(80)90013-3](https://doi.org/10.1016/0771-0509(80)90013-3)
+    //! \param tableau The Runge-Kutta tableau to be checked.
+    //! \return The order of the Runge-Kutta tableau.
+    /*unsigned tableau_order(matS const &A, vecS const &b, vecS const &c) const
+    {
+      #define CMD "Indigo.RungeKutta.tableau_order(...): "
+
+      // Temporary variables initialization
+      real tol{std::pow(EPSILON, real(2.0/3.0))};
+      vecN one{vecN::Ones()};
+      vecS Ac{A*c};
+      matS bA{(b*A).transpose()};
+      vecS err{A*one - c};
+      unsigned order{0};
+      std::string msg{""};
+
+      // Check consistency
+      SANDALS_ASSERT(std::max(std::abs(err)) > tol,
+        CMD "consistency precheck failed, A*[1] - c = " << err << " ≠ 0.");
+
+      // Check order 1
+      if (std::abs(b.sum() - 1) > tol) {
+        SANDALS_WARNING(CMD "order 1 check failed, found sum(b) == " << b.sum() << " ≠ 1.");
+        return order;
+      }
+
+      order = 1; // Order 1 is the highest order that can be checked
+
+      // Check order 2
+      vecS bc{b.cwiseProduct(c)};
+      if (std::abs(bc.sum() - 1/2) > tol) {
+        SANDALS_WARNING(CMD "order 2 check failed, sum(b*c) = " << bc.sum() << " ≠ 1/2.");
+        return order;
+      }
+
+      order = 2; // Order 2 is the highest order that can be checked
+
+      // Check order 3
+      vecS bc2{b.cwiseProduct(c.pow(2))};
+      if (std::abs(bc2.sum() - 1/3) > tol) {
+        SANDALS_WARNING(CMD "order 3 check failed, sum(b*c^2) = " << bc2.sum() << " ≠ 1/3.");
+        return order;
+      }
+
+      vecS bAc = b.cwiseProduct(Ac);
+      if (std::abs(bAc.sum() - 1/6) > tol) {
+        SANDALS_WARNING(CMD "order 3 check failed, sum(b*d) = " << bAc.sum() << " ≠ 1/6.");
+        return order;
+      }
+
+      order = 3; // Order 3 is the highest order that can be checked
+
+      // Check order 4
+      vecS bc3{b.cwiseProduct(c.pow(3))};
+      if (std::abs(bc3.sum() - 1/4) > tol) {
+        SANDALS_WARNING(CMD "order 4 check failed, sum(b*c^3) = " << bc3.sum() << " ≠ 1/4.");
+        return order;
+      }
+
+      vecS cAc{c.cwiseProduct(Ac)};
+      vecS bcAc{b.cwiseProduct(cAc)};
+      if (std::abs(bcAc.sum() - 1/8) > tol) {
+        SANDALS_WARNING(CMD "order 4 check failed, sum(b*c*A*c) = " << bcAc.sum() << " ≠ 1/8.");
+        return order;
+      }
+
+      vecS bAc2{bA.cwiseProduct(c.pow(2))};
+      if (std::abs(bAc2.sum() - 1/12) > tol) {
+        SANDALS_WARNING(CMD "order 4 check failed, sum(b*A*c^2) = " << bAc2.sum() << " ≠ 1/12.");
+        return order;
+      }
+
+      vecS bAAc{bA.cwiseProduct(Ac)};
+      if (std::abs(bAAc.sum() - 1/24) > tol) {
+        SANDALS_WARNING(CMD "order 4 check failed, sum(b*A*A*c) = " << bAAc.sum() << " ≠ 1/24.");
+        return order;
+      }
+
+      order = 4; // Order 4 is the highest order that can be checked
+
+      // Check order 5
+      vecS bc4{b.cwiseProduct(c.pow(4))};
+      if (std::abs(bc4.sum() - 1/5) > tol) {
+        SANDALS_WARNING(CMD "order 5 check failed, sum(b*c^4) = " << bc4.sum() << " ≠ 1/5.");
+        return order;
+      }
+
+      vecS bc2Ac{bc2.cwiseProduct(Ac)};
+      if (std::abs(bc2Ac.sum() - 1/10) > tol) {
+        SANDALS_WARNING(CMD "order 5 check failed, sum(b*c^2*A*c) = " << bc2Ac.sum() << " ≠ 1/10.");
+        return order;
+      }
+
+      vecS bAcAc{(b.cwiseProduct(Ac)).cwiseProduct(Ac)};
+      if (std::abs(bAcAc.sum() - 1/20) > tol) {
+        SANDALS_WARNING(CMD "order 5 check failed, sum(b*A*c*A*c) = " << bAcAc.sum() << " ≠ 1/20.");
+        return order;
+      }
+
+      matS Ac2{A*(c.pow(2))};
+      matS bcAc2{bc.cwiseProduct(Ac2)};
+      if (std::abs(bcAc2.sum() - 1/15) > tol) {
+        SANDALS_WARNING(CMD "order 5 check failed, sum(b*c*A*c^2) = " << bcAc2.sum() << " ≠ 1/15.");
+        return order;
+      }
+
+      matS Ac3{A*(c.pow(3))};
+      matS bAc3{b.cwiseProduct(Ac3)};
+      if (std::abs(bAc3.sum() - 1/20) > tol) {
+        SANDALS_WARNING(CMD "order 5 check failed, sum(b*A*c^3) = " << bAc3.sum() << " ≠ 1/20.");
+        return order;
+      }
+
+      bAcAc = bA.cwiseProduct(c.cwiseProduct(Ac));
+      if (std::abs(bAcAc.sum() - 1/40) > tol) {
+        SANDALS_WARNING(CMD "order 5 check failed, sum(b*A*c*A*c) = " << bAcAc.sum() << " ≠ 1/40.");
+        return order;
+      }
+
+      matS bAAc2{bA.cwiseProduct(Ac2)};
+      if (std::abs(bAAc2.sum() - 1/60) > tol) {
+        SANDALS_WARNING(CMD "order 5 check failed, sum(b*A*c*A*c) = " << bAAc2.sum() << " ≠ 1/60.");
+        return order;
+      }
+
+      matS AAc{A*Ac};
+      matS bAAAc{bA.cwiseProduct(AAc)};
+      if (std::abs(bAAAc.sum() - 1/120) > tol) {
+        SANDALS_WARNING(CMD "order 5 check failed, sum(b*A*c*A*c) = " << bAAAc.sum() << " ≠ 1/120.");
+        return order;
+      }
+
+      order = 5; // Order 5 is the highest order that can be checked
+
+      // Check order 6
+      vecS bc5{b.cwiseProduct(c.pow(5))};
+      if (std::abs(bc5.sum() - 1/6) > tol) {
+        SANDALS_WARNING(CMD "order 6 check failed, sum(b*c^5) = " << bc5.sum() << " ≠ 1/6.");
+        return order;
+      }
+
+      vecS bc3Ac{bc3.cwiseProduct(Ac)};
+      if (std::abs(bc3Ac.sum() - 1/12) > tol) {
+        SANDALS_WARNING(CMD "order 6 check failed, sum(bc3Ac) = " << bc3Ac.sum() << " ≠ 1/12.");
+        return order;
+      }
+
+      vecS bcAcAc{bc.cwiseProduct(Ac).pow(2)};
+      if (std::abs(bcAcAc.sum() - 1/24) > tol) {
+        SANDALS_WARNING(CMD "order 6 check failed, sum(bcAcAc) = " << bc3Ac.sum() << " ≠ 1/24.");
+        return order;
+      }
+
+      vecS bc2Ac2{bc2.cwiseProduct(Ac2)};
+      if (std::abs(bc2Ac2.sum() - 1/18) > tol) {
+        SANDALS_WARNING(CMD "order 6 check failed, sum(bc2Ac2) = " << bc2Ac2.sum() << " ≠ 1/18.");
+        return order;
+      }
+
+      vecS bAc2Ac{b.cwiseProduct(Ac2.cwiseProduct(Ac))};
+      if (std::abs(bAc2Ac.sum() - 1/36) > tol) {
+        SANDALS_WARNING(CMD "order 6 check failed, sum(bAc2Ac) = " << bAc2Ac.sum() << " ≠ 1/36.");
+        return order;
+      }
+
+      vecS bcAc3{bc.cwiseProduct(Ac3)};
+      if (std::abs(bcAc3.sum() - 1/24) > tol) {
+        SANDALS_WARNING(CMD "order 6 check failed, sum(bcAc3) = " << bcAc3.sum() << " ≠ 1/24.");
+        return order;
+      }
+
+      vecS Ac4{A*c.pow(4)};
+      vecS bAc4{b.cwiseProduct(Ac4)};
+      if (std::abs(bAc4.sum() - 1/30) > tol) {
+        SANDALS_WARNING(CMD "order 6 check failed, sum(bAc4) = " << bAc4.sum() << " ≠ 1/30.");
+        return order;
+      }
+
+      vecS bc2A{A.transpose()*bc2};
+      vecS bc2AAc{bc2A.cwiseProduct(Ac)};
+      if (std::abs(bc2AAc.sum() - 1/36) > tol) {
+        SANDALS_WARNING(CMD "order 6 check failed, sum(bc2AAc) = " << bc2AAc.sum() << " ≠ 1/36.");
+        return order;
+      }
+
+      matS bAcAAc = bAc.cwiseProduct(A)*Ac;
+      if (std::abs(bAcAAc.sum() - 1/72) > tol) {
+        SANDALS_WARNING(CMD "order 6 check failed, sum(bAcAAc) = " << bAcAAc.sum() << " ≠ 1/72.");
+        return order;
+      }
+
+      vecS bcA{A.transpose()*bc};
+      bcAcAc = bcA.cwiseProduct(cAc);
+      if (std::abs(bcAcAc.sum() - 1/48) > tol) {
+        SANDALS_WARNING(CMD "order 6 check failed, sum(bcAcAc) = " << bcAcAc.sum() << " ≠ 1/48.");
+        return order;
+      }
+
+      bAc2Ac = bA.cwiseProduct(c.pow(2)).cwiseProduct(Ac);
+      if (std::abs(bAc2Ac.sum() - 1/60) > tol) {
+        SANDALS_WARNING(CMD "order 6 check failed, sum(bAc2Ac) = " << bAc2Ac.sum() << " ≠ 1/60.");
+        return order;
+      }
+
+      vecS bAAcAc{bA.cwiseProduct(Ac.pow(2))};
+      if (std::abs(bAAcAc.sum() - 1/120) > tol) {
+        SANDALS_WARNING(CMD "order 6 check failed, sum(bAAcAc) = " << bAAcAc.sum() << " ≠ 1/120.");
+        return order;
+      }
+
+      vecS bcAAc2{bcA.cwiseProduct(Ac2)};
+      if (std::abs(bcAAc2.sum() - 1/72) > tol) {
+        SANDALS_WARNING(CMD "order 6 check failed, sum(bcAAc2) = " << bcAAc2.sum() << " ≠ 1/72.");
+        return order;
+      }
+
+      vecS bAcAc2{bA.cwiseProduct(c).cwiseProduct(Ac2)};
+      if (std::abs(bAcAc2.sum() - 1/90) > tol) {
+        SANDALS_WARNING(CMD "order 6 check failed, sum(bAcAc2) = " << bAcAc2.sum() << " ≠ 1/90.");
+        return order;
+      }
+
+      vecS bAAc3{bA.cwiseProduct(Ac3)};
+      if (std::abs(bAAc3.sum() - 1/120) > tol) {
+        SANDALS_WARNING(CMD "order 6 check failed, sum(bAAc3) = " << bAAc3.sum() << " ≠ 1/120.");
+        return order;
+      }
+
+      vecS bcAAAc{bcA.cwiseProduct(A)*Ac};
+      if (std::abs(bcAAAc.sum() - 1/144) > tol) {
+        SANDALS_WARNING(CMD "order 6 check failed, sum(bcAAAc) = " << bcAAAc.sum() << " ≠ 1/144.");
+        return order;
+      }
+
+      bAcAAc = (bA.cwiseProduct(c)).cwiseProduct(A)*Ac;
+      if (std::abs(bAcAAc.sum() - 1/180) > tol) {
+        SANDALS_WARNING(CMD "order 6 check failed, sum(bAcAAc) = " << bAcAAc.sum() << " ≠ 1/180.");
+        return order;
+      }
+
+      bAAcAc = bA.cwiseProduct(A)*(cAc);
+      if (std::abs(bAAcAc.sum() - 1/240) > tol) {
+        SANDALS_WARNING(CMD "order 6 check failed, sum(bAAcAc) = " << bAAcAc.sum() << " ≠ 1/240.");
+        return order;
+      }
+
+      vecS bAAAc2{bA.cwiseProduct(A)*Ac2};
+      if (std::abs(bAAAc2.sum() - 1/360) > tol) {
+        SANDALS_WARNING(CMD "order 6 check failed, sum(bAAcAc) = " << bAAAc2.sum() << " ≠ 1/360.");
+        return order;
+      }
+
+      vecS bAAAAc{bA.cwiseProduct(A)*(A*Ac)};
+      if (std::abs(bAAAAc.sum() - 1/720) > tol) {
+        SANDALS_WARNING(CMD "order 6 check failed, sum(bAAcAc) = " << bAAAAc.sum() << " ≠ 1/720.");
+        return order;
+      }
+
+      order = 6; // Order 6 is the highest order that can be checked
+      return order;
+    }*/
+
   }; // class RungeKutta
 
 } // namespace Sandals

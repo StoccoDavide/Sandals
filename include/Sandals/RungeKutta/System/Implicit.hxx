@@ -22,9 +22,9 @@ namespace Sandals {
   class Implicit
   {
   public:
-    using ptr  = std::shared_ptr<const Implicit>; //!< Shared pointer to an implicit ODE system.
-    using vecN = Implicit<N>; //!< Column vector type.
-    using matN = Implicit<N>; //!< Matrix type.
+    using ptr  = std::shared_ptr<const Implicit<N>>; //!< Shared pointer to an implicit ODE system.
+    using vecN = Eigen::Matrix<real, N, 1>;          //!< Templetized vector type.
+    using matN = Eigen::Matrix<real, N, N>;          //!< Templetized matrix type.
     using ODEType = enum class ODEType : integer {
       IMPLICIT = 0, EXPLICIT = 1, SEMI_EXPLICIT = 2, LINEAR_EXPLICIT = 3
     }; //!< ODE type enumeration.

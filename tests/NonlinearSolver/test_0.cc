@@ -10,66 +10,57 @@
 
 #include "Sandals.hh"
 
-using Sandals::vec2; using Sandals::mat2;
-using Sandals::vec3; using Sandals::mat3;
-using Sandals::vec4; using Sandals::mat4;
-using Sandals::vec5; using Sandals::mat5;
-using Sandals::vec6; using Sandals::mat6;
-using Sandals::vec7; using Sandals::mat7;
-using Sandals::vec8; using Sandals::mat8;
-using Sandals::vec9; using Sandals::mat9;
-
 // Broyden's Ugly solver.
-template class Sandals::BroydenUgly<vec2, mat2>;
-template class Sandals::BroydenUgly<vec3, mat3>;
-template class Sandals::BroydenUgly<vec4, mat4>;
-template class Sandals::BroydenUgly<vec5, mat5>;
-template class Sandals::BroydenUgly<vec6, mat6>;
-template class Sandals::BroydenUgly<vec7, mat7>;
-template class Sandals::BroydenUgly<vec8, mat8>;
-template class Sandals::BroydenUgly<vec9, mat9>;
+template class Sandals::BroydenUgly<2>;
+template class Sandals::BroydenUgly<3>;
+template class Sandals::BroydenUgly<4>;
+template class Sandals::BroydenUgly<5>;
+template class Sandals::BroydenUgly<6>;
+template class Sandals::BroydenUgly<7>;
+template class Sandals::BroydenUgly<8>;
+template class Sandals::BroydenUgly<9>;
 
 // Broyden's Bad solver.
-template class Sandals::BroydenBad<vec2, mat2>;
-template class Sandals::BroydenBad<vec3, mat3>;
-template class Sandals::BroydenBad<vec4, mat4>;
-template class Sandals::BroydenBad<vec5, mat5>;
-template class Sandals::BroydenBad<vec6, mat6>;
-template class Sandals::BroydenBad<vec7, mat7>;
-template class Sandals::BroydenBad<vec8, mat8>;
-template class Sandals::BroydenBad<vec9, mat9>;
+template class Sandals::BroydenBad<2>;
+template class Sandals::BroydenBad<3>;
+template class Sandals::BroydenBad<4>;
+template class Sandals::BroydenBad<5>;
+template class Sandals::BroydenBad<6>;
+template class Sandals::BroydenBad<7>;
+template class Sandals::BroydenBad<8>;
+template class Sandals::BroydenBad<9>;
 
 // Broyden's Good solver.
-template class Sandals::BroydenGood<vec2, mat2>;
-template class Sandals::BroydenGood<vec3, mat3>;
-template class Sandals::BroydenGood<vec4, mat4>;
-template class Sandals::BroydenGood<vec5, mat5>;
-template class Sandals::BroydenGood<vec6, mat6>;
-template class Sandals::BroydenGood<vec7, mat7>;
-template class Sandals::BroydenGood<vec8, mat8>;
-template class Sandals::BroydenGood<vec9, mat9>;
+template class Sandals::BroydenGood<2>;
+template class Sandals::BroydenGood<3>;
+template class Sandals::BroydenGood<4>;
+template class Sandals::BroydenGood<5>;
+template class Sandals::BroydenGood<6>;
+template class Sandals::BroydenGood<7>;
+template class Sandals::BroydenGood<8>;
+template class Sandals::BroydenGood<9>;
 
 // Broyden's Good solver.
-template class Sandals::BroydenCombined<vec2, mat2>;
-template class Sandals::BroydenCombined<vec3, mat3>;
-template class Sandals::BroydenCombined<vec4, mat4>;
-template class Sandals::BroydenCombined<vec5, mat5>;
-template class Sandals::BroydenCombined<vec6, mat6>;
-template class Sandals::BroydenCombined<vec7, mat7>;
-template class Sandals::BroydenCombined<vec8, mat8>;
-template class Sandals::BroydenCombined<vec9, mat9>;
+template class Sandals::BroydenCombined<2>;
+template class Sandals::BroydenCombined<3>;
+template class Sandals::BroydenCombined<4>;
+template class Sandals::BroydenCombined<5>;
+template class Sandals::BroydenCombined<6>;
+template class Sandals::BroydenCombined<7>;
+template class Sandals::BroydenCombined<8>;
+template class Sandals::BroydenCombined<9>;
 
 // Newton solver.
-template class Sandals::Newton<vec2, mat2>;
-template class Sandals::Newton<vec3, mat3>;
-template class Sandals::Newton<vec4, mat4>;
-template class Sandals::Newton<vec5, mat5>;
-template class Sandals::Newton<vec6, mat6>;
-template class Sandals::Newton<vec7, mat7>;
-template class Sandals::Newton<vec8, mat8>;
-template class Sandals::Newton<vec9, mat9>;
+template class Sandals::Newton<2>;
+template class Sandals::Newton<3>;
+template class Sandals::Newton<4>;
+template class Sandals::Newton<5>;
+template class Sandals::Newton<6>;
+template class Sandals::Newton<7>;
+template class Sandals::Newton<8>;
+template class Sandals::Newton<9>;
 
 int main(void) {
-  std::cout << "Hello World!" << std::endl;
+  std::cout << "Hi, I'm finding the sandal size for you!" << std::endl;
   return 0;
 }

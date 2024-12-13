@@ -33,8 +33,28 @@
 #ifndef SANDALS_ASSERT
 #define SANDALS_ASSERT(COND, MSG) \
   if (!(COND))                    \
-  SANDALS_ERROR(MSG)
+  {                               \
+    SANDALS_ERROR(MSG);           \
+  }
 #endif
+
+// Warning for Sandals
+#ifndef SANDALS_WARNING
+#define SANDALS_WARNING(MSG)        \
+  {                                 \
+    std::cout << MSG << std::endl;  \
+  }
+#endif
+
+// Warning assert for Sandals
+#ifndef SANDALS_ASSERT_WARNING
+#define SANDALS_ASSERT_WARNING(COND, MSG) \
+  if (!(COND))                            \
+  {                                       \
+    SANDALS_WARNING(MSG);                 \
+  }
+#endif
+
 
 namespace Sandals
 {
@@ -86,18 +106,19 @@ namespace Sandals
    |
   \*/
 
-  static real const EPSILON_MACHINE = std::numeric_limits<real>::epsilon();            //!< Machine epsilon epsilon static constant value.
-  static real const EPSILON_HIGH    = real(1.0e-12);                                   //!< High precision epsilon static constant value.
-  static real const EPSILON_MEDIUM  = real(1.0e-10);                                   //!< Medium precision epsilon static constant value.
-  static real const EPSILON_LOW     = real(1.0e-08);                                   //!< Low precision epsilon static constant value.
-  static real const EPSILON         = EPSILON_MEDIUM;                                  //!< Standard precision epsilon static constant value.
-  static real const INFTY           = std::numeric_limits<real>::infinity();           //!< Infinity static constant value.
-  static real const QUIET_NAN       = std::numeric_limits<real>::quiet_NaN();          //!< Not-a-Number static constant value.
-  static real const PI              = real(3.141592653589793238462643383279502884197); //!< Pi static constant value.
-  static real const PIMUL2          = real(6.283185307179586476925286766559005768394); //<! The value of \f$ 2\pi \f$.
-  static real const PIDIV2          = real(1.570796326794896619231321691639751442098); //<! The value of \f$ \pi/2 \f$.
-  static real const DEG2RAD         = real(0.017453292519943295769236907684886127134); //!< The value of \f$ \pi/180 \f$.
-  static real const RAD2DEG         = real(57.29577951308232087679815481410517033240); //!< The value of \f$ 180/\pi \f$.
+  static real const EPSILON        = std::numeric_limits<real>::epsilon();            //!< Machine epsilon epsilon static constant value.
+  static real const SQRT_EPSILON   = std::sqrt(EPSILON);                              //!< Square root of machine epsilon epsilon static constant value.
+  static real const CBRT_EPSILON   = std::cbrt(EPSILON);                              //!< Cubic root of machine epsilon epsilon static constant value.
+  static real const EPSILON_HIGH   = real(1.0e-12);                                   //!< High precision epsilon static constant value.
+  static real const EPSILON_MEDIUM = real(1.0e-10);                                   //!< Medium precision epsilon static constant value.
+  static real const EPSILON_LOW    = real(1.0e-08);                                   //!< Low precision epsilon static constant value.
+  static real const INFTY          = std::numeric_limits<real>::infinity();           //!< Infinity static constant value.
+  static real const QUIET_NAN      = std::numeric_limits<real>::quiet_NaN();          //!< Not-a-Number static constant value.
+  static real const PI             = real(3.141592653589793238462643383279502884197); //!< Pi static constant value.
+  static real const PIMUL2         = real(6.283185307179586476925286766559005768394); //<! The value of \f$ 2\pi \f$.
+  static real const PIDIV2         = real(1.570796326794896619231321691639751442098); //<! The value of \f$ \pi/2 \f$.
+  static real const DEG2RAD        = real(0.017453292519943295769236907684886127134); //!< The value of \f$ \pi/180 \f$.
+  static real const RAD2DEG        = real(57.29577951308232087679815481410517033240); //!< The value of \f$ 180/\pi \f$.
 
   static vec2 const UNITX_VEC2    = vec2::UnitX();             //!< X axis unit vec2 static constant object.
   static vec2 const UNITY_VEC2    = vec2::UnitY();             //!< Y axis unit vec2 static constant object.

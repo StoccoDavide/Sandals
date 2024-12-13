@@ -10,7 +10,13 @@
 
 #include "Sandals.hh"
 
+template class Sandals::RK4<2>;
+template class Sandals::RK4<3>;
+template class Sandals::RK4<4>;
+template class Sandals::RK4<5>;
+template class Sandals::RK4<6>;
+
 int main(void) {
-  std::cout << "Hello World!" << std::endl;
+  std::cout << "Hi, I'm finding the sandal size for you!" << std::endl;
   return 0;
 }

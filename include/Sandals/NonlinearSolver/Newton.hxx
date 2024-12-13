@@ -53,11 +53,13 @@ namespace Sandals
   //! For more details on the Newton's method with affine invariant step refer to:
   //! https://www.zib.de/deuflhard/research/algorithm/ainewton.en.html.
   //! Newton affine solver class container.
-  template <typename vecT, typename matT>
-  class Newton : public NonlinearSolver<vecT, matT>
+  template <unsigned N>
+  class Newton : public NonlinearSolver<N>
   {
-    using funT = NonlinearSolver<vecT, matT>; //!< Function type.
-    using jacT = NonlinearSolver<vecT, matT>; //!< Jacobian type.
+    using vecN = Eigen::Matrix<real, N, 1>;                 //!< Templetized vector type.
+    using matN = Eigen::Matrix<real, N, N>;                 //!< Templetized matrix type.
+    using funN = std::function<void(vecN const &, vecN &)>; //!< Non-linear function type.
+    using jacN = std::function<void(vecN const &, matN &)>; //!< Jacobian function type.
 
   public:
     //! Class constructor for a quasi-Newton solver.
@@ -71,14 +73,14 @@ namespace Sandals
     //! \param t_fun The function pointer.
     //! \param x_ini The initialization point.
     //! \param x_sol The solution point.
-    bool solve(vecT const &x_ini, vecT &x_sol) override
+    bool solve(vecN const &x_ini, vecN &x_sol) override
     {
       // Setup internal variables
       this->reset();
 
       // Initialize variables
-      matT J0, J1;
-      vecT X0, F0, D0, X1, F1, D1;
+      matN J0, J1;
+      vecN X0, F0, D0, X1, F1, D1;
       real F0_norm = real(0.0);
       real D0_norm = real(0.0);
 
@@ -129,14 +131,14 @@ namespace Sandals
     //! \param t_fun The function pointer.
     //! \param x_ini The initialization point.
     //! \param x_sol The solution point.
-    bool solve_dumped(vecT const &x_ini, vecT &x_sol) override
+    bool solve_dumped(vecN const &x_ini, vecN &x_sol) override
     {
       // Setup internal variables
       this->reset();
 
       // Initialize variables
-      matT J0, J1;
-      vecT X0, F0, D0, X1, F1, D1;
+      matN J0, J1;
+      vecN X0, F0, D0, X1, F1, D1;
       real F0_norm = real(0.0);
       real D0_norm = real(0.0);
       real F1_norm = real(0.0);
@@ -204,7 +206,7 @@ namespace Sandals
     //! \param F Function.
     //! \param J Jacobian approximation.
     //! \param D Step.
-    void step(vecT const &F, matT const &J, vecT &D) const {D = -J.inverse() * F;}
+    void step(vecN const &F, matN const &J, vecN &D) const {D = -J.inverse() * F;}
 
   }; // class Newton
 

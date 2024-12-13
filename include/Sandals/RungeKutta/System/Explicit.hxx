@@ -21,9 +21,9 @@ namespace Sandals {
   class Explicit : public Implicit<N>
   {
   public:
-    using ptr = std::shared_ptr<Explicit>; //!< Shared pointer to an explicit ODE system.
-    using matN = Implicit<N>; //!< Matrix type.
-    using vecN = Implicit<N>; //!< Column vector type.
+    using ptr  = std::shared_ptr<const Explicit<N>>; //!< Shared pointer to an explicit ODE system.
+    using vecN = Eigen::Matrix<real, N, 1>;          //!< Templetized vector type.
+    using matN = Eigen::Matrix<real, N, N>;          //!< Templetized matrix type.
 
     //! Class constructor for an explicit ODE system.
     //! \param t_name The name of the explicit ODE system.
