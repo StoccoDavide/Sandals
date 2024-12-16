@@ -17,39 +17,45 @@ namespace Sandals
 {
 
   /*\
-   |    ___                  _ _   _               _
-   |   / _ \ _   _  __ _ ___(_) \ | | _____      _| |_ ___  _ __
-   |  | | | | | | |/ _` / __| |  \| |/ _ \ \ /\ / / __/ _ \| '_ \
-   |  | |_| | |_| | (_| \__ \ | |\  |  __/\ V  V /| || (_) | | | |
-   |   \__\_\\__,_|\__,_|___/_|_| \_|\___| \_/\_/  \__\___/|_| |_|
-   |
+   |   ____                      _
+   |  | __ ) _ __ ___  _   _  __| | ___ _ __
+   |  |  _ \| '__/ _ \| | | |/ _` |/ _ \ '_ \
+   |  | |_) | | | (_) | |_| | (_| |  __/ | | |
+   |  |____/|_|  \___/ \__, |\__,_|\___|_| |_|
+   |                   |___/
   \*/
 
-  //! Quasi-Newton solver class container.
+  //! Broyden solver class container.
   template <unsigned N>
-  class QuasiNewton : public NonlinearSolver<N>
+  class Broyden : public NonlinearSolver<N>
   {
   public:
-    using vecN = Eigen::Matrix<real, N, 1>;                 //!< Templetized vector type.
-    using matN = Eigen::Matrix<real, N, N>;                 //!< Templetized matrix type.
-    using funN = std::function<void(vecN const &, vecN &)>; //!< Non-linear function type.
-    using jacN = std::function<void(vecN const &, matN &)>; //!< Jacobian function type.
+    using vec = typename NonlinearSolver<N>::vec; //!< Templetized vector type.
+    using mat = typename NonlinearSolver<N>::mat; //!< Templetized matrix type.
+    using fun = typename NonlinearSolver<N>::fun; //!< Non-linear function type.
+    using jac = typename NonlinearSolver<N>::jac; //!< Jacobian function type.
+    using NonlinearSolver<N>::solve;
+    using NonlinearSolver<N>::solve_dumped;
 
-    //! Class constructor for a quasi-Newton solver.
-    QuasiNewton(void) {}
+    //! Class constructor for a Broyden solver.
+    Broyden(void) {}
+
+    //! Get the Broyden solver name.
+    //! \return The Broyden solver name.
+    std::string name(void) const override {return "Broyden";}
 
     //! Solve non-linear system of equations \f$ \mathbf{F}(\mathbf{x}) = \mathbf{0} \f$.
     //! \param t_fun The function pointer.
     //! \param x_ini The initialization point.
     //! \param x_sol The solution point.
-    bool solve(vecN const &x_ini, vecN &x_sol)
+    bool solve(vec const &x_ini, vec &x_sol) override
     {
       // Setup internal variables
       this->reset();
 
       // Initialize variables
-      matN J0, J1;
-      vecN X0, F0, D0, DX0, DF0, X1, F1, D1, DX1, DF1;
+      mat J0, J1;
+      vec X0, F0, D0, DX0, DF0, X1, F1, D1, DX1, DF1;
       real F0_norm = real(0.0);
       real D0_norm = real(0.0);
 
@@ -63,7 +69,7 @@ namespace Sandals
       real tolerance_D_norm = this->m_tolerance * this->m_tolerance;
       this->m_converged     = false;
       for (this->m_iterations = unsigned(1);
-          this->m_iterations < this->m_max_iterations;
+           this->m_iterations < this->m_max_iterations;
            ++this->m_iterations) {
 
         // Calculate step
@@ -85,8 +91,8 @@ namespace Sandals
         DX1 = X1 - X0;
         DF1 = F1 - F0;
         this->update(
-          X0, F0, D0, DX0, DF0, J0, // Old step data
-          X1, F1, D1, DX1, DF1, J1  // New step data
+          DX0, DF0, J0, // Old step data
+          DX1, DF1, J1  // New step data
         );
 
         // Update internal variables
@@ -109,14 +115,14 @@ namespace Sandals
     //! \param t_fun The function pointer.
     //! \param x_ini The initialization point.
     //! \param x_sol The solution point.
-    bool solve_dumped(vecN const &x_ini, vecN &x_sol)
+    bool solve_dumped(vec const &x_ini, vec &x_sol) override
     {
       // Setup internal variables
       this->reset();
 
       // Initialize variables
-      matN J0, J1;
-      vecN X0, F0, D0, DX0, DF0, X1, F1, D1, DX1, DF1;
+      mat J0, J1;
+      vec X0, F0, D0, DX0, DF0, X1, F1, D1, DX1, DF1;
       real F0_norm = real(0.0);
       real D0_norm = real(0.0);
       real F1_norm = real(0.0);
@@ -135,6 +141,7 @@ namespace Sandals
       for (this->m_iterations = unsigned(1);
            this->m_iterations < this->m_max_iterations;
            ++this->m_iterations) {
+
         // Calculate step
         this->step(F0, J0, D0);
 
@@ -170,8 +177,8 @@ namespace Sandals
         DX1 = X1 - X0;
         DF1 = F1 - F0;
         this->update(
-          X0, F0, D0, DX0, DF0, J0, // Old step data
-          X1, F1, D1, DX1, DF1, J1  // New step data
+          DX0, DF0, J0, // Old step data
+          DX1, DF1, J1  // New step data
         );
 
         // Update internal variables
@@ -190,211 +197,17 @@ namespace Sandals
     }
 
     //! Jacobian approximation update rule.
-    //! \param X0  Old point.
-    //! \param F0  Old function value.
-    //! \param D0  Old step.
     //! \param DX0 Old point difference.
     //! \param DF0 Old function value difference.
     //! \param J0  Old jacobian approximation.
-    //! \param X1  New point.
-    //! \param F1  New function value.
-    //! \param D1  New step.
-    //! \param DX1 New point difference.
-    //! \param DF1 New function value difference.
-    //! \param J1  New jacobian approximation.
-    virtual void update(
-      vecN const &X0,  vecN const &F0,  vecN const &D0,
-      vecN const &DX0, vecN const &DF0, matN const &J0,
-      vecN const &X1,  vecN const &F1,  vecN const &D1,
-      vecN const &DX1, vecN const &DF1, matN       &J1
-    ) = 0;
-
-    //! Calculate the step.
-    //! \param F Function.
-    //! \param J Jacobian approximation.
-    //! \param D Step.
-    virtual void step(vecN const &F, matN const &J, vecN &D) const = 0;
-
-  }; // class QuasiNewton
-
-  /*\
-   |   ____                      _
-   |  | __ ) _ __ ___  _   _  __| | ___ _ __
-   |  |  _ \| '__/ _ \| | | |/ _` |/ _ \ '_ \
-   |  | |_) | | | (_) | |_| | (_| |  __/ | | |
-   |  |____/|_|  \___/ \__, |\__,_|\___|_| |_|
-   |                   |___/
-  \*/
-
-  //! Broyden's Ugly solver class container.
-  template <unsigned N>
-  class BroydenUgly : public QuasiNewton<N>
-  {
-  public:
-    using vecN = Eigen::Matrix<real, N, 1>; //!< Templetized vector type.
-    using matN = Eigen::Matrix<real, N, N>; //!< Templetized matrix type.
-
-    //! Get the quasi-Newton solver name.
-    //! \return The quasi-Newton solver name.
-    std::string name(void) const override {return "BroydenUgly";}
-
-  private:
-    //! Jacobian approximation update rule.
-    //! \param X0  Old point.
-    //! \param F0  Old function value.
-    //! \param D0  Old step.
-    //! \param DX0 Old point difference.
-    //! \param DF0 Old function value difference.
-    //! \param J0  Old jacobian approximation.
-    //! \param X1  New point.
-    //! \param F1  New function value.
-    //! \param D1  New step.
     //! \param DX1 New point difference.
     //! \param DF1 New function value difference.
     //! \param J1  New jacobian approximation.
     void update(
-      vecN const &/*X0*/,  vecN const &/*F0*/,  vecN const &/*D0*/,
-      vecN const &/*DX0*/, vecN const &/*DF0*/, matN const &J0,
-      vecN const &/*X1*/,  vecN const &/*F1*/,  vecN const &/*D1*/,
-      vecN const &DX1,     vecN const &DF1,     matN       &J1
-    ) override {
-      // Broyden's Ugly solver
-      // J1 = J0 - (J0*DF1-DX1)/(C'*DX1)*C', where C = DX1;
-      J1 = J0 - (J0 * DF1 - DF1) / (DX1.transpose() * DX1) * DX1.transpose();
-    }
-
-    //! Calculate the step.
-    //! \param F Function.
-    //! \param J Jacobian approximation.
-    //! \param D Step.
-    void step(vecN const &F, matN const &J, vecN &D) const override {D = -J.inverse() * F;}
-
-  }; // class BroydenUgly
-
-  //! Broyden's Bad solver class container.
-  template <unsigned N>
-  class BroydenBad : public QuasiNewton<N>
-  {
-  public:
-    using vecN = Eigen::Matrix<real, N, 1>; //!< Templetized vector type.
-    using matN = Eigen::Matrix<real, N, N>; //!< Templetized matrix type.
-
-    //! Get the quasi-Newton solver name.
-    //! \return The quasi-Newton solver name.
-    std::string name(void) const override {return "BroydenBad";}
-
-  private:
-    //! Jacobian approximation update rule.
-    //! \param X0  Old point.
-    //! \param F0  Old function value.
-    //! \param D0  Old step.
-    //! \param DX0 Old point difference.
-    //! \param DF0 Old function value difference.
-    //! \param J0  Old jacobian approximation.
-    //! \param X1  New point.
-    //! \param F1  New function value.
-    //! \param D1  New step.
-    //! \param DX1 New point difference.
-    //! \param DF1 New function value difference.
-    //! \param J1  New jacobian approximation.
-    void update(
-      vecN const &/*X0*/,  vecN const &/*F0*/,  vecN const &/*D0*/,
-      vecN const &/*DX0*/, vecN const &/*DF0*/, matN const &J0,
-      vecN const &/*X1*/,  vecN const &/*F1*/,  vecN const &/*D1*/,
-      vecN const &DX1,     vecN const &DF1,     matN       &J1
-    ) override {
-      // Broyden's Bad solver
-      // J1 = J0 - (J0*DF1-DX1)/(C'*DF1)*C', where C = DF1;
-      J1 = J0 - (J0 * DF1 - DX1) / (DF1.transpose() * DF1) * DF1.transpose();
-    }
-
-    //! Calculate the step.
-    //! \param F Function.
-    //! \param J Jacobian approximation.
-    //! \param D Step.
-    void step(vecN const &F, matN const &J, vecN &D) const override {D = -J * F;}
-
-  }; // class BroydenBad
-
-  //! Broyden's Good solver class container.
-  template <unsigned N>
-  class BroydenGood : public QuasiNewton<N>
-  {
-  public:
-    using vecN = Eigen::Matrix<real, N, 1>; //!< Templetized vector type.
-    using matN = Eigen::Matrix<real, N, N>; //!< Templetized matrix type.
-
-    //! Get the quasi-Newton solver name.
-    //! \return The quasi-Newton solver name.
-    std::string name(void) const override {return "BroydenGood";}
-
-  private:
-    //! Jacobian approximation update rule.
-    //! \param X0  Old point.
-    //! \param F0  Old function value.
-    //! \param D0  Old step.
-    //! \param DX0 Old point difference.
-    //! \param DF0 Old function value difference.
-    //! \param J0  Old jacobian approximation.
-    //! \param X1  New point.
-    //! \param F1  New function value.
-    //! \param D1  New step.
-    //! \param DX1 New point difference.
-    //! \param DF1 New function value difference.
-    //! \param J1  New jacobian approximation.
-    void update(
-      vecN const &/*X0*/,  vecN const &/*F0*/,  vecN const &/*D0*/,
-      vecN const &/*DX0*/, vecN const &/*DF0*/, matN const &J0,
-      vecN const &/*X1*/,  vecN const &/*F1*/,  vecN const &/*D1*/,
-      vecN const &DX1,     vecN const &DF1,     matN       &J1
-    ) override {
-      // Broyden's Good solver
-      // J1 = J0 - (J0*DF1-DX1)/(C'*DF1)*C', where C = J0'*DX1;
-      vecN C(J0.transpose() * DX1);
-      J1 = J0 - (J0 * DF1 - DX1) / (C.transpose() * DF1) * C.transpose();
-    }
-
-    //! Calculate the step.
-    //! \param F Function.
-    //! \param J Jacobian approximation.
-    //! \param D Step.
-    void step(vecN const &F, matN const &J, vecN &D) const override {D = -J * F;}
-
-  }; // class BroydenGood
-
-  //! Broyden's Combined solver class container.
-  template <unsigned N>
-  class BroydenCombined : public QuasiNewton<N>
-  {
-  public:
-    using vecN = Eigen::Matrix<real, N, 1>; //!< Templetized vector type.
-    using matN = Eigen::Matrix<real, N, N>; //!< Templetized matrix type.
-
-    //! Get the quasi-Newton solver name.
-    //! \return The quasi-Newton solver name.
-    std::string name(void) const override {return "BroydenCombined";}
-
-  private:
-    //! Jacobian approximation update rule.
-    //! \param X0  Old point.
-    //! \param F0  Old function value.
-    //! \param D0  Old step.
-    //! \param DX0 Old point difference.
-    //! \param DF0 Old function value difference.
-    //! \param J0  Old jacobian approximation.
-    //! \param X1  New point.
-    //! \param F1  New function value.
-    //! \param D1  New step.
-    //! \param DX1 New point difference.
-    //! \param DF1 New function value difference.
-    //! \param J1  New jacobian approximation.
-    void update(
-      vecN const &/*X0*/, vecN const &/*F0*/, vecN const &/*D0*/,
-      vecN const &DX0,    vecN const &DF0,    matN const &J0,
-      vecN const &/*X1*/, vecN const &/*F1*/, vecN const &/*D1*/,
-      vecN const &DX1,    vecN const &DF1,    matN       &J1
-    ) override {
-      vecN J0DF1(J0 * DF1);
+      vec const &DX0, vec const &DF0, mat const &J0,
+      vec const &DX1, vec const &DF1, mat       &J1
+    ) {
+      vec J0DF1(J0 * DF1);
       real DX1J0DF1 = DX1.transpose() * J0DF1;
       real DF1DF1   = DF1.transpose() * DF1;
       // Selection criteria
@@ -404,7 +217,7 @@ namespace Sandals
           this->iterations() < unsigned(2)) {
         // Broyden's Good solver
         // J1 = J0 - (J0*DF1-DX1)/(C'*DF1)*C', where C = J0'*DX1;
-        vecN C(J0.transpose() * DX1);
+        vec C(J0.transpose() * DX1);
         J1 = J0 - (J0DF1 - DX1) / (C.transpose() * DF1) * C.transpose();
       } else {
         // Broyden's Bad solver
@@ -417,9 +230,9 @@ namespace Sandals
     //! \param F Function.
     //! \param J Jacobian approximation.
     //! \param D Step.
-    void step(vecN const &F, matN const &J, vecN &D) const override {D = -J * F;}
+    void step(vec const &F, mat const &J, vec &D) const {D = -J * F;}
 
-  }; // class BroydenCombined
+  }; // class Broyden
 
 } // namespace Sandals
 

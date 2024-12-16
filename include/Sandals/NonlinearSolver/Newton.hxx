@@ -13,6 +13,8 @@
 #ifndef SANDALS_NEWTON_HXX
 #define SANDALS_NEWTON_HXX
 
+#include "Sandals/NonlinearSolver/NonlinearSolver.hxx"
+
 namespace Sandals
 {
 
@@ -56,12 +58,14 @@ namespace Sandals
   template <unsigned N>
   class Newton : public NonlinearSolver<N>
   {
-    using vecN = Eigen::Matrix<real, N, 1>;                 //!< Templetized vector type.
-    using matN = Eigen::Matrix<real, N, N>;                 //!< Templetized matrix type.
-    using funN = std::function<void(vecN const &, vecN &)>; //!< Non-linear function type.
-    using jacN = std::function<void(vecN const &, matN &)>; //!< Jacobian function type.
-
   public:
+    using vec = typename NonlinearSolver<N>::vec; //!< Templetized vector type.
+    using mat = typename NonlinearSolver<N>::mat; //!< Templetized matrix type.
+    using fun = typename NonlinearSolver<N>::fun; //!< Non-linear function type.
+    using jac = typename NonlinearSolver<N>::jac; //!< Jacobian function type.
+    using NonlinearSolver<N>::solve;
+    using NonlinearSolver<N>::solve_dumped;
+
     //! Class constructor for a quasi-Newton solver.
     Newton(void) {}
 
@@ -69,18 +73,17 @@ namespace Sandals
     //! \return The quasi-Newton solver name.
     std::string name(void) const override {return "Newton";}
 
-    using NonlinearSolver<N>::solve;
     //! Solve non-linear system of equations \f$ \mathbf{F}(\mathbf{x}) = \mathbf{0} \f$.
     //! \param x_ini The initialization point.
     //! \param x_sol The solution point.
-    bool solve(vecN const &x_ini, vecN &x_sol) override
+    bool solve(vec const &x_ini, vec &x_sol) override
     {
       // Setup internal variables
       this->reset();
 
       // Initialize variables
-      matN J0, J1;
-      vecN X0, F0, D0, X1, F1, D1;
+      mat J0, J1;
+      vec X0, F0, D0, X1, F1, D1;
       real F0_norm = real(0.0);
       real D0_norm = real(0.0);
 
@@ -131,14 +134,14 @@ namespace Sandals
     //! \param t_fun The function pointer.
     //! \param x_ini The initialization point.
     //! \param x_sol The solution point.
-    bool solve_dumped(vecN const &x_ini, vecN &x_sol) override
+    bool solve_dumped(vec const &x_ini, vec &x_sol) override
     {
       // Setup internal variables
       this->reset();
 
       // Initialize variables
-      matN J0, J1;
-      vecN X0, F0, D0, X1, F1, D1;
+      mat J0, J1;
+      vec X0, F0, D0, X1, F1, D1;
       real F0_norm = real(0.0);
       real D0_norm = real(0.0);
       real F1_norm = real(0.0);
@@ -190,10 +193,10 @@ namespace Sandals
         }
 
         // Update internal variables
-        X0  = X1;
-        F0  = F1;
-        D0  = D1;
-        J0  = J1;
+        X0 = X1;
+        F0 = F1;
+        D0 = D1;
+        J0 = J1;
       }
 
       // Convergence data
@@ -206,7 +209,7 @@ namespace Sandals
     //! \param F Function.
     //! \param J Jacobian approximation.
     //! \param D Step.
-    void step(vecN const &F, matN const &J, vecN &D) const {D = -J.inverse() * F;}
+    void step(vec const &F, mat const &J, vec &D) const {D = -J.inverse() * F;}
 
   }; // class Newton
 

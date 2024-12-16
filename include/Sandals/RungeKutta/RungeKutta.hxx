@@ -61,20 +61,20 @@ namespace Sandals {
   template <unsigned S>
   struct Tableau
   {
-    using vecS = Eigen::Matrix<real, S, 1>; //!< Vector type.
-    using matS = Eigen::Matrix<real, S, S>; //!< Matrix type.
-    using RKType = enum class RKType : unsigned {
+    using vec = Eigen::Vector<real, S>;    //!< Vector type.
+    using mat = Eigen::Matrix<real, S, S>; //!< Matrix type.
+    using type = enum class type : unsigned {
       ERK = 0, IRK = 1, DIRK = 2
     }; //!< Runge-Kutta type enumeration.
 
     std::string name;        //!< Name of the method.
-    RKType      type;        //!< Runge-Kutta type.
+    type        rk_type;     //!< Runge-Kutta type.
     unsigned    order;       //!< Order of the method.
     bool        is_embedded; //!< Embedded method boolean.
-    matS        A;           //!< Matrix \f$ \mathbf{A} \f$.
-    vecS        b;           //!< Weights vector \f$ \mathbf{b} \f$ (row vector).
-    vecS        b_e;         //!< Embedded weights vector \f$ \mathbf{b}_{e} \f$ (row vector).
-    vecS        c;           //!< Nodes vector \f$ \mathbf{c} \f$ (column vector).
+    mat         A;           //!< Matrix \f$ \mathbf{A} \f$.
+    vec         b;           //!< Weights vector \f$ \mathbf{b} \f$ (row vector).
+    vec         b_e;         //!< Embedded weights vector \f$ \mathbf{b}_{e} \f$ (row vector).
+    vec         c;           //!< Nodes vector \f$ \mathbf{c} \f$ (column vector).
   };
 
   //! \brief Class container for Runge-Kutta solvers of the system of ODEs.
@@ -125,24 +125,24 @@ namespace Sandals {
   template <unsigned S, unsigned N>
   class RungeKutta
   {
-    using vecK  = Eigen::Matrix<real, N*S, 1>;   //!< Templetized vector type.
-    using matK  = Eigen::Matrix<real, N, S>;     //!< Templetized matrix type.
-    using matJK = Eigen::Matrix<real, N*S, N*S>; //!< Templetized matrix type.
+    using vecK = Eigen::Vector<real, N*S>;      //!< Templetized vector type.
+    using matK = Eigen::Matrix<real, N, S>;     //!< Templetized matrix type.
+    using matJ = Eigen::Matrix<real, N*S, N*S>; //!< Templetized matrix type.
+    using vecS = typename Tableau<S>::vec;      //!< Templetized vector type.
+    using matS = typename Tableau<S>::mat;      //!< Templetized matrix type.
+    using vecN = typename Implicit<N>::vec;     //!< Templetized vector type.
+    using matN = typename Implicit<N>::mat;     //!< Templetized matrix type.
 
   public:
-    using RKType = typename Tableau<S>::RKType; //!< Runge-Kutta type enumeration.
-    using vecS   = typename Tableau<S>::vecS;   //!< Templetized vector type.
-    using matS   = typename Tableau<S>::matS;   //!< Templetized matrix type.
-    using vecN   = typename Implicit<N>::vecN;  //!< Templetized vector type.
-    using matN   = typename Implicit<N>::matN;  //!< Templetized matrix type.
-    using odeN   = typename Implicit<N>::ptr;   //!< Shared pointer to an ODE system
-    using matND  = Eigen::Matrix<real, N, Eigen::Dynamic>; //!< Templetized matrix type.
+    using system   = typename Implicit<N>::ptr;              //!< Shared pointer to an implicit ODE system.
+    using type     = typename Tableau<S>::type;              //!< Runge-Kutta type enumeration.
+    using time     = Eigen::Vector<real, Eigen::Dynamic>;    //!< Templetized vector type for the time.
+    using solution = Eigen::Matrix<real, N, Eigen::Dynamic>; //!< Templetized matrix type for the solution.
 
   private:
     Newton<N*S> m_newton;                //!< Newton solver for implicit methods.
-    RKType      m_rk_type;               //!< Runge-Kutta type (explicit, implicit, diagonal implicit).
     Tableau<S>  m_tableau;               //!< Butcher tableau of the Runge-Kutta method.
-    odeN        m_sys;                   //!< ODE system object pointer.
+    system      m_system;                //!< ODE system object pointer.
     real        m_abs_tol{EPSILON_LOW};  //!< Absolute tolerance for adaptive step.
     real        m_rel_tol{EPSILON_LOW};  //!< Relative tolerance for adaptive step.
     real        m_sft_fac{0.9};          //!< Safety factor for adaptive step.
@@ -163,49 +163,31 @@ namespace Sandals {
       //  this->tableau_order(this->m_tableau.A, this->m_tableau.b, this->m_tableau.c));
     }
 
-    //! Class constructor for a Runge-Kutta solver given a namne and a Tableau.
-    //! \param t_name The name of the solver.
+    //! Class constructor for a Runge-Kutta solver given a Tableau reference.
     //! \param t_tableau The Tableau reference.
-    RungeKutta(std::string t_name, Tableau<S> const &t_tableau)
-      : m_tableau(t_tableau) {
-      this->m_tableau.name = t_name;
-      this->tableau_order(this->m_tableau.A, this->m_tableau.b, this->m_tableau.c);
+    //! \param t_system The ODE system shared pointer.
+    RungeKutta(Tableau<S> const &t_tableau, system t_system)
+      : m_tableau(t_tableau), m_system(t_system) {
       //SANDALS_WARNING(
-      //  "RungeKutta::RungeKutta(...): the order of the method " << t_name << " is " <<
+      //  "RungeKutta::RungeKutta(...): the order of the method " << t_tableau.name << " is " <<
       //  this->tableau_order(this->m_tableau.A, this->m_tableau.b, this->m_tableau.c));
     }
 
-    //! Class constructor for a Runge-Kutta solver given all Tableau elements.
-    //! \param t_name The name of the solver.
-    //! \param t_order The order of the method.
-    //! \param t_is_embedded The embedded method boolean.
-    //! \param t_A The matrix \f$ \mathbf{A} \f$ (lower triangular matrix).
-    //! \param t_b The weights vector \f$ \mathbf{b} \f$.
-    //! \param t_b_e The embedded weights vector \f$ \\mathbf{b}_{e} \f$.
-    //! \param t_c The nodes vector \f$ \mathbf{c} \f$.
-    RungeKutta(std::string const &t_name, unsigned t_order, bool t_is_embedded,
-      matS const &t_A, vecS const &t_b, vecS const &t_b_e, vecS const &t_c)
-      : m_tableau({t_name, t_order, t_is_embedded, t_A, t_b, t_b_e, t_c}) {
-      //SANDALS_WARNING(
-      //  "RungeKutta::RungeKutta(...): the order of the method " << t_name << " is " <<
-      //  this->tableau_order(this->m_tableau.A, this->m_tableau.b, this->m_tableau.c));
-      }
-
     //! Check if the solver is explicit, implicit or diagonal implicit
     //! \return The type of the solver.
-    RKType rk_type(void) const {return this->m_tableau.type;}
+    type rk_type(void) const {return this->m_tableau.rk_type;}
 
     //! Cheack if the solver is explicit.
     //! \return True if the solver is explicit, false otherwise.
-    bool is_explicit(void) const {return this->m_tableau.type == RKType::ERK;}
+    bool is_explicit(void) const {return this->m_tableau.rk_type == type::ERK;}
 
     //! Cheack if the solver is implicit.
     //! \return True if the solver is implicit, false otherwise.
-    bool is_implicit(void) const {return this->m_tableau.type == RKType::IRK;}
+    bool is_implicit(void) const {return this->m_tableau.rk_type == type::IRK;}
 
     //! Cheack if the solver is diagonal implicit.
     //! \return True if the solver is diagonal implicit, false otherwise.
-    bool is_diagonal_implicit(void) const {return this->m_tableau.type == RKType::DIRK;}
+    bool is_diagonal_implicit(void) const {return this->m_tableau.rk_type == type::DIRK;}
 
     //! Get the Tableau reference.
     //! \return The Tableau reference.
@@ -247,17 +229,13 @@ namespace Sandals {
     //! \return The nodes vector \f$ \mathbf{c} \f$.
     vecS c(void) const {return c;}
 
-    //! Get the ODE system pointer.
-    //! \return The ODE system pointer.
-    odeN ode(void) {return this->m_sys;}
+    //! Get the ODE system shared pointer.
+    //! \return The ODE system shared pointer.
+    system ode(void) {return this->m_system;}
 
-    //! Set the ODE system pointer.
-    //! \param t_ode_ptr The ODE system pointer.
-    void ode(odeN t_ode_ptr) {this->m_sys = t_ode_ptr;}
-
-    //! Set the ODE system pointer.
-    //! \param t_ode The ODE system pointer.
-    // FIXME: void ode(Implicit<N> const &t_ode) {this->m_sys = std::make_shared<const Implicit<N>>(t_ode);}
+    //! Set the ODE system shared pointer.
+    //! \param t_system The ODE system shared pointer.
+    void ode(system t_system) {this->m_system = t_system;}
 
     //! Get the adaptive step absolute tolerance.
     //! \return The adaptive step absolute tolerance.
@@ -465,38 +443,41 @@ namespace Sandals {
     //! Runge-Kutta method the time step is not modified through any error control
     //! method.
     //!
-    //! \param x_k States value at \f$ k \f$-th time step \f$ \mathbf{x}(t_k) \f$.
-    //! \param t_k Time step \f$ t_k \f$.
-    //! \param d_t Advancing time step \f$ \Delta t\f$.
-    //! \param x_o The approximation of the states at \f$ k+1 \f$-th time step
+    //! \param x_old States value at \f$ k \f$-th time step \f$ \mathbf{x}(t_k) \f$.
+    //! \param t_old Time step \f$ t_k \f$.
+    //! \param t_step Advancing time step \f$ \Delta t\f$.
+    //! \param x_new The approximation of the states at \f$ k+1 \f$-th time step
     //!            \f$ \mathbf{x_{k+1}}(t_{k}+\Delta t) \f$
-    //! \param d_t_star The suggested time step for the next advancing step
+    //! \param t_est The suggested time step for the next advancing step
     //!                 \f$ \Delta t_{k+1} \f$.
     //! \return True if the step is successfully computed, false otherwise.
-    bool explicit_step(vecN const &x_k, real t_k, real d_t, vecN &x_o, real &d_t_star) const
+    bool explicit_step(vecN const &x_old, real t_old, real t_step, vecN &x_new, real &t_est)
     {
       using Eigen::all;
       using Eigen::seqN;
 
       // Compute the K variables in the case of an explicit method and explicit system
-      real t_i;
-      vecN x_i;
-      matK K{matK::Zero()};
+      real t_node;
+      vecN x_node;
+      matK K;
       for (unsigned i = 0; i < S; ++i)
       {
-        t_i = t_k + this->m_tableau.c(i) * d_t;
-        x_i = x_k + K(all, seqN(0, i)) * this->m_tableau.A(i, seqN(0, i)).transpose();
-        K.col(i) = d_t * static_cast<Explicit<N>>(this->m_sys)->f(x_i, t_i);
+        // FIXME: optimize this loop
+        t_node = t_old + this->m_tableau.c(i) * t_step;
+        x_node = x_old + K(all, seqN(0, i)) * this->m_tableau.A(i, seqN(0, i)).transpose();
+        K.col(i) = t_step * static_cast<Explicit<N> const *>(this->m_system.get())->f(x_node, t_node);
+        std::cout << "K[" << i << "] = " << K.col(i).transpose() << std::endl;
       }
       if (!K.allFinite()) {return false;}
 
       // Perform the step and obtain the next state
-      x_o = x_k + K * this->m_tableau.b;
+      x_new = x_old + K * this->m_tableau.b;
 
       // Adapt next time step
       if (this->m_adaptive_step && this->m_is_embedded) {
-        vecN x_e = x_k + K * this->m_tableau.b_e;
-        d_t_star = this->estimate_step(x_o, x_e, d_t);
+        // FIXME: optimize this loop
+        vecN x_e = x_old + K * this->m_tableau.b_e;
+        t_est = this->estimate_step(x_new, x_e, t_step);
       }
       return true;
     }
@@ -513,20 +494,21 @@ namespace Sandals {
     //! \param K_k Variables \f$ \mathbf{K} \f$ of the system to be solved.
     //! \param t_k Time step \f$ t_k \f$.
     //! \param d_t Advancing time step \f$ \Delta t \f$.
-    //! \return The residual of system to be solved.
-    vecK implicit_residual(vecN const &x_k, vecK const &K_k, real t_k, real d_t) const
+    //! \param fun The residual of system to be solved.
+    void implicit_function(vecN const &x_k, vecK const &K_k, real t_k, real d_t, vecK &fun) const
     {
       // Loop through each equation of the system
       real t_i;
       vecN x_i;
-      matK res{matK::Zero()};
-      matK K{K_k.reshaped(N, S)};
+      matK K{K_k.reshaped(N, S)}; // FIXME: can i avoid reshaping?
+      matK fun_tmp;
       for (unsigned i = 0; i < S; ++i) {
+        // FIXME: optimize this loop
         t_i = t_k + this->m_tableau.c(i) * d_t;
         x_i = x_k + K * this->m_tableau.A.row(i).transpose();
-        res.col(i) = this->m_sys->F(x_i, K.col(i) / d_t, t_i);
+        fun_tmp.col(i) = this->m_system->F(x_i, K.col(i) / d_t, t_i);
       }
-      return res.reshaped(N*S, 1);
+      fun = fun_tmp.reshaped(N*S, 1);
     }
 
     //! Compute the Jacobian of the system of equations:
@@ -550,8 +532,8 @@ namespace Sandals {
     //! \param K_k Variables \f$ \mathbf{K} \f$ of the system to be solved.
     //! \param t_k Time step \f$ t_k \f$.
     //! \param d_t Advancing time step \f$ \Delta t \f$.
-    //! \return The Jacobian of the system of equations to be solved.
-    matJK implicit_jacobian(vecN const &x_k, vecK const &K_k, real t_k, real d_t) const
+    //! \param jac The Jacobian of the system of equations to be solved.
+    void implicit_jacobian(vecN const &x_k, vecK const &K_k, real t_k, real d_t, matJ &jac) const
     {
       using Eigen::all;
       using Eigen::seqN;
@@ -560,7 +542,6 @@ namespace Sandals {
       matK K{K_k.reshaped(N, S)};
       vecN x_dot_i;
       matN JF_x, JF_x_dot;
-      matJK JK;
       auto idx = seqN(0, N-1);
       auto jdx = idx;
       real t_i;
@@ -571,24 +552,23 @@ namespace Sandals {
 
         // Compute the Jacobians with respect to x and x_dot
         x_dot_i  = K.col(i) / d_t;
-        JF_x     = this->m_sys->JF_x(x_i, x_dot_i, t_i);
-        JF_x_dot = this->m_sys->JF_x_dot(x_i, x_dot_i, t_i);
+        JF_x     = this->m_system->JF_x(x_i, x_dot_i, t_i);
+        JF_x_dot = this->m_system->JF_x_dot(x_i, x_dot_i, t_i);
 
         // Derivative of F(x_i, K(:,i)/d_t, t_i)
         jdx = seqN(0, N-1);
-        for (unsigned j = 0; j < S; ++i) {
+        for (unsigned j = 0; j < S; ++j) {
           // Combine the Jacobians with respect to x and x_dot to obtain the
           // Jacobian with respect to K
           if (i == j) {
-            JK(idx, jdx) = this->m_tableau.A(i,j) * JF_x + JF_x_dot / d_t;
+            jac(idx, jdx) = this->m_tableau.A(i,j) * JF_x + JF_x_dot / d_t;
           } else {
-            JK(idx, jdx) = this->m_tableau.A(i,j) * JF_x;
+            jac(idx, jdx) = this->m_tableau.A(i,j) * JF_x;
           }
           jdx = seqN(j*N, (j+1)*N-1);
         }
         idx = seqN(i*N, (i+1)*N-1);
       }
-      return JK;
     }
 
     //! Compute an integration step using the implicit Runge-Kutta method for a
@@ -663,11 +643,12 @@ namespace Sandals {
     //! \return True if the step is successfully computed, false otherwise.
     bool implicit_step(vecN const &x_k, real t_k, real d_t, vecN &x_o, real &d_t_star)
     {
+      std::cout << "implicit_step: ";
       // Check if the solver converged
       vecK K;
       if (!this->m_newton.solve(
-        [&](vecK const &K) {return this->implicit_residual(x_k, K, t_k, d_t);},
-        [&](vecK const &K) {return this->implicit_jacobian(x_k, K, t_k, d_t);},
+        [this, &x_k, t_k, d_t](vecK const &K, vecK &fun) {this->implicit_function(x_k, K, t_k, d_t, fun);},
+        [this, &x_k, t_k, d_t](vecK const &K, matJ &jac) {this->implicit_jacobian(x_k, K, t_k, d_t, jac);},
         vecK::Zero(), K)) {return false;}
 
       // Perform the step and obtain x_k+1
@@ -678,6 +659,7 @@ namespace Sandals {
         vecN x_e{x_k + K.reshaped(N, S) * this->m_tableau.b_e};
         d_t_star = this->estimate_step(x_o, x_e, d_t);
       }
+      std::cout << "DONE" << std::endl;
       return true;
     }
 
@@ -702,7 +684,7 @@ namespace Sandals {
     //! \return True if the step is successfully computed, false otherwise.
     bool step(vecN const &x_k, real t_k, real d_t, vecN &x_o, real &d_t_star)
     {
-      if (this->is_explicit() && this->m_sys->is_explicit()) {
+      if (this->is_explicit() && this->m_system->is_explicit()) {
         return this->explicit_step(x_k, t_k, d_t, x_o, d_t_star);
       } else {
         return this->implicit_step(x_k, t_k, d_t, x_o, d_t_star);
@@ -754,7 +736,7 @@ namespace Sandals {
         while (k > 0)
         {
           // Calculate the next time step with substepping logic
-          if (this->step(x_tmp, t_tmp, d_t_tmp, x_tmp, d_t_star_tmp)) {
+          if (this->step(x_tmp, t_tmp, d_t_tmp, x_new, d_t_star_tmp)) {
 
             // Accept the step
             d_t_tmp = d_t_star_tmp;
@@ -815,22 +797,22 @@ namespace Sandals {
     //!
     //! \param t Time mesh points \f$ \mathbf{t} = \left[ t_0, t_1, \ldots, t_n
     //!          \right]^T \f$.
-    //! \param x_0 Initial conditions \f$ \mathbf{x}(t_0) \f$.
-    //! \param x_o A matrix \f$ \left[(\mathrm{size}(\mathbf{x}) \times \mathrm{size}
+    //! \param ics Initial conditions \f$ \mathbf{x}(t = 0) \f$.
+    //! \param sol A matrix \f$ \left[(\mathrm{size}(\mathbf{x}) \times \mathrm{size}
     //!            (\mathbf{t})\right] \f$ containing the approximated solution
     //!            over the mesh of time points.
     //! \return True if the system is successfully solved, false otherwise.
-    bool solve(vecD const &t, vecN const &x_0, matND &x_o)
+    bool solve(vecD const &t, vecN const &ics, solution &sol)
     {
       using Eigen::last;
 
       // Store first step
-      x_o.resize(x_0.size(), t.size());
-      x_o.col(0) = x_0;
+      sol.resize(ics.size(), t.size());
+      sol.col(0) = ics;
       unsigned s{0};
 
       // Update the current step
-      vecN x_s{x_0};
+      vecN x_s{ics};
       real t_s{t(0)};
       real d_t_s{t(1) - t(0)};
       real d_t_tmp{d_t_s}, d_t_star;
@@ -838,17 +820,17 @@ namespace Sandals {
 
       while (true) {
         // Integrate system
-        if (!this->advance(x_s, t_s, d_t_s, x_s, d_t_star)) {return false;}
+        if (!this->advance(sol.col(s), t_s, d_t_s, x_s, d_t_star)) {return false;}
 
         // Update the current step
         t_s = t_s + d_t_s;
 
         // Saturate the suggested timestep
-        mesh_point_bool = std::abs(t_s - t(s)) < SQRT_EPSILON;
-        saturation_bool = t_s + d_t_star > t(s) + SQRT_EPSILON;
+        mesh_point_bool = std::abs(t_s - t(s+1)) < SQRT_EPSILON;
+        saturation_bool = t_s + d_t_star > t(s+1) + SQRT_EPSILON;
         if (this->m_adaptive_step && !mesh_point_bool && saturation_bool) {
           d_t_tmp = d_t_star;
-          d_t_s   = t(s) - t_s;
+          d_t_s   = t(s+1) - t_s;
         } else {
           d_t_s = d_t_star;
         }
@@ -860,7 +842,7 @@ namespace Sandals {
           d_t_s = d_t_tmp;
 
           // Update outputs
-          x_o.col(s) = x_s;
+          sol.col(s) = x_s;
 
           // Check if the current step is the last one
           if (std::abs(t_s - t(last)) < SQRT_EPSILON) {break;}
@@ -873,12 +855,12 @@ namespace Sandals {
     //! suggested mesh of time points with adaptive step size control.
     //! \param t Time mesh points \f$ \mathbf{t} = \left[ t_0, t_1, \ldots, t_n
     //!          \right]^T \f$.
-    //! \param x_0 Initial states value \f$ \mathbf{x}(t_0) \f$.
-    //! \param x_o A matrix \f$ \left[(\mathrm{size}(\mathbf{x}) \times \mathrm{size}
+    //! \param ics Initial conditions \f$ \mathbf{x}(t = 0) \f$.
+    //! \param sol A matrix \f$ \left[(\mathrm{size}(\mathbf{x}) \times \mathrm{size}
     //!           (\mathbf{t})\right] \f$ containing the approximated solution
     //!           over the mesh of time points.
     //! \return True if the system is successfully solved, false otherwise.
-    bool adaptive_solve(vecD t, vecN const &x_0, matND &x_o) const
+    bool adaptive_solve(vecD t, vecN const &ics, solution &sol) const
     {
       using Eigen::last;
 
@@ -899,14 +881,14 @@ namespace Sandals {
 
       // Store first step
       t_o(0)     = t(0);
-      x_o.col(0) = x_0;
+      sol.col(0) = ics;
 
       // Instantiate temporary variables
       unsigned s{0}; // Current step
 
       while (true) {
         // Integrate system
-        this->advance(x_o.col(s), t_o(s), d_t, x_o.col(s+1), d_t_star);
+        this->advance(sol.col(s), t_o(s), d_t, sol.col(s+1), d_t_star);
 
         // Saturate the suggested timestep
         d_t = std::max(std::min(d_t_star, t_max), t_min);
@@ -923,7 +905,7 @@ namespace Sandals {
 
       // Resize the output
       t_o.conservativeResize(s-1);
-      x_o.conservativeResize(Eigen::NoChange, s-1);
+      sol.conservativeResize(Eigen::NoChange, s-1);
 
       return true;
 
@@ -970,7 +952,7 @@ namespace Sandals {
       order = 1; // Order 1 is the highest order that can be checked
 
       // Check order 2
-      vecS bc{b.cwiseProduct(c)};
+      auto bc{b.array() * c.array()};
       if (std::abs(bc.sum() - 1/2) > tol) {
         SANDALS_WARNING(CMD "order 2 check failed, sum(b*c) = " << bc.sum() << " ≠ 1/2.");
         return order;
@@ -979,13 +961,13 @@ namespace Sandals {
       order = 2; // Order 2 is the highest order that can be checked
 
       // Check order 3
-      vecS bc2{b.cwiseProduct(c.pow(2))};
+      auto bc2{b.array() * (c.pow(2)).array()};
       if (std::abs(bc2.sum() - 1/3) > tol) {
         SANDALS_WARNING(CMD "order 3 check failed, sum(b*c^2) = " << bc2.sum() << " ≠ 1/3.");
         return order;
       }
 
-      vecS bAc = b.cwiseProduct(Ac);
+      auto bAc{b.array() * Ac.array()};
       if (std::abs(bAc.sum() - 1/6) > tol) {
         SANDALS_WARNING(CMD "order 3 check failed, sum(b*d) = " << bAc.sum() << " ≠ 1/6.");
         return order;
@@ -994,26 +976,26 @@ namespace Sandals {
       order = 3; // Order 3 is the highest order that can be checked
 
       // Check order 4
-      vecS bc3{b.cwiseProduct(c.pow(3))};
+      auto bc3{b.array() * (c.pow(3)).array()};
       if (std::abs(bc3.sum() - 1/4) > tol) {
         SANDALS_WARNING(CMD "order 4 check failed, sum(b*c^3) = " << bc3.sum() << " ≠ 1/4.");
         return order;
       }
 
-      vecS cAc{c.cwiseProduct(Ac)};
+      auto cAc{c.array() * Ac.array()};
       vecS bcAc{b.cwiseProduct(cAc)};
       if (std::abs(bcAc.sum() - 1/8) > tol) {
         SANDALS_WARNING(CMD "order 4 check failed, sum(b*c*A*c) = " << bcAc.sum() << " ≠ 1/8.");
         return order;
       }
 
-      vecS bAc2{bA.cwiseProduct(c.pow(2))};
+      auto bAc2{bA.array() * (c.pow(2)).array()};
       if (std::abs(bAc2.sum() - 1/12) > tol) {
         SANDALS_WARNING(CMD "order 4 check failed, sum(b*A*c^2) = " << bAc2.sum() << " ≠ 1/12.");
         return order;
       }
 
-      vecS bAAc{bA.cwiseProduct(Ac)};
+      auto bAAc{bA.array() * Ac.array()};
       if (std::abs(bAAc.sum() - 1/24) > tol) {
         SANDALS_WARNING(CMD "order 4 check failed, sum(b*A*A*c) = " << bAAc.sum() << " ≠ 1/24.");
         return order;
@@ -1022,13 +1004,13 @@ namespace Sandals {
       order = 4; // Order 4 is the highest order that can be checked
 
       // Check order 5
-      vecS bc4{b.cwiseProduct(c.pow(4))};
+      auto bc4{b.array() * (c.pow(4)).array()};
       if (std::abs(bc4.sum() - 1/5) > tol) {
         SANDALS_WARNING(CMD "order 5 check failed, sum(b*c^4) = " << bc4.sum() << " ≠ 1/5.");
         return order;
       }
 
-      vecS bc2Ac{bc2.cwiseProduct(Ac)};
+      auto bc2Ac{bc2.array() * Ac.array()};
       if (std::abs(bc2Ac.sum() - 1/10) > tol) {
         SANDALS_WARNING(CMD "order 5 check failed, sum(b*c^2*A*c) = " << bc2Ac.sum() << " ≠ 1/10.");
         return order;

@@ -31,10 +31,12 @@ namespace Sandals
   class RK4Tableau : public Tableau<4>
   {
     public:
+    using Tableau<4>::type; //!< Type enumeration.
+
     //! Class constructor for the RK4 method.
     RK4Tableau(void) {
       this->name        = "RK4";
-      this->type        = RKType::ERK;
+      this->rk_type     = type::ERK;
       this->order       = 4;
       this->is_embedded = false;
       this->A << 0.0, 0.0, 0.0, 0.0,
@@ -52,10 +54,17 @@ namespace Sandals
   class RK4 : public RungeKutta<4, N>
   {
   public:
-    using odeN = typename Explicit<N>::ptr; //!< Shared pointer to an ODE system
+  using System = typename Implicit<N>::ptr; //!< System type.
 
-    //! Class constructor for the RK4 method.
+    //! Class constructor for a Runge-Kutta solver given a Tableau reference.
+    //! \param t_tableau The Tableau reference.
     RK4(void) : RungeKutta<4, N>(RK4Tableau()) {}
+
+    //! Class constructor for a Runge-Kutta solver given a Tableau reference.
+    //! \param t_tableau The Tableau reference.
+    //! \param t_system The system reference.
+    RK4(System t_system) : RungeKutta<4, N>(RK4Tableau(), t_system) {}
+
   }; // class RK4
 
 } // namespace Sandals

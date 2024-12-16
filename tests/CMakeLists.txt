@@ -8,18 +8,27 @@
 # e-mail: davide.stocco@unitn.it           e-mail: enrico.bertolazzi@unitn.it #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
+find_package(Matplot++ REQUIRED)
+
 file(GLOB_RECURSE
-  NONLINEAR_SOLVER_TESTS
-  "${CMAKE_CURRENT_SOURCE_DIR}/NonlinearSolver/test_*.cc"
+  BROYDEN_TESTS
+  "${CMAKE_CURRENT_SOURCE_DIR}/Broyden/test_*.cc"
 )
-add_executable(test_nonlinear_solver ${NONLINEAR_SOLVER_TESTS})
-target_link_libraries(test_nonlinear_solver PRIVATE sandals)
+add_executable(test_broyden ${BROYDEN_TESTS})
+target_link_libraries(test_broyden PRIVATE sandals Matplot++::matplot)
+
+file(GLOB_RECURSE
+  NEWTON_TESTS
+  "${CMAKE_CURRENT_SOURCE_DIR}/Newton/test_*.cc"
+)
+add_executable(test_newton ${NEWTON_TESTS})
+target_link_libraries(test_newton PRIVATE sandals Matplot++::matplot)
 
 file(GLOB_RECURSE
 RUNGEKUTTA_TESTS
   "${CMAKE_CURRENT_SOURCE_DIR}/RungeKutta/test_*.cc"
 )
 add_executable(test_rungekutta ${RUNGEKUTTA_TESTS})
-target_link_libraries(test_rungekutta PRIVATE sandals)
+target_link_libraries(test_rungekutta PRIVATE sandals Matplot++::matplot)
 
 # That's all folks!

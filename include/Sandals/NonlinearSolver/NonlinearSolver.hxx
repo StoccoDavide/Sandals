@@ -33,16 +33,16 @@ namespace Sandals
   class NonlinearSolver
   {
   public:
-    using vecN = Eigen::Matrix<real, N, 1>;                 //!< Templetized vector type.
-    using matN = Eigen::Matrix<real, N, N>;                 //!< Templetized matrix type.
-    using funN = std::function<void(vecN const &, vecN &)>; //!< Non-linear function type.
-    using jacN = std::function<void(vecN const &, matN &)>; //!< Jacobian function type.
+    using vec = Eigen::Vector<real, N>;                  //!< Templetized vector type.
+    using mat = Eigen::Matrix<real, N, N>;               //!< Templetized matrix type.
+    using fun = std::function<void(vec const &, vec &)>; //!< Non-linear function type.
+    using jac = std::function<void(vec const &, mat &)>; //!< Jacobian function type.
 
   protected:
-    funN     m_function_ptr;             //!< Non-linear function pointer.
-    jacN     m_jacobian_ptr;             //!< Jacobian function pointer.
-    real     m_tolerance{EPSILON_LOW};   //!< Solver tolerance.
-    real     m_alpha{0.9};               //!< Relaxation factor.
+    fun      m_fun;                      //!< Non-linear function.
+    jac      m_jac;                      //!< Jacobian function.
+    real     m_tolerance{EPSILON_HIGH};  //!< Solver tolerance.
+    real     m_alpha{0.8};               //!< Relaxation factor.
     unsigned m_max_iterations{100};      //!< Maximum number of allowed algorithm iterations.
     unsigned m_max_fun_evaluations{100}; //!< Maximum number of allowed function evaluations.
     unsigned m_max_jac_evaluations{100}; //!< Maximum number of allowed Jacobian evaluations.
@@ -187,10 +187,10 @@ namespace Sandals
     //! \param t_jac The jacobian of the non-linear function pointer.
     //! \param x_ini The initialization point.
     //! \param x_sol The solution point.
-    bool solve(funN t_fun, jacN t_jac, vecN const &x_ini, vecN &x_sol)
+    bool solve(fun t_fun, jac t_jac, vec const &x_ini, vec &x_sol)
     {
-      this->m_function_ptr = t_fun;
-      this->m_jacobian_ptr = t_jac;
+      this->m_fun = t_fun;
+      this->m_jac = t_jac;
       return this->solve(x_ini, x_sol);
     }
 
@@ -200,10 +200,10 @@ namespace Sandals
     //! \param t_jac The jacobian of the non-linear function pointer.
     //! \param x_ini The initialization point.
     //! \param x_sol The solution point.
-    bool solve_dumped(funN t_fun, jacN t_jac, vecN const &x_ini, vecN &x_sol)
+    bool solve_dumped(fun t_fun, jac t_jac, vec const &x_ini, vec &x_sol)
     {
-      this->m_function_ptr = t_fun;
-      this->m_jacobian_ptr = t_jac;
+      this->m_fun = t_fun;
+      this->m_jac = t_jac;
       return this->solve_dumped(x_ini, x_sol);
     }
 
@@ -226,33 +226,33 @@ namespace Sandals
     //! Evaluate function \f$ \mathbf{F}(\mathbf{x}) \f$.
     //! \param x Input point.
     //! \param F Output value.
-    void evaluate_function(vecN const &x, vecN &F)
+    void evaluate_function(vec const &x, vec &F)
     {
       ++this->m_fun_evaluations;
-      this->m_function_ptr(x, F);
+      this->m_fun(x, F);
     }
 
     //! Evaluate jacobian \f$ \mathbf{J}(\mathbf{x}) \f$.
     //! \param x Input point.
     //! \param J Output value.
-    void evaluate_jacobian(vecN const &x, matN &J)
+    void evaluate_jacobian(vec const &x, mat &J)
     {
       ++this->m_jac_evaluations;
-      this->m_jacobian_ptr(x, J);
+      this->m_jac(x, J);
     }
 
     //! Solve non-linear system of equations \f$ \mathbf{F}(\mathbf{x}) = \mathbf{0} \f$.
     //! \param t_fun The function pointer.
     //! \param x_ini The initialization point.
     //! \param x_sol The solution point.
-    virtual bool solve(vecN const &x_ini, vecN &x_sol) = 0;
+    virtual bool solve(vec const &x_ini, vec &x_sol) = 0;
 
     //! Solve non-linear system of equations \f$ \mathbf{F}(\mathbf{x}) = \mathbf{0} \f$
     //! with dumping factor \f$ \alpha \f$.
     //! \param t_fun The function pointer.
     //! \param x_ini The initialization point.
     //! \param x_sol The solution point.
-    virtual bool solve_dumped(vecN const &x_ini, vecN &x_sol) = 0;
+    virtual bool solve_dumped(vec const &x_ini, vec &x_sol) = 0;
 
   }; // class NonlinearSolver
 

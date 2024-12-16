@@ -68,28 +68,28 @@ namespace Sandals
    |
   \*/
 
-  using real    = double;       //!< Real number type.
-  using integer = int;          //!< Integer number type.
-  using ostream = std::ostream; //!< Output stream type.
+  using real     = double;       //!< Real number type.
+  using integer  = int;          //!< Integer number type.
+  using ostream  = std::ostream; //!< Output stream type.
 
-  using vec2 = Eigen::Matrix<real, 2, 1>; //!< 2x1 vector of real number type (column vector)
+  using vec2 = Eigen::Vector<real, 2>;    //!< 2x1 vector of real number type (column vector)
   using mat2 = Eigen::Matrix<real, 2, 2>; //!< 2x2 matrix of real number type
-  using vec3 = Eigen::Matrix<real, 3, 1>; //!< 3x1 vector of real number type (column vector)
+  using vec3 = Eigen::Vector<real, 3>;    //!< 3x1 vector of real number type (column vector)
   using mat3 = Eigen::Matrix<real, 3, 3>; //!< 3x3 matrix of real number type
-  using vec4 = Eigen::Matrix<real, 4, 1>; //!< 4x1 vector of real number type (column vector)
+  using vec4 = Eigen::Vector<real, 4>;    //!< 4x1 vector of real number type (column vector)
   using mat4 = Eigen::Matrix<real, 4, 4>; //!< 4x4 matrix of real number type
-  using vec5 = Eigen::Matrix<real, 5, 1>; //!< 5x1 vector of real number type (column vector)
+  using vec5 = Eigen::Vector<real, 5>;    //!< 5x1 vector of real number type (column vector)
   using mat5 = Eigen::Matrix<real, 5, 5>; //!< 5x5 matrix of real number type
-  using vec6 = Eigen::Matrix<real, 6, 1>; //!< 6x1 vector of real number type (column vector)
+  using vec6 = Eigen::Vector<real, 6>;    //!< 6x1 vector of real number type (column vector)
   using mat6 = Eigen::Matrix<real, 6, 6>; //!< 6x6 matrix of real number type
-  using vec7 = Eigen::Matrix<real, 7, 1>; //!< 7x1 vector of real number type (column vector)
+  using vec7 = Eigen::Vector<real, 7>;    //!< 7x1 vector of real number type (column vector)
   using mat7 = Eigen::Matrix<real, 7, 7>; //!< 7x7 matrix of real number type
-  using vec8 = Eigen::Matrix<real, 8, 1>; //!< 8x1 vector of real number type (column vector)
+  using vec8 = Eigen::Vector<real, 8>;    //!< 8x1 vector of real number type (column vector)
   using mat8 = Eigen::Matrix<real, 8, 8>; //!< 8x8 matrix of real number type
-  using vec9 = Eigen::Matrix<real, 9, 1>; //!< 9x1 vector of real number type (column vector)
+  using vec9 = Eigen::Vector<real, 9>;    //!< 9x1 vector of real number type (column vector)
   using mat9 = Eigen::Matrix<real, 9, 9>; //!< 9x9 matrix of real number type
 
-  using vecD = Eigen::Matrix<real, Eigen::Dynamic, 1>;              //!< Nx1 vector of real number type (column vector).
+  using vecD = Eigen::Vector<real, Eigen::Dynamic>;                 //!< Nx1 vector of real number type (column vector).
   using matD = Eigen::Matrix<real, Eigen::Dynamic, Eigen::Dynamic>; //!< NxN matrix of real number type.
 
   using scale     = Eigen::DiagonalMatrix<real, 3>;           //!< 3D scaling transformation type.
