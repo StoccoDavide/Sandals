@@ -83,7 +83,7 @@ namespace Sandals
     //!
     //! \f[
     //!   \mathbf{JF}_{\mathbf{x}}(\mathbf{x}, \mathbf{x}^{\prime}, t) =
-    //!   \dfrac{\partial\mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, t)}{\partial\mathbf{x}} \text{.}
+    //!   \frac{\partial\mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, t)}{\partial\mathbf{x}} \text{.}
     //! \f]
     //!
     //! \param x     States \f$ \mathbf{x} \f$.
@@ -97,7 +97,7 @@ namespace Sandals
     //!
     //! \f[
     //!   \mathbf{JF}_{\mathbf{x}^{\prime}}(\mathbf{x}, \mathbf{x}^{\prime}, t) =
-    //!   \dfrac{\partial\mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, t)}{\partial\mathbf{x}^{\prime}} \text{.}
+    //!   \frac{\partial\mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, t)}{\partial\mathbf{x}^{\prime}} \text{.}
     //! \f]
     //!
     //! \param x     States \f$ \mathbf{x} \f$.

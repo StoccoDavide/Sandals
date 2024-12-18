@@ -19,14 +19,14 @@ Are you looking for the online documentation? Visit [this link](https://StoccoDa
 
 ## Authors
 
-- Davide Stocco \
-  University of Trento \
-  Department of Industrial Engineering \
+- Davide Stocco <br>
+  University of Trento <br>
+  Department of Industrial Engineering <br>
   email: davide.stocco@unitn.it
 
-- Enrico Bertolazzi \
-  University of Trento \
-  Department of Industrial Engineering \
+- Enrico Bertolazzi <br>
+  University of Trento <br>
+  Department of Industrial Engineering <br>
   email: enrico.bertolazzi@unitn.it
 
 Aka...
@@ -41,7 +41,7 @@ Aka...
 
 ## License
 
-The `Sandals` project is distributed under the GNU GPLv3 (General Public License v3.0) - see the [LICENSE](LICENSE) file for details.
+The `Sandals` project is distributed under the GNU GPLv3 (General Public License v3.0) - see the [LICENSE](https://StoccoDavide.github.io/Sandals/LICENSE) file for details.
 
 Here's what the license entails:
 

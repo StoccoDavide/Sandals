@@ -77,6 +77,109 @@ namespace Sandals {
     vec         c;           //!< Nodes vector \f$ \mathbf{c} \f$ (column vector).
   };
 
+
+  template <unsigned N>
+  struct Solution
+  {
+    using vec = Eigen::Vector<real, Eigen::Dynamic>;    //!< Templetized matrix type.
+    using mat = Eigen::Matrix<real, N, Eigen::Dynamic>; //!< Templetized matrix type.
+
+    vec time;   //!< Time vector.
+    mat states; //!< States solution matrix.
+
+    //! Default class constructor for the Solution class.
+    Solution(void) : time(0), states(vec::Zero(N, 0)) {}
+
+    //! Class constructor for the Solution class given the time and states sizes.
+    //! \param size The size of the time and states vectors.
+    Solution(unsigned size)
+      : time(size), states(vec::Zero(N, size)) {}
+
+    //! Resize the time and states vectors.
+    //! \param size The size of the time and states vectors.
+    void resize(unsigned size) {
+      this->time.resize(size);
+      this->states.resize(N, size);
+    }
+
+    //! Resize conserving the data of the time and states vectors.
+    //! \param size The size of the time and states vectors.
+    void conservative_resize(unsigned size) {
+      this->time.conservativeResize(size);
+      this->states.conservativeResize(Eigen::NoChange, size);
+    }
+
+    //! Clear the time and states vectors.
+    void clear(void) {
+      this->time.resize(0);
+      this->states.resize(N, 0);
+    }
+
+    //! Check if the time and states vectors are empty.
+    //! \return True if the time and states vectors are empty, false otherwise.
+    bool is_empty(void) const {return this->time.size() == 0 && this->states.cols()== 0 ;}
+
+    //! Get the size of the time and states vectors.
+    //! \return The size of the time and states vectors.
+    unsigned size(void) const {return this->time.size();}
+
+    //! Get the time vector as a standard vector.
+    //! \return The time vector as a standard vector.
+    std::vector<real> std_time(void) const {
+      return std::vector<real>(this->time.data(), this->time.data() + this->time.size());
+    }
+
+    //! Get the states i-th state vector as a standard vector.
+    //! \param i The index of the state vector.
+    //! \return The states i-th state vector as a standard vector.
+    std::vector<real> std_state(unsigned i) const {
+      vec tmp(this->states.row(i));
+      return std::vector<real>(tmp.data(), tmp.data() + tmp.size());
+    }
+
+    //! Get a map of the states vectors as standard vectors.
+    //! \return A map of the states vectors as standard vectors.
+    std::map<unsigned, std::vector<real>> std_states(void) const {
+      std::map<unsigned, std::vector<real>> states_map;
+      for (unsigned i = 0; i < N; ++i) {
+        states_map[i] = this->std_states(i);
+      }
+      return states_map;
+    }
+    //! Get a map of the states vectors as Eigen vectors.
+    //! \return A map of the states vectors as Eigen vectors.
+    std::map<unsigned, vec> eig_states(void) const {
+      std::map<unsigned, vec> states_map;
+      for (unsigned i = 0; i < N; ++i) {
+        states_map[i] = this->states.row(i);
+      }
+      return states_map;
+    }
+
+    //! Get a map of the states vectors as standard vectors.
+    //! \param names The names of the states vectors.
+    //! \return A map of the states vectors as standard vectors.
+    std::map<std::string, std::vector<real>> std_states(std::vector<std::string> names) const {
+      std::map<std::string, std::vector<real>> states_map;
+      for (unsigned i = 0; i < N; ++i) {
+        states_map[names[i]] = this->std_state(i);
+      }
+      return states_map;
+    }
+
+    //! Get a map of the states vectors as Eigen vectors.
+    //! \param names The names of the states vectors.
+    //! \return A map of the states vectors as Eigen vectors.
+    std::map<std::string, vec> eig_states(std::vector<std::string> names) const {
+      std::map<std::string, vec> states_map;
+      for (unsigned i = 0; i < N; ++i) {
+        states_map[names[i]] = this->states.row(i);
+      }
+      return states_map;
+    }
+  };
+
+
   //! \brief Class container for Runge-Kutta solvers of the system of ODEs.
   //! Class container for Runge-Kutta solvers of the system of Ordinary
   //! Differential Equations (ODEs). The user must define the Butcher tableau
@@ -134,10 +237,10 @@ namespace Sandals {
     using matN = typename Implicit<N>::mat;     //!< Templetized matrix type.
 
   public:
-    using system   = typename Implicit<N>::ptr;              //!< Shared pointer to an implicit ODE system.
-    using type     = typename Tableau<S>::type;              //!< Runge-Kutta type enumeration.
-    using time     = Eigen::Vector<real, Eigen::Dynamic>;    //!< Templetized vector type for the time.
-    using solution = Eigen::Matrix<real, N, Eigen::Dynamic>; //!< Templetized matrix type for the solution.
+    using system   = typename Implicit<N>::ptr;           //!< Shared pointer to an implicit ODE system.
+    using type     = typename Tableau<S>::type;           //!< Runge-Kutta type enumeration.
+    using time     = Eigen::Vector<real, Eigen::Dynamic>; //!< Templetized vector type for the time.
+    using solution = Solution<N>;                //!< Templetized structure type for solution.
 
   private:
     Newton<N*S> m_newton;                //!< Newton solver for implicit methods.
@@ -294,7 +397,7 @@ namespace Sandals {
     //! error method, which is based on the following formula:
     //!
     //! \f[
-    //! e = \sqrt{\dfrac{1}{n} \displaystyle\sum_{i=1}{n}\left(\dfrac
+    //! e = \sqrt{\frac{1}{n} \displaystyle\sum_{i=1}{n}\left(\frac
     //!   {\mathbf{x} - \hat{\mathbf{x}}}
     //!   {s c_i}
     //! \right)^2}
@@ -310,7 +413,7 @@ namespace Sandals {
     //! the optimal step size is obtained as:
     //!
     //! \f[
-    //! h_{opt} = h \left( \dfrac{1}{e} \right)^{\frac{1}{q+1}}
+    //! h_{opt} = h \left( \frac{1}{e} \right)^{\frac{1}{q+1}}
     //! \f]
     //!
     //! We multiply the previous quation by a safety factor \f$ f \f$, usually
@@ -320,7 +423,7 @@ namespace Sandals {
     //! So we put:
     //!
     //! \f[
-    //! h_{new} = h \min\left(f_{max}, \max\left(f_{max}, f \left(\dfrac{1}{e}\right)^{\frac{1}{q+1}}
+    //! h_{new} = h \min\left(f_{max}, \max\left(f_{max}, f \left(\frac{1}{e}\right)^{\frac{1}{q+1}}
     //! \right) \right)
     //! \f]
     //!
@@ -339,7 +442,8 @@ namespace Sandals {
     //! \param d_t Actual advancing time step \f$ \Delta t\f$.
     //! \return The suggested time step for the next advancing step \f$ \Delta
     //!         t_{k+1} \f$.
-    real estimate_step(vecN const &x_h, vecN const &x_l, real d_t) const {
+    real estimate_step(vecN const &x_h, vecN const &x_l, real d_t) const
+    {
       return d_t * std::min(this->m_max_sft_fac, std::max(this->m_min_sft_fac,
         this->m_sft_fac * ((x_h - x_l) / (
         this->m_abs_tol + this->m_rel_tol*std::max(x_h.cwiseAbs().maxCoeff(), x_l.cwiseAbs().maxCoeff())
@@ -443,41 +547,38 @@ namespace Sandals {
     //! Runge-Kutta method the time step is not modified through any error control
     //! method.
     //!
-    //! \param x_old States value at \f$ k \f$-th time step \f$ \mathbf{x}(t_k) \f$.
-    //! \param t_old Time step \f$ t_k \f$.
+    //! \param x_k States value at \f$ k \f$-th time step \f$ \mathbf{x}(t_k) \f$.
+    //! \param t_k Time step \f$ t_k \f$.
     //! \param t_step Advancing time step \f$ \Delta t\f$.
-    //! \param x_new The approximation of the states at \f$ k+1 \f$-th time step
+    //! \param x_out The approximation of the states at \f$ k+1 \f$-th time step
     //!            \f$ \mathbf{x_{k+1}}(t_{k}+\Delta t) \f$
-    //! \param t_est The suggested time step for the next advancing step
-    //!                 \f$ \Delta t_{k+1} \f$.
+    //! \param t_adap The suggested adaptive time step for the next advancing step
+    //!               \f$ \Delta t_{k+1} \f$.
     //! \return True if the step is successfully computed, false otherwise.
-    bool explicit_step(vecN const &x_old, real t_old, real t_step, vecN &x_new, real &t_est)
+    bool explicit_step(vecN const &x_k, real t_k, real t_step, vecN &x_out, real &t_adap) const
     {
       using Eigen::all;
       using Eigen::seqN;
 
       // Compute the K variables in the case of an explicit method and explicit system
-      real t_node;
-      vecN x_node;
+      real t_i;
+      vecN x_i;
       matK K;
       for (unsigned i = 0; i < S; ++i)
       {
-        // FIXME: optimize this loop
-        t_node = t_old + this->m_tableau.c(i) * t_step;
-        x_node = x_old + K(all, seqN(0, i)) * this->m_tableau.A(i, seqN(0, i)).transpose();
-        K.col(i) = t_step * static_cast<Explicit<N> const *>(this->m_system.get())->f(x_node, t_node);
-        std::cout << "K[" << i << "] = " << K.col(i).transpose() << std::endl;
+        t_i = t_k + this->m_tableau.c(i) * t_step;
+        x_i = x_k + K(all, seqN(0, i)) * this->m_tableau.A(i, seqN(0, i)).transpose();
+        K.col(i) = t_step * static_cast<Explicit<N> const *>(this->m_system.get())->f(x_i, t_i);
       }
       if (!K.allFinite()) {return false;}
 
       // Perform the step and obtain the next state
-      x_new = x_old + K * this->m_tableau.b;
+      x_out = x_k + K * this->m_tableau.b;
 
       // Adapt next time step
       if (this->m_adaptive_step && this->m_is_embedded) {
-        // FIXME: optimize this loop
-        vecN x_e = x_old + K * this->m_tableau.b_e;
-        t_est = this->estimate_step(x_new, x_e, t_step);
+        vecN x_e = x_k + K * this->m_tableau.b_e;
+        t_adap = this->estimate_step(x_out, x_e, t_step);
       }
       return true;
     }
@@ -497,13 +598,14 @@ namespace Sandals {
     //! \param fun The residual of system to be solved.
     void implicit_function(vecN const &x_k, vecK const &K_k, real t_k, real d_t, vecK &fun) const
     {
+      fun.setZero();
+
       // Loop through each equation of the system
       real t_i;
       vecN x_i;
       matK K{K_k.reshaped(N, S)}; // FIXME: can i avoid reshaping?
       matK fun_tmp;
       for (unsigned i = 0; i < S; ++i) {
-        // FIXME: optimize this loop
         t_i = t_k + this->m_tableau.c(i) * d_t;
         x_i = x_k + K * this->m_tableau.A.row(i).transpose();
         fun_tmp.col(i) = this->m_system->F(x_i, K.col(i) / d_t, t_i);
@@ -522,7 +624,7 @@ namespace Sandals {
     //! to be solved in the \f$ \mathbf{K} \f$ variable:
     //!
     //! \f[
-    //! \dfrac{\partial \mathbf{F}_i}{\partial \mathbf{K}_i} \left(
+    //! \frac{\partial \mathbf{F}_i}{\partial \mathbf{K}_i} \left(
     //!   \mathbf{x}_k + \Delta t \displaystyle\sum_{j=1}^s a_{ij} \mathbf{K}_j,
     //!   \, \mathbf{K}_i, \, t_k + c_i \Delta t
     //! \right)
@@ -538,14 +640,14 @@ namespace Sandals {
       using Eigen::all;
       using Eigen::seqN;
 
+      jac.setZero();
+
       // Loop through each equation of the system
       matK K{K_k.reshaped(N, S)};
-      vecN x_dot_i;
-      matN JF_x, JF_x_dot;
-      auto idx = seqN(0, N-1);
-      auto jdx = idx;
       real t_i;
-      vecN x_i;
+      vecN x_i, x_dot_i;
+      matN JF_x, JF_x_dot;
+      auto idx = seqN(0, N), jdx = seqN(0, N);
       for (unsigned i = 0; i < S; ++i) {
         t_i = t_k + this->m_tableau.c(i) * d_t;
         x_i = x_k + K * this->m_tableau.A.row(i).transpose();
@@ -556,18 +658,17 @@ namespace Sandals {
         JF_x_dot = this->m_system->JF_x_dot(x_i, x_dot_i, t_i);
 
         // Derivative of F(x_i, K(:,i)/d_t, t_i)
-        jdx = seqN(0, N-1);
+        idx = seqN(i*N, N);
         for (unsigned j = 0; j < S; ++j) {
           // Combine the Jacobians with respect to x and x_dot to obtain the
           // Jacobian with respect to K
+          jdx = seqN(j*N, N);
           if (i == j) {
             jac(idx, jdx) = this->m_tableau.A(i,j) * JF_x + JF_x_dot / d_t;
           } else {
             jac(idx, jdx) = this->m_tableau.A(i,j) * JF_x;
           }
-          jdx = seqN(j*N, (j+1)*N-1);
         }
-        idx = seqN(i*N, (i+1)*N-1);
       }
     }
 
@@ -643,9 +744,9 @@ namespace Sandals {
     //! \return True if the step is successfully computed, false otherwise.
     bool implicit_step(vecN const &x_k, real t_k, real d_t, vecN &x_o, real &d_t_star)
     {
-      std::cout << "implicit_step: ";
       // Check if the solver converged
       vecK K;
+
       if (!this->m_newton.solve(
         [this, &x_k, t_k, d_t](vecK const &K, vecK &fun) {this->implicit_function(x_k, K, t_k, d_t, fun);},
         [this, &x_k, t_k, d_t](vecK const &K, matJ &jac) {this->implicit_jacobian(x_k, K, t_k, d_t, jac);},
@@ -659,7 +760,6 @@ namespace Sandals {
         vecN x_e{x_k + K.reshaped(N, S) * this->m_tableau.b_e};
         d_t_star = this->estimate_step(x_o, x_e, d_t);
       }
-      std::cout << "DONE" << std::endl;
       return true;
     }
 
@@ -806,12 +906,15 @@ namespace Sandals {
     {
       using Eigen::last;
 
+      // Instantiate output
+      sol.resize(t.size());
+
       // Store first step
-      sol.resize(ics.size(), t.size());
-      sol.col(0) = ics;
-      unsigned s{0};
+      sol.time(0)       = t(0);
+      sol.states.col(0) = ics;
 
       // Update the current step
+      unsigned s{0};
       vecN x_s{ics};
       real t_s{t(0)};
       real d_t_s{t(1) - t(0)};
@@ -820,7 +923,7 @@ namespace Sandals {
 
       while (true) {
         // Integrate system
-        if (!this->advance(sol.col(s), t_s, d_t_s, x_s, d_t_star)) {return false;}
+        if (!this->advance(sol.states.col(s), t_s, d_t_s, x_s, d_t_star)) {return false;}
 
         // Update the current step
         t_s = t_s + d_t_s;
@@ -842,7 +945,8 @@ namespace Sandals {
           d_t_s = d_t_tmp;
 
           // Update outputs
-          sol.col(s) = x_s;
+          sol.time(s)       = t_s;
+          sol.states.col(s) = x_s;
 
           // Check if the current step is the last one
           if (std::abs(t_s - t(last)) < SQRT_EPSILON) {break;}
@@ -860,330 +964,61 @@ namespace Sandals {
     //!           (\mathbf{t})\right] \f$ containing the approximated solution
     //!           over the mesh of time points.
     //! \return True if the system is successfully solved, false otherwise.
-    bool adaptive_solve(vecD t, vecN const &ics, solution &sol) const
+    bool adaptive_solve(vecD const &t, vecN const &ics, solution &sol)
     {
       using Eigen::last;
 
-      #define CMD "Indigo.RungeKutta.adaptive_solve(...): "
-
-      // Collect optional arguments
-      real d_t{t(1) - t(0)}, d_t_star;
-      real scale{100.0};
-      real t_min{std::max(this->m_d_t_min, d_t/scale)};
-      real t_max{scale*d_t};
-
-      SANDALS_ASSERT(t_max > t_min && t_min > real(0.0), CMD "invalid time bounds detected.");
-      d_t = std::max(std::min(d_t, t_max), t_min);
+      #define CMD "Sandals::RungeKutta::adaptive_solve(...): "
 
       // Instantiate output
-      unsigned safety_length = std::ceil(real(1.5)/this->m_min_sft_fac) * t.size();
-      vecN t_o(safety_length);
+      this->enable_adaptive_step();
+      real d_t{t(1) - t(0)}, d_t_star;
+      if (this->m_tableau.is_embedded) {
+        real scale{100.0};
+        real t_min{std::max(this->m_d_t_min, d_t/scale)};
+        real t_max{scale*d_t};
+        unsigned safety_length = std::ceil(real(1.5)/this->m_min_sft_fac) * t.size();
+        sol.resize(safety_length);
+      } else {
+        sol.resize(t.size());
+      }
 
       // Store first step
-      t_o(0)     = t(0);
-      sol.col(0) = ics;
+      sol.time(0)      = t(0);
+      sol.states.col(0) = ics;
 
       // Instantiate temporary variables
-      unsigned s{0}; // Current step
+      unsigned s{0};
+      vecN x_s{ics};
 
       while (true) {
         // Integrate system
-        this->advance(sol.col(s), t_o(s), d_t, sol.col(s+1), d_t_star);
+        this->advance(sol.states.col(s), sol.time(s), d_t, x_s, d_t_star);
 
         // Saturate the suggested timestep
         d_t = std::max(std::min(d_t_star, t_max), t_min);
+        std::cout << "d_t = " << d_t << std::endl;
+
+        SANDALS_ASSERT(s < safety_length, CMD "safety length exceeded.");
 
         // Store solution
-        t_o(s+1) = t_o(s) + d_t;
+        sol.time(s+1)       = sol.time(s) + d_t;
+        sol.states.col(s+1) = x_s;
 
         // Check if the current step is the last one
-        if (t_o(s+1) + d_t > t(last)) {break;}
+        if (sol.time(s+1) + d_t > t(last)) {break;}
 
         // Update steps counter
         s += 1;
       }
 
       // Resize the output
-      t_o.conservativeResize(s-1);
-      sol.conservativeResize(Eigen::NoChange, s-1);
+      sol.conservative_resize(s-1);
 
       return true;
 
       #undef CMD
     }
-
-    //! Check Butcher tableau consistency for an explicit Runge-Kutta method.
-    //! \param tbl.A   Matrix \f$ \mathbf{A} \f$.
-    //! \param tbl.b   Weights vector \f$ \mathbf{b} \f$.
-    //! \param tbl.b_e [optional] Embedded weights vector \f$ \\mathbf{b}_{e} \f$.
-    //! \param tbl.c   Nodes vector \f$ \mathbf{c} \f$.
-    //! \return True if the Butcher tableau is consistent, false otherwise.
-    //[out,order,e_order] = check_tableau( this, tbl )
-
-    //! Check the order of a Runge-Kutta tableau according to the conditions taken from:
-    //! *A family of embedded Runge-Kutta formulae*, J. R. Dormand and P. J. Prince,
-    //! Journal of Computational and Applied Mathematics, volume 6(1), 1980.
-    //! Doi: [10.1016/0771-0509(80)90013-3](https://doi.org/10.1016/0771-0509(80)90013-3)
-    //! \param tableau The Runge-Kutta tableau to be checked.
-    //! \return The order of the Runge-Kutta tableau.
-    /*unsigned tableau_order(matS const &A, vecS const &b, vecS const &c) const
-    {
-      #define CMD "Indigo.RungeKutta.tableau_order(...): "
-
-      // Temporary variables initialization
-      real tol{std::pow(EPSILON, real(2.0/3.0))};
-      vecN one{vecN::Ones()};
-      vecS Ac{A*c};
-      matS bA{(b*A).transpose()};
-      vecS err{A*one - c};
-      unsigned order{0};
-      std::string msg{""};
-
-      // Check consistency
-      SANDALS_ASSERT(std::max(std::abs(err)) > tol,
-        CMD "consistency precheck failed, A*[1] - c = " << err << " ≠ 0.");
-
-      // Check order 1
-      if (std::abs(b.sum() - 1) > tol) {
-        SANDALS_WARNING(CMD "order 1 check failed, found sum(b) == " << b.sum() << " ≠ 1.");
-        return order;
-      }
-
-      order = 1; // Order 1 is the highest order that can be checked
-
-      // Check order 2
-      auto bc{b.array() * c.array()};
-      if (std::abs(bc.sum() - 1/2) > tol) {
-        SANDALS_WARNING(CMD "order 2 check failed, sum(b*c) = " << bc.sum() << " ≠ 1/2.");
-        return order;
-      }
-
-      order = 2; // Order 2 is the highest order that can be checked
-
-      // Check order 3
-      auto bc2{b.array() * (c.pow(2)).array()};
-      if (std::abs(bc2.sum() - 1/3) > tol) {
-        SANDALS_WARNING(CMD "order 3 check failed, sum(b*c^2) = " << bc2.sum() << " ≠ 1/3.");
-        return order;
-      }
-
-      auto bAc{b.array() * Ac.array()};
-      if (std::abs(bAc.sum() - 1/6) > tol) {
-        SANDALS_WARNING(CMD "order 3 check failed, sum(b*d) = " << bAc.sum() << " ≠ 1/6.");
-        return order;
-      }
-
-      order = 3; // Order 3 is the highest order that can be checked
-
-      // Check order 4
-      auto bc3{b.array() * (c.pow(3)).array()};
-      if (std::abs(bc3.sum() - 1/4) > tol) {
-        SANDALS_WARNING(CMD "order 4 check failed, sum(b*c^3) = " << bc3.sum() << " ≠ 1/4.");
-        return order;
-      }
-
-      auto cAc{c.array() * Ac.array()};
-      vecS bcAc{b.cwiseProduct(cAc)};
-      if (std::abs(bcAc.sum() - 1/8) > tol) {
-        SANDALS_WARNING(CMD "order 4 check failed, sum(b*c*A*c) = " << bcAc.sum() << " ≠ 1/8.");
-        return order;
-      }
-
-      auto bAc2{bA.array() * (c.pow(2)).array()};
-      if (std::abs(bAc2.sum() - 1/12) > tol) {
-        SANDALS_WARNING(CMD "order 4 check failed, sum(b*A*c^2) = " << bAc2.sum() << " ≠ 1/12.");
-        return order;
-      }
-
-      auto bAAc{bA.array() * Ac.array()};
-      if (std::abs(bAAc.sum() - 1/24) > tol) {
-        SANDALS_WARNING(CMD "order 4 check failed, sum(b*A*A*c) = " << bAAc.sum() << " ≠ 1/24.");
-        return order;
-      }
-
-      order = 4; // Order 4 is the highest order that can be checked
-
-      // Check order 5
-      auto bc4{b.array() * (c.pow(4)).array()};
-      if (std::abs(bc4.sum() - 1/5) > tol) {
-        SANDALS_WARNING(CMD "order 5 check failed, sum(b*c^4) = " << bc4.sum() << " ≠ 1/5.");
-        return order;
-      }
-
-      auto bc2Ac{bc2.array() * Ac.array()};
-      if (std::abs(bc2Ac.sum() - 1/10) > tol) {
-        SANDALS_WARNING(CMD "order 5 check failed, sum(b*c^2*A*c) = " << bc2Ac.sum() << " ≠ 1/10.");
-        return order;
-      }
-
-      vecS bAcAc{(b.cwiseProduct(Ac)).cwiseProduct(Ac)};
-      if (std::abs(bAcAc.sum() - 1/20) > tol) {
-        SANDALS_WARNING(CMD "order 5 check failed, sum(b*A*c*A*c) = " << bAcAc.sum() << " ≠ 1/20.");
-        return order;
-      }
-
-      matS Ac2{A*(c.pow(2))};
-      matS bcAc2{bc.cwiseProduct(Ac2)};
-      if (std::abs(bcAc2.sum() - 1/15) > tol) {
-        SANDALS_WARNING(CMD "order 5 check failed, sum(b*c*A*c^2) = " << bcAc2.sum() << " ≠ 1/15.");
-        return order;
-      }
-
-      matS Ac3{A*(c.pow(3))};
-      matS bAc3{b.cwiseProduct(Ac3)};
-      if (std::abs(bAc3.sum() - 1/20) > tol) {
-        SANDALS_WARNING(CMD "order 5 check failed, sum(b*A*c^3) = " << bAc3.sum() << " ≠ 1/20.");
-        return order;
-      }
-
-      bAcAc = bA.cwiseProduct(c.cwiseProduct(Ac));
-      if (std::abs(bAcAc.sum() - 1/40) > tol) {
-        SANDALS_WARNING(CMD "order 5 check failed, sum(b*A*c*A*c) = " << bAcAc.sum() << " ≠ 1/40.");
-        return order;
-      }
-
-      matS bAAc2{bA.cwiseProduct(Ac2)};
-      if (std::abs(bAAc2.sum() - 1/60) > tol) {
-        SANDALS_WARNING(CMD "order 5 check failed, sum(b*A*c*A*c) = " << bAAc2.sum() << " ≠ 1/60.");
-        return order;
-      }
-
-      matS AAc{A*Ac};
-      matS bAAAc{bA.cwiseProduct(AAc)};
-      if (std::abs(bAAAc.sum() - 1/120) > tol) {
-        SANDALS_WARNING(CMD "order 5 check failed, sum(b*A*c*A*c) = " << bAAAc.sum() << " ≠ 1/120.");
-        return order;
-      }
-
-      order = 5; // Order 5 is the highest order that can be checked
-
-      // Check order 6
-      vecS bc5{b.cwiseProduct(c.pow(5))};
-      if (std::abs(bc5.sum() - 1/6) > tol) {
-        SANDALS_WARNING(CMD "order 6 check failed, sum(b*c^5) = " << bc5.sum() << " ≠ 1/6.");
-        return order;
-      }
-
-      vecS bc3Ac{bc3.cwiseProduct(Ac)};
-      if (std::abs(bc3Ac.sum() - 1/12) > tol) {
-        SANDALS_WARNING(CMD "order 6 check failed, sum(bc3Ac) = " << bc3Ac.sum() << " ≠ 1/12.");
-        return order;
-      }
-
-      vecS bcAcAc{bc.cwiseProduct(Ac).pow(2)};
-      if (std::abs(bcAcAc.sum() - 1/24) > tol) {
-        SANDALS_WARNING(CMD "order 6 check failed, sum(bcAcAc) = " << bc3Ac.sum() << " ≠ 1/24.");
-        return order;
-      }
-
-      vecS bc2Ac2{bc2.cwiseProduct(Ac2)};
-      if (std::abs(bc2Ac2.sum() - 1/18) > tol) {
-        SANDALS_WARNING(CMD "order 6 check failed, sum(bc2Ac2) = " << bc2Ac2.sum() << " ≠ 1/18.");
-        return order;
-      }
-
-      vecS bAc2Ac{b.cwiseProduct(Ac2.cwiseProduct(Ac))};
-      if (std::abs(bAc2Ac.sum() - 1/36) > tol) {
-        SANDALS_WARNING(CMD "order 6 check failed, sum(bAc2Ac) = " << bAc2Ac.sum() << " ≠ 1/36.");
-        return order;
-      }
-
-      vecS bcAc3{bc.cwiseProduct(Ac3)};
-      if (std::abs(bcAc3.sum() - 1/24) > tol) {
-        SANDALS_WARNING(CMD "order 6 check failed, sum(bcAc3) = " << bcAc3.sum() << " ≠ 1/24.");
-        return order;
-      }
-
-      vecS Ac4{A*c.pow(4)};
-      vecS bAc4{b.cwiseProduct(Ac4)};
-      if (std::abs(bAc4.sum() - 1/30) > tol) {
-        SANDALS_WARNING(CMD "order 6 check failed, sum(bAc4) = " << bAc4.sum() << " ≠ 1/30.");
-        return order;
-      }
-
-      vecS bc2A{A.transpose()*bc2};
-      vecS bc2AAc{bc2A.cwiseProduct(Ac)};
-      if (std::abs(bc2AAc.sum() - 1/36) > tol) {
-        SANDALS_WARNING(CMD "order 6 check failed, sum(bc2AAc) = " << bc2AAc.sum() << " ≠ 1/36.");
-        return order;
-      }
-
-      matS bAcAAc = bAc.cwiseProduct(A)*Ac;
-      if (std::abs(bAcAAc.sum() - 1/72) > tol) {
-        SANDALS_WARNING(CMD "order 6 check failed, sum(bAcAAc) = " << bAcAAc.sum() << " ≠ 1/72.");
-        return order;
-      }
-
-      vecS bcA{A.transpose()*bc};
-      bcAcAc = bcA.cwiseProduct(cAc);
-      if (std::abs(bcAcAc.sum() - 1/48) > tol) {
-        SANDALS_WARNING(CMD "order 6 check failed, sum(bcAcAc) = " << bcAcAc.sum() << " ≠ 1/48.");
-        return order;
-      }
-
-      bAc2Ac = bA.cwiseProduct(c.pow(2)).cwiseProduct(Ac);
-      if (std::abs(bAc2Ac.sum() - 1/60) > tol) {
-        SANDALS_WARNING(CMD "order 6 check failed, sum(bAc2Ac) = " << bAc2Ac.sum() << " ≠ 1/60.");
-        return order;
-      }
-
-      vecS bAAcAc{bA.cwiseProduct(Ac.pow(2))};
-      if (std::abs(bAAcAc.sum() - 1/120) > tol) {
-        SANDALS_WARNING(CMD "order 6 check failed, sum(bAAcAc) = " << bAAcAc.sum() << " ≠ 1/120.");
-        return order;
-      }
-
-      vecS bcAAc2{bcA.cwiseProduct(Ac2)};
-      if (std::abs(bcAAc2.sum() - 1/72) > tol) {
-        SANDALS_WARNING(CMD "order 6 check failed, sum(bcAAc2) = " << bcAAc2.sum() << " ≠ 1/72.");
-        return order;
-      }
-
-      vecS bAcAc2{bA.cwiseProduct(c).cwiseProduct(Ac2)};
-      if (std::abs(bAcAc2.sum() - 1/90) > tol) {
-        SANDALS_WARNING(CMD "order 6 check failed, sum(bAcAc2) = " << bAcAc2.sum() << " ≠ 1/90.");
-        return order;
-      }
-
-      vecS bAAc3{bA.cwiseProduct(Ac3)};
-      if (std::abs(bAAc3.sum() - 1/120) > tol) {
-        SANDALS_WARNING(CMD "order 6 check failed, sum(bAAc3) = " << bAAc3.sum() << " ≠ 1/120.");
-        return order;
-      }
-
-      vecS bcAAAc{bcA.cwiseProduct(A)*Ac};
-      if (std::abs(bcAAAc.sum() - 1/144) > tol) {
-        SANDALS_WARNING(CMD "order 6 check failed, sum(bcAAAc) = " << bcAAAc.sum() << " ≠ 1/144.");
-        return order;
-      }
-
-      bAcAAc = (bA.cwiseProduct(c)).cwiseProduct(A)*Ac;
-      if (std::abs(bAcAAc.sum() - 1/180) > tol) {
-        SANDALS_WARNING(CMD "order 6 check failed, sum(bAcAAc) = " << bAcAAc.sum() << " ≠ 1/180.");
-        return order;
-      }
-
-      bAAcAc = bA.cwiseProduct(A)*(cAc);
-      if (std::abs(bAAcAc.sum() - 1/240) > tol) {
-        SANDALS_WARNING(CMD "order 6 check failed, sum(bAAcAc) = " << bAAcAc.sum() << " ≠ 1/240.");
-        return order;
-      }
-
-      vecS bAAAc2{bA.cwiseProduct(A)*Ac2};
-      if (std::abs(bAAAc2.sum() - 1/360) > tol) {
-        SANDALS_WARNING(CMD "order 6 check failed, sum(bAAcAc) = " << bAAAc2.sum() << " ≠ 1/360.");
-        return order;
-      }
-
-      vecS bAAAAc{bA.cwiseProduct(A)*(A*Ac)};
-      if (std::abs(bAAAAc.sum() - 1/720) > tol) {
-        SANDALS_WARNING(CMD "order 6 check failed, sum(bAAcAc) = " << bAAAAc.sum() << " ≠ 1/720.");
-        return order;
-      }
-
-      order = 6; // Order 6 is the highest order that can be checked
-      return order;
-    }*/
 
   }; // class RungeKutta
 

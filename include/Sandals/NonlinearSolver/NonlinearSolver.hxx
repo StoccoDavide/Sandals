@@ -41,7 +41,7 @@ namespace Sandals
   protected:
     fun      m_fun;                      //!< Non-linear function.
     jac      m_jac;                      //!< Jacobian function.
-    real     m_tolerance{EPSILON_HIGH};  //!< Solver tolerance.
+    real     m_tolerance{EPSILON_LOW};  //!< Solver tolerance.
     real     m_alpha{0.8};               //!< Relaxation factor.
     unsigned m_max_iterations{100};      //!< Maximum number of allowed algorithm iterations.
     unsigned m_max_fun_evaluations{100}; //!< Maximum number of allowed function evaluations.
@@ -137,7 +137,7 @@ namespace Sandals
       this->m_max_relaxations = t_max_relaxations;
     }
 
-    //! Get relaxation factor \f$ \alpha \f$.
+    //! Get relaxation factor \f$\alpha\f$.
     //! \return The relaxation factor \f$ \alpha \f$.
     real alpha(void) const {return this->m_alpha;}
 

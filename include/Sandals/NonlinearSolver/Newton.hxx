@@ -47,8 +47,8 @@ namespace Sandals
   //!
   //! \f[
   //! \left\| \mathbf{JF}_{\mathbf{x}}(\mathbf{x}_k)^{-1} \mathbf{F}(\mathbf{x}_{k+1}) \right\|
-  //! \leq \left(1 - \dfrac{\alpha_k}{2}\right) \left\| \mathbf{JF}_{\mathbf{x}}(\mathbf{x}_k)^{-1}
-  //! \mathbf{F}(\mathbf{x}_k) \right\| = \left(1 - \dfrac{\alpha_k}{2} \right)
+  //! \leq \left(1 - \frac{\alpha_k}{2}\right) \left\| \mathbf{JF}_{\mathbf{x}}(\mathbf{x}_k)^{-1}
+  //! \mathbf{F}(\mathbf{x}_k) \right\| = \left(1 - \frac{\alpha_k}{2} \right)
   //! \left\| \mathbf{h}  \right\|.
   //! \f]
   //!
@@ -84,8 +84,8 @@ namespace Sandals
       // Initialize variables
       mat J0, J1;
       vec X0, F0, D0, X1, F1, D1;
-      real F0_norm = real(0.0);
-      real D0_norm = real(0.0);
+      real F0_norm{0.0};
+      real D0_norm{0.0};
 
       // Set initial iteration
       X0 = x_ini;
@@ -94,7 +94,7 @@ namespace Sandals
 
       // Algorithm iterations
       real tolerance_F_norm = this->m_tolerance;
-      real tolerance_D_norm = tolerance_F_norm * tolerance_F_norm;
+      real tolerance_D_norm = this->m_tolerance * this->m_tolerance;
       this->m_converged = false;
       for (this->m_iterations = unsigned(1);
           this->m_iterations < this->m_max_iterations;
@@ -160,6 +160,7 @@ namespace Sandals
       for (this->m_iterations = unsigned(1);
            this->m_iterations < this->m_max_iterations;
            ++this->m_iterations) {
+
         // Calculate step
         this->step(F0, J0, D0);
 
@@ -205,11 +206,15 @@ namespace Sandals
       return this->m_converged;
     }
 
-    //! Calculate the step.
+    //! Calculate the step (the inversion of the Jacobian is done through a
+    //! partial pivoting LU decomposition).
     //! \param F Function.
     //! \param J Jacobian approximation.
     //! \param D Step.
-    void step(vec const &F, mat const &J, vec &D) const {D = -J.inverse() * F;}
+    void step(vec const &F, mat const &J, vec &D) const {
+      Eigen::FullPivLU<mat> lu(J);
+      D = -lu.solve(F);
+    }
 
   }; // class Newton
 

@@ -17,6 +17,7 @@
 #include <tuple>
 #include <string>
 #include <cmath>
+#include <map>
 #include <Eigen/Dense>
 
 // Print Sandals errors

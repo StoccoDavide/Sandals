@@ -1,0 +1,234 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.12.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<!-- BEGIN opengraph metadata -->
+<meta property="og:title" content="Doxygen Awesome" />
+<meta property="og:image" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta property="og:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<meta property="og:url" content="https://jothepro.github.io/doxygen-awesome-css/" />
+<!-- END opengraph metadata -->
+<!-- BEGIN twitter metadata -->
+<meta name="twitter:image:src" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta name="twitter:title" content="Doxygen Awesome" />
+<meta name="twitter:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<!-- END twitter metadata -->
+<title>Sandals: include/Sandals/RungeKutta/System/Explicit.hxx Source File</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link rel="icon" type="image/svg+xml" href="logo.jpg"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+<script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+<script type="text/javascript" src="doxygen-awesome-paragraph-link.js"></script>
+<script type="text/javascript" src="doxygen-awesome-interactive-toc.js"></script>
+<script type="text/javascript" src="doxygen-awesome-tabs.js"></script>
+<script type="text/javascript" src="toggle-alternative-theme.js"></script>
+<script type="text/javascript">
+    DoxygenAwesomeFragmentCopyButton.init()
+    DoxygenAwesomeDarkModeToggle.init()
+    DoxygenAwesomeParagraphLink.init()
+    DoxygenAwesomeInteractiveToc.init()
+    DoxygenAwesomeTabs.init()
+</script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX","output/HTML-CSS"],
+});
+</script>
+<script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="custom.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- https://tholman.com/github-corners/ -->
+<a href="https://github.com/StoccoDavide/Sandals" class="github-corner" title="View source on GitHub" target="_blank" rel="noopener noreferrer">
+    <svg viewBox="0 0 250 250" width="40" height="40" style="position: absolute; top: 0; border: 0; right: 0; z-index: 99;" aria-hidden="true">
+    <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="logo.svg"/></td>
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">Sandals
+   &#160;<span id="projectnumber">v0.0.0</span>
+   </div>
+   <div id="projectbrief">Integrating ODEs and DAEs with style</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.12.0 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() { codefold.init(0); });
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Search',true);
+  $(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function(){initNavTree('_explicit_8hxx_source.html',''); initResizable(true); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">Explicit.hxx</div></div>
+</div><!--header-->
+<div class="contents">
+<a href="_explicit_8hxx.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment"> * Copyright (c) 2025, Davide Stocco and Enrico Bertolazzi.                  *</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment"> *                                                                           *</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="comment"> * The Sandals project is distributed under the GNU GPLv3.                   *</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment"> *                                                                           *</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="comment"> * Davide Stocco                                           Enrico Bertolazzi *</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="comment"> * University of Trento                                 University of Trento *</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="comment"> * e-mail: davide.stocco@unitn.it         e-mail: enrico.bertolazzi@unitn.it *</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="comment">\* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span> </div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#pragma once</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> </div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#ifndef SANDALS_EXPLICIT_SYSTEM_HXX</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno"><a class="line" href="_explicit_8hxx.html#aa3a3631e2e486aff6933340660acd99e">   14</a></span><span class="preprocessor">#define SANDALS_EXPLICIT_SYSTEM_HXX</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespace_sandals.html">Sandals</a> {</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span> </div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>  <span class="keyword">template</span> &lt;<span class="keywordtype">unsigned</span> N&gt;</div>
+<div class="foldopen" id="foldopen00021" data-start="{" data-end="};">
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno"><a class="line" href="class_sandals_1_1_explicit.html">   21</a></span>  <span class="keyword">class </span><a class="code hl_class" href="class_sandals_1_1_explicit.html">Explicit</a> : <span class="keyword">public</span> <a class="code hl_class" href="class_sandals_1_1_implicit.html">Implicit</a>&lt;N&gt;</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>  {</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>  <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno"><a class="line" href="class_sandals_1_1_explicit.html#a50b6b569d4e589106540e0cedb45e1ad">   24</a></span>    <span class="keyword">using </span><a class="code hl_typedef" href="class_sandals_1_1_explicit.html#a50b6b569d4e589106540e0cedb45e1ad">ptr</a>  = std::shared_ptr&lt;Explicit&lt;N&gt;&gt;; </div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno"><a class="line" href="class_sandals_1_1_explicit.html#a95b01175a557a242d92a8aba875a42a3">   25</a></span>    <span class="keyword">using </span><a class="code hl_typedef" href="class_sandals_1_1_explicit.html#a95b01175a557a242d92a8aba875a42a3">vec</a>  = <span class="keyword">typename</span> <a class="code hl_typedef" href="class_sandals_1_1_implicit.html#a835648cefa5e8b00aef9dac60b3b6b91">Implicit&lt;N&gt;::vec</a>;    </div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno"><a class="line" href="class_sandals_1_1_explicit.html#a5c74136de3bfa4caaf02849ded2f8057">   26</a></span>    <span class="keyword">using </span><a class="code hl_typedef" href="class_sandals_1_1_explicit.html#a5c74136de3bfa4caaf02849ded2f8057">mat</a>  = <span class="keyword">typename</span> <a class="code hl_typedef" href="class_sandals_1_1_implicit.html#a5a873108f540e627bc79d21d3644c658">Implicit&lt;N&gt;::mat</a>;    </div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno"><a class="line" href="class_sandals_1_1_explicit.html#a4335ea50bcfbec671f05b6543a931089">   27</a></span>    <span class="keyword">using </span><a class="code hl_typedef" href="class_sandals_1_1_explicit.html#a4335ea50bcfbec671f05b6543a931089">type</a> = <span class="keyword">typename</span> <a class="code hl_typedef" href="class_sandals_1_1_implicit.html#a8fd47ded99442407d5a889012b6a2379">Implicit&lt;N&gt;::type</a>;   </div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span> </div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno"><a class="line" href="class_sandals_1_1_explicit.html#a15847e3df5eaa8ba9826dfe583ac5bbd">   30</a></span>    <a class="code hl_function" href="class_sandals_1_1_explicit.html#a15847e3df5eaa8ba9826dfe583ac5bbd">Explicit</a>(<span class="keywordtype">void</span>) : <a class="code hl_class" href="class_sandals_1_1_implicit.html">Implicit</a>&lt;N&gt;(<a class="code hl_typedef" href="class_sandals_1_1_explicit.html#a4335ea50bcfbec671f05b6543a931089">type</a>::EXPLICIT, <span class="stringliteral">&quot;(missing name)&quot;</span>) {}</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span> </div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno"><a class="line" href="class_sandals_1_1_explicit.html#af033985c28a34440f8410eb546dfd819">   34</a></span>    <a class="code hl_function" href="class_sandals_1_1_explicit.html#af033985c28a34440f8410eb546dfd819">Explicit</a>(std::string t_name) : <a class="code hl_class" href="class_sandals_1_1_implicit.html">Implicit</a>&lt;N&gt;(<a class="code hl_typedef" href="class_sandals_1_1_explicit.html#a4335ea50bcfbec671f05b6543a931089">type</a>::EXPLICIT, t_name) {}</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span> </div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno"><a class="line" href="class_sandals_1_1_explicit.html#a95da2b9086f1c4900d5b2a4580388e23">   40</a></span>    <span class="keyword">virtual</span> <a class="code hl_typedef" href="class_sandals_1_1_explicit.html#a95b01175a557a242d92a8aba875a42a3">vec</a> <a class="code hl_function" href="class_sandals_1_1_explicit.html#a95da2b9086f1c4900d5b2a4580388e23">f</a>(<a class="code hl_typedef" href="class_sandals_1_1_explicit.html#a95b01175a557a242d92a8aba875a42a3">vec</a> <span class="keyword">const</span> &amp;x, <a class="code hl_typedef" href="namespace_sandals.html#affeed098f47099153ff75a660863dc62">real</a> t) <span class="keyword">const</span> = 0;</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span> </div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno"><a class="line" href="class_sandals_1_1_explicit.html#a3fd43a75f79e9b05ec029fe05a9420e3">   53</a></span>    <span class="keyword">virtual</span> <a class="code hl_typedef" href="class_sandals_1_1_explicit.html#a5c74136de3bfa4caaf02849ded2f8057">mat</a> <a class="code hl_function" href="class_sandals_1_1_explicit.html#a3fd43a75f79e9b05ec029fe05a9420e3">Jf_x</a>(<a class="code hl_typedef" href="class_sandals_1_1_explicit.html#a95b01175a557a242d92a8aba875a42a3">vec</a> <span class="keyword">const</span> &amp;x, <a class="code hl_typedef" href="namespace_sandals.html#affeed098f47099153ff75a660863dc62">real</a> t) <span class="keyword">const</span> = 0;</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span> </div>
+<div class="foldopen" id="foldopen00060" data-start="{" data-end="}">
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno"><a class="line" href="class_sandals_1_1_explicit.html#a9855d6f3f99d68d4e9c5f42d27033042">   60</a></span>    <span class="keyword">virtual</span> <a class="code hl_typedef" href="class_sandals_1_1_explicit.html#a95b01175a557a242d92a8aba875a42a3">vec</a> <a class="code hl_function" href="class_sandals_1_1_explicit.html#a9855d6f3f99d68d4e9c5f42d27033042">F</a>(<a class="code hl_typedef" href="class_sandals_1_1_explicit.html#a95b01175a557a242d92a8aba875a42a3">vec</a> <span class="keyword">const</span> &amp;x, <a class="code hl_typedef" href="class_sandals_1_1_explicit.html#a95b01175a557a242d92a8aba875a42a3">vec</a> <span class="keyword">const</span> &amp;x_dot, <a class="code hl_typedef" href="namespace_sandals.html#affeed098f47099153ff75a660863dc62">real</a> t)<span class="keyword"> const override</span></div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span><span class="keyword">    </span>{</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>      <span class="keywordflow">return</span> x_dot - this-&gt;<a class="code hl_function" href="class_sandals_1_1_explicit.html#a95da2b9086f1c4900d5b2a4580388e23">f</a>(x, t);</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    }</div>
+</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span> </div>
+<div class="foldopen" id="foldopen00077" data-start="{" data-end="}">
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno"><a class="line" href="class_sandals_1_1_explicit.html#a23eab51cd0bb136101700f5a82e2ea7d">   77</a></span>    <a class="code hl_typedef" href="class_sandals_1_1_explicit.html#a5c74136de3bfa4caaf02849ded2f8057">mat</a> <a class="code hl_function" href="class_sandals_1_1_explicit.html#a23eab51cd0bb136101700f5a82e2ea7d">JF_x</a>(<a class="code hl_typedef" href="class_sandals_1_1_explicit.html#a95b01175a557a242d92a8aba875a42a3">vec</a> <span class="keyword">const</span> &amp;x, <a class="code hl_typedef" href="class_sandals_1_1_explicit.html#a95b01175a557a242d92a8aba875a42a3">vec</a> <span class="keyword">const</span> &amp;<span class="comment">/*x_dot*/</span>, <a class="code hl_typedef" href="namespace_sandals.html#affeed098f47099153ff75a660863dc62">real</a> t)<span class="keyword"> const override</span></div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span><span class="keyword">    </span>{</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>      <span class="keywordflow">return</span> -this-&gt;<a class="code hl_function" href="class_sandals_1_1_explicit.html#a3fd43a75f79e9b05ec029fe05a9420e3">Jf_x</a>(x, t);</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>    }</div>
+</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span> </div>
+<div class="foldopen" id="foldopen00094" data-start="{" data-end="}">
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno"><a class="line" href="class_sandals_1_1_explicit.html#aee0b70473e4ef81a08bc3ea625cc723c">   94</a></span>    <a class="code hl_typedef" href="class_sandals_1_1_explicit.html#a5c74136de3bfa4caaf02849ded2f8057">mat</a> <a class="code hl_function" href="class_sandals_1_1_explicit.html#aee0b70473e4ef81a08bc3ea625cc723c">JF_x_dot</a>(<a class="code hl_typedef" href="class_sandals_1_1_explicit.html#a95b01175a557a242d92a8aba875a42a3">vec</a> <span class="keyword">const</span> &amp;<span class="comment">/*x*/</span>, <a class="code hl_typedef" href="class_sandals_1_1_explicit.html#a95b01175a557a242d92a8aba875a42a3">vec</a> <span class="keyword">const</span> &amp;<span class="comment">/*x_dot*/</span>, <a class="code hl_typedef" href="namespace_sandals.html#affeed098f47099153ff75a660863dc62">real</a> <span class="comment">/*t*/</span>)<span class="keyword"> const override</span></div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span><span class="keyword">    </span>{</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>      <span class="keywordflow">return</span> mat::Identity();</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>    }</div>
+</div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span> </div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>  }; <span class="comment">// class Explicit</span></div>
+</div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span> </div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>} <span class="comment">// namespace Sandals</span></div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span> </div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span><span class="preprocessor">#endif </span><span class="comment">// SANDALS_EXPLICIT_SYSTEM_HXX</span></div>
+<div class="ttc" id="aclass_sandals_1_1_explicit_html"><div class="ttname"><a href="class_sandals_1_1_explicit.html">Sandals::Explicit</a></div><div class="ttdef"><b>Definition</b> Explicit.hxx:22</div></div>
+<div class="ttc" id="aclass_sandals_1_1_explicit_html_a15847e3df5eaa8ba9826dfe583ac5bbd"><div class="ttname"><a href="class_sandals_1_1_explicit.html#a15847e3df5eaa8ba9826dfe583ac5bbd">Sandals::Explicit::Explicit</a></div><div class="ttdeci">Explicit(void)</div><div class="ttdoc">Default class constructor for an implicit ODE system.</div><div class="ttdef"><b>Definition</b> Explicit.hxx:30</div></div>
+<div class="ttc" id="aclass_sandals_1_1_explicit_html_a23eab51cd0bb136101700f5a82e2ea7d"><div class="ttname"><a href="class_sandals_1_1_explicit.html#a23eab51cd0bb136101700f5a82e2ea7d">Sandals::Explicit::JF_x</a></div><div class="ttdeci">mat JF_x(vec const &amp;x, vec const &amp;, real t) const override</div><div class="ttdef"><b>Definition</b> Explicit.hxx:77</div></div>
+<div class="ttc" id="aclass_sandals_1_1_explicit_html_a3fd43a75f79e9b05ec029fe05a9420e3"><div class="ttname"><a href="class_sandals_1_1_explicit.html#a3fd43a75f79e9b05ec029fe05a9420e3">Sandals::Explicit::Jf_x</a></div><div class="ttdeci">virtual mat Jf_x(vec const &amp;x, real t) const =0</div></div>
+<div class="ttc" id="aclass_sandals_1_1_explicit_html_a4335ea50bcfbec671f05b6543a931089"><div class="ttname"><a href="class_sandals_1_1_explicit.html#a4335ea50bcfbec671f05b6543a931089">Sandals::Explicit::type</a></div><div class="ttdeci">typename Implicit&lt; N &gt;::type type</div><div class="ttdoc">ODE type enumeration.</div><div class="ttdef"><b>Definition</b> Explicit.hxx:27</div></div>
+<div class="ttc" id="aclass_sandals_1_1_explicit_html_a50b6b569d4e589106540e0cedb45e1ad"><div class="ttname"><a href="class_sandals_1_1_explicit.html#a50b6b569d4e589106540e0cedb45e1ad">Sandals::Explicit::ptr</a></div><div class="ttdeci">std::shared_ptr&lt; Explicit&lt; N &gt; &gt; ptr</div><div class="ttdoc">Shared pointer to an explicit ODE system.</div><div class="ttdef"><b>Definition</b> Explicit.hxx:24</div></div>
+<div class="ttc" id="aclass_sandals_1_1_explicit_html_a5c74136de3bfa4caaf02849ded2f8057"><div class="ttname"><a href="class_sandals_1_1_explicit.html#a5c74136de3bfa4caaf02849ded2f8057">Sandals::Explicit::mat</a></div><div class="ttdeci">typename Implicit&lt; N &gt;::mat mat</div><div class="ttdoc">Templetized matrix type.</div><div class="ttdef"><b>Definition</b> Explicit.hxx:26</div></div>
+<div class="ttc" id="aclass_sandals_1_1_explicit_html_a95b01175a557a242d92a8aba875a42a3"><div class="ttname"><a href="class_sandals_1_1_explicit.html#a95b01175a557a242d92a8aba875a42a3">Sandals::Explicit::vec</a></div><div class="ttdeci">typename Implicit&lt; N &gt;::vec vec</div><div class="ttdoc">Templetized vector type.</div><div class="ttdef"><b>Definition</b> Explicit.hxx:25</div></div>
+<div class="ttc" id="aclass_sandals_1_1_explicit_html_a95da2b9086f1c4900d5b2a4580388e23"><div class="ttname"><a href="class_sandals_1_1_explicit.html#a95da2b9086f1c4900d5b2a4580388e23">Sandals::Explicit::f</a></div><div class="ttdeci">virtual vec f(vec const &amp;x, real t) const =0</div></div>
+<div class="ttc" id="aclass_sandals_1_1_explicit_html_a9855d6f3f99d68d4e9c5f42d27033042"><div class="ttname"><a href="class_sandals_1_1_explicit.html#a9855d6f3f99d68d4e9c5f42d27033042">Sandals::Explicit::F</a></div><div class="ttdeci">virtual vec F(vec const &amp;x, vec const &amp;x_dot, real t) const override</div><div class="ttdef"><b>Definition</b> Explicit.hxx:60</div></div>
+<div class="ttc" id="aclass_sandals_1_1_explicit_html_aee0b70473e4ef81a08bc3ea625cc723c"><div class="ttname"><a href="class_sandals_1_1_explicit.html#aee0b70473e4ef81a08bc3ea625cc723c">Sandals::Explicit::JF_x_dot</a></div><div class="ttdeci">mat JF_x_dot(vec const &amp;, vec const &amp;, real) const override</div><div class="ttdef"><b>Definition</b> Explicit.hxx:94</div></div>
+<div class="ttc" id="aclass_sandals_1_1_explicit_html_af033985c28a34440f8410eb546dfd819"><div class="ttname"><a href="class_sandals_1_1_explicit.html#af033985c28a34440f8410eb546dfd819">Sandals::Explicit::Explicit</a></div><div class="ttdeci">Explicit(std::string t_name)</div><div class="ttdef"><b>Definition</b> Explicit.hxx:34</div></div>
+<div class="ttc" id="aclass_sandals_1_1_implicit_html"><div class="ttname"><a href="class_sandals_1_1_implicit.html">Sandals::Implicit</a></div><div class="ttdef"><b>Definition</b> Implicit.hxx:24</div></div>
+<div class="ttc" id="aclass_sandals_1_1_implicit_html_a5a873108f540e627bc79d21d3644c658"><div class="ttname"><a href="class_sandals_1_1_implicit.html#a5a873108f540e627bc79d21d3644c658">Sandals::Implicit::mat</a></div><div class="ttdeci">Eigen::Matrix&lt; real, N, N &gt; mat</div><div class="ttdoc">Templetized matrix type.</div><div class="ttdef"><b>Definition</b> Implicit.hxx:28</div></div>
+<div class="ttc" id="aclass_sandals_1_1_implicit_html_a835648cefa5e8b00aef9dac60b3b6b91"><div class="ttname"><a href="class_sandals_1_1_implicit.html#a835648cefa5e8b00aef9dac60b3b6b91">Sandals::Implicit::vec</a></div><div class="ttdeci">Eigen::Vector&lt; real, N &gt; vec</div><div class="ttdoc">Templetized vector type.</div><div class="ttdef"><b>Definition</b> Implicit.hxx:27</div></div>
+<div class="ttc" id="aclass_sandals_1_1_implicit_html_a8fd47ded99442407d5a889012b6a2379"><div class="ttname"><a href="class_sandals_1_1_implicit.html#a8fd47ded99442407d5a889012b6a2379">Sandals::Implicit::type</a></div><div class="ttdeci">enum class type :unsigned { IMPLICIT=0, EXPLICIT=1, } type</div><div class="ttdoc">ODE type enumeration.</div><div class="ttdef"><b>Definition</b> Implicit.hxx:29</div></div>
+<div class="ttc" id="anamespace_sandals_html"><div class="ttname"><a href="namespace_sandals.html">Sandals</a></div><div class="ttdef"><b>Definition</b> Sandals.hh:61</div></div>
+<div class="ttc" id="anamespace_sandals_html_affeed098f47099153ff75a660863dc62"><div class="ttname"><a href="namespace_sandals.html#affeed098f47099153ff75a660863dc62">Sandals::real</a></div><div class="ttdeci">double real</div><div class="ttdoc">Real number type.</div><div class="ttdef"><b>Definition</b> Sandals.hh:72</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_897bfc2149a094f38e3fcfed941b9c13.html">Sandals</a></li><li class="navelem"><a class="el" href="dir_a2b8e6e8bc5496fcb9ad26110b81b5a1.html">RungeKutta</a></li><li class="navelem"><a class="el" href="dir_70bcc25b742a43d73f222f559e284179.html">System</a></li><li class="navelem"><a class="el" href="_explicit_8hxx.html">Explicit.hxx</a></li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.12.0 </li>
+  </ul>
+</div>
+</body>
+</html>

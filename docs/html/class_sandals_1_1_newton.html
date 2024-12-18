@@ -1,0 +1,606 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.12.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<!-- BEGIN opengraph metadata -->
+<meta property="og:title" content="Doxygen Awesome" />
+<meta property="og:image" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta property="og:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<meta property="og:url" content="https://jothepro.github.io/doxygen-awesome-css/" />
+<!-- END opengraph metadata -->
+<!-- BEGIN twitter metadata -->
+<meta name="twitter:image:src" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta name="twitter:title" content="Doxygen Awesome" />
+<meta name="twitter:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<!-- END twitter metadata -->
+<title>Sandals: Sandals::Newton&lt; N &gt; Class Template Reference</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link rel="icon" type="image/svg+xml" href="logo.jpg"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+<script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+<script type="text/javascript" src="doxygen-awesome-paragraph-link.js"></script>
+<script type="text/javascript" src="doxygen-awesome-interactive-toc.js"></script>
+<script type="text/javascript" src="doxygen-awesome-tabs.js"></script>
+<script type="text/javascript" src="toggle-alternative-theme.js"></script>
+<script type="text/javascript">
+    DoxygenAwesomeFragmentCopyButton.init()
+    DoxygenAwesomeDarkModeToggle.init()
+    DoxygenAwesomeParagraphLink.init()
+    DoxygenAwesomeInteractiveToc.init()
+    DoxygenAwesomeTabs.init()
+</script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX","output/HTML-CSS"],
+});
+</script>
+<script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="custom.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- https://tholman.com/github-corners/ -->
+<a href="https://github.com/StoccoDavide/Sandals" class="github-corner" title="View source on GitHub" target="_blank" rel="noopener noreferrer">
+    <svg viewBox="0 0 250 250" width="40" height="40" style="position: absolute; top: 0; border: 0; right: 0; z-index: 99;" aria-hidden="true">
+    <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="logo.svg"/></td>
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">Sandals
+   &#160;<span id="projectnumber">v0.0.0</span>
+   </div>
+   <div id="projectbrief">Integrating ODEs and DAEs with style</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.12.0 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() { codefold.init(0); });
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Search',true);
+  $(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function(){initNavTree('class_sandals_1_1_newton.html',''); initResizable(true); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="class_sandals_1_1_newton-members.html">List of all members</a>  </div>
+  <div class="headertitle"><div class="title">Sandals::Newton&lt; N &gt; Class Template Reference</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p>Class container for a dumped <a class="el" href="class_sandals_1_1_newton.html" title="Class container for a dumped Newton&#39;s method with affine invariant step. Class container for a dumped...">Newton</a>'s method with affine invariant step. Class container for a dumped <a class="el" href="class_sandals_1_1_newton.html" title="Class container for a dumped Newton&#39;s method with affine invariant step. Class container for a dumped...">Newton</a>'s method with affine invariant step. Given a zeros of a vectorial function problem of the form  \( \mathbf{F}
+(\mathbf{x}) = \mathbf{0} \), where  \( \mathbf{F}: \mathbb{R}^n \rightarrow
+\mathbb{R}^n \), then the <a class="el" href="class_sandals_1_1_newton.html" title="Class container for a dumped Newton&#39;s method with affine invariant step. Class container for a dumped...">Newton</a>'s method is defined as:  
+ <a href="#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_newton_8hxx_source.html">Newton.hxx</a>&gt;</code></p>
+
+<p>Inherits <a class="el" href="class_sandals_1_1_nonlinear_solver.html">Sandals::NonlinearSolver&lt; N &gt;</a>.</p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a74e1322ebec92002ff9b02ac8d86bdb1" id="r_a74e1322ebec92002ff9b02ac8d86bdb1"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a74e1322ebec92002ff9b02ac8d86bdb1">vec</a> = typename <a class="el" href="class_sandals_1_1_nonlinear_solver.html">NonlinearSolver</a>&lt;N&gt;::vec</td></tr>
+<tr class="memdesc:a74e1322ebec92002ff9b02ac8d86bdb1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Templetized vector type.  <br /></td></tr>
+<tr class="separator:a74e1322ebec92002ff9b02ac8d86bdb1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac502e18a13fbeae892d12839c1648978" id="r_ac502e18a13fbeae892d12839c1648978"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac502e18a13fbeae892d12839c1648978">mat</a> = typename <a class="el" href="class_sandals_1_1_nonlinear_solver.html">NonlinearSolver</a>&lt;N&gt;::mat</td></tr>
+<tr class="memdesc:ac502e18a13fbeae892d12839c1648978"><td class="mdescLeft">&#160;</td><td class="mdescRight">Templetized matrix type.  <br /></td></tr>
+<tr class="separator:ac502e18a13fbeae892d12839c1648978"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea05cb1f7bf36f6ff41fc8180aa64361" id="r_aea05cb1f7bf36f6ff41fc8180aa64361"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aea05cb1f7bf36f6ff41fc8180aa64361">fun</a> = typename <a class="el" href="class_sandals_1_1_nonlinear_solver.html">NonlinearSolver</a>&lt;N&gt;::fun</td></tr>
+<tr class="memdesc:aea05cb1f7bf36f6ff41fc8180aa64361"><td class="mdescLeft">&#160;</td><td class="mdescRight">Non-linear function type.  <br /></td></tr>
+<tr class="separator:aea05cb1f7bf36f6ff41fc8180aa64361"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad4afb8f654e6bd1bac9db868639024a5" id="r_ad4afb8f654e6bd1bac9db868639024a5"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad4afb8f654e6bd1bac9db868639024a5">jac</a> = typename <a class="el" href="class_sandals_1_1_nonlinear_solver.html">NonlinearSolver</a>&lt;N&gt;::jac</td></tr>
+<tr class="memdesc:ad4afb8f654e6bd1bac9db868639024a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Jacobian function type.  <br /></td></tr>
+<tr class="separator:ad4afb8f654e6bd1bac9db868639024a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_types_class_sandals_1_1_nonlinear_solver"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pub_types_class_sandals_1_1_nonlinear_solver')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="class_sandals_1_1_nonlinear_solver.html">Sandals::NonlinearSolver&lt; N &gt;</a></td></tr>
+<tr class="memitem:a619c31ccb1a71ebde109daa4b9d16349 inherit pub_types_class_sandals_1_1_nonlinear_solver" id="r_a619c31ccb1a71ebde109daa4b9d16349"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_nonlinear_solver.html#a619c31ccb1a71ebde109daa4b9d16349">vec</a> = Eigen::Vector&lt;<a class="el" href="namespace_sandals.html#affeed098f47099153ff75a660863dc62">real</a>, N&gt;</td></tr>
+<tr class="memdesc:a619c31ccb1a71ebde109daa4b9d16349 inherit pub_types_class_sandals_1_1_nonlinear_solver"><td class="mdescLeft">&#160;</td><td class="mdescRight">Templetized vector type.  <br /></td></tr>
+<tr class="separator:a619c31ccb1a71ebde109daa4b9d16349 inherit pub_types_class_sandals_1_1_nonlinear_solver"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a966b0c98423bacfe0a0fc9284b404223 inherit pub_types_class_sandals_1_1_nonlinear_solver" id="r_a966b0c98423bacfe0a0fc9284b404223"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_nonlinear_solver.html#a966b0c98423bacfe0a0fc9284b404223">mat</a> = Eigen::Matrix&lt;<a class="el" href="namespace_sandals.html#affeed098f47099153ff75a660863dc62">real</a>, N, N&gt;</td></tr>
+<tr class="memdesc:a966b0c98423bacfe0a0fc9284b404223 inherit pub_types_class_sandals_1_1_nonlinear_solver"><td class="mdescLeft">&#160;</td><td class="mdescRight">Templetized matrix type.  <br /></td></tr>
+<tr class="separator:a966b0c98423bacfe0a0fc9284b404223 inherit pub_types_class_sandals_1_1_nonlinear_solver"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a87ee6bf19bc8314c6d8a0a7d3525c105 inherit pub_types_class_sandals_1_1_nonlinear_solver" id="r_a87ee6bf19bc8314c6d8a0a7d3525c105"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_nonlinear_solver.html#a87ee6bf19bc8314c6d8a0a7d3525c105">fun</a> = std::function&lt;void(<a class="el" href="class_sandals_1_1_nonlinear_solver.html#a619c31ccb1a71ebde109daa4b9d16349">vec</a> const &amp;, <a class="el" href="class_sandals_1_1_nonlinear_solver.html#a619c31ccb1a71ebde109daa4b9d16349">vec</a> &amp;)&gt;</td></tr>
+<tr class="memdesc:a87ee6bf19bc8314c6d8a0a7d3525c105 inherit pub_types_class_sandals_1_1_nonlinear_solver"><td class="mdescLeft">&#160;</td><td class="mdescRight">Non-linear function type.  <br /></td></tr>
+<tr class="separator:a87ee6bf19bc8314c6d8a0a7d3525c105 inherit pub_types_class_sandals_1_1_nonlinear_solver"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad420d823144de81ec0b1c8643076838f inherit pub_types_class_sandals_1_1_nonlinear_solver" id="r_ad420d823144de81ec0b1c8643076838f"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_nonlinear_solver.html#ad420d823144de81ec0b1c8643076838f">jac</a> = std::function&lt;void(<a class="el" href="class_sandals_1_1_nonlinear_solver.html#a619c31ccb1a71ebde109daa4b9d16349">vec</a> const &amp;, <a class="el" href="class_sandals_1_1_nonlinear_solver.html#a966b0c98423bacfe0a0fc9284b404223">mat</a> &amp;)&gt;</td></tr>
+<tr class="memdesc:ad420d823144de81ec0b1c8643076838f inherit pub_types_class_sandals_1_1_nonlinear_solver"><td class="mdescLeft">&#160;</td><td class="mdescRight">Jacobian function type.  <br /></td></tr>
+<tr class="separator:ad420d823144de81ec0b1c8643076838f inherit pub_types_class_sandals_1_1_nonlinear_solver"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a161215d2d01dfe4726073efa2459bdfe" id="r_a161215d2d01dfe4726073efa2459bdfe"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a161215d2d01dfe4726073efa2459bdfe">Newton</a> (void)</td></tr>
+<tr class="memdesc:a161215d2d01dfe4726073efa2459bdfe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Class constructor for a quasi-Newton solver.  <br /></td></tr>
+<tr class="separator:a161215d2d01dfe4726073efa2459bdfe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad20a1bd4e6256633a4e034872053f6f7" id="r_ad20a1bd4e6256633a4e034872053f6f7"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad20a1bd4e6256633a4e034872053f6f7">name</a> (void) const override</td></tr>
+<tr class="separator:ad20a1bd4e6256633a4e034872053f6f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa93e387123f3669da273dc785704e306" id="r_aa93e387123f3669da273dc785704e306"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa93e387123f3669da273dc785704e306">solve</a> (<a class="el" href="#a74e1322ebec92002ff9b02ac8d86bdb1">vec</a> const &amp;x_ini, <a class="el" href="#a74e1322ebec92002ff9b02ac8d86bdb1">vec</a> &amp;x_sol) override</td></tr>
+<tr class="separator:aa93e387123f3669da273dc785704e306"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a24cf6583555f0195f291c7dc082d5961" id="r_a24cf6583555f0195f291c7dc082d5961"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a24cf6583555f0195f291c7dc082d5961">solve_dumped</a> (<a class="el" href="#a74e1322ebec92002ff9b02ac8d86bdb1">vec</a> const &amp;x_ini, <a class="el" href="#a74e1322ebec92002ff9b02ac8d86bdb1">vec</a> &amp;x_sol) override</td></tr>
+<tr class="separator:a24cf6583555f0195f291c7dc082d5961"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac53d8b02e49c513c629b55d6f522ff14" id="r_ac53d8b02e49c513c629b55d6f522ff14"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac53d8b02e49c513c629b55d6f522ff14">step</a> (<a class="el" href="#a74e1322ebec92002ff9b02ac8d86bdb1">vec</a> const &amp;F, <a class="el" href="#ac502e18a13fbeae892d12839c1648978">mat</a> const &amp;J, <a class="el" href="#a74e1322ebec92002ff9b02ac8d86bdb1">vec</a> &amp;D) const</td></tr>
+<tr class="separator:ac53d8b02e49c513c629b55d6f522ff14"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_class_sandals_1_1_nonlinear_solver"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pub_methods_class_sandals_1_1_nonlinear_solver')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="class_sandals_1_1_nonlinear_solver.html">Sandals::NonlinearSolver&lt; N &gt;</a></td></tr>
+<tr class="memitem:ae5105e5b6e6217a2940f9350d3073837 inherit pub_methods_class_sandals_1_1_nonlinear_solver" id="r_ae5105e5b6e6217a2940f9350d3073837"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_nonlinear_solver.html#ae5105e5b6e6217a2940f9350d3073837">NonlinearSolver</a> (void)</td></tr>
+<tr class="memdesc:ae5105e5b6e6217a2940f9350d3073837 inherit pub_methods_class_sandals_1_1_nonlinear_solver"><td class="mdescLeft">&#160;</td><td class="mdescRight">Class constructor for a nonlinear solver.  <br /></td></tr>
+<tr class="separator:ae5105e5b6e6217a2940f9350d3073837 inherit pub_methods_class_sandals_1_1_nonlinear_solver"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8662ea61d2d6ebd87f89dd7f73507aa0 inherit pub_methods_class_sandals_1_1_nonlinear_solver" id="r_a8662ea61d2d6ebd87f89dd7f73507aa0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_sandals.html#affeed098f47099153ff75a660863dc62">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_nonlinear_solver.html#a8662ea61d2d6ebd87f89dd7f73507aa0">tolerance</a> (void) const</td></tr>
+<tr class="separator:a8662ea61d2d6ebd87f89dd7f73507aa0 inherit pub_methods_class_sandals_1_1_nonlinear_solver"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4e5a890913aea0bc12294b3719d79fe9 inherit pub_methods_class_sandals_1_1_nonlinear_solver" id="r_a4e5a890913aea0bc12294b3719d79fe9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_nonlinear_solver.html#a4e5a890913aea0bc12294b3719d79fe9">tolerance</a> (<a class="el" href="namespace_sandals.html#affeed098f47099153ff75a660863dc62">real</a> t_tolerance)</td></tr>
+<tr class="separator:a4e5a890913aea0bc12294b3719d79fe9 inherit pub_methods_class_sandals_1_1_nonlinear_solver"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af0398bd54f2a84713121216ff475fb36 inherit pub_methods_class_sandals_1_1_nonlinear_solver" id="r_af0398bd54f2a84713121216ff475fb36"><td class="memItemLeft" align="right" valign="top">unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_nonlinear_solver.html#af0398bd54f2a84713121216ff475fb36">max_iterations</a> (void) const</td></tr>
+<tr class="separator:af0398bd54f2a84713121216ff475fb36 inherit pub_methods_class_sandals_1_1_nonlinear_solver"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a16873bd4a52d01840f66a2f7b9316498 inherit pub_methods_class_sandals_1_1_nonlinear_solver" id="r_a16873bd4a52d01840f66a2f7b9316498"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_nonlinear_solver.html#a16873bd4a52d01840f66a2f7b9316498">max_iterations</a> (unsigned t_max_iterations)</td></tr>
+<tr class="separator:a16873bd4a52d01840f66a2f7b9316498 inherit pub_methods_class_sandals_1_1_nonlinear_solver"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a96d32d7334b3842bfed70958f9ac4c9d inherit pub_methods_class_sandals_1_1_nonlinear_solver" id="r_a96d32d7334b3842bfed70958f9ac4c9d"><td class="memItemLeft" align="right" valign="top">unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_nonlinear_solver.html#a96d32d7334b3842bfed70958f9ac4c9d">max_function_evaluations</a> (void) const</td></tr>
+<tr class="separator:a96d32d7334b3842bfed70958f9ac4c9d inherit pub_methods_class_sandals_1_1_nonlinear_solver"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a18c09276cfb329148a278e508f1d3fec inherit pub_methods_class_sandals_1_1_nonlinear_solver" id="r_a18c09276cfb329148a278e508f1d3fec"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_nonlinear_solver.html#a18c09276cfb329148a278e508f1d3fec">max_function_evaluations</a> (unsigned t_max_fun_evaluations)</td></tr>
+<tr class="separator:a18c09276cfb329148a278e508f1d3fec inherit pub_methods_class_sandals_1_1_nonlinear_solver"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aef858de91b5ae7f63b6d977c342578b2 inherit pub_methods_class_sandals_1_1_nonlinear_solver" id="r_aef858de91b5ae7f63b6d977c342578b2"><td class="memItemLeft" align="right" valign="top">unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_nonlinear_solver.html#aef858de91b5ae7f63b6d977c342578b2">max_jacobian_evaluations</a> (void) const</td></tr>
+<tr class="separator:aef858de91b5ae7f63b6d977c342578b2 inherit pub_methods_class_sandals_1_1_nonlinear_solver"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a265b37964ce02db9b78c93aadb6e424f inherit pub_methods_class_sandals_1_1_nonlinear_solver" id="r_a265b37964ce02db9b78c93aadb6e424f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_nonlinear_solver.html#a265b37964ce02db9b78c93aadb6e424f">max_jacobian_evaluations</a> (unsigned t_max_jac_evaluations)</td></tr>
+<tr class="separator:a265b37964ce02db9b78c93aadb6e424f inherit pub_methods_class_sandals_1_1_nonlinear_solver"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aee793cd77f17ca4907116c6cfdd0e18b inherit pub_methods_class_sandals_1_1_nonlinear_solver" id="r_aee793cd77f17ca4907116c6cfdd0e18b"><td class="memItemLeft" align="right" valign="top">unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_nonlinear_solver.html#aee793cd77f17ca4907116c6cfdd0e18b">max_relaxations</a> (void) const</td></tr>
+<tr class="separator:aee793cd77f17ca4907116c6cfdd0e18b inherit pub_methods_class_sandals_1_1_nonlinear_solver"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a78f573c49c9323bf41fa299eb4009e05 inherit pub_methods_class_sandals_1_1_nonlinear_solver" id="r_a78f573c49c9323bf41fa299eb4009e05"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_nonlinear_solver.html#a78f573c49c9323bf41fa299eb4009e05">max_relaxations</a> (unsigned t_max_relaxations)</td></tr>
+<tr class="separator:a78f573c49c9323bf41fa299eb4009e05 inherit pub_methods_class_sandals_1_1_nonlinear_solver"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acf637ed08ddc7ac8594367a8f6c6ceae inherit pub_methods_class_sandals_1_1_nonlinear_solver" id="r_acf637ed08ddc7ac8594367a8f6c6ceae"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_sandals.html#affeed098f47099153ff75a660863dc62">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_nonlinear_solver.html#acf637ed08ddc7ac8594367a8f6c6ceae">alpha</a> (void) const</td></tr>
+<tr class="separator:acf637ed08ddc7ac8594367a8f6c6ceae inherit pub_methods_class_sandals_1_1_nonlinear_solver"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7410c9b4dc335e99e89dba83a3f9249f inherit pub_methods_class_sandals_1_1_nonlinear_solver" id="r_a7410c9b4dc335e99e89dba83a3f9249f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_nonlinear_solver.html#a7410c9b4dc335e99e89dba83a3f9249f">alpha</a> (<a class="el" href="namespace_sandals.html#affeed098f47099153ff75a660863dc62">real</a> t_alpha)</td></tr>
+<tr class="separator:a7410c9b4dc335e99e89dba83a3f9249f inherit pub_methods_class_sandals_1_1_nonlinear_solver"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa80c941cc7138e5db207e839405bb4ca inherit pub_methods_class_sandals_1_1_nonlinear_solver" id="r_aa80c941cc7138e5db207e839405bb4ca"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_nonlinear_solver.html#aa80c941cc7138e5db207e839405bb4ca">enable_verbose</a> (void)</td></tr>
+<tr class="memdesc:aa80c941cc7138e5db207e839405bb4ca inherit pub_methods_class_sandals_1_1_nonlinear_solver"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable solver's verbose mode.  <br /></td></tr>
+<tr class="separator:aa80c941cc7138e5db207e839405bb4ca inherit pub_methods_class_sandals_1_1_nonlinear_solver"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac3384a7f8c2ba68ce66166cc1c4bf23e inherit pub_methods_class_sandals_1_1_nonlinear_solver" id="r_ac3384a7f8c2ba68ce66166cc1c4bf23e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_nonlinear_solver.html#ac3384a7f8c2ba68ce66166cc1c4bf23e">disable_verbose</a> (void)</td></tr>
+<tr class="memdesc:ac3384a7f8c2ba68ce66166cc1c4bf23e inherit pub_methods_class_sandals_1_1_nonlinear_solver"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disable solver's verbose mode.  <br /></td></tr>
+<tr class="separator:ac3384a7f8c2ba68ce66166cc1c4bf23e inherit pub_methods_class_sandals_1_1_nonlinear_solver"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a04078e4943a0f014eadecd34ccfd9edb inherit pub_methods_class_sandals_1_1_nonlinear_solver" id="r_a04078e4943a0f014eadecd34ccfd9edb"><td class="memItemLeft" align="right" valign="top">unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_nonlinear_solver.html#a04078e4943a0f014eadecd34ccfd9edb">iterations</a> (void) const</td></tr>
+<tr class="memdesc:a04078e4943a0f014eadecd34ccfd9edb inherit pub_methods_class_sandals_1_1_nonlinear_solver"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the number of algorithm iterations.  <br /></td></tr>
+<tr class="separator:a04078e4943a0f014eadecd34ccfd9edb inherit pub_methods_class_sandals_1_1_nonlinear_solver"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a36615eee812ca3212e3b2c3a0436a326 inherit pub_methods_class_sandals_1_1_nonlinear_solver" id="r_a36615eee812ca3212e3b2c3a0436a326"><td class="memItemLeft" align="right" valign="top">unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_nonlinear_solver.html#a36615eee812ca3212e3b2c3a0436a326">function_evaluations</a> (void) const</td></tr>
+<tr class="separator:a36615eee812ca3212e3b2c3a0436a326 inherit pub_methods_class_sandals_1_1_nonlinear_solver"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8240c1e31e077ec0a367cd1b1b7e9f88 inherit pub_methods_class_sandals_1_1_nonlinear_solver" id="r_a8240c1e31e077ec0a367cd1b1b7e9f88"><td class="memItemLeft" align="right" valign="top">unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_nonlinear_solver.html#a8240c1e31e077ec0a367cd1b1b7e9f88">jacobian_evaluations</a> (void) const</td></tr>
+<tr class="separator:a8240c1e31e077ec0a367cd1b1b7e9f88 inherit pub_methods_class_sandals_1_1_nonlinear_solver"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a715eb2c1e3622560d4b2953fc407ce18 inherit pub_methods_class_sandals_1_1_nonlinear_solver" id="r_a715eb2c1e3622560d4b2953fc407ce18"><td class="memItemLeft" align="right" valign="top">unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_nonlinear_solver.html#a715eb2c1e3622560d4b2953fc407ce18">relaxations</a> (void) const</td></tr>
+<tr class="separator:a715eb2c1e3622560d4b2953fc407ce18 inherit pub_methods_class_sandals_1_1_nonlinear_solver"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa64cf0b6dbd923aa8c3502005fa20314 inherit pub_methods_class_sandals_1_1_nonlinear_solver" id="r_aa64cf0b6dbd923aa8c3502005fa20314"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_sandals.html#affeed098f47099153ff75a660863dc62">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_nonlinear_solver.html#aa64cf0b6dbd923aa8c3502005fa20314">residuals</a> (void) const</td></tr>
+<tr class="separator:aa64cf0b6dbd923aa8c3502005fa20314 inherit pub_methods_class_sandals_1_1_nonlinear_solver"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a34a83f6a014e7082da38f1a064bad467 inherit pub_methods_class_sandals_1_1_nonlinear_solver" id="r_a34a83f6a014e7082da38f1a064bad467"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_nonlinear_solver.html#a34a83f6a014e7082da38f1a064bad467">converged</a> (void) const</td></tr>
+<tr class="separator:a34a83f6a014e7082da38f1a064bad467 inherit pub_methods_class_sandals_1_1_nonlinear_solver"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a67d4d5c9cc36cf5ed10d4f3185ae55e1 inherit pub_methods_class_sandals_1_1_nonlinear_solver" id="r_a67d4d5c9cc36cf5ed10d4f3185ae55e1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_nonlinear_solver.html#a67d4d5c9cc36cf5ed10d4f3185ae55e1">solve</a> (<a class="el" href="class_sandals_1_1_nonlinear_solver.html#a87ee6bf19bc8314c6d8a0a7d3525c105">fun</a> t_fun, <a class="el" href="class_sandals_1_1_nonlinear_solver.html#ad420d823144de81ec0b1c8643076838f">jac</a> t_jac, <a class="el" href="class_sandals_1_1_nonlinear_solver.html#a619c31ccb1a71ebde109daa4b9d16349">vec</a> const &amp;x_ini, <a class="el" href="class_sandals_1_1_nonlinear_solver.html#a619c31ccb1a71ebde109daa4b9d16349">vec</a> &amp;x_sol)</td></tr>
+<tr class="separator:a67d4d5c9cc36cf5ed10d4f3185ae55e1 inherit pub_methods_class_sandals_1_1_nonlinear_solver"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a89e925c8e52f76d6f558b057e9849c2b inherit pub_methods_class_sandals_1_1_nonlinear_solver" id="r_a89e925c8e52f76d6f558b057e9849c2b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_nonlinear_solver.html#a89e925c8e52f76d6f558b057e9849c2b">solve_dumped</a> (<a class="el" href="class_sandals_1_1_nonlinear_solver.html#a87ee6bf19bc8314c6d8a0a7d3525c105">fun</a> t_fun, <a class="el" href="class_sandals_1_1_nonlinear_solver.html#ad420d823144de81ec0b1c8643076838f">jac</a> t_jac, <a class="el" href="class_sandals_1_1_nonlinear_solver.html#a619c31ccb1a71ebde109daa4b9d16349">vec</a> const &amp;x_ini, <a class="el" href="class_sandals_1_1_nonlinear_solver.html#a619c31ccb1a71ebde109daa4b9d16349">vec</a> &amp;x_sol)</td></tr>
+<tr class="separator:a89e925c8e52f76d6f558b057e9849c2b inherit pub_methods_class_sandals_1_1_nonlinear_solver"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
+Additional Inherited Members</h2></td></tr>
+<tr class="inherit_header pro_methods_class_sandals_1_1_nonlinear_solver"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pro_methods_class_sandals_1_1_nonlinear_solver')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="class_sandals_1_1_nonlinear_solver.html">Sandals::NonlinearSolver&lt; N &gt;</a></td></tr>
+<tr class="memitem:a0383c7ce7ea772fd92382eaa247c4f3f inherit pro_methods_class_sandals_1_1_nonlinear_solver" id="r_a0383c7ce7ea772fd92382eaa247c4f3f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_nonlinear_solver.html#a0383c7ce7ea772fd92382eaa247c4f3f">reset</a> (void)</td></tr>
+<tr class="memdesc:a0383c7ce7ea772fd92382eaa247c4f3f inherit pro_methods_class_sandals_1_1_nonlinear_solver"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reset solver internal counters and variables.  <br /></td></tr>
+<tr class="separator:a0383c7ce7ea772fd92382eaa247c4f3f inherit pro_methods_class_sandals_1_1_nonlinear_solver"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a52f6fc887beeddc4cbc491e9fb13019b inherit pro_methods_class_sandals_1_1_nonlinear_solver" id="r_a52f6fc887beeddc4cbc491e9fb13019b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_nonlinear_solver.html#a52f6fc887beeddc4cbc491e9fb13019b">evaluate_function</a> (<a class="el" href="class_sandals_1_1_nonlinear_solver.html#a619c31ccb1a71ebde109daa4b9d16349">vec</a> const &amp;x, <a class="el" href="class_sandals_1_1_nonlinear_solver.html#a619c31ccb1a71ebde109daa4b9d16349">vec</a> &amp;F)</td></tr>
+<tr class="separator:a52f6fc887beeddc4cbc491e9fb13019b inherit pro_methods_class_sandals_1_1_nonlinear_solver"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4808627d288fd432f8445afaa1ebc0fb inherit pro_methods_class_sandals_1_1_nonlinear_solver" id="r_a4808627d288fd432f8445afaa1ebc0fb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_nonlinear_solver.html#a4808627d288fd432f8445afaa1ebc0fb">evaluate_jacobian</a> (<a class="el" href="class_sandals_1_1_nonlinear_solver.html#a619c31ccb1a71ebde109daa4b9d16349">vec</a> const &amp;x, <a class="el" href="class_sandals_1_1_nonlinear_solver.html#a966b0c98423bacfe0a0fc9284b404223">mat</a> &amp;J)</td></tr>
+<tr class="separator:a4808627d288fd432f8445afaa1ebc0fb inherit pro_methods_class_sandals_1_1_nonlinear_solver"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_attribs_class_sandals_1_1_nonlinear_solver"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pro_attribs_class_sandals_1_1_nonlinear_solver')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="class_sandals_1_1_nonlinear_solver.html">Sandals::NonlinearSolver&lt; N &gt;</a></td></tr>
+<tr class="memitem:a92080a31fbe3464b28aa10b65c91e901 inherit pro_attribs_class_sandals_1_1_nonlinear_solver" id="r_a92080a31fbe3464b28aa10b65c91e901"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_sandals_1_1_nonlinear_solver.html#a87ee6bf19bc8314c6d8a0a7d3525c105">fun</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_nonlinear_solver.html#a92080a31fbe3464b28aa10b65c91e901">m_fun</a></td></tr>
+<tr class="memdesc:a92080a31fbe3464b28aa10b65c91e901 inherit pro_attribs_class_sandals_1_1_nonlinear_solver"><td class="mdescLeft">&#160;</td><td class="mdescRight">Non-linear function.  <br /></td></tr>
+<tr class="separator:a92080a31fbe3464b28aa10b65c91e901 inherit pro_attribs_class_sandals_1_1_nonlinear_solver"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac8eaab060b01249349ea0d238c9a4901 inherit pro_attribs_class_sandals_1_1_nonlinear_solver" id="r_ac8eaab060b01249349ea0d238c9a4901"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_sandals_1_1_nonlinear_solver.html#ad420d823144de81ec0b1c8643076838f">jac</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_nonlinear_solver.html#ac8eaab060b01249349ea0d238c9a4901">m_jac</a></td></tr>
+<tr class="memdesc:ac8eaab060b01249349ea0d238c9a4901 inherit pro_attribs_class_sandals_1_1_nonlinear_solver"><td class="mdescLeft">&#160;</td><td class="mdescRight">Jacobian function.  <br /></td></tr>
+<tr class="separator:ac8eaab060b01249349ea0d238c9a4901 inherit pro_attribs_class_sandals_1_1_nonlinear_solver"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a19def1fbe0f4642d4525eeb4b906dada inherit pro_attribs_class_sandals_1_1_nonlinear_solver" id="r_a19def1fbe0f4642d4525eeb4b906dada"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_sandals.html#affeed098f47099153ff75a660863dc62">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_nonlinear_solver.html#a19def1fbe0f4642d4525eeb4b906dada">m_tolerance</a> {EPSILON_LOW}</td></tr>
+<tr class="memdesc:a19def1fbe0f4642d4525eeb4b906dada inherit pro_attribs_class_sandals_1_1_nonlinear_solver"><td class="mdescLeft">&#160;</td><td class="mdescRight">Solver tolerance.  <br /></td></tr>
+<tr class="separator:a19def1fbe0f4642d4525eeb4b906dada inherit pro_attribs_class_sandals_1_1_nonlinear_solver"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a98c58c4df3892ccaca6e2fe4a35282 inherit pro_attribs_class_sandals_1_1_nonlinear_solver" id="r_a2a98c58c4df3892ccaca6e2fe4a35282"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_sandals.html#affeed098f47099153ff75a660863dc62">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_nonlinear_solver.html#a2a98c58c4df3892ccaca6e2fe4a35282">m_alpha</a> {0.8}</td></tr>
+<tr class="memdesc:a2a98c58c4df3892ccaca6e2fe4a35282 inherit pro_attribs_class_sandals_1_1_nonlinear_solver"><td class="mdescLeft">&#160;</td><td class="mdescRight">Relaxation factor.  <br /></td></tr>
+<tr class="separator:a2a98c58c4df3892ccaca6e2fe4a35282 inherit pro_attribs_class_sandals_1_1_nonlinear_solver"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d3ade73df16ed424a1fa96718e0f478 inherit pro_attribs_class_sandals_1_1_nonlinear_solver" id="r_a0d3ade73df16ed424a1fa96718e0f478"><td class="memItemLeft" align="right" valign="top">unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_nonlinear_solver.html#a0d3ade73df16ed424a1fa96718e0f478">m_max_iterations</a> {100}</td></tr>
+<tr class="memdesc:a0d3ade73df16ed424a1fa96718e0f478 inherit pro_attribs_class_sandals_1_1_nonlinear_solver"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maximum number of allowed algorithm iterations.  <br /></td></tr>
+<tr class="separator:a0d3ade73df16ed424a1fa96718e0f478 inherit pro_attribs_class_sandals_1_1_nonlinear_solver"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a55c24844f4b81778732a372112b2229d inherit pro_attribs_class_sandals_1_1_nonlinear_solver" id="r_a55c24844f4b81778732a372112b2229d"><td class="memItemLeft" align="right" valign="top">unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_nonlinear_solver.html#a55c24844f4b81778732a372112b2229d">m_max_fun_evaluations</a> {100}</td></tr>
+<tr class="memdesc:a55c24844f4b81778732a372112b2229d inherit pro_attribs_class_sandals_1_1_nonlinear_solver"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maximum number of allowed function evaluations.  <br /></td></tr>
+<tr class="separator:a55c24844f4b81778732a372112b2229d inherit pro_attribs_class_sandals_1_1_nonlinear_solver"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac6de00c4a0c21697a48b67d2af584655 inherit pro_attribs_class_sandals_1_1_nonlinear_solver" id="r_ac6de00c4a0c21697a48b67d2af584655"><td class="memItemLeft" align="right" valign="top">unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_nonlinear_solver.html#ac6de00c4a0c21697a48b67d2af584655">m_max_jac_evaluations</a> {100}</td></tr>
+<tr class="memdesc:ac6de00c4a0c21697a48b67d2af584655 inherit pro_attribs_class_sandals_1_1_nonlinear_solver"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maximum number of allowed Jacobian evaluations.  <br /></td></tr>
+<tr class="separator:ac6de00c4a0c21697a48b67d2af584655 inherit pro_attribs_class_sandals_1_1_nonlinear_solver"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac4689bdf6c20f934f14fc6465970c186 inherit pro_attribs_class_sandals_1_1_nonlinear_solver" id="r_ac4689bdf6c20f934f14fc6465970c186"><td class="memItemLeft" align="right" valign="top">unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_nonlinear_solver.html#ac4689bdf6c20f934f14fc6465970c186">m_max_relaxations</a> {10}</td></tr>
+<tr class="memdesc:ac4689bdf6c20f934f14fc6465970c186 inherit pro_attribs_class_sandals_1_1_nonlinear_solver"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maximum number of allowed algorithm relaxations.  <br /></td></tr>
+<tr class="separator:ac4689bdf6c20f934f14fc6465970c186 inherit pro_attribs_class_sandals_1_1_nonlinear_solver"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a993e753d028d756fcd9b97eff2f65dcf inherit pro_attribs_class_sandals_1_1_nonlinear_solver" id="r_a993e753d028d756fcd9b97eff2f65dcf"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_nonlinear_solver.html#a993e753d028d756fcd9b97eff2f65dcf">m_verbose</a> {false}</td></tr>
+<tr class="memdesc:a993e753d028d756fcd9b97eff2f65dcf inherit pro_attribs_class_sandals_1_1_nonlinear_solver"><td class="mdescLeft">&#160;</td><td class="mdescRight">Verbose mode boolean.  <br /></td></tr>
+<tr class="separator:a993e753d028d756fcd9b97eff2f65dcf inherit pro_attribs_class_sandals_1_1_nonlinear_solver"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d305af90bef717e8570ccb047be7eef inherit pro_attribs_class_sandals_1_1_nonlinear_solver" id="r_a7d305af90bef717e8570ccb047be7eef"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_nonlinear_solver.html#a7d305af90bef717e8570ccb047be7eef">m_converged</a> {false}</td></tr>
+<tr class="memdesc:a7d305af90bef717e8570ccb047be7eef inherit pro_attribs_class_sandals_1_1_nonlinear_solver"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convergence boolean.  <br /></td></tr>
+<tr class="separator:a7d305af90bef717e8570ccb047be7eef inherit pro_attribs_class_sandals_1_1_nonlinear_solver"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaa14a50ae7480fb52d47e27c8785d3aa inherit pro_attribs_class_sandals_1_1_nonlinear_solver" id="r_aaa14a50ae7480fb52d47e27c8785d3aa"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_sandals.html#affeed098f47099153ff75a660863dc62">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_nonlinear_solver.html#aaa14a50ae7480fb52d47e27c8785d3aa">m_residuals</a> {0.0}</td></tr>
+<tr class="memdesc:aaa14a50ae7480fb52d47e27c8785d3aa inherit pro_attribs_class_sandals_1_1_nonlinear_solver"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function residuals.  <br /></td></tr>
+<tr class="separator:aaa14a50ae7480fb52d47e27c8785d3aa inherit pro_attribs_class_sandals_1_1_nonlinear_solver"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8b3c6aa10109c8f7e1e5d02fc47aba0f inherit pro_attribs_class_sandals_1_1_nonlinear_solver" id="r_a8b3c6aa10109c8f7e1e5d02fc47aba0f"><td class="memItemLeft" align="right" valign="top">unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_nonlinear_solver.html#a8b3c6aa10109c8f7e1e5d02fc47aba0f">m_iterations</a> {0}</td></tr>
+<tr class="memdesc:a8b3c6aa10109c8f7e1e5d02fc47aba0f inherit pro_attribs_class_sandals_1_1_nonlinear_solver"><td class="mdescLeft">&#160;</td><td class="mdescRight">Algorithm iterations number.  <br /></td></tr>
+<tr class="separator:a8b3c6aa10109c8f7e1e5d02fc47aba0f inherit pro_attribs_class_sandals_1_1_nonlinear_solver"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a063cfb6a6667bc8fe8a3f8f022483a77 inherit pro_attribs_class_sandals_1_1_nonlinear_solver" id="r_a063cfb6a6667bc8fe8a3f8f022483a77"><td class="memItemLeft" align="right" valign="top">unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_nonlinear_solver.html#a063cfb6a6667bc8fe8a3f8f022483a77">m_fun_evaluations</a> {0}</td></tr>
+<tr class="memdesc:a063cfb6a6667bc8fe8a3f8f022483a77 inherit pro_attribs_class_sandals_1_1_nonlinear_solver"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function evaluations number.  <br /></td></tr>
+<tr class="separator:a063cfb6a6667bc8fe8a3f8f022483a77 inherit pro_attribs_class_sandals_1_1_nonlinear_solver"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9aea2cfb5a182a62a76705c42cdc4e15 inherit pro_attribs_class_sandals_1_1_nonlinear_solver" id="r_a9aea2cfb5a182a62a76705c42cdc4e15"><td class="memItemLeft" align="right" valign="top">unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_nonlinear_solver.html#a9aea2cfb5a182a62a76705c42cdc4e15">m_jac_evaluations</a> {0}</td></tr>
+<tr class="memdesc:a9aea2cfb5a182a62a76705c42cdc4e15 inherit pro_attribs_class_sandals_1_1_nonlinear_solver"><td class="mdescLeft">&#160;</td><td class="mdescRight">Jacobian evaluations number.  <br /></td></tr>
+<tr class="separator:a9aea2cfb5a182a62a76705c42cdc4e15 inherit pro_attribs_class_sandals_1_1_nonlinear_solver"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a91d8fcaa97db40e4c904bc1513d75417 inherit pro_attribs_class_sandals_1_1_nonlinear_solver" id="r_a91d8fcaa97db40e4c904bc1513d75417"><td class="memItemLeft" align="right" valign="top">unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_nonlinear_solver.html#a91d8fcaa97db40e4c904bc1513d75417">m_relaxations</a> {0}</td></tr>
+<tr class="memdesc:a91d8fcaa97db40e4c904bc1513d75417 inherit pro_attribs_class_sandals_1_1_nonlinear_solver"><td class="mdescLeft">&#160;</td><td class="mdescRight">Algorithm relaxations number.  <br /></td></tr>
+<tr class="separator:a91d8fcaa97db40e4c904bc1513d75417 inherit pro_attribs_class_sandals_1_1_nonlinear_solver"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><div class="compoundTemplParams">template&lt;unsigned N&gt;<br />
+class Sandals::Newton&lt; N &gt;</div><p>Class container for a dumped <a class="el" href="class_sandals_1_1_newton.html" title="Class container for a dumped Newton&#39;s method with affine invariant step. Class container for a dumped...">Newton</a>'s method with affine invariant step. Class container for a dumped <a class="el" href="class_sandals_1_1_newton.html" title="Class container for a dumped Newton&#39;s method with affine invariant step. Class container for a dumped...">Newton</a>'s method with affine invariant step. Given a zeros of a vectorial function problem of the form  \( \mathbf{F}
+(\mathbf{x}) = \mathbf{0} \), where  \( \mathbf{F}: \mathbb{R}^n \rightarrow
+\mathbb{R}^n \), then the <a class="el" href="class_sandals_1_1_newton.html" title="Class container for a dumped Newton&#39;s method with affine invariant step. Class container for a dumped...">Newton</a>'s method is defined as: </p>
+<p class="formulaDsp">
+\[
+  \mathbf{JF}_{\mathbf{x}}(\mathbf{x}_k) \mathbf{h} = -\mathbf{F}(\mathbf{x}_k).
+\]
+</p>
+<p>The dumped step is defined as:</p>
+<p class="formulaDsp">
+\[
+  \mathbf{x}_{k+1} = \mathbf{x}_k + \alpha_k \mathbf{h}
+\]
+</p>
+<p>where \( \alpha_k \) is a dumping coefficient that satisfies:</p>
+<p class="formulaDsp">
+\[
+\left\| \mathbf{JF}_{\mathbf{x}}(\mathbf{x}_k)^{-1} \mathbf{F}(\mathbf{x}_{k+1}) \right\|
+\leq \left(1 - \frac{\alpha_k}{2}\right) \left\| \mathbf{JF}_{\mathbf{x}}(\mathbf{x}_k)^{-1}
+\mathbf{F}(\mathbf{x}_k) \right\| = \left(1 - \frac{\alpha_k}{2} \right)
+\left\| \mathbf{h}  \right\|.
+\]
+</p>
+<p>For more details on the <a class="el" href="class_sandals_1_1_newton.html" title="Class container for a dumped Newton&#39;s method with affine invariant step. Class container for a dumped...">Newton</a>'s method with affine invariant step refer to: <a href="https://www.zib.de/deuflhard/research/algorithm/ainewton.en.html">https://www.zib.de/deuflhard/research/algorithm/ainewton.en.html</a>. <a class="el" href="class_sandals_1_1_newton.html" title="Class container for a dumped Newton&#39;s method with affine invariant step. Class container for a dumped...">Newton</a> affine solver class container. </p>
+</div><h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="aea05cb1f7bf36f6ff41fc8180aa64361" name="aea05cb1f7bf36f6ff41fc8180aa64361"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aea05cb1f7bf36f6ff41fc8180aa64361">&#9670;&#160;</a></span>fun</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;unsigned N&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="class_sandals_1_1_newton.html">Sandals::Newton</a>&lt; N &gt;::fun = typename <a class="el" href="class_sandals_1_1_nonlinear_solver.html">NonlinearSolver</a>&lt;N&gt;::fun</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Non-linear function type. </p>
+
+</div>
+</div>
+<a id="ad4afb8f654e6bd1bac9db868639024a5" name="ad4afb8f654e6bd1bac9db868639024a5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad4afb8f654e6bd1bac9db868639024a5">&#9670;&#160;</a></span>jac</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;unsigned N&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="class_sandals_1_1_newton.html">Sandals::Newton</a>&lt; N &gt;::jac = typename <a class="el" href="class_sandals_1_1_nonlinear_solver.html">NonlinearSolver</a>&lt;N&gt;::jac</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Jacobian function type. </p>
+
+</div>
+</div>
+<a id="ac502e18a13fbeae892d12839c1648978" name="ac502e18a13fbeae892d12839c1648978"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac502e18a13fbeae892d12839c1648978">&#9670;&#160;</a></span>mat</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;unsigned N&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="class_sandals_1_1_newton.html">Sandals::Newton</a>&lt; N &gt;::mat = typename <a class="el" href="class_sandals_1_1_nonlinear_solver.html">NonlinearSolver</a>&lt;N&gt;::mat</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Templetized matrix type. </p>
+
+</div>
+</div>
+<a id="a74e1322ebec92002ff9b02ac8d86bdb1" name="a74e1322ebec92002ff9b02ac8d86bdb1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a74e1322ebec92002ff9b02ac8d86bdb1">&#9670;&#160;</a></span>vec</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;unsigned N&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="class_sandals_1_1_newton.html">Sandals::Newton</a>&lt; N &gt;::vec = typename <a class="el" href="class_sandals_1_1_nonlinear_solver.html">NonlinearSolver</a>&lt;N&gt;::vec</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Templetized vector type. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a161215d2d01dfe4726073efa2459bdfe" name="a161215d2d01dfe4726073efa2459bdfe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a161215d2d01dfe4726073efa2459bdfe">&#9670;&#160;</a></span>Newton()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;unsigned N&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_sandals_1_1_newton.html">Sandals::Newton</a>&lt; N &gt;::Newton </td>
+          <td>(</td>
+          <td class="paramtype">void</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Class constructor for a quasi-Newton solver. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="ad20a1bd4e6256633a4e034872053f6f7" name="ad20a1bd4e6256633a4e034872053f6f7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad20a1bd4e6256633a4e034872053f6f7">&#9670;&#160;</a></span>name()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;unsigned N&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string <a class="el" href="class_sandals_1_1_newton.html">Sandals::Newton</a>&lt; N &gt;::name </td>
+          <td>(</td>
+          <td class="paramtype">void</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Get the quasi-Newton solver name. </p><dl class="section return"><dt>Returns</dt><dd>The quasi-Newton solver name. </dd></dl>
+
+<p>Implements <a class="el" href="class_sandals_1_1_nonlinear_solver.html#a65fbcd734a8c1e9c9acedede10e9a898">Sandals::NonlinearSolver&lt; N &gt;</a>.</p>
+
+</div>
+</div>
+<a id="aa93e387123f3669da273dc785704e306" name="aa93e387123f3669da273dc785704e306"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa93e387123f3669da273dc785704e306">&#9670;&#160;</a></span>solve()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;unsigned N&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="class_sandals_1_1_newton.html">Sandals::Newton</a>&lt; N &gt;::solve </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#a74e1322ebec92002ff9b02ac8d86bdb1">vec</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>x_ini</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="#a74e1322ebec92002ff9b02ac8d86bdb1">vec</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>x_sol</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Solve non-linear system of equations \( \mathbf{F}(\mathbf{x}) = \mathbf{0} \). </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x_ini</td><td>The initialization point. </td></tr>
+    <tr><td class="paramname">x_sol</td><td>The solution point. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implements <a class="el" href="class_sandals_1_1_nonlinear_solver.html#a6a11aa76077af612bb626ff63dc63829">Sandals::NonlinearSolver&lt; N &gt;</a>.</p>
+
+</div>
+</div>
+<a id="a24cf6583555f0195f291c7dc082d5961" name="a24cf6583555f0195f291c7dc082d5961"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a24cf6583555f0195f291c7dc082d5961">&#9670;&#160;</a></span>solve_dumped()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;unsigned N&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="class_sandals_1_1_newton.html">Sandals::Newton</a>&lt; N &gt;::solve_dumped </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#a74e1322ebec92002ff9b02ac8d86bdb1">vec</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>x_ini</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="#a74e1322ebec92002ff9b02ac8d86bdb1">vec</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>x_sol</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Solve non-linear system of equations \( \mathbf{F}(\mathbf{x}) = \mathbf{0} \) with dumping factor \( \alpha \). </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">t_fun</td><td>The function pointer. </td></tr>
+    <tr><td class="paramname">x_ini</td><td>The initialization point. </td></tr>
+    <tr><td class="paramname">x_sol</td><td>The solution point. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implements <a class="el" href="class_sandals_1_1_nonlinear_solver.html#ab5abec537aabfb6177ec39206a1bab4d">Sandals::NonlinearSolver&lt; N &gt;</a>.</p>
+
+</div>
+</div>
+<a id="ac53d8b02e49c513c629b55d6f522ff14" name="ac53d8b02e49c513c629b55d6f522ff14"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac53d8b02e49c513c629b55d6f522ff14">&#9670;&#160;</a></span>step()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;unsigned N&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="class_sandals_1_1_newton.html">Sandals::Newton</a>&lt; N &gt;::step </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#a74e1322ebec92002ff9b02ac8d86bdb1">vec</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>F</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="#ac502e18a13fbeae892d12839c1648978">mat</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>J</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="#a74e1322ebec92002ff9b02ac8d86bdb1">vec</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>D</em></span>&#160;) const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Calculate the step (the inversion of the Jacobian is done through a partial pivoting LU decomposition). </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">F</td><td>Function. </td></tr>
+    <tr><td class="paramname">J</td><td>Jacobian approximation. </td></tr>
+    <tr><td class="paramname">D</td><td>Step. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
+<li>include/Sandals/NonlinearSolver/<a class="el" href="_newton_8hxx_source.html">Newton.hxx</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="namespace_sandals.html">Sandals</a></li><li class="navelem"><a class="el" href="class_sandals_1_1_newton.html">Newton</a></li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.12.0 </li>
+  </ul>
+</div>
+</body>
+</html>

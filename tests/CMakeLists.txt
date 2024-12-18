@@ -9,26 +9,23 @@
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 find_package(Matplot++ REQUIRED)
+find_package(GTest REQUIRED)
 
-file(GLOB_RECURSE
-  BROYDEN_TESTS
-  "${CMAKE_CURRENT_SOURCE_DIR}/Broyden/test_*.cc"
-)
+file(GLOB_RECURSE BROYDEN_TESTS "${CMAKE_CURRENT_SOURCE_DIR}/Broyden/test_*.cc")
 add_executable(test_broyden ${BROYDEN_TESTS})
-target_link_libraries(test_broyden PRIVATE sandals Matplot++::matplot)
+target_link_libraries(test_broyden PRIVATE sandals GTest::gtest)
 
-file(GLOB_RECURSE
-  NEWTON_TESTS
-  "${CMAKE_CURRENT_SOURCE_DIR}/Newton/test_*.cc"
-)
+file(GLOB_RECURSE NEWTON_TESTS "${CMAKE_CURRENT_SOURCE_DIR}/Newton/test_*.cc")
 add_executable(test_newton ${NEWTON_TESTS})
-target_link_libraries(test_newton PRIVATE sandals Matplot++::matplot)
+target_link_libraries(test_newton PRIVATE sandals GTest::gtest)
 
-file(GLOB_RECURSE
-RUNGEKUTTA_TESTS
-  "${CMAKE_CURRENT_SOURCE_DIR}/RungeKutta/test_*.cc"
-)
-add_executable(test_rungekutta ${RUNGEKUTTA_TESTS})
-target_link_libraries(test_rungekutta PRIVATE sandals Matplot++::matplot)
+
+file(GLOB_RECURSE EXPLICIT_TESTS "${CMAKE_CURRENT_SOURCE_DIR}/Explicit/test_*.cc")
+add_executable(test_explicit ${EXPLICIT_TESTS})
+target_link_libraries(test_explicit PRIVATE sandals GTest::gtest Matplot++::matplot)
+
+file(GLOB_RECURSE IMPLICIT_TESTS "${CMAKE_CURRENT_SOURCE_DIR}/Implicit/test_*.cc")
+add_executable(test_implicit ${IMPLICIT_TESTS})
+target_link_libraries(test_implicit PRIVATE sandals GTest::gtest Matplot++::matplot)
 
 # That's all folks!
