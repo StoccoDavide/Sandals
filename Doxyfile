@@ -61,7 +61,7 @@ PROJECT_BRIEF          = "Integrating ODEs and DAEs with style"
 # pixels and the maximum width should not exceed 200 pixels. Doxygen will copy
 # the logo to the output directory.
 
-PROJECT_LOGO           = ./docs/logo.svg
+PROJECT_LOGO           = docs/include/logo.svg
 
 # With the PROJECT_ICON tag one can specify an icon that is included in the tabs
 # when the HTML document is shown. Doxygen will copy the logo to the output
@@ -74,7 +74,7 @@ PROJECT_ICON           =
 # entered, it will be relative to the location where Doxygen was started. If
 # left blank the current directory will be used.
 
-OUTPUT_DIRECTORY       = docs
+OUTPUT_DIRECTORY       =
 
 # If the CREATE_SUBDIRS tag is set to YES then Doxygen will create up to 4096
 # sub-directories (in 2 levels) under the output directory of each output format
@@ -1120,7 +1120,7 @@ EXAMPLE_RECURSIVE      = NO
 # that contain images that are to be included in the documentation (see the
 # \image command).
 
-IMAGE_PATH             = docs/figures
+IMAGE_PATH             =
 
 # The INPUT_FILTER tag can be used to specify a program that Doxygen should
 # invoke to filter for each input file. Doxygen will invoke the filter program
@@ -1354,7 +1354,7 @@ GENERATE_HTML          = YES
 # The default directory is: html.
 # This tag requires that the tag GENERATE_HTML is set to YES.
 
-HTML_OUTPUT            = html
+HTML_OUTPUT            = docs
 
 # The HTML_FILE_EXTENSION tag can be used to specify the file extension for each
 # generated HTML page (for example: .htm, .php, .asp).
@@ -1381,7 +1381,7 @@ HTML_FILE_EXTENSION    = .html
 # of the possible markers and block names see the documentation.
 # This tag requires that the tag GENERATE_HTML is set to YES.
 
-HTML_HEADER            = docs/doxygen-custom/header.html
+HTML_HEADER            = docs/include/doxygen-custom/header.html
 
 # The HTML_FOOTER tag can be used to specify a user-defined HTML footer for each
 # generated HTML page. If the tag is left blank Doxygen will generate a standard
@@ -1421,11 +1421,11 @@ HTML_STYLESHEET        =
 # documentation.
 # This tag requires that the tag GENERATE_HTML is set to YES.
 
-HTML_EXTRA_STYLESHEET  = docs/doxygen-custom/doxygen-awesome.css \
-                         docs/doxygen-custom/custom.css \
-                         docs/doxygen-custom/doxygen-awesome-sidebar-only.css \
-                         docs/doxygen-custom/doxygen-awesome-sidebar-only-darkmode-toggle.css \
-                         docs/doxygen-custom/custom-alternative.css
+HTML_EXTRA_STYLESHEET  = docs/include/doxygen-custom/doxygen-awesome.css \
+                         docs/include/doxygen-custom/custom.css \
+                         docs/include/doxygen-custom/doxygen-awesome-sidebar-only.css \
+                         docs/include/doxygen-custom/doxygen-awesome-sidebar-only-darkmode-toggle.css \
+                         docs/include/doxygen-custom/custom-alternative.css
 
 # The HTML_EXTRA_FILES tag can be used to specify one or more extra images or
 # other source files which should be copied to the HTML output directory. Note
@@ -1435,12 +1435,12 @@ HTML_EXTRA_STYLESHEET  = docs/doxygen-custom/doxygen-awesome.css \
 # files will be copied as-is; there are no commands or markers available.
 # This tag requires that the tag GENERATE_HTML is set to YES.
 
-HTML_EXTRA_FILES       = docs/doxygen-custom/doxygen-awesome-darkmode-toggle.js \
-                         docs/doxygen-custom/doxygen-awesome-fragment-copy-button.js \
-                         docs/doxygen-custom/doxygen-awesome-paragraph-link.js \
-                         docs/doxygen-custom/toggle-alternative-theme.js \
-                         docs/doxygen-custom/doxygen-awesome-interactive-toc.js \
-                         docs/doxygen-custom/doxygen-awesome-tabs.js
+HTML_EXTRA_FILES       = docs/include/doxygen-custom/doxygen-awesome-darkmode-toggle.js \
+                         docs/include/doxygen-custom/doxygen-awesome-fragment-copy-button.js \
+                         docs/include/doxygen-custom/doxygen-awesome-paragraph-link.js \
+                         docs/include/doxygen-custom/toggle-alternative-theme.js \
+                         docs/include/doxygen-custom/doxygen-awesome-interactive-toc.js \
+                         docs/include/doxygen-custom/doxygen-awesome-tabs.js
 
 # The HTML_COLORSTYLE tag can be used to specify if the generated HTML output
 # should be rendered with a dark or light theme.
