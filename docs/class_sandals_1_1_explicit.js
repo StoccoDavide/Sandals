@@ -1,14 +1,14 @@
 var class_sandals_1_1_explicit =
 [
-    [ "mat", "class_sandals_1_1_explicit.html#a5c74136de3bfa4caaf02849ded2f8057", null ],
-    [ "ptr", "class_sandals_1_1_explicit.html#a50b6b569d4e589106540e0cedb45e1ad", null ],
-    [ "type", "class_sandals_1_1_explicit.html#a4335ea50bcfbec671f05b6543a931089", null ],
-    [ "vec", "class_sandals_1_1_explicit.html#a95b01175a557a242d92a8aba875a42a3", null ],
-    [ "Explicit", "class_sandals_1_1_explicit.html#a15847e3df5eaa8ba9826dfe583ac5bbd", null ],
+    [ "Matrix", "class_sandals_1_1_explicit.html#aace720d7d5fad127691de992cb60f02b", null ],
+    [ "Pointer", "class_sandals_1_1_explicit.html#affad89487d8f8301193bf748a446d8d7", null ],
+    [ "Type", "class_sandals_1_1_explicit.html#a91ca6e707337a224436d99bddbf850fe", null ],
+    [ "Vector", "class_sandals_1_1_explicit.html#a4738be9b3a566e9ea97778a02cd19b1b", null ],
+    [ "Explicit", "class_sandals_1_1_explicit.html#a08d979cbafcfc995eb7065cce23e19d7", null ],
     [ "Explicit", "class_sandals_1_1_explicit.html#af033985c28a34440f8410eb546dfd819", null ],
-    [ "F", "class_sandals_1_1_explicit.html#a9855d6f3f99d68d4e9c5f42d27033042", null ],
-    [ "f", "class_sandals_1_1_explicit.html#a95da2b9086f1c4900d5b2a4580388e23", null ],
-    [ "JF_x", "class_sandals_1_1_explicit.html#a23eab51cd0bb136101700f5a82e2ea7d", null ],
-    [ "Jf_x", "class_sandals_1_1_explicit.html#a3fd43a75f79e9b05ec029fe05a9420e3", null ],
-    [ "JF_x_dot", "class_sandals_1_1_explicit.html#aee0b70473e4ef81a08bc3ea625cc723c", null ]
+    [ "F", "class_sandals_1_1_explicit.html#abeac89a21ea1ca8b36b22e4db612d2f7", null ],
+    [ "f", "class_sandals_1_1_explicit.html#a568dcb9b525a5747b81312f6ac8bcd0e", null ],
+    [ "JF_x", "class_sandals_1_1_explicit.html#aaef6ee92880d205accfc309eb0f56594", null ],
+    [ "Jf_x", "class_sandals_1_1_explicit.html#a61f9ad996a5a614ad9494c1b6c63d945", null ],
+    [ "JF_x_dot", "class_sandals_1_1_explicit.html#abc2f2cf5e5afaed6d828f4404ae778de", null ]
 ];

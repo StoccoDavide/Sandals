@@ -71,7 +71,14 @@ var menudata={children:[
 {text:"u",url:"functions_func.html#index_u"},
 {text:"~",url:"functions_func.html#index__7E"}]},
 {text:"Variables",url:"functions_vars.html"},
-{text:"Typedefs",url:"functions_type.html"}]}]},
+{text:"Typedefs",url:"functions_type.html",children:[
+{text:"f",url:"functions_type.html#index_f"},
+{text:"j",url:"functions_type.html#index_j"},
+{text:"m",url:"functions_type.html#index_m"},
+{text:"p",url:"functions_type.html#index_p"},
+{text:"s",url:"functions_type.html#index_s"},
+{text:"t",url:"functions_type.html#index_t"},
+{text:"v",url:"functions_type.html#index_v"}]}]}]},
 {text:"Files",url:"files.html",children:[
 {text:"File List",url:"files.html"},
 {text:"File Members",url:"globals.html",children:[

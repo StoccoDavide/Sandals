@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['jac_0',['jac',['../class_sandals_1_1_broyden.html#a555631aa23072ae314aeb133a89577c7',1,'Sandals::Broyden::jac'],['../class_sandals_1_1_newton.html#ad4afb8f654e6bd1bac9db868639024a5',1,'Sandals::Newton::jac'],['../class_sandals_1_1_nonlinear_solver.html#ad420d823144de81ec0b1c8643076838f',1,'Sandals::NonlinearSolver::jac']]]
+  ['pointer_0',['Pointer',['../class_sandals_1_1_explicit.html#affad89487d8f8301193bf748a446d8d7',1,'Sandals::Explicit::Pointer'],['../class_sandals_1_1_implicit.html#a896083964a3b4b98c44355fd0b274ded',1,'Sandals::Implicit::Pointer'],['../class_sandals_1_1_semi_explicit.html#a74d00460d5a6b18a0606b70e83208169',1,'Sandals::SemiExplicit::Pointer']]]
 ];

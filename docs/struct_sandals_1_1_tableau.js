@@ -1,14 +1,14 @@
 var struct_sandals_1_1_tableau =
 [
-    [ "mat", "struct_sandals_1_1_tableau.html#af888d687bbb21728cef5e4da9b8dca6d", null ],
-    [ "type", "struct_sandals_1_1_tableau.html#a7a5eb2a5c3cc0896e8f7fc7bff0d799a", null ],
-    [ "vec", "struct_sandals_1_1_tableau.html#a5d72d956bc77fae2469a59640bddff70", null ],
-    [ "A", "struct_sandals_1_1_tableau.html#ac42e1ff5bf91c517b2fe4a72849af6a4", null ],
-    [ "b", "struct_sandals_1_1_tableau.html#a786b056659dca4c16f292fa247632e81", null ],
-    [ "b_e", "struct_sandals_1_1_tableau.html#a877727da62b9d0a75d0782180d0a2195", null ],
-    [ "c", "struct_sandals_1_1_tableau.html#a511a379a156e25437cb43c41e0e0622a", null ],
+    [ "Matrix", "struct_sandals_1_1_tableau.html#a44cc45c25ef9d0b1d8d6e5e50d9ea0d4", null ],
+    [ "Type", "struct_sandals_1_1_tableau.html#aa43503b6d3e5f928707595084a24b628", null ],
+    [ "Vector", "struct_sandals_1_1_tableau.html#a79fae830cbfc87f94fe55bf63f44acca", null ],
+    [ "A", "struct_sandals_1_1_tableau.html#abbd2a2dc79f4d3192bf1b09703a9b610", null ],
+    [ "b", "struct_sandals_1_1_tableau.html#ae3599b0ea4ce3192cf878ede5ed5495c", null ],
+    [ "b_e", "struct_sandals_1_1_tableau.html#a663221e1bc37597ab58c38860b328b84", null ],
+    [ "c", "struct_sandals_1_1_tableau.html#af18be157b6ba6167a417e14ab9fe2e25", null ],
     [ "is_embedded", "struct_sandals_1_1_tableau.html#a08434f6abf25945e74187861744fde4d", null ],
     [ "name", "struct_sandals_1_1_tableau.html#ad164e88a41097ed0fba4878437e46df2", null ],
-    [ "order", "struct_sandals_1_1_tableau.html#a93d0855d1c56a7b422b7bc33bc79b57d", null ],
+    [ "order", "struct_sandals_1_1_tableau.html#a169ac5d428448178b8066a561357283a", null ],
     [ "rk_type", "struct_sandals_1_1_tableau.html#a67540bc8844d05337bd37559870c95d6", null ]
 ];

@@ -11,7 +11,7 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="struct_sandals_1_1_tableau.html" target="_top" xlink:title="Class container for the Butcher tableau of a Runge&#45;Kutta solver. Class container for the Butcher tabl...">
+<g id="a_Node000000"><a xlink:href="struct_sandals_1_1_tableau.html" target="_top" xlink:title="Class container for the Butcher tableau of a Runge&#45;Kutta solver.">
 <polygon fill="white" stroke="#666666" points="115.75,-19.25 0,-19.25 0,0 115.75,0 115.75,-19.25"/>
 <text text-anchor="middle" x="57.88" y="-5.75" font-family="Helvetica,sans-Serif" font-size="10.00">Sandals::Tableau&lt; S &gt;</text>
 </a>

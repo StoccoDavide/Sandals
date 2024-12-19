@@ -16,6 +16,7 @@
 namespace Sandals {
 
   //! \brief Class container for the Butcher tableau of a Runge-Kutta solver.
+  //!
   //! Class container for the Butcher tableau of a Runge-Kutta solver. The
   //! Butcher tableau is defined as:
   //!
@@ -23,7 +24,7 @@ namespace Sandals {
   //! \begin{array}{c|c}
   //!   \mathbf{c} & \mathbf{A} \\ \hline
   //!              & \mathbf{b} \\
-  //!              & \\mathbf{b}_{e}
+  //!              & \mathbf{b}_{e}
   //! \end{array} \text{,}
   //! \f]
   //!
@@ -45,12 +46,12 @@ namespace Sandals {
   //!   \mathbf{b} = \left[ b_1, b_2, \dots, b_s \right] \text{,}
   //! \f]
   //!
-  //! \f$ \\mathbf{b}_{e} \f$ is the (optional) embedded Runge-Kutta weights
+  //! \f$ \mathbf{b}_{e} \f$ is the (optional) embedded Runge-Kutta weights
   //! vector relative to a method of order \f$ \hat{p} \f$
   //! (usually \f$ \hat{p} = p−1 \f$ or \f$ \hat{p} = p+1 \f$) (row vector):
   //!
   //! \f[
-  //!   \\mathbf{b}_{e} = \left[ \hat{b}_1, \hat{b}_2, \dots, \hat{b}_s \right] \text{,}
+  //!   \mathbf{b}_{e} = \left[ \hat{b}_1, \hat{b}_2, \dots, \hat{b}_s \right] \text{,}
   //! \f]
   //!
   //! and \f$ \mathbf{c} \f$ is the Runge-Kutta nodes vector (column vector):
@@ -58,99 +59,99 @@ namespace Sandals {
   //! \f[
   //!   \mathbf{c} = \left[ c_1, c_2, \dots, c_s \right]^{\top} \text{.}
   //! \f]
-  template <unsigned S>
+  template <Size S>
   struct Tableau
   {
-    using vec = Eigen::Vector<real, S>;    //!< Vector type.
-    using mat = Eigen::Matrix<real, S, S>; //!< Matrix type.
-    using type = enum class type : unsigned {
+    using Vector = Eigen::Vector<Real, S>;    //!< Vector type.
+    using Matrix = Eigen::Matrix<Real, S, S>; //!< Matrix type.
+    using Type = enum class type : Size {
       ERK = 0, IRK = 1, DIRK = 2
     }; //!< Runge-Kutta type enumeration.
 
     std::string name;        //!< Name of the method.
     type        rk_type;     //!< Runge-Kutta type.
-    unsigned    order;       //!< Order of the method.
+    Size        order;       //!< Order of the method.
     bool        is_embedded; //!< Embedded method boolean.
-    mat         A;           //!< Matrix \f$ \mathbf{A} \f$.
-    vec         b;           //!< Weights vector \f$ \mathbf{b} \f$ (row vector).
-    vec         b_e;         //!< Embedded weights vector \f$ \mathbf{b}_{e} \f$ (row vector).
-    vec         c;           //!< Nodes vector \f$ \mathbf{c} \f$ (column vector).
+    Matrix      A;           //!< Matrix \f$ \mathbf{A} \f$.
+    Vector      b;           //!< Weights vector \f$ \mathbf{b} \f$ (row vector).
+    Vector      b_e;         //!< Embedded weights vector \f$ \mathbf{b}_{e} \f$ (row vector).
+    Vector      c;           //!< Nodes vector \f$ \mathbf{c} \f$ (column vector).
   };
 
 
-  template <unsigned N>
+  template <Size N>
   struct Solution
   {
-    using vec = Eigen::Vector<real, Eigen::Dynamic>;    //!< Templetized matrix type.
-    using mat = Eigen::Matrix<real, N, Eigen::Dynamic>; //!< Templetized matrix type.
+    using Vector = Eigen::Vector<Real, Eigen::Dynamic>;    //!< Templetized matrix type.
+    using Matrix = Eigen::Matrix<Real, N, Eigen::Dynamic>; //!< Templetized matrix type.
 
-    vec time;   //!< Time vector.
-    mat states; //!< States solution matrix.
+    Vector time;   //!< Time vector.
+    Matrix states; //!< States solution matrix.
 
     //! Default class constructor for the Solution class.
-    Solution(void) : time(0), states(vec::Zero(N, 0)) {}
+    Solution() : time(0), states(Vector::Zero(N, 0)) {}
 
     //! Class constructor for the Solution class given the time and states sizes.
     //! \param size The size of the time and states vectors.
-    Solution(unsigned size)
-      : time(size), states(vec::Zero(N, size)) {}
+    Solution(Size size)
+      : time(size), states(Vector::Zero(N, size)) {}
 
     //! Resize the time and states vectors.
     //! \param size The size of the time and states vectors.
-    void resize(unsigned size) {
+    void resize(Size size) {
       this->time.resize(size);
       this->states.resize(N, size);
     }
 
     //! Resize conserving the data of the time and states vectors.
     //! \param size The size of the time and states vectors.
-    void conservative_resize(unsigned size) {
+    void conservative_resize(Size size) {
       this->time.conservativeResize(size);
       this->states.conservativeResize(Eigen::NoChange, size);
     }
 
     //! Clear the time and states vectors.
-    void clear(void) {
+    void clear() {
       this->time.resize(0);
       this->states.resize(N, 0);
     }
 
     //! Check if the time and states vectors are empty.
     //! \return True if the time and states vectors are empty, false otherwise.
-    bool is_empty(void) const {return this->time.size() == 0 && this->states.cols()== 0 ;}
+    bool is_empty() const {return this->time.size() == 0 && this->states.cols()== 0 ;}
 
     //! Get the size of the time and states vectors.
     //! \return The size of the time and states vectors.
-    unsigned size(void) const {return this->time.size();}
+    Size size() const {return this->time.size();}
 
     //! Get the time vector as a standard vector.
     //! \return The time vector as a standard vector.
-    std::vector<real> std_time(void) const {
-      return std::vector<real>(this->time.data(), this->time.data() + this->time.size());
+    std::vector<Real> std_time() const {
+      return std::vector<Real>(this->time.data(), this->time.data() + this->time.size());
     }
 
     //! Get the states i-th state vector as a standard vector.
     //! \param i The index of the state vector.
     //! \return The states i-th state vector as a standard vector.
-    std::vector<real> std_state(unsigned i) const {
-      vec tmp(this->states.row(i));
-      return std::vector<real>(tmp.data(), tmp.data() + tmp.size());
+    std::vector<Real> std_state(Size i) const {
+      Vector tmp(this->states.row(i));
+      return std::vector<Real>(tmp.data(), tmp.data() + tmp.size());
     }
 
     //! Get a map of the states vectors as standard vectors.
     //! \return A map of the states vectors as standard vectors.
-    std::map<unsigned, std::vector<real>> std_states(void) const {
-      std::map<unsigned, std::vector<real>> states_map;
-      for (unsigned i = 0; i < N; ++i) {
+    std::map<Size, std::vector<Real>> std_states() const {
+      std::map<Size, std::vector<Real>> states_map;
+      for (Size i = 0; i < N; ++i) {
         states_map[i] = this->std_states(i);
       }
       return states_map;
     }
     //! Get a map of the states vectors as Eigen vectors.
     //! \return A map of the states vectors as Eigen vectors.
-    std::map<unsigned, vec> eig_states(void) const {
-      std::map<unsigned, vec> states_map;
-      for (unsigned i = 0; i < N; ++i) {
+    std::map<Size, Vector> eig_states() const {
+      std::map<Size, Vector> states_map;
+      for (Size i = 0; i < N; ++i) {
         states_map[i] = this->states.row(i);
       }
       return states_map;
@@ -159,9 +160,9 @@ namespace Sandals {
     //! Get a map of the states vectors as standard vectors.
     //! \param names The names of the states vectors.
     //! \return A map of the states vectors as standard vectors.
-    std::map<std::string, std::vector<real>> std_states(std::vector<std::string> names) const {
-      std::map<std::string, std::vector<real>> states_map;
-      for (unsigned i = 0; i < N; ++i) {
+    std::map<std::string, std::vector<Real>> std_states(std::vector<std::string> names) const {
+      std::map<std::string, std::vector<Real>> states_map;
+      for (Size i = 0; i < N; ++i) {
         states_map[names[i]] = this->std_state(i);
       }
       return states_map;
@@ -170,9 +171,9 @@ namespace Sandals {
     //! Get a map of the states vectors as Eigen vectors.
     //! \param names The names of the states vectors.
     //! \return A map of the states vectors as Eigen vectors.
-    std::map<std::string, vec> eig_states(std::vector<std::string> names) const {
-      std::map<std::string, vec> states_map;
-      for (unsigned i = 0; i < N; ++i) {
+    std::map<std::string, Vector> eig_states(std::vector<std::string> names) const {
+      std::map<std::string, Vector> states_map;
+      for (Size i = 0; i < N; ++i) {
         states_map[names[i]] = this->states.row(i);
       }
       return states_map;
@@ -181,6 +182,7 @@ namespace Sandals {
 
 
   //! \brief Class container for Runge-Kutta solvers of the system of ODEs.
+  //!
   //! Class container for Runge-Kutta solvers of the system of Ordinary
   //! Differential Equations (ODEs). The user must define the Butcher tableau
   //! of the solver of order \f$ p \f$ and \f$ s \f$ stages, which defined as:
@@ -189,7 +191,7 @@ namespace Sandals {
   //! \begin{array}{c|c}
   //!   \mathbf{c} & \mathbf{A} \\ \hline
   //!              & \mathbf{b} \\
-  //!              & \\mathbf{b}_{e}
+  //!              & \mathbf{b}_{e}
   //! \end{array} \text{,}
   //! \f]
   //!
@@ -211,12 +213,12 @@ namespace Sandals {
   //!   \mathbf{b} = \left[ b_1, b_2, \dots, b_s \right] \text{,}
   //! \f]
   //!
-  //! \f$ \\mathbf{b}_{e} \f$ is the (optional) embedded Runge-Kutta weights
+  //! \f$ \mathbf{b}_{e} \f$ is the (optional) embedded Runge-Kutta weights
   //! vector relative to a method of order \f$ \hat{p} \f$
   //! (usually \f$ \hat{p} = p−1 \f$ or \f$ \hat{p} = p+1 \f$) (row vector):
   //!
   //! \f[
-  //!   \\mathbf{b}_{e} = \left[ \hat{b}_1, \hat{b}_2, \dots, \hat{b}_s \right] \text{,}
+  //!   \mathbf{b}_{e} = \left[ \hat{b}_1, \hat{b}_2, \dots, \hat{b}_s \right] \text{,}
   //! \f]
   //!
   //! and \f$ \mathbf{c} \f$ is the Runge-Kutta nodes vector (column vector):
@@ -225,36 +227,36 @@ namespace Sandals {
   //!   \mathbf{c} = \left[ c_1, c_2, \dots, c_s \right]^{\top} \text{.}
   //! \f]
   //
-  template <unsigned S, unsigned N>
+  template <Size S, Size N>
   class RungeKutta
   {
-    using vecK = Eigen::Vector<real, N*S>;      //!< Templetized vector type.
-    using matK = Eigen::Matrix<real, N, S>;     //!< Templetized matrix type.
-    using matJ = Eigen::Matrix<real, N*S, N*S>; //!< Templetized matrix type.
-    using vecS = typename Tableau<S>::vec;      //!< Templetized vector type.
-    using matS = typename Tableau<S>::mat;      //!< Templetized matrix type.
-    using vecN = typename Implicit<N>::vec;     //!< Templetized vector type.
-    using matN = typename Implicit<N>::mat;     //!< Templetized matrix type.
+    using VectorK = Eigen::Vector<Real, N*S>;      //!< Templetized vector type.
+    using MatrixK = Eigen::Matrix<Real, N, S>;     //!< Templetized matrix type.
+    using MatrixJ = Eigen::Matrix<Real, N*S, N*S>; //!< Templetized matrix type.
+    using VectorS = typename Tableau<S>::Vector;   //!< Templetized vector type.
+    using MatrixS = typename Tableau<S>::Matrix;   //!< Templetized matrix type.
+    using VectorN = typename Implicit<N>::Vector;  //!< Templetized vector type.
+    using MatrixN = typename Implicit<N>::Matrix;  //!< Templetized matrix type.
 
   public:
-    using system   = typename Implicit<N>::ptr;           //!< Shared pointer to an implicit ODE system.
-    using type     = typename Tableau<S>::type;           //!< Runge-Kutta type enumeration.
-    using time     = Eigen::Vector<real, Eigen::Dynamic>; //!< Templetized vector type for the time.
-    using solution = Solution<N>;                //!< Templetized structure type for solution.
+    using System   = typename Implicit<N>::Pointer;       //!< Shared pointer to an implicit ODE system.
+    using Type     = typename Tableau<S>::Type;           //!< Runge-Kutta type enumeration.
+    using Time     = Eigen::Vector<Real, Eigen::Dynamic>; //!< Templetized vector type for the time.
+    using Solution = Solution<N>;                         //!< Templetized structure type for solution.
 
   private:
     Newton<N*S> m_newton;                //!< Newton solver for implicit methods.
     Tableau<S>  m_tableau;               //!< Butcher tableau of the Runge-Kutta method.
-    system      m_system;                //!< ODE system object pointer.
-    real        m_abs_tol{EPSILON_LOW};  //!< Absolute tolerance for adaptive step.
-    real        m_rel_tol{EPSILON_LOW};  //!< Relative tolerance for adaptive step.
-    real        m_sft_fac{0.9};          //!< Safety factor for adaptive step.
-    real        m_min_sft_fac{0.2};      //!< Minimum safety factor for adaptive step.
-    real        m_max_sft_fac{1.5};      //!< Maximum safety factor for adaptive step.
-    real        m_d_t_min{EPSILON_HIGH}; //!< minimum step for advancing;
+    System      m_system;                //!< ODE system object pointer.
+    Real        m_abs_tol{EPSILON_LOW};  //!< Absolute tolerance for adaptive step.
+    Real        m_rel_tol{EPSILON_LOW};  //!< Relative tolerance for adaptive step.
+    Real        m_sft_fac{0.9};          //!< Safety factor for adaptive step.
+    Real        m_min_sft_fac{0.2};      //!< Minimum safety factor for adaptive step.
+    Real        m_max_sft_fac{1.5};      //!< Maximum safety factor for adaptive step.
+    Real        m_d_t_min{EPSILON_HIGH}; //!< minimum step for advancing;
     bool        m_adaptive_step{false};  //!< Aadaptive step mode boolean.
     bool        m_verbose{false};        //!< Verbose mode boolean.
-    unsigned    m_order;                 //!< Order of the solver.
+    Size        m_order;                 //!< Order of the solver.
     bool        m_is_embedded;           //!< Boolean to check if the method is embedded.
 
   public:
@@ -269,7 +271,7 @@ namespace Sandals {
     //! Class constructor for a Runge-Kutta solver given a Tableau reference.
     //! \param t_tableau The Tableau reference.
     //! \param t_system The ODE system shared pointer.
-    RungeKutta(Tableau<S> const &t_tableau, system t_system)
+    RungeKutta(Tableau<S> const &t_tableau, System t_system)
       : m_tableau(t_tableau), m_system(t_system) {
       //SANDALS_WARNING(
       //  "RungeKutta::RungeKutta(...): the order of the method " << t_tableau.name << " is " <<
@@ -278,39 +280,39 @@ namespace Sandals {
 
     //! Check if the solver is explicit, implicit or diagonal implicit
     //! \return The type of the solver.
-    type rk_type(void) const {return this->m_tableau.rk_type;}
+    Type rk_type() const {return this->m_tableau.rk_type;}
 
     //! Cheack if the solver is explicit.
     //! \return True if the solver is explicit, false otherwise.
-    bool is_explicit(void) const {return this->m_tableau.rk_type == type::ERK;}
+    bool is_explicit() const {return this->m_tableau.rk_type == Type::ERK;}
 
     //! Cheack if the solver is implicit.
     //! \return True if the solver is implicit, false otherwise.
-    bool is_implicit(void) const {return this->m_tableau.rk_type == type::IRK;}
+    bool is_implicit() const {return this->m_tableau.rk_type == Type::IRK;}
 
     //! Cheack if the solver is diagonal implicit.
     //! \return True if the solver is diagonal implicit, false otherwise.
-    bool is_diagonal_implicit(void) const {return this->m_tableau.rk_type == type::DIRK;}
+    bool is_diagonal_implicit() const {return this->m_tableau.rk_type == Type::DIRK;}
 
     //! Get the Tableau reference.
     //! \return The Tableau reference.
-    Tableau<S> & tableau(void) {return this->m_tableau;}
+    Tableau<S> & tableau() {return this->m_tableau;}
 
     //! Get the Tableau const reference.
     //! \return The Tableau const reference.
-    Tableau<S> const & tableau(void) const {return this->m_tableau;}
+    Tableau<S> const & tableau() const {return this->m_tableau;}
 
     //! Get the stages number of the method.
     //! \return The stages number of the method.
-    unsigned stages(void) const {return S;}
+    Size stages() const {return S;}
 
     //! Get the name of the method.
     //! \return The name of the method.
-    std::string name(void) const {return this->m_tableau.name;}
+    std::string name() const {return this->m_tableau.name;}
 
     //! Get the order of the method.
     //! \return The order of the method.
-    unsigned order(void) const {return this->m_tableau.order;}
+    Size order() const {return this->m_tableau.order;}
 
     //! Check if the method is embedded.
     //! \return True if the method is embedded, false otherwise.
@@ -318,79 +320,79 @@ namespace Sandals {
 
     //! Get the matrix \f$ \mathbf{A} \f$.
     //! \return The matrix \f$ \mathbf{A} \f$.
-    matS A(void) const {return this->m_tableau.A;}
+    MatrixS A() const {return this->m_tableau.A;}
 
     //! Get the weights vector \f$ \mathbf{b} \f$.
     //! \return The weights vector \f$ \mathbf{b} \f$.
-    vecS b(void) const {return this->m_tableau.b;}
+    VectorS b() const {return this->m_tableau.b;}
 
-    //! Get the embedded weights vector \f$ \\mathbf{b}_{e} \f$.
-    //! \return The embedded weights vector \f$ \\mathbf{b}_{e} \f$.
-    vecS b_embedded(void) const {return this->m_tableau.b_e;}
+    //! Get the embedded weights vector \f$ \mathbf{b}_{e} \f$.
+    //! \return The embedded weights vector \f$ \mathbf{b}_{e} \f$.
+    VectorS b_embedded() const {return this->m_tableau.b_e;}
 
     //! Get the nodes vector \f$ \mathbf{c} \f$.
     //! \return The nodes vector \f$ \mathbf{c} \f$.
-    vecS c(void) const {return c;}
+    VectorS c() const {return c;}
 
     //! Get the ODE system shared pointer.
     //! \return The ODE system shared pointer.
-    system ode(void) {return this->m_system;}
+    System ode() {return this->m_system;}
 
     //! Set the ODE system shared pointer.
     //! \param t_system The ODE system shared pointer.
-    void ode(system t_system) {this->m_system = t_system;}
+    void ode(System t_system) {this->m_system = t_system;}
 
     //! Get the adaptive step absolute tolerance.
     //! \return The adaptive step absolute tolerance.
-    real absolute_tolerance(void) {return this->m_abs_tol;}
+    Real absolute_tolerance() {return this->m_abs_tol;}
 
     //! Get the adaptive step absolute tolerance reference.
     //! \param t_abs_tol The adaptive step absolute tolerance.
-    void absolute_tolerance(real t_abs_tol) {this->m_abs_tol = t_abs_tol;}
+    void absolute_tolerance(Real t_abs_tol) {this->m_abs_tol = t_abs_tol;}
 
     //! Get the adaptive step relative tolerance.
     //! \return The adaptive step relative tolerance.
-    real relative_tolerance(void) {return this->m_rel_tol;}
+    Real relative_tolerance() {return this->m_rel_tol;}
 
     //! Get the adaptive step relative tolerance reference.
     //! \param t_rel_tol The adaptive step relative tolerance.
-    void relative_tolerance(real t_rel_tol) {this->m_rel_tol = t_rel_tol;}
+    void relative_tolerance(Real t_rel_tol) {this->m_rel_tol = t_rel_tol;}
 
     //! Get the safety factor for adaptive step.
     //! \return The safety factor for adaptive step.
-    real & safety_factor(void) {return this->m_sft_fac;}
+    Real & safety_factor() {return this->m_sft_fac;}
 
     //! Set safety factor for adaptive step.
     //! \param t_sft_fac The safety factor for adaptive step.
-    void safety_factor(real t_sft_fac) {this->m_sft_fac = t_sft_fac;}
+    void safety_factor(Real t_sft_fac) {this->m_sft_fac = t_sft_fac;}
 
     //! Get the minimum safety factor for adaptive step.
     //! \return The minimum safety factor for adaptive step.
-    real & min_safety_factor(void) {return this->m_min_sft_fac;}
+    Real & min_safety_factor() {return this->m_min_sft_fac;}
 
     //! Set the minimum safety factor for adaptive step.
     //! \param t_min_sft_fac The minimum safety factor for adaptive step.
-    void min_safety_factor(real t_min_sft_fac) {this->m_min_sft_fac = t_min_sft_fac;}
+    void min_safety_factor(Real t_min_sft_fac) {this->m_min_sft_fac = t_min_sft_fac;}
 
     //! Get the maximum safety factor for adaptive step.
     //! \return The maximum safety factor for adaptive step.
-    real & max_safety_factor(void) {return this->m_max_sft_fac;}
+    Real & max_safety_factor() {return this->m_max_sft_fac;}
 
     //! Set the maximum safety factor for adaptive step.
     //! \param t_max_sft_fac The maximum safety factor for adaptive step.
-    void max_safety_factor(real t_max_sft_fac) {this->m_max_sft_fac = t_max_sft_fac;}
+    void max_safety_factor(Real t_max_sft_fac) {this->m_max_sft_fac = t_max_sft_fac;}
 
     //! Enable verbose mode.
-    void enable_verbose_mode(void) {this->m_verbose = true;}
+    void enable_verbose_mode() {this->m_verbose = true;}
 
     //! Disable verbose mode.
-    void disable_verbose_mode(void) {this->m_verbose = false;}
+    void disable_verbose_mode() {this->m_verbose = false;}
 
     //! Enable adaptive step mode.
-    void enable_adaptive_step(void) {this->m_adaptive_step = true;}
+    void enable_adaptive_step() {this->m_adaptive_step = true;}
 
     //! Disable adaptive step mode.
-    void disable_adaptive_step(void) {this->m_adaptive_step = false;}
+    void disable_adaptive_step() {this->m_adaptive_step = false;}
 
     //! Compute adaptive time step for the next advancing step according to the
     //! error control method. The error control method used is the local truncation
@@ -442,7 +444,7 @@ namespace Sandals {
     //! \param d_t Actual advancing time step \f$ \Delta t\f$.
     //! \return The suggested time step for the next advancing step \f$ \Delta
     //!         t_{k+1} \f$.
-    real estimate_step(vecN const &x_h, vecN const &x_l, real d_t) const
+    Real estimate_step(VectorN const &x_h, VectorN const &x_l, Real d_t) const
     {
       return d_t * std::min(this->m_max_sft_fac, std::max(this->m_min_sft_fac,
         this->m_sft_fac * ((x_h - x_l) / (
@@ -509,7 +511,7 @@ namespace Sandals {
     //! \f]
     //!
     //! It is important to notice that the system of \f$ s \f$ equations
-    //! \f$ \mathbf{F}_i \f$ is a triangular system (which may be non-linear in
+    //! \f$ \mathbf{F}_i \f$ is a triangular system (which may be nonlinear in
     //! the \f$ \mathbf{K}_i \f$ variables), so it can be solved using forward
     //! substitution and the solution of the system is the vector \f$ \mathbf{K}
     //! \f$. Thus, the final system to be solved is the following:
@@ -555,16 +557,16 @@ namespace Sandals {
     //! \param t_adap The suggested adaptive time step for the next advancing step
     //!               \f$ \Delta t_{k+1} \f$.
     //! \return True if the step is successfully computed, false otherwise.
-    bool explicit_step(vecN const &x_k, real t_k, real t_step, vecN &x_out, real &t_adap) const
+    bool explicit_step(VectorN const &x_k, Real t_k, Real t_step, VectorN &x_out, Real &t_adap) const
     {
       using Eigen::all;
       using Eigen::seqN;
 
       // Compute the K variables in the case of an explicit method and explicit system
-      real t_i;
-      vecN x_i;
-      matK K;
-      for (unsigned i = 0; i < S; ++i)
+      Real t_i;
+      VectorN x_i;
+      MatrixK K;
+      for (Size i = 0; i < S; ++i)
       {
         t_i = t_k + this->m_tableau.c(i) * t_step;
         x_i = x_k + K(all, seqN(0, i)) * this->m_tableau.A(i, seqN(0, i)).transpose();
@@ -577,7 +579,7 @@ namespace Sandals {
 
       // Adapt next time step
       if (this->m_adaptive_step && this->m_is_embedded) {
-        vecN x_e = x_k + K * this->m_tableau.b_e;
+        VectorN x_e = x_k + K * this->m_tableau.b_e;
         t_adap = this->estimate_step(x_out, x_e, t_step);
       }
       return true;
@@ -596,16 +598,16 @@ namespace Sandals {
     //! \param t_k Time step \f$ t_k \f$.
     //! \param d_t Advancing time step \f$ \Delta t \f$.
     //! \param fun The residual of system to be solved.
-    void implicit_function(vecN const &x_k, vecK const &K_k, real t_k, real d_t, vecK &fun) const
+    void implicit_function(VectorN const &x_k, VectorK const &K_k, Real t_k, Real d_t, VectorK &fun) const
     {
       fun.setZero();
 
       // Loop through each equation of the system
-      real t_i;
-      vecN x_i;
-      matK K{K_k.reshaped(N, S)}; // FIXME: can i avoid reshaping?
-      matK fun_tmp;
-      for (unsigned i = 0; i < S; ++i) {
+      Real t_i;
+      VectorN x_i;
+      MatrixK K{K_k.reshaped(N, S)}; // FIXME: can i avoid reshaping?
+      MatrixK fun_tmp;
+      for (Size i = 0; i < S; ++i) {
         t_i = t_k + this->m_tableau.c(i) * d_t;
         x_i = x_k + K * this->m_tableau.A.row(i).transpose();
         fun_tmp.col(i) = this->m_system->F(x_i, K.col(i) / d_t, t_i);
@@ -635,7 +637,7 @@ namespace Sandals {
     //! \param t_k Time step \f$ t_k \f$.
     //! \param d_t Advancing time step \f$ \Delta t \f$.
     //! \param jac The Jacobian of the system of equations to be solved.
-    void implicit_jacobian(vecN const &x_k, vecK const &K_k, real t_k, real d_t, matJ &jac) const
+    void implicit_jacobian(VectorN const &x_k, VectorK const &K_k, Real t_k, Real d_t, MatrixJ &jac) const
     {
       using Eigen::all;
       using Eigen::seqN;
@@ -643,12 +645,12 @@ namespace Sandals {
       jac.setZero();
 
       // Loop through each equation of the system
-      matK K{K_k.reshaped(N, S)};
-      real t_i;
-      vecN x_i, x_dot_i;
-      matN JF_x, JF_x_dot;
+      MatrixK K{K_k.reshaped(N, S)};
+      Real t_i;
+      VectorN x_i, x_dot_i;
+      MatrixN JF_x, JF_x_dot;
       auto idx = seqN(0, N), jdx = seqN(0, N);
-      for (unsigned i = 0; i < S; ++i) {
+      for (Size i = 0; i < S; ++i) {
         t_i = t_k + this->m_tableau.c(i) * d_t;
         x_i = x_k + K * this->m_tableau.A.row(i).transpose();
 
@@ -659,7 +661,7 @@ namespace Sandals {
 
         // Derivative of F(x_i, K(:,i)/d_t, t_i)
         idx = seqN(i*N, N);
-        for (unsigned j = 0; j < S; ++j) {
+        for (Size j = 0; j < S; ++j) {
           // Combine the Jacobians with respect to x and x_dot to obtain the
           // Jacobian with respect to K
           jdx = seqN(j*N, N);
@@ -742,22 +744,22 @@ namespace Sandals {
     //! \param d_t_star The suggested time step for the next advancing step
     //!                 \f$ \Delta t_{k+1} \f$.
     //! \return True if the step is successfully computed, false otherwise.
-    bool implicit_step(vecN const &x_k, real t_k, real d_t, vecN &x_o, real &d_t_star)
+    bool implicit_step(VectorN const &x_k, Real t_k, Real d_t, VectorN &x_o, Real &d_t_star)
     {
       // Check if the solver converged
-      vecK K;
+      VectorK K;
 
       if (!this->m_newton.solve(
-        [this, &x_k, t_k, d_t](vecK const &K, vecK &fun) {this->implicit_function(x_k, K, t_k, d_t, fun);},
-        [this, &x_k, t_k, d_t](vecK const &K, matJ &jac) {this->implicit_jacobian(x_k, K, t_k, d_t, jac);},
-        vecK::Zero(), K)) {return false;}
+        [this, &x_k, t_k, d_t](VectorK const &K, VectorK &fun) {this->implicit_function(x_k, K, t_k, d_t, fun);},
+        [this, &x_k, t_k, d_t](VectorK const &K, MatrixJ &jac) {this->implicit_jacobian(x_k, K, t_k, d_t, jac);},
+        VectorK::Zero(), K)) {return false;}
 
       // Perform the step and obtain x_k+1
       x_o = x_k + K.reshaped(N, S) * this->m_tableau.b;
 
       // Adapt next time step
       if (this->m_adaptive_step && this->m_tableau.is_embedded) {
-        vecN x_e{x_k + K.reshaped(N, S) * this->m_tableau.b_e};
+        VectorN x_e{x_k + K.reshaped(N, S) * this->m_tableau.b_e};
         d_t_star = this->estimate_step(x_o, x_e, d_t);
       }
       return true;
@@ -782,7 +784,7 @@ namespace Sandals {
     //! \param d_t_star The suggested time step for the next advancing step
     //!                \f$ \Delta t_{k+1} \f$.
     //! \return True if the step is successfully computed, false otherwise.
-    bool step(vecN const &x_k, real t_k, real d_t, vecN &x_o, real &d_t_star)
+    bool step(VectorN const &x_k, Real t_k, Real d_t, VectorN &x_o, Real &d_t_star)
     {
       if (this->is_explicit() && this->m_system->is_explicit()) {
         return this->explicit_step(x_k, t_k, d_t, x_o, d_t_star);
@@ -813,26 +815,26 @@ namespace Sandals {
     //! \param d_t_star The suggested time step for the next advancing step
     //!                 \f$ \Delta t_{k+1} \f$.
     //! \return True if the step is successfully computed, false otherwise.
-    bool advance(vecN const &x_k, real t_k, real d_t, vecN &x_new, real &d_t_star)
+    bool advance(VectorN const &x_k, Real t_k, Real d_t, VectorN &x_new, Real &d_t_star)
     {
       #define CMD "Indigo.RungeKutta.advance(...): "
 
       // Check step size
-      SANDALS_ASSERT(d_t > real(0.0), CMD "in " << this->m_tableau.name <<
+      SANDALS_ASSERT(d_t > Real(0.0), CMD "in " << this->m_tableau.name <<
         "solver, d_t = "<< d_t << ", expected > 0.");
 
       // If the integration step failed, try again with substepping
       if (!this->step(x_k, t_k, d_t, x_new, d_t_star))
       {
-        vecN x_tmp   = x_k;
-        real t_tmp   = t_k;
-        real d_t_tmp = d_t / real(2.0);
+        VectorN x_tmp   = x_k;
+        Real t_tmp   = t_k;
+        Real d_t_tmp = d_t / Real(2.0);
 
         // Substepping logic
-        unsigned max_substeps = 10;
-        unsigned max_k = max_substeps * max_substeps;
-        unsigned k = 2;
-        real d_t_star_tmp;
+        Size max_substeps = 10;
+        Size max_k = max_substeps * max_substeps;
+        Size k = 2;
+        Real d_t_star_tmp;
         while (k > 0)
         {
           // Calculate the next time step with substepping logic
@@ -846,7 +848,7 @@ namespace Sandals {
               k = k - 1;
               // If the substepping index is even, double the step size
               if (k % 2 == 0) {
-                d_t_tmp = real(2.0) * d_t_tmp;
+                d_t_tmp = Real(2.0) * d_t_tmp;
                 if (this->m_verbose) {
                   SANDALS_WARNING(CMD "in " << this->m_tableau.name << " solver, at t = " <<
                   t_tmp << ", integration succedded disable one substepping layer.");
@@ -873,7 +875,7 @@ namespace Sandals {
               SANDALS_WARNING(CMD "in " << this->m_tableau.name << " solver, at t = " <<
                 t_tmp << ", integration failed, adding substepping layer.");
             }
-            d_t_tmp = d_t_tmp / real(2.0);
+            d_t_tmp = d_t_tmp / Real(2.0);
             continue;
 
           }
@@ -902,7 +904,7 @@ namespace Sandals {
     //!            (\mathbf{t})\right] \f$ containing the approximated solution
     //!            over the mesh of time points.
     //! \return True if the system is successfully solved, false otherwise.
-    bool solve(vecD const &t, vecN const &ics, solution &sol)
+    bool solve(VectorD const &t, VectorN const &ics, Solution &sol)
     {
       using Eigen::last;
 
@@ -914,11 +916,11 @@ namespace Sandals {
       sol.states.col(0) = ics;
 
       // Update the current step
-      unsigned s{0};
-      vecN x_s{ics};
-      real t_s{t(0)};
-      real d_t_s{t(1) - t(0)};
-      real d_t_tmp{d_t_s}, d_t_star;
+      Size s{0};
+      VectorN x_s{ics};
+      Real t_s{t(0)};
+      Real d_t_s{t(1) - t(0)};
+      Real d_t_tmp{d_t_s}, d_t_star;
       bool mesh_point_bool, saturation_bool;
 
       while (true) {
@@ -964,7 +966,7 @@ namespace Sandals {
     //!           (\mathbf{t})\right] \f$ containing the approximated solution
     //!           over the mesh of time points.
     //! \return True if the system is successfully solved, false otherwise.
-    bool adaptive_solve(vecD const &t, vecN const &ics, solution &sol)
+    bool adaptive_solve(VectorD const &t, VectorN const &ics, Solution &sol)
     {
       using Eigen::last;
 
@@ -972,12 +974,15 @@ namespace Sandals {
 
       // Instantiate output
       this->enable_adaptive_step();
-      real d_t{t(1) - t(0)}, d_t_star;
+      Real d_t{t(1) - t(0)}, d_t_star;
+        Real scale{100.0};
+        std::cout << "d_t = " << d_t << std::endl;
+
+        Real t_min{std::max(this->m_d_t_min, d_t/scale)};
+        Real t_max{scale*d_t};
+        Size safety_length;
       if (this->m_tableau.is_embedded) {
-        real scale{100.0};
-        real t_min{std::max(this->m_d_t_min, d_t/scale)};
-        real t_max{scale*d_t};
-        unsigned safety_length = std::ceil(real(1.5)/this->m_min_sft_fac) * t.size();
+        safety_length = std::ceil(Real(1.5)/this->m_min_sft_fac) * t.size();
         sol.resize(safety_length);
       } else {
         sol.resize(t.size());
@@ -988,18 +993,20 @@ namespace Sandals {
       sol.states.col(0) = ics;
 
       // Instantiate temporary variables
-      unsigned s{0};
-      vecN x_s{ics};
+      Size s{0};
+      VectorN x_s{ics};
 
       while (true) {
         // Integrate system
         this->advance(sol.states.col(s), sol.time(s), d_t, x_s, d_t_star);
 
         // Saturate the suggested timestep
-        d_t = std::max(std::min(d_t_star, t_max), t_min);
-        std::cout << "d_t = " << d_t << std::endl;
+        if (this->m_adaptive_step && this->m_tableau.is_embedded) {
+          d_t = std::max(std::min(d_t_star, t_max), t_min);
+        }
+        std::cout << "d_t = " << d_t_star << std::endl;
 
-        SANDALS_ASSERT(s < safety_length, CMD "safety length exceeded.");
+        SANDALS_ASSERT(s < t.size(), CMD "safety length exceeded.");
 
         // Store solution
         sol.time(s+1)       = sol.time(s) + d_t;

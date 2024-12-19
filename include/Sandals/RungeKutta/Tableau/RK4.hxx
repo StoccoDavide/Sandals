@@ -31,14 +31,14 @@ namespace Sandals
   class RK4Tableau : public Tableau<4>
   {
     public:
-    using Tableau<4>::type; //!< Type enumeration.
-    using Tableau<4>::vec; //!< Vector type.
-    using Tableau<4>::mat; //!< Matrix type.
+    using Tableau<4>::Type;   //!< Type enumeration.
+    using Tableau<4>::Vector; //!< Vector type.
+    using Tableau<4>::Matrix; //!< Matrix type.
 
     //! Class constructor for the RK4 method.
-    RK4Tableau(void) {
+    RK4Tableau() {
       this->name        = "RK4";
-      this->rk_type     = type::ERK;
+      this->rk_type     = Type::ERK;
       this->order       = 4;
       this->is_embedded = false;
       this->A << 0.0,     0.0,     0.0,     0.0,
@@ -52,15 +52,15 @@ namespace Sandals
   }; // class RK4Tableau
 
   //! Class container for the Runge-Kutta 4 method.
-  template <unsigned N>
+  template <Size N>
   class RK4 : public RungeKutta<4, N>
   {
   public:
-    using System = typename Implicit<N>::ptr; //!< System type.
+    using System = typename Implicit<N>::Pointer; //!< System type.
 
     //! Class constructor for a Runge-Kutta solver given a Tableau reference.
     //! \param t_tableau The Tableau reference.
-    RK4(void) : RungeKutta<4, N>(RK4Tableau()) {}
+    RK4() : RungeKutta<4, N>(RK4Tableau()) {}
 
     //! Class constructor for a Runge-Kutta solver given a Tableau reference.
     //! \param t_tableau The Tableau reference.
@@ -77,7 +77,7 @@ namespace Sandals
     //! Check Butcher tableau consistency for an explicit Runge-Kutta method.
     //! \param tbl.A   Matrix \f$ \mathbf{A} \f$.
     //! \param tbl.b   Weights vector \f$ \mathbf{b} \f$.
-    //! \param tbl.b_e [optional] Embedded weights vector \f$ \\mathbf{b}_{e} \f$.
+    //! \param tbl.b_e [optional] Embedded weights vector \f$ \mathbf{b}_{e} \f$.
     //! \param tbl.c   Nodes vector \f$ \mathbf{c} \f$.
     //! \return True if the Butcher tableau is consistent, false otherwise.
     //[out,order,e_order] = check_tableau( this, tbl )
@@ -88,17 +88,17 @@ namespace Sandals
     //! Doi: [10.1016/0771-0509(80)90013-3](https://doi.org/10.1016/0771-0509(80)90013-3)
     //! \param tableau The Runge-Kutta tableau to be checked.
     //! \return The order of the Runge-Kutta tableau.
-    /*unsigned tableau_order(matS const &A, vecS const &b, vecS const &c) const
+    /*Size tableau_order(matS const &A, vecS const &b, vecS const &c) const
     {
       #define CMD "Indigo.RungeKutta.tableau_order(...): "
 
       // Temporary variables initialization
-      real tol{std::pow(EPSILON, real(2.0/3.0))};
+      Real tol{std::pow(EPSILON, Real(2.0/3.0))};
       vecN one{vecN::Ones()};
       vecS Ac{A*c};
       matS bA{(b*A).transpose()};
       vecS err{A*one - c};
-      unsigned order{0};
+      Size order{0};
       std::string msg{""};
 
       // Check consistency

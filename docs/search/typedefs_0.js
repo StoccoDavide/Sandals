@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['affine_0',['affine',['../namespace_sandals.html#a162da7af33d69b419027b134993f0bfc',1,'Sandals']]],
-  ['angleaxis_1',['angleaxis',['../namespace_sandals.html#ab5c569020985dddc6c4e0d65d423452e',1,'Sandals']]]
+  ['function_0',['Function',['../class_sandals_1_1_broyden.html#aaf9ea1397fa4e79b42589c802a69c4cc',1,'Sandals::Broyden::Function'],['../class_sandals_1_1_newton.html#a45c478c8801c0e29e9253cf9e18831e0',1,'Sandals::Newton::Function'],['../class_sandals_1_1_nonlinear_solver.html#abf328882e8633352092875ce9aea564f',1,'Sandals::NonlinearSolver::Function']]]
 ];

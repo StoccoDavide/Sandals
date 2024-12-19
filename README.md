@@ -4,7 +4,7 @@
 
 `Sandals` is a library for the numerical integration of Ordinary Differential Equations (ODEs) and Differential Algebraic Equations (DAEs) written in C++17. It is a porting of the `Indigo` integration library present at [this link](https://StoccoDavide.github.io/Indigo), which is written in MATLAB.
 
-Are you looking for the online documentation? Visit [this link](https://StoccoDavide.github.io/Sandals)! (not yet available)
+Are you looking for the online documentation? Visit [this link](https://stoccodavide.github.io/Sandals/)!
 
 ## Installation
 

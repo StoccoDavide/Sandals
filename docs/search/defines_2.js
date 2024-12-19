@@ -10,5 +10,6 @@ var searchData=
   ['sandals_5fnonlinear_5fsolver_5fhxx_7',['SANDALS_NONLINEAR_SOLVER_HXX',['../_nonlinear_solver_8hxx.html#aa3e6ddae2a14b78a89f6161aa8132fe1',1,'NonlinearSolver.hxx']]],
   ['sandals_5frk4_5fhxx_8',['SANDALS_RK4_HXX',['../_r_k4_8hxx.html#a9f4193ea06da9a3ea98850c7cc49b35a',1,'RK4.hxx']]],
   ['sandals_5frungekutta_5fhxx_9',['SANDALS_RUNGEKUTTA_HXX',['../_runge_kutta_8hxx.html#a7be2a905117b87d5ceeb770481ea138c',1,'RungeKutta.hxx']]],
-  ['sandals_5fwarning_10',['SANDALS_WARNING',['../_sandals_8hh.html#af4bb493f98398347f140267342d2d72f',1,'Sandals.hh']]]
+  ['sandals_5fsemi_5fexplicit_5fsystem_5fhxx_10',['SANDALS_SEMI_EXPLICIT_SYSTEM_HXX',['../_semi_explicit_8hxx.html#a181d41d085a6baa2944c80bcffc9a5de',1,'SemiExplicit.hxx']]],
+  ['sandals_5fwarning_11',['SANDALS_WARNING',['../_sandals_8hh.html#af4bb493f98398347f140267342d2d72f',1,'Sandals.hh']]]
 ];

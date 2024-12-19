@@ -1,12 +1,11 @@
 var class_sandals_1_1_newton =
 [
-    [ "fun", "class_sandals_1_1_newton.html#aea05cb1f7bf36f6ff41fc8180aa64361", null ],
-    [ "jac", "class_sandals_1_1_newton.html#ad4afb8f654e6bd1bac9db868639024a5", null ],
-    [ "mat", "class_sandals_1_1_newton.html#ac502e18a13fbeae892d12839c1648978", null ],
-    [ "vec", "class_sandals_1_1_newton.html#a74e1322ebec92002ff9b02ac8d86bdb1", null ],
-    [ "Newton", "class_sandals_1_1_newton.html#a161215d2d01dfe4726073efa2459bdfe", null ],
-    [ "name", "class_sandals_1_1_newton.html#ad20a1bd4e6256633a4e034872053f6f7", null ],
-    [ "solve", "class_sandals_1_1_newton.html#aa93e387123f3669da273dc785704e306", null ],
-    [ "solve_dumped", "class_sandals_1_1_newton.html#a24cf6583555f0195f291c7dc082d5961", null ],
-    [ "step", "class_sandals_1_1_newton.html#ac53d8b02e49c513c629b55d6f522ff14", null ]
+    [ "Function", "class_sandals_1_1_newton.html#a45c478c8801c0e29e9253cf9e18831e0", null ],
+    [ "Jacobian", "class_sandals_1_1_newton.html#ad7eaf0726a68577d5a77ded41e9fe134", null ],
+    [ "Matrix", "class_sandals_1_1_newton.html#a770ad9b60010b6ec0c43b5b9a1484d4f", null ],
+    [ "Vector", "class_sandals_1_1_newton.html#ab1a0b26369bc5bdc70293be4d6dbe7e1", null ],
+    [ "Newton", "class_sandals_1_1_newton.html#a9bc8311c525f2ea3d73df097da153f03", null ],
+    [ "name", "class_sandals_1_1_newton.html#a7a88e9fb6eb64c02a9d9e4b97d110adb", null ],
+    [ "solve", "class_sandals_1_1_newton.html#a13a4447e3f3ff4380520312e67c3d376", null ],
+    [ "solve_damped", "class_sandals_1_1_newton.html#a4b28c355bcd80fb73f7347b2d0a42242", null ]
 ];

@@ -18,17 +18,20 @@ using namespace matplot;
 int main(void) {
   SimplePendulumExplicit system;
   RK4<2> integrator(std::make_shared<SimplePendulumExplicit>(system));
-  RK4<2>::time time = Eigen::VectorXd::LinSpaced(200, 0.0, 100.0);
-  RK4<2>::solution sol;
+  RK4<2>::Time time = Eigen::VectorXd::LinSpaced(200, 0.0, 100.0);
+  RK4<2>::Solution sol;
+  RK4<2>::Solution sol_adaptive;
+  integrator.solve(time, system.ics(), sol);
+  integrator.adaptive_solve(time, system.ics(), sol_adaptive);
 
-  // integrator.solve(time, system.ics(), sol);
-  // plot(sol.std_time(), sol.std_state(0), sol.std_time(), sol.std_state(1));
-  // show();
+  plot(
+    sol.std_time(), sol.std_state(0),
+    sol.std_time(), sol.std_state(1)
+  ); show();
+  plot(
+    sol_adaptive.std_time(), sol_adaptive.std_state(0),
+    sol_adaptive.std_time(), sol_adaptive.std_state(1)
+  ); show();
 
-  integrator.adaptive_solve(time, system.ics(), sol);
-  plot(sol.std_time(), sol.std_state(0), sol.std_time(), sol.std_state(1));
-  show();
-
-  std::cout << "Hi, I'm finding the sandal size for you!" << std::endl;
   return 0;
 }

@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['ode_0',['ode',['../class_sandals_1_1_runge_kutta.html#a6553a8974f7cf54ffbaa8713e669e94d',1,'Sandals::RungeKutta::ode(void)'],['../class_sandals_1_1_runge_kutta.html#aeb8a1cb9346350b2db2409a18691c50d',1,'Sandals::RungeKutta::ode(system t_system)']]],
-  ['order_1',['order',['../class_sandals_1_1_runge_kutta.html#a7ea885f3b2859bf568a8a6a1bed8ca20',1,'Sandals::RungeKutta']]]
+  ['ode_0',['ode',['../class_sandals_1_1_runge_kutta.html#a899ff34e2ca7ffbf5f83f21c885f8bd9',1,'Sandals::RungeKutta::ode()'],['../class_sandals_1_1_runge_kutta.html#ad540829cb7c3ea631cb00fbe302cc281',1,'Sandals::RungeKutta::ode(System t_system)']]],
+  ['order_1',['order',['../class_sandals_1_1_runge_kutta.html#a0157b139b0dbb5a21df1d44dbd05a8d9',1,'Sandals::RungeKutta']]]
 ];

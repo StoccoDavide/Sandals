@@ -1,7 +1,8 @@
 var hierarchy =
 [
     [ "Sandals::Implicit< N >", "class_sandals_1_1_implicit.html", [
-      [ "Sandals::Explicit< N >", "class_sandals_1_1_explicit.html", null ]
+      [ "Sandals::Explicit< N >", "class_sandals_1_1_explicit.html", null ],
+      [ "Sandals::SemiExplicit< N >", "class_sandals_1_1_semi_explicit.html", null ]
     ] ],
     [ "Sandals::NonlinearSolver< N >", "class_sandals_1_1_nonlinear_solver.html", [
       [ "Sandals::Newton< N *S >", "class_sandals_1_1_newton.html", null ],

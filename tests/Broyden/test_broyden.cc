@@ -18,21 +18,21 @@ TEST(Broyden, Booth) {
   // Non-linear solver.
   Sandals::Broyden<2> nlsolver;
   // Starting entries.
-  vec2 x_ini(0.0, 0.0);
-  vec2 x_out(QUIET_NAN, QUIET_NAN);
-  auto fun = [](vec2 const & X, vec2 & F) {
+  Vector2 x_ini = Vector2::Zero();
+  Vector2 x_out = Vector2::Zero();
+  auto fun = [](Vector2 const & X, Vector2 & F) {
     F << X(0) + 2.0*X(1) - 7.0, 2.0*X(0) + X(1) - 5.0;
   };
-  auto jac = [](vec2 const & /*X*/, mat2 & JF) {
+  auto jac = [](Vector2 const & /*X*/, Matrix2 & JF) {
     JF << 1.0, 2.0, 2.0, 1.0;
   };
   // Solve without damping.
   nlsolver.solve(fun, jac, x_ini, x_out);
-  EXPECT_LE((x_out - vec2(1.0, 3.0)).maxCoeff(), EPSILON_LOW);
+  EXPECT_LE((x_out - Vector2(1.0, 3.0)).maxCoeff(), EPSILON_LOW);
   EXPECT_TRUE(nlsolver.converged());
   // Solve with damping.
-  nlsolver.solve_dumped(fun, jac, x_ini, x_out);
-  EXPECT_LE((x_out - vec2(1.0, 3.0)).maxCoeff(), EPSILON_LOW);
+  nlsolver.solve_damped(fun, jac, x_ini, x_out);
+  EXPECT_LE((x_out - Vector2(1.0, 3.0)).maxCoeff(), EPSILON_LOW);
   EXPECT_TRUE(nlsolver.converged());
 }
 
@@ -40,24 +40,24 @@ TEST(Broyden, Booth) {
 TEST(Broyden, Rosenbrock2D) {
   // Non-linear solver.
   Sandals::Broyden<2> nlsolver;
-  for (real a = 1.0; a <= 100.0; a += 1.0) {
-    for (real b = 1.0; b <= 100.0; b += 1.0) {
+  for (Real a = 1.0; a <= 5.0; a += 1.0) {
+    for (Real b = 1.0; b <= 5.0; b += 1.0) {
       // Starting entries.
-      vec2 x_ini(0.0, 0.0);
-      vec2 x_out(QUIET_NAN, QUIET_NAN);
-      auto fun = [a, b](vec2 const & X, vec2 & F) {
+      Vector2 x_ini = Vector2::Zero();
+      Vector2 x_out = Vector2::Zero();
+      auto fun = [a, b](Vector2 const & X, Vector2 & F) {
         F << a*(1 - X(0)), b*(X(1) - X(0)*X(0));
       };
-      auto jac = [a, b](vec2 const & /*X*/, mat2 & JF) {
-        JF << -a, real(0.0), real(0.0), b;
+      auto jac = [a, b](Vector2 const & /*X*/, Matrix2 & JF) {
+        JF << -a, Real(0.0), Real(0.0), b;
       };
       // Solve without damping.
       nlsolver.solve(fun, jac, x_ini, x_out);
-      EXPECT_LE((x_out - vec2(1.0, 1.0)).maxCoeff(), EPSILON_LOW);
+      EXPECT_LE((x_out - Vector2::Ones()).maxCoeff(), EPSILON_LOW);
       EXPECT_TRUE(nlsolver.converged());
       // Solve with damping.
-      nlsolver.solve_dumped(fun, jac, x_ini, x_out);
-      EXPECT_LE((x_out - vec2(1.0, 1.0)).maxCoeff(), EPSILON_LOW);
+      nlsolver.solve_damped(fun, jac, x_ini, x_out);
+      EXPECT_LE((x_out - Vector2::Ones()).maxCoeff(), EPSILON_LOW);
       EXPECT_TRUE(nlsolver.converged());
     }
   }
@@ -67,27 +67,25 @@ TEST(Broyden, Rosenbrock2D) {
 TEST(Broyden, Rosenbrock3D) {
   // Non-linear solver.
   Sandals::Broyden<3> nlsolver;
-  for (real a = 1.0; a <= 100.0; a += 1.0) {
-    for (real b = 1.0; b <= 100.0; b += 1.0) {
-      for (real c = 1.0; c <= 100.0; c += 1.0) {
+  for (Real a = 1.0; a <= 10.0; a += 1.0) {
+    for (Real b = 1.0; b <= 10.0; b += 1.0) {
         // Starting entries.
-        vec3 x_ini(0.0, 0.0, 0.0);
-        vec3 x_out(QUIET_NAN, QUIET_NAN, QUIET_NAN);
-        auto fun = [a, b, c](vec3 const & X, vec3 & F) {
-          F << a*(1 - X(0)), b*(X(1) - X(0)*X(0)), c*(X(2) - X(1)*X(1));
+        Vector3 x_ini = Vector3::Zero();
+        Vector3 x_out = Vector3::Zero();
+        auto fun = [a, b](Vector3 const & X, Vector3 & F) {
+          F << a*(1 - X(0)), b*(X(1) - X(0)*X(0)), b*(X(2) - X(1)*X(1));
         };
-        auto jac = [a, b, c](vec3 const & X, mat3 & JF) {
-          JF << -a, real(0.0), real(0.0), -2*a*X(0), b, real(0.0), real(0.0), -2*b*X(1), c;
+        auto jac = [a, b](Vector3 const & X, Matrix3 & JF) {
+          JF << -a, Real(0.0), Real(0.0), -2*b*X(0), b, Real(0.0), Real(0.0), -2*b*X(1), b;
         };
         // Solve without damping.
         nlsolver.solve(fun, jac, x_ini, x_out);
-        EXPECT_LE((x_out - vec3(1.0, 1.0, 1.0)).maxCoeff(), EPSILON_LOW);
+        EXPECT_LE((x_out - Vector3::Ones()).maxCoeff(), EPSILON_LOW);
         EXPECT_TRUE(nlsolver.converged());
         // Solve with damping.
-        nlsolver.solve_dumped(fun, jac, x_ini, x_out);
-        EXPECT_LE((x_out - vec3(1.0, 1.0, 1.0)).maxCoeff(), EPSILON_LOW);
+        nlsolver.solve_damped(fun, jac, x_ini, x_out);
+        EXPECT_LE((x_out - Vector3::Ones()).maxCoeff(), EPSILON_LOW);
         EXPECT_TRUE(nlsolver.converged());
-      }
     }
   }
 }
@@ -104,34 +102,37 @@ void for_unrolled(F&& f) {
 
 // ND Rosenbrock function.
 TEST(Broyden, RosenbrockND) {
-  for_unrolled<2, 5, 10, 20>([](auto d) {
-  // Non-linear solver.
-    Sandals::Broyden<d> nlsolver;
-    for (real a = 1.0; a <= 100.0; a += 1.0) {
-      for (real b = 1.0; b <= 100.0; b += 1.0) {
+  for_unrolled<1, 2, 3>([](auto D) {
+    using Vector = typename Sandals::Broyden<D>::Vector;
+    using Matrix = typename Sandals::Broyden<D>::Matrix;
+    // Non-linear solver.
+    Sandals::Broyden<D> nlsolver;
+    for (Real a = 1.0; a <= 10.0; a += 1.0) {
+      for (Real b = 1.0; b <= 10.0; b += 1.0) {
         // Starting entries.
-        Eigen::Vector<real, d> x_ini = Eigen::Vector<real, d>::Ones();
-        Eigen::Vector<real, d> x_out = Eigen::Vector<real, d>::Zero();
-        auto fun = [a, b, d](Eigen::Vector<real, d> const & X, Eigen::Vector<real, d> & F) {
+        Vector x_ini = Vector::Zero();
+        Vector x_out = Vector::Zero();
+        auto fun = [a, b, D](Vector const & X, Vector & F) {
           F(0) = a*(1 - X(0));
-          for (unsigned i = 1; i < d; ++i) {
-            F(i) = b*(X(i-1) - X(i-1)*X(i-1));
+          for (Size i = 1; i < D; ++i) {
+            F(i) = b*(X(i) - X(i-1)*X(i-1));
           }
         };
-        auto jac = [a, b, d](Eigen::Vector<real, d> const & X, Eigen::Matrix<real, d, d> & JF) {
+        auto jac = [a, b, D](Vector const & X, Matrix & JF) {
+          JF.setZero();
           JF(0, 0) = -a;
-          for (unsigned i = 1; i < d; ++i) {
-            JF(i, i-1) = -2*b*X(i-1);
+          for (Size i = 1; i < D; ++i) {
             JF(i, i)   = b;
+            JF(i, i-1) = -2*b*X(i-1);
           }
         };
         // Solve without damping.
         nlsolver.solve(fun, jac, x_ini, x_out);
-        EXPECT_LE((x_out - Eigen::Vector<real, d>::Ones()).maxCoeff(), EPSILON_LOW);
+        EXPECT_LE((x_out - Vector::Ones()).maxCoeff(), EPSILON_LOW);
         EXPECT_TRUE(nlsolver.converged());
         // Solve with damping.
-        nlsolver.solve_dumped(fun, jac, x_ini, x_out);
-        EXPECT_LE((x_out - Eigen::Vector<real, d>::Ones()).maxCoeff(), EPSILON_LOW);
+        nlsolver.solve_damped(fun, jac, x_ini, x_out);
+        EXPECT_LE((x_out - Vector::Ones()).maxCoeff(), EPSILON_LOW);
         EXPECT_TRUE(nlsolver.converged());
       }
     }

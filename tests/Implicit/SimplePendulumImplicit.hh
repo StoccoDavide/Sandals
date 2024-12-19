@@ -14,37 +14,35 @@ using namespace Sandals;
 
 class SimplePendulumImplicit : public Implicit<2>
 {
-  real m_l{1.0};        // Length of the pendulum (m)
-  real m_g{9.81};       // Gravity acceleration (m/s^2)
-  vec2 m_ics{1.0, 0.0}; // Initial conditions
+  Real    m_l{1.0};        // Length of the pendulum (m)
+  Real    m_g{9.81};       // Gravity acceleration (m/s^2)
+  Vector2 m_ics{1.0, 0.0}; // Initial conditions
 
 public:
-  using ptr = std::shared_ptr<SimplePendulumImplicit>;
-
   SimplePendulumImplicit(void) : Implicit<2>("SimplePendulumImplicit") {}
 
   ~SimplePendulumImplicit(void) {}
 
-  vec2 F(vec2 const &x, vec2 const &x_dot, real /*t*/) const override
+  Vector2 F(Vector2 const &x, Vector2 const &x_dot, Real /*t*/) const override
   {
-    vec2 F;
+    Vector2 F;
     F << x_dot(0) - x(1), x_dot(1) + this->m_g / this->m_l * std::sin(x(0));
     return F;
   }
 
-  mat2 JF_x(vec2 const &x, vec2 const &/*x_dot*/, real /*t*/) const override
+  Matrix2 JF_x(Vector2 const &x, Vector2 const &/*x_dot*/, Real /*t*/) const override
   {
-    mat2 JF_x;
+    Matrix2 JF_x;
     JF_x << 0.0, -1.0, this->m_g / this->m_l * std::cos(x(0)), 0.0;
     return JF_x;
   }
 
-  mat2 JF_x_dot(vec2 const &/*x*/, vec2 const &/*x_dot*/, real /*t*/) const override
-  {return mat2::Identity();}
+  Matrix2 JF_x_dot(Vector2 const &/*x*/, Vector2 const &/*x_dot*/, Real /*t*/) const override
+  {return Matrix2::Identity();}
 
-  bool in_domain(vec2 const &/*x*/, real /*t*/) const override {return true;}
+  bool in_domain(Vector2 const &/*x*/, Real /*t*/) const override {return true;}
 
-  vec2 const & ics(void) const {return this->m_ics;}
+  Vector2 const & ics(void) const {return this->m_ics;}
 };
 
 #endif // TESTS_IMPLICIT_SIMPLEPENDULUMIMPLICIT_HH

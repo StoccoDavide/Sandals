@@ -25,148 +25,173 @@ namespace Sandals
    |                   |___/
   \*/
 
-  //! Broyden solver class container.
-  template <unsigned N>
+  //! \brief Class container for the (damped) Broyden's method with affine invariant step.
+  //!
+  //! Class container for the (damped) Broyden's \a combined method with affine invariant step. The
+  //! \a combined Broyden's method is a combination of the Broyden's Good and Broyden's Bad solvers.
+  //! Given a zeros of a vectorial function problem of the form \f$ \mathbf{F}(\mathbf{x}) =
+  //! \mathbf{0} \f$, where \f$ \mathbf{F}: \mathbb{R}^{n} \rightarrow \mathbb{R}^{n} \f$, the
+  //! generic Broyden's method is defined as
+  //!
+  //! \f[ \mathbf{H}_k(\mathbf{x}_k) \mathbf{h} = -\mathbf{F}(\mathbf{x}_k) \text{,} \f]
+  //!
+  //! where \f$ \mathbf{H} \f$ is the (inverse) Jacobian approximation. The advancing
+  //! step is then defined as
+  //!
+  //! \f[ \mathbf{x}_{k+1} = \mathbf{x}_k + \alpha_k \mathbf{h} \text{,} \f]
+  //!
+  //! What distinguishes the Broyden's \em combined method from the generic Broyden's method is the
+  //! update of the Jacobian approximation. The Broyden's \em combined method uses the following
+  //! update rule, which is a combination of the Broyden's Good and Broyden's Bad solvers
+  //!
+  //! \f[ \left\{\begin{array}{ll} \mathbf{H}_{k+1}^{-1} = \mathbf{H}_k^{-1} - \displaystyle\frac{
+  //! \mathbf{H}_k^{-1} \Delta\mathbf{F}_k - \Delta\mathbf{x}_k}{\mathbf{C}_g \Delta\mathbf{F}_k} \mathbf{C}_g
+  //! & \left\| \displaystyle\frac{\Delta\mathbf{x}_k^{\top} \Delta\mathbf{x}_{k-1}}{\Delta\mathbf{x}_k^{\top}
+  //! \mathbf{H}_k^{-1} \Delta\mathbf{F}_k} \right\| < \left\| \displaystyle\frac{\Delta\mathbf{F}_k^\top
+  //! \Delta\mathbf{F}_{k-1}}{\Delta\mathbf{F}_k^\top\Delta\mathbf{F}_k} \right\| \\
+  //! \mathbf{H}_{k+1}^{-1} = \mathbf{H}_k^{-1} - \displaystyle\frac{\mathbf{H}_k^{-1} \Delta\mathbf{F}_k
+  //! -\Delta\mathbf{x}_k}{\mathbf{C}_b \Delta\mathbf{F}_k} \mathbf{C}_b & \text{otherwise}
+  //! \end{array}\right. \text{,} \f]
+  //!
+  //! with \f$ \mathbf{C}_g = \Delta\mathbf{x}_k^\top \mathbf{H}_k^{-1} \f$, \f$ \mathbf{C}_b =
+  //! \Delta\mathbf{F}_k^\top \f$, \f$ \Delta\mathbf{x}_k = \mathbf{x}_{k+1} - \mathbf{x}_k \f$,
+  //! and \f$ \Delta\mathbf{F}_k = \mathbf{F}(\mathbf{x}_{k+1}) - \mathbf{F}(\mathbf{x}_k) \f$.
+  //! For more details on the Broyden's \em combined method with affine invariant step refer to the
+  //! reference: <em> "Sobre dois métodos de Broyden" </em> by J. M. Martínez and J. M. Martínez,
+  //! Matemática Aplicada e Computacional, IV Congresso Nacional de Matemática Aplicada e Computacional,
+  //! Rio de Janeiro, Brasil, setembro de 1981.
+  template <Size N>
   class Broyden : public NonlinearSolver<N>
   {
   public:
-    using vec = typename NonlinearSolver<N>::vec; //!< Templetized vector type.
-    using mat = typename NonlinearSolver<N>::mat; //!< Templetized matrix type.
-    using fun = typename NonlinearSolver<N>::fun; //!< Non-linear function type.
-    using jac = typename NonlinearSolver<N>::jac; //!< Jacobian function type.
+    using Vector   = typename NonlinearSolver<N>::Vector;   //!< Templetized vector type.
+    using Matrix   = typename NonlinearSolver<N>::Matrix;   //!< Templetized matrix type.
+    using Function = typename NonlinearSolver<N>::Function; //!< nonlinear function type.
+    using Jacobian = typename NonlinearSolver<N>::Jacobian; //!< Jacobian function type.
     using NonlinearSolver<N>::solve;
-    using NonlinearSolver<N>::solve_dumped;
+    using NonlinearSolver<N>::solve_damped;
 
-    //! Class constructor for a Broyden solver.
-    Broyden(void) {}
+    //! Class constructor for the \em combined Broyden solver.
+    //!
+    Broyden() {}
 
-    //! Get the Broyden solver name.
-    //! \return The Broyden solver name.
-    std::string name(void) const override {return "Broyden";}
+    //! Get the \em combined Broyden solver name.
+    //! \return The \em combined Broyden solver name.
+    std::string name() const override {return "Broyden";}
 
-    //! Solve non-linear system of equations \f$ \mathbf{F}(\mathbf{x}) = \mathbf{0} \f$.
-    //! \param t_fun The function pointer.
-    //! \param x_ini The initialization point.
-    //! \param x_sol The solution point.
-    bool solve(vec const &x_ini, vec &x_sol) override
+    //! Solve nonlinear system of equations \f$ \mathbf{F}(\mathbf{x}) = \mathbf{0} \f$.
+    //! \param[in] x_ini The initialization point.
+    //! \param[out] x_sol The solution point.
+    bool solve(Vector const &x_ini, Vector &x_sol) override
     {
       // Setup internal variables
       this->reset();
 
       // Initialize variables
-      mat J0, J1;
-      vec X0, F0, D0, DX0, DF0, X1, F1, D1, DX1, DF1;
-      real F0_norm = real(0.0);
-      real D0_norm = real(0.0);
+      Real residuals, step_norm;
+      Vector x_old, x_new, function_old, function_new, step_old, step_new, delta_x_old, delta_x_new,
+        delta_function_old, delta_function_new;
+      Matrix jacobian_old, jacobian_new;
 
       // Set initial iteration
-      X0 = x_ini;
-      this->evaluate_function(X0, F0);
-      this->evaluate_jacobian(X0, J0);
+      x_old = x_ini;
+      this->evaluate_function(x_old, function_old);
+      this->evaluate_jacobian(x_old, jacobian_old);
 
       // Algorithm iterations
-      real tolerance_F_norm = this->m_tolerance;
-      real tolerance_D_norm = this->m_tolerance * this->m_tolerance;
-      this->m_converged     = false;
-      for (this->m_iterations = unsigned(1);
-           this->m_iterations < this->m_max_iterations;
-           ++this->m_iterations) {
+      Real tolerance_residuals{this->m_tolerance};
+      Real tolerance_step_norm{this->m_tolerance * this->m_tolerance};
+      for (this->m_iterations = Size(1); this->m_iterations < this->m_max_iterations; ++this->m_iterations)
+      {
 
         // Calculate step
-        this->step(F0, J0, D0);
+        step_old = -jacobian_old * function_old;
 
         // Check convergence
-        F0_norm = F0.norm();
-        D0_norm = D0.norm();
-        if (F0_norm < tolerance_F_norm || D0_norm < tolerance_D_norm) {
+        residuals = function_old.norm();
+        step_norm = step_old.norm();
+        if (residuals < tolerance_residuals || step_norm < tolerance_step_norm) {
           this->m_converged = true;
           break;
         }
 
         // Update point
-        X1 = X0 + D0;
-        this->evaluate_function(X1, F1);
+        x_new = x_old + step_old;
+        this->evaluate_function(x_new, function_new);
 
         // Update jacobian approximation
-        DX1 = X1 - X0;
-        DF1 = F1 - F0;
+        delta_x_new = x_new - x_old;
+        delta_function_new = function_new - function_old;
         this->update(
-          DX0, DF0, J0, // Old step data
-          DX1, DF1, J1  // New step data
+          delta_x_old, delta_function_old, jacobian_old, // Old step data
+          delta_x_new, delta_function_new, jacobian_new  // New step data
         );
 
         // Update internal variables
-        X0  = X1;
-        F0  = F1;
-        DX0 = DX1;
-        DF0 = DF1;
-        D0  = D1;
-        J0  = J1;
+        x_old              = x_new;
+        function_old       = function_new;
+        delta_x_old        = delta_x_new;
+        delta_function_old = delta_function_new;
+        step_old           = step_new;
+        jacobian_old       = jacobian_new;
       }
 
       // Convergence data
-      x_sol             = X0;
-      this->m_residuals = F0_norm;
+      x_sol             = x_old;
+      this->m_residuals = residuals;
       return this->m_converged;
     }
 
-    //! Solve non-linear system of equations \f$ \mathbf{F}(\mathbf{x}) = \mathbf{0} \f$
-    //! with dumping factor \f$ \alpha \f$.
-    //! \param t_fun The function pointer.
-    //! \param x_ini The initialization point.
-    //! \param x_sol The solution point.
-    bool solve_dumped(vec const &x_ini, vec &x_sol) override
+    //! Solve nonlinear system of equations \f$ \mathbf{F}(\mathbf{x}) = \mathbf{0} \f$
+    //! with damping factor \f$ \alpha \f$.
+    //! \param[in] x_ini The initialization point.
+    //! \param[out] x_sol The solution point.
+    bool solve_damped(Vector const &x_ini, Vector &x_sol) override
     {
       // Setup internal variables
       this->reset();
 
       // Initialize variables
-      mat J0, J1;
-      vec X0, F0, D0, DX0, DF0, X1, F1, D1, DX1, DF1;
-      real F0_norm = real(0.0);
-      real D0_norm = real(0.0);
-      real F1_norm = real(0.0);
-      real D1_norm = real(0.0);
+      Real residuals_old, residuals_new, step_norm_old, step_norm_new, tau;
+      Vector x_old, x_new, function_old, function_new, step_old, step_new, delta_x_old, delta_x_new,
+        delta_function_old, delta_function_new;
+      Matrix jacobian_old, jacobian_new;
 
       // Set initial iteration
-      X0 = x_ini;
-      this->evaluate_function(X0, F0);
-      this->evaluate_jacobian(X0, J0);
+      x_old = x_ini;
+      this->evaluate_function(x_old, function_old);
+      this->evaluate_jacobian(x_old, jacobian_old);
 
       // Algorithm iterations
-      real tolerance_F_norm = this->m_tolerance;
-      real tolerance_D_norm = this->m_tolerance * this->m_tolerance;
-      this->m_converged     = false;
-      real tau              = real(1.0);
-      for (this->m_iterations = unsigned(1);
-           this->m_iterations < this->m_max_iterations;
-           ++this->m_iterations) {
+      Real tolerance_residuals{this->m_tolerance};
+      Real tolerance_step_norm{this->m_tolerance * this->m_tolerance};
+      for (this->m_iterations = Size(1); this->m_iterations < this->m_max_iterations; ++this->m_iterations)
+      {
 
         // Calculate step
-        this->step(F0, J0, D0);
+        step_old = -jacobian_old * function_old;
 
         // Check convergence
-        F0_norm = F0.norm();
-        D0_norm = D0.norm();
-        if (F0_norm < tolerance_F_norm || D0_norm < tolerance_D_norm) {
+        residuals_old = function_old.norm();
+        step_norm_old = step_old.norm();
+        if (residuals_old < tolerance_residuals || step_norm_old < tolerance_step_norm) {
           this->m_converged = true;
           break;
         }
 
         // Relax the iteration process
-        tau = real(1.0);
-        for (this->m_relaxations = unsigned(0);
-             this->m_relaxations < this->m_max_relaxations;
-             ++this->m_relaxations) {
+        tau = Real(1.0);
+        for (this->m_relaxations = Size(0); this->m_relaxations < this->m_max_relaxations; ++this->m_relaxations)
+        {
           // Update point
-          D1 = tau * D0;
-          X1 = X0 + D1;
-          this->evaluate_function(X1, F1);
+          step_new = tau * step_old;
+          x_new = x_old + step_new;
+          this->evaluate_function(x_new, function_new);
 
           // Check relaxation
-          F1_norm = F1.norm();
-          D1_norm = D1.norm();
-          if (F1_norm < F0_norm || D1_norm < (real(1.0)-tau/real(2.0))*D0_norm) {
+          residuals_new = function_new.norm();
+          step_norm_new = step_new.norm();
+          if (residuals_new < residuals_old || step_norm_new < (Real(1.0)-tau/Real(2.0))*step_norm_old) {
             break;
           } else {
             tau *= this->m_alpha;
@@ -174,63 +199,58 @@ namespace Sandals
         }
 
         // Update jacobian approximation
-        DX1 = X1 - X0;
-        DF1 = F1 - F0;
+        delta_x_new = x_new - x_old;
+        delta_function_new = function_new - function_old;
         this->update(
-          DX0, DF0, J0, // Old step data
-          DX1, DF1, J1  // New step data
+          delta_x_old, delta_function_old, jacobian_old, // Old step data
+          delta_x_new, delta_function_new, jacobian_new  // New step data
         );
 
         // Update internal variables
-        X0  = X1;
-        F0  = F1;
-        DX0 = DX1;
-        DF0 = DF1;
-        D0  = D1;
-        J0  = J1;
+        x_old              = x_new;
+        function_old       = function_new;
+        delta_x_old        = delta_x_new;
+        delta_function_old = delta_function_new;
+        step_old           = step_new;
+        jacobian_old       = jacobian_new;
       }
 
       // Convergence data
-      x_sol             = X0;
-      this->m_residuals = F0_norm;
+      x_sol             = x_old;
+      this->m_residuals = residuals_old;
       return this->m_converged;
     }
 
-    //! Jacobian approximation update rule.
-    //! \param DX0 Old point difference.
-    //! \param DF0 Old function value difference.
-    //! \param J0  Old jacobian approximation.
-    //! \param DX1 New point difference.
-    //! \param DF1 New function value difference.
-    //! \param J1  New jacobian approximation.
+    //! \brief Jacobian approximation update rule for the \em combined Broyden's method.
+    //!
+    //! Jacobian approximation update rule for the \em combined Broyden's method.
+    //! \param[in] delta_x_old Old difference between points.
+    //! \param[in] delta_function_old Old difference between function values.
+    //! \param[in] jacobian_old Old jacobian approximation.
+    //! \param[in] delta_x_new New difference between points.
+    //! \param[in] delta_function_new New difference between function values.
+    //! \param[out] jacobian_new New jacobian approximation.
     void update(
-      vec const &DX0, vec const &DF0, mat const &J0,
-      vec const &DX1, vec const &DF1, mat       &J1
+      Vector const &delta_x_old, Vector const &delta_function_old, Matrix const &jacobian_old,
+      Vector const &delta_x_new, Vector const &delta_function_new, Matrix       &jacobian_new
     ) {
-      vec J0DF1(J0 * DF1);
-      real DX1J0DF1 = DX1.transpose() * J0DF1;
-      real DF1DF1   = DF1.transpose() * DF1;
+      Vector tmp_1(jacobian_old * delta_function_new);
+      Real tmp_2{delta_function_new.squaredNorm()};
       // Selection criteria
-      // |DX1'*DX0|/|DX1'*J0*DF1| < |DF1'*DF0|/(DF1'*DF1)
-      if (std::abs(DX1.transpose() * DX0) / std::abs(DX1J0DF1) <
-          std::abs(DF1.transpose() * DF0) / DF1DF1 ||
-          this->iterations() < unsigned(2)) {
+      // |(dx_new'*dx_old) / (dx_new'*J_old*dF_new)| < |(dF_new'*dF_old) / (dF_new'*dF_new)|
+      if (std::abs(delta_x_new.transpose() * delta_x_old) / std::abs(delta_x_new.transpose() * tmp_1)
+          < std::abs(delta_function_new.transpose() * delta_function_old) / tmp_2 ||
+          this->iterations() < Size(2)) {
         // Broyden's Good solver
-        // J1 = J0 - (J0*DF1-DX1)/(C'*DF1)*C', where C = J0'*DX1;
-        vec C(J0.transpose() * DX1);
-        J1 = J0 - (J0DF1 - DX1) / (C.transpose() * DF1) * C.transpose();
+        // J_new = J_old - (J_old*dF_new-dx_new) / (C'*dF_new)*C', where C = J_old'*dx_new;
+        Vector C_g(jacobian_old.transpose() * delta_x_new);
+        jacobian_new = jacobian_old - (tmp_1 - delta_x_new) / (C_g.transpose() * delta_function_new) * C_g.transpose();
       } else {
         // Broyden's Bad solver
-        // J1 = J0 - (J0*DF1-DX1)/(C'*DF1)*C', where C = DF1;
-        J1 = J0 - (J0DF1 - DX1) / (DF1DF1)*DF1.transpose();
+        // J_new = J_old - (J_old*dF_old-dx_new) / (C'*dF_old)*C', where C = dF_old;
+        jacobian_new = jacobian_old - (tmp_1 - delta_x_new) / tmp_2 * delta_function_old.transpose();
       }
     }
-
-    //! Calculate the step.
-    //! \param F Function.
-    //! \param J Jacobian approximation.
-    //! \param D Step.
-    void step(vec const &F, mat const &J, vec &D) const {D = -J * F;}
 
   }; // class Broyden
 

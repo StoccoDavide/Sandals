@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['ode_0',['ode',['../class_sandals_1_1_runge_kutta.html#a6553a8974f7cf54ffbaa8713e669e94d',1,'Sandals::RungeKutta::ode(void)'],['../class_sandals_1_1_runge_kutta.html#aeb8a1cb9346350b2db2409a18691c50d',1,'Sandals::RungeKutta::ode(system t_system)']]],
-  ['order_1',['order',['../struct_sandals_1_1_tableau.html#a93d0855d1c56a7b422b7bc33bc79b57d',1,'Sandals::Tableau::order'],['../class_sandals_1_1_runge_kutta.html#a7ea885f3b2859bf568a8a6a1bed8ca20',1,'Sandals::RungeKutta::order()']]],
-  ['ostream_2',['ostream',['../namespace_sandals.html#ab208d0afae0f3d2dfd5183d450c3deb6',1,'Sandals']]]
+  ['ode_0',['ode',['../class_sandals_1_1_runge_kutta.html#a899ff34e2ca7ffbf5f83f21c885f8bd9',1,'Sandals::RungeKutta::ode()'],['../class_sandals_1_1_runge_kutta.html#ad540829cb7c3ea631cb00fbe302cc281',1,'Sandals::RungeKutta::ode(System t_system)']]],
+  ['order_1',['order',['../struct_sandals_1_1_tableau.html#a169ac5d428448178b8066a561357283a',1,'Sandals::Tableau::order'],['../class_sandals_1_1_runge_kutta.html#a0157b139b0dbb5a21df1d44dbd05a8d9',1,'Sandals::RungeKutta::order()']]]
 ];

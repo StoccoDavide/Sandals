@@ -1,8 +1,5 @@
 <map id="include/Sandals/NonlinearSolver/NonlinearSolver.hxx" name="include/Sandals/NonlinearSolver/NonlinearSolver.hxx">
 <area shape="rect" id="Node000001" title=" " alt="" coords="5,5,184,46"/>
-<area shape="rect" id="Node000002" href="$_sandals_8hh.html" title=" " alt="" coords="29,183,160,208"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="75,60,61,95,58,114,61,134,72,160,87,181,82,184,68,162,56,135,52,114,56,93,71,58"/>
-<area shape="rect" id="Node000003" href="$_newton_8hxx.html" title=" " alt="" coords="71,94,243,135"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="120,57,145,92,141,95,115,60"/>
-<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="134,149,106,184,102,180,130,145"/>
+<area shape="rect" id="Node000002" href="$_sandals_8hh.html" title=" " alt="" coords="29,94,160,120"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="97,62,97,93,92,93,92,62"/>
 </map>
