@@ -15,6 +15,15 @@
 
 namespace Sandals {
 
+  /*\
+   |   _____            _ _      _ _
+   |  | ____|_  ___ __ | (_) ___(_) |_
+   |  |  _| \ \/ / '_ \| | |/ __| | __|
+   |  | |___ >  <| |_) | | | (__| | |_
+   |  |_____/_/\_\ .__/|_|_|\___|_|\__|
+   |             |_|
+  \*/
+
   //! \brief Class container for the system of explicit ODEs.
   //!
   //! Class container for the system of explicit ordinary differential equations (ODEs) of the type
@@ -26,7 +35,7 @@ namespace Sandals {
     using Pointer = std::shared_ptr<Explicit<N>>; //!< Shared pointer to an explicit ODE system.
     using Vector  = typename Implicit<N>::Vector; //!< Templetized vector type.
     using Matrix  = typename Implicit<N>::Matrix; //!< Templetized matrix type.
-    using Type    = typename Implicit<N>::Type;   //!< ODE system type enumeration.
+    using Type    = typename Implicit<N>::Type;   //!< System type enumeration.
 
     //! Default class constructor for the explicit ODE system.
     //!

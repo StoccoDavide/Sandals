@@ -25,10 +25,10 @@ namespace Sandals
    |                   |___/
   \*/
 
-  //! \brief Class container for the (damped) Broyden's method with affine invariant step.
+  //! \brief Class container for the (damped) Broyden's methods: \em good, \em bad, and \em combined.
   //!
-  //! Class container for the (damped) Broyden's \a combined method with affine invariant step. The
-  //! \a combined Broyden's method is a combination of the Broyden's Good and Broyden's Bad solvers.
+  //! Class container for the (damped) Broyden's  methods: \em good, \em bad, and \em combined. The
+  //! \em combined Broyden's method is a combination of the Broyden's Good and Broyden's Bad solvers.
   //! Given a zeros of a vectorial function problem of the form \f$ \mathbf{F}(\mathbf{x}) =
   //! \mathbf{0} \f$, where \f$ \mathbf{F}: \mathbb{R}^{n} \rightarrow \mathbb{R}^{n} \f$, the
   //! generic Broyden's method is defined as
@@ -46,7 +46,7 @@ namespace Sandals
   //!
   //! \f[ \left\{\begin{array}{ll} \mathbf{H}_{k+1}^{-1} = \mathbf{H}_k^{-1} - \displaystyle\frac{
   //! \mathbf{H}_k^{-1} \Delta\mathbf{F}_k - \Delta\mathbf{x}_k}{\mathbf{C}_g \Delta\mathbf{F}_k} \mathbf{C}_g
-  //! & \left\| \displaystyle\frac{\Delta\mathbf{x}_k^{\top} \Delta\mathbf{x}_{k-1}}{\Delta\mathbf{x}_k^{\top}
+  //! & \left\| \displaystyle\frac{\Delta\mathbf{x}_k^\top \Delta\mathbf{x}_{k-1}}{\Delta\mathbf{x}_k^\top
   //! \mathbf{H}_k^{-1} \Delta\mathbf{F}_k} \right\| < \left\| \displaystyle\frac{\Delta\mathbf{F}_k^\top
   //! \Delta\mathbf{F}_{k-1}}{\Delta\mathbf{F}_k^\top\Delta\mathbf{F}_k} \right\| \\
   //! \mathbf{H}_{k+1}^{-1} = \mathbf{H}_k^{-1} - \displaystyle\frac{\mathbf{H}_k^{-1} \Delta\mathbf{F}_k
@@ -56,14 +56,16 @@ namespace Sandals
   //! with \f$ \mathbf{C}_g = \Delta\mathbf{x}_k^\top \mathbf{H}_k^{-1} \f$, \f$ \mathbf{C}_b =
   //! \Delta\mathbf{F}_k^\top \f$, \f$ \Delta\mathbf{x}_k = \mathbf{x}_{k+1} - \mathbf{x}_k \f$,
   //! and \f$ \Delta\mathbf{F}_k = \mathbf{F}(\mathbf{x}_{k+1}) - \mathbf{F}(\mathbf{x}_k) \f$.
-  //! For more details on the Broyden's \em combined method with affine invariant step refer to the
-  //! reference: <em> "Sobre dois métodos de Broyden" </em> by J. M. Martínez and J. M. Martínez,
-  //! Matemática Aplicada e Computacional, IV Congresso Nacional de Matemática Aplicada e Computacional,
-  //! Rio de Janeiro, Brasil, setembro de 1981.
+  //! For more details on the Broyden's \em combined method refer to the reference: <em> "Sobre dois
+  //! métodos de Broyden" </em> by J. M. Martínez and J. M. Martínez, Matemática Aplicada e Computacional,
+  //! IV Congresso Nacional de Matemática Aplicada e Computacional, Rio de Janeiro, Brasil, setembro de 1981.
+  //! \note The implemented Broyden's class for the \em combined method can be used as a \em good or
+  //! \em bad solver by setting the appropriate parameters.
   template <Size N>
   class Broyden : public NonlinearSolver<N>
   {
   public:
+    using Type = enum class Type : Size {GOOD=0, BAD=1, COMBINED=2}; //!< Broyden solver type.
     using Vector   = typename NonlinearSolver<N>::Vector;   //!< Templetized vector type.
     using Matrix   = typename NonlinearSolver<N>::Matrix;   //!< Templetized matrix type.
     using Function = typename NonlinearSolver<N>::Function; //!< nonlinear function type.
@@ -71,13 +73,37 @@ namespace Sandals
     using NonlinearSolver<N>::solve;
     using NonlinearSolver<N>::solve_damped;
 
-    //! Class constructor for the \em combined Broyden solver.
+  private:
+    Type m_type{Type::COMBINED}; //!< ODE system type.
+
+  public:
+    //! Class constructor for the Broyden solver.
     //!
     Broyden() {}
 
-    //! Get the \em combined Broyden solver name.
-    //! \return The \em combined Broyden solver name.
+    //! Get the Broyden solver name.
+    //! \return The Broyden solver name.
     std::string name() const override {return "Broyden";}
+
+    //! Get the enumeration type of the Broyden solver.
+    //! \return The Broyden solver enumeration type.
+    Type type() const {return this->m_type;}
+
+    //! Set the enumeration type of the Broyden solver.
+    //! \param[in] t_type The Broyden solver enumeration type.
+    void type(Type t_type) {this->m_type = t_type;}
+
+    //! Enable the \em good Broyden solver.
+    //!
+    void enable_good_mode() {this->m_type = Type::GOOD;}
+
+    //! Enable the \em bad Broyden solver.
+    //!
+    void enable_bad_mode() {this->m_type = Type::BAD;}
+
+    //! Enable the \em combined Broyden solver.
+    //!
+    void enable_combined_mode() {this->m_type = Type::COMBINED;}
 
     //! Solve nonlinear system of equations \f$ \mathbf{F}(\mathbf{x}) = \mathbf{0} \f$.
     //! \param[in] x_ini The initialization point.
@@ -221,9 +247,7 @@ namespace Sandals
       return this->m_converged;
     }
 
-    //! \brief Jacobian approximation update rule for the \em combined Broyden's method.
-    //!
-    //! Jacobian approximation update rule for the \em combined Broyden's method.
+    //! Jacobian approximation update rule for the Broyden's method.
     //! \param[in] delta_x_old Old difference between points.
     //! \param[in] delta_function_old Old difference between function values.
     //! \param[in] jacobian_old Old jacobian approximation.
@@ -238,9 +262,9 @@ namespace Sandals
       Real tmp_2{delta_function_new.squaredNorm()};
       // Selection criteria
       // |(dx_new'*dx_old) / (dx_new'*J_old*dF_new)| < |(dF_new'*dF_old) / (dF_new'*dF_new)|
-      if (std::abs(delta_x_new.transpose() * delta_x_old) / std::abs(delta_x_new.transpose() * tmp_1)
-          < std::abs(delta_function_new.transpose() * delta_function_old) / tmp_2 ||
-          this->iterations() < Size(2)) {
+      if (this->m_type == Type::COMBINED || this->m_type == Type::GOOD || this->iterations() < Size(2) ||
+          std::abs(delta_x_new.transpose() * delta_x_old) / std::abs(delta_x_new.transpose() * tmp_1)
+          < std::abs(delta_function_new.transpose() * delta_function_old) / tmp_2) {
         // Broyden's Good solver
         // J_new = J_old - (J_old*dF_new-dx_new) / (C'*dF_new)*C', where C = J_old'*dx_new;
         Vector C_g(jacobian_old.transpose() * delta_x_new);

@@ -69,8 +69,8 @@ namespace Sandals
    |
   \*/
 
-  using Real = double;   //!< Real number type.
-  using Size = unsigned; //!< Size number type.
+  using Real = double; //!< Real number type.
+  using Size = int;    //!< Size number type.
 
   using Vector2 = Eigen::Vector<Real, 2>;    //!< 2x1 vector of Real number type (column vector)
   using Matrix2 = Eigen::Matrix<Real, 2, 2>; //!< 2x2 matrix of Real number type
@@ -89,8 +89,8 @@ namespace Sandals
   using Vector9 = Eigen::Vector<Real, 9>;    //!< 9x1 vector of Real number type (column vector)
   using Matrix9 = Eigen::Matrix<Real, 9, 9>; //!< 9x9 matrix of Real number type
 
-  using VectorD = Eigen::Vector<Real, Eigen::Dynamic>;                 //!< Nx1 vector of Real number type (column vector).
-  using MatrixD = Eigen::Matrix<Real, Eigen::Dynamic, Eigen::Dynamic>; //!< NxN matrix of Real number type.
+  using VectorX = Eigen::Vector<Real, Eigen::Dynamic>;                 //!< Nx1 vector of Real number type (column vector).
+  using MatrixX = Eigen::Matrix<Real, Eigen::Dynamic, Eigen::Dynamic>; //!< NxN matrix of Real number type.
 
   /*\
    |    ____                _              _
@@ -158,11 +158,13 @@ namespace Sandals
 #include "Sandals/NonlinearSolver/Newton.hxx"
 #include "Sandals/NonlinearSolver/Broyden.hxx"
 
-// Runge-Kutta integrators
+// ODE/DAE system of equations
 #include "Sandals/RungeKutta/System/Implicit.hxx"
 #include "Sandals/RungeKutta/System/Explicit.hxx"
+#include "Sandals/RungeKutta/System/Linear.hxx"
 #include "Sandals/RungeKutta/System/SemiExplicit.hxx"
-//#include "Sandals/RungeKutta/System/Linear.hxx"
+
+// Runge-Kutta integrators
 #include "Sandals/RungeKutta/RungeKutta.hxx"
 #include "Sandals/RungeKutta/Tableau/RK4.hxx"
 

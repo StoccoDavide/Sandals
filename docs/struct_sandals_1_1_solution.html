@@ -18,7 +18,7 @@
 <!-- END twitter metadata -->
 <title>Sandals: Sandals::Solution&lt; N &gt; Struct Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
-<link rel="icon" type="image/svg+xml" href="logo.jpg"/>
+<link rel="icon" type="image/svg+xml" href="logo.png"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
 <script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
@@ -147,12 +147,15 @@ $(function(){initNavTree('struct_sandals_1_1_solution.html',''); initResizable(t
 </div><!--header-->
 <div class="contents">
 
+<p>Class container for the numerical solution of a system of ODEs/DAEs.  
+ <a href="#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="_runge_kutta_8hxx_source.html">RungeKutta.hxx</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
 Public Types</h2></td></tr>
 <tr class="memitem:a21927532bc20e55229991d4a3bd31aa1" id="r_a21927532bc20e55229991d4a3bd31aa1"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a21927532bc20e55229991d4a3bd31aa1">Vector</a> = Eigen::Vector&lt;<a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a>, Eigen::Dynamic&gt;</td></tr>
-<tr class="memdesc:a21927532bc20e55229991d4a3bd31aa1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Templetized matrix type.  <br /></td></tr>
+<tr class="memdesc:a21927532bc20e55229991d4a3bd31aa1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Templetized vector type.  <br /></td></tr>
 <tr class="separator:a21927532bc20e55229991d4a3bd31aa1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab5b3c34ede25c90d4f6cbf3290d155c3" id="r_ab5b3c34ede25c90d4f6cbf3290d155c3"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab5b3c34ede25c90d4f6cbf3290d155c3">Matrix</a> = Eigen::Matrix&lt;<a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a>, N, Eigen::Dynamic&gt;</td></tr>
 <tr class="memdesc:ab5b3c34ede25c90d4f6cbf3290d155c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Templetized matrix type.  <br /></td></tr>
@@ -161,28 +164,26 @@ Public Types</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a9e5e0824c1982d970c264c16a301bc75" id="r_a9e5e0824c1982d970c264c16a301bc75"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9e5e0824c1982d970c264c16a301bc75">Solution</a> ()</td></tr>
-<tr class="memdesc:a9e5e0824c1982d970c264c16a301bc75"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default class constructor for the <a class="el" href="struct_sandals_1_1_solution.html">Solution</a> class.  <br /></td></tr>
 <tr class="separator:a9e5e0824c1982d970c264c16a301bc75"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa51cbe2b9d18f8a68f0d60c9ce3bb84d" id="r_aa51cbe2b9d18f8a68f0d60c9ce3bb84d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa51cbe2b9d18f8a68f0d60c9ce3bb84d">Solution</a> (<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377c62a986c">Size</a> <a class="el" href="#a9b1dae6a41db5bcf2587bbf2fcacd521">size</a>)</td></tr>
+<tr class="memitem:aa51cbe2b9d18f8a68f0d60c9ce3bb84d" id="r_aa51cbe2b9d18f8a68f0d60c9ce3bb84d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa51cbe2b9d18f8a68f0d60c9ce3bb84d">Solution</a> (<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> <a class="el" href="#a9b1dae6a41db5bcf2587bbf2fcacd521">size</a>)</td></tr>
 <tr class="separator:aa51cbe2b9d18f8a68f0d60c9ce3bb84d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a02f0cf7c87c2326d5d5b1b2bb54a382c" id="r_a02f0cf7c87c2326d5d5b1b2bb54a382c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a02f0cf7c87c2326d5d5b1b2bb54a382c">resize</a> (<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377c62a986c">Size</a> <a class="el" href="#a9b1dae6a41db5bcf2587bbf2fcacd521">size</a>)</td></tr>
+<tr class="memitem:a02f0cf7c87c2326d5d5b1b2bb54a382c" id="r_a02f0cf7c87c2326d5d5b1b2bb54a382c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a02f0cf7c87c2326d5d5b1b2bb54a382c">resize</a> (<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> <a class="el" href="#a9b1dae6a41db5bcf2587bbf2fcacd521">size</a>)</td></tr>
 <tr class="separator:a02f0cf7c87c2326d5d5b1b2bb54a382c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a18084a835f99097ddfe1fe902f8bd4fd" id="r_a18084a835f99097ddfe1fe902f8bd4fd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a18084a835f99097ddfe1fe902f8bd4fd">conservative_resize</a> (<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377c62a986c">Size</a> <a class="el" href="#a9b1dae6a41db5bcf2587bbf2fcacd521">size</a>)</td></tr>
+<tr class="memitem:a18084a835f99097ddfe1fe902f8bd4fd" id="r_a18084a835f99097ddfe1fe902f8bd4fd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a18084a835f99097ddfe1fe902f8bd4fd">conservative_resize</a> (<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> <a class="el" href="#a9b1dae6a41db5bcf2587bbf2fcacd521">size</a>)</td></tr>
 <tr class="separator:a18084a835f99097ddfe1fe902f8bd4fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a069aae4e4666215c01ac7b93630ee4ec" id="r_a069aae4e4666215c01ac7b93630ee4ec"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a069aae4e4666215c01ac7b93630ee4ec">clear</a> ()</td></tr>
-<tr class="memdesc:a069aae4e4666215c01ac7b93630ee4ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clear the time and states vectors.  <br /></td></tr>
 <tr class="separator:a069aae4e4666215c01ac7b93630ee4ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6ec216de7246d2ed79d918f54ac3fc98" id="r_a6ec216de7246d2ed79d918f54ac3fc98"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6ec216de7246d2ed79d918f54ac3fc98">is_empty</a> () const</td></tr>
 <tr class="separator:a6ec216de7246d2ed79d918f54ac3fc98"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9b1dae6a41db5bcf2587bbf2fcacd521" id="r_a9b1dae6a41db5bcf2587bbf2fcacd521"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377c62a986c">Size</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9b1dae6a41db5bcf2587bbf2fcacd521">size</a> () const</td></tr>
+<tr class="memitem:a9b1dae6a41db5bcf2587bbf2fcacd521" id="r_a9b1dae6a41db5bcf2587bbf2fcacd521"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9b1dae6a41db5bcf2587bbf2fcacd521">size</a> () const</td></tr>
 <tr class="separator:a9b1dae6a41db5bcf2587bbf2fcacd521"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4113cea91fffc3ed758876c6abe00553" id="r_a4113cea91fffc3ed758876c6abe00553"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4113cea91fffc3ed758876c6abe00553">std_time</a> () const</td></tr>
 <tr class="separator:a4113cea91fffc3ed758876c6abe00553"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa95ddb3cb5c54bc24b38401addacb6a2" id="r_aa95ddb3cb5c54bc24b38401addacb6a2"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa95ddb3cb5c54bc24b38401addacb6a2">std_state</a> (<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377c62a986c">Size</a> i) const</td></tr>
+<tr class="memitem:aa95ddb3cb5c54bc24b38401addacb6a2" id="r_aa95ddb3cb5c54bc24b38401addacb6a2"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa95ddb3cb5c54bc24b38401addacb6a2">std_state</a> (<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> i) const</td></tr>
 <tr class="separator:aa95ddb3cb5c54bc24b38401addacb6a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aedf65e5d1b2da6577cf175ab2dbc6c10" id="r_aedf65e5d1b2da6577cf175ab2dbc6c10"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377c62a986c">Size</a>, std::vector&lt; <a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aedf65e5d1b2da6577cf175ab2dbc6c10">std_states</a> () const</td></tr>
+<tr class="memitem:aedf65e5d1b2da6577cf175ab2dbc6c10" id="r_aedf65e5d1b2da6577cf175ab2dbc6c10"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a>, std::vector&lt; <a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aedf65e5d1b2da6577cf175ab2dbc6c10">std_states</a> () const</td></tr>
 <tr class="separator:aedf65e5d1b2da6577cf175ab2dbc6c10"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abfb2016b331b7d16294cec5998e6e9a2" id="r_abfb2016b331b7d16294cec5998e6e9a2"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377c62a986c">Size</a>, <a class="el" href="#a21927532bc20e55229991d4a3bd31aa1">Vector</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abfb2016b331b7d16294cec5998e6e9a2">eig_states</a> () const</td></tr>
+<tr class="memitem:abfb2016b331b7d16294cec5998e6e9a2" id="r_abfb2016b331b7d16294cec5998e6e9a2"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a>, <a class="el" href="#a21927532bc20e55229991d4a3bd31aa1">Vector</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abfb2016b331b7d16294cec5998e6e9a2">eig_states</a> () const</td></tr>
 <tr class="separator:abfb2016b331b7d16294cec5998e6e9a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae6364d71ba997361137312313cc67d9a" id="r_ae6364d71ba997361137312313cc67d9a"><td class="memItemLeft" align="right" valign="top">std::map&lt; std::string, std::vector&lt; <a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae6364d71ba997361137312313cc67d9a">std_states</a> (std::vector&lt; std::string &gt; names) const</td></tr>
 <tr class="separator:ae6364d71ba997361137312313cc67d9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -192,20 +193,24 @@ Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a772573a8324b438c273b6f2be20bc25d" id="r_a772573a8324b438c273b6f2be20bc25d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a21927532bc20e55229991d4a3bd31aa1">Vector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a772573a8324b438c273b6f2be20bc25d">time</a></td></tr>
-<tr class="memdesc:a772573a8324b438c273b6f2be20bc25d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Time vector.  <br /></td></tr>
+<tr class="memdesc:a772573a8324b438c273b6f2be20bc25d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Time solution vector.  <br /></td></tr>
 <tr class="separator:a772573a8324b438c273b6f2be20bc25d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a625d18e8ef2d1b35ca0faafb57f26326" id="r_a625d18e8ef2d1b35ca0faafb57f26326"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#ab5b3c34ede25c90d4f6cbf3290d155c3">Matrix</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a625d18e8ef2d1b35ca0faafb57f26326">states</a></td></tr>
 <tr class="memdesc:a625d18e8ef2d1b35ca0faafb57f26326"><td class="mdescLeft">&#160;</td><td class="mdescRight">States solution matrix.  <br /></td></tr>
 <tr class="separator:a625d18e8ef2d1b35ca0faafb57f26326"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Typedef Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><div class="compoundTemplParams">template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> N&gt;<br />
+struct Sandals::Solution&lt; N &gt;</div><p>Class container for the numerical solution of a system of ODEs/DAEs. </p>
+<p>Class container for the numerical solution of a system of Ordinary Differential Equations (ODEs) or Differential Algebraic Equations (DAEs). The solution is stored in a time vector and states matrix, where each row of the matrix represents the solution of a state at a given time. The solution can be accessed as standard library vectors or Eigen library vectors. </p>
+</div><h2 class="groupheader">Member Typedef Documentation</h2>
 <a id="ab5b3c34ede25c90d4f6cbf3290d155c3" name="ab5b3c34ede25c90d4f6cbf3290d155c3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab5b3c34ede25c90d4f6cbf3290d155c3">&#9670;&#160;</a></span>Matrix</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377c62a986c">Size</a> N&gt; </div>
+template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> N&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">using <a class="el" href="struct_sandals_1_1_solution.html">Sandals::Solution</a>&lt; N &gt;::Matrix = Eigen::Matrix&lt;<a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a>, N, Eigen::Dynamic&gt;</td>
@@ -223,7 +228,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377c62a986c">Size</a> N&gt; </div>
+template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> N&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">using <a class="el" href="struct_sandals_1_1_solution.html">Sandals::Solution</a>&lt; N &gt;::Vector = Eigen::Vector&lt;<a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a>, Eigen::Dynamic&gt;</td>
@@ -231,7 +236,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
       </table>
 </div><div class="memdoc">
 
-<p>Templetized matrix type. </p>
+<p>Templetized vector type. </p>
 
 </div>
 </div>
@@ -242,7 +247,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377c62a986c">Size</a> N&gt; </div>
+template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> N&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -260,8 +265,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p>Default class constructor for the <a class="el" href="struct_sandals_1_1_solution.html">Solution</a> class. </p>
+<p>Default class constructor for the <a class="el" href="struct_sandals_1_1_solution.html" title="Class container for the numerical solution of a system of ODEs/DAEs.">Solution</a> class. </p>
 
 </div>
 </div>
@@ -271,7 +275,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377c62a986c">Size</a> N&gt; </div>
+template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> N&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -279,7 +283,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
         <tr>
           <td class="memname"><a class="el" href="struct_sandals_1_1_solution.html">Sandals::Solution</a>&lt; N &gt;::Solution </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377c62a986c">Size</a></td>          <td class="paramname"><span class="paramname"><em>size</em></span></td><td>)</td>
+          <td class="paramtype"><a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a></td>          <td class="paramname"><span class="paramname"><em>size</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -289,9 +293,9 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Class constructor for the <a class="el" href="struct_sandals_1_1_solution.html">Solution</a> class given the time and states sizes. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Class constructor for the <a class="el" href="struct_sandals_1_1_solution.html" title="Class container for the numerical solution of a system of ODEs/DAEs.">Solution</a> class given the time and states sizes. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">size</td><td>The size of the time and states vectors. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">size</td><td>The size of the time vector and states matrix. </td></tr>
   </table>
   </dd>
 </dl>
@@ -305,7 +309,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377c62a986c">Size</a> N&gt; </div>
+template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> N&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -323,8 +327,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p>Clear the time and states vectors. </p>
+<p>Clear the time vector and states matrix. </p>
 
 </div>
 </div>
@@ -334,7 +337,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377c62a986c">Size</a> N&gt; </div>
+template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> N&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -342,7 +345,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
         <tr>
           <td class="memname">void <a class="el" href="struct_sandals_1_1_solution.html">Sandals::Solution</a>&lt; N &gt;::conservative_resize </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377c62a986c">Size</a></td>          <td class="paramname"><span class="paramname"><em>size</em></span></td><td>)</td>
+          <td class="paramtype"><a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a></td>          <td class="paramname"><span class="paramname"><em>size</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -352,9 +355,9 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Resize conserving the data of the time and states vectors. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Resize conserving the data of the time vector and states matrix. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">size</td><td>The size of the time and states vectors. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">size</td><td>The size of the time vector and states matrix. </td></tr>
   </table>
   </dd>
 </dl>
@@ -367,13 +370,13 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377c62a986c">Size</a> N&gt; </div>
+template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> N&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::map&lt; <a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377c62a986c">Size</a>, <a class="el" href="#a21927532bc20e55229991d4a3bd31aa1">Vector</a> &gt; <a class="el" href="struct_sandals_1_1_solution.html">Sandals::Solution</a>&lt; N &gt;::eig_states </td>
+          <td class="memname">std::map&lt; <a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a>, <a class="el" href="#a21927532bc20e55229991d4a3bd31aa1">Vector</a> &gt; <a class="el" href="struct_sandals_1_1_solution.html">Sandals::Solution</a>&lt; N &gt;::eig_states </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td> const</td>
@@ -385,7 +388,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Get a map of the states vectors as Eigen vectors. </p><dl class="section return"><dt>Returns</dt><dd>A map of the states vectors as Eigen vectors. </dd></dl>
+<p>Get a map of the states vectors as Eigen library vectors. </p><dl class="section return"><dt>Returns</dt><dd>A map of the states vectors as Eigen library vectors. </dd></dl>
 
 </div>
 </div>
@@ -395,7 +398,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377c62a986c">Size</a> N&gt; </div>
+template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> N&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -413,13 +416,13 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Get a map of the states vectors as Eigen vectors. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Get a map of the states vectors as Eigen library vectors. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">names</td><td>The names of the states vectors. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">names</td><td>The names of the states vectors. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>A map of the states vectors as Eigen vectors. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>A map of the states vectors as Eigen library vectors. </dd></dl>
 
 </div>
 </div>
@@ -429,7 +432,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377c62a986c">Size</a> N&gt; </div>
+template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> N&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -447,7 +450,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Check if the time and states vectors are empty. </p><dl class="section return"><dt>Returns</dt><dd>True if the time and states vectors are empty, false otherwise. </dd></dl>
+<p>Check if the time vector and states matrix are empty. </p><dl class="section return"><dt>Returns</dt><dd>True if the time vector and states matrix are empty, false otherwise. </dd></dl>
 
 </div>
 </div>
@@ -457,7 +460,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377c62a986c">Size</a> N&gt; </div>
+template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> N&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -465,7 +468,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
         <tr>
           <td class="memname">void <a class="el" href="struct_sandals_1_1_solution.html">Sandals::Solution</a>&lt; N &gt;::resize </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377c62a986c">Size</a></td>          <td class="paramname"><span class="paramname"><em>size</em></span></td><td>)</td>
+          <td class="paramtype"><a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a></td>          <td class="paramname"><span class="paramname"><em>size</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -475,9 +478,9 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Resize the time and states vectors. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Resize the time vector and states matrix. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">size</td><td>The size of the time and states vectors. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">size</td><td>The size of the time vector and states matrix. </td></tr>
   </table>
   </dd>
 </dl>
@@ -490,13 +493,13 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377c62a986c">Size</a> N&gt; </div>
+template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> N&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377c62a986c">Size</a> <a class="el" href="struct_sandals_1_1_solution.html">Sandals::Solution</a>&lt; N &gt;::size </td>
+          <td class="memname"><a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> <a class="el" href="struct_sandals_1_1_solution.html">Sandals::Solution</a>&lt; N &gt;::size </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td> const</td>
@@ -508,7 +511,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Get the size of the time and states vectors. </p><dl class="section return"><dt>Returns</dt><dd>The size of the time and states vectors. </dd></dl>
+<p>Get the size of the time vector and states matrix. </p><dl class="section return"><dt>Returns</dt><dd>The size of the time vector and states matrix. </dd></dl>
 
 </div>
 </div>
@@ -518,7 +521,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377c62a986c">Size</a> N&gt; </div>
+template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> N&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -526,7 +529,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
         <tr>
           <td class="memname">std::vector&lt; <a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> &gt; <a class="el" href="struct_sandals_1_1_solution.html">Sandals::Solution</a>&lt; N &gt;::std_state </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377c62a986c">Size</a></td>          <td class="paramname"><span class="paramname"><em>i</em></span></td><td>)</td>
+          <td class="paramtype"><a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a></td>          <td class="paramname"><span class="paramname"><em>i</em></span></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
@@ -536,13 +539,13 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Get the states i-th state vector as a standard vector. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Get the states i-th state vector as a standard library vector. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">i</td><td>The index of the state vector. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">i</td><td>The index of the state vector. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The states i-th state vector as a standard vector. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The states i-th state vector as a standard library vector. </dd></dl>
 
 </div>
 </div>
@@ -552,13 +555,13 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377c62a986c">Size</a> N&gt; </div>
+template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> N&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::map&lt; <a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377c62a986c">Size</a>, std::vector&lt; <a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> &gt; &gt; <a class="el" href="struct_sandals_1_1_solution.html">Sandals::Solution</a>&lt; N &gt;::std_states </td>
+          <td class="memname">std::map&lt; <a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a>, std::vector&lt; <a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> &gt; &gt; <a class="el" href="struct_sandals_1_1_solution.html">Sandals::Solution</a>&lt; N &gt;::std_states </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td> const</td>
@@ -570,7 +573,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Get a map of the states vectors as standard vectors. </p><dl class="section return"><dt>Returns</dt><dd>A map of the states vectors as standard vectors. </dd></dl>
+<p>Get a map of the states vectors as standard library vectors. </p><dl class="section return"><dt>Returns</dt><dd>A map of the states vectors as standard library vectors. </dd></dl>
 
 </div>
 </div>
@@ -580,7 +583,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377c62a986c">Size</a> N&gt; </div>
+template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> N&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -600,7 +603,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
 </div><div class="memdoc">
 <p>Get a map of the states vectors as standard vectors. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">names</td><td>The names of the states vectors. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">names</td><td>The names of the states vectors. </td></tr>
   </table>
   </dd>
 </dl>
@@ -614,7 +617,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377c62a986c">Size</a> N&gt; </div>
+template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> N&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -632,7 +635,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Get the time vector as a standard vector. </p><dl class="section return"><dt>Returns</dt><dd>The time vector as a standard vector. </dd></dl>
+<p>Get the time vector as a standard library vector. </p><dl class="section return"><dt>Returns</dt><dd>The time vector as a standard library vector. </dd></dl>
 
 </div>
 </div>
@@ -643,7 +646,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377c62a986c">Size</a> N&gt; </div>
+template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> N&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="#ab5b3c34ede25c90d4f6cbf3290d155c3">Matrix</a> <a class="el" href="struct_sandals_1_1_solution.html">Sandals::Solution</a>&lt; N &gt;::states</td>
@@ -661,7 +664,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377c62a986c">Size</a> N&gt; </div>
+template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> N&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="#a21927532bc20e55229991d4a3bd31aa1">Vector</a> <a class="el" href="struct_sandals_1_1_solution.html">Sandals::Solution</a>&lt; N &gt;::time</td>
@@ -669,7 +672,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
       </table>
 </div><div class="memdoc">
 
-<p>Time vector. </p>
+<p>Time solution vector. </p>
 
 </div>
 </div>

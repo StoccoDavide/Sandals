@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['_7eimplicit_0',['~Implicit',['../class_sandals_1_1_implicit.html#a0be04b05f165ea506dfc5426d6a1c11e',1,'Sandals::Implicit']]]
+  ['update_0',['update',['../class_sandals_1_1_broyden.html#a80b54d0ecd42efea320e6a94571cb3ce',1,'Sandals::Broyden']]]
 ];

@@ -13,9 +13,9 @@ var _sandals_8hh =
     [ "Matrix7", "_sandals_8hh.html#ae280a277c2596f70c7d276c5ee5f03cc", null ],
     [ "Matrix8", "_sandals_8hh.html#a1e42255acf96dfc0cd8f9468edea81a5", null ],
     [ "Matrix9", "_sandals_8hh.html#a7a0240d81b055dba1a6358491cc0fdb8", null ],
-    [ "MatrixD", "_sandals_8hh.html#a2f7ca6468ba46f9b704fd7e725e348f9", null ],
+    [ "MatrixX", "_sandals_8hh.html#a0ee48ca4b7f6f11887cb8c86fc6aca60", null ],
     [ "Real", "_sandals_8hh.html#a14d9a2b6eb039e206089c5dab9f6b977", null ],
-    [ "Size", "_sandals_8hh.html#a8bf4580a4b07792e50c67377c62a986c", null ],
+    [ "Size", "_sandals_8hh.html#a3b675b688cd98c7c58ea7d4425e61777", null ],
     [ "Vector2", "_sandals_8hh.html#ab368752a66add914b967bf189e86d52e", null ],
     [ "Vector3", "_sandals_8hh.html#a675a2e72a56fbacf72053c369c7b3ac2", null ],
     [ "Vector4", "_sandals_8hh.html#a3c882532fe454a5fe79deeea17612526", null ],
@@ -24,5 +24,5 @@ var _sandals_8hh =
     [ "Vector7", "_sandals_8hh.html#adf78d7891044f80c8958a9bf469a5412", null ],
     [ "Vector8", "_sandals_8hh.html#a39355d44dafd596a8434b8ed4a59af9a", null ],
     [ "Vector9", "_sandals_8hh.html#a91fc5f246e5e906c5370c844354f71a8", null ],
-    [ "VectorD", "_sandals_8hh.html#a75e98d2bd0ee215588460f9805212647", null ]
+    [ "VectorX", "_sandals_8hh.html#a080688e002c472e6b23d2028ffe840ea", null ]
 ];

@@ -31,9 +31,9 @@ namespace Sandals
   class RK4Tableau : public Tableau<4>
   {
     public:
-    using Tableau<4>::Type;   //!< Type enumeration.
-    using Tableau<4>::Vector; //!< Vector type.
-    using Tableau<4>::Matrix; //!< Matrix type.
+    using Tableau<4>::Type;   //!< Runge-Kutta type enumeration.
+    using Tableau<4>::Vector; //!< Templetized vector type.
+    using Tableau<4>::Matrix; //!< Templetized matrix type.
 
     //! Class constructor for the RK4 method.
     RK4Tableau() {
@@ -59,12 +59,12 @@ namespace Sandals
     using System = typename Implicit<N>::Pointer; //!< System type.
 
     //! Class constructor for a Runge-Kutta solver given a Tableau reference.
-    //! \param t_tableau The Tableau reference.
+    //! \param[in] t_tableau The Tableau reference.
     RK4() : RungeKutta<4, N>(RK4Tableau()) {}
 
     //! Class constructor for a Runge-Kutta solver given a Tableau reference.
-    //! \param t_tableau The Tableau reference.
-    //! \param t_system The system reference.
+    //! \param[in] t_tableau The Tableau reference.
+    //! \param[in] t_system The system reference.
     RK4(System t_system) : RungeKutta<4, N>(RK4Tableau(), t_system) {}
 
   }; // class RK4
@@ -75,10 +75,10 @@ namespace Sandals
 
 
     //! Check Butcher tableau consistency for an explicit Runge-Kutta method.
-    //! \param tbl.A   Matrix \f$ \mathbf{A} \f$.
-    //! \param tbl.b   Weights vector \f$ \mathbf{b} \f$.
-    //! \param tbl.b_e [optional] Embedded weights vector \f$ \mathbf{b}_{e} \f$.
-    //! \param tbl.c   Nodes vector \f$ \mathbf{c} \f$.
+    //! \param[in] tbl.A   Matrix \f$ \mathbf{A} \f$.
+    //! \param[in] tbl.b   Weights vector \f$ \mathbf{b} \f$.
+    //! \param[in] tbl.b_e [optional] Embedded weights vector \f$ \mathbf{b}_{e} \f$.
+    //! \param[in] tbl.c   Nodes vector \f$ \mathbf{c} \f$.
     //! \return True if the Butcher tableau is consistent, false otherwise.
     //[out,order,e_order] = check_tableau( this, tbl )
 
@@ -86,7 +86,7 @@ namespace Sandals
     //! *A family of embedded Runge-Kutta formulae*, J. R. Dormand and P. J. Prince,
     //! Journal of Computational and Applied Mathematics, volume 6(1), 1980.
     //! Doi: [10.1016/0771-0509(80)90013-3](https://doi.org/10.1016/0771-0509(80)90013-3)
-    //! \param tableau The Runge-Kutta tableau to be checked.
+    //! \param[in] tableau The Runge-Kutta tableau to be checked.
     //! \return The order of the Runge-Kutta tableau.
     /*Size tableau_order(matS const &A, vecS const &b, vecS const &c) const
     {

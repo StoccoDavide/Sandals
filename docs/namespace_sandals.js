@@ -3,6 +3,7 @@ var namespace_sandals =
     [ "Broyden", "class_sandals_1_1_broyden.html", "class_sandals_1_1_broyden" ],
     [ "Explicit", "class_sandals_1_1_explicit.html", "class_sandals_1_1_explicit" ],
     [ "Implicit", "class_sandals_1_1_implicit.html", "class_sandals_1_1_implicit" ],
+    [ "Linear", "class_sandals_1_1_linear.html", "class_sandals_1_1_linear" ],
     [ "Newton", "class_sandals_1_1_newton.html", "class_sandals_1_1_newton" ],
     [ "NonlinearSolver", "class_sandals_1_1_nonlinear_solver.html", "class_sandals_1_1_nonlinear_solver" ],
     [ "RK4", "class_sandals_1_1_r_k4.html", "class_sandals_1_1_r_k4" ],
@@ -19,9 +20,9 @@ var namespace_sandals =
     [ "Matrix7", "namespace_sandals.html#ae280a277c2596f70c7d276c5ee5f03cc", null ],
     [ "Matrix8", "namespace_sandals.html#a1e42255acf96dfc0cd8f9468edea81a5", null ],
     [ "Matrix9", "namespace_sandals.html#a7a0240d81b055dba1a6358491cc0fdb8", null ],
-    [ "MatrixD", "namespace_sandals.html#a2f7ca6468ba46f9b704fd7e725e348f9", null ],
+    [ "MatrixX", "namespace_sandals.html#a0ee48ca4b7f6f11887cb8c86fc6aca60", null ],
     [ "Real", "namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977", null ],
-    [ "Size", "namespace_sandals.html#a8bf4580a4b07792e50c67377c62a986c", null ],
+    [ "Size", "namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777", null ],
     [ "Vector2", "namespace_sandals.html#ab368752a66add914b967bf189e86d52e", null ],
     [ "Vector3", "namespace_sandals.html#a675a2e72a56fbacf72053c369c7b3ac2", null ],
     [ "Vector4", "namespace_sandals.html#a3c882532fe454a5fe79deeea17612526", null ],
@@ -30,5 +31,5 @@ var namespace_sandals =
     [ "Vector7", "namespace_sandals.html#adf78d7891044f80c8958a9bf469a5412", null ],
     [ "Vector8", "namespace_sandals.html#a39355d44dafd596a8434b8ed4a59af9a", null ],
     [ "Vector9", "namespace_sandals.html#a91fc5f246e5e906c5370c844354f71a8", null ],
-    [ "VectorD", "namespace_sandals.html#a75e98d2bd0ee215588460f9805212647", null ]
+    [ "VectorX", "namespace_sandals.html#a080688e002c472e6b23d2028ffe840ea", null ]
 ];

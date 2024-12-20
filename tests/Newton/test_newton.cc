@@ -114,14 +114,14 @@ TEST(Newton, RosenbrockND) {
         Vector x_out = Vector::Zero();
         auto fun = [a, b, D](Vector const & X, Vector & F) {
           F(0) = a*(1 - X(0));
-          for (Size i = 1; i < D; ++i) {
+          for (std::size_t i = 1; i < D; ++i) {
             F(i) = b*(X(i) - X(i-1)*X(i-1));
           }
         };
         auto jac = [a, b, D](Vector const & X, Matrix & JF) {
           JF.setZero();
           JF(0, 0) = -a;
-          for (Size i = 1; i < D; ++i) {
+          for (std::size_t i = 1; i < D; ++i) {
             JF(i, i)   = b;
             JF(i, i-1) = -2*b*X(i-1);
           }

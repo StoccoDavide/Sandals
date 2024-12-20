@@ -45,7 +45,7 @@ namespace Sandals
   //! \left\| \mathbf{h} \right\| \text{.} \f]
   //!
   //! For more details on the Newton's method with affine invariant step refer to the references
-  //! in \link https://www.zib.de/deuflhard/research/algorithm/ainewton.en.html this link \endlink.
+  //! in [this link](https://www.zib.de/deuflhard/research/algorithm/ainewton.en.html).
   template <Size N>
   class Newton : public NonlinearSolver<N>
   {
@@ -95,6 +95,8 @@ namespace Sandals
 
         // Calculate step
         this->m_lu.compute(jacobian);
+        SANDALS_ASSERT(this->m_lu.rank() == N,
+          "Sandals:Newton::solve(...): singular Jacobian detected.");
         step = -this->m_lu.solve(function);
 
         // Check convergence
@@ -146,6 +148,8 @@ namespace Sandals
 
         // Calculate step
         this->m_lu.compute(jacobian);
+        SANDALS_ASSERT(this->m_lu.rank() == N,
+          "Sandals:Newton::solve_damped(...): singular Jacobian detected.");
         step_old = -this->m_lu.solve(function_old);
 
         // Check convergence

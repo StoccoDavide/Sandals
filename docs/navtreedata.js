@@ -44,7 +44,7 @@ var NAVTREE =
       [ "Class Index", "classes.html", null ],
       [ "Class Hierarchy", "hierarchy.html", "hierarchy" ],
       [ "Class Members", "functions.html", [
-        [ "All", "functions.html", null ],
+        [ "All", "functions.html", "functions_dup" ],
         [ "Functions", "functions_func.html", null ],
         [ "Variables", "functions_vars.html", null ],
         [ "Typedefs", "functions_type.html", null ]
@@ -63,7 +63,8 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "_broyden_8hxx.html",
-"class_sandals_1_1_nonlinear_solver.html#afa043950d7d07db2b48a257d1ed6a40d"
+"class_sandals_1_1_nonlinear_solver.html#a7d305af90bef717e8570ccb047be7eef",
+"namespace_sandals.html#a675a2e72a56fbacf72053c369c7b3ac2"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

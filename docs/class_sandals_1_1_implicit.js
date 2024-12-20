@@ -2,7 +2,7 @@ var class_sandals_1_1_implicit =
 [
     [ "Matrix", "class_sandals_1_1_implicit.html#ad89d224f9332cacdbd33d8af558771b0", null ],
     [ "Pointer", "class_sandals_1_1_implicit.html#a896083964a3b4b98c44355fd0b274ded", null ],
-    [ "Type", "class_sandals_1_1_implicit.html#a4a703a4ef132e52f30c6682a9d4eb6fa", null ],
+    [ "Type", "class_sandals_1_1_implicit.html#a82ff44cd39c131af29bcb4d3e93aeedc", null ],
     [ "Vector", "class_sandals_1_1_implicit.html#aced7bfc952f91abd2f5a1d3e347eee51", null ],
     [ "Implicit", "class_sandals_1_1_implicit.html#aef91069ab70bb5393ee249a2a56710ee", null ],
     [ "Implicit", "class_sandals_1_1_implicit.html#a1dd0fca49bb668559d413cf3d4d34978", null ],
@@ -17,5 +17,6 @@ var class_sandals_1_1_implicit =
     [ "JF_x", "class_sandals_1_1_implicit.html#a21d054e88f4c441f6fa57d07eb1bdab1", null ],
     [ "JF_x_dot", "class_sandals_1_1_implicit.html#a6a63e2e693bfcb59d2fb984c57c17ad9", null ],
     [ "name", "class_sandals_1_1_implicit.html#a20f13990727203eabf009dda1821be19", null ],
-    [ "name", "class_sandals_1_1_implicit.html#affc87247b85c1ca993d39f0167f35091", null ]
+    [ "name", "class_sandals_1_1_implicit.html#affc87247b85c1ca993d39f0167f35091", null ],
+    [ "type", "class_sandals_1_1_implicit.html#a22c6e8a2ba6b4c7fa1c18eadb03bd14c", null ]
 ];

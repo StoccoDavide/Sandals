@@ -1,7 +1,9 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$class_sandals_1_1_implicit.html" title="Class container for the system of implicit ODEs/DAEs." alt="" coords="5,31,158,56"/>
+<area shape="rect" id="Node000000" href="$class_sandals_1_1_implicit.html" title="Class container for the system of implicit ODEs/DAEs." alt="" coords="5,55,158,80"/>
 <area shape="rect" id="Node000001" href="$class_sandals_1_1_explicit.html" title="Class container for the system of explicit ODEs." alt="" coords="221,5,374,31"/>
-<area shape="poly" id="edge1_Node000000_Node000001" title=" " alt="" coords="173,30,220,25,220,30,173,35"/>
-<area shape="rect" id="Node000002" href="$class_sandals_1_1_semi_explicit.html" title="Class container for the system of explicit ODEs." alt="" coords="206,55,389,80"/>
-<area shape="poly" id="edge2_Node000000_Node000002" title=" " alt="" coords="174,51,205,55,205,60,173,56"/>
+<area shape="poly" id="edge1_Node000000_Node000001" title=" " alt="" coords="155,48,237,29,238,34,157,53"/>
+<area shape="rect" id="Node000002" href="$class_sandals_1_1_linear.html" title="Class container for the system of linear ODEs/DAEs." alt="" coords="225,55,370,80"/>
+<area shape="poly" id="edge2_Node000000_Node000002" title=" " alt="" coords="173,65,224,65,224,70,173,70"/>
+<area shape="rect" id="Node000003" href="$class_sandals_1_1_semi_explicit.html" title="Class container for the system of explicit ODEs/DAEs." alt="" coords="206,104,389,130"/>
+<area shape="poly" id="edge3_Node000000_Node000003" title=" " alt="" coords="157,82,238,101,237,106,155,87"/>
 </map>

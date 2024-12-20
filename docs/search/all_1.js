@@ -5,5 +5,6 @@ var searchData=
   ['b_5fembedded_2',['b_embedded',['../class_sandals_1_1_runge_kutta.html#a8e87a3c6c139f000664c1778030e8224',1,'Sandals::RungeKutta']]],
   ['broyden_3',['Broyden',['../class_sandals_1_1_broyden.html',1,'Sandals::Broyden&lt; N &gt;'],['../class_sandals_1_1_broyden.html#af8cc4048861199086435613fd00fe434',1,'Sandals::Broyden::Broyden()']]],
   ['broyden_2ehxx_4',['Broyden.hxx',['../_broyden_8hxx.html',1,'']]],
-  ['build_5',['Build',['../index.html#autotoc_md3',1,'']]]
+  ['broyden_3c_20n_20_2as_20_3e_5',['Broyden&lt; N *S &gt;',['../class_sandals_1_1_broyden.html',1,'Sandals']]],
+  ['build_6',['Build',['../index.html#autotoc_md3',1,'']]]
 ];

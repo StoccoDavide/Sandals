@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['rk_5ftype_0',['rk_type',['../struct_sandals_1_1_tableau.html#a67540bc8844d05337bd37559870c95d6',1,'Sandals::Tableau']]]
+  ['states_0',['states',['../struct_sandals_1_1_solution.html#a625d18e8ef2d1b35ca0faafb57f26326',1,'Sandals::Solution']]]
 ];

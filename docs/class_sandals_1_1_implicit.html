@@ -18,7 +18,7 @@
 <!-- END twitter metadata -->
 <title>Sandals: Sandals::Implicit&lt; N &gt; Class Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
-<link rel="icon" type="image/svg+xml" href="logo.jpg"/>
+<link rel="icon" type="image/svg+xml" href="logo.png"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
 <script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
@@ -152,10 +152,13 @@ $(function(){initNavTree('class_sandals_1_1_implicit.html',''); initResizable(tr
 
 <p><code>#include &lt;<a class="el" href="_implicit_8hxx_source.html">Implicit.hxx</a>&gt;</code></p>
 
-<p>Inherited by <a class="el" href="class_sandals_1_1_explicit.html">Sandals::Explicit&lt; N &gt;</a>, and <a class="el" href="class_sandals_1_1_semi_explicit.html">Sandals::SemiExplicit&lt; N &gt;</a>.</p>
+<p>Inherited by <a class="el" href="class_sandals_1_1_explicit.html">Sandals::Explicit&lt; N &gt;</a>, <a class="el" href="class_sandals_1_1_linear.html">Sandals::Linear&lt; N &gt;</a>, and <a class="el" href="class_sandals_1_1_semi_explicit.html">Sandals::SemiExplicit&lt; N &gt;</a>.</p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
 Public Types</h2></td></tr>
+<tr class="memitem:a82ff44cd39c131af29bcb4d3e93aeedc" id="r_a82ff44cd39c131af29bcb4d3e93aeedc"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a82ff44cd39c131af29bcb4d3e93aeedc">Type</a> = enum class <a class="el" href="#a82ff44cd39c131af29bcb4d3e93aeedc">Type</a> : <a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> {IMPLICIT=0, EXPLICIT=1, SEMI_EXPLICIT=2, LINEAR=3}</td></tr>
+<tr class="memdesc:a82ff44cd39c131af29bcb4d3e93aeedc"><td class="mdescLeft">&#160;</td><td class="mdescRight">System type enumeration.  <br /></td></tr>
+<tr class="separator:a82ff44cd39c131af29bcb4d3e93aeedc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a896083964a3b4b98c44355fd0b274ded" id="r_a896083964a3b4b98c44355fd0b274ded"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a896083964a3b4b98c44355fd0b274ded">Pointer</a> = std::shared_ptr&lt;<a class="el" href="class_sandals_1_1_implicit.html">Implicit</a>&lt;N&gt;&gt;</td></tr>
 <tr class="memdesc:a896083964a3b4b98c44355fd0b274ded"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shared pointer to an implicit ODE system.  <br /></td></tr>
 <tr class="separator:a896083964a3b4b98c44355fd0b274ded"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -165,9 +168,6 @@ Public Types</h2></td></tr>
 <tr class="memitem:ad89d224f9332cacdbd33d8af558771b0" id="r_ad89d224f9332cacdbd33d8af558771b0"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad89d224f9332cacdbd33d8af558771b0">Matrix</a> = Eigen::Matrix&lt;<a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a>, N, N&gt;</td></tr>
 <tr class="memdesc:ad89d224f9332cacdbd33d8af558771b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Templetized matrix type.  <br /></td></tr>
 <tr class="separator:ad89d224f9332cacdbd33d8af558771b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4a703a4ef132e52f30c6682a9d4eb6fa" id="r_a4a703a4ef132e52f30c6682a9d4eb6fa"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4a703a4ef132e52f30c6682a9d4eb6fa">Type</a></td></tr>
-<tr class="memdesc:a4a703a4ef132e52f30c6682a9d4eb6fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">ODE system type enumeration.  <br /></td></tr>
-<tr class="separator:a4a703a4ef132e52f30c6682a9d4eb6fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -176,8 +176,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ad146b3b9d9a0be4f102991b400617211" id="r_ad146b3b9d9a0be4f102991b400617211"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad146b3b9d9a0be4f102991b400617211">Implicit</a> (std::string t_name)</td></tr>
 <tr class="separator:ad146b3b9d9a0be4f102991b400617211"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0be04b05f165ea506dfc5426d6a1c11e" id="r_a0be04b05f165ea506dfc5426d6a1c11e"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0be04b05f165ea506dfc5426d6a1c11e">~Implicit</a> ()</td></tr>
-<tr class="memdesc:a0be04b05f165ea506dfc5426d6a1c11e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Class destructor for an implicit ODE system.  <br /></td></tr>
 <tr class="separator:a0be04b05f165ea506dfc5426d6a1c11e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22c6e8a2ba6b4c7fa1c18eadb03bd14c" id="r_a22c6e8a2ba6b4c7fa1c18eadb03bd14c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a82ff44cd39c131af29bcb4d3e93aeedc">Type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a22c6e8a2ba6b4c7fa1c18eadb03bd14c">type</a> () const</td></tr>
+<tr class="separator:a22c6e8a2ba6b4c7fa1c18eadb03bd14c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3b9e3a7f81292a9d724b58b2135ba6ce" id="r_a3b9e3a7f81292a9d724b58b2135ba6ce"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3b9e3a7f81292a9d724b58b2135ba6ce">is_implicit</a> () const</td></tr>
 <tr class="separator:a3b9e3a7f81292a9d724b58b2135ba6ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a403926bf070e0a1a0c086501a309e6b4" id="r_a403926bf070e0a1a0c086501a309e6b4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a403926bf070e0a1a0c086501a309e6b4">is_explicit</a> () const</td></tr>
@@ -188,7 +189,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a20f13990727203eabf009dda1821be19"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:affc87247b85c1ca993d39f0167f35091" id="r_affc87247b85c1ca993d39f0167f35091"><td class="memItemLeft" align="right" valign="top">std::string const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#affc87247b85c1ca993d39f0167f35091">name</a> () const</td></tr>
 <tr class="separator:affc87247b85c1ca993d39f0167f35091"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa7157af3e5c025dd773975161e703fba" id="r_aa7157af3e5c025dd773975161e703fba"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377c62a986c">Size</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa7157af3e5c025dd773975161e703fba">dimension</a> () const</td></tr>
+<tr class="memitem:aa7157af3e5c025dd773975161e703fba" id="r_aa7157af3e5c025dd773975161e703fba"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa7157af3e5c025dd773975161e703fba">dimension</a> () const</td></tr>
 <tr class="separator:aa7157af3e5c025dd773975161e703fba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a41882355c011c0fd0bac84c583ac766d" id="r_a41882355c011c0fd0bac84c583ac766d"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="#aced7bfc952f91abd2f5a1d3e347eee51">Vector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a41882355c011c0fd0bac84c583ac766d">F</a> (<a class="el" href="#aced7bfc952f91abd2f5a1d3e347eee51">Vector</a> const &amp;x, <a class="el" href="#aced7bfc952f91abd2f5a1d3e347eee51">Vector</a> const &amp;x_dot, <a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> t) const =0</td></tr>
 <tr class="separator:a41882355c011c0fd0bac84c583ac766d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -201,12 +202,11 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-methods" name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr class="memitem:aef91069ab70bb5393ee249a2a56710ee" id="r_aef91069ab70bb5393ee249a2a56710ee"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aef91069ab70bb5393ee249a2a56710ee">Implicit</a> (<a class="el" href="#a4a703a4ef132e52f30c6682a9d4eb6fa">Type</a> t_type, std::string t_name)</td></tr>
-<tr class="memdesc:aef91069ab70bb5393ee249a2a56710ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Name of the ODE system.  <br /></td></tr>
+<tr class="memitem:aef91069ab70bb5393ee249a2a56710ee" id="r_aef91069ab70bb5393ee249a2a56710ee"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aef91069ab70bb5393ee249a2a56710ee">Implicit</a> (<a class="el" href="#a82ff44cd39c131af29bcb4d3e93aeedc">Type</a> t_type, std::string t_name)</td></tr>
 <tr class="separator:aef91069ab70bb5393ee249a2a56710ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><div class="compoundTemplParams">template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377c62a986c">Size</a> N&gt;<br />
+<div class="textblock"><div class="compoundTemplParams">template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> N&gt;<br />
 class Sandals::Implicit&lt; N &gt;</div><p>Class container for the system of implicit ODEs/DAEs. </p>
 <p>Class container for the system of inplicit ordinary differential equations (ODEs) or differential algebraic equations (DAEs) of the type  \( \mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, t) =
 \mathbf{0} \). </p>
@@ -217,7 +217,7 @@ class Sandals::Implicit&lt; N &gt;</div><p>Class container for the system of imp
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377c62a986c">Size</a> N&gt; </div>
+template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> N&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">using <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; N &gt;::Matrix = Eigen::Matrix&lt;<a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a>, N, N&gt;</td>
@@ -235,7 +235,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377c62a986c">Size</a> N&gt; </div>
+template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> N&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">using <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; N &gt;::Pointer = std::shared_ptr&lt;<a class="el" href="class_sandals_1_1_implicit.html">Implicit</a>&lt;N&gt;&gt;</td>
@@ -247,26 +247,21 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
 
 </div>
 </div>
-<a id="a4a703a4ef132e52f30c6682a9d4eb6fa" name="a4a703a4ef132e52f30c6682a9d4eb6fa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4a703a4ef132e52f30c6682a9d4eb6fa">&#9670;&#160;</a></span>Type</h2>
+<a id="a82ff44cd39c131af29bcb4d3e93aeedc" name="a82ff44cd39c131af29bcb4d3e93aeedc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a82ff44cd39c131af29bcb4d3e93aeedc">&#9670;&#160;</a></span>Type</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377c62a986c">Size</a> N&gt; </div>
+template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> N&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; N &gt;::Type</td>
+          <td class="memname">using <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; N &gt;::Type = enum class <a class="el" href="#a82ff44cd39c131af29bcb4d3e93aeedc">Type</a> : <a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> {IMPLICIT=0, EXPLICIT=1, SEMI_EXPLICIT=2, LINEAR=3}</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line"> <span class="keyword">enum class</span> <a class="code hl_typedef" href="#a4a703a4ef132e52f30c6682a9d4eb6fa">Type</a> : <a class="code hl_typedef" href="namespace_sandals.html#a8bf4580a4b07792e50c67377c62a986c">Size</a> {</div>
-<div class="line">      IMPLICIT = 0, EXPLICIT = 1, SEMI_EXPLICIT = 2</div>
-<div class="line">    }</div>
-<div class="ttc" id="aclass_sandals_1_1_implicit_html_a4a703a4ef132e52f30c6682a9d4eb6fa"><div class="ttname"><a href="#a4a703a4ef132e52f30c6682a9d4eb6fa">Sandals::Implicit::Type</a></div><div class="ttdeci">enum class Type :Size { IMPLICIT=0, EXPLICIT=1, SEMI_EXPLICIT=2 } Type</div><div class="ttdoc">ODE system type enumeration.</div><div class="ttdef"><b>Definition</b> Implicit.hxx:31</div></div>
-<div class="ttc" id="anamespace_sandals_html_a8bf4580a4b07792e50c67377c62a986c"><div class="ttname"><a href="namespace_sandals.html#a8bf4580a4b07792e50c67377c62a986c">Sandals::Size</a></div><div class="ttdeci">unsigned Size</div><div class="ttdoc">Size number type.</div><div class="ttdef"><b>Definition</b> Sandals.hh:73</div></div>
-</div><!-- fragment -->
-<p>ODE system type enumeration. </p>
+
+<p>System type enumeration. </p>
 
 </div>
 </div>
@@ -276,7 +271,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377c62a986c">Size</a> N&gt; </div>
+template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> N&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">using <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; N &gt;::Vector = Eigen::Vector&lt;<a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a>, N&gt;</td>
@@ -295,7 +290,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377c62a986c">Size</a> N&gt; </div>
+template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> N&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -303,7 +298,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
         <tr>
           <td class="memname"><a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; N &gt;::Implicit </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="#a4a703a4ef132e52f30c6682a9d4eb6fa">Type</a></td>          <td class="paramname"><span class="paramname"><em>t_type</em></span>, </td>
+          <td class="paramtype"><a class="el" href="#a82ff44cd39c131af29bcb4d3e93aeedc">Type</a></td>          <td class="paramname"><span class="paramname"><em>t_type</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -317,12 +312,10 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p>Name of the ODE system. </p>
-<p>Class constructor for an implicit ODE system. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Class constructor for an implicit ODE/DAE system. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">t_type</td><td>The type of the implicit ODE system. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">t_name</td><td>The name of the implicit ODE system. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">t_type</td><td>The type of the implicit ODE/DAE system. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">t_name</td><td>The name of the implicit ODE/DAE system. </td></tr>
   </table>
   </dd>
 </dl>
@@ -335,7 +328,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377c62a986c">Size</a> N&gt; </div>
+template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> N&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -353,7 +346,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Default class constructor for an implicit ODE system. </p>
+<p>Default class constructor for an implicit ODE/DAE system. </p>
 
 </div>
 </div>
@@ -363,7 +356,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377c62a986c">Size</a> N&gt; </div>
+template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> N&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -381,9 +374,9 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Class constructor for an implicit ODE system. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Class constructor for an implicit ODE/DAE system. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">t_name</td><td>The name of the implicit ODE system. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">t_name</td><td>The name of the implicit ODE/DAE system. </td></tr>
   </table>
   </dd>
 </dl>
@@ -396,7 +389,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377c62a986c">Size</a> N&gt; </div>
+template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> N&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -414,8 +407,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p>Class destructor for an implicit ODE system. </p>
+<p>Class destructor for an implicit ODE/DAE system. </p>
 
 </div>
 </div>
@@ -426,13 +418,13 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377c62a986c">Size</a> N&gt; </div>
+template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> N&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377c62a986c">Size</a> <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; N &gt;::dimension </td>
+          <td class="memname"><a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; N &gt;::dimension </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td> const</td>
@@ -444,7 +436,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Get the number of equations of the ODE system. </p><dl class="section return"><dt>Returns</dt><dd>The number of equations of the ODE system. </dd></dl>
+<p>Get the number of equations of the ODE/DAE system. </p><dl class="section return"><dt>Returns</dt><dd>The number of equations of the ODE/DAE system. </dd></dl>
 
 </div>
 </div>
@@ -454,7 +446,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377c62a986c">Size</a> N&gt; </div>
+template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> N&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -481,7 +473,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Evaluate the ODE system \( \mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, t) \). </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Evaluate the ODE/DAE system \( \mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, t) \). </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>States \( \mathbf{x} \). </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">x_dot</td><td>States derivative \( \mathbf{x}^{\prime} \). </td></tr>
@@ -491,7 +483,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The system function \( \mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, t) \). </dd></dl>
 
-<p>Implemented in <a class="el" href="class_sandals_1_1_explicit.html#abeac89a21ea1ca8b36b22e4db612d2f7">Sandals::Explicit&lt; N &gt;</a>, and <a class="el" href="class_sandals_1_1_semi_explicit.html#aa4415c924f58ecb283141d1922c33696">Sandals::SemiExplicit&lt; N &gt;</a>.</p>
+<p>Implemented in <a class="el" href="class_sandals_1_1_explicit.html#abeac89a21ea1ca8b36b22e4db612d2f7">Sandals::Explicit&lt; N &gt;</a>, <a class="el" href="class_sandals_1_1_linear.html#a8e9de614ff5c05a344378eb2bef507c5">Sandals::Linear&lt; N &gt;</a>, and <a class="el" href="class_sandals_1_1_semi_explicit.html#aa4415c924f58ecb283141d1922c33696">Sandals::SemiExplicit&lt; N &gt;</a>.</p>
 
 </div>
 </div>
@@ -501,7 +493,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377c62a986c">Size</a> N&gt; </div>
+template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> N&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -523,14 +515,14 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Return true if the values \( \mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, t) \) is in the domain of the ODE system. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Return true if the values \( \mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, t) \) is in the domain of the ODE/DAE system. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>States \( \mathbf{x} \). </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">t</td><td>Independent variable \( t \). </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>True if \( \mathbf{F}(\mathbf{x}, t) \) is in the domain of the ODE system. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>True if \( \mathbf{F}(\mathbf{x}, t) \) is in the domain of the ODE/DAE system. </dd></dl>
 
 </div>
 </div>
@@ -540,7 +532,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377c62a986c">Size</a> N&gt; </div>
+template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> N&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -558,7 +550,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Check if the ODE system is explicit. </p><dl class="section return"><dt>Returns</dt><dd>True if the ODE system is explicit, false otherwise. </dd></dl>
+<p>Check if the ODE/DAE system is explicit. </p><dl class="section return"><dt>Returns</dt><dd>True if the ODE/DAE system is explicit, false otherwise. </dd></dl>
 
 </div>
 </div>
@@ -568,7 +560,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377c62a986c">Size</a> N&gt; </div>
+template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> N&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -586,7 +578,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Check if the ODE system is implicit. </p><dl class="section return"><dt>Returns</dt><dd>True if the ODE system is implicit, false otherwise. </dd></dl>
+<p>Check if the ODE/DAE system is implicit. </p><dl class="section return"><dt>Returns</dt><dd>True if the ODE/DAE system is implicit, false otherwise. </dd></dl>
 
 </div>
 </div>
@@ -596,7 +588,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377c62a986c">Size</a> N&gt; </div>
+template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> N&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -614,7 +606,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Check if the ODE system is semi-explicit. </p><dl class="section return"><dt>Returns</dt><dd>True if the ODE system is semi-explicit, false otherwise. </dd></dl>
+<p>Check if the ODE/DAE system is semi-explicit. </p><dl class="section return"><dt>Returns</dt><dd>True if the ODE/DAE system is semi-explicit, false otherwise. </dd></dl>
 
 </div>
 </div>
@@ -624,7 +616,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377c62a986c">Size</a> N&gt; </div>
+template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> N&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -651,8 +643,8 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Evaluate the Jacobian of the ODE system function  \( \mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime},
-t) \) with respect to the states \( \mathbf{x} \)</p>
+<p>Evaluate the Jacobian of the ODE/DAE system function  \( \mathbf{F}(\mathbf{x},
+\mathbf{x}^{\prime}, t) \) with respect to the states \( \mathbf{x} \)</p>
 <p class="formulaDsp">
 \[ \mathbf{JF}_{\mathbf{x}}(\mathbf{x}, \mathbf{x}^{\prime}, t) = \displaystyle\frac{
 \partial\mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, t)}{\partial\mathbf{x}} \text{.} \]
@@ -667,7 +659,7 @@ t) \) with respect to the states \( \mathbf{x} \)</p>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The Jacobian \( \mathbf{JF}_{\mathbf{x}}(\mathbf{x}, \mathbf{x}^{\prime}, t) \). </dd></dl>
 
-<p>Implemented in <a class="el" href="class_sandals_1_1_explicit.html#aaef6ee92880d205accfc309eb0f56594">Sandals::Explicit&lt; N &gt;</a>, and <a class="el" href="class_sandals_1_1_semi_explicit.html#ac86677e8d0dca2cfb0b6b53fc3d6d751">Sandals::SemiExplicit&lt; N &gt;</a>.</p>
+<p>Implemented in <a class="el" href="class_sandals_1_1_explicit.html#aaef6ee92880d205accfc309eb0f56594">Sandals::Explicit&lt; N &gt;</a>, <a class="el" href="class_sandals_1_1_linear.html#ab961b3af6a996409b39c02bb613c9aeb">Sandals::Linear&lt; N &gt;</a>, and <a class="el" href="class_sandals_1_1_semi_explicit.html#a1ae699fb9aa8ea0f6a10161f17dad72c">Sandals::SemiExplicit&lt; N &gt;</a>.</p>
 
 </div>
 </div>
@@ -677,7 +669,7 @@ t) \) with respect to the states \( \mathbf{x} \)</p>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377c62a986c">Size</a> N&gt; </div>
+template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> N&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -704,8 +696,8 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Evaluate the Jacobian of the ODE system function  \( \mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime},
-t) \) with respect to the states derivative \( \mathbf{x}^{\prime} \)</p>
+<p>Evaluate the Jacobian of the ODE/DAE system function  \( \mathbf{F}(\mathbf{x},
+\mathbf{x}^{\prime}, t) \) with respect to the states derivative \( \mathbf{x}^{\prime} \)</p>
 <p class="formulaDsp">
 \[ \mathbf{JF}_{\mathbf{x}^{\prime}}(\mathbf{x}, \mathbf{x}^{\prime}, t) = \displaystyle
 \frac{\partial\mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, t)}{\partial\mathbf{x}^{\prime}}
@@ -721,7 +713,7 @@ t) \) with respect to the states derivative \( \mathbf{x}^{\prime} \)</p>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The Jacobian \( \mathbf{JF}_{\mathbf{x}^{\prime}}(\mathbf{x}, \mathbf{x}^{\prime}, t) \). </dd></dl>
 
-<p>Implemented in <a class="el" href="class_sandals_1_1_explicit.html#abc2f2cf5e5afaed6d828f4404ae778de">Sandals::Explicit&lt; N &gt;</a>, and <a class="el" href="class_sandals_1_1_semi_explicit.html#ab4f529f8b70446a38c763befe3c5000b">Sandals::SemiExplicit&lt; N &gt;</a>.</p>
+<p>Implemented in <a class="el" href="class_sandals_1_1_explicit.html#abc2f2cf5e5afaed6d828f4404ae778de">Sandals::Explicit&lt; N &gt;</a>, <a class="el" href="class_sandals_1_1_linear.html#af1e7173c6b99630350d62a9ff7217106">Sandals::Linear&lt; N &gt;</a>, and <a class="el" href="class_sandals_1_1_semi_explicit.html#ab4f529f8b70446a38c763befe3c5000b">Sandals::SemiExplicit&lt; N &gt;</a>.</p>
 
 </div>
 </div>
@@ -731,7 +723,7 @@ t) \) with respect to the states derivative \( \mathbf{x}^{\prime} \)</p>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377c62a986c">Size</a> N&gt; </div>
+template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> N&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -749,7 +741,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Get the ODE system name reference. </p><dl class="section return"><dt>Returns</dt><dd>The ODE system name reference. </dd></dl>
+<p>Get the ODE/DAE system name reference. </p><dl class="section return"><dt>Returns</dt><dd>The ODE/DAE system name reference. </dd></dl>
 
 </div>
 </div>
@@ -759,7 +751,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377c62a986c">Size</a> N&gt; </div>
+template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> N&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -777,7 +769,35 @@ template&lt;<a class="el" href="namespace_sandals.html#a8bf4580a4b07792e50c67377
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Get the ODE system name const reference. </p><dl class="section return"><dt>Returns</dt><dd>The ODE system name const reference. </dd></dl>
+<p>Get the ODE/DAE system name const reference. </p><dl class="section return"><dt>Returns</dt><dd>The ODE/DAE system name const reference. </dd></dl>
+
+</div>
+</div>
+<a id="a22c6e8a2ba6b4c7fa1c18eadb03bd14c" name="a22c6e8a2ba6b4c7fa1c18eadb03bd14c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a22c6e8a2ba6b4c7fa1c18eadb03bd14c">&#9670;&#160;</a></span>type()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> N&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a82ff44cd39c131af29bcb4d3e93aeedc">Type</a> <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; N &gt;::type </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Get the enumeration type of the ODE/DAE system. </p><dl class="section return"><dt>Returns</dt><dd>The enumeration type of the ODE/DAE system. </dd></dl>
 
 </div>
 </div>
