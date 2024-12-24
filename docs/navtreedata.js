@@ -25,13 +25,6 @@
 var NAVTREE =
 [
   [ "Sandals", "index.html", [
-    [ "Installation", "index.html#autotoc_md1", [
-      [ "Prerequisites", "index.html#autotoc_md2", null ],
-      [ "Build", "index.html#autotoc_md3", null ]
-    ] ],
-    [ "Authors", "index.html#autotoc_md4", null ],
-    [ "License", "index.html#autotoc_md5", null ],
-    [ "That's all folks!", "index.html#autotoc_md6", null ],
     [ "Namespaces", "namespaces.html", [
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
       [ "Namespace Members", "namespacemembers.html", [
@@ -64,7 +57,7 @@ var NAVTREEINDEX =
 [
 "_broyden_8hxx.html",
 "class_sandals_1_1_nonlinear_solver.html#a7d305af90bef717e8570ccb047be7eef",
-"namespace_sandals.html#a675a2e72a56fbacf72053c369c7b3ac2"
+"namespace_sandals.html#a91fc5f246e5e906c5370c844354f71a8"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

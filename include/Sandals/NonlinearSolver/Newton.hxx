@@ -27,25 +27,7 @@ namespace Sandals
 
   //! \brief Class container for the (damped) Newton's method with affine invariant step.
   //!
-  //! Class container for the (damped) Newton's method with affine invariant step. Given a zeros
-  //! of a vectorial function problem of the form \f$ \mathbf{F}(\mathbf{x}) = \mathbf{0} \f$, where
-  //! \f$ \mathbf{F}: \mathbb{R}^{n} \rightarrow \mathbb{R}^{n} \f$, the Newton's method is defined as
-  //!
-  //! \f[ \mathbf{JF}_{\mathbf{x}}(\mathbf{x}_k) \mathbf{h} = -\mathbf{F}(\mathbf{x}_k) \text{.} \f]
-  //!
-  //! The advancing step is then defined as
-  //!
-  //! \f[ \mathbf{x}_{k+1} = \mathbf{x}_k + \alpha_k \mathbf{h} \text{,} \f]
-  //!
-  //! where \f$ \alpha_k \f$ is a damping coefficient that satisfies
-  //!
-  //! \f[ \left\| \mathbf{JF}_{\mathbf{x}}(\mathbf{x}_k)^{-1} \mathbf{F}(\mathbf{x}_{k+1}) \right\|
-  //! \leq \left(1 - \displaystyle\frac{\alpha_k}{2}\right) \left\| \mathbf{JF}_{\mathbf{x}}(\mathbf{x}_k)^{-1}
-  //! \mathbf{F}(\mathbf{x}_k) \right\| = \left(1 - \displaystyle\frac{\alpha_k}{2} \right)
-  //! \left\| \mathbf{h} \right\| \text{.} \f]
-  //!
-  //! For more details on the Newton's method with affine invariant step refer to the references
-  //! in [this link](https://www.zib.de/deuflhard/research/algorithm/ainewton.en.html).
+  //! \includedoc docs/markdown/Newton.md
   template <Size N>
   class Newton : public NonlinearSolver<N>
   {

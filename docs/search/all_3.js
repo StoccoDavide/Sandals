@@ -1,6 +1,12 @@
 var searchData=
 [
-  ['dimension_0',['dimension',['../class_sandals_1_1_implicit.html#aa7157af3e5c025dd773975161e703fba',1,'Sandals::Implicit']]],
-  ['disable_5fadaptive_5fstep_1',['disable_adaptive_step',['../class_sandals_1_1_runge_kutta.html#ac1340e3bdcf6d82e2bc2aa2ca9f94de4',1,'Sandals::RungeKutta']]],
-  ['disable_5fverbose_5fmode_2',['disable_verbose_mode',['../class_sandals_1_1_nonlinear_solver.html#aa8302590030f2da5094597b907fd408e',1,'Sandals::NonlinearSolver::disable_verbose_mode()'],['../class_sandals_1_1_runge_kutta.html#af2ff6ead85d59683bc391819d71b4b64',1,'Sandals::RungeKutta::disable_verbose_mode()']]]
+  ['diagonally_20implicit_20runge_20kutta_20methods_0',['Diagonally implicit Runge-Kutta methods',['../class_sandals_1_1_runge_kutta.html#autotoc_md12',1,'']]],
+  ['dimension_1',['dimension',['../class_sandals_1_1_implicit.html#aa7157af3e5c025dd773975161e703fba',1,'Sandals::Implicit']]],
+  ['dirk_20methods_20for_20explicit_20dynamic_20systems_2',['DIRK methods for explicit dynamic systems',['../class_sandals_1_1_runge_kutta.html#autotoc_md13',1,'']]],
+  ['dirk_20methods_20for_20implicit_20dynamic_20systems_3',['DIRK methods for implicit dynamic systems',['../class_sandals_1_1_runge_kutta.html#autotoc_md14',1,'']]],
+  ['dirk_5fstep_4',['dirk_step',['../class_sandals_1_1_runge_kutta.html#aaa90f07ad60db5c598492169c6240b13',1,'Sandals::RungeKutta']]],
+  ['disable_5fadaptive_5fstep_5',['disable_adaptive_step',['../class_sandals_1_1_runge_kutta.html#ac1340e3bdcf6d82e2bc2aa2ca9f94de4',1,'Sandals::RungeKutta']]],
+  ['disable_5fverbose_5fmode_6',['disable_verbose_mode',['../class_sandals_1_1_nonlinear_solver.html#aa8302590030f2da5094597b907fd408e',1,'Sandals::NonlinearSolver::disable_verbose_mode()'],['../class_sandals_1_1_runge_kutta.html#af2ff6ead85d59683bc391819d71b4b64',1,'Sandals::RungeKutta::disable_verbose_mode()']]],
+  ['dynamic_20systems_7',['dynamic systems',['../class_sandals_1_1_runge_kutta.html#autotoc_md13',1,'DIRK methods for explicit dynamic systems'],['../class_sandals_1_1_runge_kutta.html#autotoc_md14',1,'DIRK methods for implicit dynamic systems'],['../class_sandals_1_1_runge_kutta.html#autotoc_md7',1,'ERK methods for explicit dynamic systems'],['../class_sandals_1_1_runge_kutta.html#autotoc_md8',1,'ERK methods for implicit dynamic systems'],['../class_sandals_1_1_runge_kutta.html#autotoc_md10',1,'IRK methods for explicit dynamic systems'],['../class_sandals_1_1_runge_kutta.html#autotoc_md11',1,'IRK methods for implicit dynamic systems']]],
+  ['dynamic_20systems_20representation_8',['Dynamic systems representation',['../class_sandals_1_1_runge_kutta.html#autotoc_md5',1,'']]]
 ];

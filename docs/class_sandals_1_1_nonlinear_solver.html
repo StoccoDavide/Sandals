@@ -285,8 +285,15 @@ Protected Attributes</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><div class="compoundTemplParams">template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> N&gt;<br />
 class Sandals::NonlinearSolver&lt; N &gt;</div><p>Class container for the nonlinear solver. </p>
-<p>Class container for the nonlinear solver for a problem of the form  \( \mathbf{F}(\mathbf{x}) =
-\mathbf{0} \) where \( \mathbf{F}: \mathbb{R}^n \rightarrow \mathbb{R}^n \). </p>
+<h1><a class="anchor" id="autotoc_md2"></a>
+Nonlinear solvers</h1>
+<p>This section describes the nonlinear solvers implemented in <code><a class="el" href="namespace_sandals.html">Sandals</a></code>. The available solvers are <em><a class="el" href="class_sandals_1_1_newton.html" title="Class container for the (damped) Newton&#39;s method with affine invariant step.">Newton</a></em>'s method and <em><a class="el" href="class_sandals_1_1_broyden.html" title="Class container for the (damped) Broyden&#39;s method.">Broyden</a></em>'s method, both designed to solve nonlinear systems of equations. <a class="el" href="class_sandals_1_1_newton.html" title="Class container for the (damped) Newton&#39;s method with affine invariant step.">Newton</a>'s method is a well-known classical approach, while <a class="el" href="class_sandals_1_1_broyden.html" title="Class container for the (damped) Broyden&#39;s method.">Broyden</a>'s method is a quasi-Newton technique that approximates the Jacobian matrix for improved efficiency in certain scenarios.</p>
+<p>The nonlinear solvers are implemented for solving problems of the form   </p><p class="formulaDsp">
+\[
+  \mathbf{F}(\mathbf{x}) = \mathbf{0} \text{,} \quad \mathbf{F}: \mathbb{R}^{n} \rightarrow \mathbb{R}^{n} \text{.}
+\]
+</p>
+<p> and finding the root of the function \(\mathbf{F}\) by iteratively updating the current iterate \(\mathbf{x}_k\) until convergence is achieved. The solvers require the function \(\mathbf{F}\) and its Jacobian matrix \(\mathbf{JF}_{\mathbf{x}}\) to be provided by the user. The Jacobian matrix can be computed analytically or numerically, depending on the problem's complexity and the user's preference. Nontheless, quasi-Newton methods, such as <a class="el" href="class_sandals_1_1_broyden.html" title="Class container for the (damped) Broyden&#39;s method.">Broyden</a>'s method, are designed to approximate the Jacobian matrix iteratively, avoiding the need to compute it explicitly.   </p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
 <a id="abf328882e8633352092875ce9aea564f" name="abf328882e8633352092875ce9aea564f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#abf328882e8633352092875ce9aea564f">&#9670;&#160;</a></span>Function</h2>

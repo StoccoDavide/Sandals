@@ -193,36 +193,22 @@ Public Attributes</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><div class="compoundTemplParams">template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> S&gt;<br />
 struct Sandals::Tableau&lt; S &gt;</div><p>Class container for the Butcher tableau of a Runge-Kutta methos. </p>
-<p>Class container for the Butcher tableau of a Runge-Kutta methos. The Butcher tableau of a Runge-Kutta method of order \( p \) is defined as</p>
-<p class="formulaDsp">
-\[ \begin{array}{c|c}
-  \mathbf{c} &amp; \mathbf{A} \\ \hline
-             &amp; \mathbf{b}^\top \\
-             &amp; \hat{\mathbf{b}}^\top
-\end{array} \text{,} \]
+<h1><a class="anchor" id="autotoc_md3"></a>
+Butcher tableau</h1>
+<p>Runge-Kutta methods are a family of numerical techniques for solving ODEs and DAEs. These methods approximate the solution by combining weighted evaluations of the system's functions at specific points called <em>nodes</em> within the integration domain.</p>
+<p>A Runge-Kutta method is characterized by its Butcher tableau, a tabular representation of the method's parameters. For a method of order \(p\) and \(s\) stages, the Butcher tableau is defined as         </p><p class="formulaDsp">
+\[
+  \begin{array}{c|ccc}
+    c_1 &amp; a_{11} &amp; a_{12} &amp; \dots &amp; a_{1s} \\
+    c_2 &amp; a_{21} &amp; a_{22} &amp; \dots &amp; a_{2s} \\
+        \vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+    c_s    &amp; a_{s1} &amp; a_{s2} &amp; \dots &amp; a_{ss} \\ \hline
+    &amp; b_1 &amp; b_2 &amp; \dots &amp; b_s
+  \end{array} \text{,}
+\]
 </p>
-<p>where \( \mathbf{A} \) is the Runge-Kutta matrix</p>
-<p class="formulaDsp">
-\[ \mathbf{A} = \begin{bmatrix}
-  a_{11} &amp; a_{12} &amp; \dots  &amp; a_{1s} \\
-  a_{21} &amp; a_{22} &amp; \dots  &amp; a_{2s} \\
-  \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
-  a_{s1} &amp; a_{s2} &amp; \dots  &amp; a_{ss}
-\end{bmatrix} \text{,} \]
-</p>
-<p>\( \mathbf{b} \) is the Runge-Kutta weights vector</p>
-<p class="formulaDsp">
-\[ \mathbf{b} = \left[ b_1, b_2, \dots, b_s \right]^\top \text{,} \]
-</p>
-<p>\( \hat{\mathbf{b}} \) is the (optional) embedded Runge-Kutta weights vector</p>
-<p class="formulaDsp">
-\[ \hat{\mathbf{b}} = \left[ \hat{b}_1, \hat{b}_2, \dots, \hat{b}_s \right]^\top \text{,} \]
-</p>
-<p>and \( \mathbf{c} \) is the Runge-Kutta nodes vector</p>
-<p class="formulaDsp">
-\[ \mathbf{c} = \left[ c_1, c_2, \dots, c_s \right] \text{.} \]
-</p>
- </div><h2 class="groupheader">Member Typedef Documentation</h2>
+<p> where \(\mathbf{A}\) is the Runge-Kutta coefficient matrix, \(\mathbf{b}\) is the Runge-Kutta weights vector, \(\hat{\mathbf{b}}\) is the (optional) embedded Runge-Kutta weights vector, and \(\mathbf{c}\) is the Runge-Kutta nodes vector. These parameters define the method's structure and determine its accuracy and stability.   </p>
+</div><h2 class="groupheader">Member Typedef Documentation</h2>
 <a id="a44cc45c25ef9d0b1d8d6e5e50d9ea0d4" name="a44cc45c25ef9d0b1d8d6e5e50d9ea0d4"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a44cc45c25ef9d0b1d8d6e5e50d9ea0d4">&#9670;&#160;</a></span>Matrix</h2>
 

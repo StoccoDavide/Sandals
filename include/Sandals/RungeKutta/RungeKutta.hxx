@@ -26,35 +26,7 @@ namespace Sandals {
 
   //! \brief Class container for the Butcher tableau of a Runge-Kutta methos.
   //!
-  //! Class container for the Butcher tableau of a Runge-Kutta methos. The
-  //! Butcher tableau of a Runge-Kutta method of order \f$ p \f$ is defined as
-  //!
-  //! \f[ \begin{array}{c|c}
-  //!   \mathbf{c} & \mathbf{A} \\ \hline
-  //!              & \mathbf{b}^\top \\
-  //!              & \hat{\mathbf{b}}^\top
-  //! \end{array} \text{,} \f]
-  //!
-  //! where \f$ \mathbf{A} \f$ is the Runge-Kutta matrix
-  //!
-  //! \f[ \mathbf{A} = \begin{bmatrix}
-  //!   a_{11} & a_{12} & \dots  & a_{1s} \\
-  //!   a_{21} & a_{22} & \dots  & a_{2s} \\
-  //!   \vdots & \vdots & \ddots & \vdots \\
-  //!   a_{s1} & a_{s2} & \dots  & a_{ss}
-  //! \end{bmatrix} \text{,} \f]
-  //!
-  //! \f$ \mathbf{b} \f$ is the Runge-Kutta weights vector
-  //!
-  //! \f[ \mathbf{b} = \left[ b_1, b_2, \dots, b_s \right]^\top \text{,} \f]
-  //!
-  //! \f$ \hat{\mathbf{b}} \f$ is the (optional) embedded Runge-Kutta weights vector
-  //!
-  //! \f[ \hat{\mathbf{b}} = \left[ \hat{b}_1, \hat{b}_2, \dots, \hat{b}_s \right]^\top \text{,} \f]
-  //!
-  //! and \f$ \mathbf{c} \f$ is the Runge-Kutta nodes vector
-  //!
-  //! \f[ \mathbf{c} = \left[ c_1, c_2, \dots, c_s \right] \text{.} \f]
+  //! \includedoc docs/markdown/Tableau.md
   template <Size S>
   struct Tableau
   {
@@ -198,23 +170,10 @@ namespace Sandals {
    |                     |___/
   \*/
 
-  //! \brief Class container for the generic \em implicit and \em explicit Runge-Kutta solvers.
+  //! \brief Class container for the generic \em implicit, \em explicit, and <em> diagonally implicit +
+  //! </em> Runge-Kutta methods.
   //!
-  //! Class container for the generic \em implicit and \em explicit Runge-Kutta solvers. The class
-  //! implements the generic Runge-Kutta method of order \f$ p \f$ with \f$ s \f$ stages. The
-  //! Runge-Kutta method can be explicit, implicit, or diagonally implicit. The class provides
-  //! specialized methods for \em explicit and \em implicit Runge-Kutta methods and can be used to
-  //! solve systems of ordinary differential equations (ODEs) or differential algebraic equations
-  //! (DAEs) of the Implicit \f$ \mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, t) = \mathbf{0} \f$,
-  //! Explicit \f$ \mathbf{x}^{\prime} = \mathbf{f}(\mathbf{x}, t) \f$, Linear \f$ \mathbf{E}(t)
-  //! \mathbf{x}^{\prime} = \mathbf{A}(t)\mathbf{x} + \mathbf{f}(t) \f$, or SemiExplicit \f$
-  //! \mathbf{M}(\mathbf{x}, t) \mathbf{x}^{\prime} = \mathbf{r}(\mathbf{x}, t) \f$ type.
-  //!
-  //! \note Specialized methods for <em> diagonally implicit </em> Runge-Kutta methods are not yet
-  //! implemented and will be available in future releases.
-  //!
-  //! The class internally uses the \em Newton (default) or \em Broyden solvers for solving the
-  //! nonlinear systems of equations in implicit Runge-Kutta methods.
+  //! \includedoc docs/markdown/RungeKutta.md
   template <Size S, Size N>
   class RungeKutta
   {
@@ -270,15 +229,15 @@ namespace Sandals {
 
     //! Check if the method is an explicit Runge-Kutta (ERK) method.
     //! \return True if the method is an explicit Runge-Kutta method, false otherwise.
-    bool is_explicit() const {return this->m_tableau.type == Type::ERK;}
+    bool is_erk() const {return this->m_tableau.type == Type::ERK;}
 
     //! Check if the method is an implicit Runge-Kutta (IRK) method.
     //! \return True if the method is an implicit Runge-Kutta method, false otherwise.
-    bool is_implicit() const {return this->m_tableau.type == Type::IRK;}
+    bool is_irk() const {return this->m_tableau.type == Type::IRK;}
 
     //! Check if the method is a diagonally implicit Runge-Kutta (DIRK) method.
     //! \return True if the method is a diagonally implicit Runge-Kutta method, false otherwise.
-    bool is_diagonal_implicit() const {return this->m_tableau.type == Type::DIRK;}
+    bool is_dirk() const {return this->m_tableau.type == Type::DIRK;}
 
     //! Get the Butcher Tableau reference.
     //! \return The Tableau reference.
@@ -407,7 +366,7 @@ namespace Sandals {
     //! with higher order method of \f$ p \f$, and \f$ \hat{\mathbf{x}} \f$ is the
     //! approximation of the states at computed with lower order method of \f$
     //! \hat{p} \f$. To compute the suggested time step for the next advancing step
-    //! \f$ \Delta t_{k+1} \f$, The error is compared to \f$ 1 \f$ in order to find
+    //! \f$ h_{k+1} \f$, The error is compared to \f$ 1 \f$ in order to find
     //! an optimal step size. From the error behaviour \f$ e \approx Ch^{q+1} \f$
     //! and from \f$ 1 \approx Ch_{opt}^{q+1} \f$ (where \f$ q = \min(p,\hat{p}) \f$)
     //! the optimal step size is obtained as
@@ -442,7 +401,7 @@ namespace Sandals {
     //! \param[in] x_e States approximation \f$ \hat{\mathbf{x}}_{k+1} \f$ computed with the embedded
     //! weights vector \f$ \hat{\mathbf{b}} \f$.
     //! \param[in] h_k Actual advancing time step \f$ h_k \f$.
-    //! \return The suggested time step for the next advancing step \f$ h_{k+1} \f$.
+    //! \return The suggested time step for the next integration step \f$ h_{k+1}^\star \f$.
     Real estimate_step(VectorN const &x, VectorN const &x_e, Real h_k) const
     {
       return h_k * std::min(this->m_max_safety_factor, std::max(this->m_min_safety_factor,
@@ -482,11 +441,9 @@ namespace Sandals {
     //! \f[
     //! \begin{array}{l}
     //! \mathbf{K}_i = \mathbf{f} \left(
-    //!   \mathbf{x}_k + \Delta t \displaystyle\sum_{j=1}^{s} a_{ij} \mathbf{K}_j,
-    //!   \, t_k + c_i \Delta t
-    //!   \right), \qquad i = 1, 2, \ldots, s \\
-    //! \mathbf{x}_{k+1} = \mathbf{x}_k + \Delta t \displaystyle\sum_{j=1}^s b_j
-    //! \mathbf{K}_j \, ,
+    //!   \mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{s} a_{ij} \mathbf{K}_j, t_k + h_k c_i
+    //!   \right), \qquad i = 1, 2, \ldots, s \text{,} \\
+    //! \mathbf{x}_{k+1} = \mathbf{x}_k + h_k \displaystyle\sum_{i=1}^s b_i \mathbf{K}_i \text{,}
     //! \end{array}
     //! \f]
     //!
@@ -496,9 +453,9 @@ namespace Sandals {
     //!
     //! \f[
     //! \mathbf{K}_i = \mathbf{f} \left(
-    //!   \mathbf{x}_k + \Delta t \displaystyle\sum_{j=1}^{i-1} a_{ij}
-    //!   \mathbf{K}_j, \, t_k + c_i \Delta t
-    //!   \right), \qquad i = 1, 2, \ldots, s.
+    //!   \mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{i-1} a_{ij}
+    //!   \mathbf{K}_j, t_k + h_k c_i
+    //!   \right), \qquad i = 1, 2, \ldots, s \text{.}
     //! \f]
     //!
     //! Then the explicit Runge-Kutta method for an implicit system of the form
@@ -508,10 +465,10 @@ namespace Sandals {
     //! \f[
     //! \begin{array}{l}
     //! \mathbf{F}_i \left(
-    //!   \mathbf{x}_k + \Delta t \displaystyle\sum_{j=1}^{i-1} a_{ij}
-    //!     \mathbf{K}_j, \, \mathbf{K}_i, \, t_k + c_i \Delta t
-    //! \right) = \mathbf{0}, \qquad i = 1, 2, \ldots, s \\
-    //! \mathbf{x}_{k+1} = \mathbf{x}_k + \displaystyle\sum_{j=1}^s b_j \mathbf{K}_j.
+    //!   \mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{i-1} a_{ij}
+    //!     \mathbf{K}_j, \mathbf{K}_i, t_k + h_k c_i
+    //! \right) = \mathbf{0}, \qquad i = 1, 2, \ldots, s \text{,} \\
+    //! \mathbf{x}_{k+1} = \mathbf{x}_k + \displaystyle\sum_{i=1}^s b_i \mathbf{K}_i.
     //! \end{array}
     //! \f]
     //!
@@ -523,18 +480,11 @@ namespace Sandals {
     //!
     //! \f[
     //! \left\{\begin{array}{l}
-    //! \mathbf{F}_1 \left(
-    //!   \mathbf{x}_k, \, \mathbf{K}_1, \, t_k + c_1 \Delta t
-    //! \right) = \mathbf{0} \\
-    //! \mathbf{F}_2 \left(
-    //!   \mathbf{x}_k + \Delta t \, a_{21} \mathbf{K}_1, \,
-    //!   \mathbf{K}_2, \, t_k + c_2 \Delta t
+    //! \mathbf{F}_1 \left(\mathbf{x}_k, \mathbf{K}_1, t_k + c_1 h_k\right) = \mathbf{0} \\
+    //! \mathbf{F}_2 \left(\mathbf{x}_k + h_k a_{21} \mathbf{K}_1, \mathbf{K}_2, t_k + c_2 h_k
     //! \right) = \mathbf{0} \\
     //! ~~ \vdots \\
-    //! \mathbf{F}_s \left(
-    //!   \mathbf{x}_k + \Delta t \displaystyle\sum_{j=1}^{s-1} a_{sj}
-    //!   \mathbf{K}_j, \, \mathbf{K}_s, \, t_k + c_s \Delta t
-    //! \right) = \mathbf{0}
+    //! \mathbf{F}_s \left(\mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{s-1} a_{sj} \mathbf{K}_j, \mathbf{K}_s, t_k + c_s h_k \right) = \mathbf{0}
     //! \end{array}\right.
     //! \f]
     //!
@@ -549,20 +499,48 @@ namespace Sandals {
     //! Runge-Kutta method. For this reason, a Butcher tableau relative to an
     //! explicit Runge-Kutta method can also be used in the `ImplicitRungeKutta` class.
     //!
-    //! The suggested time step for the next advancing step \f$ \Delta t_{k+1} \f$,
-    //! is the same as the input time step \f$ \Delta t \f$ since in the explicit
+    //! The suggested time step for the next advancing step \f$ h_{k+1} \f$,
+    //! is the same as the input time step \f$ h_k \f$ since in the explicit
     //! Runge-Kutta method the time step is not modified through any error control
     //! method.
     //!
-    //! \param x_k States value at \f$ k \f$-th time step \f$ \mathbf{x}(t_k) \f$.
-    //! \param t_k Time step \f$ t_k \f$.
-    //! \param t_step Advancing time step \f$ \Delta t\f$.
-    //! \param x_out The approximation of the states at \f$ k+1 \f$-th time step
-    //!            \f$ \mathbf{x}_{k+1}(t_{k}+\Delta t) \f$
-    //! \param t_adap The suggested adaptive time step for the next advancing step
-    //!               \f$ \Delta t_{k+1} \f$.
+    //! \param[in] x_k States at \f$ k \f$-th step \f$ \mathbf{x}_k \f$.
+    //! \param[in] t_k Time \f$ t_k \f$.
+    //! \param[in] t_step Advancing time step \f$ h_k\f$.
+    //! \param[out] x_out States at \f$ k+1 \f$-th step \f$ \mathbf{x}_{k+1} \f$.
+    //! \param[out] t_adap The suggested adaptive time step for the next advancing step
+    //!               \f$ h_{k+1} \f$.
     //! \return True if the step is successfully computed, false otherwise.
-    bool explicit_step(VectorN const &x_k, Real t_k, Real t_step, VectorN &x_out, Real &t_adap) const
+    bool erk_step(VectorN const &x_k, Real t_k, Real t_step, VectorN &x_out, Real &t_adap) const
+    {
+      using Eigen::all;
+      using Eigen::seqN;
+
+      // Compute the K variables in the case of an explicit method and explicit system
+      Real t_i;
+      VectorN x_i;
+      MatrixK K;
+      for (Size i = 0; i < S; ++i)
+      {
+        t_i = t_k + this->m_tableau.c(i) * t_step;
+        x_i = x_k + K(all, seqN(0, i)) * this->m_tableau.A(i, seqN(0, i)).transpose();
+        K.col(i) = t_step * static_cast<Explicit<N> const *>(this->m_system.get())->f(x_i, t_i);
+      }
+      if (!K.allFinite()) {return false;}
+
+      // Perform the step and obtain the next state
+      x_out = x_k + K * this->m_tableau.b;
+
+      // Adapt next time step
+      if (this->m_adaptive_step && this->m_is_embedded) {
+        VectorN x_e = x_k + K * this->m_tableau.b_e;
+        t_adap = this->estimate_step(x_out, x_e, t_step);
+      }
+      return true;
+    }
+
+    //! Compute the residual of system to be solved:
+    bool dirk_step(VectorN const &x_k, Real t_k, Real t_step, VectorN &x_out, Real &t_adap) const
     {
       using Eigen::all;
       using Eigen::seqN;
@@ -598,12 +576,12 @@ namespace Sandals {
     //! \right) = \mathbf{0}.
     //! \f]
     //!
-    //! \param x_k States value at \f$ k \f$-th time step \f$ \mathbf{x}(t_k) \f$.
-    //! \param K_k Variables \f$ \mathbf{K} \f$ of the system to be solved.
-    //! \param t_k Time step \f$ t_k \f$.
-    //! \param d_t Advancing time step \f$ \Delta t \f$.
-    //! \param fun The residual of system to be solved.
-    void implicit_function(VectorN const &x_k, VectorK const &K_k, Real t_k, Real d_t, VectorK &fun) const
+    //! \param[in] x_k States at \f$ k \f$-th step \f$ \mathbf{x}_k \f$.
+    //! \param[in] K_k Variables \f$ \mathbf{K} \f$ of the system to be solved.
+    //! \param[in] t_k Time \f$ t_k \f$.
+    //! \param[in] d_t Advancing time step \f$ \Delta t \f$.
+    //! \param[out] fun The residual of system to be solved.
+    void irk_function(VectorN const &x_k, VectorK const &K_k, Real t_k, Real d_t, VectorK &fun) const
     {
       fun.setZero();
 
@@ -637,12 +615,12 @@ namespace Sandals {
     //! \right)
     //! \f]
     //!
-    //! \param x_k States value at \f$ k \f$-th time step \f$ \mathbf{x}(t_k) \f$.
-    //! \param K_k Variables \f$ \mathbf{K} \f$ of the system to be solved.
-    //! \param t_k Time step \f$ t_k \f$.
-    //! \param d_t Advancing time step \f$ \Delta t \f$.
-    //! \param jac The Jacobian of the system of equations to be solved.
-    void implicit_jacobian(VectorN const &x_k, VectorK const &K_k, Real t_k, Real d_t, MatrixJ &jac) const
+    //! \param[in] x_k States at \f$ k \f$-th step \f$ \mathbf{x}_k \f$.
+    //! \param[in] K_k Variables \f$ \mathbf{K} \f$ of the system to be solved.
+    //! \param[in] t_k Time \f$ t_k \f$.
+    //! \param[in] d_t Advancing time step \f$ \Delta t \f$.
+    //! \param[out] jac The Jacobian of the system of equations to be solved.
+    void irk_jacobian(VectorN const &x_k, VectorK const &K_k, Real t_k, Real d_t, MatrixJ &jac) const
     {
       using Eigen::all;
       using Eigen::seqN;
@@ -719,17 +697,17 @@ namespace Sandals {
     //! \f[
     //! \left\{\begin{array}{l}
     //! \mathbf{F}_1 \left(
-    //!   \mathbf{x}_k + \Delta t \displaystyle\sum_{j=1}^s a_{1j}
-    //!   \mathbf{K}_j, \, \mathbf{K}_1, \, t_k + c_1 \Delta t
+    //!   \mathbf{x}_k + h_k \displaystyle\sum_{j=1}^s a_{1j}
+    //!   \mathbf{K}_j, \, \mathbf{K}_1, \, t_k + h_k c_1
     //! \right) = \mathbf{0} \\
     //! \mathbf{F}_2 \left(
-    //!   \mathbf{x}_k + \Delta t \displaystyle\sum_{j=1}^s a_{2j}
-    //!   \mathbf{K}_j, \, \mathbf{K}_2, \, t_k + c_2 \Delta t
+    //!   \mathbf{x}_k + h_k \displaystyle\sum_{j=1}^s a_{2j}
+    //!   \mathbf{K}_j, \, \mathbf{K}_2, \, t_k + h_k c_2
     //! \right) = \mathbf{0} \\
     //! ~~ \vdots \\
     //! \mathbf{F}_s \left(
-    //!   \mathbf{x}_k + \Delta t \displaystyle\sum_{j=1}^s a_{sj}
-    //!   \mathbf{K}_j, \, \mathbf{K}_s, \, t_k + c_s \Delta t
+    //!   \mathbf{x}_k + h_k \displaystyle\sum_{j=1}^s a_{sj}
+    //!   \mathbf{K}_j, \, \mathbf{K}_s, \, t_k + h_k c_s
     //! \right) = \mathbf{0}
     //! \end{array}\right.
     //! \f]
@@ -737,26 +715,24 @@ namespace Sandals {
     //! The \f$ \mathbf{K} \f$ variables are computed using the Newton's method.
     //!
     //! The suggested time step for the next advancing step
-    //! \f$ \Delta t_{k+1} \f$, is the same as the input time step
+    //! \f$ h_{k+1} \f$, is the same as the input time step
     //! \f$ \Delta t \f$ since in the implicit Runge-Kutta method the time step
     //! is not modified through any error control method.
     //!
-    //! \param x_k States value at \f$ k \f$-th time step \f$ \mathbf{x}(t_k) \f$.
-    //! \param t_k Time step \f$ t_k \f$.
-    //! \param d_t Advancing time step \f$ \Delta t\f$.
-    //! \param x_o The approximation of the states at \f$ k+1 \f$-th time step
-    //!            \f$ \mathbf{x}_{k+1}(t_{k}+\Delta t) \f$
-    //! \param d_t_star The suggested time step for the next advancing step
-    //!                 \f$ \Delta t_{k+1} \f$.
+    //! \param[in] x_k States at \f$ k \f$-th step \f$ \mathbf{x}_k \f$.
+    //! \param[in] t_k Time \f$ t_k \f$.
+    //! \param[in] d_t Advancing time step \f$ \Delta t\f$.
+    //! \param[out] x_o States at \f$ k+1 \f$-th step \f$ \mathbf{x}_{k+1} \f$.
+    //! \param[out] d_t_star Suggested time step for the next integration step \f$ h_{k+1}^\star \f$.
     //! \return True if the step is successfully computed, false otherwise.
-    bool implicit_step(VectorN const &x_k, Real t_k, Real d_t, VectorN &x_o, Real &d_t_star)
+    bool irk_step(VectorN const &x_k, Real t_k, Real d_t, VectorN &x_o, Real &d_t_star)
     {
       // Check if the solver converged
       VectorK K;
 
       if (!this->m_newton.solve(
-        [this, &x_k, t_k, d_t](VectorK const &K, VectorK &fun) {this->implicit_function(x_k, K, t_k, d_t, fun);},
-        [this, &x_k, t_k, d_t](VectorK const &K, MatrixJ &jac) {this->implicit_jacobian(x_k, K, t_k, d_t, jac);},
+        [this, &x_k, t_k, d_t](VectorK const &K, VectorK &fun) {this->irk_function(x_k, K, t_k, d_t, fun);},
+        [this, &x_k, t_k, d_t](VectorK const &K, MatrixJ &jac) {this->irk_jacobian(x_k, K, t_k, d_t, jac);},
         VectorK::Zero(), K)) {return false;}
 
       // Perform the step and obtain x_k+1
@@ -774,27 +750,24 @@ namespace Sandals {
     //! form \f$ \mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, t) = \mathbf{0}
     //! \f$. The step is based on the following formula:
     //!
-    //! \f[
-    //! \mathbf{x}_{k+1}(t_{k}+\Delta t) = \mathbf{x}_k(t_{k}) +
-    //! \mathcal{S}(\mathbf{x}_k(t_k), \mathbf{x}^{\prime}_k(t_k), t_k, \Delta t)
-    //! \f]
+    //! \f[ \mathbf{x}_{k+1} = \mathbf{x}_k + \mathcal{S}(\mathbf{x}_k, \mathbf{x}^{\prime}_k, t_k, h_k) \f]
     //!
     //! where \f$ \mathcal{S} \f$ is the generic advancing step of the solver.
     //!
-    //! \param x_k States value at \f$ k \f$-th time step \f$ \mathbf{x}(t_k) \f$.
-    //! \param t_k Time step \f$ t_k \f$.
-    //! \param d_t Advancing time step \f$ \Delta t\f$.
-    //! \param x_o The approximation of the states at \f$ k+1 \f$-th time step
-    //!              \f$ \mathbf{x}_{k+1}(t_{k}+\Delta t) \f$
-    //! \param d_t_star The suggested time step for the next advancing step
-    //!                \f$ \Delta t_{k+1} \f$.
+    //! \param x_k States at \f$ k \f$-th step \f$ \mathbf{x}_k \f$.
+    //! \param t_k Time \f$ t_k \f$.
+    //! \param d_t Advancing time step \f$ h_k\f$.
+    //! \param x_o States at \f$ k+1 \f$-th step \f$ \mathbf{x}_{k+1} \f$.
+    //! \param d_t_star Suggested time step for the next integration step \f$ h_{k+1}^\star \f$.
     //! \return True if the step is successfully computed, false otherwise.
     bool step(VectorN const &x_k, Real t_k, Real d_t, VectorN &x_o, Real &d_t_star)
     {
-      if (this->is_explicit() && this->m_system->is_explicit()) {
-        return this->explicit_step(x_k, t_k, d_t, x_o, d_t_star);
+      if (this->is_erk() && this->m_system->is_explicit()) {
+        return this->erk_step(x_k, t_k, d_t, x_o, d_t_star);
+      //} else if (this->is_dirk()) {
+      //  return this->dirk_step(x_k, t_k, d_t, x_o, d_t_star);
       } else {
-        return this->implicit_step(x_k, t_k, d_t, x_o, d_t_star);
+        return this->irk_step(x_k, t_k, d_t, x_o, d_t_star);
       }
     }
 
@@ -803,7 +776,7 @@ namespace Sandals {
     //! The step is based on the following formula:
     //!
     //! \f[
-    //! \mathbf{x}_{k+1}(t_{k}+\Delta t) = \mathbf{x}_k(t_{k}) +
+    //! \mathbf{x}_{k+1}(t_k + h_k) = \mathbf{x}_k(t_k) +
     //! \mathbf{S}(\mathbf{x}_k, \mathbf{x}^{\prime}_k, t_k, \Delta t)
     //! \f]
     //!
@@ -812,13 +785,11 @@ namespace Sandals {
     //! manifold \f$ \mathbf{h}(\mathbf{x}, t) \f$. Substepping is
     //! also used to ensure that the solution is accurate.
     //!
-    //! \param x_k States value at \f$ k \f$-th time step \f$ \mathbf{x}(t_k) \f$.
-    //! \param t_k Time step \f$ t_k \f$.
+    //! \param x_k States at \f$ k \f$-th step \f$ \mathbf{x}_k \f$.
+    //! \param t_k Time \f$ t_k \f$.
     //! \param d_t Advancing time step \f$ \Delta t\f$.
-    //! \param x_new The approximation of the states at \f$ k+1 \f$-th time step
-    //!              \f$ \mathbf{x}_{k+1}(t_{k}+\Delta t) \f$
-    //! \param d_t_star The suggested time step for the next advancing step
-    //!                 \f$ \Delta t_{k+1} \f$.
+    //! \param x_new States at \f$ k+1 \f$-th step \f$ \mathbf{x}_{k+1} \f$.
+    //! \param d_t_star Suggested time step for the next integration step \f$ h_{k+1}^\star \f$.
     //! \return True if the step is successfully computed, false otherwise.
     bool advance(VectorN const &x_k, Real t_k, Real d_t, VectorN &x_new, Real &d_t_star)
     {

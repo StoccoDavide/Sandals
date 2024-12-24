@@ -27,8 +27,7 @@ namespace Sandals
 
   //! \brief Class container for the nonlinear solver.
   //!
-  //! Class container for the nonlinear solver for a problem of the form \f$ \mathbf{F}(\mathbf{x}) =
-  //! \mathbf{0} \f$ where \f$ \mathbf{F}: \mathbb{R}^n \rightarrow \mathbb{R}^n \f$.
+  //! \includedoc docs/markdown/NonlinearSolver.md
   template <Size N>
   class NonlinearSolver
   {

@@ -25,42 +25,9 @@ namespace Sandals
    |                   |___/
   \*/
 
-  //! \brief Class container for the (damped) Broyden's methods: \em good, \em bad, and \em combined.
+  //! \brief Class container for the (damped) Broyden's method.
   //!
-  //! Class container for the (damped) Broyden's  methods: \em good, \em bad, and \em combined. The
-  //! \em combined Broyden's method is a combination of the Broyden's Good and Broyden's Bad solvers.
-  //! Given a zeros of a vectorial function problem of the form \f$ \mathbf{F}(\mathbf{x}) =
-  //! \mathbf{0} \f$, where \f$ \mathbf{F}: \mathbb{R}^{n} \rightarrow \mathbb{R}^{n} \f$, the
-  //! generic Broyden's method is defined as
-  //!
-  //! \f[ \mathbf{H}_k(\mathbf{x}_k) \mathbf{h} = -\mathbf{F}(\mathbf{x}_k) \text{,} \f]
-  //!
-  //! where \f$ \mathbf{H} \f$ is the (inverse) Jacobian approximation. The advancing
-  //! step is then defined as
-  //!
-  //! \f[ \mathbf{x}_{k+1} = \mathbf{x}_k + \alpha_k \mathbf{h} \text{,} \f]
-  //!
-  //! What distinguishes the Broyden's \em combined method from the generic Broyden's method is the
-  //! update of the Jacobian approximation. The Broyden's \em combined method uses the following
-  //! update rule, which is a combination of the Broyden's Good and Broyden's Bad solvers
-  //!
-  //! \f[ \left\{\begin{array}{ll} \mathbf{H}_{k+1}^{-1} = \mathbf{H}_k^{-1} - \displaystyle\frac{
-  //! \mathbf{H}_k^{-1} \Delta\mathbf{F}_k - \Delta\mathbf{x}_k}{\mathbf{C}_g \Delta\mathbf{F}_k} \mathbf{C}_g
-  //! & \left\| \displaystyle\frac{\Delta\mathbf{x}_k^\top \Delta\mathbf{x}_{k-1}}{\Delta\mathbf{x}_k^\top
-  //! \mathbf{H}_k^{-1} \Delta\mathbf{F}_k} \right\| < \left\| \displaystyle\frac{\Delta\mathbf{F}_k^\top
-  //! \Delta\mathbf{F}_{k-1}}{\Delta\mathbf{F}_k^\top\Delta\mathbf{F}_k} \right\| \\
-  //! \mathbf{H}_{k+1}^{-1} = \mathbf{H}_k^{-1} - \displaystyle\frac{\mathbf{H}_k^{-1} \Delta\mathbf{F}_k
-  //! -\Delta\mathbf{x}_k}{\mathbf{C}_b \Delta\mathbf{F}_k} \mathbf{C}_b & \text{otherwise}
-  //! \end{array}\right. \text{,} \f]
-  //!
-  //! with \f$ \mathbf{C}_g = \Delta\mathbf{x}_k^\top \mathbf{H}_k^{-1} \f$, \f$ \mathbf{C}_b =
-  //! \Delta\mathbf{F}_k^\top \f$, \f$ \Delta\mathbf{x}_k = \mathbf{x}_{k+1} - \mathbf{x}_k \f$,
-  //! and \f$ \Delta\mathbf{F}_k = \mathbf{F}(\mathbf{x}_{k+1}) - \mathbf{F}(\mathbf{x}_k) \f$.
-  //! For more details on the Broyden's \em combined method refer to the reference: <em> "Sobre dois
-  //! métodos de Broyden" </em> by J. M. Martínez and J. M. Martínez, Matemática Aplicada e Computacional,
-  //! IV Congresso Nacional de Matemática Aplicada e Computacional, Rio de Janeiro, Brasil, setembro de 1981.
-  //! \note The implemented Broyden's class for the \em combined method can be used as a \em good or
-  //! \em bad solver by setting the appropriate parameters.
+  //! \includedoc docs/markdown/Broyden.md
   template <Size N>
   class Broyden : public NonlinearSolver<N>
   {

@@ -298,22 +298,32 @@ Additional Inherited Members</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><div class="compoundTemplParams">template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> N&gt;<br />
 class Sandals::Newton&lt; N &gt;</div><p>Class container for the (damped) <a class="el" href="class_sandals_1_1_newton.html" title="Class container for the (damped) Newton&#39;s method with affine invariant step.">Newton</a>'s method with affine invariant step. </p>
-<p>Class container for the (damped) <a class="el" href="class_sandals_1_1_newton.html" title="Class container for the (damped) Newton&#39;s method with affine invariant step.">Newton</a>'s method with affine invariant step. Given a zeros of a vectorial function problem of the form \( \mathbf{F}(\mathbf{x}) = \mathbf{0} \), where \( \mathbf{F}: \mathbb{R}^{n} \rightarrow \mathbb{R}^{n} \), the <a class="el" href="class_sandals_1_1_newton.html" title="Class container for the (damped) Newton&#39;s method with affine invariant step.">Newton</a>'s method is defined as</p>
-<p class="formulaDsp">
-\[ \mathbf{JF}_{\mathbf{x}}(\mathbf{x}_k) \mathbf{h} = -\mathbf{F}(\mathbf{x}_k) \text{.} \]
+<h1><a class="anchor" id="autotoc_md1"></a>
+Newton's method</h1>
+<p><a class="el" href="class_sandals_1_1_newton.html" title="Class container for the (damped) Newton&#39;s method with affine invariant step.">Newton</a>'s method, including its damped variant with an affine-invariant step, is implemented for solving problems of the form   </p><p class="formulaDsp">
+\[
+  \mathbf{F}(\mathbf{x}) = \mathbf{0} \text{,} \quad \mathbf{F}: \mathbb{R}^{n} \rightarrow \mathbb{R}^{n} \text{.}
+\]
 </p>
-<p>The advancing step is then defined as</p>
-<p class="formulaDsp">
-\[ \mathbf{x}_{k+1} = \mathbf{x}_k + \alpha_k \mathbf{h} \text{,} \]
+<p> The method is based on the linearization of the function \(\mathbf{F}\) around the current iterate \(\mathbf{x}_k\), which leads to the linear system   </p><p class="formulaDsp">
+\[
+  \mathbf{JF}_{\mathbf{x}}(\mathbf{x}_k) \mathbf{h}_k = -\mathbf{F}(\mathbf{x}_k) \text{.}
+\]
 </p>
-<p>where \( \alpha_k \) is a damping coefficient that satisfies</p>
-<p class="formulaDsp">
-\[ \left\| \mathbf{JF}_{\mathbf{x}}(\mathbf{x}_k)^{-1} \mathbf{F}(\mathbf{x}_{k+1}) \right\|
-\leq \left(1 - \displaystyle\frac{\alpha_k}{2}\right) \left\| \mathbf{JF}_{\mathbf{x}}(\mathbf{x}_k)^{-1}
-\mathbf{F}(\mathbf{x}_k) \right\| = \left(1 - \displaystyle\frac{\alpha_k}{2} \right)
-\left\| \mathbf{h} \right\| \text{.} \]
+<p> The advancing step \(\mathbf{h}_k\) is then computed as   </p><p class="formulaDsp">
+\[
+  \mathbf{x}_{k+1} = \mathbf{x}_k + \alpha_k \mathbf{h}_k \text{,}
+\]
 </p>
-<p>For more details on the <a class="el" href="class_sandals_1_1_newton.html" title="Class container for the (damped) Newton&#39;s method with affine invariant step.">Newton</a>'s method with affine invariant step refer to the references in <a href="https://www.zib.de/deuflhard/research/algorithm/ainewton.en.html">this link</a>. </p>
+<p> where \(\alpha_k\) is a damping coefficient that ensures convergence by satisfying      </p><p class="formulaDsp">
+\[
+  \left\|\mathbf{JF}_{\mathbf{x}}(\mathbf{x}_k)^{-1} \mathbf{F}(\mathbf{x}_{k+1})\right\|
+  \leq \left(1 - \displaystyle\frac{\alpha_k}{2}\right) \left\|\mathbf{JF}_{\mathbf{x}}(\mathbf{x}_k)^{-1}
+  \mathbf{F}(\mathbf{x}_k)\right\| = \left(1 - \displaystyle\frac{\alpha_k}{2} \right)
+  \left\|\mathbf{h}_k\right\| \text{.}
+\]
+</p>
+<p> For detailed information on the affine-invariant <a class="el" href="class_sandals_1_1_newton.html" title="Class container for the (damped) Newton&#39;s method with affine invariant step.">Newton</a>'s method, refer to <a href="https://www.zib.de/deuflhard/research/algorithm/ainewton.en.html">this link</a>.   </p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
 <a id="a45c478c8801c0e29e9253cf9e18831e0" name="a45c478c8801c0e29e9253cf9e18831e0"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a45c478c8801c0e29e9253cf9e18831e0">&#9670;&#160;</a></span>Function</h2>

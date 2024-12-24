@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['license_0',['License',['../index.html#autotoc_md5',1,'']]],
-  ['linear_1',['Linear',['../class_sandals_1_1_linear.html',1,'Sandals::Linear&lt; N &gt;'],['../class_sandals_1_1_linear.html#a8212701a28d74974a3b519c1fea55c7a',1,'Sandals::Linear::Linear()'],['../class_sandals_1_1_linear.html#afad9342c06a012ae8b2160d5250e06d4',1,'Sandals::Linear::Linear(std::string t_name)']]],
-  ['linear_2ehxx_2',['Linear.hxx',['../_linear_8hxx.html',1,'']]]
+  ['kutta_20methods_0',['Kutta methods',['../class_sandals_1_1_runge_kutta.html#autotoc_md12',1,'Diagonally implicit Runge-Kutta methods'],['../class_sandals_1_1_runge_kutta.html#autotoc_md6',1,'Explicit Runge-Kutta methods'],['../class_sandals_1_1_runge_kutta.html#autotoc_md9',1,'Implicit Runge-Kutta methods']]],
+  ['kutta_20methods_20and_20butcher_20tableaus_1',['Runge-Kutta methods and Butcher tableaus',['../class_sandals_1_1_runge_kutta.html#autotoc_md4',1,'']]]
 ];

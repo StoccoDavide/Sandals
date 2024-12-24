@@ -56,7 +56,7 @@
 <!-- Node3 -->
 <g id="Node000003" class="node">
 <title>Node3</title>
-<g id="a_Node000003"><a xlink:href="class_sandals_1_1_broyden.html" target="_top" xlink:title="Class container for the (damped) Broyden&#39;s methods: good, bad, and combined.">
+<g id="a_Node000003"><a xlink:href="class_sandals_1_1_broyden.html" target="_top" xlink:title="Class container for the (damped) Broyden&#39;s method.">
 <polygon fill="white" stroke="#666666" points="313.25,-56.25 194.5,-56.25 194.5,-37 313.25,-37 313.25,-56.25"/>
 <text text-anchor="middle" x="253.88" y="-42.75" font-family="Helvetica,sans-Serif" font-size="10.00">Sandals::Broyden&lt; N &gt;</text>
 </a>
