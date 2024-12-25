@@ -57,7 +57,7 @@ var NAVTREEINDEX =
 [
 "_broyden_8hxx.html",
 "class_sandals_1_1_nonlinear_solver.html#a7d305af90bef717e8570ccb047be7eef",
-"namespace_sandals.html#a91fc5f246e5e906c5370c844354f71a8"
+"namespace_sandals.html#a3c882532fe454a5fe79deeea17612526"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

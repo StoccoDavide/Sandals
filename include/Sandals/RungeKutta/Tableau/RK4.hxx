@@ -38,7 +38,7 @@ namespace Sandals
     //! Class constructor for the RK4 method.
     RK4Tableau() {
       this->name        = "RK4";
-      this->rk_type     = Type::ERK;
+      this->type        = Type::ERK;
       this->order       = 4;
       this->is_embedded = false;
       this->A << 0.0,     0.0,     0.0,     0.0,

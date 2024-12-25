@@ -24,14 +24,14 @@ int main(void) {
   integrator.solve(time, system.ics(), sol);
   integrator.adaptive_solve(time, system.ics(), sol_adaptive);
 
-  plot(
-    sol.std_time(), sol.std_state(0),
-    sol.std_time(), sol.std_state(1)
-  ); show();
-  plot(
-    sol_adaptive.std_time(), sol_adaptive.std_state(0),
-    sol_adaptive.std_time(), sol_adaptive.std_state(1)
-  ); show();
+  //plot(
+  //  sol.std_time(), sol.std_state(0),
+  //  sol.std_time(), sol.std_state(1)
+  //); show();
+  //plot(
+  //  sol_adaptive.std_time(), sol_adaptive.std_state(0),
+  //  sol_adaptive.std_time(), sol_adaptive.std_state(1)
+  //); show();
 
   return 0;
 }

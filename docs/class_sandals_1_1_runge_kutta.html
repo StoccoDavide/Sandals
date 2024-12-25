@@ -172,6 +172,12 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a3e8fcd992e7ce1f8b274ce00794e3d67"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae5e18b15909f374c091e9b4d291fd445" id="r_ae5e18b15909f374c091e9b4d291fd445"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae5e18b15909f374c091e9b4d291fd445">RungeKutta</a> (<a class="el" href="struct_sandals_1_1_tableau.html">Tableau</a>&lt; S &gt; const &amp;t_tableau, <a class="el" href="#a227aa936c98776f8cadcee24ed5a9599">System</a> t_system)</td></tr>
 <tr class="separator:ae5e18b15909f374c091e9b4d291fd445"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab4a6322cb3e8fc95e62ac5763412c038" id="r_ab4a6322cb3e8fc95e62ac5763412c038"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab4a6322cb3e8fc95e62ac5763412c038">enable_newton</a> ()</td></tr>
+<tr class="memdesc:ab4a6322cb3e8fc95e62ac5763412c038"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable the <a class="el" href="class_sandals_1_1_newton.html" title="Class container for the (damped) Newton&#39;s method with affine invariant step.">Newton</a> nonlinear solver for implicit methods.  <br /></td></tr>
+<tr class="separator:ab4a6322cb3e8fc95e62ac5763412c038"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a269064eade0c3a118d2695aaeb4d4f5c" id="r_a269064eade0c3a118d2695aaeb4d4f5c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a269064eade0c3a118d2695aaeb4d4f5c">enable_broyden</a> ()</td></tr>
+<tr class="memdesc:a269064eade0c3a118d2695aaeb4d4f5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable the <a class="el" href="class_sandals_1_1_broyden.html" title="Class container for the (damped) Broyden&#39;s method.">Broyden</a> nonlinear solver for implicit methods.  <br /></td></tr>
+<tr class="separator:a269064eade0c3a118d2695aaeb4d4f5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a532fe5f8171b83f44ea4a39a8fb893b4" id="r_a532fe5f8171b83f44ea4a39a8fb893b4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#ae3db16787e9e757e1cc7f68c5e048523">Type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a532fe5f8171b83f44ea4a39a8fb893b4">type</a> () const</td></tr>
 <tr class="separator:a532fe5f8171b83f44ea4a39a8fb893b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af497bf41e40d29ae2d712a83278a9c8b" id="r_af497bf41e40d29ae2d712a83278a9c8b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af497bf41e40d29ae2d712a83278a9c8b">is_erk</a> () const</td></tr>
@@ -240,17 +246,20 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:abf0f8ace58ad29368cb948879933d0cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af7b1b48ae3e87bcf5028f46b5b1888d8" id="r_af7b1b48ae3e87bcf5028f46b5b1888d8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af7b1b48ae3e87bcf5028f46b5b1888d8">info</a> (std::ostream &amp;os) const</td></tr>
 <tr class="separator:af7b1b48ae3e87bcf5028f46b5b1888d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6a040eeb18a58443e7ee8688d896218c" id="r_a6a040eeb18a58443e7ee8688d896218c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6a040eeb18a58443e7ee8688d896218c">erk_step</a> (VectorN const &amp;x_k, <a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> t_k, <a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> t_step, VectorN &amp;x_out, <a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> &amp;t_adap) const</td></tr>
-<tr class="separator:a6a040eeb18a58443e7ee8688d896218c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaa90f07ad60db5c598492169c6240b13" id="r_aaa90f07ad60db5c598492169c6240b13"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aaa90f07ad60db5c598492169c6240b13">dirk_step</a> (VectorN const &amp;x_k, <a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> t_k, <a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> t_step, VectorN &amp;x_out, <a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> &amp;t_adap) const</td></tr>
-<tr class="memdesc:aaa90f07ad60db5c598492169c6240b13"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the residual of system to be solved:  <br /></td></tr>
-<tr class="separator:aaa90f07ad60db5c598492169c6240b13"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0348f37ea827ca9e1a5a0abf04bf4899" id="r_a0348f37ea827ca9e1a5a0abf04bf4899"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0348f37ea827ca9e1a5a0abf04bf4899">irk_function</a> (VectorN const &amp;x_k, VectorK const &amp;K_k, <a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> t_k, <a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> d_t, VectorK &amp;fun) const</td></tr>
-<tr class="separator:a0348f37ea827ca9e1a5a0abf04bf4899"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8552e2534062ec87c6bf78068d196a7e" id="r_a8552e2534062ec87c6bf78068d196a7e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8552e2534062ec87c6bf78068d196a7e">irk_jacobian</a> (VectorN const &amp;x_k, VectorK const &amp;K_k, <a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> t_k, <a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> d_t, MatrixJ &amp;jac) const</td></tr>
-<tr class="separator:a8552e2534062ec87c6bf78068d196a7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9945c5e45a92b88b01bdec7750b137ff" id="r_a9945c5e45a92b88b01bdec7750b137ff"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9945c5e45a92b88b01bdec7750b137ff">irk_step</a> (VectorN const &amp;x_k, <a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> t_k, <a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> d_t, VectorN &amp;x_o, <a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> &amp;d_t_star)</td></tr>
-<tr class="separator:a9945c5e45a92b88b01bdec7750b137ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5aa4a2b83f697872e96532a25fb7a8b5" id="r_a5aa4a2b83f697872e96532a25fb7a8b5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5aa4a2b83f697872e96532a25fb7a8b5">erk_explicit_step</a> (VectorN const &amp;x_old, <a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> t_old, <a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> h_old, VectorN &amp;x_new, <a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> &amp;h_new) const</td></tr>
+<tr class="separator:a5aa4a2b83f697872e96532a25fb7a8b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afd06e1a9c1aefa329e63955fb665482f" id="r_afd06e1a9c1aefa329e63955fb665482f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afd06e1a9c1aefa329e63955fb665482f">erk_implicit_function</a> (<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> n, VectorN const &amp;x, <a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> t, <a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> h, VectorN const &amp;K, VectorN &amp;fun) const</td></tr>
+<tr class="separator:afd06e1a9c1aefa329e63955fb665482f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a21a0620dc48d8dea4533022fc9bc1972" id="r_a21a0620dc48d8dea4533022fc9bc1972"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a21a0620dc48d8dea4533022fc9bc1972">erk_implicit_jacobian</a> (<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> n, VectorN const &amp;x, <a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> t, <a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> h, VectorN const &amp;K, MatrixS &amp;jac) const</td></tr>
+<tr class="separator:a21a0620dc48d8dea4533022fc9bc1972"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a44f54b4985a27cbeb4ca31f154a69d1d" id="r_a44f54b4985a27cbeb4ca31f154a69d1d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a44f54b4985a27cbeb4ca31f154a69d1d">erk_implicit_step</a> (VectorN const &amp;x_old, <a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> t_old, <a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> h_old, VectorN &amp;x_new, <a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> &amp;h_new) const</td></tr>
+<tr class="separator:a44f54b4985a27cbeb4ca31f154a69d1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeea5617bc8f1145446c80c811b30e10e" id="r_aeea5617bc8f1145446c80c811b30e10e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aeea5617bc8f1145446c80c811b30e10e">irk_function</a> (VectorN const &amp;x, <a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> t, <a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> h, VectorK const &amp;K, VectorK &amp;fun) const</td></tr>
+<tr class="separator:aeea5617bc8f1145446c80c811b30e10e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2312da96a16a2a164f38b3edfc0c7ad1" id="r_a2312da96a16a2a164f38b3edfc0c7ad1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2312da96a16a2a164f38b3edfc0c7ad1">irk_jacobian</a> (VectorN const &amp;x, <a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> t, <a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> h, VectorK const &amp;K, MatrixJ &amp;jac) const</td></tr>
+<tr class="separator:a2312da96a16a2a164f38b3edfc0c7ad1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a54961f65246397d200b857344a10bae0" id="r_a54961f65246397d200b857344a10bae0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a54961f65246397d200b857344a10bae0">irk_step</a> (VectorN const &amp;x_old, <a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> t_old, <a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> h_old, VectorN &amp;x_new, <a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> &amp;h_new)</td></tr>
+<tr class="separator:a54961f65246397d200b857344a10bae0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a742407a51920dc646a34d7bc07a70fcb" id="r_a742407a51920dc646a34d7bc07a70fcb"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a742407a51920dc646a34d7bc07a70fcb">step</a> (VectorN const &amp;x_k, <a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> t_k, <a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> d_t, VectorN &amp;x_o, <a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> &amp;d_t_star)</td></tr>
 <tr class="separator:a742407a51920dc646a34d7bc07a70fcb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a592490ac70811b5c4da5a5ede688e2f2" id="r_a592490ac70811b5c4da5a5ede688e2f2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a592490ac70811b5c4da5a5ede688e2f2">advance</a> (VectorN const &amp;x_k, <a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> t_k, <a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> d_t, VectorN &amp;x_new, <a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> &amp;d_t_star)</td></tr>
@@ -273,7 +282,7 @@ Dynamic systems representation</h2>
 <li><em><a class="el" href="class_sandals_1_1_explicit.html" title="Class container for the system of explicit ODEs.">Explicit</a></em> form: \(\mathbf{x}^\prime = \mathbf{f}(\mathbf{x}, t)\).</li>
 <li><em><a class="el" href="class_sandals_1_1_implicit.html" title="Class container for the system of implicit ODEs/DAEs.">Implicit</a></em> form: \(\mathbf{F}(t\mathbf{x}, \mathbf{x}^\prime, t) = \mathbf{0}\).</li>
 <li><em><a class="el" href="class_sandals_1_1_linear.html" title="Class container for the system of linear ODEs/DAEs.">Linear</a></em> form: \(\mathbf{E}(t)\mathbf{x}^\prime = \mathbf{A}(t)\mathbf{x} + \mathbf{f}(t)\).</li>
-<li><em>Semi-explicit</em> form: \(\mathbf{M}(\mathbf{x}, t)\mathbf{x}^\prime = \mathbf{f}(\mathbf{x}, t)\).</li>
+<li><em><a class="el" href="class_sandals_1_1_semi_explicit.html" title="Class container for the system of explicit ODEs/DAEs.">SemiExplicit</a></em> form: \(\mathbf{M}(\mathbf{x}, t)\mathbf{x}^\prime = \mathbf{f}(\mathbf{x}, t)\).</li>
 </ul>
 <p>The implicit form is the most general and is frequently used to represent DAEs. However, the explicit and semi-explicit forms are more commonly employed for ODEs. Note that the semi-explicit and linear forms are subsets of the explicit form. Consequently, the Runge-Kutta methods we implement will be specialized for the explicit and implicit forms.</p>
 <h2><a class="anchor" id="autotoc_md6"></a>
@@ -342,9 +351,9 @@ IRK methods for explicit dynamic systems</h3>
 <p> Unrolling the stages gives        </p><p class="formulaDsp">
 \[
   \begin{array}{l}
-    \mathbf{K}_1 = \mathbf{f} \left(\mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{1} a_{1j} \mathbf{K}_j, t_k + h_k c_1\right) \\
-    \mathbf{K}_2 = \mathbf{f} \left(\mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{2} a_{2j} \mathbf{K}_j, t_k + h_k c_2\right) \\
-    \vdots \\[0.5em]
+    \mathbf{K}_1 = \mathbf{f} \left(\mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{s} a_{1j} \mathbf{K}_j, t_k + h_k c_1\right) \\
+    \mathbf{K}_2 = \mathbf{f} \left(\mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{s} a_{2j} \mathbf{K}_j, t_k + h_k c_2\right) \\[-0.5em]
+    \vdots \\[-0.5em]
     \mathbf{K}_s = \mathbf{f} \left(\mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{s} a_{sj} \mathbf{K}_j, t_k + h_k c_s\right)
   \end{array} \text{.}
 \]
@@ -362,9 +371,9 @@ IRK methods for implicit dynamic systems</h3>
 <p> Unrolling the stages, we have        </p><p class="formulaDsp">
 \[
   \begin{array}{l}
-    \mathbf{F}_1 \left(\mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{1} a_{1j} \mathbf{K}_j, \mathbf{K}_1, t_k + h_k c_1\right) = \mathbf{0} \\
-    \mathbf{F}_2 \left(\mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{2} a_{2j} \mathbf{K}_j, \mathbf{K}_2, t_k + h_k c_2\right) = \mathbf{0} \\
-    \vdots \\[0.5em]
+    \mathbf{F}_1 \left(\mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{s} a_{1j} \mathbf{K}_j, \mathbf{K}_1, t_k + h_k c_1\right) = \mathbf{0} \\
+    \mathbf{F}_2 \left(\mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{s} a_{2j} \mathbf{K}_j, \mathbf{K}_2, t_k + h_k c_2\right) = \mathbf{0} \\[-0.5em]
+    \vdots \\[-0.5em]
     \mathbf{F}_s \left(\mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{s} a_{sj} \mathbf{K}_j, \mathbf{K}_s, t_k + h_k c_s\right) = \mathbf{0}
   \end{array} \text{.}
 \]
@@ -745,11 +754,11 @@ template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d44
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Advance using a generic integration method for a system of the form \( \mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, t) = \mathbf{0} \). The step is based on the following formula:</p>
+<p>Advance using a generic integration method for a system of the form \( \mathbf{F}(\mathbf{x}, \mathbf{x}^\prime, t) = \mathbf{0} \). The step is based on the following formula:</p>
 <p class="formulaDsp">
 \[
 \mathbf{x}_{k+1}(t_k + h_k) = \mathbf{x}_k(t_k) +
-\mathbf{S}(\mathbf{x}_k, \mathbf{x}^{\prime}_k, t_k, \Delta t)
+\mathbf{S}(\mathbf{x}_k, \mathbf{x}^\prime_k, t_k, \Delta t)
 \]
 </p>
 <p>where \( \mathbf{S} \) is the generic advancing step of the solver. In the advvancing step, the system solution is also projected on the manifold \( \mathbf{h}(\mathbf{x}, t) \). Substepping is also used to ensure that the solution is accurate.</p>
@@ -851,54 +860,6 @@ template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d44
 
 </div>
 </div>
-<a id="aaa90f07ad60db5c598492169c6240b13" name="aaa90f07ad60db5c598492169c6240b13"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aaa90f07ad60db5c598492169c6240b13">&#9670;&#160;</a></span>dirk_step()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> S, <a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> N&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool <a class="el" href="class_sandals_1_1_runge_kutta.html">Sandals::RungeKutta</a>&lt; S, N &gt;::dirk_step </td>
-          <td>(</td>
-          <td class="paramtype">VectorN const &amp;</td>          <td class="paramname"><span class="paramname"><em>x_k</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a></td>          <td class="paramname"><span class="paramname"><em>t_k</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a></td>          <td class="paramname"><span class="paramname"><em>t_step</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">VectorN &amp;</td>          <td class="paramname"><span class="paramname"><em>x_out</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>t_adap</em></span>&#160;) const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Compute the residual of system to be solved: </p>
-
-</div>
-</div>
 <a id="ac1340e3bdcf6d82e2bc2aa2ca9f94de4" name="ac1340e3bdcf6d82e2bc2aa2ca9f94de4"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac1340e3bdcf6d82e2bc2aa2ca9f94de4">&#9670;&#160;</a></span>disable_adaptive_step()</h2>
 
@@ -983,6 +944,64 @@ template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d44
 
 </div>
 </div>
+<a id="a269064eade0c3a118d2695aaeb4d4f5c" name="a269064eade0c3a118d2695aaeb4d4f5c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a269064eade0c3a118d2695aaeb4d4f5c">&#9670;&#160;</a></span>enable_broyden()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> S, <a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> N&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="class_sandals_1_1_runge_kutta.html">Sandals::RungeKutta</a>&lt; S, N &gt;::enable_broyden </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Enable the <a class="el" href="class_sandals_1_1_broyden.html" title="Class container for the (damped) Broyden&#39;s method.">Broyden</a> nonlinear solver for implicit methods. </p>
+
+</div>
+</div>
+<a id="ab4a6322cb3e8fc95e62ac5763412c038" name="ab4a6322cb3e8fc95e62ac5763412c038"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab4a6322cb3e8fc95e62ac5763412c038">&#9670;&#160;</a></span>enable_newton()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> S, <a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> N&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="class_sandals_1_1_runge_kutta.html">Sandals::RungeKutta</a>&lt; S, N &gt;::enable_newton </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Enable the <a class="el" href="class_sandals_1_1_newton.html" title="Class container for the (damped) Newton&#39;s method with affine invariant step.">Newton</a> nonlinear solver for implicit methods. </p>
+
+</div>
+</div>
 <a id="aa8832dd69b1a4e1043015122449118d5" name="aa8832dd69b1a4e1043015122449118d5"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa8832dd69b1a4e1043015122449118d5">&#9670;&#160;</a></span>enable_verbose_mode()</h2>
 
@@ -1011,8 +1030,8 @@ template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d44
 
 </div>
 </div>
-<a id="a6a040eeb18a58443e7ee8688d896218c" name="a6a040eeb18a58443e7ee8688d896218c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6a040eeb18a58443e7ee8688d896218c">&#9670;&#160;</a></span>erk_step()</h2>
+<a id="a5aa4a2b83f697872e96532a25fb7a8b5" name="a5aa4a2b83f697872e96532a25fb7a8b5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5aa4a2b83f697872e96532a25fb7a8b5">&#9670;&#160;</a></span>erk_explicit_step()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1023,29 +1042,29 @@ template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d44
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool <a class="el" href="class_sandals_1_1_runge_kutta.html">Sandals::RungeKutta</a>&lt; S, N &gt;::erk_step </td>
+          <td class="memname">bool <a class="el" href="class_sandals_1_1_runge_kutta.html">Sandals::RungeKutta</a>&lt; S, N &gt;::erk_explicit_step </td>
           <td>(</td>
-          <td class="paramtype">VectorN const &amp;</td>          <td class="paramname"><span class="paramname"><em>x_k</em></span>, </td>
+          <td class="paramtype">VectorN const &amp;</td>          <td class="paramname"><span class="paramname"><em>x_old</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a></td>          <td class="paramname"><span class="paramname"><em>t_k</em></span>, </td>
+          <td class="paramtype"><a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a></td>          <td class="paramname"><span class="paramname"><em>t_old</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a></td>          <td class="paramname"><span class="paramname"><em>t_step</em></span>, </td>
+          <td class="paramtype"><a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a></td>          <td class="paramname"><span class="paramname"><em>h_old</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">VectorN &amp;</td>          <td class="paramname"><span class="paramname"><em>x_out</em></span>, </td>
+          <td class="paramtype">VectorN &amp;</td>          <td class="paramname"><span class="paramname"><em>x_new</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>t_adap</em></span>&#160;) const</td>
+          <td class="paramtype"><a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>h_new</em></span>&#160;) const</td>
         </tr>
       </table>
   </td>
@@ -1054,65 +1073,226 @@ template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d44
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Compute an integration step using the explicit Runge-Kutta method for a system of the form  \( \mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, t)
-= \mathbf{0} \). Notice that if the Runge-Kutta method and the ODE system are both explicit then the \( \mathbf{K}_i \) variables can be straightforwardly calculated.</p>
-<p><b><a class="el" href="struct_sandals_1_1_solution.html" title="Class container for the numerical solution of a system of ODEs/DAEs.">Solution</a> Algorithm</b></p>
-<p>Consider a Runge-Kutta method, written for a system of the form \( \mathbf{x}^{\prime} = \mathbf{f}(\mathbf{x}, t) \):</p>
-<p class="formulaDsp">
+<p>Compute the new states \( \mathbf{x}_{k+1} \) at the next advancing step  \( t_{k+1} = t_k
++ h_k \) using an explicit Runge-Kutta method, given an explicit system of the form  \(
+\mathbf{x}^\prime = \mathbf{f}(\mathbf{x}, t) \). If the method is embedded, the time step for the next advancing step \( h_{k+1}^\star \) is also computed according to the error control method. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">x_old</td><td>States \( \mathbf{x}_k \) at the \( k \)-th step. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">t_old</td><td>Time \( t_k \) at the \( k \)-th step. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">h_old</td><td>Advancing time step \( h_k \) at the \( k \)-th step. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">x_new</td><td>Computed states \( \mathbf{x}_{k+1} \) at the \( k+1 \)-th step. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">h_new</td><td>The suggested time step \( h_{k+1}^\star \) for the next advancing step. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the step is successfully computed, false otherwise. </dd></dl>
+
+</div>
+</div>
+<a id="afd06e1a9c1aefa329e63955fb665482f" name="afd06e1a9c1aefa329e63955fb665482f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afd06e1a9c1aefa329e63955fb665482f">&#9670;&#160;</a></span>erk_implicit_function()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> S, <a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> N&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="class_sandals_1_1_runge_kutta.html">Sandals::RungeKutta</a>&lt; S, N &gt;::erk_implicit_function </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a></td>          <td class="paramname"><span class="paramname"><em>n</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">VectorN const &amp;</td>          <td class="paramname"><span class="paramname"><em>x</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a></td>          <td class="paramname"><span class="paramname"><em>t</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a></td>          <td class="paramname"><span class="paramname"><em>h</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">VectorN const &amp;</td>          <td class="paramname"><span class="paramname"><em>K</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">VectorN &amp;</td>          <td class="paramname"><span class="paramname"><em>fun</em></span>&#160;) const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Compute the residual of system to be solved, which is given by the values of the system      </p><p class="formulaDsp">
 \[
 \begin{array}{l}
-\mathbf{K}_i = \mathbf{f} \left(
-  \mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{s} a_{ij} \mathbf{K}_j, t_k + h_k c_i
-  \right), \qquad i = 1, 2, \ldots, s \text{,} \\
-\mathbf{x}_{k+1} = \mathbf{x}_k + h_k \displaystyle\sum_{i=1}^s b_i \mathbf{K}_i \text{,}
-\end{array}
+  \mathbf{F}_n \left(\mathbf{x} + \displaystyle\sum_{j=1}^{n-1} a_{nj}\tilde{\mathbf{K}}_j,
+  \displaystyle\frac{\tilde{\mathbf{K}}_n}{h}, t + h c_n\right)
+\end{array} \text{.}
 \]
 </p>
-<p>Beacuse of the nature of the matrix \( \mathbf{A} \) (lower triangular) the \( s\) stages for a generic explicit Runge-Kutta method take the form:</p>
-<p class="formulaDsp">
-\[
-\mathbf{K}_i = \mathbf{f} \left(
-  \mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{i-1} a_{ij}
-  \mathbf{K}_j, t_k + h_k c_i
-  \right), \qquad i = 1, 2, \ldots, s \text{.}
-\]
-</p>
-<p>Then the explicit Runge-Kutta method for an implicit system of the form \(\mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, t) = \mathbf{0} \) can be written as</p>
-<p class="formulaDsp">
-\[
-\begin{array}{l}
-\mathbf{F}_i \left(
-  \mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{i-1} a_{ij}
-    \mathbf{K}_j, \mathbf{K}_i, t_k + h_k c_i
-\right) = \mathbf{0}, \qquad i = 1, 2, \ldots, s \text{,} \\
-\mathbf{x}_{k+1} = \mathbf{x}_k + \displaystyle\sum_{i=1}^s b_i \mathbf{K}_i.
-\end{array}
-\]
-</p>
-<p>It is important to notice that the system of \( s \) equations \( \mathbf{F}_i \) is a triangular system (which may be nonlinear in the \( \mathbf{K}_i \) variables), so it can be solved using forward substitution and the solution of the system is the vector  \( \mathbf{K}
-\). Thus, the final system to be solved is the following:</p>
-<p class="formulaDsp">
-\[
-\left\{\begin{array}{l}
-\mathbf{F}_1 \left(\mathbf{x}_k, \mathbf{K}_1, t_k + c_1 h_k\right) = \mathbf{0} \\
-\mathbf{F}_2 \left(\mathbf{x}_k + h_k a_{21} \mathbf{K}_1, \mathbf{K}_2, t_k + c_2 h_k
-\right) = \mathbf{0} \\
-~~ \vdots \\
-\mathbf{F}_s \left(\mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{s-1} a_{sj} \mathbf{K}_j, \mathbf{K}_s, t_k + c_s h_k \right) = \mathbf{0}
-\end{array}\right.
-\]
-</p>
-<p>The \( \mathbf{K}_i \) variable are computed using the <a class="el" href="class_sandals_1_1_newton.html" title="Class container for the (damped) Newton&#39;s method with affine invariant step.">Newton</a>'s method.</p>
-<p><b>Note</b></p>
-<p>Another approach is to directly solve the whole system of equations by <a class="el" href="class_sandals_1_1_newton.html" title="Class container for the (damped) Newton&#39;s method with affine invariant step.">Newton</a>'smethod. In other words, the system of equations is solved iteratively by computing the Jacobian matrixes of the system and using them to compute the solution. This approach is used in the implicit Runge-Kutta method. For this reason, a Butcher tableau relative to an explicit Runge-Kutta method can also be used in the <code>ImplicitRungeKutta</code> class.</p>
-<p>The suggested time step for the next advancing step \( h_{k+1} \), is the same as the input time step \( h_k \) since in the explicit Runge-Kutta method the time step is not modified through any error control method.</p>
+<p> where \( \tilde{\mathbf{K}} = h \mathbf{K} \). </p><dl class="section note"><dt>Note</dt><dd>If \( h \gets 0 \), then the first guess to solve the nonlinear system is given by \( \tilde{\mathbf{K}} = \mathbf{0} \). </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">x_k</td><td>States at \( k \)-th step \( \mathbf{x}_k \). </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">t_k</td><td>Time \( t_k \). </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">t_step</td><td>Advancing time step \( h_k\). </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">x_out</td><td>States at \( k+1 \)-th step \( \mathbf{x}_{k+1} \). </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">t_adap</td><td>The suggested adaptive time step for the next advancing step \( h_{k+1} \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>Equation index \( n \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>States \( \mathbf{x} \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">t</td><td>Time \( t \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">h</td><td>Advancing time step \( h \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">K</td><td>Variables \( \tilde{\mathbf{K}} = h \mathbf{K} \) of the system to be solved. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">fun</td><td>The residual of system to be solved. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a21a0620dc48d8dea4533022fc9bc1972" name="a21a0620dc48d8dea4533022fc9bc1972"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a21a0620dc48d8dea4533022fc9bc1972">&#9670;&#160;</a></span>erk_implicit_jacobian()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> S, <a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> N&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="class_sandals_1_1_runge_kutta.html">Sandals::RungeKutta</a>&lt; S, N &gt;::erk_implicit_jacobian </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a></td>          <td class="paramname"><span class="paramname"><em>n</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">VectorN const &amp;</td>          <td class="paramname"><span class="paramname"><em>x</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a></td>          <td class="paramname"><span class="paramname"><em>t</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a></td>          <td class="paramname"><span class="paramname"><em>h</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">VectorN const &amp;</td>          <td class="paramname"><span class="paramname"><em>K</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">MatrixS &amp;</td>          <td class="paramname"><span class="paramname"><em>jac</em></span>&#160;) const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Compute the Jacobian of the system of equations      </p><p class="formulaDsp">
+\[
+\begin{array}{l}
+  \mathbf{F}_n \left(\mathbf{x} + \displaystyle\sum_{j=1}^{n-1} a_{nj}\tilde{\mathbf{K}}_j,
+  \displaystyle\frac{\tilde{\mathbf{K}}_n}{h}, t + h c_n\right)
+\end{array} \text{.}
+\]
+</p>
+<p> with respect to the \( \tilde{\mathbf{K}}_n = h \mathbf{K}_n \) variables. The Jacobian matrix of the \( n \)-th equation with respect to the \( \tilde{\mathbf{K}}_n \) variables is given by        </p><p class="formulaDsp">
+\[
+  \frac{\partial\mathbf{F}_n}{\partial\tilde{\mathbf{K}}_n}\left(\mathbf{x} + \displaystyle
+  \sum_{j=1}^{n-1} a_{nj}\tilde{\mathbf{K}}_j, \displaystyle\frac{\tilde{\mathbf{K}}_n}{h}, t +
+  h c_n \right) = a_{nj} \mathbf{JF}_x + \displaystyle\frac{1}{h}\begin{cases}
+  \mathbf{JF}_{x^{\prime}} &amp; n = j \\
+  0 &amp; n \neq j
+\end{cases} \text{,}
+\]
+</p>
+<p> for \( j = 1, 2, \ldots, s \). </p><dl class="section note"><dt>Note</dt><dd>If \( h \rightarrow 0 \), then the first guess to solve the nonlinear system is given by \( \tilde{\mathbf{K}} = \mathbf{0} \). </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>Equation index \( n \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>States \( \mathbf{x} \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">t</td><td>Time \( t \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">h</td><td>Advancing time step \( h \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">K</td><td>Variables \( h \mathbf{K} \) of the system to be solved. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">fun</td><td>The Jacobian of system to be solved. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a44f54b4985a27cbeb4ca31f154a69d1d" name="a44f54b4985a27cbeb4ca31f154a69d1d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a44f54b4985a27cbeb4ca31f154a69d1d">&#9670;&#160;</a></span>erk_implicit_step()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> S, <a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> N&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="class_sandals_1_1_runge_kutta.html">Sandals::RungeKutta</a>&lt; S, N &gt;::erk_implicit_step </td>
+          <td>(</td>
+          <td class="paramtype">VectorN const &amp;</td>          <td class="paramname"><span class="paramname"><em>x_old</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a></td>          <td class="paramname"><span class="paramname"><em>t_old</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a></td>          <td class="paramname"><span class="paramname"><em>h_old</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">VectorN &amp;</td>          <td class="paramname"><span class="paramname"><em>x_new</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>h_new</em></span>&#160;) const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Compute the new states \( \mathbf{x}_{k+1} \) at the next advancing step  \( t_{k+1} = t_k
++ h_k \) using an explicit Runge-Kutta method, given an explicit system of the form  \(
+\mathbf{x}^\prime = \mathbf{f}(\mathbf{x}, t) \). If the method is embedded, the time step for the next advancing step \( h_{k+1}^\star \) is also computed according to the error control method. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">x_old</td><td>States \( \mathbf{x}_k \) at the \( k \)-th step. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">t_old</td><td>Time \( t_k \) at the \( k \)-th step. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">h_old</td><td>Advancing time step \( h_k \) at the \( k \)-th step. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">x_new</td><td>Computed states \( \mathbf{x}_{k+1} \) at the \( k+1 \)-th step. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">h_new</td><td>The suggested time step \( h_{k+1}^\star \) for the next advancing step. </td></tr>
   </table>
   </dd>
 </dl>
@@ -1223,8 +1403,8 @@ template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d44
 
 </div>
 </div>
-<a id="a0348f37ea827ca9e1a5a0abf04bf4899" name="a0348f37ea827ca9e1a5a0abf04bf4899"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0348f37ea827ca9e1a5a0abf04bf4899">&#9670;&#160;</a></span>irk_function()</h2>
+<a id="aeea5617bc8f1145446c80c811b30e10e" name="aeea5617bc8f1145446c80c811b30e10e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeea5617bc8f1145446c80c811b30e10e">&#9670;&#160;</a></span>irk_function()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1237,22 +1417,22 @@ template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d44
         <tr>
           <td class="memname">void <a class="el" href="class_sandals_1_1_runge_kutta.html">Sandals::RungeKutta</a>&lt; S, N &gt;::irk_function </td>
           <td>(</td>
-          <td class="paramtype">VectorN const &amp;</td>          <td class="paramname"><span class="paramname"><em>x_k</em></span>, </td>
+          <td class="paramtype">VectorN const &amp;</td>          <td class="paramname"><span class="paramname"><em>x</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">VectorK const &amp;</td>          <td class="paramname"><span class="paramname"><em>K_k</em></span>, </td>
+          <td class="paramtype"><a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a></td>          <td class="paramname"><span class="paramname"><em>t</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a></td>          <td class="paramname"><span class="paramname"><em>t_k</em></span>, </td>
+          <td class="paramtype"><a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a></td>          <td class="paramname"><span class="paramname"><em>h</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a></td>          <td class="paramname"><span class="paramname"><em>d_t</em></span>, </td>
+          <td class="paramtype">VectorK const &amp;</td>          <td class="paramname"><span class="paramname"><em>K</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -1266,20 +1446,26 @@ template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d44
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Compute the residual of system to be solved:</p>
-<p class="formulaDsp">
+<p>Compute the residual of system to be solved, which is given by the values of the system           </p><p class="formulaDsp">
 \[
-\mathbf{F}_i\left(\mathbf{x}_k + \Delta t \displaystyle\sum_{j=1}^{s}
-  a_{ij} \mathbf{K}_j, \, \mathbf{K}_i, \, t_k + c_i \Delta t
-\right) = \mathbf{0}.
+\begin{array}{l}
+  \mathbf{F}_1 \left(\mathbf{x} + \displaystyle\sum_{j=1}^{s} a_{1j}\tilde{\mathbf{K}}_j,
+  \displaystyle\frac{\tilde{\mathbf{K}}_1}{h}, t + h c_1\right) \\
+  \mathbf{F}_2 \left(\mathbf{x} + \displaystyle\sum_{j=1}^{s} a_{2j}\tilde{\mathbf{K}}_j,
+  \displaystyle\frac{\tilde{\mathbf{K}}_2}{h}, t + h c_2\right) \\[-0.5em]
+  \vdots \\[-0.5em]
+  \mathbf{F}_s \left(\mathbf{x} + \displaystyle\sum_{j=1}^{s} a_{sj}\tilde{\mathbf{K}}_j,
+  \displaystyle\frac{\tilde{\mathbf{K}}_s}{h}, t + h c_s\right)
+\end{array} \text{.}
 \]
 </p>
+<p> where \( \tilde{\mathbf{K}} = h \mathbf{K} \). </p><dl class="section note"><dt>Note</dt><dd>If \( h \gets 0 \), then the first guess to solve the nonlinear system is given by \( \tilde{\mathbf{K}} = \mathbf{0} \). </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">x_k</td><td>States at \( k \)-th step \( \mathbf{x}_k \). </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">K_k</td><td>Variables \( \mathbf{K} \) of the system to be solved. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">t_k</td><td>Time \( t_k \). </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">d_t</td><td>Advancing time step \( \Delta t \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>States \( \mathbf{x} \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">t</td><td>Time \( t \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">h</td><td>Advancing time step \( h \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">K</td><td>Variables \( \tilde{\mathbf{K}} = h \mathbf{K} \) of the system to be solved. </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">fun</td><td>The residual of system to be solved. </td></tr>
   </table>
   </dd>
@@ -1287,8 +1473,8 @@ template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d44
 
 </div>
 </div>
-<a id="a8552e2534062ec87c6bf78068d196a7e" name="a8552e2534062ec87c6bf78068d196a7e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8552e2534062ec87c6bf78068d196a7e">&#9670;&#160;</a></span>irk_jacobian()</h2>
+<a id="a2312da96a16a2a164f38b3edfc0c7ad1" name="a2312da96a16a2a164f38b3edfc0c7ad1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2312da96a16a2a164f38b3edfc0c7ad1">&#9670;&#160;</a></span>irk_jacobian()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1301,22 +1487,22 @@ template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d44
         <tr>
           <td class="memname">void <a class="el" href="class_sandals_1_1_runge_kutta.html">Sandals::RungeKutta</a>&lt; S, N &gt;::irk_jacobian </td>
           <td>(</td>
-          <td class="paramtype">VectorN const &amp;</td>          <td class="paramname"><span class="paramname"><em>x_k</em></span>, </td>
+          <td class="paramtype">VectorN const &amp;</td>          <td class="paramname"><span class="paramname"><em>x</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">VectorK const &amp;</td>          <td class="paramname"><span class="paramname"><em>K_k</em></span>, </td>
+          <td class="paramtype"><a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a></td>          <td class="paramname"><span class="paramname"><em>t</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a></td>          <td class="paramname"><span class="paramname"><em>t_k</em></span>, </td>
+          <td class="paramtype"><a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a></td>          <td class="paramname"><span class="paramname"><em>h</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a></td>          <td class="paramname"><span class="paramname"><em>d_t</em></span>, </td>
+          <td class="paramtype">VectorK const &amp;</td>          <td class="paramname"><span class="paramname"><em>K</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -1330,38 +1516,45 @@ template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d44
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Compute the Jacobian of the system of equations:</p>
-<p class="formulaDsp">
+<p>Compute the Jacobian of the system of equations           </p><p class="formulaDsp">
 \[
-\mathbf{F}_i\left(\mathbf{x}_k + \Delta t \displaystyle\sum_{j=1}^s
-  a_{ij} \mathbf{K}_j, \, \mathbf{K}_i, \, t_k + c_i \Delta t
-\right) = \mathbf{0}
+\begin{array}{l}
+  \mathbf{F}_1 \left(\mathbf{x} + \displaystyle\sum_{j=1}^{s} a_{1j}\tilde{\mathbf{K}}_j,
+  \displaystyle\frac{\tilde{\mathbf{K}}_1}{h}, t + h c_1\right) \\
+  \mathbf{F}_2 \left(\mathbf{x} + \displaystyle\sum_{j=1}^{s} a_{2j}\tilde{\mathbf{K}}_j,
+  \displaystyle\frac{\tilde{\mathbf{K}}_2}{h}, t + h c_2\right) \\[-0.5em]
+  \vdots \\[-0.5em]
+  \mathbf{F}_s \left(\mathbf{x} + \displaystyle\sum_{j=1}^{s} a_{sj}\tilde{\mathbf{K}}_j,
+  \displaystyle\frac{\tilde{\mathbf{K}}_s}{h}, t + h c_s\right)
+\end{array} \text{.}
 \]
 </p>
-<p>to be solved in the \( \mathbf{K} \) variable:</p>
-<p class="formulaDsp">
+<p> with respect to the \( \tilde{\mathbf{K}} = h \mathbf{K} \) variables. The \( ij \)-th Jacobian matrix entry is given by        </p><p class="formulaDsp">
 \[
-\frac{\partial \mathbf{F}_i}{\partial \mathbf{K}_i} \left(
-  \mathbf{x}_k + \Delta t \displaystyle\sum_{j=1}^s a_{ij} \mathbf{K}_j,
-  \, \mathbf{K}_i, \, t_k + c_i \Delta t
-\right)
+  \frac{\partial\mathbf{F}_i}{\partial\tilde{\mathbf{K}}_j}\left(\mathbf{x} + \displaystyle
+  \sum_{j=1}^s a_{ij}\tilde{\mathbf{K}}_j, \displaystyle\frac{\tilde{\mathbf{K}}_i}{h}, t +
+  h c_i \right) = a_{ij} \mathbf{JF}_x + \displaystyle\frac{1}{h}\begin{cases}
+  \mathbf{JF}_{x^{\prime}} &amp; i = j \\
+  0 &amp; i \neq j
+\end{cases} \text{,}
 \]
 </p>
+<p> for \( i = 1, 2, \ldots, s \) and \( j = 1, 2, \ldots, s \). </p><dl class="section note"><dt>Note</dt><dd>If \( h \rightarrow 0 \), then the first guess to solve the nonlinear system is given by \( \tilde{\mathbf{K}} = \mathbf{0} \). </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">x_k</td><td>States at \( k \)-th step \( \mathbf{x}_k \). </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">K_k</td><td>Variables \( \mathbf{K} \) of the system to be solved. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">t_k</td><td>Time \( t_k \). </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">d_t</td><td>Advancing time step \( \Delta t \). </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">jac</td><td>The Jacobian of the system of equations to be solved. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>States \( \mathbf{x} \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">t</td><td>Time \( t \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">h</td><td>Advancing time step \( h \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">K</td><td>Variables \( h \mathbf{K} \) of the system to be solved. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">fun</td><td>The Jacobian of system to be solved. </td></tr>
   </table>
   </dd>
 </dl>
 
 </div>
 </div>
-<a id="a9945c5e45a92b88b01bdec7750b137ff" name="a9945c5e45a92b88b01bdec7750b137ff"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9945c5e45a92b88b01bdec7750b137ff">&#9670;&#160;</a></span>irk_step()</h2>
+<a id="a54961f65246397d200b857344a10bae0" name="a54961f65246397d200b857344a10bae0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a54961f65246397d200b857344a10bae0">&#9670;&#160;</a></span>irk_step()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1374,27 +1567,27 @@ template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d44
         <tr>
           <td class="memname">bool <a class="el" href="class_sandals_1_1_runge_kutta.html">Sandals::RungeKutta</a>&lt; S, N &gt;::irk_step </td>
           <td>(</td>
-          <td class="paramtype">VectorN const &amp;</td>          <td class="paramname"><span class="paramname"><em>x_k</em></span>, </td>
+          <td class="paramtype">VectorN const &amp;</td>          <td class="paramname"><span class="paramname"><em>x_old</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a></td>          <td class="paramname"><span class="paramname"><em>t_k</em></span>, </td>
+          <td class="paramtype"><a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a></td>          <td class="paramname"><span class="paramname"><em>t_old</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a></td>          <td class="paramname"><span class="paramname"><em>d_t</em></span>, </td>
+          <td class="paramtype"><a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a></td>          <td class="paramname"><span class="paramname"><em>h_old</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">VectorN &amp;</td>          <td class="paramname"><span class="paramname"><em>x_o</em></span>, </td>
+          <td class="paramtype">VectorN &amp;</td>          <td class="paramname"><span class="paramname"><em>x_new</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>d_t_star</em></span>&#160;)</td>
+          <td class="paramtype"><a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>h_new</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -1403,64 +1596,15 @@ template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d44
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Compute an integration step using the implicit Runge-Kutta method for a system of the form  \( \mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, t) =
-\mathbf{0} \).</p>
-<p><b><a class="el" href="struct_sandals_1_1_solution.html" title="Class container for the numerical solution of a system of ODEs/DAEs.">Solution</a> Algorithm</b></p>
-<p>Consider a Runge-Kutta method, written for a system of the form \( \mathbf{x}^{\prime} = \mathbf{f}(\mathbf{x}, t) \):</p>
-<p class="formulaDsp">
-\[
-\begin{array}{l}
-\mathbf{K}_i = \mathbf{f} \left(
-  \mathbf{x}_k + \Delta t \displaystyle\sum_{j=1}^{s} a_{ij}
-  \mathbf{K}_j,
-  \, t_k + c_i \Delta t
-  \right), \qquad i = 1, 2, \ldots, s \\
-\mathbf{x}_{k+1} = \mathbf{x}_k + \Delta t \displaystyle\sum_{j=1}^s b_j
-\mathbf{K}_j \, ,
-\end{array}
-\]
-</p>
-<p>Then the implicit Runge-Kutta method for an implicit system of the form \(\mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, t) = \mathbf{0} \) can be written as</p>
-<p class="formulaDsp">
-\[
-\begin{array}{l}
-\mathbf{F}_i \left(
-  \mathbf{x}_k + \Delta t \displaystyle\sum_{j=1}^s a_{ij}
-    \mathbf{K}_j, \, \mathbf{K}_i, \, t_k + c_i \Delta t
-\right) = \mathbf{0}, \qquad i = 1, 2, \ldots, s \\
-\mathbf{x}_{k+1} = \mathbf{x}_k + \displaystyle\sum_{j=1}^s b_j \mathbf{K}_j.
-\end{array}
-\]
-</p>
-<p>Thus, the final system to be solved is the following:</p>
-<p class="formulaDsp">
-\[
-\left\{\begin{array}{l}
-\mathbf{F}_1 \left(
-  \mathbf{x}_k + h_k \displaystyle\sum_{j=1}^s a_{1j}
-  \mathbf{K}_j, \, \mathbf{K}_1, \, t_k + h_k c_1
-\right) = \mathbf{0} \\
-\mathbf{F}_2 \left(
-  \mathbf{x}_k + h_k \displaystyle\sum_{j=1}^s a_{2j}
-  \mathbf{K}_j, \, \mathbf{K}_2, \, t_k + h_k c_2
-\right) = \mathbf{0} \\
-~~ \vdots \\
-\mathbf{F}_s \left(
-  \mathbf{x}_k + h_k \displaystyle\sum_{j=1}^s a_{sj}
-  \mathbf{K}_j, \, \mathbf{K}_s, \, t_k + h_k c_s
-\right) = \mathbf{0}
-\end{array}\right.
-\]
-</p>
-<p>The \( \mathbf{K} \) variables are computed using the <a class="el" href="class_sandals_1_1_newton.html" title="Class container for the (damped) Newton&#39;s method with affine invariant step.">Newton</a>'s method.</p>
-<p>The suggested time step for the next advancing step \( h_{k+1} \), is the same as the input time step \( \Delta t \) since in the implicit Runge-Kutta method the time step is not modified through any error control method.</p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Compute the new states \( \mathbf{x}_{k+1} \) at the next advancing step  \( t_{k+1} = t_k
++ h_k \) using an implicit Runge-Kutta method, given an implicit system of the form  \(
+\mathbf{F}(\mathbf{x}, \mathbf{x}^\prime, t) = \mathbf{0} \). If the method is embedded, the time step for the next advancing step \( h_{k+1}^\star \) is also computed according to the error control method. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">x_k</td><td>States at \( k \)-th step \( \mathbf{x}_k \). </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">t_k</td><td>Time \( t_k \). </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">d_t</td><td>Advancing time step \( \Delta t\). </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">x_o</td><td>States at \( k+1 \)-th step \( \mathbf{x}_{k+1} \). </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">d_t_star</td><td>Suggested time step for the next integration step \( h_{k+1}^\star \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">x_old</td><td>States \( \mathbf{x}_k \) at the \( k \)-th step. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">t_old</td><td>Time \( t_k \) at the \( k \)-th step. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">h_old</td><td>Advancing time step \( h_k \) at the \( k \)-th step. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">x_new</td><td>Computed states \( \mathbf{x}_{k+1} \) at the \( k+1 \)-th step. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">h_new</td><td>The suggested time step \( h_{k+1}^\star \) for the next advancing step. </td></tr>
   </table>
   </dd>
 </dl>
@@ -2119,10 +2263,10 @@ template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d44
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Compute a step using a generic integration method for a system of the form  \( \mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, t) = \mathbf{0}
+<p>Compute a step using a generic integration method for a system of the form  \( \mathbf{F}(\mathbf{x}, \mathbf{x}^\prime, t) = \mathbf{0}
 \). The step is based on the following formula:</p>
 <p class="formulaDsp">
-\[ \mathbf{x}_{k+1} = \mathbf{x}_k + \mathcal{S}(\mathbf{x}_k, \mathbf{x}^{\prime}_k, t_k, h_k) \]
+\[ \mathbf{x}_{k+1} = \mathbf{x}_k + \mathcal{S}(\mathbf{x}_k, \mathbf{x}^\prime_k, t_k, h_k) \]
 </p>
 <p>where \( \mathcal{S} \) is the generic advancing step of the solver.</p>
 <dl class="params"><dt>Parameters</dt><dd>

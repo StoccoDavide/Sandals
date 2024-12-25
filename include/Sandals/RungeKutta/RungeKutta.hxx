@@ -177,14 +177,15 @@ namespace Sandals {
   template <Size S, Size N>
   class RungeKutta
   {
-    using VectorK  = Eigen::Vector<Real, N*S>;      //!< Templetized vector type.
-    using MatrixK  = Eigen::Matrix<Real, N, S>;     //!< Templetized matrix type.
-    using MatrixJ  = Eigen::Matrix<Real, N*S, N*S>; //!< Templetized matrix type.
-    using VectorS  = typename Tableau<S>::Vector;   //!< Templetized vector type.
-    using MatrixS  = typename Tableau<S>::Matrix;   //!< Templetized matrix type.
-    using VectorN  = typename Implicit<N>::Vector;  //!< Templetized vector type.
-    using MatrixN  = typename Implicit<N>::Matrix;  //!< Templetized matrix type.
-    using NLSolver = typename NonlinearSolver<N*S>; //!< Templetized nonlinear solver type.
+    using VectorK = Eigen::Vector<Real, N*S>;      //!< Templetized vector type.
+    using MatrixK = Eigen::Matrix<Real, N, S>;     //!< Templetized matrix type.
+    using MatrixJ = Eigen::Matrix<Real, N*S, N*S>; //!< Templetized matrix type.
+    using SolverK = NonlinearSolver<N*S>;          //!< Templetized nonlinear solver type for IRK methods.
+    using SolverN = NonlinearSolver<N>;            //!< Templetized nonlinear solver type for ERK and DIRK methods.
+    using VectorS = typename Tableau<S>::Vector;   //!< Templetized vector type.
+    using MatrixS = typename Tableau<S>::Matrix;   //!< Templetized matrix type.
+    using VectorN = typename Implicit<N>::Vector;  //!< Templetized vector type.
+    using MatrixN = typename Implicit<N>::Matrix;  //!< Templetized matrix type.
 
   public:
     using System   = typename Implicit<N>::Pointer;       //!< Shared pointer to an implicit ODE/DAE system.
@@ -193,9 +194,12 @@ namespace Sandals {
     using Solution = Solution<N>;                         //!< Templetized structure type for solution.
 
   private:
-    NLSolver    *m_nlsolver;                         //!< Nonlinear solver for implicit methods.
-    Newton<N*S>  m_newton;                           //!< Newton solver for implicit methods.
-    Broyden<N*S> m_broyden;                          //!< Broyden solver for implicit methods.
+    SolverN   *  m_solverN;                          //!< Nonlinear solver for ERK and DIRK methods.
+    Newton<N>    m_newtonN;                          //!< Newton solver for ERK and DIRK methods.
+    Broyden<N>   m_broydenN;                         //!< Broyden solver for ERK and DIRK methods.
+    SolverK     *m_solverK;                          //!< Nonlinear solver for IRK methods.
+    Newton<N*S>  m_newtonK;                          //!< Newton solver for IRK methods.
+    Broyden<N*S> m_broydenK;                         //!< Broyden solver for IRK methods.
     Tableau<S>   m_tableau;                          //!< Butcher tableau of the Runge-Kutta method.
     System       m_system;                           //!< ODE/DAE system object pointer.
     Real         m_absolute_tolerance{EPSILON_HIGH}; //!< Absolute tolerance for adaptive step \f$ \epsilon_{\text{abs}} \f$.
@@ -212,7 +216,8 @@ namespace Sandals {
     //! \param[in] t_tableau The Tableau reference.
     RungeKutta(Tableau<S> const &t_tableau)
       : m_tableau(t_tableau) {
-      this->m_nlsolver = &this->m_newton;
+      this->m_solverN = &this->m_newtonN;
+      this->m_solverK = &this->m_newtonK;
     }
 
     //! Class constructor for the Runge-Kutta method.
@@ -220,7 +225,20 @@ namespace Sandals {
     //! \param[in] t_system The ODE/DAE system shared pointer.
     RungeKutta(Tableau<S> const &t_tableau, System t_system)
       : m_tableau(t_tableau), m_system(t_system) {
-      this->m_nlsolver = &this->m_newton;
+      this->m_solverN = &this->m_newtonN;
+      this->m_solverK = &this->m_newtonK;
+    }
+
+    //! Enable the Newton nonlinear solver for implicit methods.
+    void enable_newton() {
+      this->m_solverN = &this->m_newtonN;
+      this->m_solverK = &this->m_newtonK;
+    }
+
+    //! Enable the Broyden nonlinear solver for implicit methods.
+    void enable_broyden() {
+      this->m_solverN = &this->m_broydenN;
+      this->m_solverK = &this->m_broydenK;
     }
 
     //! Get the enumeration type of the Runge-Kutta method.
@@ -427,200 +445,238 @@ namespace Sandals {
         << "\t- embedded:\t" << this->is_embedded() << std::endl;
     }
 
-    //! Compute an integration step using the explicit Runge-Kutta method for a
-    //! system of the form \f$ \mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, t)
-    //! = \mathbf{0} \f$. Notice that if the Runge-Kutta method and the ODE
-    //! system are both explicit then the \f$ \mathbf{K}_i \f$ variables can be
-    //! straightforwardly calculated.
-    //!
-    //! **Solution Algorithm**
-    //!
-    //! Consider a Runge-Kutta method, written for a system of the
-    //! form \f$ \mathbf{x}^{\prime} = \mathbf{f}(\mathbf{x}, t) \f$:
-    //!
-    //! \f[
-    //! \begin{array}{l}
-    //! \mathbf{K}_i = \mathbf{f} \left(
-    //!   \mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{s} a_{ij} \mathbf{K}_j, t_k + h_k c_i
-    //!   \right), \qquad i = 1, 2, \ldots, s \text{,} \\
-    //! \mathbf{x}_{k+1} = \mathbf{x}_k + h_k \displaystyle\sum_{i=1}^s b_i \mathbf{K}_i \text{,}
-    //! \end{array}
-    //! \f]
-    //!
-    //! Beacuse of the nature of the matrix \f$ \mathbf{A} \f$ (lower triangular)
-    //! the \f$ s\f$ stages for a generic explicit Runge-Kutta method take the
-    //! form:
-    //!
-    //! \f[
-    //! \mathbf{K}_i = \mathbf{f} \left(
-    //!   \mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{i-1} a_{ij}
-    //!   \mathbf{K}_j, t_k + h_k c_i
-    //!   \right), \qquad i = 1, 2, \ldots, s \text{.}
-    //! \f]
-    //!
-    //! Then the explicit Runge-Kutta method for an implicit system of the form
-    //! \f$\mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, t) = \mathbf{0} \f$ can be
-    //! written as
-    //!
-    //! \f[
-    //! \begin{array}{l}
-    //! \mathbf{F}_i \left(
-    //!   \mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{i-1} a_{ij}
-    //!     \mathbf{K}_j, \mathbf{K}_i, t_k + h_k c_i
-    //! \right) = \mathbf{0}, \qquad i = 1, 2, \ldots, s \text{,} \\
-    //! \mathbf{x}_{k+1} = \mathbf{x}_k + \displaystyle\sum_{i=1}^s b_i \mathbf{K}_i.
-    //! \end{array}
-    //! \f]
-    //!
-    //! It is important to notice that the system of \f$ s \f$ equations
-    //! \f$ \mathbf{F}_i \f$ is a triangular system (which may be nonlinear in
-    //! the \f$ \mathbf{K}_i \f$ variables), so it can be solved using forward
-    //! substitution and the solution of the system is the vector \f$ \mathbf{K}
-    //! \f$. Thus, the final system to be solved is the following:
-    //!
-    //! \f[
-    //! \left\{\begin{array}{l}
-    //! \mathbf{F}_1 \left(\mathbf{x}_k, \mathbf{K}_1, t_k + c_1 h_k\right) = \mathbf{0} \\
-    //! \mathbf{F}_2 \left(\mathbf{x}_k + h_k a_{21} \mathbf{K}_1, \mathbf{K}_2, t_k + c_2 h_k
-    //! \right) = \mathbf{0} \\
-    //! ~~ \vdots \\
-    //! \mathbf{F}_s \left(\mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{s-1} a_{sj} \mathbf{K}_j, \mathbf{K}_s, t_k + c_s h_k \right) = \mathbf{0}
-    //! \end{array}\right.
-    //! \f]
-    //!
-    //! The \f$ \mathbf{K}_i \f$ variable are computed using the Newton's method.
-    //!
-    //! **Note**
-    //!
-    //! Another approach is to directly solve the whole system of equations by
-    //! Newton'smethod. In other words, the system of equations is solved
-    //! iteratively by computing the Jacobian matrixes of the system and using
-    //! them to compute the solution. This approach is used in the implicit
-    //! Runge-Kutta method. For this reason, a Butcher tableau relative to an
-    //! explicit Runge-Kutta method can also be used in the `ImplicitRungeKutta` class.
-    //!
-    //! The suggested time step for the next advancing step \f$ h_{k+1} \f$,
-    //! is the same as the input time step \f$ h_k \f$ since in the explicit
-    //! Runge-Kutta method the time step is not modified through any error control
-    //! method.
-    //!
-    //! \param[in] x_k States at \f$ k \f$-th step \f$ \mathbf{x}_k \f$.
-    //! \param[in] t_k Time \f$ t_k \f$.
-    //! \param[in] t_step Advancing time step \f$ h_k\f$.
-    //! \param[out] x_out States at \f$ k+1 \f$-th step \f$ \mathbf{x}_{k+1} \f$.
-    //! \param[out] t_adap The suggested adaptive time step for the next advancing step
-    //!               \f$ h_{k+1} \f$.
+    /*\
+     |   _____ ____  _  __
+     |  | ____|  _ \| |/ /
+     |  |  _| | |_) | ' /
+     |  | |___|  _ <| . \
+     |  |_____|_| \_\_|\_\
+     |
+    \*/
+
+    //! Compute the new states \f$ \mathbf{x}_{k+1} \f$ at the next advancing step \f$ t_{k+1} = t_k
+    //! + h_k \f$ using an explicit Runge-Kutta method, given an explicit system of the form \f$
+    //! \mathbf{x}^\prime = \mathbf{f}(\mathbf{x}, t) \f$. If the method is embedded, the time
+    //! step for the next advancing step \f$ h_{k+1}^\star \f$ is also computed according to the
+    //! error control method.
+    //! \param[in] x_old States \f$ \mathbf{x}_k \f$ at the \f$ k \f$-th step.
+    //! \param[in] t_old Time \f$ t_k \f$ at the \f$ k \f$-th step.
+    //! \param[in] h_old Advancing time step \f$ h_k \f$ at the \f$ k \f$-th step.
+    //! \param[out] x_new Computed states \f$ \mathbf{x}_{k+1} \f$ at the \f$ k+1 \f$-th step.
+    //! \param[out] h_new The suggested time step \f$ h_{k+1}^\star \f$ for the next advancing step.
     //! \return True if the step is successfully computed, false otherwise.
-    bool erk_step(VectorN const &x_k, Real t_k, Real t_step, VectorN &x_out, Real &t_adap) const
+    bool erk_explicit_step(VectorN const &x_old, Real t_old, Real h_old, VectorN &x_new, Real &h_new) const
     {
       using Eigen::all;
       using Eigen::seqN;
 
       // Compute the K variables in the case of an explicit method and explicit system
-      Real t_i;
-      VectorN x_i;
+      Real t_node;
+      VectorN x_node;
       MatrixK K;
-      for (Size i = 0; i < S; ++i)
-      {
-        t_i = t_k + this->m_tableau.c(i) * t_step;
-        x_i = x_k + K(all, seqN(0, i)) * this->m_tableau.A(i, seqN(0, i)).transpose();
-        K.col(i) = t_step * static_cast<Explicit<N> const *>(this->m_system.get())->f(x_i, t_i);
+      for (Size i = 0; i < S; ++i) {
+        t_node = t_old + this->m_tableau.c(i) * h_old;
+        x_node = x_old + K(all, seqN(0, i)) * this->m_tableau.A(i, seqN(0, i)).transpose();
+        K.col(i) = h_old * static_cast<Explicit<N> const *>(this->m_system.get())->f(x_node, t_node);
       }
       if (!K.allFinite()) {return false;}
 
       // Perform the step and obtain the next state
-      x_out = x_k + K * this->m_tableau.b;
+      x_new = x_old + K * this->m_tableau.b;
 
       // Adapt next time step
-      if (this->m_adaptive_step && this->m_is_embedded) {
-        VectorN x_e = x_k + K * this->m_tableau.b_e;
-        t_adap = this->estimate_step(x_out, x_e, t_step);
+      if (this->m_adaptive_step && this->m_tableau.is_embedded) {
+        VectorN x_emb = x_old + K * this->m_tableau.b_e;
+        h_new = this->estimate_step(x_new, x_emb, h_old);
       }
       return true;
     }
 
-    //! Compute the residual of system to be solved:
-    bool dirk_step(VectorN const &x_k, Real t_k, Real t_step, VectorN &x_out, Real &t_adap) const
-    {
-      using Eigen::all;
-      using Eigen::seqN;
-
-      // Compute the K variables in the case of an explicit method and explicit system
-      Real t_i;
-      VectorN x_i;
-      MatrixK K;
-      for (Size i = 0; i < S; ++i)
-      {
-        t_i = t_k + this->m_tableau.c(i) * t_step;
-        x_i = x_k + K(all, seqN(0, i)) * this->m_tableau.A(i, seqN(0, i)).transpose();
-        K.col(i) = t_step * static_cast<Explicit<N> const *>(this->m_system.get())->f(x_i, t_i);
-      }
-      if (!K.allFinite()) {return false;}
-
-      // Perform the step and obtain the next state
-      x_out = x_k + K * this->m_tableau.b;
-
-      // Adapt next time step
-      if (this->m_adaptive_step && this->m_is_embedded) {
-        VectorN x_e = x_k + K * this->m_tableau.b_e;
-        t_adap = this->estimate_step(x_out, x_e, t_step);
-      }
-      return true;
-    }
-
-    //! Compute the residual of system to be solved:
-    //!
+    //! Compute the residual of system to be solved, which is given by the values of the system
     //! \f[
-    //! \mathbf{F}_i\left(\mathbf{x}_k + \Delta t \displaystyle\sum_{j=1}^{s}
-    //!   a_{ij} \mathbf{K}_j, \, \mathbf{K}_i, \, t_k + c_i \Delta t
-    //! \right) = \mathbf{0}.
+    //! \begin{array}{l}
+    //!   \mathbf{F}_n \left(\mathbf{x} + \displaystyle\sum_{j=1}^{n-1} a_{nj}\tilde{\mathbf{K}}_j,
+    //!   \displaystyle\frac{\tilde{\mathbf{K}}_n}{h}, t + h c_n\right)
+    //! \end{array} \text{.}
     //! \f]
-    //!
-    //! \param[in] x_k States at \f$ k \f$-th step \f$ \mathbf{x}_k \f$.
-    //! \param[in] K_k Variables \f$ \mathbf{K} \f$ of the system to be solved.
-    //! \param[in] t_k Time \f$ t_k \f$.
-    //! \param[in] d_t Advancing time step \f$ \Delta t \f$.
+    //! where \f$ \tilde{\mathbf{K}} = h \mathbf{K} \f$.
+    //! \note If \f$ h \gets 0 \f$, then the first guess to solve the nonlinear system
+    //! is given by \f$ \tilde{\mathbf{K}} = \mathbf{0} \f$.
+    //! \param[in] s Stage index \f$ s \f$.
+    //! \param[in] x States \f$ \mathbf{x} \f$.
+    //! \param[in] t Time \f$ t \f$.
+    //! \param[in] h Advancing time step \f$ h \f$.
+    //! \param[in] K Variables \f$ \tilde{\mathbf{K}} = h \mathbf{K} \f$ of the system to be solved.
     //! \param[out] fun The residual of system to be solved.
-    void irk_function(VectorN const &x_k, VectorK const &K_k, Real t_k, Real d_t, VectorK &fun) const
+    void erk_implicit_function(Size s, VectorN const &x, Real t, Real h, MatrixK const &K, VectorN &fun) const
     {
-      fun.setZero();
+      using Eigen::seqN;
+      using Eigen::all;
+      Real t_node{t + h * this->m_tableau.c(s)}; // FIXME: can i avoid this temporary variables?
+      VectorN x_node(x + K(all, seqN(0, s)) * this->m_tableau.A(s, seqN(0, s)).transpose());
+      fun = this->m_system->F(x_node, K.col(s)/h, t_node);
+    }
+
+    //! Compute the Jacobian of the system of equations
+    //! \f[
+    //! \begin{array}{l}
+    //!   \mathbf{F}_n \left(\mathbf{x} + \displaystyle\sum_{j=1}^{n-1} a_{nj}\tilde{\mathbf{K}}_j,
+    //!   \displaystyle\frac{\tilde{\mathbf{K}}_n}{h}, t + h c_n\right)
+    //! \end{array} \text{.}
+    //! \f]
+    //! with respect to the \f$ \tilde{\mathbf{K}}_n = h \mathbf{K}_n \f$ variables. The Jacobian
+    //! matrix of the \f$ n \f$-th equation with respect to the \f$ \tilde{\mathbf{K}}_n \f$ variables
+    //! is given by
+    //! \f[
+    //!   \frac{\partial\mathbf{F}_n}{\partial\tilde{\mathbf{K}}_n}\left(\mathbf{x} + \displaystyle
+    //!   \sum_{j=1}^{n-1} a_{nj}\tilde{\mathbf{K}}_j, \displaystyle\frac{\tilde{\mathbf{K}}_n}{h},
+    //!   t + h c_n \right) = a_{nj} \mathbf{JF}_x + \displaystyle\frac{1}{h}\begin{cases}
+    //!   \mathbf{JF}_{x^{\prime}} & n = j \\
+    //!   0 & n \neq j
+    //! \end{cases} \text{,}
+    //! \f]
+    //! for \f$ j = 1, 2, \ldots, s \f$.
+    //! \note If \f$ h \rightarrow 0 \f$, then the first guess to solve the nonlinear system
+    //! is given by \f$ \tilde{\mathbf{K}} = \mathbf{0} \f$.
+    //! \param[in] s Stage index \f$ s \f$.
+    //! \param[in] x States \f$ \mathbf{x} \f$.
+    //! \param[in] t Time \f$ t \f$.
+    //! \param[in] h Advancing time step \f$ h \f$.
+    //! \param[in] K Variables \f$ h \mathbf{K} \f$ of the system to be solved.
+    //! \param[out] fun The Jacobian of system to be solved.
+    void erk_implicit_jacobian(Size s, VectorN const &x, Real t, Real h, MatrixK const &K, MatrixN &jac) const
+    {
+      using Eigen::all;
+      using Eigen::seqN;
+
+      // Compute node's time and states
+      Real t_node{t + h * this->m_tableau.c(s)}; // FIXME: can i avoid this temporary variables?
+      VectorN x_node(x + K(all, seqN(0, s)) * this->m_tableau.A(s, seqN(0, s)).transpose());
+
+      // Combine the Jacobians with respect to x and x_dot to obtain the Jacobian with respect to K
+      jac = this->m_system->JF_x_dot(x_node, K.col(s)/h, t_node) / h;
+    }
+
+    //! Compute the new states \f$ \mathbf{x}_{k+1} \f$ at the next advancing step \f$ t_{k+1} = t_k
+    //! + h_k \f$ using an explicit Runge-Kutta method, given an explicit system of the form \f$
+    //! \mathbf{x}^\prime = \mathbf{f}(\mathbf{x}, t) \f$. If the method is embedded, the time
+    //! step for the next advancing step \f$ h_{k+1}^\star \f$ is also computed according to the
+    //! error control method.
+    //! \param[in] x_old States \f$ \mathbf{x}_k \f$ at the \f$ k \f$-th step.
+    //! \param[in] t_old Time \f$ t_k \f$ at the \f$ k \f$-th step.
+    //! \param[in] h_old Advancing time step \f$ h_k \f$ at the \f$ k \f$-th step.
+    //! \param[out] x_new Computed states \f$ \mathbf{x}_{k+1} \f$ at the \f$ k+1 \f$-th step.
+    //! \param[out] h_new The suggested time step \f$ h_{k+1}^\star \f$ for the next advancing step.
+    //! \return True if the step is successfully computed, false otherwise.
+    bool erk_implicit_step(VectorN const &x_old, Real t_old, Real h_old, VectorN &x_new, Real &h_new) const
+    {
+      MatrixK K;
+      VectorN K_sol;
+      VectorN K_ini(VectorN::Zero());
+      // Check if the solver converged
+      for (Size s = 0; s < S; ++s) {
+        if (this->m_solverN->solve(
+            [this, s, &K, &x_old, t_old, h_old](VectorN const &K_fun, VectorN &fun)
+              {K.col(s) = K_fun; this->erk_implicit_function(s, x_old, t_old, h_old, K, fun);},
+            [this, s, &K, &x_old, t_old, h_old](VectorN const &K_jac, MatrixN &jac)
+              {K.col(s) = K_jac; this->erk_implicit_jacobian(s, x_old, t_old, h_old, K, jac);},
+            K_ini, K_sol)) {
+            std::cout << "iter = " <<this->m_solverN->iterations() << std::endl;
+            K.col(s) = K_sol;
+          } else {
+            return false;
+          }
+      }
+
+      // Perform the step and obtain the next state
+      x_new = x_old + K * this->m_tableau.b;
+
+      // Adapt next time step
+      if (this->m_adaptive_step && this->m_tableau.is_embedded) {
+        VectorN x_emb(x_old + K * this->m_tableau.b_e);
+        h_new = this->estimate_step(x_new, x_emb, h_old);
+      }
+      return true;
+    }
+
+    /*\
+     |   ___ ____  _  __
+     |  |_ _|  _ \| |/ /
+     |   | || |_) | ' /
+     |   | ||  _ <| . \
+     |  |___|_| \_\_|\_\
+     |
+    \*/
+
+    //! Compute the residual of system to be solved, which is given by the values of the system
+    //! \f[
+    //! \begin{array}{l}
+    //!   \mathbf{F}_1 \left(\mathbf{x} + \displaystyle\sum_{j=1}^{s} a_{1j}\tilde{\mathbf{K}}_j,
+    //!   \displaystyle\frac{\tilde{\mathbf{K}}_1}{h}, t + h c_1\right) \\
+    //!   \mathbf{F}_2 \left(\mathbf{x} + \displaystyle\sum_{j=1}^{s} a_{2j}\tilde{\mathbf{K}}_j,
+    //!   \displaystyle\frac{\tilde{\mathbf{K}}_2}{h}, t + h c_2\right) \\[-0.5em]
+    //!   \vdots \\[-0.5em]
+    //!   \mathbf{F}_s \left(\mathbf{x} + \displaystyle\sum_{j=1}^{s} a_{sj}\tilde{\mathbf{K}}_j,
+    //!   \displaystyle\frac{\tilde{\mathbf{K}}_s}{h}, t + h c_s\right)
+    //! \end{array} \text{.}
+    //! \f]
+    //! where \f$ \tilde{\mathbf{K}} = h \mathbf{K} \f$.
+    //! \note If \f$ h \gets 0 \f$, then the first guess to solve the nonlinear system
+    //! is given by \f$ \tilde{\mathbf{K}} = \mathbf{0} \f$.
+    //! \param[in] x States \f$ \mathbf{x} \f$.
+    //! \param[in] t Time \f$ t \f$.
+    //! \param[in] h Advancing time step \f$ h \f$.
+    //! \param[in] K Variables \f$ \tilde{\mathbf{K}} = h \mathbf{K} \f$ of the system to be solved.
+    //! \param[out] fun The residual of system to be solved.
+    void irk_function(VectorN const &x, Real t, Real h, VectorK const &K, VectorK &fun) const
+    {
+      // Reset the residual vector
+      fun.setZero(); // FIXME: can i avoid this?
 
       // Loop through each equation of the system
-      Real t_i;
-      VectorN x_i;
-      MatrixK K{K_k.reshaped(N, S)}; // FIXME: can i avoid reshaping?
-      MatrixK fun_tmp;
+      Real t_node;
+      VectorN x_node; // FIXME: can i avoid this temporary variables?
+      MatrixK K_mat{K.reshaped(N, S)}; // FIXME: can i avoid reshaping?
+      MatrixK fun_mat;
       for (Size i = 0; i < S; ++i) {
-        t_i = t_k + this->m_tableau.c(i) * d_t;
-        x_i = x_k + K * this->m_tableau.A.row(i).transpose();
-        fun_tmp.col(i) = this->m_system->F(x_i, K.col(i) / d_t, t_i);
+        t_node = t + h * this->m_tableau.c(i);
+        x_node = x + K_mat * this->m_tableau.A.row(i).transpose();
+        fun_mat.col(i) = this->m_system->F(x_node, K_mat.col(i)/h, t_node);
       }
-      fun = fun_tmp.reshaped(N*S, 1);
+      fun = fun_mat.reshaped(N*S, 1);
     }
 
-    //! Compute the Jacobian of the system of equations:
-    //!
+    //! Compute the Jacobian of the system of equations
     //! \f[
-    //! \mathbf{F}_i\left(\mathbf{x}_k + \Delta t \displaystyle\sum_{j=1}^s
-    //!   a_{ij} \mathbf{K}_j, \, \mathbf{K}_i, \, t_k + c_i \Delta t
-    //! \right) = \mathbf{0}
+    //! \begin{array}{l}
+    //!   \mathbf{F}_1 \left(\mathbf{x} + \displaystyle\sum_{j=1}^{s} a_{1j}\tilde{\mathbf{K}}_j,
+    //!   \displaystyle\frac{\tilde{\mathbf{K}}_1}{h}, t + h c_1\right) \\
+    //!   \mathbf{F}_2 \left(\mathbf{x} + \displaystyle\sum_{j=1}^{s} a_{2j}\tilde{\mathbf{K}}_j,
+    //!   \displaystyle\frac{\tilde{\mathbf{K}}_2}{h}, t + h c_2\right) \\[-0.5em]
+    //!   \vdots \\[-0.5em]
+    //!   \mathbf{F}_s \left(\mathbf{x} + \displaystyle\sum_{j=1}^{s} a_{sj}\tilde{\mathbf{K}}_j,
+    //!   \displaystyle\frac{\tilde{\mathbf{K}}_s}{h}, t + h c_s\right)
+    //! \end{array} \text{.}
     //! \f]
-    //!
-    //! to be solved in the \f$ \mathbf{K} \f$ variable:
-    //!
+    //! with respect to the \f$ \tilde{\mathbf{K}} = h \mathbf{K} \f$ variables. The \f$ ij \f$-th
+    //! Jacobian matrix entry is given by
     //! \f[
-    //! \frac{\partial \mathbf{F}_i}{\partial \mathbf{K}_i} \left(
-    //!   \mathbf{x}_k + \Delta t \displaystyle\sum_{j=1}^s a_{ij} \mathbf{K}_j,
-    //!   \, \mathbf{K}_i, \, t_k + c_i \Delta t
-    //! \right)
+    //!   \frac{\partial\mathbf{F}_i}{\partial\tilde{\mathbf{K}}_j}\left(\mathbf{x} + \displaystyle
+    //!   \sum_{j=1}^s a_{ij}\tilde{\mathbf{K}}_j, \displaystyle\frac{\tilde{\mathbf{K}}_i}{h}, t +
+    //!   h c_i \right) = a_{ij} \mathbf{JF}_x + \displaystyle\frac{1}{h}\begin{cases}
+    //!   \mathbf{JF}_{x^{\prime}} & i = j \\
+    //!   0 & i \neq j
+    //! \end{cases} \text{,}
     //! \f]
-    //!
-    //! \param[in] x_k States at \f$ k \f$-th step \f$ \mathbf{x}_k \f$.
-    //! \param[in] K_k Variables \f$ \mathbf{K} \f$ of the system to be solved.
-    //! \param[in] t_k Time \f$ t_k \f$.
-    //! \param[in] d_t Advancing time step \f$ \Delta t \f$.
-    //! \param[out] jac The Jacobian of the system of equations to be solved.
-    void irk_jacobian(VectorN const &x_k, VectorK const &K_k, Real t_k, Real d_t, MatrixJ &jac) const
+    //! for \f$ i = 1, 2, \ldots, s \f$ and \f$ j = 1, 2, \ldots, s \f$.
+    //! \note If \f$ h \rightarrow 0 \f$, then the first guess to solve the nonlinear system
+    //! is given by \f$ \tilde{\mathbf{K}} = \mathbf{0} \f$.
+    //! \param[in] x States \f$ \mathbf{x} \f$.
+    //! \param[in] t Time \f$ t \f$.
+    //! \param[in] h Advancing time step \f$ h \f$.
+    //! \param[in] K Variables \f$ h \mathbf{K} \f$ of the system to be solved.
+    //! \param[out] fun The Jacobian of system to be solved.
+    void irk_jacobian(VectorN const &x, Real t, Real h, VectorK const &K, MatrixJ &jac) const
     {
       using Eigen::all;
       using Eigen::seqN;
@@ -628,28 +684,28 @@ namespace Sandals {
       jac.setZero();
 
       // Loop through each equation of the system
-      MatrixK K{K_k.reshaped(N, S)};
-      Real t_i;
-      VectorN x_i, x_dot_i;
+      MatrixK K_mat{K.reshaped(N, S)};
+      Real t_node;
+      VectorN x_node, x_dot_node;
       MatrixN JF_x, JF_x_dot;
       auto idx = seqN(0, N), jdx = seqN(0, N);
       for (Size i = 0; i < S; ++i) {
-        t_i = t_k + this->m_tableau.c(i) * d_t;
-        x_i = x_k + K * this->m_tableau.A.row(i).transpose();
+        t_node = t + h * this->m_tableau.c(i);
+        x_node = x + K_mat * this->m_tableau.A.row(i).transpose();
 
         // Compute the Jacobians with respect to x and x_dot
-        x_dot_i  = K.col(i) / d_t;
-        JF_x     = this->m_system->JF_x(x_i, x_dot_i, t_i);
-        JF_x_dot = this->m_system->JF_x_dot(x_i, x_dot_i, t_i);
+        x_dot_node = K_mat.col(i)/h;
+        JF_x       = this->m_system->JF_x(x_node, x_dot_node, t_node);
+        JF_x_dot   = this->m_system->JF_x_dot(x_node, x_dot_node, t_node);
 
-        // Derivative of F(x_i, K(:,i)/d_t, t_i)
+        // Derivative of F(x_node, K(:,i)/h, t_node)
         idx = seqN(i*N, N);
         for (Size j = 0; j < S; ++j) {
           // Combine the Jacobians with respect to x and x_dot to obtain the
           // Jacobian with respect to K
           jdx = seqN(j*N, N);
           if (i == j) {
-            jac(idx, jdx) = this->m_tableau.A(i,j) * JF_x + JF_x_dot / d_t;
+            jac(idx, jdx) = this->m_tableau.A(i,j) * JF_x + JF_x_dot / h;
           } else {
             jac(idx, jdx) = this->m_tableau.A(i,j) * JF_x;
           }
@@ -657,100 +713,168 @@ namespace Sandals {
       }
     }
 
-    //! Compute an integration step using the implicit Runge-Kutta method for a
-    //! system of the form \f$ \mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, t) =
-    //! \mathbf{0} \f$.
-    //!
-    //! **Solution Algorithm**
-    //!
-    //! Consider a Runge-Kutta method, written for a system of the form
-    //! \f$ \mathbf{x}^{\prime} = \mathbf{f}(\mathbf{x}, t) \f$:
-    //!
-    //! \f[
-    //! \begin{array}{l}
-    //! \mathbf{K}_i = \mathbf{f} \left(
-    //!   \mathbf{x}_k + \Delta t \displaystyle\sum_{j=1}^{s} a_{ij}
-    //!   \mathbf{K}_j,
-    //!   \, t_k + c_i \Delta t
-    //!   \right), \qquad i = 1, 2, \ldots, s \\
-    //! \mathbf{x}_{k+1} = \mathbf{x}_k + \Delta t \displaystyle\sum_{j=1}^s b_j
-    //! \mathbf{K}_j \, ,
-    //! \end{array}
-    //! \f]
-    //!
-    //! Then the implicit Runge-Kutta method for an implicit system of the form
-    //! \f$\mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, t) = \mathbf{0} \f$ can be written
-    //! as
-    //!
-    //! \f[
-    //! \begin{array}{l}
-    //! \mathbf{F}_i \left(
-    //!   \mathbf{x}_k + \Delta t \displaystyle\sum_{j=1}^s a_{ij}
-    //!     \mathbf{K}_j, \, \mathbf{K}_i, \, t_k + c_i \Delta t
-    //! \right) = \mathbf{0}, \qquad i = 1, 2, \ldots, s \\
-    //! \mathbf{x}_{k+1} = \mathbf{x}_k + \displaystyle\sum_{j=1}^s b_j \mathbf{K}_j.
-    //! \end{array}
-    //! \f]
-    //!
-    //! Thus, the final system to be solved is the following:
-    //!
-    //! \f[
-    //! \left\{\begin{array}{l}
-    //! \mathbf{F}_1 \left(
-    //!   \mathbf{x}_k + h_k \displaystyle\sum_{j=1}^s a_{1j}
-    //!   \mathbf{K}_j, \, \mathbf{K}_1, \, t_k + h_k c_1
-    //! \right) = \mathbf{0} \\
-    //! \mathbf{F}_2 \left(
-    //!   \mathbf{x}_k + h_k \displaystyle\sum_{j=1}^s a_{2j}
-    //!   \mathbf{K}_j, \, \mathbf{K}_2, \, t_k + h_k c_2
-    //! \right) = \mathbf{0} \\
-    //! ~~ \vdots \\
-    //! \mathbf{F}_s \left(
-    //!   \mathbf{x}_k + h_k \displaystyle\sum_{j=1}^s a_{sj}
-    //!   \mathbf{K}_j, \, \mathbf{K}_s, \, t_k + h_k c_s
-    //! \right) = \mathbf{0}
-    //! \end{array}\right.
-    //! \f]
-    //!
-    //! The \f$ \mathbf{K} \f$ variables are computed using the Newton's method.
-    //!
-    //! The suggested time step for the next advancing step
-    //! \f$ h_{k+1} \f$, is the same as the input time step
-    //! \f$ \Delta t \f$ since in the implicit Runge-Kutta method the time step
-    //! is not modified through any error control method.
-    //!
-    //! \param[in] x_k States at \f$ k \f$-th step \f$ \mathbf{x}_k \f$.
-    //! \param[in] t_k Time \f$ t_k \f$.
-    //! \param[in] d_t Advancing time step \f$ \Delta t\f$.
-    //! \param[out] x_o States at \f$ k+1 \f$-th step \f$ \mathbf{x}_{k+1} \f$.
-    //! \param[out] d_t_star Suggested time step for the next integration step \f$ h_{k+1}^\star \f$.
+    //! Compute the new states \f$ \mathbf{x}_{k+1} \f$ at the next advancing step \f$ t_{k+1} = t_k
+    //! + h_k \f$ using an implicit Runge-Kutta method, given an implicit system of the form \f$
+    //! \mathbf{F}(\mathbf{x}, \mathbf{x}^\prime, t) = \mathbf{0} \f$. If the method is embedded,
+    //! the time step for the next advancing step \f$ h_{k+1}^\star \f$ is also computed according
+    //! to the error control method.
+    //! \param[in] x_old States \f$ \mathbf{x}_k \f$ at the \f$ k \f$-th step.
+    //! \param[in] t_old Time \f$ t_k \f$ at the \f$ k \f$-th step.
+    //! \param[in] h_old Advancing time step \f$ h_k \f$ at the \f$ k \f$-th step.
+    //! \param[out] x_new Computed states \f$ \mathbf{x}_{k+1} \f$ at the \f$ k+1 \f$-th step.
+    //! \param[out] h_new The suggested time step \f$ h_{k+1}^\star \f$ for the next advancing step.
     //! \return True if the step is successfully computed, false otherwise.
-    bool irk_step(VectorN const &x_k, Real t_k, Real d_t, VectorN &x_o, Real &d_t_star)
+    bool irk_step(VectorN const &x_old, Real t_old, Real h_old, VectorN &x_new, Real &h_new)
     {
-      // Check if the solver converged
       VectorK K;
 
-      if (!this->m_newton.solve(
-        [this, &x_k, t_k, d_t](VectorK const &K, VectorK &fun) {this->irk_function(x_k, K, t_k, d_t, fun);},
-        [this, &x_k, t_k, d_t](VectorK const &K, MatrixJ &jac) {this->irk_jacobian(x_k, K, t_k, d_t, jac);},
-        VectorK::Zero(), K)) {return false;}
+      // Check if the solver converged
+      if (!this->m_solverK->solve(
+          [this, &x_old, t_old, h_old](VectorK const &K, VectorK &fun)
+            {this->irk_function(x_old, t_old, h_old, K, fun);},
+          [this, &x_old, t_old, h_old](VectorK const &K, MatrixJ &jac)
+            {this->irk_jacobian(x_old, t_old, h_old, K, jac);},
+          VectorK::Zero(), K))
+        {return false;}
 
-      // Perform the step and obtain x_k+1
-      x_o = x_k + K.reshaped(N, S) * this->m_tableau.b;
+      // Perform the step and obtain the next state
+      x_new = x_old + K.reshaped(N, S) * this->m_tableau.b;
 
       // Adapt next time step
       if (this->m_adaptive_step && this->m_tableau.is_embedded) {
-        VectorN x_e{x_k + K.reshaped(N, S) * this->m_tableau.b_e};
-        d_t_star = this->estimate_step(x_o, x_e, d_t);
+        VectorN x_emb(x_old + K.reshaped(N, S) * this->m_tableau.b_e);
+        h_new = this->estimate_step(x_new, x_emb, h_old);
       }
       return true;
     }
 
+    /*\
+     |   ____ ___ ____  _  __
+     |  |  _ \_ _|  _ \| |/ /
+     |  | | | | || |_) | ' /
+     |  | |_| | ||  _ <| . \
+     |  |____/___|_| \_\_|\_\
+     |
+    \*/
+
+    //! Compute the residual of system to be solved, which is given by the values of the system
+    //! \f[
+    //! \begin{array}{l}
+    //!   \mathbf{F}_n \left(\mathbf{x} + \displaystyle\sum_{j=1}^n a_{nj}\tilde{\mathbf{K}}_j,
+    //!   \displaystyle\frac{\tilde{\mathbf{K}}_n}{h}, t + h c_n\right)
+    //! \end{array} \text{.}
+    //! \f]
+    //! where \f$ \tilde{\mathbf{K}} = h \mathbf{K} \f$.
+    //! \note If \f$ h \gets 0 \f$, then the first guess to solve the nonlinear system
+    //! is given by \f$ \tilde{\mathbf{K}} = \mathbf{0} \f$.
+    //! \param[in] n Equation index \f$ n \f$.
+    //! \param[in] x States \f$ \mathbf{x} \f$.
+    //! \param[in] t Time \f$ t \f$.
+    //! \param[in] h Advancing time step \f$ h \f$.
+    //! \param[in] K Variables \f$ \tilde{\mathbf{K}} = h \mathbf{K} \f$ of the system to be solved.
+    //! \param[out] fun The residual of system to be solved.
+    void dirk_implicit_function(Size n, VectorN const &x, Real t, Real h, MatrixK const &K, VectorN &fun) const
+    {
+      using Eigen::seqN;
+      using Eigen::all;
+      Real t_node{t + h * this->m_tableau.c(n)}; // FIXME: can i avoid this temporary variables?
+      VectorN x_node(x + K(all, seqN(0, n+1)) * this->m_tableau.A(n, seqN(0, n+1)).transpose());
+      fun = this->m_system->F(x_node, K.col(n)/h, t_node);
+    }
+
+    //! Compute the Jacobian of the system of equations
+    //! \f[
+    //! \begin{array}{l}
+    //!   \mathbf{F}_n \left(\mathbf{x} + \displaystyle\sum_{j=1}^n a_{nj}\tilde{\mathbf{K}}_j,
+    //!   \displaystyle\frac{\tilde{\mathbf{K}}_n}{h}, t + h c_n\right)
+    //! \end{array} \text{.}
+    //! \f]
+    //! with respect to the \f$ \tilde{\mathbf{K}}_n = h \mathbf{K}_n \f$ variables. The Jacobian
+    //! matrix of the \f$ n \f$-th equation with respect to the \f$ \tilde{\mathbf{K}}_n \f$ variables
+    //! is given by
+    //! \f[
+    //!   \frac{\partial\mathbf{F}_n}{\partial\tilde{\mathbf{K}}_n}\left(\mathbf{x} + \displaystyle
+    //!   \sum_{j=1}^n a_{nj}\tilde{\mathbf{K}}_j, \displaystyle\frac{\tilde{\mathbf{K}}_n}{h},
+    //!   t + h c_n \right) = a_{nj} \mathbf{JF}_x + \displaystyle\frac{1}{h}\begin{cases}
+    //!   \mathbf{JF}_{x^{\prime}} & n = j \\
+    //!   0 & n \neq j
+    //! \end{cases} \text{,}
+    //! \f]
+    //! for \f$ j = 1, 2, \ldots, s \f$.
+    //! \note If \f$ h \rightarrow 0 \f$, then the first guess to solve the nonlinear system
+    //! is given by \f$ \tilde{\mathbf{K}} = \mathbf{0} \f$.
+    //! \param[in] n Equation index \f$ n \f$.
+    //! \param[in] x States \f$ \mathbf{x} \f$.
+    //! \param[in] t Time \f$ t \f$.
+    //! \param[in] h Advancing time step \f$ h \f$.
+    //! \param[in] K Variables \f$ h \mathbf{K} \f$ of the system to be solved.
+    //! \param[out] fun The Jacobian of system to be solved.
+    void dirk_implicit_jacobian(Size n, VectorN const &x, Real t, Real h, MatrixK const &K, MatrixN &jac) const
+    {
+      using Eigen::all;
+      using Eigen::seqN;
+
+      // Compute node's time and states
+      Real t_node{t + h * this->m_tableau.c(n)}; // FIXME: can i avoid this temporary variables?
+      VectorN x_node(x + K(all, seqN(0, n+1)) * this->m_tableau.A(n, seqN(0, n+1)).transpose());
+      VectorN x_dot_node(K.col(n)/h);
+
+      // Combine the Jacobians with respect to x and x_dot to obtain the Jacobian with respect to K
+      jac = this->m_tableau.A(n,n) * this->m_system->JF_x(x_node, x_dot_node, t_node) +
+        this->m_system->JF_x_dot(x_node, x_dot_node, t_node) / h;
+    }
+
+    //! Compute the new states \f$ \mathbf{x}_{k+1} \f$ at the next advancing step \f$ t_{k+1} = t_k
+    //! + h_k \f$ using an diagonally implicit Runge-Kutta method, given an implicit system of the
+    //! form \f$ \mathbf{F}(\mathbf{x}, \mathbf{x}^\prime, t) = \mathbf{0} \f$. If the method is
+    //! embedded, the time step for the next advancing step \f$ h_{k+1}^\star \f$ is also computed
+    //! according to the error control method.
+    //! \param[in] x_old States \f$ \mathbf{x}_k \f$ at the \f$ k \f$-th step.
+    //! \param[in] t_old Time \f$ t_k \f$ at the \f$ k \f$-th step.
+    //! \param[in] h_old Advancing time step \f$ h_k \f$ at the \f$ k \f$-th step.
+    //! \param[out] x_new Computed states \f$ \mathbf{x}_{k+1} \f$ at the \f$ k+1 \f$-th step.
+    //! \param[out] h_new The suggested time step \f$ h_{k+1}^\star \f$ for the next advancing step.
+    //! \return True if the step is successfully computed, false otherwise.
+    bool dirk_implicit_step(VectorN const &x_old, Real t_old, Real h_old, VectorN &x_new, Real &h_new) const
+    {
+      MatrixK K;
+      VectorN K_sol;
+      VectorN K_ini(VectorN::Zero());
+      // Check if the solver converged
+      for (Size n = 0; n < S; ++n) {
+        if (this->m_solverN->solve(
+            [this, n, &K, &x_old, t_old, h_old](VectorN const &K_fun, VectorN &fun)
+              {K.col(n) = K_fun; this->dirk_implicit_function(n, x_old, t_old, h_old, K, fun);},
+            [this, n, &K, &x_old, t_old, h_old](VectorN const &K_jac, MatrixN &jac)
+              {K.col(n) = K_jac; this->dirk_implicit_jacobian(n, x_old, t_old, h_old, K, jac);},
+            K_ini, K_sol)) {
+            K.col(n) = K_sol;
+            std::cout << "iter = " <<this->m_solverN->iterations() << std::endl;
+          } else {
+            return false;
+          }
+      }
+
+      // Perform the step and obtain the next state
+      x_new = x_old + K * this->m_tableau.b;
+
+      // Adapt next time step
+      if (this->m_adaptive_step && this->m_tableau.is_embedded) {
+        VectorN x_emb(x_old + K * this->m_tableau.b_e);
+        h_new = this->estimate_step(x_new, x_emb, h_old);
+      }
+      return true;
+    }
+
+
+
+
+
     //! Compute a step using a generic integration method for a system of the
-    //! form \f$ \mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, t) = \mathbf{0}
+    //! form \f$ \mathbf{F}(\mathbf{x}, \mathbf{x}^\prime, t) = \mathbf{0}
     //! \f$. The step is based on the following formula:
     //!
-    //! \f[ \mathbf{x}_{k+1} = \mathbf{x}_k + \mathcal{S}(\mathbf{x}_k, \mathbf{x}^{\prime}_k, t_k, h_k) \f]
+    //! \f[ \mathbf{x}_{k+1} = \mathbf{x}_k + \mathcal{S}(\mathbf{x}_k, \mathbf{x}^\prime_k, t_k, h_k) \f]
     //!
     //! where \f$ \mathcal{S} \f$ is the generic advancing step of the solver.
     //!
@@ -763,7 +887,9 @@ namespace Sandals {
     bool step(VectorN const &x_k, Real t_k, Real d_t, VectorN &x_o, Real &d_t_star)
     {
       if (this->is_erk() && this->m_system->is_explicit()) {
-        return this->erk_step(x_k, t_k, d_t, x_o, d_t_star);
+        return this->erk_explicit_step(x_k, t_k, d_t, x_o, d_t_star);
+      } else if (this->is_erk() && this->m_system->is_implicit()) {
+        return this->erk_implicit_step(x_k, t_k, d_t, x_o, d_t_star);
       //} else if (this->is_dirk()) {
       //  return this->dirk_step(x_k, t_k, d_t, x_o, d_t_star);
       } else {
@@ -772,12 +898,12 @@ namespace Sandals {
     }
 
     //! Advance using a generic integration method for a system of the form
-    //! \f$ \mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, t) = \mathbf{0} \f$.
+    //! \f$ \mathbf{F}(\mathbf{x}, \mathbf{x}^\prime, t) = \mathbf{0} \f$.
     //! The step is based on the following formula:
     //!
     //! \f[
     //! \mathbf{x}_{k+1}(t_k + h_k) = \mathbf{x}_k(t_k) +
-    //! \mathbf{S}(\mathbf{x}_k, \mathbf{x}^{\prime}_k, t_k, \Delta t)
+    //! \mathbf{S}(\mathbf{x}_k, \mathbf{x}^\prime_k, t_k, \Delta t)
     //! \f]
     //!
     //! where \f$ \mathbf{S} \f$ is the generic advancing step of the solver.
@@ -946,7 +1072,6 @@ namespace Sandals {
       this->enable_adaptive_step();
       Real d_t{t(1) - t(0)}, d_t_star;
         Real scale{100.0};
-        std::cout << "d_t = " << d_t << std::endl;
 
         Real t_min{std::max(this->m_min_step, d_t/scale)};
         Real t_max{scale*d_t};
@@ -974,7 +1099,6 @@ namespace Sandals {
         if (this->m_adaptive_step && this->m_tableau.is_embedded) {
           d_t = std::max(std::min(d_t_star, t_max), t_min);
         }
-        std::cout << "d_t = " << d_t_star << std::endl;
 
         SANDALS_ASSERT(s < t.size(), CMD "safety length exceeded.");
 

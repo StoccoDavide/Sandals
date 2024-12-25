@@ -9,7 +9,7 @@ ODEs and DAEs can be expressed in several forms. While these forms may be mathem
 - *Explicit* form: \f$\mathbf{x}^\prime = \mathbf{f}(\mathbf{x}, t)\f$.
 - *Implicit* form: \f$\mathbf{F}(t\mathbf{x}, \mathbf{x}^\prime, t) = \mathbf{0}\f$.
 - *Linear* form: \f$\mathbf{E}(t)\mathbf{x}^\prime = \mathbf{A}(t)\mathbf{x} + \mathbf{f}(t)\f$.
-- *Semi-explicit* form: \f$\mathbf{M}(\mathbf{x}, t)\mathbf{x}^\prime = \mathbf{f}(\mathbf{x}, t)\f$.
+- *SemiExplicit* form: \f$\mathbf{M}(\mathbf{x}, t)\mathbf{x}^\prime = \mathbf{f}(\mathbf{x}, t)\f$.
 
 The implicit form is the most general and is frequently used to represent DAEs. However, the explicit and semi-explicit forms are more commonly employed for ODEs. Note that the semi-explicit and linear forms are subsets of the explicit form. Consequently, the Runge-Kutta methods we implement will be specialized for the explicit and implicit forms.
 
@@ -78,9 +78,9 @@ For an explicit dynamical system of the form \f$\mathbf{x}^\prime = \mathbf{f}(\
 Unrolling the stages gives
 \f[
   \begin{array}{l}
-    \mathbf{K}_1 = \mathbf{f} \left(\mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{1} a_{1j} \mathbf{K}_j, t_k + h_k c_1\right) \\
-    \mathbf{K}_2 = \mathbf{f} \left(\mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{2} a_{2j} \mathbf{K}_j, t_k + h_k c_2\right) \\
-    \vdots \\[0.5em]
+    \mathbf{K}_1 = \mathbf{f} \left(\mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{s} a_{1j} \mathbf{K}_j, t_k + h_k c_1\right) \\
+    \mathbf{K}_2 = \mathbf{f} \left(\mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{s} a_{2j} \mathbf{K}_j, t_k + h_k c_2\right) \\[-0.5em]
+    \vdots \\[-0.5em]
     \mathbf{K}_s = \mathbf{f} \left(\mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{s} a_{sj} \mathbf{K}_j, t_k + h_k c_s\right)
   \end{array} \text{.}
 \f]
@@ -97,9 +97,9 @@ For an implicit dynamic system of the form \f$\mathbf{F}(\mathbf{x}, \mathbf{x}^
 Unrolling the stages, we have
 \f[
   \begin{array}{l}
-    \mathbf{F}_1 \left(\mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{1} a_{1j} \mathbf{K}_j, \mathbf{K}_1, t_k + h_k c_1\right) = \mathbf{0} \\
-    \mathbf{F}_2 \left(\mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{2} a_{2j} \mathbf{K}_j, \mathbf{K}_2, t_k + h_k c_2\right) = \mathbf{0} \\
-    \vdots \\[0.5em]
+    \mathbf{F}_1 \left(\mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{s} a_{1j} \mathbf{K}_j, \mathbf{K}_1, t_k + h_k c_1\right) = \mathbf{0} \\
+    \mathbf{F}_2 \left(\mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{s} a_{2j} \mathbf{K}_j, \mathbf{K}_2, t_k + h_k c_2\right) = \mathbf{0} \\[-0.5em]
+    \vdots \\[-0.5em]
     \mathbf{F}_s \left(\mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{s} a_{sj} \mathbf{K}_j, \mathbf{K}_s, t_k + h_k c_s\right) = \mathbf{0}
   \end{array} \text{.}
 \f]
