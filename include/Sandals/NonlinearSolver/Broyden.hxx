@@ -35,7 +35,7 @@ namespace Sandals
     using Type = enum class Type : Size {GOOD=0, BAD=1, COMBINED=2}; //!< Broyden solver type.
     using Vector   = typename NonlinearSolver<N>::Vector;   //!< Templetized vector type.
     using Matrix   = typename NonlinearSolver<N>::Matrix;   //!< Templetized matrix type.
-    using Function = typename NonlinearSolver<N>::Function; //!< nonlinear function type.
+    using Function = typename NonlinearSolver<N>::Function; //!< Nonlinear function type.
     using Jacobian = typename NonlinearSolver<N>::Jacobian; //!< Jacobian function type.
     using NonlinearSolver<N>::solve;
     using NonlinearSolver<N>::solve_damped;

@@ -33,7 +33,7 @@ else
   mm = cmakeversion.split('.');
   if mm[0].to_i > 3 || (mm[0].to_i == 3 && mm[1].to_i >= 12) then
     PARALLEL = "--parallel #{Etc.nprocessors} "
-    QUIET    = '-- --quiet '
+    QUIET    = ''
   else
     PARALLEL = ''
     QUIET    = ''

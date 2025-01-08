@@ -35,10 +35,13 @@ For explicit methods, the Runge-Kutta coefficient matrix \f$\mathbf{A}\f$ is str
 and by unrolling the stages, we obtain
 \f[
   \begin{array}{l}
-    \mathbf{K}_1 = \mathbf{f} \left(\mathbf{x}_k, t_k\right) \\
-    \mathbf{K}_2 = \mathbf{f} \left(\mathbf{x}_k + h_k a_{21} \mathbf{K}_1, t_k + h_k c_2\right) \\
-    \vdots \\[-0.5em]
-    \mathbf{K}_s = \mathbf{f} \left(\mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{s-1} a_{sj} \mathbf{K}_j, t_k + h_k c_s\right)
+    \begin{cases}
+      \mathbf{K}_1 = \mathbf{f} \left(\mathbf{x}_k, t_k\right) \\
+      \mathbf{K}_2 = \mathbf{f} \left(\mathbf{x}_k + h_k a_{21} \mathbf{K}_1, t_k + h_k c_2\right) \\
+      \vdots \\[-0.5em]
+      \mathbf{K}_s = \mathbf{f} \left(\mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{s-1} a_{sj} \mathbf{K}_j, t_k + h_k c_s\right)
+    \end{cases} \\
+    \mathbf{x}_{k+1} = \mathbf{x}_k + h_k \displaystyle\sum_{i=1}^s b_i \mathbf{K}_i
   \end{array} \text{.}
 \f]
 
@@ -54,10 +57,13 @@ For an implicit dynamical system of the form  \f$\mathbf{F}(\mathbf{x}, \mathbf{
 Here, the \f$s\f$-stage system of equations \f$\mathbf{F}_i\f$ forms a lower triangular system, typically nonlinear in the intermediate variables \f$\mathbf{K}_i\f$. The solution is obtained using forward substitution, where each stage is solved sequentially, *i.e.,*
 \f[
   \begin{array}{l}
-    \mathbf{F}_1 \left(\mathbf{x}_k, \mathbf{K}_1, t_k + h_k c_1\right) = \mathbf{0} \\
-    \mathbf{F}_2 \left(\mathbf{x}_k + h_k a_{21} \mathbf{K}_1, \mathbf{K}_2, t_k + h_k c_2\right) = \mathbf{0} \\
-    \vdots \\[-0.5em]
-    \mathbf{F}_s \left(\mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{s-1} a_{sj} \mathbf{K}_j, \mathbf{K}_s, t_k + h_k c_s\right) = \mathbf{0}
+    \begin{cases}
+      \mathbf{F}_1 \left(\mathbf{x}_k, \mathbf{K}_1, t_k + h_k c_1\right) = \mathbf{0} \\
+      \mathbf{F}_2 \left(\mathbf{x}_k + h_k a_{21} \mathbf{K}_1, \mathbf{K}_2, t_k + h_k c_2\right) = \mathbf{0} \\
+      \vdots \\[-0.5em]
+      \mathbf{F}_s \left(\mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{s-1} a_{sj} \mathbf{K}_j, \mathbf{K}_s, t_k + h_k c_s\right) = \mathbf{0}
+    \end{cases} \\
+    \mathbf{x}_{k+1} = \mathbf{x}_k + h_k \displaystyle\sum_{i=1}^s b_i \mathbf{K}_i
   \end{array} \text{.}
 \f]
 Notice that the intermediate variables \f$\mathbf{K}_i\f$ are typically computed using Newton's method.
@@ -78,10 +84,13 @@ For an explicit dynamical system of the form \f$\mathbf{x}^\prime = \mathbf{f}(\
 Unrolling the stages gives
 \f[
   \begin{array}{l}
-    \mathbf{K}_1 = \mathbf{f} \left(\mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{s} a_{1j} \mathbf{K}_j, t_k + h_k c_1\right) \\
-    \mathbf{K}_2 = \mathbf{f} \left(\mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{s} a_{2j} \mathbf{K}_j, t_k + h_k c_2\right) \\[-0.5em]
-    \vdots \\[-0.5em]
-    \mathbf{K}_s = \mathbf{f} \left(\mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{s} a_{sj} \mathbf{K}_j, t_k + h_k c_s\right)
+    \begin{cases}
+      \mathbf{K}_1 = \mathbf{f} \left(\mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{s} a_{1j} \mathbf{K}_j, t_k + h_k c_1\right) \\
+      \mathbf{K}_2 = \mathbf{f} \left(\mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{s} a_{2j} \mathbf{K}_j, t_k + h_k c_2\right) \\[-0.5em]
+      \vdots \\[-0.5em]
+      \mathbf{K}_s = \mathbf{f} \left(\mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{s} a_{sj} \mathbf{K}_j, t_k + h_k c_s\right)
+    \end{cases} \\
+    \mathbf{x}_{k+1} = \mathbf{x}_k + h_k \displaystyle\sum_{i=1}^s b_i \mathbf{K}_i
   \end{array} \text{.}
 \f]
 
@@ -97,10 +106,13 @@ For an implicit dynamic system of the form \f$\mathbf{F}(\mathbf{x}, \mathbf{x}^
 Unrolling the stages, we have
 \f[
   \begin{array}{l}
-    \mathbf{F}_1 \left(\mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{s} a_{1j} \mathbf{K}_j, \mathbf{K}_1, t_k + h_k c_1\right) = \mathbf{0} \\
-    \mathbf{F}_2 \left(\mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{s} a_{2j} \mathbf{K}_j, \mathbf{K}_2, t_k + h_k c_2\right) = \mathbf{0} \\[-0.5em]
-    \vdots \\[-0.5em]
-    \mathbf{F}_s \left(\mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{s} a_{sj} \mathbf{K}_j, \mathbf{K}_s, t_k + h_k c_s\right) = \mathbf{0}
+    \begin{cases}
+      \mathbf{F}_1 \left(\mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{s} a_{1j} \mathbf{K}_j, \mathbf{K}_1, t_k + h_k c_1\right) = \mathbf{0} \\
+      \mathbf{F}_2 \left(\mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{s} a_{2j} \mathbf{K}_j, \mathbf{K}_2, t_k + h_k c_2\right) = \mathbf{0} \\[-0.5em]
+      \vdots \\[-0.5em]
+      \mathbf{F}_s \left(\mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{s} a_{sj} \mathbf{K}_j, \mathbf{K}_s, t_k + h_k c_s\right) = \mathbf{0}
+    \end{cases} \\
+    \mathbf{x}_{k+1} = \mathbf{x}_k + h_k \displaystyle\sum_{i=1}^s b_i \mathbf{K}_i
   \end{array} \text{.}
 \f]
 
@@ -122,10 +134,13 @@ For an explicit dynamic system of the form \f$\mathbf{x}^\prime = \mathbf{f}(\ma
 When the stages are unrolled, the equations become
 \f[
   \begin{array}{l}
-    \mathbf{K}_1 = \mathbf{f} \left(\mathbf{x}_k + h_k a_{11} \mathbf{K}_1, t_k + h_k c_1\right) \\
-    \mathbf{K}_2 = \mathbf{f} \left(\mathbf{x}_k + h_k a_{21} \mathbf{K}_1 + h_k a_{22} \mathbf{K}_2, t_k + h_k c_2\right) \\
-    \vdots \\[-0.5em]
-    \mathbf{K}_s = \mathbf{f} \left(\mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{s} a_{sj} \mathbf{K}_j, t_k + h_k c_s\right)
+    \begin{cases}
+      \mathbf{K}_1 = \mathbf{f} \left(\mathbf{x}_k + h_k a_{11} \mathbf{K}_1, t_k + h_k c_1\right) \\
+      \mathbf{K}_2 = \mathbf{f} \left(\mathbf{x}_k + h_k a_{21} \mathbf{K}_1 + h_k a_{22} \mathbf{K}_2, t_k + h_k c_2\right) \\
+      \vdots \\[-0.5em]
+      \mathbf{K}_s = \mathbf{f} \left(\mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{s} a_{sj} \mathbf{K}_j, t_k + h_k c_s\right)
+    \end{cases} \\
+    \mathbf{x}_{k+1} = \mathbf{x}_k + h_k \displaystyle\sum_{i=1}^s b_i \mathbf{K}_i
   \end{array} \text{.}
 \f]
 
@@ -143,11 +158,58 @@ For an implicit dynamic system of the form \f$\mathbf{F}(\mathbf{x}, \mathbf{x}^
 If the stages are unrolled, we have
 \f[
   \begin{array}{l}
-    \mathbf{F}_1 \left(\mathbf{x}_k + h_k a_{11} \mathbf{K}_1, \mathbf{K}_1, t_k + h_k c_1\right) = \mathbf{0} \\
-    \mathbf{F}_2 \left(\mathbf{x}_k + h_k a_{21} \mathbf{K}_1 + h_k a_{22} \mathbf{K}_2, \mathbf{K}_2, t_k + h_k c_2\right) = \mathbf{0} \\
-    \vdots \\[-0.5em]
-    \mathbf{F}_s \left(\mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{s} a_{sj} \mathbf{K}_j, \mathbf{K}_s, t_k + h_k c_s\right) = \mathbf{0}
+    \begin{cases}
+      \mathbf{F}_1 \left(\mathbf{x}_k + h_k a_{11} \mathbf{K}_1, \mathbf{K}_1, t_k + h_k c_1\right) = \mathbf{0} \\
+      \mathbf{F}_2 \left(\mathbf{x}_k + h_k a_{21} \mathbf{K}_1 + h_k a_{22} \mathbf{K}_2, \mathbf{K}_2, t_k + h_k c_2\right) = \mathbf{0} \\
+      \vdots \\[-0.5em]
+      \mathbf{F}_s \left(\mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{s} a_{sj} \mathbf{K}_j, \mathbf{K}_s, t_k + h_k c_s\right) = \mathbf{0}
+    \end{cases} \\
+    \mathbf{x}_{k+1} = \mathbf{x}_k + h_k \displaystyle\sum_{i=1}^s b_i \mathbf{K}_i
   \end{array} \text{.}
 \f]
 
 > **NOTE:** As with IRK methods, the implementation of DIRK methods for explicit and implicit dynamic systems in `Sandals` is unified. Since solving the nonlinear system is inherent to DIRK methods, a specialized version for explicit systems would not significantly reduce computational complexity. Consequently, only the DIRK method for implicit dynamic systems is implemented.
+
+# Projection on the invariants manifold
+
+In many applications, the dynamic system's states must satisfy certain constraints, which are typically expressed as invariants. For example, in mechanical systems, the constraints may represent the conservation of energy or momentum. In such cases, the states must be projected onto the manifold defined by the invariants to ensure that the system's dynamics are physically consistent. In `Sandals`, the projection is performed using a simple iterative method, where the states are updated until the invariants are satisfied within a specified tolerance. In other words, at each time step, the states are adjusted to ensure that the invariants are preserved.
+
+## Constrained minimization problem
+
+Consider the constrained minimization problem
+\f[
+  \underset{\mathbf{x}}{\text{minimize}} \quad \frac{1}{2}\left(\mathbf{x} - \tilde{\mathbf{x}}\right)^2 \quad \text{subject to} \quad \mathbf{h}(\mathbf{x}) = \mathbf{0} \text{,}
+\f]
+whose Lagrangian is given by
+\f[
+  \mathcal{L}(\mathbf{x}, \boldsymbol{\lambda}) = \frac{1}{2}\left(\mathbf{x} - \tilde{\mathbf{x}}\right)^2 + \boldsymbol{\lambda} \cdot \mathbf{h}(\mathbf{x})  \text{.}
+\f]
+The first-order Karush-Kuhn-Tucker conditions for this problem are then
+\f[
+  \begin{cases}
+    \mathbf{x} + \mathbf{Jh}_{\mathbf{x}}^\top \boldsymbol{\lambda} = \tilde{\mathbf{x}} \\
+    \mathbf{h}(\mathbf{x}) = \mathbf{0}
+  \end{cases} \text{.}
+\f]
+This system of equations can be solved though the iterative solution of a linear system derived from the Taylor expansion
+\f[
+  \begin{cases}
+    \mathbf{x} + \delta\mathbf{x} + \mathbf{Jh}_{\mathbf{x}}^\top(\mathbf{x} + \delta\mathbf{x}, t) \boldsymbol{\lambda} = \tilde{\mathbf{x}} \\
+    \mathbf{h}(\mathbf{x}) + \mathbf{Jh}_{\mathbf{x}}(\mathbf{x}, t) \delta\mathbf{x} + \mathcal{O}\left(\| \delta\mathbf{x} \|^2\right) = \mathbf{0}
+  \end{cases} \text{,}
+\f]
+where \f$\mathbf{Jh}_{\mathbf{x}}\f$ is the Jacobian of the constraint function \f$\mathbf{h}(\mathbf{x})\f$ with respect to the states \f$\mathbf{x}\f$. The linear system can be written in matrix form as
+\f[
+  \begin{bmatrix}
+    \mathbf{I}              & \mathbf{Jh}_{\mathbf{x}}^\top \\
+    \mathbf{Jh}_{\mathbf{x}} & \mathbf{0}
+  \end{bmatrix}
+  \begin{bmatrix}
+    \delta\mathbf{x} \\
+    \boldsymbol{\lambda}
+  \end{bmatrix} = \begin{bmatrix}
+    \tilde{\mathbf{x}} - \mathbf{x} \\
+    -\mathbf{h}(\mathbf{x})
+  \end{bmatrix} \text{,}
+\f]
+and the update step for the states is then \f$\mathbf{x} = \tilde{\mathbf{x}} + \delta\mathbf{x}\f$.

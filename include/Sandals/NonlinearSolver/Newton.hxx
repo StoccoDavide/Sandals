@@ -34,7 +34,7 @@ namespace Sandals
   public:
     using Vector   = typename NonlinearSolver<N>::Vector;   //!< Templetized vector type.
     using Matrix   = typename NonlinearSolver<N>::Matrix;   //!< Templetized matrix type.
-    using Function = typename NonlinearSolver<N>::Function; //!< nonlinear function type.
+    using Function = typename NonlinearSolver<N>::Function; //!< Nonlinear function type.
     using Jacobian = typename NonlinearSolver<N>::Jacobian; //!< Jacobian function type.
     using NonlinearSolver<N>::solve;
     using NonlinearSolver<N>::solve_damped;
@@ -77,8 +77,7 @@ namespace Sandals
 
         // Calculate step
         this->m_lu.compute(jacobian);
-        SANDALS_ASSERT(this->m_lu.rank() == N,
-          "Sandals:Newton::solve(...): singular Jacobian detected.");
+        SANDALS_ASSERT(this->m_lu.rank() == N, "Sandals:Newton::solve(...): singular Jacobian detected.");
         step = -this->m_lu.solve(function);
 
         // Check convergence
@@ -130,8 +129,7 @@ namespace Sandals
 
         // Calculate step
         this->m_lu.compute(jacobian);
-        SANDALS_ASSERT(this->m_lu.rank() == N,
-          "Sandals:Newton::solve_damped(...): singular Jacobian detected.");
+        SANDALS_ASSERT(this->m_lu.rank() == N, "Sandals:Newton::solve_damped(...): singular Jacobian detected.");
         step_old = -this->m_lu.solve(function_old);
 
         // Check convergence

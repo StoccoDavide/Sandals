@@ -14,10 +14,11 @@
 #define INCLUDE_SANDALS_HH
 
 #include <iostream>
-#include <tuple>
 #include <string>
 #include <cmath>
+#include <vector>
 #include <map>
+#include <numeric>
 #include <Eigen/Dense>
 
 // Print Sandals errors
@@ -72,25 +73,29 @@ namespace Sandals
   using Real = double; //!< Real number type.
   using Size = int;    //!< Size number type.
 
-  using Vector2 = Eigen::Vector<Real, 2>;    //!< 2x1 vector of Real number type (column vector)
-  using Matrix2 = Eigen::Matrix<Real, 2, 2>; //!< 2x2 matrix of Real number type
-  using Vector3 = Eigen::Vector<Real, 3>;    //!< 3x1 vector of Real number type (column vector)
-  using Matrix3 = Eigen::Matrix<Real, 3, 3>; //!< 3x3 matrix of Real number type
-  using Vector4 = Eigen::Vector<Real, 4>;    //!< 4x1 vector of Real number type (column vector)
-  using Matrix4 = Eigen::Matrix<Real, 4, 4>; //!< 4x4 matrix of Real number type
-  using Vector5 = Eigen::Vector<Real, 5>;    //!< 5x1 vector of Real number type (column vector)
-  using Matrix5 = Eigen::Matrix<Real, 5, 5>; //!< 5x5 matrix of Real number type
-  using Vector6 = Eigen::Vector<Real, 6>;    //!< 6x1 vector of Real number type (column vector)
-  using Matrix6 = Eigen::Matrix<Real, 6, 6>; //!< 6x6 matrix of Real number type
-  using Vector7 = Eigen::Vector<Real, 7>;    //!< 7x1 vector of Real number type (column vector)
-  using Matrix7 = Eigen::Matrix<Real, 7, 7>; //!< 7x7 matrix of Real number type
-  using Vector8 = Eigen::Vector<Real, 8>;    //!< 8x1 vector of Real number type (column vector)
-  using Matrix8 = Eigen::Matrix<Real, 8, 8>; //!< 8x8 matrix of Real number type
-  using Vector9 = Eigen::Vector<Real, 9>;    //!< 9x1 vector of Real number type (column vector)
-  using Matrix9 = Eigen::Matrix<Real, 9, 9>; //!< 9x9 matrix of Real number type
+  using Vector0 = Eigen::Vector<Real, 0>;    //!< \f$ 0 \times 1 \f$ vector of Real number type (column vector)
+  using Matrix0 = Eigen::Matrix<Real, 0, 0>; //!< \f$ 0 \times 0 \f$ matrix of Real number type
+  using Vector1 = Eigen::Vector<Real, 1>;    //!< \f$ 1 \times 1 \f$ vector of Real number type (column vector)
+  using Matrix1 = Eigen::Matrix<Real, 1, 1>; //!< \f$ 1 \times 1 \f$ matrix of Real number type
+  using Vector2 = Eigen::Vector<Real, 2>;    //!< \f$ 2 \times 1 \f$ vector of Real number type (column vector)
+  using Matrix2 = Eigen::Matrix<Real, 2, 2>; //!< \f$ 2 \times 2 \f$ matrix of Real number type
+  using Vector3 = Eigen::Vector<Real, 3>;    //!< \f$ 3 \times 1 \f$ vector of Real number type (column vector)
+  using Matrix3 = Eigen::Matrix<Real, 3, 3>; //!< \f$ 3 \times 3 \f$ matrix of Real number type
+  using Vector4 = Eigen::Vector<Real, 4>;    //!< \f$ 4 \times 1 \f$ vector of Real number type (column vector)
+  using Matrix4 = Eigen::Matrix<Real, 4, 4>; //!< \f$ 4 \times 4 \f$ matrix of Real number type
+  using Vector5 = Eigen::Vector<Real, 5>;    //!< \f$ 5 \times 1 \f$ vector of Real number type (column vector)
+  using Matrix5 = Eigen::Matrix<Real, 5, 5>; //!< \f$ 5 \times 5 \f$ matrix of Real number type
+  using Vector6 = Eigen::Vector<Real, 6>;    //!< \f$ 6 \times 1 \f$ vector of Real number type (column vector)
+  using Matrix6 = Eigen::Matrix<Real, 6, 6>; //!< \f$ 6 \times 6 \f$ matrix of Real number type
+  using Vector7 = Eigen::Vector<Real, 7>;    //!< \f$ 7 \times 1 \f$ vector of Real number type (column vector)
+  using Matrix7 = Eigen::Matrix<Real, 7, 7>; //!< \f$ 7 \times 7 \f$ matrix of Real number type
+  using Vector8 = Eigen::Vector<Real, 8>;    //!< \f$ 8 \times 1 \f$ vector of Real number type (column vector)
+  using Matrix8 = Eigen::Matrix<Real, 8, 8>; //!< \f$ 8 \times 8 \f$ matrix of Real number type
+  using Vector9 = Eigen::Vector<Real, 9>;    //!< \f$ 9 \times 1 \f$ vector of Real number type (column vector)
+  using Matrix9 = Eigen::Matrix<Real, 9, 9>; //!< \f$ 9 \times 9 \f$ matrix of Real number type
 
-  using VectorX = Eigen::Vector<Real, Eigen::Dynamic>;                 //!< Nx1 vector of Real number type (column vector).
-  using MatrixX = Eigen::Matrix<Real, Eigen::Dynamic, Eigen::Dynamic>; //!< NxN matrix of Real number type.
+  using VectorX = Eigen::Vector<Real, Eigen::Dynamic>;                 //!< \f$ N \times 1 \f$ vector of Real number type (column vector).
+  using MatrixX = Eigen::Matrix<Real, Eigen::Dynamic, Eigen::Dynamic>; //!< \f$ N \times N \f$ matrix of Real number type.
 
   /*\
    |    ____                _              _
@@ -119,10 +124,10 @@ namespace Sandals
   static Vector2 const UNITY_VEC2    = Vector2::UnitY();             //!< Y axis unit vec2 static constant object.
   static Vector2 const NAN_VEC2      = Vector2::Constant(QUIET_NAN); //!< Not-a-Number vec2 static constant object.
   static Matrix2 const NAN_MAT2      = Matrix2::Constant(QUIET_NAN); //!< Not-a-Number mat2 static constant object.
-  static Vector2 const ZEROS_VEC2    = Vector2::Constant(Real(0.0)); //!< Zeros vec2 static constant object.
-  static Matrix2 const ZEROS_MAT2    = Matrix2::Constant(Real(0.0)); //!< Zeros mat2 static constant object.
-  static Vector2 const ONES_VEC2     = Vector2::Constant(Real(1.0)); //!< Ones vec2 static constant object.
-  static Matrix2 const ONES_MAT2     = Matrix2::Constant(Real(1.0)); //!< Ones mat2 static constant object.
+  static Vector2 const ZEROS_VEC2    = Vector2::Zero();              //!< Zeros vec2 static constant object.
+  static Matrix2 const ZEROS_MAT2    = Matrix2::Zero();              //!< Zeros mat2 static constant object.
+  static Vector2 const ONES_VEC2     = Vector2::Ones();              //!< Ones vec2 static constant object.
+  static Matrix2 const ONES_MAT2     = Matrix2::Ones();              //!< Ones mat2 static constant object.
   static Matrix2 const IDENTITY_MAT2 = Matrix2::Identity();          //!< Identity mat2 static constant object.
 
   static Vector3 const UNITX_VEC3    = Vector3::UnitX();             //!< X axis unit vec3 type.
@@ -130,10 +135,10 @@ namespace Sandals
   static Vector3 const UNITZ_VEC3    = Vector3::UnitZ();             //!< Z axis unit vec3 type.
   static Vector3 const NAN_VEC3      = Vector3::Constant(QUIET_NAN); //!< Not-a-Number vec3 type.
   static Matrix3 const NAN_MAT3      = Matrix3::Constant(QUIET_NAN); //!< Not-a-Number mat3 type.
-  static Vector3 const ZEROS_VEC3    = Vector3::Constant(Real(0.0)); //!< Zeros vec3 type.
-  static Matrix3 const ZEROS_MAT3    = Matrix3::Constant(Real(0.0)); //!< Zeros mat3 type.
-  static Vector3 const ONES_VEC3     = Vector3::Constant(Real(1.0)); //!< Ones vec3 type.
-  static Matrix3 const ONES_MAT3     = Matrix3::Constant(Real(1.0)); //!< Ones mat3 type.
+  static Vector3 const ZEROS_VEC3    = Vector3::Zero();              //!< Zeros vec3 type.
+  static Matrix3 const ZEROS_MAT3    = Matrix3::Zero();              //!< Zeros mat3 type.
+  static Vector3 const ONES_VEC3     = Vector3::Ones();              //!< Ones vec3 type.
+  static Matrix3 const ONES_MAT3     = Matrix3::Ones();              //!< Ones mat3 type.
   static Matrix3 const IDENTITY_MAT3 = Matrix3::Identity();          //!< Identity mat3 type.
 
   static Vector4 const UNITX_VEC4    = Vector4::UnitX();             //!< X axis unit vec4 type.
@@ -142,10 +147,10 @@ namespace Sandals
   static Vector4 const UNITW_VEC4    = Vector4::UnitW();             //!< W axis unit vec4 type.
   static Vector4 const NAN_VEC4      = Vector4::Constant(QUIET_NAN); //!< Not-a-Number vec4 type.
   static Matrix4 const NAN_MAT4      = Matrix4::Constant(QUIET_NAN); //!< Not-a-Number mat4 type.
-  static Vector4 const ZEROS_VEC4    = Vector4::Constant(Real(0.0)); //!< Zeros vec4 type.
-  static Matrix4 const ZEROS_MAT4    = Matrix4::Constant(Real(0.0)); //!< Zeros mat4 type.
-  static Vector4 const ONES_VEC4     = Vector4::Constant(Real(1.0)); //!< Ones vec4 type.
-  static Matrix4 const ONES_MAT4     = Matrix4::Constant(Real(1.0)); //!< Ones mat4 type.
+  static Vector4 const ZEROS_VEC4    = Vector4::Zero();              //!< Zeros vec4 type.
+  static Matrix4 const ZEROS_MAT4    = Matrix4::Zero();              //!< Zeros mat4 type.
+  static Vector4 const ONES_VEC4     = Vector4::Ones();              //!< Ones vec4 type.
+  static Matrix4 const ONES_MAT4     = Matrix4::Ones();              //!< Ones mat4 type.
   static Matrix4 const IDENTITY_MAT4 = Matrix4::Identity();          //!< Identity mat4 type.
 
 } // namespace Sandals
@@ -159,10 +164,10 @@ namespace Sandals
 #include "Sandals/NonlinearSolver/Broyden.hxx"
 
 // ODE/DAE system of equations
-#include "Sandals/RungeKutta/System/Implicit.hxx"
-#include "Sandals/RungeKutta/System/Explicit.hxx"
-#include "Sandals/RungeKutta/System/Linear.hxx"
-#include "Sandals/RungeKutta/System/SemiExplicit.hxx"
+#include "Sandals/System/Implicit.hxx"
+#include "Sandals/System/Explicit.hxx"
+#include "Sandals/System/Linear.hxx"
+#include "Sandals/System/SemiExplicit.hxx"
 
 // Runge-Kutta integrators
 #include "Sandals/RungeKutta/RungeKutta.hxx"
