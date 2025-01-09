@@ -19,7 +19,7 @@ namespace Sandals
   // and Geng Sun. Journal of Applied Analysis ans Computation, Volume 7, Number 3, 2017(8), 1185-1199
   // http://www.jaac-online.com/data/article/jaac/preview/pdf/20170325.pdf
 
-  //! Butcher tableau for the Gauss-Legendre 4 method:
+  //! Butcher tableau for the Gauss-Legendre order 4 method:
   //!
   //! \f[
   //! \begin{array}{c|cc}
@@ -38,7 +38,7 @@ namespace Sandals
     using Tableau<2>::Vector; //!< Templetized vector type.
     using Tableau<2>::Matrix; //!< Templetized matrix type.
 
-    //! Class constructor for the Gauss-Legendre 4 method.
+    //! Class constructor for the Gauss-Legendre order 4 method.
     GaussLegendre4Tableau() {
       this->name  = "GaussLegendre4";
       this->type  = Type::IRK;
@@ -51,7 +51,7 @@ namespace Sandals
     }
   }; // class GaussLegendre4Tableau
 
-  //! Class container for the Gauss-Legendre 4 method.
+  //! Class container for the Gauss-Legendre order 4 method.
   template <Size N>
   class GaussLegendre4 : public RungeKutta<2, N>
   {

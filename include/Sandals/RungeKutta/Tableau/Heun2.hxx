@@ -10,8 +10,8 @@
 
 #pragma once
 
-#ifndef SANDALS_GAUSSLEGENDRE2_HXX
-#define SANDALS_GAUSSLEGENDRE2_HXX
+#ifndef SANDALS_HEUN2_HXX
+#define SANDALS_HEUN2_HXX
 
 namespace Sandals
 {
@@ -19,7 +19,7 @@ namespace Sandals
   // and Geng Sun. Journal of Applied Analysis ans Computation, Volume 7, Number 3, 2017(8), 1185-1199
   // http://www.jaac-online.com/data/article/jaac/preview/pdf/20170325.pdf
 
-  //! Butcher tableau for the Gauss-Legendre order 2 method:
+  //! Butcher tableau for the Heun's order 2 method:
   //!
   //! \f[
   //! \begin{array}{c|c}
@@ -28,42 +28,43 @@ namespace Sandals
   //!       & 1
   //! \end{array} \text{.}
   //! \f]
-  class GaussLegendre2Tableau : public Tableau<1>
+  class Heun2Tableau : public Tableau<2>
   {
     public:
-    using Tableau<1>::Type;   //!< Runge-Kutta type enumeration.
-    using Tableau<1>::Vector; //!< Templetized vector type.
-    using Tableau<1>::Matrix; //!< Templetized matrix type.
+    using Tableau<2>::Type;   //!< Runge-Kutta type enumeration.
+    using Tableau<2>::Vector; //!< Templetized vector type.
+    using Tableau<2>::Matrix; //!< Templetized matrix type.
 
-    //! Class constructor for the Gauss-Legendre order 2 method.
-    GaussLegendre2Tableau() {
-      this->name  = "GaussLegendre2";
-      this->type  = Type::IRK;
+    //! Class constructor for the Heun's order 2 method.
+    Heun2Tableau() {
+      this->name  = "Heun2";
+      this->type  = Type::ERK;
       this->order = 2;
-      this->A << 1.0/2.0;
-      this->b << 1.0;
-      this->c << 1.0/2.0;
+      this->A << 0.0, 0.0,
+                 1.0, 0.0;
+      this->b << 1.0/2.0, 1.0/2.0;
+      this->c << 0.0, 1.0;
     }
-  }; // class GaussLegendre2Tableau
+  }; // class Heun2Tableau
 
-  //! Class container for the Gauss-Legendre order 2 method.
+  //! Class container for the Heun's order 2 method.
   template <Size N>
-  class GaussLegendre2 : public RungeKutta<1, N>
+  class Heun2 : public RungeKutta<2, N>
   {
   public:
     using System = typename Implicit<N>::Pointer; //!< System type.
 
-    //! Class constructor for a Gauss-Legendre order 2 solver given a Tableau reference.
+    //! Class constructor for a Heun's order 2 solver given a Tableau reference.
     //! \param[in] t_tableau The Tableau reference.
-    GaussLegendre2() : RungeKutta<1, N>(GaussLegendre2Tableau()) {}
+    Heun2() : RungeKutta<2, N>(Heun2Tableau()) {}
 
-    //! Class constructor for a Gauss-Legendre order 2 solver given a Tableau reference.
+    //! Class constructor for a Heun's order 2 solver given a Tableau reference.
     //! \param[in] t_tableau The Tableau reference.
     //! \param[in] t_system The system reference.
-    GaussLegendre2(System t_system) : RungeKutta<1, N>(GaussLegendre2Tableau(), t_system) {}
+    Heun2(System t_system) : RungeKutta<2, N>(Heun2Tableau(), t_system) {}
 
-  }; // class GaussLegendre2
+  }; // class Heun2
 
 } // namespace Sandals
 
-#endif // SANDALS_GAUSSLEGENDRE2_HXX
+#endif // SANDALS_HEUN2_HXX
