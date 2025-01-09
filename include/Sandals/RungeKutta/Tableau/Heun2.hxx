@@ -15,17 +15,14 @@
 
 namespace Sandals
 {
-  // Symplectic Runge-Kutta Methods of High Order Based on W-Transformation, Kaifeng Xia, Yuhao Cong
-  // and Geng Sun. Journal of Applied Analysis ans Computation, Volume 7, Number 3, 2017(8), 1185-1199
-  // http://www.jaac-online.com/data/article/jaac/preview/pdf/20170325.pdf
-
   //! Butcher tableau for the Heun's order 2 method:
   //!
   //! \f[
-  //! \begin{array}{c|c}
-  //!   1/2 & 1/2 \\
+  //! \begin{array}{c|cc}
+  //!   0 &   0 &   0 \\
+  //!   1 &   1 &   0 \\
   //!   \hline
-  //!       & 1
+  //!     & 1/2 & 1/2
   //! \end{array} \text{.}
   //! \f]
   class Heun2Tableau : public Tableau<2>
@@ -43,7 +40,7 @@ namespace Sandals
       this->A << 0.0, 0.0,
                  1.0, 0.0;
       this->b << 1.0/2.0, 1.0/2.0;
-      this->c << 0.0, 1.0;
+      this->c << 0.0,     1.0;
     }
   }; // class Heun2Tableau
 

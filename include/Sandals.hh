@@ -211,6 +211,8 @@ namespace Sandals
 // Runge-Kutta integrators
 #include "Sandals/RungeKutta/RungeKutta.hxx"
 #include "Sandals/RungeKutta/Tableau/RK4.hxx"
+#include "Sandals/RungeKutta/Tableau/Heun2.hxx"
+#include "Sandals/RungeKutta/Tableau/Heun3.hxx"
 #include "Sandals/RungeKutta/Tableau/RKF45.hxx"
 #include "Sandals/RungeKutta/Tableau/ExplicitEuler.hxx"
 #include "Sandals/RungeKutta/Tableau/ImplicitEuler.hxx"

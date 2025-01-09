@@ -15,6 +15,8 @@ using namespace Sandals;
 
 // Explicit methods
 TEST(Tableau, ExplicitEuler)  {ExplicitEulerTableau tbl;  EXPECT_TRUE(tbl.check(true));}
+TEST(Tableau, Heun2)          {Heun2Tableau tbl;          EXPECT_TRUE(tbl.check(true));}
+TEST(Tableau, Heun3)          {Heun3Tableau tbl;          EXPECT_TRUE(tbl.check(true));}
 TEST(Tableau, RK4)            {RK4Tableau tbl;            EXPECT_TRUE(tbl.check(true));}
 
 // Implicit methods
