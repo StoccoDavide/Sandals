@@ -1,14 +1,15 @@
 var searchData=
 [
-  ['safety_5ffactor_0',['safety_factor',['../class_sandals_1_1_runge_kutta.html#a17322f142fdba8a9f41463edfce80947',1,'Sandals::RungeKutta::safety_factor()'],['../class_sandals_1_1_runge_kutta.html#a4866dfa7cded69e6e8fd9f7aee3b2d71',1,'Sandals::RungeKutta::safety_factor(Real t_safety_factor)']]],
-  ['semiexplicit_1',['SemiExplicit',['../class_sandals_1_1_semi_explicit.html#a5d2b77a93d8f7ee34bc44d4ae1bfa387',1,'Sandals::SemiExplicit::SemiExplicit()'],['../class_sandals_1_1_semi_explicit.html#a1de6dd4e654472173b9d149d5e5a4070',1,'Sandals::SemiExplicit::SemiExplicit(std::string t_name)']]],
-  ['size_2',['size',['../struct_sandals_1_1_solution.html#a9b1dae6a41db5bcf2587bbf2fcacd521',1,'Sandals::Solution']]],
-  ['solution_3',['Solution',['../struct_sandals_1_1_solution.html#a9e5e0824c1982d970c264c16a301bc75',1,'Sandals::Solution::Solution()'],['../struct_sandals_1_1_solution.html#aa51cbe2b9d18f8a68f0d60c9ce3bb84d',1,'Sandals::Solution::Solution(Size size)']]],
-  ['solve_4',['solve',['../class_sandals_1_1_broyden.html#af756c1debbfae81e4dd6b139d9787c86',1,'Sandals::Broyden::solve()'],['../class_sandals_1_1_newton.html#a13a4447e3f3ff4380520312e67c3d376',1,'Sandals::Newton::solve()'],['../class_sandals_1_1_nonlinear_solver.html#a2d837cf419202b34dd33b2eef077c289',1,'Sandals::NonlinearSolver::solve(Function t_function, Jacobian t_jacobian, Vector const &amp;x_ini, Vector &amp;x_sol)'],['../class_sandals_1_1_nonlinear_solver.html#acd1533eccbc16c83c21b7362903fde43',1,'Sandals::NonlinearSolver::solve(Vector const &amp;x_ini, Vector &amp;x_sol)=0'],['../class_sandals_1_1_runge_kutta.html#a7e51f0eeef93a8049e8a6f979747396a',1,'Sandals::RungeKutta::solve()']]],
-  ['solve_5fdamped_5',['solve_damped',['../class_sandals_1_1_broyden.html#a00a2b40aef1d1391e4088bf22f4daf3a',1,'Sandals::Broyden::solve_damped()'],['../class_sandals_1_1_newton.html#a4b28c355bcd80fb73f7347b2d0a42242',1,'Sandals::Newton::solve_damped()'],['../class_sandals_1_1_nonlinear_solver.html#aed1aec262d71ebaf77bb595460581990',1,'Sandals::NonlinearSolver::solve_damped(Function t_function, Jacobian t_jacobian, Vector const &amp;x_ini, Vector &amp;x_sol)'],['../class_sandals_1_1_nonlinear_solver.html#ade45ef1caaeb596f90fc98c4252cdbf2',1,'Sandals::NonlinearSolver::solve_damped(Vector const &amp;x_ini, Vector &amp;x_sol)=0']]],
-  ['stages_6',['stages',['../class_sandals_1_1_runge_kutta.html#a844972f1bfe95cb06a3f2dd7080b5051',1,'Sandals::RungeKutta']]],
-  ['std_5fstate_7',['std_state',['../struct_sandals_1_1_solution.html#aa95ddb3cb5c54bc24b38401addacb6a2',1,'Sandals::Solution']]],
-  ['std_5fstates_8',['std_states',['../struct_sandals_1_1_solution.html#aedf65e5d1b2da6577cf175ab2dbc6c10',1,'Sandals::Solution::std_states() const'],['../struct_sandals_1_1_solution.html#ae6364d71ba997361137312313cc67d9a',1,'Sandals::Solution::std_states(std::vector&lt; std::string &gt; names) const']]],
-  ['std_5ftime_9',['std_time',['../struct_sandals_1_1_solution.html#a4113cea91fffc3ed758876c6abe00553',1,'Sandals::Solution']]],
-  ['step_10',['step',['../class_sandals_1_1_runge_kutta.html#a742407a51920dc646a34d7bc07a70fcb',1,'Sandals::RungeKutta']]]
+  ['r_0',['r',['../class_sandals_1_1_semi_explicit.html#ab4b8c14c0472660ed23ccbfe7994f4ae',1,'Sandals::SemiExplicit']]],
+  ['radauiia3_1',['RadauIIA3',['../class_sandals_1_1_radau_i_i_a3.html#a69617738c3f91211b035714ae90e3ba8',1,'Sandals::RadauIIA3::RadauIIA3()'],['../class_sandals_1_1_radau_i_i_a3.html#aa060f79123294702031a18fc9c587014',1,'Sandals::RadauIIA3::RadauIIA3(System t_system)']]],
+  ['radauiia3tableau_2',['RadauIIA3Tableau',['../class_sandals_1_1_radau_i_i_a3_tableau.html#ad8a4364f5414596e65c25db85c66e566',1,'Sandals::RadauIIA3Tableau']]],
+  ['radauiia5_3',['RadauIIA5',['../class_sandals_1_1_radau_i_i_a5.html#a505241b7d3a6dd59981aec2f60b151e5',1,'Sandals::RadauIIA5::RadauIIA5()'],['../class_sandals_1_1_radau_i_i_a5.html#a61c2078e5d7f4f45a33031d88f414e2b',1,'Sandals::RadauIIA5::RadauIIA5(System t_system)']]],
+  ['radauiia5tableau_4',['RadauIIA5Tableau',['../class_sandals_1_1_radau_i_i_a5_tableau.html#a3248edf5da10f81235a13a6f3b21893b',1,'Sandals::RadauIIA5Tableau']]],
+  ['relaxations_5',['relaxations',['../class_sandals_1_1_nonlinear_solver.html#a56594ee54dfa6375787145561ce10b98',1,'Sandals::NonlinearSolver']]],
+  ['reset_6',['reset',['../class_sandals_1_1_nonlinear_solver.html#a577e5bdd342f3edea14c41c37262b3c5',1,'Sandals::NonlinearSolver']]],
+  ['residuals_7',['residuals',['../class_sandals_1_1_nonlinear_solver.html#aa76843782eac01f8fb1fd83cb9a9d3aa',1,'Sandals::NonlinearSolver']]],
+  ['rk4_8',['RK4',['../class_sandals_1_1_r_k4.html#a4f9e064afdec2519eb5b3c74e56a4e3a',1,'Sandals::RK4::RK4()'],['../class_sandals_1_1_r_k4.html#a47ed73521f5466f420951c60e48ad42e',1,'Sandals::RK4::RK4(System t_system)']]],
+  ['rk4tableau_9',['RK4Tableau',['../class_sandals_1_1_r_k4_tableau.html#adad9e5e98eac4fe5ed9bb1c77ecebaa7',1,'Sandals::RK4Tableau']]],
+  ['rkf45_10',['RKF45',['../class_sandals_1_1_r_k_f45.html#a833c5967219682d52f0d14775716c16a',1,'Sandals::RKF45::RKF45()'],['../class_sandals_1_1_r_k_f45.html#a8e3506a444420fd3c264868dbefbd1eb',1,'Sandals::RKF45::RKF45(System t_system)']]],
+  ['rkf45tableau_11',['RKF45Tableau',['../class_sandals_1_1_r_k_f45_tableau.html#ab0b76140cae266efb79abc345b92c7aa',1,'Sandals::RKF45Tableau']]]
 ];

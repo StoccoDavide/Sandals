@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['pointer_0',['Pointer',['../class_sandals_1_1_explicit.html#affad89487d8f8301193bf748a446d8d7',1,'Sandals::Explicit::Pointer'],['../class_sandals_1_1_implicit.html#a896083964a3b4b98c44355fd0b274ded',1,'Sandals::Implicit::Pointer'],['../class_sandals_1_1_linear.html#a7d4c5e52def4d47053dca5ee2d98b064',1,'Sandals::Linear::Pointer'],['../class_sandals_1_1_semi_explicit.html#a74d00460d5a6b18a0606b70e83208169',1,'Sandals::SemiExplicit::Pointer']]]
+  ['pointer_0',['Pointer',['../class_sandals_1_1_explicit.html#a24ab32d929bfa36bf61b136120d5ebe5',1,'Sandals::Explicit::Pointer'],['../class_sandals_1_1_implicit.html#a2e8a8f6ac6ee76f16aa04917647b423b',1,'Sandals::Implicit::Pointer'],['../class_sandals_1_1_linear.html#a4f570f01f6107a583932759a8b88323b',1,'Sandals::Linear::Pointer'],['../class_sandals_1_1_semi_explicit.html#aad7dfefe5d73d242f8d86d019fddc598',1,'Sandals::SemiExplicit::Pointer']]]
 ];

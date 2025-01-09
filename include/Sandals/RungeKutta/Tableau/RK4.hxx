@@ -15,7 +15,6 @@
 
 namespace Sandals
 {
-
   //! Butcher tableau for the Runge-Kutta 4 method:
   //!
   //! \f[
@@ -37,17 +36,15 @@ namespace Sandals
 
     //! Class constructor for the RK4 method.
     RK4Tableau() {
-      this->name        = "RK4";
-      this->type        = Type::ERK;
-      this->order       = 4;
-      this->is_embedded = false;
+      this->name  = "RK4";
+      this->type  = Type::ERK;
+      this->order = 4;
       this->A << 0.0,     0.0,     0.0,     0.0,
                  1.0/2.0, 0.0,     0.0,     0.0,
                  0.0,     1.0/2.0, 0.0,     0.0,
                  0.0,     0.0,     1.0,     0.0;
       this->b << 1.0/6.0, 1.0/3.0, 1.0/3.0, 1.0/6.0;
       this->c << 0.0,     1.0/2.0, 1.0/2.0, 1.0;
-      this->b_e << NAN_VEC4;
     }
   }; // class RK4Tableau
 
@@ -58,11 +55,11 @@ namespace Sandals
   public:
     using System = typename Implicit<N>::Pointer; //!< System type.
 
-    //! Class constructor for a Runge-Kutta solver given a Tableau reference.
+    //! Class constructor for a Runge-Kutta 4 solver given a Tableau reference.
     //! \param[in] t_tableau The Tableau reference.
     RK4() : RungeKutta<4, N>(RK4Tableau()) {}
 
-    //! Class constructor for a Runge-Kutta solver given a Tableau reference.
+    //! Class constructor for a Runge-Kutta 4 solver given a Tableau reference.
     //! \param[in] t_tableau The Tableau reference.
     //! \param[in] t_system The system reference.
     RK4(System t_system) : RungeKutta<4, N>(RK4Tableau(), t_system) {}

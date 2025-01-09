@@ -58,7 +58,7 @@ namespace Sandals {
     //!
     //! \param[in] x States \f$ \mathbf{x} \f$.
     //! \param[in] x_dot States derivative \f$ \mathbf{x}^{\prime} \f$.
-    //! \param[in] t Independent variable \f$ t \f$.
+    //! \param[in] t Independent variable (or time) \f$ t \f$.
     //! \return The system function \f$ \mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, t) \f$.
     VectorN F(VectorN const &x, VectorN const &x_dot, Real t) const override
     {
@@ -74,7 +74,7 @@ namespace Sandals {
     //!
     //! \param[in] x States \f$ \mathbf{x} \f$.
     //! \param[in] x_dot States derivative \f$ \mathbf{x}^{\prime} \f$.
-    //! \param[in] t Independent variable \f$ t \f$.
+    //! \param[in] t Independent variable (or time) \f$ t \f$.
     //! \return The Jacobian \f$ \mathbf{JF}_{\mathbf{x}}(\mathbf{x}, \mathbf{x}^{\prime}, t) \f$.
     MatrixN JF_x(VectorN const &/*x*/, VectorN const &/*x_dot*/, Real t) const override {return -this->A(t);}
 
@@ -87,7 +87,7 @@ namespace Sandals {
     //!
     //! \param[in] x States \f$ \mathbf{x} \f$.
     //! \param[in] x_dot States derivative \f$ \mathbf{x}^{\prime} \f$.
-    //! \param[in] t Independent variable \f$ t \f$.
+    //! \param[in] t Independent variable (or time) \f$ t \f$.
     //! \return The Jacobian \f$ \mathbf{JF}_{\mathbf{x}^{\prime}}(\mathbf{x}, \mathbf{x}^{\prime}, t) \f$.
     MatrixN JF_x_dot(VectorN const &/*x*/, VectorN const &/*x_dot*/, Real t) const override {return this->E(t);}
 
@@ -96,7 +96,7 @@ namespace Sandals {
     //! \f[ \mathbf{f}(\mathbf{x}, t) = \mathbf{E}(t)^{-1}(\mathbf{A}(t)\mathbf{x} + \mathbf{f}(t)) \f]
     //!
     //! \param[in] x States \f$ \mathbf{x} \f$.
-    //! \param[in] t Independent variable \f$ t \f$.
+    //! \param[in] t Independent variable (or time) \f$ t \f$.
     //! \return The system function \f$ \mathbf{f}(\mathbf{x}, t) \f$.
     VectorN f(VectorN const &x, Real t) const override
     {
@@ -112,7 +112,7 @@ namespace Sandals {
     //! \mathbf{x}, t)}{\partial\mathbf{x}} = \mathbf{E}(t)^{-1} \mathbf{A}(t) \text{.} \f]
     //!
     //! \param[in] x States \f$ \mathbf{x} \f$.
-    //! \param[in] t Independent variable \f$ t \f$.
+    //! \param[in] t Independent variable (or time) \f$ t \f$.
     //! \return The Jacobian \f$ \mathbf{Jf}_{\mathbf{x}}(\mathbf{x}, t) \f$.
     MatrixN Jf_x(VectorN const &/*x*/, Real t) const override
     {
@@ -122,17 +122,17 @@ namespace Sandals {
     }
 
     //! Evaluate the linear ODE/DAE system mass matrix \f$ \mathbf{E}(t) \f$.
-    //! \param[in] t Independent variable \f$ t \f$.
+    //! \param[in] t Independent variable (or time) \f$ t \f$.
     //! \return The system function \f$ \mathbf{E}(t) \f$.
     virtual MatrixN E(Real t) const = 0;
 
     //! Evaluate the linear ODE/DAE system matrix \f$ \mathbf{A}(t) \f$.
-    //! \param[in] t Independent variable \f$ t \f$.
+    //! \param[in] t Independent variable (or time) \f$ t \f$.
     //! \return The system function \f$ \mathbf{A}(t) \f$.
     virtual MatrixN A(Real t) const = 0;
 
     //! Evaluate the linear ODE/DAE system vector \f$ \mathbf{f}(t) \f$.
-    //! \param[in] t Independent variable \f$ t \f$.
+    //! \param[in] t Independent variable (or time) \f$ t \f$.
     //! \return The system function \f$ \mathbf{f}(t) \f$.
     virtual VectorN f(Real t) const = 0;
 

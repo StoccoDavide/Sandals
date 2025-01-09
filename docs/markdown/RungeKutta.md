@@ -172,7 +172,7 @@ If the stages are unrolled, we have
 
 # Projection on the invariants manifold
 
-In many applications, the dynamic system's states must satisfy certain constraints, which are typically expressed as invariants. For example, in mechanical systems, the constraints may represent the conservation of energy or momentum. In such cases, the states must be projected onto the manifold defined by the invariants to ensure that the system's dynamics are physically consistent. In `Sandals`, the projection is performed using a simple iterative method, where the states are updated until the invariants are satisfied within a specified tolerance. In other words, at each time step, the states are adjusted to ensure that the invariants are preserved.
+In many applications, the dynamic system's states must satisfy certain constraints, which are typically expressed as invariants. For example, in mechanical systems, the constraints may represent the conservation of energy or momentum. In such cases, the states must be projected onto the manifold defined by the invariants to ensure that the system's dynamics are physically consistent. In `Sandals`, the projection is performed using a simple iterative method, where the states are updated until the invariants are satisfied within a specified tolerance. In other words, at each step, the states are adjusted to ensure that the invariants are preserved.
 
 ## Constrained minimization problem
 

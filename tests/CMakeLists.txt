@@ -28,4 +28,8 @@ file(GLOB_RECURSE IMPLICIT_TESTS "${CMAKE_CURRENT_SOURCE_DIR}/Implicit/test_*.cc
 add_executable(test_implicit ${IMPLICIT_TESTS})
 target_link_libraries(test_implicit PRIVATE sandals GTest::gtest Matplot++::matplot)
 
+file(GLOB_RECURSE TABLEAU_TESTS "${CMAKE_CURRENT_SOURCE_DIR}/Tableau/test_*.cc")
+add_executable(test_tableau ${TABLEAU_TESTS})
+target_link_libraries(test_tableau PRIVATE sandals GTest::gtest)
+
 # That's all folks!

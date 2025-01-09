@@ -1,6 +1,5 @@
 var searchData=
 [
   ['size_0',['Size',['../namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777',1,'Sandals']]],
-  ['solution_1',['Solution',['../class_sandals_1_1_runge_kutta.html#a9173ffa3f2990c716d1b634e9e5ef205',1,'Sandals::RungeKutta']]],
-  ['system_2',['System',['../class_sandals_1_1_runge_kutta.html#a227aa936c98776f8cadcee24ed5a9599',1,'Sandals::RungeKutta::System'],['../class_sandals_1_1_r_k4.html#a5d7995d1d22a3a323887b4f3d46e8211',1,'Sandals::RK4::System']]]
+  ['system_1',['System',['../class_sandals_1_1_explicit_euler.html#adb698b66adb7c6e24c17823329828aa0',1,'Sandals::ExplicitEuler::System'],['../class_sandals_1_1_gauss_legendre2.html#a822bcc21948b0334ba1b6938766d1021',1,'Sandals::GaussLegendre2::System'],['../class_sandals_1_1_gauss_legendre4.html#a5130ad1ce81bc66943224a4e21d17850',1,'Sandals::GaussLegendre4::System'],['../class_sandals_1_1_gauss_legendre6.html#a584c67ee54ea0996927641c224077b9b',1,'Sandals::GaussLegendre6::System'],['../class_sandals_1_1_implicit_euler.html#ab4453c7fc69f7f5c33070d0e53ec4ad7',1,'Sandals::ImplicitEuler::System'],['../class_sandals_1_1_radau_i_i_a3.html#a6ed48e87492b6421984c7a929f1a4ecd',1,'Sandals::RadauIIA3::System'],['../class_sandals_1_1_radau_i_i_a5.html#a9d6a603bffbd0ae2d7b3b4658fc43ed3',1,'Sandals::RadauIIA5::System'],['../class_sandals_1_1_r_k4.html#a5d7995d1d22a3a323887b4f3d46e8211',1,'Sandals::RK4::System'],['../class_sandals_1_1_r_k_f45.html#a18b78e0b3bec72cb9548c1583ce30bdd',1,'Sandals::RKF45::System']]]
 ];

@@ -113,45 +113,84 @@ namespace Sandals
   static Real const EPSILON_MEDIUM = Real(1.0e-10);                                   //!< Medium precision epsilon static constant value.
   static Real const EPSILON_LOW    = Real(1.0e-08);                                   //!< Low precision epsilon static constant value.
   static Real const INFTY          = std::numeric_limits<Real>::infinity();           //!< Infinity static constant value.
-  static Real const QUIET_NAN      = std::numeric_limits<Real>::quiet_NaN();          //!< Not-a-Number static constant value.
+  static Real const QUIET_NAN      = std::numeric_limits<Real>::quiet_NaN();          //!< Not-a-number static constant value.
   static Real const PI             = Real(3.141592653589793238462643383279502884197); //!< Pi static constant value.
   static Real const PIMUL2         = Real(6.283185307179586476925286766559005768394); //<! The value of \f$ 2\pi \f$.
   static Real const PIDIV2         = Real(1.570796326794896619231321691639751442098); //<! The value of \f$ \pi/2 \f$.
   static Real const DEG2RAD        = Real(0.017453292519943295769236907684886127134); //!< The value of \f$ \pi/180 \f$.
   static Real const RAD2DEG        = Real(57.29577951308232087679815481410517033240); //!< The value of \f$ 180/\pi \f$.
 
-  static Vector2 const UNITX_VEC2    = Vector2::UnitX();             //!< X axis unit vec2 static constant object.
-  static Vector2 const UNITY_VEC2    = Vector2::UnitY();             //!< Y axis unit vec2 static constant object.
-  static Vector2 const NAN_VEC2      = Vector2::Constant(QUIET_NAN); //!< Not-a-Number vec2 static constant object.
-  static Matrix2 const NAN_MAT2      = Matrix2::Constant(QUIET_NAN); //!< Not-a-Number mat2 static constant object.
-  static Vector2 const ZEROS_VEC2    = Vector2::Zero();              //!< Zeros vec2 static constant object.
-  static Matrix2 const ZEROS_MAT2    = Matrix2::Zero();              //!< Zeros mat2 static constant object.
-  static Vector2 const ONES_VEC2     = Vector2::Ones();              //!< Ones vec2 static constant object.
-  static Matrix2 const ONES_MAT2     = Matrix2::Ones();              //!< Ones mat2 static constant object.
-  static Matrix2 const IDENTITY_MAT2 = Matrix2::Identity();          //!< Identity mat2 static constant object.
+  static Vector1 const NAN_VEC1      = Vector1::Constant(QUIET_NAN); //!< Not-a-number \f$ 1 \times 1 \f$ vector static constant object.
+  static Matrix1 const NAN_MAT1      = Matrix1::Constant(QUIET_NAN); //!< Not-a-number \f$ 1 \times 1 \f$ matrix static constant object.
+  static Vector1 const ZEROS_VEC1    = Vector1::Zero();              //!< Zeros \f$ 1 \times 1 \f$ vector static constant object.
+  static Matrix1 const ZEROS_MAT1    = Matrix1::Zero();              //!< Zeros \f$ 1 \times 1 \f$ matrix static constant object.
+  static Vector1 const ONES_VEC1     = Vector1::Ones();              //!< Ones \f$ 1 \times 1 \f$ vector static constant object.
+  static Matrix1 const ONES_MAT1     = Matrix1::Ones();              //!< Ones \f$ 1 \times 1 \f$ matrix static constant object.
+  static Matrix1 const IDENTITY_MAT1 = Matrix1::Identity();          //!< Identity \f$ 1 \times 1 \f$ matrix static constant object.
 
-  static Vector3 const UNITX_VEC3    = Vector3::UnitX();             //!< X axis unit vec3 type.
-  static Vector3 const UNITY_VEC3    = Vector3::UnitY();             //!< Y axis unit vec3 type.
-  static Vector3 const UNITZ_VEC3    = Vector3::UnitZ();             //!< Z axis unit vec3 type.
-  static Vector3 const NAN_VEC3      = Vector3::Constant(QUIET_NAN); //!< Not-a-Number vec3 type.
-  static Matrix3 const NAN_MAT3      = Matrix3::Constant(QUIET_NAN); //!< Not-a-Number mat3 type.
-  static Vector3 const ZEROS_VEC3    = Vector3::Zero();              //!< Zeros vec3 type.
-  static Matrix3 const ZEROS_MAT3    = Matrix3::Zero();              //!< Zeros mat3 type.
-  static Vector3 const ONES_VEC3     = Vector3::Ones();              //!< Ones vec3 type.
-  static Matrix3 const ONES_MAT3     = Matrix3::Ones();              //!< Ones mat3 type.
-  static Matrix3 const IDENTITY_MAT3 = Matrix3::Identity();          //!< Identity mat3 type.
+  static Vector2 const NAN_VEC2      = Vector2::Constant(QUIET_NAN); //!< Not-a-number \f$ 2 \times 1 \f$ vector static constant object.
+  static Matrix2 const NAN_MAT2      = Matrix2::Constant(QUIET_NAN); //!< Not-a-number \f$ 2 \times 2 \f$ matrix static constant object.
+  static Vector2 const ZEROS_VEC2    = Vector2::Zero();              //!< Zeros \f$ 2 \times 1 \f$ vector static constant object.
+  static Matrix2 const ZEROS_MAT2    = Matrix2::Zero();              //!< Zeros \f$ 2 \times 2 \f$ matrix static constant object.
+  static Vector2 const ONES_VEC2     = Vector2::Ones();              //!< Ones \f$ 2 \times 1 \f$ vector static constant object.
+  static Matrix2 const ONES_MAT2     = Matrix2::Ones();              //!< Ones \f$ 2 \times 2 \f$ matrix static constant object.
+  static Matrix2 const IDENTITY_MAT2 = Matrix2::Identity();          //!< Identity \f$ 2 \times 2 \f$ matrix static constant object.
 
-  static Vector4 const UNITX_VEC4    = Vector4::UnitX();             //!< X axis unit vec4 type.
-  static Vector4 const UNITY_VEC4    = Vector4::UnitY();             //!< Y axis unit vec4 type.
-  static Vector4 const UNITZ_VEC4    = Vector4::UnitZ();             //!< Z axis unit vec4 type.
-  static Vector4 const UNITW_VEC4    = Vector4::UnitW();             //!< W axis unit vec4 type.
-  static Vector4 const NAN_VEC4      = Vector4::Constant(QUIET_NAN); //!< Not-a-Number vec4 type.
-  static Matrix4 const NAN_MAT4      = Matrix4::Constant(QUIET_NAN); //!< Not-a-Number mat4 type.
-  static Vector4 const ZEROS_VEC4    = Vector4::Zero();              //!< Zeros vec4 type.
-  static Matrix4 const ZEROS_MAT4    = Matrix4::Zero();              //!< Zeros mat4 type.
-  static Vector4 const ONES_VEC4     = Vector4::Ones();              //!< Ones vec4 type.
-  static Matrix4 const ONES_MAT4     = Matrix4::Ones();              //!< Ones mat4 type.
-  static Matrix4 const IDENTITY_MAT4 = Matrix4::Identity();          //!< Identity mat4 type.
+  static Vector3 const NAN_VEC3      = Vector3::Constant(QUIET_NAN); //!< Not-a-number \f$ 3 \times 1 \f$ vector static constant object.
+  static Matrix3 const NAN_MAT3      = Matrix3::Constant(QUIET_NAN); //!< Not-a-number \f$ 3 \times 3 \f$ matrix static constant object.
+  static Vector3 const ZEROS_VEC3    = Vector3::Zero();              //!< Zeros \f$ 3 \times 1 \f$ vector static constant object.
+  static Matrix3 const ZEROS_MAT3    = Matrix3::Zero();              //!< Zeros \f$ 3 \times 3 \f$ matrix static constant object.
+  static Vector3 const ONES_VEC3     = Vector3::Ones();              //!< Ones \f$ 3 \times 1 \f$ vector static constant object.
+  static Matrix3 const ONES_MAT3     = Matrix3::Ones();              //!< Ones \f$ 3 \times 3 \f$ matrix static constant object.
+  static Matrix3 const IDENTITY_MAT3 = Matrix3::Identity();          //!< Identity \f$ 3 \times 3 \f$ matrix static constant object.
+
+  static Vector4 const NAN_VEC4      = Vector4::Constant(QUIET_NAN); //!< Not-a-number \f$ 4 \times 1 \f$ vector static constant object.
+  static Matrix4 const NAN_MAT4      = Matrix4::Constant(QUIET_NAN); //!< Not-a-number \f$ 4 \times 4 \f$ matrix static constant object.
+  static Vector4 const ZEROS_VEC4    = Vector4::Zero();              //!< Zeros \f$ 4 \times 1 \f$ vector static constant object.
+  static Matrix4 const ZEROS_MAT4    = Matrix4::Zero();              //!< Zeros \f$ 4 \times 4 \f$ matrix static constant object.
+  static Vector4 const ONES_VEC4     = Vector4::Ones();              //!< Ones \f$ 4 \times 1 \f$ vector static constant object.
+  static Matrix4 const ONES_MAT4     = Matrix4::Ones();              //!< Ones \f$ 4 \times 4 \f$ matrix static constant object.
+  static Matrix4 const IDENTITY_MAT4 = Matrix4::Identity();          //!< Identity \f$ 4 \times 4 \f$ matrix static constant object.
+
+  static Vector5 const NAN_VEC5      = Vector5::Constant(QUIET_NAN); //!< Not-a-number \f$ 5 \times 1 \f$ vector static constant object.
+  static Matrix5 const NAN_MAT5      = Matrix5::Constant(QUIET_NAN); //!< Not-a-number \f$ 5 \times 5 \f$ matrix static constant object.
+  static Vector5 const ZEROS_VEC5    = Vector5::Zero();              //!< Zeros \f$ 5 \times 1 \f$ vector static constant object.
+  static Matrix5 const ZEROS_MAT5    = Matrix5::Zero();              //!< Zeros \f$ 5 \times 5 \f$ matrix static constant object.
+  static Vector5 const ONES_VEC5     = Vector5::Ones();              //!< Ones \f$ 5 \times 1 \f$ vector static constant object.
+  static Matrix5 const ONES_MAT5     = Matrix5::Ones();              //!< Ones \f$ 5 \times 5 \f$ matrix static constant object.
+  static Matrix5 const IDENTITY_MAT5 = Matrix5::Identity();          //!< Identity \f$ 5 \times 5 \f$ matrix static constant object.
+
+  static Vector6 const NAN_VEC6      = Vector6::Constant(QUIET_NAN); //!< Not-a-number \f$ 6 \times 1 \f$ vector static constant object.
+  static Matrix6 const NAN_MAT6      = Matrix6::Constant(QUIET_NAN); //!< Not-a-number \f$ 6 \times 6 \f$ matrix static constant object.
+  static Vector6 const ZEROS_VEC6    = Vector6::Zero();              //!< Zeros \f$ 6 \times 1 \f$ vector static constant object.
+  static Matrix6 const ZEROS_MAT6    = Matrix6::Zero();              //!< Zeros \f$ 6 \times 6 \f$ matrix static constant object.
+  static Vector6 const ONES_VEC6     = Vector6::Ones();              //!< Ones \f$ 6 \times 1 \f$ vector static constant object.
+  static Matrix6 const ONES_MAT6     = Matrix6::Ones();              //!< Ones \f$ 6 \times 6 \f$ matrix static constant object.
+  static Matrix6 const IDENTITY_MAT6 = Matrix6::Identity();          //!< Identity \f$ 6 \times 6 \f$ matrix static constant object.
+
+  static Vector7 const NAN_VEC7      = Vector7::Constant(QUIET_NAN); //!< Not-a-number \f$ 7 \times 1 \f$ vector static constant object.
+  static Matrix7 const NAN_MAT7      = Matrix7::Constant(QUIET_NAN); //!< Not-a-number \f$ 7 \times 7 \f$ matrix static constant object.
+  static Vector7 const ZEROS_VEC7    = Vector7::Zero();              //!< Zeros \f$ 7 \times 1 \f$ vector static constant object.
+  static Matrix7 const ZEROS_MAT7    = Matrix7::Zero();              //!< Zeros \f$ 7 \times 7 \f$ matrix static constant object.
+  static Vector7 const ONES_VEC7     = Vector7::Ones();              //!< Ones \f$ 7 \times 1 \f$ vector static constant object.
+  static Matrix7 const ONES_MAT7     = Matrix7::Ones();              //!< Ones \f$ 7 \times 7 \f$ matrix static constant object.
+  static Matrix7 const IDENTITY_MAT7 = Matrix7::Identity();          //!< Identity \f$ 7 \times 7 \f$ matrix static constant object.
+
+  static Vector8 const NAN_VEC8      = Vector8::Constant(QUIET_NAN); //!< Not-a-number \f$ 8 \times 1 \f$ vector static constant object.
+  static Matrix8 const NAN_MAT8      = Matrix8::Constant(QUIET_NAN); //!< Not-a-number \f$ 8 \times 8 \f$ matrix static constant object.
+  static Vector8 const ZEROS_VEC8    = Vector8::Zero();              //!< Zeros \f$ 8 \times 1 \f$ vector static constant object.
+  static Matrix8 const ZEROS_MAT8    = Matrix8::Zero();              //!< Zeros \f$ 8 \times 8 \f$ matrix static constant object.
+  static Vector8 const ONES_VEC8     = Vector8::Ones();              //!< Ones \f$ 8 \times 1 \f$ vector static constant object.
+  static Matrix8 const ONES_MAT8     = Matrix8::Ones();              //!< Ones \f$ 8 \times 8 \f$ matrix static constant object.
+  static Matrix8 const IDENTITY_MAT8 = Matrix8::Identity();          //!< Identity \f$ 8 \times 8 \f$ matrix static constant object.
+
+  static Vector9 const NAN_VEC9      = Vector9::Constant(QUIET_NAN); //!< Not-a-number \f$ 9 \times 1 \f$ vector static constant object.
+  static Matrix9 const NAN_MAT9      = Matrix9::Constant(QUIET_NAN); //!< Not-a-number \f$ 9 \times 9 \f$ matrix static constant object.
+  static Vector9 const ZEROS_VEC9    = Vector9::Zero();              //!< Zeros \f$ 9 \times 1 \f$ vector static constant object.
+  static Matrix9 const ZEROS_MAT9    = Matrix9::Zero();              //!< Zeros \f$ 9 \times 9 \f$ matrix static constant object.
+  static Vector9 const ONES_VEC9     = Vector9::Ones();              //!< Ones \f$ 9 \times 1 \f$ vector static constant object.
+  static Matrix9 const ONES_MAT9     = Matrix9::Ones();              //!< Ones \f$ 9 \times 9 \f$ matrix static constant object.
+  static Matrix9 const IDENTITY_MAT9 = Matrix9::Identity();          //!< Identity \f$ 9 \times 9 \f$ matrix static constant object.
 
 } // namespace Sandals
 
@@ -172,5 +211,13 @@ namespace Sandals
 // Runge-Kutta integrators
 #include "Sandals/RungeKutta/RungeKutta.hxx"
 #include "Sandals/RungeKutta/Tableau/RK4.hxx"
+#include "Sandals/RungeKutta/Tableau/RKF45.hxx"
+#include "Sandals/RungeKutta/Tableau/ExplicitEuler.hxx"
+#include "Sandals/RungeKutta/Tableau/ImplicitEuler.hxx"
+#include "Sandals/RungeKutta/Tableau/RadauIIA3.hxx"
+#include "Sandals/RungeKutta/Tableau/RadauIIA5.hxx"
+#include "Sandals/RungeKutta/Tableau/GaussLegendre2.hxx"
+#include "Sandals/RungeKutta/Tableau/GaussLegendre4.hxx"
+#include "Sandals/RungeKutta/Tableau/GaussLegendre6.hxx"
 
 #endif // INCLUDE_SANDALS_HH

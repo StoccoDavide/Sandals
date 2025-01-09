@@ -1,7 +1,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\
  * Copyright (c) 2025, Davide Stocco and Enrico Bertolazzi.                  *
  *                                                                           *
- * The Astro project is distributed under the GNU GPLv3.                     *
+ * The Sandals project is distributed under the GNU GPLv3.                   *
  *                                                                           *
  * Davide Stocco                                           Enrico Bertolazzi *
  * University of Trento                                 University of Trento *
@@ -19,6 +19,8 @@ class SimplePendulumImplicit : public Implicit<2>
   Vector2 m_ics{1.0, 0.0}; // Initial conditions
 
 public:
+  using Matrix0 = Eigen::Matrix<Real, 0, 2>;
+
   SimplePendulumImplicit(void) : Implicit<2>("SimplePendulumImplicit") {}
 
   ~SimplePendulumImplicit(void) {}
@@ -39,6 +41,10 @@ public:
 
   Matrix2 JF_x_dot(Vector2 const &/*x*/, Vector2 const &/*x_dot*/, Real /*t*/) const override
   {return Matrix2::Identity();}
+
+  Vector0 h(Vector2 const &/*x*/, Real /*t*/) const override {return Vector0::Zero();}
+
+  Matrix0 Jh_x(Vector2 const &/*x*/, Real /*t*/) const override {return Matrix0::Zero();}
 
   bool in_domain(Vector2 const &/*x*/, Real /*t*/) const override {return true;}
 

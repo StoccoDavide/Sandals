@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['states_0',['states',['../struct_sandals_1_1_solution.html#a625d18e8ef2d1b35ca0faafb57f26326',1,'Sandals::Solution']]]
+  ['states_0',['states',['../struct_sandals_1_1_solution.html#a90fa4be994ee4fad56beb8e5a67dcccf',1,'Sandals::Solution']]]
 ];

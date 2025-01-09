@@ -59,7 +59,7 @@ namespace Sandals {
     //!
     //! \param[in] x States \f$ \mathbf{x} \f$.
     //! \param[in] x_dot States derivative \f$ \mathbf{x}^{\prime} \f$.
-    //! \param[in] t Independent variable \f$ t \f$.
+    //! \param[in] t Independent variable (or time) \f$ t \f$.
     //! \return The system function \f$ \mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, t) \f$.
     VectorN F(VectorN const &x, VectorN const &x_dot, Real t) const override
     {
@@ -76,7 +76,7 @@ namespace Sandals {
     //!
     //! \param[in] x States \f$ \mathbf{x} \f$.
     //! \param[in] x_dot States derivative \f$ \mathbf{x}^{\prime} \f$.
-    //! \param[in] t Independent variable \f$ t \f$.
+    //! \param[in] t Independent variable (or time) \f$ t \f$.
     //! \return The Jacobian \f$ \mathbf{JF}_{\mathbf{x}}(\mathbf{x}, \mathbf{x}^{\prime}, t) \f$.
     MatrixN JF_x(VectorN const &x, VectorN const &/*x_dot*/, Real t) const override
     {
@@ -92,7 +92,7 @@ namespace Sandals {
     //!
     //! \param[in] x States \f$ \mathbf{x} \f$.
     //! \param[in] x_dot States derivative \f$ \mathbf{x}^{\prime} \f$.
-    //! \param[in] t Independent variable \f$ t \f$.
+    //! \param[in] t Independent variable (or time) \f$ t \f$.
     //! \return The Jacobian \f$ \mathbf{JF}_{\mathbf{x}^{\prime}}(\mathbf{x}, \mathbf{x}^{\prime}, t) \f$.
     MatrixN JF_x_dot(VectorN const &/*x*/, VectorN const &/*x_dot*/, Real /*t*/) const override
     {
@@ -101,7 +101,7 @@ namespace Sandals {
 
     //! Evaluate the explicit ODE system function\f$ \mathbf{f}(\mathbf{x}, t) \f$.
     //! \param[in] x States \f$ \mathbf{x} \f$.
-    //! \param[in] t Independent variable \f$ t \f$.
+    //! \param[in] t Independent variable (or time) \f$ t \f$.
     //! \return The system function \f$ \mathbf{f}(\mathbf{x}, t) \f$.
     virtual VectorN f(VectorN const &x, Real t) const = 0;
 
@@ -112,7 +112,7 @@ namespace Sandals {
     //! \displaystyle\frac{\partial\mathbf{f}(\mathbf{x}, t)}{\partial\mathbf{x}} \text{.} \f]
     //!
     //! \param[in] x States \f$ \mathbf{x} \f$.
-    //! \param[in] t Independent variable \f$ t \f$.
+    //! \param[in] t Independent variable (or time) \f$ t \f$.
     //! \return The Jacobian \f$ \mathbf{Jf}_{\mathbf{x}}(\mathbf{x}, t) \f$.
     virtual MatrixN Jf_x(VectorN const &x, Real t) const = 0;
 

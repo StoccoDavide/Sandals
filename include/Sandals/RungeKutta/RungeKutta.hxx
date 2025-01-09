@@ -34,289 +34,353 @@ namespace Sandals {
     using Vector = Eigen::Vector<Real, S>;    //!< Templetized vector type.
     using Matrix = Eigen::Matrix<Real, S, S>; //!< Templetized matrix type.
 
-    std::string name;        //!< Name of the Runge-Kutta method.
-    Type        type;        //!< Runge-Kutta type.
-    Size        order;       //!< Order of the Runge-Kutta method.
-    bool        is_embedded; //!< Embedded method boolean.
-    Matrix      A;           //!< Matrix \f$ \mathbf{A} \f$.
-    Vector      b;           //!< Weights vector \f$ \mathbf{b} \f$.
-    Vector      b_e;         //!< Embedded weights vector \f$ \hat{\mathbf{b}} \f$.
-    Vector      c;           //!< Nodes vector \f$ \mathbf{c} \f$.
-  };
+    std::string name;                //!< Name of the Runge-Kutta method.
+    Type        type;                //!< Runge-Kutta type.
+    Size        order;               //!< Order of the Runge-Kutta method.
+    Size        order_e{-1};         //!< Order of the Runge-Kutta embedded method.
+    Matrix      A;                   //!< Matrix \f$ \mathbf{A} \f$.
+    Vector      b;                   //!< Weights vector \f$ \mathbf{b} \f$.
+    Vector      b_e{Vector::Zero()}; //!< Embedded weights vector \f$ \hat{\mathbf{b}} \f$.
+    Vector      c;                   //!< Nodes vector \f$ \mathbf{c} \f$.
+    bool        is_embedded{false};  //!< Embedded method boolean.
 
+    //! Check the Butcher tableau consistency for a generic Runge-Kutta method.
+    //! \param[in] verbose Verbosity flag.
+    //! \return True if the Butcher tableau is consistent and its order is verified, false otherwise.
+    bool check(bool verbose = false) const {
 
-    //! Check Butcher tableau consistency for an explicit Runge-Kutta method.
-    //! \param[in] tbl.A   Matrix \f$ \mathbf{A} \f$.
-    //! \param[in] tbl.b   Weights vector \f$ \mathbf{b} \f$.
-    //! \param[in] tbl.b_e [optional] Embedded weights vector \f$ \mathbf{b}_{e} \f$.
-    //! \param[in] tbl.c   Nodes vector \f$ \mathbf{c} \f$.
-    //! \return True if the Butcher tableau is consistent, false otherwise.
-    //[out,order,e_order] = check_tableau( this, tbl )
+      #define CMD "Sandals::" << this->name << "::check(...): "
 
-    //! Check the order of a Runge-Kutta tableau according to the conditions taken from:
-    //! *A family of embedded Runge-Kutta formulae*, J. R. Dormand and P. J. Prince,
-    //! Journal of Computational and Applied Mathematics, volume 6(1), 1980.
-    //! Doi: [10.1016/0771-0509(80)90013-3](https://doi.org/10.1016/0771-0509(80)90013-3)
-    //! \param[in] tableau The Runge-Kutta tableau to be checked.
-    //! \return The order of the Runge-Kutta tableau.
-    /*Size tableau_order(matS const &A, vecS const &b, vecS const &c) const
-    {
-      #define CMD "Sandals::RungeKutta::tableau_order(...): "
+      // Check the occupancy of the matrix A
+      if (type == Type::ERK && (!this->A.isLowerTriangular() || !this->A.diagonal().isZero())) {
+        SANDALS_ASSERT_WARNING(!verbose, CMD "A matrix occupancy not consistent with an ERK method.");
+        return false;
+      } else if (type == Type::DIRK && (!this->A.isLowerTriangular() || this->A.diagonal().isZero())) {
+        SANDALS_ASSERT_WARNING(!verbose, CMD "A matrix occupancy not consistent with a DIRK method.");
+        return false;
+      } else if (type == Type::IRK && this->A.isZero()) {
+        SANDALS_ASSERT_WARNING(!verbose, CMD "A matrix occupancy not consistent with an IRK method.");
+        return false;
+      }
+
+      // Check the order of the method
+      Size computed_order{compute_order(this->A, this->b, this->c, verbose)};
+      if (this->order != computed_order) {
+        SANDALS_ASSERT_WARNING(!verbose, CMD "method order check failed, " << computed_order << " ≠ "
+          << this->order << ".");
+        return false;
+      }
+
+      // Check the embedded method consistency
+      if (!this->is_embedded && (this->order_e != -1 || !this->b_e.isZero())) {
+        SANDALS_ASSERT_WARNING(!verbose, CMD "embedded method inconsistency.");
+        return false;
+      } else {
+        return true;
+      }
+
+      // Check the embedded method order
+      Size computed_order_e{compute_order(this->A, this->b_e, this->c, verbose)};
+      if (this->order_e != computed_order_e) {
+        SANDALS_ASSERT_WARNING(!verbose, CMD "embedded method order check failed, " << computed_order_e
+          << " ≠ " << this->order_e << ".");
+        return false;
+      } else {
+        return true;
+      }
+
+      #undef CMD
+    }
+
+  private:
+
+    //! Check the order of a Runge-Kutta method according to the conditions taken from: *A family of
+    //! embedded Runge-Kutta formulae*, J. R. Dormand and P. J. Prince, Journal of Computational and
+    //! Applied Mathematics, volume 6(1), 1980. DOI 10.1016/0771-0509(80)90013-3.
+    //! \param[in] A Matrix \f$ \mathbf{A} \f$.
+    //! \param[in] b Weights vector \f$ \mathbf{b} \f$ or embedded weights vector \f$ \hat{\mathbf{b}} \f$.
+    //! \param[in] c Nodes vector \f$ \mathbf{c} \f$.
+    //! \param[in] verbose Verbosity flag.
+    //! \return The calculated order of the Runge-Kutta method.
+    Size compute_order(Matrix const &A, Vector const &b, Vector const &c, bool verbose = false) const {
+
+      #define CMD "Sandals::" << this->name << "::tableau_order(...): "
 
       // Temporary variables initialization
-      Real tol{std::pow(EPSILON, Real(2.0/3.0))};
-      vecN one{vecN::Ones()};
-      vecS Ac{A*c};
-      matS bA{(b*A).transpose()};
-      vecS err{A*one - c};
       Size order{0};
-      std::string msg{""};
+      Real tolerance{std::pow(EPSILON, 2.0/3.0)};
 
-      // Check consistency
-      SANDALS_ASSERT(std::max(std::abs(err)) > tol,
-        CMD "consistency precheck failed, A*[1] - c = " << err << " ≠ 0.");
+      // Precheck consistency
+      Real tmp{(A*Vector::Ones() - c).norm()};
+      if (tmp > tolerance) {
+        SANDALS_ASSERT_WARNING(!verbose, CMD "precheck failed, ||A*I - c|| = " << tmp << " ≠ 0.");
+        return order;
+      }
 
       // Check order 1
-      if (std::abs(b.sum() - 1) > tol) {
-        SANDALS_WARNING(CMD "order 1 check failed, found sum(b) == " << b.sum() << " ≠ 1.");
+      tmp = b.sum();
+      if (std::abs(tmp - 1.0) > tolerance) {
+        SANDALS_ASSERT_WARNING(!verbose, CMD "order 1 check failed, a_1 = " << tmp << " ≠ 1.");
         return order;
       }
 
       order = 1; // Order 1 is the highest order that can be checked
 
       // Check order 2
-      auto bc{b.array() * c.array()};
-      if (std::abs(bc.sum() - 1/2) > tol) {
-        SANDALS_WARNING(CMD "order 2 check failed, sum(b*c) = " << bc.sum() << " ≠ 1/2.");
+      tmp = b.transpose() * c;
+      if (std::abs(tmp - 1.0/2.0) > tolerance) {
+        SANDALS_ASSERT_WARNING(!verbose, CMD "order 2 check failed, a_1 = " << tmp << " ≠ 1/2.");
         return order;
       }
 
       order = 2; // Order 2 is the highest order that can be checked
 
       // Check order 3
-      auto bc2{b.array() * (c.pow(2)).array()};
-      if (std::abs(bc2.sum() - 1/3) > tol) {
-        SANDALS_WARNING(CMD "order 3 check failed, sum(b*c^2) = " << bc2.sum() << " ≠ 1/3.");
+      Vector c_2{c.array().pow(2)};
+      tmp = b.transpose() * c_2;
+      if (std::abs(tmp - 1.0/3.0) > tolerance) {
+        SANDALS_ASSERT_WARNING(!verbose, CMD "order 3 check failed, a_1 = " << tmp << " ≠ 1/3.");
         return order;
       }
 
-      auto bAc{b.array() * Ac.array()};
-      if (std::abs(bAc.sum() - 1/6) > tol) {
-        SANDALS_WARNING(CMD "order 3 check failed, sum(b*d) = " << bAc.sum() << " ≠ 1/6.");
+      Vector Ac{A * c};
+      tmp = b.transpose() * Ac;
+      if (std::abs(tmp - 1.0/6.0) > tolerance) {
+        SANDALS_ASSERT_WARNING(!verbose, CMD "order 3 check failed, a_2 = " << tmp << " ≠ 1/6.");
         return order;
       }
 
       order = 3; // Order 3 is the highest order that can be checked
 
       // Check order 4
-      auto bc3{b.array() * (c.pow(3)).array()};
-      if (std::abs(bc3.sum() - 1/4) > tol) {
-        SANDALS_WARNING(CMD "order 4 check failed, sum(b*c^3) = " << bc3.sum() << " ≠ 1/4.");
+      Vector c_3{c.array().pow(3)};
+      tmp = b.transpose() * c_3;
+      if (std::abs(tmp - 1.0/4.0) > tolerance) {
+        SANDALS_ASSERT_WARNING(!verbose, CMD "order 4 check failed, a_1 = " << tmp << " ≠ 1/4.");
         return order;
       }
 
-      auto cAc{c.array() * Ac.array()};
-      vecS bcAc{b.cwiseProduct(cAc)};
-      if (std::abs(bcAc.sum() - 1/8) > tol) {
-        SANDALS_WARNING(CMD "order 4 check failed, sum(b*c*A*c) = " << bcAc.sum() << " ≠ 1/8.");
+      Vector cAc{c.array() * Ac.array()};
+      tmp = b.transpose() * cAc;
+      if (std::abs(tmp - 1.0/8.0) > tolerance) {
+        SANDALS_ASSERT_WARNING(!verbose, CMD "order 4 check failed, a_2 = " << tmp << " ≠ 1/8.");
         return order;
       }
 
-      auto bAc2{bA.array() * (c.pow(2)).array()};
-      if (std::abs(bAc2.sum() - 1/12) > tol) {
-        SANDALS_WARNING(CMD "order 4 check failed, sum(b*A*c^2) = " << bAc2.sum() << " ≠ 1/12.");
+      Vector bA{(b.transpose() * A).transpose()};
+      tmp = bA.transpose() * c_2;
+      if (std::abs(tmp - 1.0/12.0) > tolerance) {
+        SANDALS_ASSERT_WARNING(!verbose, CMD "order 4 check failed, a_3 = " << tmp << " ≠ 1/12.");
         return order;
       }
 
-      auto bAAc{bA.array() * Ac.array()};
-      if (std::abs(bAAc.sum() - 1/24) > tol) {
-        SANDALS_WARNING(CMD "order 4 check failed, sum(b*A*A*c) = " << bAAc.sum() << " ≠ 1/24.");
+      tmp = b.transpose() * A * A * c;
+      if (std::abs(tmp - 1.0/24.0) > tolerance) {
+        SANDALS_ASSERT_WARNING(!verbose, CMD "order 4 check failed, a_4 = " << tmp << " ≠ 1/24.");
         return order;
       }
 
       order = 4; // Order 4 is the highest order that can be checked
 
       // Check order 5
-      auto bc4{b.array() * (c.pow(4)).array()};
-      if (std::abs(bc4.sum() - 1/5) > tol) {
-        SANDALS_WARNING(CMD "order 5 check failed, sum(b*c^4) = " << bc4.sum() << " ≠ 1/5.");
+      Vector c_4{c.array().pow(4)};
+      tmp = b.transpose() * c_4;
+      if (std::abs(tmp - 1.0/5.0) > tolerance) {
+        SANDALS_ASSERT_WARNING(!verbose, CMD "order 5 check failed, a_1 = " << tmp << " ≠ 1/5.");
         return order;
       }
 
-      auto bc2Ac{bc2.array() * Ac.array()};
-      if (std::abs(bc2Ac.sum() - 1/10) > tol) {
-        SANDALS_WARNING(CMD "order 5 check failed, sum(b*c^2*A*c) = " << bc2Ac.sum() << " ≠ 1/10.");
+      Vector b_c2{b.array() * c_2.array()};
+      tmp = b_c2.transpose() * Ac;
+      if (std::abs(tmp - 1.0/10.0) > tolerance) {
+        SANDALS_ASSERT_WARNING(!verbose, CMD "order 5 check failed, a_2 = " << tmp << " ≠ 1/10.");
         return order;
       }
 
-      vecS bAcAc{(b.cwiseProduct(Ac)).cwiseProduct(Ac)};
-      if (std::abs(bAcAc.sum() - 1/20) > tol) {
-        SANDALS_WARNING(CMD "order 5 check failed, sum(b*A*c*A*c) = " << bAcAc.sum() << " ≠ 1/20.");
+      Vector b_Ac{b.array() * Ac.array()};
+      tmp = b_Ac.transpose() * Ac;
+      if (std::abs(tmp - 1.0/20.0) > tolerance) {
+        SANDALS_ASSERT_WARNING(!verbose, CMD "order 5 check failed, a_3 = " << tmp << " ≠ 1/20.");
         return order;
       }
 
-      matS Ac2{A*(c.pow(2))};
-      matS bcAc2{bc.cwiseProduct(Ac2)};
-      if (std::abs(bcAc2.sum() - 1/15) > tol) {
-        SANDALS_WARNING(CMD "order 5 check failed, sum(b*c*A*c^2) = " << bcAc2.sum() << " ≠ 1/15.");
+      Vector b_c{b.array() * c.array()};
+      Vector Ac2{A * c_2};
+      tmp = b_c.transpose() * Ac2;
+      if (std::abs(tmp - 1.0/15.0) > tolerance) {
+        SANDALS_ASSERT_WARNING(!verbose, CMD "order 5 check failed, a_4 = " << tmp << " ≠ 1/15.");
         return order;
       }
 
-      matS Ac3{A*(c.pow(3))};
-      matS bAc3{b.cwiseProduct(Ac3)};
-      if (std::abs(bAc3.sum() - 1/20) > tol) {
-        SANDALS_WARNING(CMD "order 5 check failed, sum(b*A*c^3) = " << bAc3.sum() << " ≠ 1/20.");
+      Vector Ac3{A * c_3};
+      tmp = b.transpose() * Ac3;
+      if (std::abs(tmp - 1.0/20.0) > tolerance) {
+        SANDALS_ASSERT_WARNING(!verbose, CMD "order 5 check failed, a_5 = " << tmp << " ≠ 1/20.");
         return order;
       }
 
-      bAcAc = bA.cwiseProduct(c.cwiseProduct(Ac));
-      if (std::abs(bAcAc.sum() - 1/40) > tol) {
-        SANDALS_WARNING(CMD "order 5 check failed, sum(b*A*c*A*c) = " << bAcAc.sum() << " ≠ 1/40.");
+      Vector AAc{A * Ac};
+      tmp = b_c.transpose() * AAc;
+      if (std::abs(tmp - 1.0/30.0) > tolerance) {
+        SANDALS_ASSERT_WARNING(!verbose, CMD "order 5 check failed, a_6 = " << tmp << " ≠ 1/30.");
         return order;
       }
 
-      matS bAAc2{bA.cwiseProduct(Ac2)};
-      if (std::abs(bAAc2.sum() - 1/60) > tol) {
-        SANDALS_WARNING(CMD "order 5 check failed, sum(b*A*c*A*c) = " << bAAc2.sum() << " ≠ 1/60.");
+      tmp = bA.transpose() * (c.array() * Ac.array()).matrix();
+      if (std::abs(tmp - 1.0/40.0) > tolerance) {
+        SANDALS_ASSERT_WARNING(!verbose, CMD "order 5 check failed, a_7 = " << tmp << " ≠ 1/40.");
         return order;
       }
 
-      matS AAc{A*Ac};
-      matS bAAAc{bA.cwiseProduct(AAc)};
-      if (std::abs(bAAAc.sum() - 1/120) > tol) {
-        SANDALS_WARNING(CMD "order 5 check failed, sum(b*A*c*A*c) = " << bAAAc.sum() << " ≠ 1/120.");
+      tmp = bA.transpose() * Ac2;
+      if (std::abs(tmp - 1.0/60.0) > tolerance) {
+        SANDALS_ASSERT_WARNING(!verbose, CMD "order 5 check failed, a_8 = " << tmp << " ≠ 1/60.");
+        return order;
+      }
+
+      tmp = bA.transpose() * AAc;
+      if (std::abs(tmp - 1.0/120.0) > tolerance) {
+        SANDALS_ASSERT_WARNING(!verbose, CMD "order 5 check failed, a_9 = " << tmp << " ≠ 1/120.");
         return order;
       }
 
       order = 5; // Order 5 is the highest order that can be checked
 
       // Check order 6
-      vecS bc5{b.cwiseProduct(c.pow(5))};
-      if (std::abs(bc5.sum() - 1/6) > tol) {
-        SANDALS_WARNING(CMD "order 6 check failed, sum(b*c^5) = " << bc5.sum() << " ≠ 1/6.");
+      Vector c_5{c.array().pow(5)};
+      tmp = b.transpose() * c_5;
+      if (std::abs(tmp - 1.0/6.0) > tolerance) {
+        SANDALS_ASSERT_WARNING(!verbose, CMD "order 6 check failed, a_1 = " << tmp << " ≠ 1/6.");
         return order;
       }
 
-      vecS bc3Ac{bc3.cwiseProduct(Ac)};
-      if (std::abs(bc3Ac.sum() - 1/12) > tol) {
-        SANDALS_WARNING(CMD "order 6 check failed, sum(bc3Ac) = " << bc3Ac.sum() << " ≠ 1/12.");
+      tmp = (b.array() * c_3.array()).matrix().transpose() * Ac;
+      if (std::abs(tmp - 1.0/12.0) > tolerance) {
+        SANDALS_ASSERT_WARNING(!verbose, CMD "order 6 check failed, a_2 = " << tmp << " ≠ 1/12.");
         return order;
       }
 
-      vecS bcAcAc{bc.cwiseProduct(Ac).pow(2)};
-      if (std::abs(bcAcAc.sum() - 1/24) > tol) {
-        SANDALS_WARNING(CMD "order 6 check failed, sum(bcAcAc) = " << bc3Ac.sum() << " ≠ 1/24.");
+      Vector Ac_2{Ac.array().pow(2)};
+      tmp = b_c.transpose() * Ac_2;
+      if (std::abs(tmp - 1.0/24.0) > tolerance) {
+        SANDALS_ASSERT_WARNING(!verbose, CMD "order 6 check failed, a_3 = " << tmp << " ≠ 1/24.");
         return order;
       }
 
-      vecS bc2Ac2{bc2.cwiseProduct(Ac2)};
-      if (std::abs(bc2Ac2.sum() - 1/18) > tol) {
-        SANDALS_WARNING(CMD "order 6 check failed, sum(bc2Ac2) = " << bc2Ac2.sum() << " ≠ 1/18.");
+      tmp = b_c2.transpose() * Ac2;
+      if (std::abs(tmp - 1.0/18.0) > tolerance) {
+        SANDALS_ASSERT_WARNING(!verbose, CMD "order 6 check failed, a_4 = " << tmp << " ≠ 1/18.");
         return order;
       }
 
-      vecS bAc2Ac{b.cwiseProduct(Ac2.cwiseProduct(Ac))};
-      if (std::abs(bAc2Ac.sum() - 1/36) > tol) {
-        SANDALS_WARNING(CMD "order 6 check failed, sum(bAc2Ac) = " << bAc2Ac.sum() << " ≠ 1/36.");
+      tmp = b.transpose() * (Ac2.array() * Ac.array()).matrix();
+      if (std::abs(tmp - 1.0/36.0) > tolerance) {
+        SANDALS_ASSERT_WARNING(!verbose, CMD "order 6 check failed, a_5 = " << tmp << " ≠ 1/36.");
         return order;
       }
 
-      vecS bcAc3{bc.cwiseProduct(Ac3)};
-      if (std::abs(bcAc3.sum() - 1/24) > tol) {
-        SANDALS_WARNING(CMD "order 6 check failed, sum(bcAc3) = " << bcAc3.sum() << " ≠ 1/24.");
+      tmp = b_c.transpose() * Ac3;
+      if (std::abs(tmp - 1.0/24.0) > tolerance) {
+        SANDALS_ASSERT_WARNING(!verbose, CMD "order 6 check failed, a_6 = " << tmp << " ≠ 1/24.");
         return order;
       }
 
-      vecS Ac4{A*c.pow(4)};
-      vecS bAc4{b.cwiseProduct(Ac4)};
-      if (std::abs(bAc4.sum() - 1/30) > tol) {
-        SANDALS_WARNING(CMD "order 6 check failed, sum(bAc4) = " << bAc4.sum() << " ≠ 1/30.");
+      Vector Ac4{A * c_4};
+      tmp = b.transpose() * Ac4;
+      if (std::abs(tmp - 1.0/30.0) > tolerance) {
+        SANDALS_ASSERT_WARNING(!verbose, CMD "order 6 check failed, a_7 = " << tmp << " ≠ 1/30.");
         return order;
       }
 
-      vecS bc2A{A.transpose()*bc2};
-      vecS bc2AAc{bc2A.cwiseProduct(Ac)};
-      if (std::abs(bc2AAc.sum() - 1/36) > tol) {
-        SANDALS_WARNING(CMD "order 6 check failed, sum(bc2AAc) = " << bc2AAc.sum() << " ≠ 1/36.");
+      Vector bc2A{A.transpose() * b_c2};
+      tmp = bc2A.transpose() * Ac;
+      if (std::abs(tmp - 1.0/36.0) > tolerance) {
+        SANDALS_ASSERT_WARNING(!verbose, CMD "order 6 check failed, a_8 = " << tmp << " ≠ 1/36.");
         return order;
       }
 
-      matS bAcAAc = bAc.cwiseProduct(A)*Ac;
-      if (std::abs(bAcAAc.sum() - 1/72) > tol) {
-        SANDALS_WARNING(CMD "order 6 check failed, sum(bAcAAc) = " << bAcAAc.sum() << " ≠ 1/72.");
+      tmp = b_Ac.transpose() * AAc;
+      if (std::abs(tmp - 1.0/72.0) > tolerance) {
+        SANDALS_ASSERT_WARNING(!verbose, CMD "order 6 check failed, a_9 = " << tmp << " ≠ 1/72.");
         return order;
       }
 
-      vecS bcA{A.transpose()*bc};
-      bcAcAc = bcA.cwiseProduct(cAc);
-      if (std::abs(bcAcAc.sum() - 1/48) > tol) {
-        SANDALS_WARNING(CMD "order 6 check failed, sum(bcAcAc) = " << bcAcAc.sum() << " ≠ 1/48.");
+      Vector bcA{b_c.transpose() * A};
+      tmp = bcA.transpose() * cAc;
+      if (std::abs(tmp - 1.0/48.0) > tolerance) {
+        SANDALS_ASSERT_WARNING(!verbose, CMD "order 6 check failed, a_10 = " << tmp << " ≠ 1/48.");
         return order;
       }
 
-      bAc2Ac = bA.cwiseProduct(c.pow(2)).cwiseProduct(Ac);
-      if (std::abs(bAc2Ac.sum() - 1/60) > tol) {
-        SANDALS_WARNING(CMD "order 6 check failed, sum(bAc2Ac) = " << bAc2Ac.sum() << " ≠ 1/60.");
+      tmp = (bA.array() * c_2.array()).matrix().transpose() * Ac;
+      if (std::abs(tmp - 1.0/60.0) > tolerance) {
+        SANDALS_ASSERT_WARNING(!verbose, CMD "order 6 check failed, a_11 = " << tmp << " ≠ 1/60.");
         return order;
       }
 
-      vecS bAAcAc{bA.cwiseProduct(Ac.pow(2))};
-      if (std::abs(bAAcAc.sum() - 1/120) > tol) {
-        SANDALS_WARNING(CMD "order 6 check failed, sum(bAAcAc) = " << bAAcAc.sum() << " ≠ 1/120.");
+      tmp = bA.transpose() * Ac_2;
+      if (std::abs(tmp - 1.0/120.0) > tolerance) {
+        SANDALS_ASSERT_WARNING(!verbose, CMD "order 6 check failed, a_12 = " << tmp << " ≠ 1/120.");
         return order;
       }
 
-      vecS bcAAc2{bcA.cwiseProduct(Ac2)};
-      if (std::abs(bcAAc2.sum() - 1/72) > tol) {
-        SANDALS_WARNING(CMD "order 6 check failed, sum(bcAAc2) = " << bcAAc2.sum() << " ≠ 1/72.");
+      tmp = bcA.transpose() * Ac2;
+      if (std::abs(tmp - 1.0/72.0) > tolerance) {
+        SANDALS_ASSERT_WARNING(!verbose, CMD "order 6 check failed, a_13 = " << tmp << " ≠ 1/72.");
         return order;
       }
 
-      vecS bAcAc2{bA.cwiseProduct(c).cwiseProduct(Ac2)};
-      if (std::abs(bAcAc2.sum() - 1/90) > tol) {
-        SANDALS_WARNING(CMD "order 6 check failed, sum(bAcAc2) = " << bAcAc2.sum() << " ≠ 1/90.");
+      Vector bA_c{bA.array() * c.array()};
+      tmp = bA_c.transpose() * Ac2;
+      if (std::abs(tmp - 1.0/90.0) > tolerance) {
+        SANDALS_ASSERT_WARNING(!verbose, CMD "order 6 check failed, a_14 = " << tmp << " ≠ 1/90.");
         return order;
       }
 
-      vecS bAAc3{bA.cwiseProduct(Ac3)};
-      if (std::abs(bAAc3.sum() - 1/120) > tol) {
-        SANDALS_WARNING(CMD "order 6 check failed, sum(bAAc3) = " << bAAc3.sum() << " ≠ 1/120.");
+      tmp = bA.transpose() * Ac3;
+      if (std::abs(tmp - 1.0/120.0) > tolerance) {
+        SANDALS_ASSERT_WARNING(!verbose, CMD "order 6 check failed, a_15 = " << tmp << " ≠ 1/120.");
         return order;
       }
 
-      vecS bcAAAc{bcA.cwiseProduct(A)*Ac};
-      if (std::abs(bcAAAc.sum() - 1/144) > tol) {
-        SANDALS_WARNING(CMD "order 6 check failed, sum(bcAAAc) = " << bcAAAc.sum() << " ≠ 1/144.");
+      tmp = bcA.transpose() * AAc;
+      if (std::abs(tmp - 1.0/144.0) > tolerance) {
+        SANDALS_ASSERT_WARNING(!verbose, CMD "order 6 check failed, a_16 = " << tmp << " ≠ 1/144.");
         return order;
       }
 
-      bAcAAc = (bA.cwiseProduct(c)).cwiseProduct(A)*Ac;
-      if (std::abs(bAcAAc.sum() - 1/180) > tol) {
-        SANDALS_WARNING(CMD "order 6 check failed, sum(bAcAAc) = " << bAcAAc.sum() << " ≠ 1/180.");
+      tmp = bA_c.transpose() * AAc;
+      if (std::abs(tmp - 1.0/180.0) > tolerance) {
+        SANDALS_ASSERT_WARNING(!verbose, CMD "order 6 check failed, a_17 = " << tmp << " ≠ 1/180.");
         return order;
       }
 
-      bAAcAc = bA.cwiseProduct(A)*(cAc);
-      if (std::abs(bAAcAc.sum() - 1/240) > tol) {
-        SANDALS_WARNING(CMD "order 6 check failed, sum(bAAcAc) = " << bAAcAc.sum() << " ≠ 1/240.");
+      Vector AcAc{A * cAc};
+      tmp = bA.transpose() * AcAc;
+      if (std::abs(tmp - 1.0/240.0) > tolerance) {
+        SANDALS_ASSERT_WARNING(!verbose, CMD "order 6 check failed, a_18 = " << tmp << " ≠ 1/240.");
         return order;
       }
 
-      vecS bAAAc2{bA.cwiseProduct(A)*Ac2};
-      if (std::abs(bAAAc2.sum() - 1/360) > tol) {
-        SANDALS_WARNING(CMD "order 6 check failed, sum(bAAcAc) = " << bAAAc2.sum() << " ≠ 1/360.");
+      tmp = bA.transpose() * A * A * c_2;
+      if (std::abs(tmp - 1.0/360.0) > tolerance) {
+        SANDALS_ASSERT_WARNING(!verbose, CMD "order 6 check failed, a_19 = " << tmp << " ≠ 1/360.");
         return order;
       }
 
-      vecS bAAAAc{bA.cwiseProduct(A)*(A*Ac)};
-      if (std::abs(bAAAAc.sum() - 1/720) > tol) {
-        SANDALS_WARNING(CMD "order 6 check failed, sum(bAAcAc) = " << bAAAAc.sum() << " ≠ 1/720.");
+      tmp = bA.transpose() * A * A * Ac;
+      if (std::abs(tmp - 1.0/720.0) > tolerance) {
+        SANDALS_ASSERT_WARNING(!verbose, CMD "order 6 check failed, a_20 = " << tmp << " ≠ 1/720.");
         return order;
       }
 
-      order = 6; // Order 6 is the highest order that can be checked
+      order = 6; // Order 6 is the highest order that can be checked with this method
+
       return order;
-    }*/
+
+      #undef CMD
+    }
+  }; // struct Tableau
 
   /*\
    |   ____        _       _   _
@@ -330,9 +394,10 @@ namespace Sandals {
   //! \brief Class container for the numerical solution of a system of ODEs/DAEs.
   //!
   //! Class container for the numerical solution of a system of Ordinary Differential Equations (ODEs)
-  //! or Differential Algebraic Equations (DAEs). The solution is stored in a time vector and states
-  //! matrix, where each row of the matrix represents the solution of a state at a given time. The
-  //! solution can be accessed as standard library vectors or Eigen library vectors.
+  //! or Differential Algebraic Equations (DAEs). The solution is stored in a independent variable
+  //! (or time) vector and states matrix, where each row of the matrix represents the solution of a
+  //! state at a given independent variable mesh. The solution can be accessed as standard library
+  //! vectors or Eigen library vectors.
   template <Size N, Size M = 0>
   struct Solution
   {
@@ -340,7 +405,7 @@ namespace Sandals {
     using MatrixN = Eigen::Matrix<Real, N, Eigen::Dynamic>; //!< Templetized matrix type.
     using MatrixM = Eigen::Matrix<Real, M, Eigen::Dynamic>; //!< Templetized matrix type.
 
-    Vector time;       //!< Time solution vector.
+    Vector  time;       //!< Independent variable (or time) solution vector.
     MatrixN states;     //!< States solution matrix.
     MatrixM invariants; //!< Invariants solution matrix.
 
@@ -348,28 +413,28 @@ namespace Sandals {
     //!
     Solution() : time(0), states(Vector::Zero(N, 0)), invariants(Vector::Zero(M, 0)) {}
 
-    //! Class constructor for the Solution class given the time and states sizes.
-    //! \param[in] size The size of the time vector and states matrix.
+    //! Class constructor for the Solution class given the independent variable (or time) and states sizes.
+    //! \param[in] size The size of the independent variable (or time) vector and states matrix.
     Solution(Size size)
       : time(size), states(Vector::Zero(N, size)), invariants(Vector::Zero(M, size)) {}
 
-    //! Resize the time vector and states matrix.
-    //! \param[in] size The size of the time vector and states matrix.
+    //! Resize the independent variable (or time) vector and states matrix.
+    //! \param[in] size The size of the independent variable (or time) vector and states matrix.
     void resize(Size size) {
       this->time.resize(size);
       this->states.resize(Eigen::NoChange, size);
       this->invariants.resize(Eigen::NoChange, size);
     }
 
-    //! Resize conserving the data of the time vector and states matrix.
-    //! \param[in] size The size of the time vector and states matrix.
+    //! Resize conserving the data of the independent variable (or time) vector and states matrix.
+    //! \param[in] size The size of the independent variable (or time) vector and states matrix.
     void conservative_resize(Size size) {
       this->time.conservativeResize(size);
       this->states.conservativeResize(Eigen::NoChange, size);
       this->invariants.conservativeResize(Eigen::NoChange, size);
     }
 
-    //! Clear the time vector and states matrix.
+    //! Clear the independent variable (or time) vector and states matrix.
     //!
     void clear()
     {
@@ -378,26 +443,26 @@ namespace Sandals {
       this->invariants.resize(Eigen::NoChange, 0);
     }
 
-    //! Check if the time vector and states matrix are empty.
-    //! \return True if the time vector and states matrix are empty, false otherwise.
+    //! Check if the independent variable (or time) vector and states matrix are empty.
+    //! \return True if the independent variable (or time) vector and states matrix are empty, false otherwise.
     bool is_empty() const
     {
       return this->time.size() == 0 && this->states.cols()== 0 && this->invariants.cols() == 0;
     }
 
-    //! Get the size of the time vector and states matrix.
-    //! \return The size of the time vector and states matrix.
+    //! Get the size of the independent variable (or time) vector and states matrix.
+    //! \return The size of the independent variable (or time) vector and states matrix.
     Size size() const {return this->time.size();}
 
-    //! Get the time vector as a standard library vector.
-    //! \return The time vector as a standard library vector.
+    //! Get the independent variable (or time) vector as a standard library vector.
+    //! \return The independent variable (or time) vector as a standard library vector.
     std::vector<Real> std_time() const
     {
       return std::vector<Real>(this->time.data(), this->time.data() + this->time.size());
     }
 
-    //! Get a the time vector as Eigen library vector.
-    //! \return The time vector as Eigen library vector.
+    //! Get the independent variable (or time) vector as Eigen library vector.
+    //! \return The independent variable (or time) vector as Eigen library vector.
     Vector eig_time() const {return this->time;}
 
     //! Get the i-th state vector as a standard library vector.
@@ -528,7 +593,7 @@ namespace Sandals {
   public:
     using System   = typename Implicit<N>::Pointer;       //!< Shared pointer to an implicit ODE/DAE system.
     using Type     = typename Tableau<S>::Type;           //!< Runge-Kutta type enumeration.
-    using Time     = Eigen::Vector<Real, Eigen::Dynamic>; //!< Templetized vector type for the time.
+    using Time     = Eigen::Vector<Real, Eigen::Dynamic>; //!< Templetized vector type for the independent variable (or time).
     using Solution = Solution<N>;                         //!< Templetized structure type for solution.
 
   private:
@@ -728,7 +793,8 @@ namespace Sandals {
 
     //! Set the projection tolerance.
     //! \param[in] t_projection_tolerance The projection tolerance.
-    void projection_tolerance(Real t_projection_tolerance) {this->m_projection_tolerance = t_projection_tolerance;}
+    void projection_tolerance(Real t_projection_tolerance)
+      {this->m_projection_tolerance = t_projection_tolerance;}
 
     //! Get the maximum number of projection iterations.
     //! \return The maximum number of projection iterations.
@@ -736,7 +802,8 @@ namespace Sandals {
 
     //! Set the maximum number of projection iterations.
     //! \param[in] t_max_projection_iterations The maximum number of projection iterations.
-    void max_projection_iterations(Size t_max_projection_iterations) {this->m_max_projection_iterationsations = t_max_projection_iterations;}
+    void max_projection_iterations(Size t_max_projection_iterations)
+      {this->m_max_projection_iterationsations = t_max_projection_iterations;}
 
     //! Enable projection mode.
     //!
@@ -746,7 +813,7 @@ namespace Sandals {
     //!
     void disable_projection() {this->m_projection = false;}
 
-    //! Compute time step for the next advancing step according to the error control method. The
+    //! Compute step for the next advancing step according to the error control method. The
     //! error control method used is the local truncation error method, which is based on the
     //! following formula
     //!
@@ -760,7 +827,7 @@ namespace Sandals {
     //! where \f$ \mathbf{x} \f$ is the approximation of the states at computed
     //! with higher order method of \f$ p \f$, and \f$ \hat{\mathbf{x}} \f$ is the
     //! approximation of the states at computed with lower order method of \f$
-    //! \hat{p} \f$. To compute the suggested time step for the next advancing step
+    //! \hat{p} \f$. To compute the suggested step for the next advancing step
     //! \f$ h_{k+1} \f$, The error is compared to \f$ 1 \f$ in order to find
     //! an optimal step size. From the error behaviour \f$ e \approx Ch^{q+1} \f$
     //! and from \f$ 1 \approx Ch_{opt}^{q+1} \f$ (where \f$ q = \min(p,\hat{p}) \f$)
@@ -789,20 +856,20 @@ namespace Sandals {
     //! \f$ f_{\max} \f$ is set in the interval \f$ [1.5, 5] \f$, and \f$ f_{min} \f$
     //! is set in the interval \f$ [0.1, 0.2] \f$.
     //!
-    //! \note The error control method is only available for adaptive step mode. Furthermore, the
+    //! \note The error control method is only available if the  adaptive step mode is enabled. The
     //! implementation of the error control method \em should be overridden in the derived class to
     //! provide a more accurate and efficient error control based on the specific Runge-Kutta method.
     //! \param[in] x States approximation \f$ \mathbf{x}_{k+1} \f$.
     //! \param[in] x_e States approximation \f$ \hat{\mathbf{x}}_{k+1} \f$ computed with the embedded
     //! weights vector \f$ \hat{\mathbf{b}} \f$.
-    //! \param[in] h_k Actual advancing time step \f$ h_k \f$.
-    //! \return The suggested time step for the next integration step \f$ h_{k+1}^\star \f$.
+    //! \param[in] h_k Actual advancing step \f$ h_k \f$.
+    //! \return The suggested step for the next integration step \f$ h_{k+1}^\star \f$.
     Real estimate_step(VectorN const &x, VectorN const &x_e, Real h_k) const
     {
       return h_k * std::min(this->m_max_safety_factor, std::max(this->m_min_safety_factor,
         this->m_safety_factor * ((x - x_e) / (this->m_absolute_tolerance + this->m_relative_tolerance
-        * std::max(x.cwiseAbs().maxCoeff(), x_e.cwiseAbs().maxCoeff())
-        )).cwiseAbs().maxCoeff()));
+        * std::max(x.array().abs().maxCoeff(), x_e.array().abs().maxCoeff())
+        )).array().abs().maxCoeff()));
     }
 
     //! Print the Runge-Kutta method information to the output stream.
@@ -834,14 +901,14 @@ namespace Sandals {
 
     //! Compute the new states \f$ \mathbf{x}_{k+1} \f$ at the next advancing step \f$ t_{k+1} = t_k
     //! + h_k \f$ using an explicit Runge-Kutta method, given an explicit system of the form \f$
-    //! \mathbf{x}^\prime = \mathbf{f}(\mathbf{x}, t) \f$. If the method is embedded, the time
-    //! step for the next advancing step \f$ h_{k+1}^\star \f$ is also computed according to the
-    //! error control method.
+    //! \mathbf{x}^\prime = \mathbf{f}(\mathbf{x}, t) \f$. If the method is embedded, the step for
+    //! the next advancing step \f$ h_{k+1}^\star \f$ is also computed according to the error control
+    //! method.
     //! \param[in] x_old States \f$ \mathbf{x}_k \f$ at the \f$ k \f$-th step.
-    //! \param[in] t_old Time \f$ t_k \f$ at the \f$ k \f$-th step.
-    //! \param[in] h_old Advancing time step \f$ h_k \f$ at the \f$ k \f$-th step.
+    //! \param[in] t_old Independent variable (or time) \f$ t_k \f$ at the \f$ k \f$-th step.
+    //! \param[in] h_old Advancing step \f$ h_k \f$ at the \f$ k \f$-th step.
     //! \param[out] x_new Computed states \f$ \mathbf{x}_{k+1} \f$ at the \f$ (k+1) \f$-th step.
-    //! \param[out] h_new The suggested time step \f$ h_{k+1}^\star \f$ for the next advancing step.
+    //! \param[out] h_new The suggested step \f$ h_{k+1}^\star \f$ for the next advancing step.
     //! \return True if the step is successfully computed, false otherwise.
     bool erk_explicit_step(VectorN const &x_old, Real t_old, Real h_old, VectorN &x_new, Real &h_new) const
     {
@@ -860,7 +927,7 @@ namespace Sandals {
       // Perform the step and obtain the next state
       x_new = x_old + K * this->m_tableau.b;
 
-      // Adapt next time step
+      // Adapt next step
       if (this->m_adaptive_step && this->m_tableau.is_embedded) {
         VectorN x_emb = x_old + K * this->m_tableau.b_e;
         h_new = this->estimate_step(x_new, x_emb, h_old);
@@ -882,8 +949,8 @@ namespace Sandals {
     //! is given by \f$ \tilde{\mathbf{K}} = \mathbf{0} \f$.
     //! \param[in] s Stage index \f$ s \f$.
     //! \param[in] x States \f$ \mathbf{x} \f$.
-    //! \param[in] t Time \f$ t \f$.
-    //! \param[in] h Advancing time step \f$ h \f$.
+    //! \param[in] t Independent variable (or time) \f$ t \f$.
+    //! \param[in] h Advancing step \f$ h \f$.
     //! \param[in] K Variables \f$ \tilde{\mathbf{K}} = h \mathbf{K} \f$ of the system to be solved.
     //! \param[out] fun The residual of system to be solved.
     void erk_implicit_function(Size s, VectorN const &x, Real t, Real h, MatrixK const &K, VectorN &fun) const
@@ -921,8 +988,8 @@ namespace Sandals {
     //! is given by \f$ \tilde{\mathbf{K}} = \mathbf{0} \f$.
     //! \param[in] s Stage index \f$ s \f$.
     //! \param[in] x States \f$ \mathbf{x} \f$.
-    //! \param[in] t Time \f$ t \f$.
-    //! \param[in] h Advancing time step \f$ h \f$.
+    //! \param[in] t Independent variable (or time) \f$ t \f$.
+    //! \param[in] h Advancing step \f$ h \f$.
     //! \param[in] K Variables \f$ h \mathbf{K} \f$ of the system to be solved.
     //! \param[out] fun The Jacobian of system to be solved.
     void erk_implicit_jacobian(Size s, VectorN const &x, Real t, Real h, MatrixK const &K, MatrixN &jac) const
@@ -935,14 +1002,14 @@ namespace Sandals {
 
     //! Compute the new states \f$ \mathbf{x}_{k+1} \f$ at the next advancing step \f$ t_{k+1} = t_k
     //! + h_k \f$ using an explicit Runge-Kutta method, given an explicit system of the form \f$
-    //! \mathbf{x}^\prime = \mathbf{f}(\mathbf{x}, t) \f$. If the method is embedded, the time
-    //! step for the next advancing step \f$ h_{k+1}^\star \f$ is also computed according to the
-    //! error control method.
+    //! \mathbf{x}^\prime = \mathbf{f}(\mathbf{x}, t) \f$. If the method is embedded, the step for
+    //! the next advancing step \f$ h_{k+1}^\star \f$ is also computed according to the error control
+    //! method.
     //! \param[in] x_old States \f$ \mathbf{x}_k \f$ at the \f$ k \f$-th step.
-    //! \param[in] t_old Time \f$ t_k \f$ at the \f$ k \f$-th step.
-    //! \param[in] h_old Advancing time step \f$ h_k \f$ at the \f$ k \f$-th step.
+    //! \param[in] t_old Independent variable (or time) \f$ t_k \f$ at the \f$ k \f$-th step.
+    //! \param[in] h_old Advancing step \f$ h_k \f$ at the \f$ k \f$-th step.
     //! \param[out] x_new Computed states \f$ \mathbf{x}_{k+1} \f$ at the \f$ (k+1) \f$-th step.
-    //! \param[out] h_new The suggested time step \f$ h_{k+1}^\star \f$ for the next advancing step.
+    //! \param[out] h_new The suggested step \f$ h_{k+1}^\star \f$ for the next advancing step.
     //! \return True if the step is successfully computed, false otherwise.
     bool erk_implicit_step(VectorN const &x_old, Real t_old, Real h_old, VectorN &x_new, Real &h_new) const
     {
@@ -967,7 +1034,7 @@ namespace Sandals {
       // Perform the step and obtain the next state
       x_new = x_old + K * this->m_tableau.b;
 
-      // Adapt next time step
+      // Adapt next step
       if (this->m_adaptive_step && this->m_tableau.is_embedded) {
         VectorN x_emb(x_old + K * this->m_tableau.b_e);
         h_new = this->estimate_step(x_new, x_emb, h_old);
@@ -1002,8 +1069,8 @@ namespace Sandals {
     //! \note If \f$ h \gets 0 \f$, then the first guess to solve the nonlinear system
     //! is given by \f$ \tilde{\mathbf{K}} = \mathbf{0} \f$.
     //! \param[in] x States \f$ \mathbf{x} \f$.
-    //! \param[in] t Time \f$ t \f$.
-    //! \param[in] h Advancing time step \f$ h \f$.
+    //! \param[in] t Independent variable (or time) \f$ t \f$.
+    //! \param[in] h Advancing step \f$ h \f$.
     //! \param[in] K Variables \f$ \tilde{\mathbf{K}} = h \mathbf{K} \f$ of the system to be solved.
     //! \param[out] fun The residual of system to be solved.
     void irk_function(VectorN const &x, Real t, Real h, VectorK const &K, VectorK &fun) const
@@ -1048,8 +1115,8 @@ namespace Sandals {
     //! \note If \f$ h \rightarrow 0 \f$, then the first guess to solve the nonlinear system
     //! is given by \f$ \tilde{\mathbf{K}} = \mathbf{0} \f$.
     //! \param[in] x States \f$ \mathbf{x} \f$.
-    //! \param[in] t Time \f$ t \f$.
-    //! \param[in] h Advancing time step \f$ h \f$.
+    //! \param[in] t Independent variable (or time) \f$ t \f$.
+    //! \param[in] h Advancing step \f$ h \f$.
     //! \param[in] K Variables \f$ h \mathbf{K} \f$ of the system to be solved.
     //! \param[out] fun The Jacobian of system to be solved.
     void irk_jacobian(VectorN const &x, Real t, Real h, VectorK const &K, MatrixJ &jac) const
@@ -1090,13 +1157,13 @@ namespace Sandals {
     //! Compute the new states \f$ \mathbf{x}_{k+1} \f$ at the next advancing step \f$ t_{k+1} = t_k
     //! + h_k \f$ using an implicit Runge-Kutta method, given an implicit system of the form \f$
     //! \mathbf{F}(\mathbf{x}, \mathbf{x}^\prime, t) = \mathbf{0} \f$. If the method is embedded,
-    //! the time step for the next advancing step \f$ h_{k+1}^\star \f$ is also computed according
-    //! to the error control method.
+    //! the step for the next advancing step \f$ h_{k+1}^\star \f$ is also computed according to the
+    //! error control method.
     //! \param[in] x_old States \f$ \mathbf{x}_k \f$ at the \f$ k \f$-th step.
-    //! \param[in] t_old Time \f$ t_k \f$ at the \f$ k \f$-th step.
-    //! \param[in] h_old Advancing time step \f$ h_k \f$ at the \f$ k \f$-th step.
+    //! \param[in] t_old Independent variable (or time) \f$ t_k \f$ at the \f$ k \f$-th step.
+    //! \param[in] h_old Advancing step \f$ h_k \f$ at the \f$ k \f$-th step.
     //! \param[out] x_new Computed states \f$ \mathbf{x}_{k+1} \f$ at the \f$ (k+1) \f$-th step.
-    //! \param[out] h_new The suggested time step \f$ h_{k+1}^\star \f$ for the next advancing step.
+    //! \param[out] h_new The suggested step \f$ h_{k+1}^\star \f$ for the next advancing step.
     //! \return True if the step is successfully computed, false otherwise.
     bool irk_step(VectorN const &x_old, Real t_old, Real h_old, VectorN &x_new, Real &h_new)
     {
@@ -1114,7 +1181,7 @@ namespace Sandals {
       // Perform the step and obtain the next state
       x_new = x_old + K.reshaped(N, S) * this->m_tableau.b;
 
-      // Adapt next time step
+      // Adapt next step
       if (this->m_adaptive_step && this->m_tableau.is_embedded) {
         VectorN x_emb(x_old + K.reshaped(N, S) * this->m_tableau.b_e);
         h_new = this->estimate_step(x_new, x_emb, h_old);
@@ -1145,8 +1212,8 @@ namespace Sandals {
     //! is given by \f$ \tilde{\mathbf{K}} = \mathbf{0} \f$.
     //! \param[in] n Equation index \f$ n \f$.
     //! \param[in] x States \f$ \mathbf{x} \f$.
-    //! \param[in] t Time \f$ t \f$.
-    //! \param[in] h Advancing time step \f$ h \f$.
+    //! \param[in] t Independent variable (or time) \f$ t \f$.
+    //! \param[in] h Advancing step \f$ h \f$.
     //! \param[in] K Variables \f$ \tilde{\mathbf{K}} = h \mathbf{K} \f$ of the system to be solved.
     //! \param[out] fun The residual of system to be solved.
     void dirk_function(Size n, VectorN const &x, Real t, Real h, MatrixK const &K, VectorN &fun) const
@@ -1184,8 +1251,8 @@ namespace Sandals {
     //! is given by \f$ \tilde{\mathbf{K}} = \mathbf{0} \f$.
     //! \param[in] n Equation index \f$ n \f$.
     //! \param[in] x States \f$ \mathbf{x} \f$.
-    //! \param[in] t Time \f$ t \f$.
-    //! \param[in] h Advancing time step \f$ h \f$.
+    //! \param[in] t Independent variable (or time) \f$ t \f$.
+    //! \param[in] h Advancing step \f$ h \f$.
     //! \param[in] K Variables \f$ h \mathbf{K} \f$ of the system to be solved.
     //! \param[out] fun The Jacobian of system to be solved.
     void dirk_jacobian(Size n, VectorN const &x, Real t, Real h, MatrixK const &K, MatrixN &jac) const
@@ -1202,13 +1269,13 @@ namespace Sandals {
     //! Compute the new states \f$ \mathbf{x}_{k+1} \f$ at the next advancing step \f$ t_{k+1} = t_k
     //! + h_k \f$ using an diagonally implicit Runge-Kutta method, given an implicit system of the
     //! form \f$ \mathbf{F}(\mathbf{x}, \mathbf{x}^\prime, t) = \mathbf{0} \f$. If the method is
-    //! embedded, the time step for the next advancing step \f$ h_{k+1}^\star \f$ is also computed
+    //! embedded, the step for the next advancing step \f$ h_{k+1}^\star \f$ is also computed
     //! according to the error control method.
     //! \param[in] x_old States \f$ \mathbf{x}_k \f$ at the \f$ k \f$-th step.
-    //! \param[in] t_old Time \f$ t_k \f$ at the \f$ k \f$-th step.
-    //! \param[in] h_old Advancing time step \f$ h_k \f$ at the \f$ k \f$-th step.
+    //! \param[in] t_old Independent variable (or time) \f$ t_k \f$ at the \f$ k \f$-th step.
+    //! \param[in] h_old Advancing step \f$ h_k \f$ at the \f$ k \f$-th step.
     //! \param[out] x_new Computed states \f$ \mathbf{x}_{k+1} \f$ at the \f$ (k+1) \f$-th step.
-    //! \param[out] h_new The suggested time step \f$ h_{k+1}^\star \f$ for the next advancing step.
+    //! \param[out] h_new The suggested step \f$ h_{k+1}^\star \f$ for the next advancing step.
     //! \return True if the step is successfully computed, false otherwise.
     bool dirk_step(VectorN const &x_old, Real t_old, Real h_old, VectorN &x_new, Real &h_new) const
     {
@@ -1233,7 +1300,7 @@ namespace Sandals {
       // Perform the step and obtain the next state
       x_new = x_old + K * this->m_tableau.b;
 
-      // Adapt next time step
+      // Adapt next step
       if (this->m_adaptive_step && this->m_tableau.is_embedded) {
         VectorN x_emb(x_old + K * this->m_tableau.b_e);
         h_new = this->estimate_step(x_new, x_emb, h_old);
@@ -1245,10 +1312,10 @@ namespace Sandals {
     //! \mathbf{x}, \mathbf{x}^\prime, t) = \mathbf{0} \f$. The step is automatically selected
     //! based on the system properties and the integration method properties.
     //! \param[in] x_old States \f$ \mathbf{x}_k \f$ at the \f$ k \f$-th step.
-    //! \param[in] t_old Time \f$ t_k \f$ at the \f$ k \f$-th step.
-    //! \param[in] h_old Advancing time step \f$ h_k \f$ at the \f$ k \f$-th step.
+    //! \param[in] t_old Independent variable (or time) \f$ t_k \f$ at the \f$ k \f$-th step.
+    //! \param[in] h_old Advancing step \f$ h_k \f$ at the \f$ k \f$-th step.
     //! \param[out] x_new Computed states \f$ \mathbf{x}_{k+1} \f$ at the \f$ (k+1) \f$-th step.
-    //! \param[out] h_new The suggested time step \f$ h_{k+1}^\star \f$ for the next advancing step.
+    //! \param[out] h_new The suggested step \f$ h_{k+1}^\star \f$ for the next advancing step.
     //! \return True if the step is successfully computed, false otherwise.
     bool step(VectorN const &x_old, Real t_old, Real h_old, VectorN &x_new, Real &h_new)
     {
@@ -1269,10 +1336,10 @@ namespace Sandals {
     //! solution is also projected on the manifold \f$ \mathbf{h}(\mathbf{x}, t) \f$. Substepping
     //! may be also used to if the integration step fails with the current step size.
     //! \param[in] x_old States \f$ \mathbf{x}_k \f$ at the \f$ k \f$-th step.
-    //! \param[in] t_old Time \f$ t_k \f$ at the \f$ k \f$-th step.
-    //! \param[in] h_old Advancing time step \f$ h_k \f$ at the \f$ k \f$-th step.
+    //! \param[in] t_old Independent variable (or time) \f$ t_k \f$ at the \f$ k \f$-th step.
+    //! \param[in] h_old Advancing step \f$ h_k \f$ at the \f$ k \f$-th step.
     //! \param[out] x_new Computed states \f$ \mathbf{x}_{k+1} \f$ at the \f$ (k+1) \f$-th step.
-    //! \param[out] h_new The suggested time step \f$ h_{k+1}^\star \f$ for the next advancing step.
+    //! \param[out] h_new The suggested step \f$ h_{k+1}^\star \f$ for the next advancing step.
     //! \return True if the step is successfully computed, false otherwise.
     bool advance(VectorN const &x_old, Real t_old, Real h_old, VectorN &x_new, Real &h_new)
     {
@@ -1292,7 +1359,7 @@ namespace Sandals {
         Size max_k{this->m_max_substeps * this->m_max_substeps}, k{2};
         Real h_new_tmp;
         while (k > 0) {
-          // Calculate the next time step with substepping logic
+          // Calculate the next step with substepping logic
           if (this->step(x_tmp, t_tmp, h_tmp, x_new, h_new_tmp)) {
 
             // Accept the step
@@ -1332,7 +1399,7 @@ namespace Sandals {
             continue;
           }
 
-          // Store time solution
+          // Store independent variable (or time)
           t_tmp = t_tmp + h_tmp;
         }
 
@@ -1357,12 +1424,12 @@ namespace Sandals {
       #undef CMD
     }
 
-    //! Solve the system and calculate the approximate solution over the time mesh \f$ \mathbf{t} =
-    //! \left[ t_1, t_2, \ldots, t_n \right]^T \f$. The step size is fixed and given by \f$ h =
-    //! t_{k+1} - t_k \f$.
-    //! \param[in] t_mesh Time mesh points \f$ \mathbf{t} \f$.
+    //! Solve the system and calculate the approximate solution over the independent variable  (or
+    //! time) mesh\f$ \mathbf{t} = \left[ t_1, t_2, \ldots, t_n \right]^T \f$. The step size is fixed
+    //! and given by \f$ h = t_{k+1} - t_k \f$.
+    //! \param[in] t_mesh Independent variable (or time) mesh \f$ \mathbf{t} \f$.
     //! \param[in] ics Initial conditions \f$ \mathbf{x}(t = 0) \f$.
-    //! \param[out] sol The solution of the system over the mesh of time points.
+    //! \param[out] sol The solution of the system over the mesh of independent variable.
     //! \return True if the system is successfully solved, false otherwise.
     bool solve(VectorX const &t_mesh, VectorN const &ics, Solution &sol)
     {
@@ -1415,12 +1482,12 @@ namespace Sandals {
       return true;
     }
 
-    //! Solve the system and calculate the approximate solution over the suggested time mesh \f$
-    //! \mathbf{t} = \left[ t_1, t_2, \ldots, t_n \right]^T \f$, the step size is automatically
-    //! computed based on the error control method.
-    //! \param[in] t_mesh Time mesh points \f$ \mathbf{t} \f$.
+    //! Solve the system and calculate the approximate solution over the suggested independent
+    //! variable mesh \f$ \mathbf{t} = \left[ t_1, t_2, \ldots, t_n \right]^T \f$, the step size is
+    //! automatically computed based on the error control method.
+    //! \param[in] t_mesh Independent variable (or time) mesh \f$ \mathbf{t} \f$.
     //! \param[in] ics Initial conditions \f$ \mathbf{x}(t = 0) \f$.
-    //! \param[out] sol The solution of the system over the mesh of time points.
+    //! \param[out] sol The solution of the system over the mesh of independent variable.
     //! \return True if the system is successfully solved, false otherwise.
     bool adaptive_solve(VectorX const &t_mesh, VectorN const &ics, Solution &sol)
     {
@@ -1480,7 +1547,7 @@ namespace Sandals {
     //! Project the system solution \f$ \mathbf{x} \f$ on the invariants \f$ \mathbf{h} (\mathbf{x},
     //! t) = \mathbf{0} \f$.
     //! \param[in] x The initial guess for the states \f$\widetilde{\mathbf{x}} \f$.
-    //! \param[in] t The time \f$ t \f$ at which the states are evaluated.
+    //! \param[in] t The independent variable (or time) \f$ t \f$ at which the states are evaluated.
     //! \param[out] x_projected The projected states \f$ \mathbf{x} \f$ closest to the invariants
     //! manifold \f$ \mathbf{h} (\mathbf{x}, t) = \mathbf{0} \f$.
     //! \return True if the solution is successfully projected, false otherwise.
@@ -1524,7 +1591,7 @@ namespace Sandals {
           if (x_step.norm() < this->m_projection_tolerance * this->m_projection_tolerance) {return false;} // return false or true?
 
           // Update the solution
-          x_projected += x_step(Eigen::seqN(0, N));
+          x_projected.noalias() += x_step(Eigen::seqN(0, N));
         }
         SANDALS_WARNING(CMD "maximum number of iterations reached.");
         return false;
@@ -1538,7 +1605,7 @@ namespace Sandals {
     //! Project the system solution \f$ \mathbf{x} \f$ on the invariants \f$ \mathbf{h} (\mathbf{x},
     //! t) = \mathbf{0} \f$.
     //! \param[in] x The initial guess for the states \f$\widetilde{\mathbf{x}} \f$.
-    //! \param[in] t The time \f$ t \f$ at which the states are evaluated.
+    //! \param[in] t The independent variable (or time) \f$ t \f$ at which the states are evaluated.
     //! \param[in] projected_equations The indices of the states to be projected.
     //! \param[in] projected_invariants The indices of the invariants to be projected.
     //! \param[out] x_projected The projected states \f$ \mathbf{x} \f$ closest to the invariants
@@ -1593,7 +1660,7 @@ namespace Sandals {
           if (x_step.norm() < this->m_projection_tolerance * this->m_projection_tolerance) {return false;} // return false or true?
 
           // Update the solution
-          x_projected(projected_equations) += x_step;
+          x_projected(projected_equations).noalias() += x_step;
         }
         SANDALS_WARNING(CMD "maximum number of iterations reached.");
         return false;

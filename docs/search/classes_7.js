@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['tableau_0',['Tableau',['../struct_sandals_1_1_tableau.html',1,'Sandals']]],
-  ['tableau_3c_204_20_3e_1',['Tableau&lt; 4 &gt;',['../struct_sandals_1_1_tableau.html',1,'Sandals']]]
+  ['semiexplicit_0',['SemiExplicit',['../class_sandals_1_1_semi_explicit.html',1,'Sandals']]]
 ];

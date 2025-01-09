@@ -97,9 +97,9 @@ namespace Sandals
     Size invariants_number() const {return M;}
 
     //! Evaluate the ODE/DAE system \f$ \mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, t) \f$.
-    //! \param[in] x     States \f$ \mathbf{x} \f$.
+    //! \param[in] x States \f$ \mathbf{x} \f$.
     //! \param[in] x_dot States derivative \f$ \mathbf{x}^{\prime} \f$.
-    //! \param[in] t     Independent variable \f$ t \f$.
+    //! \param[in] t Independent variable (or time) \f$ t \f$.
     //! \return The system function \f$ \mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, t) \f$.
     virtual VectorN F(VectorN const &x, VectorN const &x_dot, Real t) const = 0;
 
@@ -109,9 +109,9 @@ namespace Sandals
     //! \f[ \mathbf{JF}_{\mathbf{x}}(\mathbf{x}, \mathbf{x}^{\prime}, t) = \displaystyle\frac{
     //! \partial\mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, t)}{\partial\mathbf{x}} \text{.} \f]
     //!
-    //! \param[in] x     States \f$ \mathbf{x} \f$.
+    //! \param[in] x States \f$ \mathbf{x} \f$.
     //! \param[in] x_dot States derivative \f$ \mathbf{x}^{\prime} \f$.
-    //! \param[in] t     Independent variable \f$ t \f$.
+    //! \param[in] t Independent variable (or time) \f$ t \f$.
     //! \return The Jacobian \f$ \mathbf{JF}_{\mathbf{x}}(\mathbf{x}, \mathbf{x}^{\prime}, t) \f$.
     virtual MatrixN JF_x(VectorN const &x, VectorN const &x_dot, Real t) const = 0;
 
@@ -122,15 +122,15 @@ namespace Sandals
     //! \frac{\partial\mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, t)}{\partial\mathbf{x}^{\prime}}
     //! \text{.} \f]
     //!
-    //! \param[in] x     States \f$ \mathbf{x} \f$.
+    //! \param[in] x States \f$ \mathbf{x} \f$.
     //! \param[in] x_dot States derivative \f$ \mathbf{x}^{\prime} \f$.
-    //! \param[in] t     Independent variable \f$ t \f$.
+    //! \param[in] t Independent variable (or time) \f$ t \f$.
     //! \return The Jacobian \f$ \mathbf{JF}_{\mathbf{x}^{\prime}}(\mathbf{x}, \mathbf{x}^{\prime}, t) \f$.
     virtual MatrixN JF_x_dot(VectorN const &x, VectorN const &x_dot, Real t) const = 0;
 
     //! Evaluate the ODE/DAE system invariants \f$ \mathbf{h}(\mathbf{x}, t) \f$.
     //! \param[in] x States \f$ \mathbf{x} \f$.
-    //! \param[in] t Independent variable \f$ t \f$.
+    //! \param[in] t Independent variable (or time) \f$ t \f$.
     //! \return The system invariants \f$ \mathbf{h}(\mathbf{x}, t) \f$.
     virtual VectorM h(VectorN const &x, Real t) const = 0;
 
@@ -141,14 +141,14 @@ namespace Sandals
     //! t)}{\partial\mathbf{x}} \text{.} \f]
     //!
     //! \param[in] x States \f$ \mathbf{x} \f$.
-    //! \param[in] t Independent variable \f$ t \f$.
+    //! \param[in] t Independent variable (or time) \f$ t \f$.
     //! \return The Jacobian \f$ \mathbf{Jh}_{\mathbf{x}}(\mathbf{x}, \mathbf{x}^{\prime}, t) \f$.
     virtual MatrixM Jh_x(VectorN const &x, Real t) const = 0;
 
     //! Return true if the values \f$ \mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, t) \f$ is in the
     //! domain of the ODE/DAE system.
     //! \param[in] x States \f$ \mathbf{x} \f$.
-    //! \param[in] t Independent variable \f$ t \f$.
+    //! \param[in] t Independent variable (or time) \f$ t \f$.
     //! \return True if \f$ \mathbf{F}(\mathbf{x}, t) \f$ is in the domain of the ODE/DAE system.
     virtual bool in_domain(VectorN const &x, Real t) const = 0;
 
