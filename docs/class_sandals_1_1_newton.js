@@ -7,5 +7,6 @@ var class_sandals_1_1_newton =
     [ "Newton", "class_sandals_1_1_newton.html#a9bc8311c525f2ea3d73df097da153f03", null ],
     [ "name", "class_sandals_1_1_newton.html#a7a88e9fb6eb64c02a9d9e4b97d110adb", null ],
     [ "solve", "class_sandals_1_1_newton.html#a13a4447e3f3ff4380520312e67c3d376", null ],
-    [ "solve_damped", "class_sandals_1_1_newton.html#a4b28c355bcd80fb73f7347b2d0a42242", null ]
+    [ "solve_damped", "class_sandals_1_1_newton.html#a4b28c355bcd80fb73f7347b2d0a42242", null ],
+    [ "m_lu", "class_sandals_1_1_newton.html#a3b4d35e5a6049873da7f18f042c024c2", null ]
 ];

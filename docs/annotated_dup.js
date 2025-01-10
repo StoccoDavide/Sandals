@@ -11,6 +11,10 @@ var annotated_dup =
       [ "GaussLegendre4Tableau", "class_sandals_1_1_gauss_legendre4_tableau.html", "class_sandals_1_1_gauss_legendre4_tableau" ],
       [ "GaussLegendre6", "class_sandals_1_1_gauss_legendre6.html", "class_sandals_1_1_gauss_legendre6" ],
       [ "GaussLegendre6Tableau", "class_sandals_1_1_gauss_legendre6_tableau.html", "class_sandals_1_1_gauss_legendre6_tableau" ],
+      [ "Heun2", "class_sandals_1_1_heun2.html", "class_sandals_1_1_heun2" ],
+      [ "Heun2Tableau", "class_sandals_1_1_heun2_tableau.html", "class_sandals_1_1_heun2_tableau" ],
+      [ "Heun3", "class_sandals_1_1_heun3.html", "class_sandals_1_1_heun3" ],
+      [ "Heun3Tableau", "class_sandals_1_1_heun3_tableau.html", "class_sandals_1_1_heun3_tableau" ],
       [ "Implicit", "class_sandals_1_1_implicit.html", "class_sandals_1_1_implicit" ],
       [ "ImplicitEuler", "class_sandals_1_1_implicit_euler.html", "class_sandals_1_1_implicit_euler" ],
       [ "ImplicitEulerTableau", "class_sandals_1_1_implicit_euler_tableau.html", "class_sandals_1_1_implicit_euler_tableau" ],
@@ -25,6 +29,8 @@ var annotated_dup =
       [ "RK4Tableau", "class_sandals_1_1_r_k4_tableau.html", "class_sandals_1_1_r_k4_tableau" ],
       [ "RKF45", "class_sandals_1_1_r_k_f45.html", "class_sandals_1_1_r_k_f45" ],
       [ "RKF45Tableau", "class_sandals_1_1_r_k_f45_tableau.html", "class_sandals_1_1_r_k_f45_tableau" ],
-      [ "SemiExplicit", "class_sandals_1_1_semi_explicit.html", "class_sandals_1_1_semi_explicit" ]
+      [ "SemiExplicit", "class_sandals_1_1_semi_explicit.html", "class_sandals_1_1_semi_explicit" ],
+      [ "Solution", "struct_sandals_1_1_solution.html", "struct_sandals_1_1_solution" ],
+      [ "Tableau", "struct_sandals_1_1_tableau.html", "struct_sandals_1_1_tableau" ]
     ] ]
 ];

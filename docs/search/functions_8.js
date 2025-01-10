@@ -5,8 +5,9 @@ var searchData=
   ['impliciteulertableau_2',['ImplicitEulerTableau',['../class_sandals_1_1_implicit_euler_tableau.html#a26fc11ecf05e0a8c8d53d28944b77c5b',1,'Sandals::ImplicitEulerTableau']]],
   ['in_5fdomain_3',['in_domain',['../class_sandals_1_1_implicit.html#aa20cc23a8b35a4601a38f73fc2cd06e7',1,'Sandals::Implicit']]],
   ['invariants_5fnumber_4',['invariants_number',['../class_sandals_1_1_implicit.html#a169ead3eb2c7eaca95c8e4a1970446a5',1,'Sandals::Implicit']]],
-  ['is_5fexplicit_5',['is_explicit',['../class_sandals_1_1_implicit.html#ab153cc1bf5946845e32ee237420e98a6',1,'Sandals::Implicit']]],
-  ['is_5fimplicit_6',['is_implicit',['../class_sandals_1_1_implicit.html#a5223f90739dfa0634560e360d97b0783',1,'Sandals::Implicit']]],
-  ['is_5fsemiexplicit_7',['is_semiexplicit',['../class_sandals_1_1_implicit.html#aba5f905eefb2332868af26e3a4be2d2d',1,'Sandals::Implicit']]],
-  ['iterations_8',['iterations',['../class_sandals_1_1_nonlinear_solver.html#a4f7ce939cc8313b762d10f64df63bb76',1,'Sandals::NonlinearSolver']]]
+  ['is_5fempty_5',['is_empty',['../struct_sandals_1_1_solution.html#a6c21241d1a1138151102e6b2cc72e0fd',1,'Sandals::Solution']]],
+  ['is_5fexplicit_6',['is_explicit',['../class_sandals_1_1_implicit.html#ab153cc1bf5946845e32ee237420e98a6',1,'Sandals::Implicit']]],
+  ['is_5fimplicit_7',['is_implicit',['../class_sandals_1_1_implicit.html#a5223f90739dfa0634560e360d97b0783',1,'Sandals::Implicit']]],
+  ['is_5fsemiexplicit_8',['is_semiexplicit',['../class_sandals_1_1_implicit.html#aba5f905eefb2332868af26e3a4be2d2d',1,'Sandals::Implicit']]],
+  ['iterations_9',['iterations',['../class_sandals_1_1_nonlinear_solver.html#a4f7ce939cc8313b762d10f64df63bb76',1,'Sandals::NonlinearSolver']]]
 ];

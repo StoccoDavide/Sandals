@@ -142,6 +142,7 @@ $(function(){initNavTree('class_sandals_1_1_implicit.html',''); initResizable(tr
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="class_sandals_1_1_implicit-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">Sandals::Implicit&lt; N, M &gt; Class Template Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div></div>
 </div><!--header-->
@@ -214,6 +215,15 @@ Public Member Functions</h2></td></tr>
 Protected Member Functions</h2></td></tr>
 <tr class="memitem:af95c9c6c9a2269f7b252d1a38df71f41" id="r_af95c9c6c9a2269f7b252d1a38df71f41"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af95c9c6c9a2269f7b252d1a38df71f41">Implicit</a> (<a class="el" href="#ae0696ff456a4e8b737cc365cf4a47f4e">Type</a> t_type, std::string t_name)</td></tr>
 <tr class="separator:af95c9c6c9a2269f7b252d1a38df71f41"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:ac6a7e07f13fb922a154b09d29dbc47d6" id="r_ac6a7e07f13fb922a154b09d29dbc47d6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#ae0696ff456a4e8b737cc365cf4a47f4e">Type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac6a7e07f13fb922a154b09d29dbc47d6">m_type</a> {Type::IMPLICIT}</td></tr>
+<tr class="memdesc:ac6a7e07f13fb922a154b09d29dbc47d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">ODE/DAE system type.  <br /></td></tr>
+<tr class="separator:ac6a7e07f13fb922a154b09d29dbc47d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a07c1286395309f54b51d1443dd3eace9" id="r_a07c1286395309f54b51d1443dd3eace9"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a07c1286395309f54b51d1443dd3eace9">m_name</a></td></tr>
+<tr class="memdesc:a07c1286395309f54b51d1443dd3eace9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Name of the ODE/DAE system.  <br /></td></tr>
+<tr class="separator:a07c1286395309f54b51d1443dd3eace9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><div class="compoundTemplParams">template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> N, <a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> M = 0&gt;<br />
@@ -955,6 +965,59 @@ template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d44
 </table>
 </div><div class="memdoc">
 <p>Get the enumeration type of the ODE/DAE system. </p><dl class="section return"><dt>Returns</dt><dd>The enumeration type of the ODE/DAE system. </dd></dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a07c1286395309f54b51d1443dd3eace9" name="a07c1286395309f54b51d1443dd3eace9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a07c1286395309f54b51d1443dd3eace9">&#9670;&#160;</a></span>m_name</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> N, <a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> M = 0&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; N, M &gt;::m_name</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Name of the ODE/DAE system. </p>
+
+</div>
+</div>
+<a id="ac6a7e07f13fb922a154b09d29dbc47d6" name="ac6a7e07f13fb922a154b09d29dbc47d6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac6a7e07f13fb922a154b09d29dbc47d6">&#9670;&#160;</a></span>m_type</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> N, <a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> M = 0&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#ae0696ff456a4e8b737cc365cf4a47f4e">Type</a> <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; N, M &gt;::m_type {Type::IMPLICIT}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>ODE/DAE system type. </p>
 
 </div>
 </div>

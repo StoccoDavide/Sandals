@@ -1,0 +1,363 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.12.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<!-- BEGIN opengraph metadata -->
+<meta property="og:title" content="Doxygen Awesome" />
+<meta property="og:image" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta property="og:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<meta property="og:url" content="https://jothepro.github.io/doxygen-awesome-css/" />
+<!-- END opengraph metadata -->
+<!-- BEGIN twitter metadata -->
+<meta name="twitter:image:src" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta name="twitter:title" content="Doxygen Awesome" />
+<meta name="twitter:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<!-- END twitter metadata -->
+<title>Sandals: include/Sandals/RungeKutta/Solution.hxx Source File</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link rel="icon" type="image/svg+xml" href="logo.png"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+<script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+<script type="text/javascript" src="doxygen-awesome-paragraph-link.js"></script>
+<script type="text/javascript" src="doxygen-awesome-interactive-toc.js"></script>
+<script type="text/javascript" src="doxygen-awesome-tabs.js"></script>
+<script type="text/javascript" src="toggle-alternative-theme.js"></script>
+<script type="text/javascript">
+    DoxygenAwesomeFragmentCopyButton.init()
+    DoxygenAwesomeDarkModeToggle.init()
+    DoxygenAwesomeParagraphLink.init()
+    DoxygenAwesomeInteractiveToc.init()
+    DoxygenAwesomeTabs.init()
+</script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX","output/HTML-CSS"],
+});
+</script>
+<script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="custom.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- https://tholman.com/github-corners/ -->
+<a href="https://github.com/StoccoDavide/Sandals" class="github-corner" title="View source on GitHub" target="_blank" rel="noopener noreferrer">
+    <svg viewBox="0 0 250 250" width="40" height="40" style="position: absolute; top: 0; border: 0; right: 0; z-index: 99;" aria-hidden="true">
+    <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="logo.svg"/></td>
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">Sandals
+   &#160;<span id="projectnumber">v0.0.0</span>
+   </div>
+   <div id="projectbrief">Integrating ODEs and DAEs with style</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.12.0 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() { codefold.init(0); });
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Search',true);
+  $(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function(){initNavTree('_solution_8hxx_source.html',''); initResizable(true); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">Solution.hxx</div></div>
+</div><!--header-->
+<div class="contents">
+<a href="_solution_8hxx.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment"> * Copyright (c) 2025, Davide Stocco and Enrico Bertolazzi.                  *</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment"> *                                                                           *</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="comment"> * The Sandals project is distributed under the GNU GPLv3.                   *</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment"> *                                                                           *</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="comment"> * Davide Stocco                                           Enrico Bertolazzi *</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="comment"> * University of Trento                                 University of Trento *</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="comment"> * e-mail: davide.stocco@unitn.it         e-mail: enrico.bertolazzi@unitn.it *</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="comment">\* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span> </div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#pragma once</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> </div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#ifndef SANDALS_SOLUTION_HXX</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno"><a class="line" href="_solution_8hxx.html#a5787c2cded25dfd1fc8ad33b6fa6e3c8">   14</a></span><span class="preprocessor">#define SANDALS_SOLUTION_HXX</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespace_sandals.html">Sandals</a> {</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span> </div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>  <span class="comment">/*\</span></div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="comment">   |   ____        _       _   _</span></div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="comment">   |  / ___|  ___ | |_   _| |_(_) ___  _ __</span></div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="comment">   |  \___ \ / _ \| | | | | __| |/ _ \| &#39;_ \</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="comment">   |   ___) | (_) | | |_| | |_| | (_) | | | |</span></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="comment">   |  |____/ \___/|_|\__,_|\__|_|\___/|_| |_|</span></div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="comment">   |</span></div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="comment">  \*/</span></div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>  <span class="keyword">template</span> &lt;Size N, Size M = 0&gt;</div>
+<div class="foldopen" id="foldopen00035" data-start="{" data-end="};">
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno"><a class="line" href="struct_sandals_1_1_solution.html">   35</a></span>  <span class="keyword">struct </span><a class="code hl_struct" href="struct_sandals_1_1_solution.html">Solution</a></div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>  {</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno"><a class="line" href="struct_sandals_1_1_solution.html#a53b5d76fe47167457e6b1cf6cdf61fb2">   37</a></span>    <span class="keyword">using </span><a class="code hl_typedef" href="struct_sandals_1_1_solution.html#a53b5d76fe47167457e6b1cf6cdf61fb2">Vector</a>  = Eigen::Vector&lt;Real, Eigen::Dynamic&gt;;    </div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno"><a class="line" href="struct_sandals_1_1_solution.html#a37772e7ebbaadcee7d60971bffb5ca93">   38</a></span>    <span class="keyword">using </span><a class="code hl_typedef" href="struct_sandals_1_1_solution.html#a37772e7ebbaadcee7d60971bffb5ca93">MatrixN</a> = Eigen::Matrix&lt;Real, N, Eigen::Dynamic&gt;; </div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno"><a class="line" href="struct_sandals_1_1_solution.html#a32d95d0cfeb6b725a07d1648c786fcc9">   39</a></span>    <span class="keyword">using </span><a class="code hl_typedef" href="struct_sandals_1_1_solution.html#a32d95d0cfeb6b725a07d1648c786fcc9">MatrixM</a> = Eigen::Matrix&lt;Real, M, Eigen::Dynamic&gt;; </div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span> </div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno"><a class="line" href="struct_sandals_1_1_solution.html#aa40451d6dc3146455b7d0f244102a002">   41</a></span>    <a class="code hl_typedef" href="struct_sandals_1_1_solution.html#a53b5d76fe47167457e6b1cf6cdf61fb2">Vector</a>  <a class="code hl_variable" href="struct_sandals_1_1_solution.html#aa40451d6dc3146455b7d0f244102a002">time</a>;       </div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno"><a class="line" href="struct_sandals_1_1_solution.html#a90fa4be994ee4fad56beb8e5a67dcccf">   42</a></span>    <a class="code hl_typedef" href="struct_sandals_1_1_solution.html#a37772e7ebbaadcee7d60971bffb5ca93">MatrixN</a> <a class="code hl_variable" href="struct_sandals_1_1_solution.html#a90fa4be994ee4fad56beb8e5a67dcccf">states</a>;     </div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno"><a class="line" href="struct_sandals_1_1_solution.html#a1e465f30f86609dfba3e0331f2c81dbe">   43</a></span>    <a class="code hl_typedef" href="struct_sandals_1_1_solution.html#a32d95d0cfeb6b725a07d1648c786fcc9">MatrixM</a> <a class="code hl_variable" href="struct_sandals_1_1_solution.html#a1e465f30f86609dfba3e0331f2c81dbe">invariants</a>; </div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span> </div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno"><a class="line" href="struct_sandals_1_1_solution.html#ab7be68ff680045082227656471c0e907">   47</a></span>    <a class="code hl_function" href="struct_sandals_1_1_solution.html#ab7be68ff680045082227656471c0e907">Solution</a>() : <a class="code hl_variable" href="struct_sandals_1_1_solution.html#aa40451d6dc3146455b7d0f244102a002">time</a>(0), <a class="code hl_variable" href="struct_sandals_1_1_solution.html#a90fa4be994ee4fad56beb8e5a67dcccf">states</a>(<a class="code hl_typedef" href="struct_sandals_1_1_solution.html#a53b5d76fe47167457e6b1cf6cdf61fb2">Vector</a>::Zero(N, 0)), <a class="code hl_variable" href="struct_sandals_1_1_solution.html#a1e465f30f86609dfba3e0331f2c81dbe">invariants</a>(<a class="code hl_typedef" href="struct_sandals_1_1_solution.html#a53b5d76fe47167457e6b1cf6cdf61fb2">Vector</a>::Zero(M, 0)) {}</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span> </div>
+<div class="foldopen" id="foldopen00051" data-start="{" data-end="}">
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno"><a class="line" href="struct_sandals_1_1_solution.html#a919d9e437cd8c8c44cf11aaa5e5bfd92">   51</a></span>    <a class="code hl_function" href="struct_sandals_1_1_solution.html#a919d9e437cd8c8c44cf11aaa5e5bfd92">Solution</a>(<a class="code hl_typedef" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> <a class="code hl_function" href="struct_sandals_1_1_solution.html#a5fb70ed770e0ec175ba03b8c7dfad8a4">size</a>)</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>      : <a class="code hl_variable" href="struct_sandals_1_1_solution.html#aa40451d6dc3146455b7d0f244102a002">time</a>(<a class="code hl_function" href="struct_sandals_1_1_solution.html#a5fb70ed770e0ec175ba03b8c7dfad8a4">size</a>), <a class="code hl_variable" href="struct_sandals_1_1_solution.html#a90fa4be994ee4fad56beb8e5a67dcccf">states</a>(<a class="code hl_typedef" href="struct_sandals_1_1_solution.html#a53b5d76fe47167457e6b1cf6cdf61fb2">Vector</a>::Zero(N, <a class="code hl_function" href="struct_sandals_1_1_solution.html#a5fb70ed770e0ec175ba03b8c7dfad8a4">size</a>)), <a class="code hl_variable" href="struct_sandals_1_1_solution.html#a1e465f30f86609dfba3e0331f2c81dbe">invariants</a>(<a class="code hl_typedef" href="struct_sandals_1_1_solution.html#a53b5d76fe47167457e6b1cf6cdf61fb2">Vector</a>::Zero(M, <a class="code hl_function" href="struct_sandals_1_1_solution.html#a5fb70ed770e0ec175ba03b8c7dfad8a4">size</a>)) {}</div>
+</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span> </div>
+<div class="foldopen" id="foldopen00056" data-start="{" data-end="}">
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno"><a class="line" href="struct_sandals_1_1_solution.html#a9d49e9eddc5db7db0fbc91213f75a76a">   56</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="struct_sandals_1_1_solution.html#a9d49e9eddc5db7db0fbc91213f75a76a">resize</a>(<a class="code hl_typedef" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> <a class="code hl_function" href="struct_sandals_1_1_solution.html#a5fb70ed770e0ec175ba03b8c7dfad8a4">size</a>) {</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>      this-&gt;time.resize(<a class="code hl_function" href="struct_sandals_1_1_solution.html#a5fb70ed770e0ec175ba03b8c7dfad8a4">size</a>);</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>      this-&gt;states.resize(Eigen::NoChange, <a class="code hl_function" href="struct_sandals_1_1_solution.html#a5fb70ed770e0ec175ba03b8c7dfad8a4">size</a>);</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>      this-&gt;invariants.resize(Eigen::NoChange, <a class="code hl_function" href="struct_sandals_1_1_solution.html#a5fb70ed770e0ec175ba03b8c7dfad8a4">size</a>);</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    }</div>
+</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span> </div>
+<div class="foldopen" id="foldopen00064" data-start="{" data-end="}">
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno"><a class="line" href="struct_sandals_1_1_solution.html#ac22b536769cd0dd36c30c9e2f115cebc">   64</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="struct_sandals_1_1_solution.html#ac22b536769cd0dd36c30c9e2f115cebc">conservative_resize</a>(<a class="code hl_typedef" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> <a class="code hl_function" href="struct_sandals_1_1_solution.html#a5fb70ed770e0ec175ba03b8c7dfad8a4">size</a>) {</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>      this-&gt;time.conservativeResize(<a class="code hl_function" href="struct_sandals_1_1_solution.html#a5fb70ed770e0ec175ba03b8c7dfad8a4">size</a>);</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>      this-&gt;states.conservativeResize(Eigen::NoChange, <a class="code hl_function" href="struct_sandals_1_1_solution.html#a5fb70ed770e0ec175ba03b8c7dfad8a4">size</a>);</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>      this-&gt;invariants.conservativeResize(Eigen::NoChange, <a class="code hl_function" href="struct_sandals_1_1_solution.html#a5fb70ed770e0ec175ba03b8c7dfad8a4">size</a>);</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>    }</div>
+</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span> </div>
+<div class="foldopen" id="foldopen00072" data-start="{" data-end="}">
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno"><a class="line" href="struct_sandals_1_1_solution.html#a120b6a1f244f6411fd0ea89c0cded43b">   72</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="struct_sandals_1_1_solution.html#a120b6a1f244f6411fd0ea89c0cded43b">clear</a>()</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>    {</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>      this-&gt;time.resize(0);</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>      this-&gt;states.resize(Eigen::NoChange, 0);</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>      this-&gt;invariants.resize(Eigen::NoChange, 0);</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>    }</div>
+</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span> </div>
+<div class="foldopen" id="foldopen00081" data-start="{" data-end="}">
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno"><a class="line" href="struct_sandals_1_1_solution.html#a6c21241d1a1138151102e6b2cc72e0fd">   81</a></span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="struct_sandals_1_1_solution.html#a6c21241d1a1138151102e6b2cc72e0fd">is_empty</a>()<span class="keyword"> const</span></div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span><span class="keyword">    </span>{</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>      <span class="keywordflow">return</span> this-&gt;time.size() == 0 &amp;&amp; this-&gt;states.cols()== 0 &amp;&amp; this-&gt;invariants.cols() == 0;</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>    }</div>
+</div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span> </div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno"><a class="line" href="struct_sandals_1_1_solution.html#a5fb70ed770e0ec175ba03b8c7dfad8a4">   88</a></span>    <a class="code hl_typedef" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> <a class="code hl_function" href="struct_sandals_1_1_solution.html#a5fb70ed770e0ec175ba03b8c7dfad8a4">size</a>()<span class="keyword"> const </span>{<span class="keywordflow">return</span> this-&gt;time.size();}</div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span> </div>
+<div class="foldopen" id="foldopen00092" data-start="{" data-end="}">
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno"><a class="line" href="struct_sandals_1_1_solution.html#a12d3052b98eb827165cc54861318d3f2">   92</a></span>    std::vector&lt;Real&gt; <a class="code hl_function" href="struct_sandals_1_1_solution.html#a12d3052b98eb827165cc54861318d3f2">std_time</a>()<span class="keyword"> const</span></div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span><span class="keyword">    </span>{</div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>      <span class="keywordflow">return</span> std::vector&lt;Real&gt;(this-&gt;time.data(), this-&gt;time.data() + this-&gt;time.size());</div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>    }</div>
+</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span> </div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno"><a class="line" href="struct_sandals_1_1_solution.html#a7807399297df8f61329b9084e0f03528">   99</a></span>    <a class="code hl_typedef" href="struct_sandals_1_1_solution.html#a53b5d76fe47167457e6b1cf6cdf61fb2">Vector</a> <a class="code hl_function" href="struct_sandals_1_1_solution.html#a7807399297df8f61329b9084e0f03528">eig_time</a>()<span class="keyword"> const </span>{<span class="keywordflow">return</span> this-&gt;<a class="code hl_variable" href="struct_sandals_1_1_solution.html#aa40451d6dc3146455b7d0f244102a002">time</a>;}</div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span> </div>
+<div class="foldopen" id="foldopen00104" data-start="{" data-end="}">
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno"><a class="line" href="struct_sandals_1_1_solution.html#a9311c780e44d63813c6b45757876f564">  104</a></span>    std::vector&lt;Real&gt; <a class="code hl_function" href="struct_sandals_1_1_solution.html#a9311c780e44d63813c6b45757876f564">std_state</a>(<a class="code hl_typedef" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> i)<span class="keyword"> const</span></div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span><span class="keyword">    </span>{</div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>      <a class="code hl_typedef" href="struct_sandals_1_1_solution.html#a53b5d76fe47167457e6b1cf6cdf61fb2">Vector</a> tmp(this-&gt;states.row(i));</div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>      <span class="keywordflow">return</span> std::vector&lt;Real&gt;(tmp.data(), tmp.data() + tmp.size());</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>    }</div>
+</div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span> </div>
+<div class="foldopen" id="foldopen00112" data-start="{" data-end="}">
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno"><a class="line" href="struct_sandals_1_1_solution.html#a7c45d81795eefe80ab9b17f6af3f73de">  112</a></span>    std::map&lt;Size, std::vector&lt;Real&gt;&gt; <a class="code hl_function" href="struct_sandals_1_1_solution.html#a7c45d81795eefe80ab9b17f6af3f73de">std_states</a>()<span class="keyword"> const</span></div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span><span class="keyword">    </span>{</div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>      std::map&lt;Size, std::vector&lt;Real&gt;&gt; states_map;</div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>      <span class="keywordflow">for</span> (<a class="code hl_typedef" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> i{0}; i &lt; N; ++i) {states_map[i] = this-&gt;<a class="code hl_function" href="struct_sandals_1_1_solution.html#a7c45d81795eefe80ab9b17f6af3f73de">std_states</a>(i);}</div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>      <span class="keywordflow">return</span> states_map;</div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>    }</div>
+</div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span> </div>
+<div class="foldopen" id="foldopen00121" data-start="{" data-end="}">
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno"><a class="line" href="struct_sandals_1_1_solution.html#a7cf79f50db103beb7f62b1d9fe26a484">  121</a></span>    std::map&lt;Size, Vector&gt; <a class="code hl_function" href="struct_sandals_1_1_solution.html#a7cf79f50db103beb7f62b1d9fe26a484">eig_states</a>()<span class="keyword"> const</span></div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span><span class="keyword">    </span>{</div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>      std::map&lt;Size, Vector&gt; states_map;</div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>      <span class="keywordflow">for</span> (<a class="code hl_typedef" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> i{0}; i &lt; N; ++i) {states_map[i] = this-&gt;states.row(i);}</div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>      <span class="keywordflow">return</span> states_map;</div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>    }</div>
+</div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span> </div>
+<div class="foldopen" id="foldopen00131" data-start="{" data-end="}">
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno"><a class="line" href="struct_sandals_1_1_solution.html#acbd35a718649a8cc565e3e76da2bb91d">  131</a></span>    std::map&lt;std::string, std::vector&lt;Real&gt;&gt; <a class="code hl_function" href="struct_sandals_1_1_solution.html#acbd35a718649a8cc565e3e76da2bb91d">std_states</a>(std::vector&lt;std::string&gt; names)<span class="keyword"> const</span></div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span><span class="keyword">    </span>{</div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>      std::map&lt;std::string, std::vector&lt;Real&gt;&gt; states_map;</div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>      <span class="keywordflow">for</span> (<a class="code hl_typedef" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> i{0}; i &lt; N; ++i) {states_map[names[i]] = this-&gt;<a class="code hl_function" href="struct_sandals_1_1_solution.html#a9311c780e44d63813c6b45757876f564">std_state</a>(i);}</div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>      <span class="keywordflow">return</span> states_map;</div>
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>    }</div>
+</div>
+<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span> </div>
+<div class="foldopen" id="foldopen00141" data-start="{" data-end="}">
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno"><a class="line" href="struct_sandals_1_1_solution.html#a12d7d12643bc5e3e3807f4bb0461ac93">  141</a></span>    std::map&lt;std::string, Vector&gt; <a class="code hl_function" href="struct_sandals_1_1_solution.html#a12d7d12643bc5e3e3807f4bb0461ac93">eig_states</a>(std::vector&lt;std::string&gt; names)<span class="keyword"> const</span></div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span><span class="keyword">    </span>{</div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>      std::map&lt;std::string, Vector&gt; states_map;</div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>      <span class="keywordflow">for</span> (<a class="code hl_typedef" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> i{0}; i &lt; N; ++i) {states_map[names[i]] = this-&gt;states.row(i);}</div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>      <span class="keywordflow">return</span> states_map;</div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>    }</div>
+</div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span> </div>
+<div class="foldopen" id="foldopen00151" data-start="{" data-end="}">
+<div class="line"><a id="l00151" name="l00151"></a><span class="lineno"><a class="line" href="struct_sandals_1_1_solution.html#ac12db5f3773837a5911a1424784c2942">  151</a></span>    std::vector&lt;Real&gt; <a class="code hl_function" href="struct_sandals_1_1_solution.html#ac12db5f3773837a5911a1424784c2942">std_invariant</a>(<a class="code hl_typedef" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> i)<span class="keyword"> const</span></div>
+<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span><span class="keyword">    </span>{</div>
+<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>      <a class="code hl_typedef" href="struct_sandals_1_1_solution.html#a53b5d76fe47167457e6b1cf6cdf61fb2">Vector</a> tmp(this-&gt;invariants.row(i));</div>
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>      <span class="keywordflow">return</span> std::vector&lt;Real&gt;(tmp.data(), tmp.data() + tmp.size());</div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>    }</div>
+</div>
+<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span> </div>
+<div class="foldopen" id="foldopen00159" data-start="{" data-end="}">
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno"><a class="line" href="struct_sandals_1_1_solution.html#a821cc5b947c27b4b20304b7afa1f951b">  159</a></span>    std::map&lt;Size, std::vector&lt;Real&gt;&gt; <a class="code hl_function" href="struct_sandals_1_1_solution.html#a821cc5b947c27b4b20304b7afa1f951b">std_invariants</a>()<span class="keyword"> const</span></div>
+<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span><span class="keyword">    </span>{</div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>      std::map&lt;Size, std::vector&lt;Real&gt;&gt; invariants_map;</div>
+<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>      <span class="keywordflow">for</span> (<a class="code hl_typedef" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> i{0}; i &lt; M; ++i) {invariants_map[i] = this-&gt;<a class="code hl_function" href="struct_sandals_1_1_solution.html#a821cc5b947c27b4b20304b7afa1f951b">std_invariants</a>(i);}</div>
+<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>      <span class="keywordflow">return</span> invariants_map;</div>
+<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>    }</div>
+</div>
+<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span> </div>
+<div class="foldopen" id="foldopen00168" data-start="{" data-end="}">
+<div class="line"><a id="l00168" name="l00168"></a><span class="lineno"><a class="line" href="struct_sandals_1_1_solution.html#a358be4596a274014ab47a19cf3971969">  168</a></span>    std::map&lt;Size, Vector&gt; <a class="code hl_function" href="struct_sandals_1_1_solution.html#a358be4596a274014ab47a19cf3971969">eig_invariants</a>()<span class="keyword"> const</span></div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span><span class="keyword">    </span>{</div>
+<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>      std::map&lt;Size, Vector&gt; invariants_map;</div>
+<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>      <span class="keywordflow">for</span> (<a class="code hl_typedef" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> i{0}; i &lt; M; ++i) {invariants_map[i] = this-&gt;invariants.row(i);}</div>
+<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span>      <span class="keywordflow">return</span> invariants_map;</div>
+<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span>    }</div>
+</div>
+<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span> </div>
+<div class="foldopen" id="foldopen00178" data-start="{" data-end="}">
+<div class="line"><a id="l00178" name="l00178"></a><span class="lineno"><a class="line" href="struct_sandals_1_1_solution.html#ad7fa5074b94a53a91d355b64d74aa340">  178</a></span>    std::map&lt;std::string, std::vector&lt;Real&gt;&gt; <a class="code hl_function" href="struct_sandals_1_1_solution.html#ad7fa5074b94a53a91d355b64d74aa340">std_invariants</a>(std::vector&lt;std::string&gt; names)<span class="keyword"> const</span></div>
+<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span><span class="keyword">    </span>{</div>
+<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>      std::map&lt;std::string, std::vector&lt;Real&gt;&gt; invariants_map;</div>
+<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span>      <span class="keywordflow">for</span> (<a class="code hl_typedef" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> i{0}; i &lt; M; ++i) {invariants_map[names[i]] = this-&gt;<a class="code hl_function" href="struct_sandals_1_1_solution.html#ac12db5f3773837a5911a1424784c2942">std_invariant</a>(i);}</div>
+<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span>      <span class="keywordflow">return</span> invariants_map;</div>
+<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>    }</div>
+</div>
+<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span> </div>
+<div class="foldopen" id="foldopen00188" data-start="{" data-end="}">
+<div class="line"><a id="l00188" name="l00188"></a><span class="lineno"><a class="line" href="struct_sandals_1_1_solution.html#aafd96c95cf180316cc167e0b29247266">  188</a></span>    std::map&lt;std::string, Vector&gt; <a class="code hl_function" href="struct_sandals_1_1_solution.html#aafd96c95cf180316cc167e0b29247266">eig_invariants</a>(std::vector&lt;std::string&gt; names)<span class="keyword"> const</span></div>
+<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span><span class="keyword">    </span>{</div>
+<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>      std::map&lt;std::string, Vector&gt; invariants_map;</div>
+<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>      <span class="keywordflow">for</span> (<a class="code hl_typedef" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> i{0}; i &lt; M; ++i) {invariants_map[names[i]] = this-&gt;invariants.row(i);}</div>
+<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>      <span class="keywordflow">return</span> invariants_map;</div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>    }</div>
+</div>
+<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>  };</div>
+</div>
+<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span> </div>
+<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span>} <span class="comment">// namespace Sandals</span></div>
+<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span> </div>
+<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span><span class="preprocessor">#endif </span><span class="comment">// SANDALS_SOLUTION_HXX</span></div>
+<div class="ttc" id="anamespace_sandals_html"><div class="ttname"><a href="namespace_sandals.html">Sandals</a></div><div class="ttdef"><b>Definition</b> Sandals.hh:62</div></div>
+<div class="ttc" id="anamespace_sandals_html_a3b675b688cd98c7c58ea7d4425e61777"><div class="ttname"><a href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Sandals::Size</a></div><div class="ttdeci">int Size</div><div class="ttdoc">Size number type.</div><div class="ttdef"><b>Definition</b> Sandals.hh:74</div></div>
+<div class="ttc" id="astruct_sandals_1_1_solution_html"><div class="ttname"><a href="struct_sandals_1_1_solution.html">Sandals::Solution</a></div><div class="ttdoc">Class container for the numerical solution of a system of ODEs/DAEs.</div><div class="ttdef"><b>Definition</b> Solution.hxx:36</div></div>
+<div class="ttc" id="astruct_sandals_1_1_solution_html_a120b6a1f244f6411fd0ea89c0cded43b"><div class="ttname"><a href="struct_sandals_1_1_solution.html#a120b6a1f244f6411fd0ea89c0cded43b">Sandals::Solution::clear</a></div><div class="ttdeci">void clear()</div><div class="ttdef"><b>Definition</b> Solution.hxx:72</div></div>
+<div class="ttc" id="astruct_sandals_1_1_solution_html_a12d3052b98eb827165cc54861318d3f2"><div class="ttname"><a href="struct_sandals_1_1_solution.html#a12d3052b98eb827165cc54861318d3f2">Sandals::Solution::std_time</a></div><div class="ttdeci">std::vector&lt; Real &gt; std_time() const</div><div class="ttdef"><b>Definition</b> Solution.hxx:92</div></div>
+<div class="ttc" id="astruct_sandals_1_1_solution_html_a12d7d12643bc5e3e3807f4bb0461ac93"><div class="ttname"><a href="struct_sandals_1_1_solution.html#a12d7d12643bc5e3e3807f4bb0461ac93">Sandals::Solution::eig_states</a></div><div class="ttdeci">std::map&lt; std::string, Vector &gt; eig_states(std::vector&lt; std::string &gt; names) const</div><div class="ttdef"><b>Definition</b> Solution.hxx:141</div></div>
+<div class="ttc" id="astruct_sandals_1_1_solution_html_a1e465f30f86609dfba3e0331f2c81dbe"><div class="ttname"><a href="struct_sandals_1_1_solution.html#a1e465f30f86609dfba3e0331f2c81dbe">Sandals::Solution::invariants</a></div><div class="ttdeci">MatrixM invariants</div><div class="ttdoc">Invariants solution matrix.</div><div class="ttdef"><b>Definition</b> Solution.hxx:43</div></div>
+<div class="ttc" id="astruct_sandals_1_1_solution_html_a32d95d0cfeb6b725a07d1648c786fcc9"><div class="ttname"><a href="struct_sandals_1_1_solution.html#a32d95d0cfeb6b725a07d1648c786fcc9">Sandals::Solution::MatrixM</a></div><div class="ttdeci">Eigen::Matrix&lt; Real, M, Eigen::Dynamic &gt; MatrixM</div><div class="ttdoc">Templetized matrix type.</div><div class="ttdef"><b>Definition</b> Solution.hxx:39</div></div>
+<div class="ttc" id="astruct_sandals_1_1_solution_html_a358be4596a274014ab47a19cf3971969"><div class="ttname"><a href="struct_sandals_1_1_solution.html#a358be4596a274014ab47a19cf3971969">Sandals::Solution::eig_invariants</a></div><div class="ttdeci">std::map&lt; Size, Vector &gt; eig_invariants() const</div><div class="ttdef"><b>Definition</b> Solution.hxx:168</div></div>
+<div class="ttc" id="astruct_sandals_1_1_solution_html_a37772e7ebbaadcee7d60971bffb5ca93"><div class="ttname"><a href="struct_sandals_1_1_solution.html#a37772e7ebbaadcee7d60971bffb5ca93">Sandals::Solution::MatrixN</a></div><div class="ttdeci">Eigen::Matrix&lt; Real, N, Eigen::Dynamic &gt; MatrixN</div><div class="ttdoc">Templetized matrix type.</div><div class="ttdef"><b>Definition</b> Solution.hxx:38</div></div>
+<div class="ttc" id="astruct_sandals_1_1_solution_html_a53b5d76fe47167457e6b1cf6cdf61fb2"><div class="ttname"><a href="struct_sandals_1_1_solution.html#a53b5d76fe47167457e6b1cf6cdf61fb2">Sandals::Solution::Vector</a></div><div class="ttdeci">Eigen::Vector&lt; Real, Eigen::Dynamic &gt; Vector</div><div class="ttdoc">Templetized vector type.</div><div class="ttdef"><b>Definition</b> Solution.hxx:37</div></div>
+<div class="ttc" id="astruct_sandals_1_1_solution_html_a5fb70ed770e0ec175ba03b8c7dfad8a4"><div class="ttname"><a href="struct_sandals_1_1_solution.html#a5fb70ed770e0ec175ba03b8c7dfad8a4">Sandals::Solution::size</a></div><div class="ttdeci">Size size() const</div><div class="ttdef"><b>Definition</b> Solution.hxx:88</div></div>
+<div class="ttc" id="astruct_sandals_1_1_solution_html_a6c21241d1a1138151102e6b2cc72e0fd"><div class="ttname"><a href="struct_sandals_1_1_solution.html#a6c21241d1a1138151102e6b2cc72e0fd">Sandals::Solution::is_empty</a></div><div class="ttdeci">bool is_empty() const</div><div class="ttdef"><b>Definition</b> Solution.hxx:81</div></div>
+<div class="ttc" id="astruct_sandals_1_1_solution_html_a7807399297df8f61329b9084e0f03528"><div class="ttname"><a href="struct_sandals_1_1_solution.html#a7807399297df8f61329b9084e0f03528">Sandals::Solution::eig_time</a></div><div class="ttdeci">Vector eig_time() const</div><div class="ttdef"><b>Definition</b> Solution.hxx:99</div></div>
+<div class="ttc" id="astruct_sandals_1_1_solution_html_a7c45d81795eefe80ab9b17f6af3f73de"><div class="ttname"><a href="struct_sandals_1_1_solution.html#a7c45d81795eefe80ab9b17f6af3f73de">Sandals::Solution::std_states</a></div><div class="ttdeci">std::map&lt; Size, std::vector&lt; Real &gt; &gt; std_states() const</div><div class="ttdef"><b>Definition</b> Solution.hxx:112</div></div>
+<div class="ttc" id="astruct_sandals_1_1_solution_html_a7cf79f50db103beb7f62b1d9fe26a484"><div class="ttname"><a href="struct_sandals_1_1_solution.html#a7cf79f50db103beb7f62b1d9fe26a484">Sandals::Solution::eig_states</a></div><div class="ttdeci">std::map&lt; Size, Vector &gt; eig_states() const</div><div class="ttdef"><b>Definition</b> Solution.hxx:121</div></div>
+<div class="ttc" id="astruct_sandals_1_1_solution_html_a821cc5b947c27b4b20304b7afa1f951b"><div class="ttname"><a href="struct_sandals_1_1_solution.html#a821cc5b947c27b4b20304b7afa1f951b">Sandals::Solution::std_invariants</a></div><div class="ttdeci">std::map&lt; Size, std::vector&lt; Real &gt; &gt; std_invariants() const</div><div class="ttdef"><b>Definition</b> Solution.hxx:159</div></div>
+<div class="ttc" id="astruct_sandals_1_1_solution_html_a90fa4be994ee4fad56beb8e5a67dcccf"><div class="ttname"><a href="struct_sandals_1_1_solution.html#a90fa4be994ee4fad56beb8e5a67dcccf">Sandals::Solution::states</a></div><div class="ttdeci">MatrixN states</div><div class="ttdoc">States solution matrix.</div><div class="ttdef"><b>Definition</b> Solution.hxx:42</div></div>
+<div class="ttc" id="astruct_sandals_1_1_solution_html_a919d9e437cd8c8c44cf11aaa5e5bfd92"><div class="ttname"><a href="struct_sandals_1_1_solution.html#a919d9e437cd8c8c44cf11aaa5e5bfd92">Sandals::Solution::Solution</a></div><div class="ttdeci">Solution(Size size)</div><div class="ttdef"><b>Definition</b> Solution.hxx:51</div></div>
+<div class="ttc" id="astruct_sandals_1_1_solution_html_a9311c780e44d63813c6b45757876f564"><div class="ttname"><a href="struct_sandals_1_1_solution.html#a9311c780e44d63813c6b45757876f564">Sandals::Solution::std_state</a></div><div class="ttdeci">std::vector&lt; Real &gt; std_state(Size i) const</div><div class="ttdef"><b>Definition</b> Solution.hxx:104</div></div>
+<div class="ttc" id="astruct_sandals_1_1_solution_html_a9d49e9eddc5db7db0fbc91213f75a76a"><div class="ttname"><a href="struct_sandals_1_1_solution.html#a9d49e9eddc5db7db0fbc91213f75a76a">Sandals::Solution::resize</a></div><div class="ttdeci">void resize(Size size)</div><div class="ttdef"><b>Definition</b> Solution.hxx:56</div></div>
+<div class="ttc" id="astruct_sandals_1_1_solution_html_aa40451d6dc3146455b7d0f244102a002"><div class="ttname"><a href="struct_sandals_1_1_solution.html#aa40451d6dc3146455b7d0f244102a002">Sandals::Solution::time</a></div><div class="ttdeci">Vector time</div><div class="ttdoc">Independent variable (or time) solution vector.</div><div class="ttdef"><b>Definition</b> Solution.hxx:41</div></div>
+<div class="ttc" id="astruct_sandals_1_1_solution_html_aafd96c95cf180316cc167e0b29247266"><div class="ttname"><a href="struct_sandals_1_1_solution.html#aafd96c95cf180316cc167e0b29247266">Sandals::Solution::eig_invariants</a></div><div class="ttdeci">std::map&lt; std::string, Vector &gt; eig_invariants(std::vector&lt; std::string &gt; names) const</div><div class="ttdef"><b>Definition</b> Solution.hxx:188</div></div>
+<div class="ttc" id="astruct_sandals_1_1_solution_html_ab7be68ff680045082227656471c0e907"><div class="ttname"><a href="struct_sandals_1_1_solution.html#ab7be68ff680045082227656471c0e907">Sandals::Solution::Solution</a></div><div class="ttdeci">Solution()</div><div class="ttdef"><b>Definition</b> Solution.hxx:47</div></div>
+<div class="ttc" id="astruct_sandals_1_1_solution_html_ac12db5f3773837a5911a1424784c2942"><div class="ttname"><a href="struct_sandals_1_1_solution.html#ac12db5f3773837a5911a1424784c2942">Sandals::Solution::std_invariant</a></div><div class="ttdeci">std::vector&lt; Real &gt; std_invariant(Size i) const</div><div class="ttdef"><b>Definition</b> Solution.hxx:151</div></div>
+<div class="ttc" id="astruct_sandals_1_1_solution_html_ac22b536769cd0dd36c30c9e2f115cebc"><div class="ttname"><a href="struct_sandals_1_1_solution.html#ac22b536769cd0dd36c30c9e2f115cebc">Sandals::Solution::conservative_resize</a></div><div class="ttdeci">void conservative_resize(Size size)</div><div class="ttdef"><b>Definition</b> Solution.hxx:64</div></div>
+<div class="ttc" id="astruct_sandals_1_1_solution_html_acbd35a718649a8cc565e3e76da2bb91d"><div class="ttname"><a href="struct_sandals_1_1_solution.html#acbd35a718649a8cc565e3e76da2bb91d">Sandals::Solution::std_states</a></div><div class="ttdeci">std::map&lt; std::string, std::vector&lt; Real &gt; &gt; std_states(std::vector&lt; std::string &gt; names) const</div><div class="ttdef"><b>Definition</b> Solution.hxx:131</div></div>
+<div class="ttc" id="astruct_sandals_1_1_solution_html_ad7fa5074b94a53a91d355b64d74aa340"><div class="ttname"><a href="struct_sandals_1_1_solution.html#ad7fa5074b94a53a91d355b64d74aa340">Sandals::Solution::std_invariants</a></div><div class="ttdeci">std::map&lt; std::string, std::vector&lt; Real &gt; &gt; std_invariants(std::vector&lt; std::string &gt; names) const</div><div class="ttdef"><b>Definition</b> Solution.hxx:178</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_897bfc2149a094f38e3fcfed941b9c13.html">Sandals</a></li><li class="navelem"><a class="el" href="dir_a2b8e6e8bc5496fcb9ad26110b81b5a1.html">RungeKutta</a></li><li class="navelem"><a class="el" href="_solution_8hxx.html">Solution.hxx</a></li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.12.0 </li>
+  </ul>
+</div>
+</body>
+</html>

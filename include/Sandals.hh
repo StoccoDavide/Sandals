@@ -197,7 +197,7 @@ namespace Sandals
 // Finite difference derivative
 //#include "Sandals/FiniteDifference.hxx"
 
-// Newton and Bronden nonlinear systems of equations solvers
+// Nonlinear systems of equations solvers
 #include "Sandals/NonlinearSolver/NonlinearSolver.hxx"
 #include "Sandals/NonlinearSolver/Newton.hxx"
 #include "Sandals/NonlinearSolver/Broyden.hxx"
@@ -208,18 +208,36 @@ namespace Sandals
 #include "Sandals/System/Linear.hxx"
 #include "Sandals/System/SemiExplicit.hxx"
 
-// Runge-Kutta integrators
+// Runge-Kutta integrator
+#include "Sandals/RungeKutta/Tableau.hxx"
+#include "Sandals/RungeKutta/Solution.hxx"
 #include "Sandals/RungeKutta/RungeKutta.hxx"
-#include "Sandals/RungeKutta/Tableau/RK4.hxx"
-#include "Sandals/RungeKutta/Tableau/Heun2.hxx"
-#include "Sandals/RungeKutta/Tableau/Heun3.hxx"
-#include "Sandals/RungeKutta/Tableau/RKF45.hxx"
+
+// Butcher tableau for Runge-Kutta methods
+#include "Sandals/RungeKutta/Tableau/Chebyshev51.hxx"
 #include "Sandals/RungeKutta/Tableau/ExplicitEuler.hxx"
-#include "Sandals/RungeKutta/Tableau/ImplicitEuler.hxx"
-#include "Sandals/RungeKutta/Tableau/RadauIIA3.hxx"
-#include "Sandals/RungeKutta/Tableau/RadauIIA5.hxx"
+#include "Sandals/RungeKutta/Tableau/Fehlberg45.hxx"
 #include "Sandals/RungeKutta/Tableau/GaussLegendre2.hxx"
 #include "Sandals/RungeKutta/Tableau/GaussLegendre4.hxx"
 #include "Sandals/RungeKutta/Tableau/GaussLegendre6.hxx"
+#include "Sandals/RungeKutta/Tableau/Heun2.hxx"
+#include "Sandals/RungeKutta/Tableau/Heun3.hxx"
+#include "Sandals/RungeKutta/Tableau/LobattoIIIA2.hxx"
+#include "Sandals/RungeKutta/Tableau/ImplicitEuler.hxx"
+#include "Sandals/RungeKutta/Tableau/MTE22.hxx"
+#include "Sandals/RungeKutta/Tableau/RadauIIA3.hxx"
+#include "Sandals/RungeKutta/Tableau/RadauIIA5.hxx"
+#include "Sandals/RungeKutta/Tableau/Ralston2.hxx"
+#include "Sandals/RungeKutta/Tableau/Ralston3.hxx"
+#include "Sandals/RungeKutta/Tableau/Ralston4.hxx"
+#include "Sandals/RungeKutta/Tableau/RK4.hxx"
+#include "Sandals/RungeKutta/Tableau/SSPIRK33.hxx"
+#include "Sandals/RungeKutta/Tableau/SSPRK22.hxx"
+#include "Sandals/RungeKutta/Tableau/SSPRK22star.hxx"
+#include "Sandals/RungeKutta/Tableau/SSPRK33.hxx"
+#include "Sandals/RungeKutta/Tableau/SSPRK42.hxx"
+#include "Sandals/RungeKutta/Tableau/SSPRK43.hxx"
+#include "Sandals/RungeKutta/Tableau/SSPRK93.hxx"
+#include "Sandals/RungeKutta/Tableau/SSPRK104.hxx"
 
 #endif // INCLUDE_SANDALS_HH

@@ -16,5 +16,6 @@ var class_sandals_1_1_semi_explicit =
     [ "Jr_x", "class_sandals_1_1_semi_explicit.html#a4fe151739a42df3cc77eca2533a6028e", null ],
     [ "M", "class_sandals_1_1_semi_explicit.html#a55d0f0ec74d8a7bdebb60eda33b83bb4", null ],
     [ "r", "class_sandals_1_1_semi_explicit.html#ab4b8c14c0472660ed23ccbfe7994f4ae", null ],
-    [ "TM_x", "class_sandals_1_1_semi_explicit.html#a94520f55f096c95290350a816068c4fb", null ]
+    [ "TM_x", "class_sandals_1_1_semi_explicit.html#a94520f55f096c95290350a816068c4fb", null ],
+    [ "m_lu", "class_sandals_1_1_semi_explicit.html#a07eb4368a0ea3b7302203e1170329775", null ]
 ];

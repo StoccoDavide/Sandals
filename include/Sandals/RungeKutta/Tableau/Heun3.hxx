@@ -15,6 +15,8 @@
 
 namespace Sandals
 {
+  //! \brief Butcher tableau for the Heun's order 3 method.
+  //!
   //! Butcher tableau for the Heun's order 3 method:
   //!
   //! \f[
@@ -54,11 +56,10 @@ namespace Sandals
     using System = typename Implicit<N>::Pointer; //!< System type.
 
     //! Class constructor for a Heun's order 3 solver given a Tableau reference.
-    //! \param[in] t_tableau The Tableau reference.
+    //!
     Heun3() : RungeKutta<3, N>(Heun3Tableau()) {}
 
     //! Class constructor for a Heun's order 3 solver given a Tableau reference.
-    //! \param[in] t_tableau The Tableau reference.
     //! \param[in] t_system The system reference.
     Heun3(System t_system) : RungeKutta<3, N>(Heun3Tableau(), t_system) {}
 

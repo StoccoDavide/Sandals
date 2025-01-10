@@ -8,8 +8,9 @@ var searchData=
   ['relaxations_5',['relaxations',['../class_sandals_1_1_nonlinear_solver.html#a56594ee54dfa6375787145561ce10b98',1,'Sandals::NonlinearSolver']]],
   ['reset_6',['reset',['../class_sandals_1_1_nonlinear_solver.html#a577e5bdd342f3edea14c41c37262b3c5',1,'Sandals::NonlinearSolver']]],
   ['residuals_7',['residuals',['../class_sandals_1_1_nonlinear_solver.html#aa76843782eac01f8fb1fd83cb9a9d3aa',1,'Sandals::NonlinearSolver']]],
-  ['rk4_8',['RK4',['../class_sandals_1_1_r_k4.html#a4f9e064afdec2519eb5b3c74e56a4e3a',1,'Sandals::RK4::RK4()'],['../class_sandals_1_1_r_k4.html#a47ed73521f5466f420951c60e48ad42e',1,'Sandals::RK4::RK4(System t_system)']]],
-  ['rk4tableau_9',['RK4Tableau',['../class_sandals_1_1_r_k4_tableau.html#adad9e5e98eac4fe5ed9bb1c77ecebaa7',1,'Sandals::RK4Tableau']]],
-  ['rkf45_10',['RKF45',['../class_sandals_1_1_r_k_f45.html#a833c5967219682d52f0d14775716c16a',1,'Sandals::RKF45::RKF45()'],['../class_sandals_1_1_r_k_f45.html#a8e3506a444420fd3c264868dbefbd1eb',1,'Sandals::RKF45::RKF45(System t_system)']]],
-  ['rkf45tableau_11',['RKF45Tableau',['../class_sandals_1_1_r_k_f45_tableau.html#ab0b76140cae266efb79abc345b92c7aa',1,'Sandals::RKF45Tableau']]]
+  ['resize_8',['resize',['../struct_sandals_1_1_solution.html#a9d49e9eddc5db7db0fbc91213f75a76a',1,'Sandals::Solution']]],
+  ['rk4_9',['RK4',['../class_sandals_1_1_r_k4.html#a4f9e064afdec2519eb5b3c74e56a4e3a',1,'Sandals::RK4::RK4()'],['../class_sandals_1_1_r_k4.html#a47ed73521f5466f420951c60e48ad42e',1,'Sandals::RK4::RK4(System t_system)']]],
+  ['rk4tableau_10',['RK4Tableau',['../class_sandals_1_1_r_k4_tableau.html#adad9e5e98eac4fe5ed9bb1c77ecebaa7',1,'Sandals::RK4Tableau']]],
+  ['rkf45_11',['RKF45',['../class_sandals_1_1_r_k_f45.html#a833c5967219682d52f0d14775716c16a',1,'Sandals::RKF45::RKF45()'],['../class_sandals_1_1_r_k_f45.html#a8e3506a444420fd3c264868dbefbd1eb',1,'Sandals::RKF45::RKF45(System t_system)']]],
+  ['rkf45tableau_12',['RKF45Tableau',['../class_sandals_1_1_r_k_f45_tableau.html#ab0b76140cae266efb79abc345b92c7aa',1,'Sandals::RKF45Tableau']]]
 ];

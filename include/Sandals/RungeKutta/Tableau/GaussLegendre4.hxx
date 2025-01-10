@@ -19,6 +19,8 @@ namespace Sandals
   // and Geng Sun. Journal of Applied Analysis ans Computation, Volume 7, Number 3, 2017(8), 1185-1199
   // http://www.jaac-online.com/data/article/jaac/preview/pdf/20170325.pdf
 
+  //! \brief Butcher Tableau for the Gauss-Legendre order 4 method.
+  //!
   //! Butcher tableau for the Gauss-Legendre order 4 method:
   //!
   //! \f[
@@ -30,7 +32,7 @@ namespace Sandals
   //! \end{array} \text{,}
   //! \f]
   //!
-  //! with \f$ t = \dfrac{\sqrt{3}}{6}\f$.
+  //! with \f$ t = \frac{\sqrt{3}}{6}\f$.
   class GaussLegendre4Tableau : public Tableau<2>
   {
     public:
@@ -59,11 +61,10 @@ namespace Sandals
     using System = typename Implicit<N>::Pointer; //!< System type.
 
     //! Class constructor for a Runge-Kutta solver given a Tableau reference.
-    //! \param[in] t_tableau The Tableau reference.
+    //!
     GaussLegendre4() : RungeKutta<2, N>(GaussLegendre4Tableau()) {}
 
     //! Class constructor for a Runge-Kutta solver given a Tableau reference.
-    //! \param[in] t_tableau The Tableau reference.
     //! \param[in] t_system The system reference.
     GaussLegendre4(System t_system) : RungeKutta<2, N>(GaussLegendre4Tableau(), t_system) {}
 

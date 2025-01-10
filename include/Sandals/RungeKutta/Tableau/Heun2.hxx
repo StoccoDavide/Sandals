@@ -15,6 +15,8 @@
 
 namespace Sandals
 {
+  //! \brief Butcher tableau for the Heun's order 2 method.
+  //!
   //! Butcher tableau for the Heun's order 2 method:
   //!
   //! \f[
@@ -52,11 +54,10 @@ namespace Sandals
     using System = typename Implicit<N>::Pointer; //!< System type.
 
     //! Class constructor for a Heun's order 2 solver given a Tableau reference.
-    //! \param[in] t_tableau The Tableau reference.
+    //!
     Heun2() : RungeKutta<2, N>(Heun2Tableau()) {}
 
     //! Class constructor for a Heun's order 2 solver given a Tableau reference.
-    //! \param[in] t_tableau The Tableau reference.
     //! \param[in] t_system The system reference.
     Heun2(System t_system) : RungeKutta<2, N>(Heun2Tableau(), t_system) {}
 

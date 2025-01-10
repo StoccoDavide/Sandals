@@ -150,7 +150,7 @@ $(function(){initNavTree('struct_sandals_1_1_solution.html',''); initResizable(t
 <p>Class container for the numerical solution of a system of ODEs/DAEs.  
  <a href="#details">More...</a></p>
 
-<p><code>#include &lt;<a class="el" href="_runge_kutta_8hxx_source.html">RungeKutta.hxx</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="_solution_8hxx_source.html">Solution.hxx</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
 Public Types</h2></td></tr>
@@ -208,7 +208,7 @@ Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:aa40451d6dc3146455b7d0f244102a002" id="r_aa40451d6dc3146455b7d0f244102a002"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a53b5d76fe47167457e6b1cf6cdf61fb2">Vector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa40451d6dc3146455b7d0f244102a002">time</a></td></tr>
-<tr class="memdesc:aa40451d6dc3146455b7d0f244102a002"><td class="mdescLeft">&#160;</td><td class="mdescRight">Time solution vector.  <br /></td></tr>
+<tr class="memdesc:aa40451d6dc3146455b7d0f244102a002"><td class="mdescLeft">&#160;</td><td class="mdescRight">Independent variable (or time) solution vector.  <br /></td></tr>
 <tr class="separator:aa40451d6dc3146455b7d0f244102a002"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a90fa4be994ee4fad56beb8e5a67dcccf" id="r_a90fa4be994ee4fad56beb8e5a67dcccf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a37772e7ebbaadcee7d60971bffb5ca93">MatrixN</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a90fa4be994ee4fad56beb8e5a67dcccf">states</a></td></tr>
 <tr class="memdesc:a90fa4be994ee4fad56beb8e5a67dcccf"><td class="mdescLeft">&#160;</td><td class="mdescRight">States solution matrix.  <br /></td></tr>
@@ -220,24 +220,7 @@ Public Attributes</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><div class="compoundTemplParams">template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> N, <a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> M = 0&gt;<br />
 struct Sandals::Solution&lt; N, M &gt;</div><p>Class container for the numerical solution of a system of ODEs/DAEs. </p>
-<p>Check Butcher tableau consistency for an explicit Runge-Kutta method. </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">tbl.A</td><td>Matrix \( \mathbf{A} \). </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">tbl.b</td><td>Weights vector \( \mathbf{b} \). </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">tbl.b_e</td><td>[optional] Embedded weights vector \( \mathbf{b}_{e} \). </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">tbl.c</td><td>Nodes vector \( \mathbf{c} \). </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>True if the Butcher tableau is consistent, false otherwise. Check the order of a Runge-Kutta tableau according to the conditions taken from: <em>A family of embedded Runge-Kutta formulae</em>, J. R. Dormand and P. J. Prince, Journal of Computational and Applied Mathematics, volume 6(1), 1980. Doi: <a href="https://doi.org/10.1016/0771-0509(80)90013-3">10.1016/0771-0509(80)90013-3</a> </dd></dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">tableau</td><td>The Runge-Kutta tableau to be checked. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The order of the Runge-Kutta tableau. </dd></dl>
-<p>Class container for the numerical solution of a system of Ordinary Differential Equations (ODEs) or Differential Algebraic Equations (DAEs). The solution is stored in a time vector and states matrix, where each row of the matrix represents the solution of a state at a given time. The solution can be accessed as standard library vectors or Eigen library vectors. </p>
+<p>Class container for the numerical solution of a system of Ordinary Differential Equations (ODEs) or Differential Algebraic Equations (DAEs). The solution is stored in a independent variable (or time) vector and states matrix, where each row of the matrix represents the solution of a state at a given independent variable mesh. The solution can be accessed as standard library vectors or Eigen library vectors. </p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
 <a id="a32d95d0cfeb6b725a07d1648c786fcc9" name="a32d95d0cfeb6b725a07d1648c786fcc9"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a32d95d0cfeb6b725a07d1648c786fcc9">&#9670;&#160;</a></span>MatrixM</h2>
@@ -346,9 +329,9 @@ template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d44
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Class constructor for the <a class="el" href="struct_sandals_1_1_solution.html" title="Class container for the numerical solution of a system of ODEs/DAEs.">Solution</a> class given the time and states sizes. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Class constructor for the <a class="el" href="struct_sandals_1_1_solution.html" title="Class container for the numerical solution of a system of ODEs/DAEs.">Solution</a> class given the independent variable (or time) and states sizes. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">size</td><td>The size of the time vector and states matrix. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">size</td><td>The size of the independent variable (or time) vector and states matrix. </td></tr>
   </table>
   </dd>
 </dl>
@@ -380,7 +363,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d44
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Clear the time vector and states matrix. </p>
+<p>Clear the independent variable (or time) vector and states matrix. </p>
 
 </div>
 </div>
@@ -408,9 +391,9 @@ template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d44
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Resize conserving the data of the time vector and states matrix. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Resize conserving the data of the independent variable (or time) vector and states matrix. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">size</td><td>The size of the time vector and states matrix. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">size</td><td>The size of the independent variable (or time) vector and states matrix. </td></tr>
   </table>
   </dd>
 </dl>
@@ -565,7 +548,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d44
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Get a the time vector as Eigen library vector. </p><dl class="section return"><dt>Returns</dt><dd>The time vector as Eigen library vector. </dd></dl>
+<p>Get the independent variable (or time) vector as Eigen library vector. </p><dl class="section return"><dt>Returns</dt><dd>The independent variable (or time) vector as Eigen library vector. </dd></dl>
 
 </div>
 </div>
@@ -593,7 +576,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d44
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Check if the time vector and states matrix are empty. </p><dl class="section return"><dt>Returns</dt><dd>True if the time vector and states matrix are empty, false otherwise. </dd></dl>
+<p>Check if the independent variable (or time) vector and states matrix are empty. </p><dl class="section return"><dt>Returns</dt><dd>True if the independent variable (or time) vector and states matrix are empty, false otherwise. </dd></dl>
 
 </div>
 </div>
@@ -621,9 +604,9 @@ template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d44
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Resize the time vector and states matrix. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Resize the independent variable (or time) vector and states matrix. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">size</td><td>The size of the time vector and states matrix. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">size</td><td>The size of the independent variable (or time) vector and states matrix. </td></tr>
   </table>
   </dd>
 </dl>
@@ -654,7 +637,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d44
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Get the size of the time vector and states matrix. </p><dl class="section return"><dt>Returns</dt><dd>The size of the time vector and states matrix. </dd></dl>
+<p>Get the size of the independent variable (or time) vector and states matrix. </p><dl class="section return"><dt>Returns</dt><dd>The size of the independent variable (or time) vector and states matrix. </dd></dl>
 
 </div>
 </div>
@@ -874,7 +857,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d44
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Get the time vector as a standard library vector. </p><dl class="section return"><dt>Returns</dt><dd>The time vector as a standard library vector. </dd></dl>
+<p>Get the independent variable (or time) vector as a standard library vector. </p><dl class="section return"><dt>Returns</dt><dd>The independent variable (or time) vector as a standard library vector. </dd></dl>
 
 </div>
 </div>
@@ -929,12 +912,12 @@ template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d44
       </table>
 </div><div class="memdoc">
 
-<p>Time solution vector. </p>
+<p>Independent variable (or time) solution vector. </p>
 
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>include/Sandals/RungeKutta/<a class="el" href="_runge_kutta_8hxx_source.html">RungeKutta.hxx</a></li>
+<li>include/Sandals/RungeKutta/<a class="el" href="_solution_8hxx_source.html">Solution.hxx</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

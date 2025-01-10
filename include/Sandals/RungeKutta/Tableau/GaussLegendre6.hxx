@@ -19,6 +19,8 @@ namespace Sandals
   // and Geng Sun. Journal of Applied Analysis ans Computation, Volume 7, Number 3, 2017(8), 1185-1199
   // http://www.jaac-online.com/data/article/jaac/preview/pdf/20170325.pdf
 
+  //! \brief Butcher tableau for the Gauss-Legendre order 6 method.
+  //!
   //! Butcher tableau for the Gauss-Legendre order 6 method:
   //!
   //! \f[
@@ -67,11 +69,10 @@ namespace Sandals
     using System = typename Implicit<N>::Pointer; //!< System type.
 
     //! Class constructor for a Runge-Kutta solver given a Tableau reference.
-    //! \param[in] t_tableau The Tableau reference.
+    //!
     GaussLegendre6() : RungeKutta<3, N>(GaussLegendre6Tableau()) {}
 
     //! Class constructor for a Runge-Kutta solver given a Tableau reference.
-    //! \param[in] t_tableau The Tableau reference.
     //! \param[in] t_system The system reference.
     GaussLegendre6(System t_system) : RungeKutta<3, N>(GaussLegendre6Tableau(), t_system) {}
 

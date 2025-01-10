@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['vector_0',['Vector',['../class_sandals_1_1_broyden.html#a530d3a29f4c4689e44f367a723553b0f',1,'Sandals::Broyden::Vector'],['../class_sandals_1_1_newton.html#ab1a0b26369bc5bdc70293be4d6dbe7e1',1,'Sandals::Newton::Vector'],['../class_sandals_1_1_nonlinear_solver.html#aef06b4918b0f772e434beee595faa30c',1,'Sandals::NonlinearSolver::Vector']]],
+  ['vector_0',['Vector',['../class_sandals_1_1_broyden.html#a530d3a29f4c4689e44f367a723553b0f',1,'Sandals::Broyden::Vector'],['../class_sandals_1_1_newton.html#ab1a0b26369bc5bdc70293be4d6dbe7e1',1,'Sandals::Newton::Vector'],['../class_sandals_1_1_nonlinear_solver.html#aef06b4918b0f772e434beee595faa30c',1,'Sandals::NonlinearSolver::Vector'],['../struct_sandals_1_1_solution.html#a53b5d76fe47167457e6b1cf6cdf61fb2',1,'Sandals::Solution::Vector'],['../struct_sandals_1_1_tableau.html#a79fae830cbfc87f94fe55bf63f44acca',1,'Sandals::Tableau::Vector']]],
   ['vector0_1',['Vector0',['../namespace_sandals.html#aa5480ee9cb0ab686fd191654ed80e2f4',1,'Sandals']]],
   ['vector1_2',['Vector1',['../namespace_sandals.html#ac944f47a6c731fead972aed909323462',1,'Sandals']]],
   ['vector2_3',['Vector2',['../namespace_sandals.html#ab368752a66add914b967bf189e86d52e',1,'Sandals']]],

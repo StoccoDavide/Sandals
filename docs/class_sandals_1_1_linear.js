@@ -14,5 +14,6 @@ var class_sandals_1_1_linear =
     [ "f", "class_sandals_1_1_linear.html#a5863e53db747407d3d792a862d5e1bfc", null ],
     [ "JF_x", "class_sandals_1_1_linear.html#a2dfa9f70cd5b09dfa7b6262ad266f5f0", null ],
     [ "Jf_x", "class_sandals_1_1_linear.html#afed073d418c02ac0510056d70ce5c96f", null ],
-    [ "JF_x_dot", "class_sandals_1_1_linear.html#a65eac971397b380f0daf684b137b7081", null ]
+    [ "JF_x_dot", "class_sandals_1_1_linear.html#a65eac971397b380f0daf684b137b7081", null ],
+    [ "m_lu", "class_sandals_1_1_linear.html#a119f4cb0dac600668110e5ddafd56750", null ]
 ];

@@ -14,5 +14,6 @@ var class_sandals_1_1_broyden =
     [ "solve_damped", "class_sandals_1_1_broyden.html#a00a2b40aef1d1391e4088bf22f4daf3a", null ],
     [ "type", "class_sandals_1_1_broyden.html#a0bfa4db3590c288ac7b6aa3a4601bee3", null ],
     [ "type", "class_sandals_1_1_broyden.html#a328f621c33dd3cfcb319564a290d086c", null ],
-    [ "update", "class_sandals_1_1_broyden.html#a80b54d0ecd42efea320e6a94571cb3ce", null ]
+    [ "update", "class_sandals_1_1_broyden.html#a80b54d0ecd42efea320e6a94571cb3ce", null ],
+    [ "m_type", "class_sandals_1_1_broyden.html#abd8cc41e7551279dd8ab928ca4e84449", null ]
 ];

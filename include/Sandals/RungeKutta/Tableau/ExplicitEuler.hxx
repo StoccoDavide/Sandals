@@ -15,6 +15,8 @@
 
 namespace Sandals
 {
+  //! \brief Butcher tableau for the Explicit Euler method.
+  //!
   //! Butcher tableau for the Explicit Euler method:
   //!
   //! \f[
@@ -50,11 +52,10 @@ namespace Sandals
     using System = typename Implicit<N>::Pointer; //!< System type.
 
     //! Class constructor for a Explicit Euler solver given a Tableau reference.
-    //! \param[in] t_tableau The Tableau reference.
+    //!
     ExplicitEuler() : RungeKutta<1, N>(ExplicitEulerTableau()) {}
 
     //! Class constructor for a Explicit Euler solver given a Tableau reference.
-    //! \param[in] t_tableau The Tableau reference.
     //! \param[in] t_system The system reference.
     ExplicitEuler(System t_system) : RungeKutta<1, N>(ExplicitEulerTableau(), t_system) {}
 

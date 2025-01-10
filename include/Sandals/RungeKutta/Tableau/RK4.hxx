@@ -15,7 +15,9 @@
 
 namespace Sandals
 {
-  //! Butcher tableau for the Runge-Kutta 4 method:
+  //! \brief Butcher tableau for the Runge-Kutta order 4 method.
+  //!
+  //! Butcher tableau for the Runge-Kutta order 4 method:
   //!
   //! \f[
   //! \begin{array}{c|cccc}
@@ -48,19 +50,18 @@ namespace Sandals
     }
   }; // class RK4Tableau
 
-  //! Class container for the Runge-Kutta 4 method.
+  //! Class container for the Runge-Kutta order 4 method.
   template <Size N>
   class RK4 : public RungeKutta<4, N>
   {
   public:
     using System = typename Implicit<N>::Pointer; //!< System type.
 
-    //! Class constructor for a Runge-Kutta 4 solver given a Tableau reference.
-    //! \param[in] t_tableau The Tableau reference.
+    //! Class constructor for a Runge-Kutta order 4 solver given a Tableau reference.
+    //!
     RK4() : RungeKutta<4, N>(RK4Tableau()) {}
 
-    //! Class constructor for a Runge-Kutta 4 solver given a Tableau reference.
-    //! \param[in] t_tableau The Tableau reference.
+    //! Class constructor for a Runge-Kutta order 4 solver given a Tableau reference.
     //! \param[in] t_system The system reference.
     RK4(System t_system) : RungeKutta<4, N>(RK4Tableau(), t_system) {}
 

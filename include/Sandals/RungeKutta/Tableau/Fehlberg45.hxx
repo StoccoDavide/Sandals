@@ -10,11 +10,13 @@
 
 #pragma once
 
-#ifndef SANDALS_RKF45_HXX
-#define SANDALS_RKF45_HXX
+#ifndef SANDALS_FEHELBERG45_HXX
+#define SANDALS_FEHELBERG45_HXX
 
 namespace Sandals
 {
+  //! \brief Butcher tableau for the Runge-Kutta-Fehlberg 4(5) method.
+  //!
   //! Butcher tableau for the Runge-Kutta-Fehlberg 4(5) method:
   //!
   //! \f[
@@ -30,7 +32,7 @@ namespace Sandals
   //!           &    25/216 &          0 & 1408/2565  & 2197/4104   &  -1/5  &    0 \\
   //! \end{array} \text{.}
   //! \f]
-  class RKF45Tableau : public Tableau<6>
+  class Fehlberg45Tableau : public Tableau<6>
   {
     public:
     using Tableau<6>::Type;   //!< Runge-Kutta type enumeration.
@@ -38,8 +40,8 @@ namespace Sandals
     using Tableau<6>::Matrix; //!< Templetized matrix type.
 
     //! Class constructor for the Runge-Kutta-Fehlberg 4(5) method.
-    RKF45Tableau() {
-      this->name        = "RKF45";
+    Fehlberg45Tableau() {
+      this->name        = "Fehlberg45";
       this->type        = Type::ERK;
       this->order       = 4;
       this->order_e     = 5;
@@ -54,26 +56,25 @@ namespace Sandals
       this->b_e << 16.0/135.0, 0.0,     6656.0/12825.0, 28561.0/56430.0, -9.0/50.0, 2.0/55.0;
       this->c   << 0.0,        1.0/4.0, 3.0/8.0,        12.0/13.0,       1.0,       1.0/2.0;
     }
-  }; // class RKF45Tableau
+  }; // class Fehlberg45Tableau
 
   //! Class container for the Runge-Kutta-Fehlberg 4(5) method.
   template <Size N>
-  class RKF45 : public RungeKutta<6, N>
+  class Fehlberg45 : public RungeKutta<6, N>
   {
   public:
     using System = typename Implicit<N>::Pointer; //!< System type.
 
     //! Class constructor for a Runge-Kutta-Fehlberg 4(5) solver given a Tableau reference.
-    //! \param[in] t_tableau The Tableau reference.
-    RKF45() : RungeKutta<6, N>(RKF45Tableau()) {}
+    //!
+    Fehlberg45() : RungeKutta<6, N>(Fehlberg45Tableau()) {}
 
     //! Class constructor for a Runge-Kutta-Fehlberg 4(5) solver given a Tableau reference.
-    //! \param[in] t_tableau The Tableau reference.
     //! \param[in] t_system The system reference.
-    RKF45(System t_system) : RungeKutta<6, N>(RKF45Tableau(), t_system) {}
+    Fehlberg45(System t_system) : RungeKutta<6, N>(Fehlberg45Tableau(), t_system) {}
 
-  }; // class RKF45
+  }; // class Fehlberg45
 
 } // namespace Sandals
 
-#endif // SANDALS_RKF45_HXX
+#endif // SANDALS_FEHELBERG45_HXX

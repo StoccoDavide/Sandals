@@ -141,6 +141,7 @@ $(function(){initNavTree('class_sandals_1_1_linear.html',''); initResizable(true
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="class_sandals_1_1_linear-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">Sandals::Linear&lt; N, M &gt; Class Template Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div></div>
 </div><!--header-->
@@ -259,6 +260,12 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a6648581bb57b44447ad1700a24a5bcfe inherit pub_methods_class_sandals_1_1_implicit"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa20cc23a8b35a4601a38f73fc2cd06e7 inherit pub_methods_class_sandals_1_1_implicit" id="r_aa20cc23a8b35a4601a38f73fc2cd06e7"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_implicit.html#aa20cc23a8b35a4601a38f73fc2cd06e7">in_domain</a> (<a class="el" href="class_sandals_1_1_implicit.html#abd4b889562c414cc162f676af42032b4">VectorN</a> const &amp;x, <a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> t) const=0</td></tr>
 <tr class="separator:aa20cc23a8b35a4601a38f73fc2cd06e7 inherit pub_methods_class_sandals_1_1_implicit"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a119f4cb0dac600668110e5ddafd56750" id="r_a119f4cb0dac600668110e5ddafd56750"><td class="memItemLeft" align="right" valign="top">Eigen::FullPivLU&lt; <a class="el" href="#ad0ce62663383c89c016bb2ce86a18992">MatrixN</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a119f4cb0dac600668110e5ddafd56750">m_lu</a></td></tr>
+<tr class="memdesc:a119f4cb0dac600668110e5ddafd56750"><td class="mdescLeft">&#160;</td><td class="mdescRight">LU decomposition.  <br /></td></tr>
+<tr class="separator:a119f4cb0dac600668110e5ddafd56750"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -778,6 +785,33 @@ template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d44
 <dl class="section return"><dt>Returns</dt><dd>The Jacobian \( \mathbf{JF}_{\mathbf{x}^{\prime}}(\mathbf{x}, \mathbf{x}^{\prime}, t) \). </dd></dl>
 
 <p>Reimplemented from <a class="el" href="class_sandals_1_1_explicit.html#a0900536ca432fcd643f35789570a383b">Sandals::Explicit&lt; N, 0 &gt;</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a119f4cb0dac600668110e5ddafd56750" name="a119f4cb0dac600668110e5ddafd56750"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a119f4cb0dac600668110e5ddafd56750">&#9670;&#160;</a></span>m_lu</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> N, <a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> M = 0&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Eigen::FullPivLU&lt;<a class="el" href="#ad0ce62663383c89c016bb2ce86a18992">MatrixN</a>&gt; <a class="el" href="class_sandals_1_1_linear.html">Sandals::Linear</a>&lt; N, M &gt;::m_lu</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>LU decomposition. </p>
 
 </div>
 </div>

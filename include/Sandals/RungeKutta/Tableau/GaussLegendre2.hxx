@@ -19,6 +19,8 @@ namespace Sandals
   // and Geng Sun. Journal of Applied Analysis ans Computation, Volume 7, Number 3, 2017(8), 1185-1199
   // http://www.jaac-online.com/data/article/jaac/preview/pdf/20170325.pdf
 
+  //! \brief Butcher Tableau for the Gauss-Legendre order 2 method.
+  //!
   //! Butcher tableau for the Gauss-Legendre order 2 method:
   //!
   //! \f[
@@ -54,11 +56,10 @@ namespace Sandals
     using System = typename Implicit<N>::Pointer; //!< System type.
 
     //! Class constructor for a Gauss-Legendre order 2 solver given a Tableau reference.
-    //! \param[in] t_tableau The Tableau reference.
+    //!
     GaussLegendre2() : RungeKutta<1, N>(GaussLegendre2Tableau()) {}
 
     //! Class constructor for a Gauss-Legendre order 2 solver given a Tableau reference.
-    //! \param[in] t_tableau The Tableau reference.
     //! \param[in] t_system The system reference.
     GaussLegendre2(System t_system) : RungeKutta<1, N>(GaussLegendre2Tableau(), t_system) {}
 

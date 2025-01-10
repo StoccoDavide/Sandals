@@ -15,7 +15,9 @@
 
 namespace Sandals
 {
-  //! Butcher tableau for the RadauIIA order 3 method:
+  //! \brief Butcher tableau for the Radau IIA order 3 method.
+  //!
+  //! Butcher tableau for the Radau IIA order 3 method:
   //!
   //! \f[
   //! \begin{array}{c|cc}
@@ -32,7 +34,7 @@ namespace Sandals
     using Tableau<2>::Vector; //!< Templetized vector type.
     using Tableau<2>::Matrix; //!< Templetized matrix type.
 
-    //! Class constructor for the RadauIIA order 3 method.
+    //! Class constructor for the Radau IIA order 3 method.
     RadauIIA3Tableau() {
       this->name  = "RadauIIA3";
       this->type  = Type::IRK;
@@ -44,19 +46,18 @@ namespace Sandals
     }
   }; // class RadauIIA3Tableau
 
-  //! Class container for the RadauIIA order 3 method.
+  //! Class container for the Radau IIA order 3 method.
   template <Size N>
   class RadauIIA3 : public RungeKutta<2, N>
   {
   public:
     using System = typename Implicit<N>::Pointer; //!< System type.
 
-    //! Class constructor for a RadauIIA order 3 solver given a Tableau reference.
-    //! \param[in] t_tableau The Tableau reference.
+    //! Class constructor for a Radau IIA order 3 solver given a Tableau reference.
+    //!
     RadauIIA3() : RungeKutta<2, N>(RadauIIA3Tableau()) {}
 
-    //! Class constructor for a RadauIIA order 3 solver given a Tableau reference.
-    //! \param[in] t_tableau The Tableau reference.
+    //! Class constructor for a Radau IIA order 3 solver given a Tableau reference.
     //! \param[in] t_system The system reference.
     RadauIIA3(System t_system) : RungeKutta<2, N>(RadauIIA3Tableau(), t_system) {}
 
