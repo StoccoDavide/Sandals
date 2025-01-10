@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['newton_0',['Newton',['../class_sandals_1_1_newton.html',1,'Sandals']]],
-  ['nonlinearsolver_1',['NonlinearSolver',['../class_sandals_1_1_nonlinear_solver.html',1,'Sandals']]]
+  ['implicit_0',['Implicit',['../class_sandals_1_1_implicit.html',1,'Sandals']]],
+  ['impliciteuler_1',['ImplicitEuler',['../class_sandals_1_1_implicit_euler.html',1,'Sandals']]],
+  ['impliciteulertableau_2',['ImplicitEulerTableau',['../class_sandals_1_1_implicit_euler_tableau.html',1,'Sandals']]]
 ];

@@ -2,7 +2,7 @@ var class_sandals_1_1_implicit =
 [
     [ "MatrixM", "class_sandals_1_1_implicit.html#ace9f728fb9d9b3f0f895a905013be446", null ],
     [ "MatrixN", "class_sandals_1_1_implicit.html#a0e70a9eaa87fe061691ed06da83666b9", null ],
-    [ "Pointer", "class_sandals_1_1_implicit.html#a2e8a8f6ac6ee76f16aa04917647b423b", null ],
+    [ "Pointer", "class_sandals_1_1_implicit.html#aed4cdcf289d11408f5b0503fcf171049", null ],
     [ "Type", "class_sandals_1_1_implicit.html#ae0696ff456a4e8b737cc365cf4a47f4e", null ],
     [ "VectorM", "class_sandals_1_1_implicit.html#a1034885c899bd8f9c433b1a77a0b8021", null ],
     [ "VectorN", "class_sandals_1_1_implicit.html#abd4b889562c414cc162f676af42032b4", null ],

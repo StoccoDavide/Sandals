@@ -25,6 +25,13 @@
 var NAVTREE =
 [
   [ "Sandals", "index.html", [
+    [ "Installation", "index.html#autotoc_md18", [
+      [ "Prerequisites", "index.html#autotoc_md19", null ],
+      [ "Build", "index.html#autotoc_md20", null ]
+    ] ],
+    [ "Authors", "index.html#autotoc_md21", null ],
+    [ "License", "index.html#autotoc_md22", null ],
+    [ "That's all folks!", "index.html#autotoc_md23", null ],
     [ "Namespaces", "namespaces.html", [
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
       [ "Namespace Members", "namespacemembers.html", [
@@ -39,7 +46,7 @@ var NAVTREE =
       [ "Class Hierarchy", "hierarchy.html", "hierarchy" ],
       [ "Class Members", "functions.html", [
         [ "All", "functions.html", "functions_dup" ],
-        [ "Functions", "functions_func.html", null ],
+        [ "Functions", "functions_func.html", "functions_func" ],
         [ "Variables", "functions_vars.html", null ],
         [ "Typedefs", "functions_type.html", null ]
       ] ]
@@ -57,9 +64,11 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "_broyden_8hxx.html",
-"class_sandals_1_1_explicit_euler_tableau.html#a82d9f8e66a15866a29ebc7acbc76500d",
-"class_sandals_1_1_nonlinear_solver.html#ace8b8215eaa90e55d5550210bc239c1f",
-"namespace_sandals.html#aef801a9341c96d05d3b794cd8a216d13"
+"class_sandals_1_1_broyden.html#af756c1debbfae81e4dd6b139d9787c86",
+"class_sandals_1_1_newton.html",
+"class_sandals_1_1_runge_kutta.html#a53e68c06cce6d036185ba836aec50759",
+"class_sandals_1_1_semi_explicit.html#a4fe151739a42df3cc77eca2533a6028e",
+"struct_sandals_1_1_tableau.html#a15223b7b6c974186d617dec0746f2e0d"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

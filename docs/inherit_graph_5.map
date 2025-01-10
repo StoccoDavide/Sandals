@@ -1,3 +1,15 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$struct_sandals_1_1_solution.html" title="Class container for the numerical solution of a system of ODEs/DAEs." alt="" coords="5,5,137,46"/>
+<area shape="rect" id="Node000000" href="$class_sandals_1_1_runge_kutta.html" title=" " alt="" coords="5,153,151,194"/>
+<area shape="rect" id="Node000001" href="$class_sandals_1_1_gauss_legendre6.html" title="Class container for the Gauss&#45;Legendre order 6 method." alt="" coords="206,5,380,46"/>
+<area shape="poly" id="edge21_Node000000_Node000001" title=" " alt="" coords="104,140,145,96,197,55,219,44,221,49,200,60,149,100,107,143"/>
+<area shape="rect" id="Node000002" href="$class_sandals_1_1_heun3.html" title="Class container for the Heun&#39;s order 3 method." alt="" coords="210,70,377,96"/>
+<area shape="poly" id="edge22_Node000000_Node000002" title=" " alt="" coords="124,143,198,106,233,94,235,99,200,111,126,148"/>
+<area shape="rect" id="Node000003" href="$class_sandals_1_1_radau_i_i_a5.html" title="Class container for the Radau IIA order 5 method." alt="" coords="224,120,362,161"/>
+<area shape="poly" id="edge23_Node000000_Node000003" title=" " alt="" coords="166,157,223,148,224,154,167,163"/>
+<area shape="rect" id="Node000004" href="$class_sandals_1_1_ralston3.html" title="Class container for the Ralston&#39;s order 3 method." alt="" coords="225,185,362,226"/>
+<area shape="poly" id="edge24_Node000000_Node000004" title=" " alt="" coords="166,184,225,193,224,198,166,189"/>
+<area shape="rect" id="Node000005" href="$class_sandals_1_1_s_s_p_i_r_k33.html" title=" " alt="" coords="219,251,368,291"/>
+<area shape="poly" id="edge25_Node000000_Node000005" title=" " alt="" coords="129,200,200,235,230,248,228,253,198,240,127,204"/>
+<area shape="rect" id="Node000006" href="$class_sandals_1_1_s_s_p_r_k33.html" title="Class container for the 3&#45;stage strong&#45;stability preserving Runge&#45;Kutta order 3 method." alt="" coords="199,316,388,341"/>
+<area shape="poly" id="edge26_Node000000_Node000006" title=" " alt="" coords="104,205,145,255,171,280,200,301,225,312,223,317,197,305,168,284,141,259,99,208"/>
 </map>

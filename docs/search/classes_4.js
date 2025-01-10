@@ -1,8 +1,9 @@
 var searchData=
 [
-  ['implicit_0',['Implicit',['../class_sandals_1_1_implicit.html',1,'Sandals']]],
-  ['implicit_3c_20n_2c_200_20_3e_1',['Implicit&lt; N, 0 &gt;',['../class_sandals_1_1_implicit.html',1,'Sandals']]],
-  ['implicit_3c_20n_2c_20m_20_3e_2',['Implicit&lt; N, M &gt;',['../class_sandals_1_1_implicit.html',1,'Sandals']]],
-  ['impliciteuler_3',['ImplicitEuler',['../class_sandals_1_1_implicit_euler.html',1,'Sandals']]],
-  ['impliciteulertableau_4',['ImplicitEulerTableau',['../class_sandals_1_1_implicit_euler_tableau.html',1,'Sandals']]]
+  ['gausslegendre2_0',['GaussLegendre2',['../class_sandals_1_1_gauss_legendre2.html',1,'Sandals']]],
+  ['gausslegendre2tableau_1',['GaussLegendre2Tableau',['../class_sandals_1_1_gauss_legendre2_tableau.html',1,'Sandals']]],
+  ['gausslegendre4_2',['GaussLegendre4',['../class_sandals_1_1_gauss_legendre4.html',1,'Sandals']]],
+  ['gausslegendre4tableau_3',['GaussLegendre4Tableau',['../class_sandals_1_1_gauss_legendre4_tableau.html',1,'Sandals']]],
+  ['gausslegendre6_4',['GaussLegendre6',['../class_sandals_1_1_gauss_legendre6.html',1,'Sandals']]],
+  ['gausslegendre6tableau_5',['GaussLegendre6Tableau',['../class_sandals_1_1_gauss_legendre6_tableau.html',1,'Sandals']]]
 ];

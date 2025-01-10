@@ -73,26 +73,26 @@ namespace Sandals
   using Real = double; //!< Real number type.
   using Size = int;    //!< Size number type.
 
-  using Vector0 = Eigen::Vector<Real, 0>;    //!< \f$ 0 \times 1 \f$ vector of Real number type (column vector)
-  using Matrix0 = Eigen::Matrix<Real, 0, 0>; //!< \f$ 0 \times 0 \f$ matrix of Real number type
-  using Vector1 = Eigen::Vector<Real, 1>;    //!< \f$ 1 \times 1 \f$ vector of Real number type (column vector)
-  using Matrix1 = Eigen::Matrix<Real, 1, 1>; //!< \f$ 1 \times 1 \f$ matrix of Real number type
-  using Vector2 = Eigen::Vector<Real, 2>;    //!< \f$ 2 \times 1 \f$ vector of Real number type (column vector)
-  using Matrix2 = Eigen::Matrix<Real, 2, 2>; //!< \f$ 2 \times 2 \f$ matrix of Real number type
-  using Vector3 = Eigen::Vector<Real, 3>;    //!< \f$ 3 \times 1 \f$ vector of Real number type (column vector)
-  using Matrix3 = Eigen::Matrix<Real, 3, 3>; //!< \f$ 3 \times 3 \f$ matrix of Real number type
-  using Vector4 = Eigen::Vector<Real, 4>;    //!< \f$ 4 \times 1 \f$ vector of Real number type (column vector)
-  using Matrix4 = Eigen::Matrix<Real, 4, 4>; //!< \f$ 4 \times 4 \f$ matrix of Real number type
-  using Vector5 = Eigen::Vector<Real, 5>;    //!< \f$ 5 \times 1 \f$ vector of Real number type (column vector)
-  using Matrix5 = Eigen::Matrix<Real, 5, 5>; //!< \f$ 5 \times 5 \f$ matrix of Real number type
-  using Vector6 = Eigen::Vector<Real, 6>;    //!< \f$ 6 \times 1 \f$ vector of Real number type (column vector)
-  using Matrix6 = Eigen::Matrix<Real, 6, 6>; //!< \f$ 6 \times 6 \f$ matrix of Real number type
-  using Vector7 = Eigen::Vector<Real, 7>;    //!< \f$ 7 \times 1 \f$ vector of Real number type (column vector)
-  using Matrix7 = Eigen::Matrix<Real, 7, 7>; //!< \f$ 7 \times 7 \f$ matrix of Real number type
-  using Vector8 = Eigen::Vector<Real, 8>;    //!< \f$ 8 \times 1 \f$ vector of Real number type (column vector)
-  using Matrix8 = Eigen::Matrix<Real, 8, 8>; //!< \f$ 8 \times 8 \f$ matrix of Real number type
-  using Vector9 = Eigen::Vector<Real, 9>;    //!< \f$ 9 \times 1 \f$ vector of Real number type (column vector)
-  using Matrix9 = Eigen::Matrix<Real, 9, 9>; //!< \f$ 9 \times 9 \f$ matrix of Real number type
+  using Vector0 = Eigen::Vector<Real, 0>;    //!< \f$ 0 \times 1 \f$ vector of Real number type (column vector).
+  using Matrix0 = Eigen::Matrix<Real, 0, 0>; //!< \f$ 0 \times 0 \f$ matrix of Real number type.
+  using Vector1 = Eigen::Vector<Real, 1>;    //!< \f$ 1 \times 1 \f$ vector of Real number type (column vector).
+  using Matrix1 = Eigen::Matrix<Real, 1, 1>; //!< \f$ 1 \times 1 \f$ matrix of Real number type.
+  using Vector2 = Eigen::Vector<Real, 2>;    //!< \f$ 2 \times 1 \f$ vector of Real number type (column vector).
+  using Matrix2 = Eigen::Matrix<Real, 2, 2>; //!< \f$ 2 \times 2 \f$ matrix of Real number type.
+  using Vector3 = Eigen::Vector<Real, 3>;    //!< \f$ 3 \times 1 \f$ vector of Real number type (column vector).
+  using Matrix3 = Eigen::Matrix<Real, 3, 3>; //!< \f$ 3 \times 3 \f$ matrix of Real number type.
+  using Vector4 = Eigen::Vector<Real, 4>;    //!< \f$ 4 \times 1 \f$ vector of Real number type (column vector).
+  using Matrix4 = Eigen::Matrix<Real, 4, 4>; //!< \f$ 4 \times 4 \f$ matrix of Real number type.
+  using Vector5 = Eigen::Vector<Real, 5>;    //!< \f$ 5 \times 1 \f$ vector of Real number type (column vector).
+  using Matrix5 = Eigen::Matrix<Real, 5, 5>; //!< \f$ 5 \times 5 \f$ matrix of Real number type.
+  using Vector6 = Eigen::Vector<Real, 6>;    //!< \f$ 6 \times 1 \f$ vector of Real number type (column vector).
+  using Matrix6 = Eigen::Matrix<Real, 6, 6>; //!< \f$ 6 \times 6 \f$ matrix of Real number type.
+  using Vector7 = Eigen::Vector<Real, 7>;    //!< \f$ 7 \times 1 \f$ vector of Real number type (column vector).
+  using Matrix7 = Eigen::Matrix<Real, 7, 7>; //!< \f$ 7 \times 7 \f$ matrix of Real number type.
+  using Vector8 = Eigen::Vector<Real, 8>;    //!< \f$ 8 \times 1 \f$ vector of Real number type (column vector).
+  using Matrix8 = Eigen::Matrix<Real, 8, 8>; //!< \f$ 8 \times 8 \f$ matrix of Real number type.
+  using Vector9 = Eigen::Vector<Real, 9>;    //!< \f$ 9 \times 1 \f$ vector of Real number type (column vector).
+  using Matrix9 = Eigen::Matrix<Real, 9, 9>; //!< \f$ 9 \times 9 \f$ matrix of Real number type.
 
   using VectorX = Eigen::Vector<Real, Eigen::Dynamic>;                 //!< \f$ N \times 1 \f$ vector of Real number type (column vector).
   using MatrixX = Eigen::Matrix<Real, Eigen::Dynamic, Eigen::Dynamic>; //!< \f$ N \times N \f$ matrix of Real number type.
@@ -115,8 +115,8 @@ namespace Sandals
   static Real const INFTY          = std::numeric_limits<Real>::infinity();           //!< Infinity static constant value.
   static Real const QUIET_NAN      = std::numeric_limits<Real>::quiet_NaN();          //!< Not-a-number static constant value.
   static Real const PI             = Real(3.141592653589793238462643383279502884197); //!< Pi static constant value.
-  static Real const PIMUL2         = Real(6.283185307179586476925286766559005768394); //<! The value of \f$ 2\pi \f$.
-  static Real const PIDIV2         = Real(1.570796326794896619231321691639751442098); //<! The value of \f$ \pi/2 \f$.
+  static Real const PIMUL2         = Real(6.283185307179586476925286766559005768394); //!< The value of \f$ 2\pi \f$.
+  static Real const PIDIV2         = Real(1.570796326794896619231321691639751442098); //!< The value of \f$ \pi/2 \f$.
   static Real const DEG2RAD        = Real(0.017453292519943295769236907684886127134); //!< The value of \f$ \pi/180 \f$.
   static Real const RAD2DEG        = Real(57.29577951308232087679815481410517033240); //!< The value of \f$ 180/\pi \f$.
 
@@ -209,35 +209,35 @@ namespace Sandals
 #include "Sandals/System/SemiExplicit.hxx"
 
 // Runge-Kutta integrator
-#include "Sandals/RungeKutta/Tableau.hxx"
-#include "Sandals/RungeKutta/Solution.hxx"
-#include "Sandals/RungeKutta/RungeKutta.hxx"
+#include "Sandals/Tableau.hxx"
+#include "Sandals/Solution.hxx"
+#include "Sandals/RungeKutta.hxx"
 
 // Butcher tableau for Runge-Kutta methods
-#include "Sandals/RungeKutta/Tableau/Chebyshev51.hxx"
-#include "Sandals/RungeKutta/Tableau/ExplicitEuler.hxx"
-#include "Sandals/RungeKutta/Tableau/Fehlberg45.hxx"
-#include "Sandals/RungeKutta/Tableau/GaussLegendre2.hxx"
-#include "Sandals/RungeKutta/Tableau/GaussLegendre4.hxx"
-#include "Sandals/RungeKutta/Tableau/GaussLegendre6.hxx"
-#include "Sandals/RungeKutta/Tableau/Heun2.hxx"
-#include "Sandals/RungeKutta/Tableau/Heun3.hxx"
-#include "Sandals/RungeKutta/Tableau/LobattoIIIA2.hxx"
-#include "Sandals/RungeKutta/Tableau/ImplicitEuler.hxx"
-#include "Sandals/RungeKutta/Tableau/MTE22.hxx"
-#include "Sandals/RungeKutta/Tableau/RadauIIA3.hxx"
-#include "Sandals/RungeKutta/Tableau/RadauIIA5.hxx"
-#include "Sandals/RungeKutta/Tableau/Ralston2.hxx"
-#include "Sandals/RungeKutta/Tableau/Ralston3.hxx"
-#include "Sandals/RungeKutta/Tableau/Ralston4.hxx"
-#include "Sandals/RungeKutta/Tableau/RK4.hxx"
-#include "Sandals/RungeKutta/Tableau/SSPIRK33.hxx"
-#include "Sandals/RungeKutta/Tableau/SSPRK22.hxx"
-#include "Sandals/RungeKutta/Tableau/SSPRK22star.hxx"
-#include "Sandals/RungeKutta/Tableau/SSPRK33.hxx"
-#include "Sandals/RungeKutta/Tableau/SSPRK42.hxx"
-#include "Sandals/RungeKutta/Tableau/SSPRK43.hxx"
-#include "Sandals/RungeKutta/Tableau/SSPRK93.hxx"
-#include "Sandals/RungeKutta/Tableau/SSPRK104.hxx"
+#include "Sandals/Tableau/Chebyshev51.hxx"
+#include "Sandals/Tableau/ExplicitEuler.hxx"
+#include "Sandals/Tableau/Fehlberg45.hxx"
+#include "Sandals/Tableau/GaussLegendre2.hxx"
+#include "Sandals/Tableau/GaussLegendre4.hxx"
+#include "Sandals/Tableau/GaussLegendre6.hxx"
+#include "Sandals/Tableau/Heun2.hxx"
+#include "Sandals/Tableau/Heun3.hxx"
+#include "Sandals/Tableau/LobattoIIIA2.hxx"
+#include "Sandals/Tableau/ImplicitEuler.hxx"
+#include "Sandals/Tableau/MTE22.hxx"
+#include "Sandals/Tableau/RadauIIA3.hxx"
+#include "Sandals/Tableau/RadauIIA5.hxx"
+#include "Sandals/Tableau/Ralston2.hxx"
+#include "Sandals/Tableau/Ralston3.hxx"
+#include "Sandals/Tableau/Ralston4.hxx"
+#include "Sandals/Tableau/RK4.hxx"
+#include "Sandals/Tableau/SSPIRK33.hxx"
+#include "Sandals/Tableau/SSPRK22.hxx"
+#include "Sandals/Tableau/SSPRK22star.hxx"
+#include "Sandals/Tableau/SSPRK33.hxx"
+#include "Sandals/Tableau/SSPRK42.hxx"
+#include "Sandals/Tableau/SSPRK43.hxx"
+#include "Sandals/Tableau/SSPRK93.hxx"
+#include "Sandals/Tableau/SSPRK104.hxx"
 
 #endif // INCLUDE_SANDALS_HH

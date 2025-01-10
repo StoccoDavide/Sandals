@@ -1,7 +1,7 @@
 var class_sandals_1_1_linear =
 [
     [ "MatrixN", "class_sandals_1_1_linear.html#ad0ce62663383c89c016bb2ce86a18992", null ],
-    [ "Pointer", "class_sandals_1_1_linear.html#a4f570f01f6107a583932759a8b88323b", null ],
+    [ "Pointer", "class_sandals_1_1_linear.html#a98687624e5f7028b6d09cb1670e56a38", null ],
     [ "Tensor", "class_sandals_1_1_linear.html#a8deaf73cee87823d5be5ec57570461fb", null ],
     [ "Type", "class_sandals_1_1_linear.html#a6b1f1b7e73bf754611630ae1290c4288", null ],
     [ "VectorN", "class_sandals_1_1_linear.html#a22fbe6901c619317be129d5e5f07f51b", null ],

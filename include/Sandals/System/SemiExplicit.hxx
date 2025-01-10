@@ -30,7 +30,7 @@ namespace Sandals {
   //! differential algebraic equations (DAEs)of the type \f$ \mathbf{M}(\mathbf{x}, t)
   //! \mathbf{x}^{\prime} = \mathbf{r}(\mathbf{x}, t) \f$, with invariants manifold \f$ \mathbf{h}(
   //! \mathbf{x}, t) = \mathbf{0} \f$.
-  template <Size N, Size H = 0>
+  template <Size N, Size H>
   class SemiExplicit : public Explicit<N, H>
   {
   public:
@@ -44,7 +44,7 @@ namespace Sandals {
     Eigen::FullPivLU<MatrixN> m_lu; //!< LU decomposition.
 
   public:
-    //! Default class constructor for the semi-explicit ODE/DAE system.
+    //! Class constructor for the semi-explicit ODE/DAE system.
     //!
     SemiExplicit() : Explicit<N, H>(Type::SEMI_EXPLICIT, "(missing name)") {}
 

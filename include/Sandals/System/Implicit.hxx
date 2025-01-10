@@ -30,16 +30,16 @@ namespace Sandals
   //! Class container for the system of inplicit ordinary differential equations (ODEs) or differential
   //! algebraic equations (DAEs) of the type \f$ \mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, t) =
   //! \mathbf{0} \f$, with invariants manifold \f$ \mathbf{h}(\mathbf{x}, t) = \mathbf{0} \f$.
-  template <Size N, Size M = 0>
+  template <Size N, Size M>
   class Implicit
   {
   public:
     using Type = enum class Type : Size {IMPLICIT=0, EXPLICIT=1, SEMI_EXPLICIT=2, LINEAR=3}; //!< System type enumeration.
-    using Pointer = std::shared_ptr<Implicit<N>>; //!< Shared pointer to an implicit ODE system.
-    using VectorN = Eigen::Vector<Real, N>;       //!< Templetized vector type.
-    using MatrixN = Eigen::Matrix<Real, N, N>;    //!< Templetized matrix type.
-    using VectorM = Eigen::Vector<Real, M>;       //!< Templetized vector type.
-    using MatrixM = Eigen::Matrix<Real, M, N>;    //!< Templetized matrix type.
+    using Pointer = std::shared_ptr<Implicit<N, M>>; //!< Shared pointer to an implicit ODE system.
+    using VectorN = Eigen::Vector<Real, N>;          //!< Templetized vector type.
+    using MatrixN = Eigen::Matrix<Real, N, N>;       //!< Templetized matrix type.
+    using VectorM = Eigen::Vector<Real, M>;          //!< Templetized vector type.
+    using MatrixM = Eigen::Matrix<Real, M, N>;       //!< Templetized matrix type.
 
   private:
     Type        m_type{Type::IMPLICIT}; //!< ODE/DAE system type.
@@ -52,7 +52,7 @@ namespace Sandals
     Implicit(Type t_type, std::string t_name) : m_type(t_type), m_name(t_name) {}
 
   public:
-    //! Default class constructor for an implicit ODE/DAE system.
+    //! Class constructor for an implicit ODE/DAE system.
     //!
     Implicit() : m_type(Type::IMPLICIT), m_name("(missing name)") {}
 

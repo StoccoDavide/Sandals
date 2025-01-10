@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['semiexplicit_0',['SemiExplicit',['../class_sandals_1_1_semi_explicit.html',1,'Sandals']]],
-  ['solution_1',['Solution',['../struct_sandals_1_1_solution.html',1,'Sandals']]]
+  ['mte22_0',['MTE22',['../class_sandals_1_1_m_t_e22.html',1,'Sandals']]],
+  ['mte22tableau_1',['MTE22Tableau',['../class_sandals_1_1_m_t_e22_tableau.html',1,'Sandals']]]
 ];

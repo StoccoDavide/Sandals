@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['rad2deg_0',['RAD2DEG',['../namespace_sandals.html#a78f8f2f27d18f31217d3e9ed22ec343b',1,'Sandals']]]
+  ['quiet_5fnan_0',['QUIET_NAN',['../namespace_sandals.html#a922904c90c70b72eba40de74c43f0f51',1,'Sandals']]]
 ];

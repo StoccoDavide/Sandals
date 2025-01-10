@@ -1,9 +1,0 @@
-<map id="Sandals::NonlinearSolver&lt; N &gt;" name="Sandals::NonlinearSolver&lt; N &gt;">
-<area shape="rect" id="Node000001" title="Nonlinear solver base class container. Nonlinear solver base class container for a problem of the for..." alt="" coords="180,5,382,31"/>
-<area shape="rect" id="Node000002" href="$class_sandals_1_1_newton.html" title=" " alt="" coords="5,79,179,105"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="236,39,125,81,123,76,234,34"/>
-<area shape="rect" id="Node000003" href="$class_sandals_1_1_broyden.html" title="Broyden solver class container." alt="" coords="202,79,360,105"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="284,46,284,79,279,79,279,46"/>
-<area shape="rect" id="Node000004" href="$class_sandals_1_1_newton.html" title="Class container for a dumped Newton&#39;s method with affine invariant step. Class container for a dumped..." alt="" coords="385,79,540,105"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="327,35,433,76,431,81,325,40"/>
-</map>

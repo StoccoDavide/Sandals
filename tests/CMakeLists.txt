@@ -19,14 +19,13 @@ file(GLOB_RECURSE NEWTON_TESTS "${CMAKE_CURRENT_SOURCE_DIR}/Newton/test_*.cc")
 add_executable(test_newton ${NEWTON_TESTS})
 target_link_libraries(test_newton PRIVATE sandals GTest::gtest)
 
+file(GLOB_RECURSE SYSTEM_TESTS "${CMAKE_CURRENT_SOURCE_DIR}/System/test_*.cc")
+add_executable(test_system ${SYSTEM_TESTS})
+target_link_libraries(test_system PRIVATE sandals GTest::gtest Matplot++::matplot)
 
-file(GLOB_RECURSE EXPLICIT_TESTS "${CMAKE_CURRENT_SOURCE_DIR}/Explicit/test_*.cc")
-add_executable(test_explicit ${EXPLICIT_TESTS})
-target_link_libraries(test_explicit PRIVATE sandals GTest::gtest Matplot++::matplot)
-
-file(GLOB_RECURSE IMPLICIT_TESTS "${CMAKE_CURRENT_SOURCE_DIR}/Implicit/test_*.cc")
-add_executable(test_implicit ${IMPLICIT_TESTS})
-target_link_libraries(test_implicit PRIVATE sandals GTest::gtest Matplot++::matplot)
+#file(GLOB_RECURSE ORDER_TESTS "${CMAKE_CURRENT_SOURCE_DIR}/Order/test_*.cc")
+#add_executable(test_order ${ORDER_TESTS})
+#target_link_libraries(test_order PRIVATE sandals GTest::gtest Matplot++::matplot)
 
 file(GLOB_RECURSE TABLEAU_TESTS "${CMAKE_CURRENT_SOURCE_DIR}/Tableau/test_*.cc")
 add_executable(test_tableau ${TABLEAU_TESTS})

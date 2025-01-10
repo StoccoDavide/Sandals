@@ -29,21 +29,21 @@ namespace Sandals {
   //! Class container for the system of linear ordinary differential equations (ODEs) or differential
   //! algebraic equations (DAEs) of the type \f$ \mathbf{E}(t)\mathbf{x}^{\prime} = \mathbf{A}(t)
   //! \mathbf{x} + \mathbf{f}(t) \f$, with invariants manifold \f$ \mathbf{h}(\mathbf{x}, t) = \mathbf{0} \f$.
-  template <Size N, Size M = 0>
+  template <Size N, Size M>
   class Linear : public Explicit<N, M>
   {
   public:
-    using Pointer = std::shared_ptr<Linear<N>>;   //!< Shared pointer to a linear ODE/DAE system.
+    using Pointer = std::shared_ptr<Linear<N, M>>;    //!< Shared pointer to a linear ODE/DAE system.
     using VectorN = typename Explicit<N, M>::VectorN; //!< Templetized vector type.
     using MatrixN = typename Explicit<N, M>::MatrixN; //!< Templetized matrix type.
-    using Tensor  = typename std::vector<MatrixN>; //!< Templetized matrix type.
-    using Type    = typename Explicit<N, M>::Type;   //!< System type enumeration.
+    using Tensor  = typename std::vector<MatrixN>;    //!< Templetized matrix type.
+    using Type    = typename Explicit<N, M>::Type;    //!< System type enumeration.
 
   private:
     Eigen::FullPivLU<MatrixN> m_lu; //!< LU decomposition.
 
   public:
-    //! Default class constructor for the linear ODE/DAE system.
+    //! Class constructor for the linear ODE/DAE system.
     //!
     Linear() : Explicit<N, M>(Type::LINEAR, "(missing name)") {}
 

@@ -13,7 +13,6 @@
 
 using namespace Sandals;
 
-// Explicit methods
 TEST(Tableau, Chebyshev51)    {Chebyshev51Tableau tbl;    EXPECT_TRUE(tbl.check(true));}
 TEST(Tableau, ExplicitEuler)  {ExplicitEulerTableau tbl;  EXPECT_TRUE(tbl.check(true));}
 TEST(Tableau, Fehlberg45)     {Fehlberg45Tableau tbl;     EXPECT_TRUE(tbl.check(true));}

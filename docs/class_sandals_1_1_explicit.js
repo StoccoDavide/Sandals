@@ -1,7 +1,7 @@
 var class_sandals_1_1_explicit =
 [
     [ "MatrixN", "class_sandals_1_1_explicit.html#a4fe3ecfbf2837ff6b0ca0425c30fdbdd", null ],
-    [ "Pointer", "class_sandals_1_1_explicit.html#a24ab32d929bfa36bf61b136120d5ebe5", null ],
+    [ "Pointer", "class_sandals_1_1_explicit.html#ac022e502620116d1e9ad5fb92d31f1cb", null ],
     [ "Type", "class_sandals_1_1_explicit.html#ace5ce370e63a642ee4c57c3e72ce0fee", null ],
     [ "VectorN", "class_sandals_1_1_explicit.html#ad27fbb707a3028a7c231f1eb6179270d", null ],
     [ "Explicit", "class_sandals_1_1_explicit.html#ac1356fe8a1eb5d4680af6ddc9e675d01", null ],

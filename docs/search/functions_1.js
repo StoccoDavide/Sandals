@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['broyden_0',['Broyden',['../class_sandals_1_1_broyden.html#af8cc4048861199086435613fd00fe434',1,'Sandals::Broyden']]]
+  ['b_0',['b',['../class_sandals_1_1_runge_kutta.html#abc96cd77b81dc4d6df5a0c2d1163a20d',1,'Sandals::RungeKutta']]],
+  ['b_5fembedded_1',['b_embedded',['../class_sandals_1_1_runge_kutta.html#a4243388c4b59ca70aaddeec11fe1d4c2',1,'Sandals::RungeKutta']]],
+  ['broyden_2',['Broyden',['../class_sandals_1_1_broyden.html#af8cc4048861199086435613fd00fe434',1,'Sandals::Broyden']]]
 ];

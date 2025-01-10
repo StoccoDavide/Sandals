@@ -32,8 +32,8 @@ namespace Sandals
   class NonlinearSolver
   {
   public:
-    using Vector   = Eigen::Vector<Real, N>;                       //!< Templetized vector type.
-    using Matrix   = Eigen::Matrix<Real, N, N>;                    //!< Templetized matrix type.
+    using Vector   = Eigen::Vector<Real, N>;                        //!< Templetized vector type.
+    using Matrix   = Eigen::Matrix<Real, N, N>;                     //!< Templetized matrix type.
     using Function = std::function<void(Vector const &, Vector &)>; //!< Nonlinear function type.
     using Jacobian = std::function<void(Vector const &, Matrix &)>; //!< Jacobian function type.
 
@@ -46,8 +46,8 @@ namespace Sandals
     Size     m_max_function_evaluations{100}; //!< Maximum number of allowed function evaluations.
     Size     m_max_jacobian_evaluations{100}; //!< Maximum number of allowed Jacobian evaluations.
     Size     m_max_relaxations{10};           //!< Maximum number of allowed algorithm relaxations.
-    bool     m_verbose{false};                //!< Verbose mode boolean flag
-    bool     m_converged{false};              //!< Convergence boolean flag
+    bool     m_verbose{false};                //!< Verbose mode boolean flag.
+    bool     m_converged{false};              //!< Convergence boolean flag.
     Real     m_residuals{0.0};                //!< Function residuals.
     Size     m_iterations{0};                 //!< Algorithm iterations number.
     Size     m_function_evaluations{0};       //!< Function evaluations number.

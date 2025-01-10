@@ -29,14 +29,14 @@ namespace Sandals {
   //! Class container for the system of explicit ordinary differential equations (ODEs) of the type
   //! \f$ \mathbf{x}^{\prime} = \mathbf{f}(\mathbf{x}, t) \f$, with invariants manifold \f$ \mathbf{h}
   //! (\mathbf{x}, t) = \mathbf{0} \f$.
-  template <Size N, Size M = 0>
+  template <Size N, Size M>
   class Explicit : public Implicit<N, M>
   {
   public:
-    using Pointer = std::shared_ptr<Explicit<N>>; //!< Shared pointer to an explicit ODE system.
+    using Pointer = std::shared_ptr<Explicit<N, M>>;  //!< Shared pointer to an explicit ODE system.
     using VectorN = typename Implicit<N, M>::VectorN; //!< Templetized vector type.
     using MatrixN = typename Implicit<N, M>::MatrixN; //!< Templetized matrix type.
-    using Type    = typename Implicit<N, M>::Type;   //!< System type enumeration.
+    using Type    = typename Implicit<N, M>::Type;    //!< System type enumeration.
 
   protected:
     //! Class constructor for an explicit ODE/DAE system.
@@ -45,7 +45,7 @@ namespace Sandals {
     Explicit(Type t_type, std::string t_name) : Implicit<N, M>(t_type, t_name) {}
 
   public:
-    //! Default class constructor for the explicit ODE system.
+    //! Class constructor for the explicit ODE system.
     //!
     Explicit() : Implicit<N, M>(Type::EXPLICIT, "(missing name)") {}
 

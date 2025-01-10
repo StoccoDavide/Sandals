@@ -1,21 +1,14 @@
 var searchData=
 [
-  ['m_5falpha_0',['m_alpha',['../class_sandals_1_1_nonlinear_solver.html#ad627c4c03517e3d478e0253362e47789',1,'Sandals::NonlinearSolver']]],
-  ['m_5fconverged_1',['m_converged',['../class_sandals_1_1_nonlinear_solver.html#a7d305af90bef717e8570ccb047be7eef',1,'Sandals::NonlinearSolver']]],
-  ['m_5ffunction_2',['m_function',['../class_sandals_1_1_nonlinear_solver.html#adad1ac60833498528ab7679978034686',1,'Sandals::NonlinearSolver']]],
-  ['m_5ffunction_5fevaluations_3',['m_function_evaluations',['../class_sandals_1_1_nonlinear_solver.html#a54001923b770883c3a00221c6133b455',1,'Sandals::NonlinearSolver']]],
-  ['m_5fiterations_4',['m_iterations',['../class_sandals_1_1_nonlinear_solver.html#ab5d50fb5f92a2808260cd8c863c4c851',1,'Sandals::NonlinearSolver']]],
-  ['m_5fjacobian_5',['m_jacobian',['../class_sandals_1_1_nonlinear_solver.html#ae3d1ffe6e404ffac07f2b64a0966e9ff',1,'Sandals::NonlinearSolver']]],
-  ['m_5fjacobian_5fevaluations_6',['m_jacobian_evaluations',['../class_sandals_1_1_nonlinear_solver.html#a8d620501804cae03dea1107e6821a1b4',1,'Sandals::NonlinearSolver']]],
-  ['m_5flu_7',['m_lu',['../class_sandals_1_1_newton.html#a3b4d35e5a6049873da7f18f042c024c2',1,'Sandals::Newton::m_lu'],['../class_sandals_1_1_linear.html#a119f4cb0dac600668110e5ddafd56750',1,'Sandals::Linear::m_lu'],['../class_sandals_1_1_semi_explicit.html#a07eb4368a0ea3b7302203e1170329775',1,'Sandals::SemiExplicit::m_lu']]],
-  ['m_5fmax_5ffunction_5fevaluations_8',['m_max_function_evaluations',['../class_sandals_1_1_nonlinear_solver.html#a97c77a81e30a7badddf3627856e8e8ed',1,'Sandals::NonlinearSolver']]],
-  ['m_5fmax_5fiterations_9',['m_max_iterations',['../class_sandals_1_1_nonlinear_solver.html#ace8b8215eaa90e55d5550210bc239c1f',1,'Sandals::NonlinearSolver']]],
-  ['m_5fmax_5fjacobian_5fevaluations_10',['m_max_jacobian_evaluations',['../class_sandals_1_1_nonlinear_solver.html#a0a071645728b0e427c3f40d156d5f849',1,'Sandals::NonlinearSolver']]],
-  ['m_5fmax_5frelaxations_11',['m_max_relaxations',['../class_sandals_1_1_nonlinear_solver.html#a3b0d0edff5e71e7e66d7fd702b9e24fa',1,'Sandals::NonlinearSolver']]],
-  ['m_5fname_12',['m_name',['../class_sandals_1_1_implicit.html#a07c1286395309f54b51d1443dd3eace9',1,'Sandals::Implicit']]],
-  ['m_5frelaxations_13',['m_relaxations',['../class_sandals_1_1_nonlinear_solver.html#a5435f7c99a70faee5403f79e6d55a709',1,'Sandals::NonlinearSolver']]],
-  ['m_5fresiduals_14',['m_residuals',['../class_sandals_1_1_nonlinear_solver.html#a73cd7ad2e87cc5e9efeb75fd36d5dc23',1,'Sandals::NonlinearSolver']]],
-  ['m_5ftolerance_15',['m_tolerance',['../class_sandals_1_1_nonlinear_solver.html#a6658289c34784ff2c34667b544fe8405',1,'Sandals::NonlinearSolver']]],
-  ['m_5ftype_16',['m_type',['../class_sandals_1_1_broyden.html#abd8cc41e7551279dd8ab928ca4e84449',1,'Sandals::Broyden::m_type'],['../class_sandals_1_1_implicit.html#ac6a7e07f13fb922a154b09d29dbc47d6',1,'Sandals::Implicit::m_type']]],
-  ['m_5fverbose_17',['m_verbose',['../class_sandals_1_1_nonlinear_solver.html#a993e753d028d756fcd9b97eff2f65dcf',1,'Sandals::NonlinearSolver']]]
+  ['identity_5fmat1_0',['IDENTITY_MAT1',['../namespace_sandals.html#a8584b005139eaedc8338590351dc694c',1,'Sandals']]],
+  ['identity_5fmat2_1',['IDENTITY_MAT2',['../namespace_sandals.html#a098951047e8a8a9aab69e76677a1f4fb',1,'Sandals']]],
+  ['identity_5fmat3_2',['IDENTITY_MAT3',['../namespace_sandals.html#a39d4c45516cb7d9b6ae0f900922da96d',1,'Sandals']]],
+  ['identity_5fmat4_3',['IDENTITY_MAT4',['../namespace_sandals.html#a50dc233f4eb0722700d37c2dd76ce151',1,'Sandals']]],
+  ['identity_5fmat5_4',['IDENTITY_MAT5',['../namespace_sandals.html#a72f28fc8a15edf29b44074c9d7904c6a',1,'Sandals']]],
+  ['identity_5fmat6_5',['IDENTITY_MAT6',['../namespace_sandals.html#a29580f2113c3f33c3ae5533fc73eb3ac',1,'Sandals']]],
+  ['identity_5fmat7_6',['IDENTITY_MAT7',['../namespace_sandals.html#a53406e0707df015a7d998ee45e7ced20',1,'Sandals']]],
+  ['identity_5fmat8_7',['IDENTITY_MAT8',['../namespace_sandals.html#a048514c9294e51bfca6babb48f6b9269',1,'Sandals']]],
+  ['identity_5fmat9_8',['IDENTITY_MAT9',['../namespace_sandals.html#afe6c0ace5d9e22d4e04dd47bd303a68e',1,'Sandals']]],
+  ['infty_9',['INFTY',['../namespace_sandals.html#a785d6207d4d62745dedb33197e09cd6b',1,'Sandals']]],
+  ['is_5fembedded_10',['is_embedded',['../struct_sandals_1_1_tableau.html#a08434f6abf25945e74187861744fde4d',1,'Sandals::Tableau']]]
 ];

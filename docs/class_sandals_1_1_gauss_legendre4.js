@@ -1,6 +1,6 @@
 var class_sandals_1_1_gauss_legendre4 =
 [
-    [ "System", "class_sandals_1_1_gauss_legendre4.html#a5130ad1ce81bc66943224a4e21d17850", null ],
-    [ "GaussLegendre4", "class_sandals_1_1_gauss_legendre4.html#a4fb0415f9fc36cd4906633786a80ce64", null ],
-    [ "GaussLegendre4", "class_sandals_1_1_gauss_legendre4.html#a06f4cf5b591ec1c2f0d25382a1950c8e", null ]
+    [ "System", "class_sandals_1_1_gauss_legendre4.html#a1c2980f8440640c43b5f1019cf89bb93", null ],
+    [ "GaussLegendre4", "class_sandals_1_1_gauss_legendre4.html#a71c986cacd78b311878d924a02d160f3", null ],
+    [ "GaussLegendre4", "class_sandals_1_1_gauss_legendre4.html#a63de46200dc9c037edd615fe65e2dcd4", null ]
 ];
