@@ -1,7 +1,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\
  * Copyright (c) 2025, Davide Stocco and Enrico Bertolazzi.                  *
  *                                                                           *
- * The Sandals project is distributed under the GNU GPLv3.                   *
+ * The Sandals project is distributed under the BSD 2-Clause License.        *
  *                                                                           *
  * Davide Stocco                                           Enrico Bertolazzi *
  * University of Trento                                 University of Trento *
@@ -54,7 +54,6 @@ namespace Sandals
     using System = typename Implicit<N, M>::Pointer; //!< System type.
 
     //! Class constructor for a Ralston's order 2 solver given a Tableau reference.
-    //!
     Ralston2() : RungeKutta<2, N, M>(Ralston2Tableau()) {}
 
     //! Class constructor for a Ralston's order 2 solver given a Tableau reference.

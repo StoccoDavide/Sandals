@@ -1,7 +1,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\
  * Copyright (c) 2025, Davide Stocco and Enrico Bertolazzi.                  *
  *                                                                           *
- * The Sandals project is distributed under the GNU GPLv3.                   *
+ * The Sandals project is distributed under the BSD 2-Clause License.        *
  *                                                                           *
  * Davide Stocco                                           Enrico Bertolazzi *
  * University of Trento                                 University of Trento *
@@ -34,7 +34,7 @@ namespace Sandals
   class Implicit
   {
   public:
-    using Type = enum class Type : Size {IMPLICIT=0, EXPLICIT=1, SEMI_EXPLICIT=2, LINEAR=3}; //!< System type enumeration.
+    using Type = enum class Type : Size {IMPLICIT=0, EXPLICIT=1}; //!< System type enumeration.
     using Pointer = std::shared_ptr<Implicit<N, M>>; //!< Shared pointer to an implicit ODE system.
     using VectorN = Eigen::Vector<Real, N>;          //!< Templetized vector type.
     using MatrixN = Eigen::Matrix<Real, N, N>;       //!< Templetized matrix type.
@@ -53,7 +53,6 @@ namespace Sandals
 
   public:
     //! Class constructor for an implicit ODE/DAE system.
-    //!
     Implicit() : m_type(Type::IMPLICIT), m_name("(missing name)") {}
 
     //! Class constructor for an implicit ODE/DAE system.
@@ -61,7 +60,6 @@ namespace Sandals
     Implicit(std::string t_name) : m_type(Type::IMPLICIT), m_name(t_name) {}
 
     //! Class destructor for an implicit ODE/DAE system.
-    //!
     virtual ~Implicit() {}
 
     //! Get the enumeration type of the ODE/DAE system.
@@ -75,10 +73,6 @@ namespace Sandals
     //! Check if the ODE/DAE system is explicit.
     //! \return True if the ODE/DAE system is explicit, false otherwise.
     bool is_explicit() const {return this->m_type == Type::EXPLICIT;}
-
-    //! Check if the ODE/DAE system is semi-explicit.
-    //! \return True if the ODE/DAE system is semi-explicit, false otherwise.
-    bool is_semiexplicit() const {return this->m_type == Type::SEMI_EXPLICIT;}
 
     //! Get the ODE/DAE system name reference.
     //! \return The ODE/DAE system name reference.
@@ -106,8 +100,10 @@ namespace Sandals
     //! Evaluate the Jacobian of the ODE/DAE system function \f$ \mathbf{F}(\mathbf{x},
     //! \mathbf{x}^{\prime}, t) \f$ with respect to the states \f$ \mathbf{x} \f$
     //!
-    //! \f[ \mathbf{JF}_{\mathbf{x}}(\mathbf{x}, \mathbf{x}^{\prime}, t) = \displaystyle\frac{
-    //! \partial\mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, t)}{\partial\mathbf{x}} \text{.} \f]
+    //! \f[
+    //! \mathbf{JF}_{\mathbf{x}}(\mathbf{x}, \mathbf{x}^{\prime}, t) = \displaystyle\frac{
+    //! \partial\mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, t)}{\partial\mathbf{x}} \text{.}
+    //! \f]
     //!
     //! \param[in] x States \f$ \mathbf{x} \f$.
     //! \param[in] x_dot States derivative \f$ \mathbf{x}^{\prime} \f$.
@@ -118,9 +114,11 @@ namespace Sandals
     //! Evaluate the Jacobian of the ODE/DAE system function \f$ \mathbf{F}(\mathbf{x},
     //! \mathbf{x}^{\prime}, t) \f$ with respect to the states derivative \f$ \mathbf{x}^{\prime} \f$
     //!
-    //! \f[ \mathbf{JF}_{\mathbf{x}^{\prime}}(\mathbf{x}, \mathbf{x}^{\prime}, t) = \displaystyle
+    //! \f[
+    //! \mathbf{JF}_{\mathbf{x}^{\prime}}(\mathbf{x}, \mathbf{x}^{\prime}, t) = \displaystyle
     //! \frac{\partial\mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, t)}{\partial\mathbf{x}^{\prime}}
-    //! \text{.} \f]
+    //! \text{.}
+    //! \f]
     //!
     //! \param[in] x States \f$ \mathbf{x} \f$.
     //! \param[in] x_dot States derivative \f$ \mathbf{x}^{\prime} \f$.
@@ -137,8 +135,10 @@ namespace Sandals
     //! Evaluate the Jacobian of the ODE/DAE system invariants \f$ \mathbf{h}(\mathbf{x}, t) \f$
     //! with respect to the states \f$ \mathbf{x} \f$
     //!
-    //! \f[ \mathbf{Jh}_{\mathbf{x}}(\mathbf{x} t) = \displaystyle\frac{\partial\mathbf{h}(\mathbf{x},
-    //! t)}{\partial\mathbf{x}} \text{.} \f]
+    //! \f[
+    //! \mathbf{Jh}_{\mathbf{x}}(\mathbf{x} t) = \displaystyle\frac{\partial\mathbf{h}(\mathbf{x},
+    //! t)}{\partial\mathbf{x}} \text{.}
+    //! \f]
     //!
     //! \param[in] x States \f$ \mathbf{x} \f$.
     //! \param[in] t Independent variable (or time) \f$ t \f$.

@@ -1,7 +1,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\
  * Copyright (c) 2025, Davide Stocco and Enrico Bertolazzi.                  *
  *                                                                           *
- * The Sandals project is distributed under the GNU GPLv3.                   *
+ * The Sandals project is distributed under the BSD 2-Clause License.        *
  *                                                                           *
  * Davide Stocco                                           Enrico Bertolazzi *
  * University of Trento                                 University of Trento *
@@ -35,7 +35,6 @@ namespace Sandals
     using Tableau<2>::Matrix;
 
     //! Class constructor for the Lobatto IIIA order 2 method.
-    //!
     LobattoIIIA2Tableau() {
       this->name  = "LobattoIIIA2";
       this->type  = Type::DIRK;
@@ -48,7 +47,6 @@ namespace Sandals
   }; // class LobattoIIIA2Tableau
 
   //! Class container for the Lobatto IIIA order 2 method.
-  //!
   template <Size N, Size M = 0>
   class LobattoIIIA2 : public RungeKutta<2, N, M>
   {
@@ -56,7 +54,6 @@ namespace Sandals
     using System = typename Implicit<N, M>::Pointer; //!< System type.
 
     //! Class constructor for a Lobatto IIIA order 2 solver given a Tableau reference.
-    //!
     LobattoIIIA2() : RungeKutta<2, N, M>(LobattoIIIA2Tableau()) {}
 
     //! Class constructor for a Lobatto IIIA order 2 solver given a Tableau reference.

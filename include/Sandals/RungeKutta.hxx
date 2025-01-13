@@ -1,7 +1,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\
  * Copyright (c) 2025, Davide Stocco and Enrico Bertolazzi.                  *
  *                                                                           *
- * The Sandals project is distributed under the GNU GPLv3.                   *
+ * The Sandals project is distributed under the BSD 2-Clause License.        *
  *                                                                           *
  * Davide Stocco                                           Enrico Bertolazzi *
  * University of Trento                                 University of Trento *
@@ -227,19 +227,15 @@ namespace Sandals {
     void max_substeps(Size t_max_substeps) {this->m_max_substeps = t_max_substeps;}
 
     //! Enable verbose mode.
-    //!
     void enable_verbose_mode() {this->m_verbose = true;}
 
     //! Disable verbose mode.
-    //!
     void disable_verbose_mode() {this->m_verbose = false;}
 
     //! Enable adaptive step mode.
-    //!
     void enable_adaptive_step() {this->m_adaptive_step = true;}
 
     //! Disable adaptive step mode.
-    //!
     void disable_adaptive_step() {this->m_adaptive_step = false;}
 
     //! Get the projection tolerance.
@@ -261,11 +257,9 @@ namespace Sandals {
       {this->m_max_projection_iterationsations = t_max_projection_iterations;}
 
     //! Enable projection mode.
-    //!
     void enable_projection() {this->m_projection = true;}
 
     //! Disable projection mode.
-    //!
     void disable_projection() {this->m_projection = false;}
 
     //! Compute step for the next advancing step according to the error control method. The
@@ -801,7 +795,7 @@ namespace Sandals {
       #define CMD "Sandals::RungeKutta::advance(...): "
 
       // Check step size
-      SANDALS_ASSERT(h_old > Real(0.0), CMD "in " << this->m_tableau.name << "solver, d_t = "<<
+      SANDALS_ASSERT(h_old > Real(0.0), CMD "in " << this->m_tableau.name << " solver, h = "<<
         h_old << ", expected > 0.");
 
       // If the integration step failed, try again with substepping
@@ -822,7 +816,7 @@ namespace Sandals {
 
             // If substepping is enabled, double the step size
             if (k > 0 && k < max_k) {
-              k = k - 1;
+              k -= 1;
               // If the substepping index is even, double the step size
               if (k % 2 == 0) {
                 h_tmp = Real(2.0) * h_tmp;
@@ -840,7 +834,7 @@ namespace Sandals {
           } else {
 
             // If the substepping index is too high, abort the integration
-            k = k + 2;
+            k += 2;
             SANDALS_ASSERT(k < max_k, CMD "in " << this->m_tableau.name << " solver, at t = " <<
               t_tmp << ", integration failed with d_t = " << h_tmp << ", aborting.");
             return false;
@@ -850,12 +844,12 @@ namespace Sandals {
               SANDALS_WARNING(CMD "in " << this->m_tableau.name << " solver, at t = " <<
                 t_tmp << ", integration failed, adding substepping layer.");
             }
-            h_tmp = h_tmp / Real(2.0);
+            h_tmp /= Real(2.0);
             continue;
           }
 
           // Store independent variable (or time)
-          t_tmp = t_tmp + h_tmp;
+          t_tmp += h_tmp;
         }
 
         // Store output states substepping solutions
@@ -909,7 +903,7 @@ namespace Sandals {
         if (!this->advance(sol.x.col(step), t_step, h_step, x_step, h_new_step)) {return false;}
 
         // Update the current step
-        t_step = t_step + h_step;
+        t_step += h_step;
 
         // Saturate the suggested timestep
         mesh_point_bool = std::abs(t_step - t_mesh(step+1)) < SQRT_EPSILON;
@@ -1022,6 +1016,8 @@ namespace Sandals {
         MatrixM Jh_x;
         VectorP b, x_step;
         MatrixP A;
+        A.setZero();
+        A.template block<N, N>(0, 0) = MatrixN::Identity();
         for (Size k{0}; k < this->m_max_projection_iterations; ++k) {
 
           // Standard projection method
@@ -1031,15 +1027,17 @@ namespace Sandals {
           // \ Jh_x    0 / \ lambda /   \    -h     /
 
           // Evaluate the invariants vector and its Jacobian
-          h    = this->m_system->h(x, t);
-          Jh_x = this->m_system->Jh_x(x, t);
+          h    = this->m_system->h(x_projected, t);
+          Jh_x = this->m_system->Jh_x(x_projected, t);
 
           // Check if the solution is found
           if (h.norm() < this->m_projection_tolerance) {return true;}
 
           // Build the linear system
-          A << MatrixN::Identity(), Jh_x.transpose(), Jh_x, MatrixM::Zero();
-          b << x - x_projected, -h;
+          A.template block<N, M>(0, N) = Jh_x.transpose();
+          A.template block<M, N>(N, 0) = Jh_x;
+          b.template head<N>() = x - x_projected;
+          b.template tail<M>() = -h;
 
           // Compute the solution of the linear system
           this->m_lu.compute(A);
@@ -1052,7 +1050,8 @@ namespace Sandals {
           // Update the solution
           x_projected.noalias() += x_step(Eigen::seqN(0, N));
         }
-        SANDALS_WARNING(CMD "maximum number of iterations reached.");
+        SANDALS_WARNING(CMD "maximum number of iterations reached with residual ||h||_inf = " <<
+          h.norm() << ".");
         return false;
       } else {
         return true;
@@ -1086,6 +1085,8 @@ namespace Sandals {
         MatrixM Jh_x;
         VectorX b(X+H), x_step(X+H);
         MatrixX A(X+H, X+H);
+        A.setZero();
+        A.block(0, 0, X, X) = MatrixX::Identity(X+H, X+H);
         Eigen::FullPivLU<MatrixX> lu;
         for (Size k{0}; k < this->m_max_projection_iterations; ++k) {
 
@@ -1096,8 +1097,8 @@ namespace Sandals {
           // \ Jh_x    0 / \ lambda /   \    -h     /
 
           // Evaluate the invariants vector and its Jacobian
-          h    = this->m_system->h(x, t);
-          Jh_x = this->m_system->Jh_x(x, t);
+          h    = this->m_system->h(x_projected, t);
+          Jh_x = this->m_system->Jh_x(x_projected, t);
 
           // Select only the projected invariants
           h    = h(projected_invariants);
@@ -1107,8 +1108,10 @@ namespace Sandals {
           if (h.norm() < this->m_projection_tolerance) {return true;}
 
           // Build the linear system
-          A << MatrixX::Identity(X+H, X+H), Jh_x.trasposed(), Jh_x, MatrixX::Zero(X+H, X+H);
-          b << x(projected_equations) - x_projected(projected_equations), -h;
+          A.block(0, X, X, H) = Jh_x.transpose();
+          A.block(X, 0, H, X) = Jh_x;
+          b.head(X) = x(projected_equations) - x_projected(projected_equations);
+          b.tail(H) = -h;
 
           // Compute the solution of the linear system
           lu.compute(A);
@@ -1128,6 +1131,50 @@ namespace Sandals {
       }
 
       #undef CMD
+    }
+
+    //! Estimate the order of the Runge-Kutta method.
+    //! \param[in] t_mesh The vector of time meshes with same initial and final time with *fixed* step.
+    //! \param[in] ics Initial conditions \f$ \mathbf{x}(t = 0) \f$.
+    //! \param[in] sol The *analytical* solution of the system over the mesh of independent variable.
+    //! \return The estimated order of the method.
+    Real estimate_order(std::vector<VectorX> const &t_mesh, VectorN const &ics, std::vector<MatrixX> &sol) {
+
+      #define CMD "Sandals::RungeKutta::estimate_order(...): "
+
+      SANDALS_ASSERT(t_mesh.size() > 1, CMD "expected at least two time meshes.");
+      SANDALS_ASSERT(sol.size() == t_mesh.size(), CMD "expected the same number of analytical solutions.");
+
+      for (Size i{0}; i < static_cast<Size>(t_mesh.size()); ++i) {
+
+        // Check if the time mesh has the same initial and final time
+        SANDALS_ASSERT((t_mesh[0].template head<1>() - t_mesh[i].template head<1>()).norm() < SQRT_EPSILON,
+          CMD "expected the same initial time.");
+        SANDALS_ASSERT((t_mesh[0].template tail<1>() - t_mesh[i].template tail<1>()).norm() < SQRT_EPSILON,
+          CMD "expected the same final time.");
+
+        // Check if the mesh step is fixed all over the time mesh
+        for (Size j{1}; j < static_cast<Size>(t_mesh[i].size()); ++j) {
+          SANDALS_ASSERT((t_mesh[i](j) - t_mesh[i](j-1)) - (t_mesh[i](1) - t_mesh[i](0)) < SQRT_EPSILON,
+            CMD "expected a fixed step.");
+        }
+      }
+
+      // Solve the system for each time scale
+      Solution sol_num;
+      VectorX h_vec(t_mesh.size()), e_vec(t_mesh.size());
+      for (Size i{0}; i < static_cast<Size>(t_mesh.size()); ++i) {
+        SANDALS_ASSERT(this->solve(t_mesh[i], ics, sol_num), CMD "failed to solve the system for " <<
+          "the" << i << "-th time mesh.");
+        h_vec(i) = std::abs(t_mesh[i](1) - t_mesh[i](0));
+        e_vec(i) = (sol[i].row(0) - sol_num.x.row(0)).array().abs().maxCoeff();
+      }
+
+      // Compute the order of the method thorugh least squares
+      VectorX A(h_vec.array().log());
+      VectorX b(e_vec.array().log());
+      VectorX x((A.transpose() * A).ldlt().solve(A.transpose() * b));
+      return x(0);
     }
 
   }; // class RungeKutta

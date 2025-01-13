@@ -1,7 +1,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\
  * Copyright (c) 2025, Davide Stocco and Enrico Bertolazzi.                  *
  *                                                                           *
- * The Sandals project is distributed under the GNU GPLv3.                   *
+ * The Sandals project is distributed under the BSD 2-Clause License.        *
  *                                                                           *
  * Davide Stocco                                           Enrico Bertolazzi *
  * University of Trento                                 University of Trento *
@@ -58,7 +58,6 @@ namespace Sandals
     using System = typename Implicit<N, M>::Pointer; //!< System type.
 
     //! Class constructor for a Runge-Kutta order 4 solver given a Tableau reference.
-    //!
     RK4() : RungeKutta<4, N, M>(RK4Tableau()) {}
 
     //! Class constructor for a Runge-Kutta order 4 solver given a Tableau reference.

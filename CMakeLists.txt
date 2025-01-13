@@ -1,7 +1,7 @@
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Copyright (c) 2025, Davide Stocco and Enrico Bertolazzi.                    #
 #                                                                             #
-# The Sandals project is distributed under the GNU GPLv3.                     #
+# The Sandals project is distributed under the BSD 2-Clause License.          #
 #                                                                             #
 # Davide Stocco                                             Enrico Bertolazzi #
 # University of Trento                                   University of Trento #
@@ -12,7 +12,7 @@ cmake_minimum_required(VERSION 3.10)
 
 project(sandals
   VERSION 0.0.0
-  DESCRIPTION "A header-only library to harness the power of BSplines"
+  DESCRIPTION "A header-only library for numerical integration of ODEs/DAEs"
   HOMEPAGE_URL "https://github.com/StoccoDavide/Sandals"
 )
 

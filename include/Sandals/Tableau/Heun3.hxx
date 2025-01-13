@@ -1,7 +1,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\
  * Copyright (c) 2025, Davide Stocco and Enrico Bertolazzi.                  *
  *                                                                           *
- * The Sandals project is distributed under the GNU GPLv3.                   *
+ * The Sandals project is distributed under the BSD 2-Clause License.        *
  *                                                                           *
  * Davide Stocco                                           Enrico Bertolazzi *
  * University of Trento                                 University of Trento *
@@ -56,7 +56,6 @@ namespace Sandals
     using System = typename Implicit<N, M>::Pointer; //!< System type.
 
     //! Class constructor for a Heun's order 3 solver given a Tableau reference.
-    //!
     Heun3() : RungeKutta<3, N, M>(Heun3Tableau()) {}
 
     //! Class constructor for a Heun's order 3 solver given a Tableau reference.

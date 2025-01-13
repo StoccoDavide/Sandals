@@ -1,7 +1,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\
  * Copyright (c) 2025, Davide Stocco and Enrico Bertolazzi.                  *
  *                                                                           *
- * The Sandals project is distributed under the GNU GPLv3.                   *
+ * The Sandals project is distributed under the BSD 2-Clause License.        *
  *                                                                           *
  * Davide Stocco                                           Enrico Bertolazzi *
  * University of Trento                                 University of Trento *
@@ -34,7 +34,6 @@ namespace Sandals
     using Tableau<1>::Matrix;
 
     //! Class constructor for the Explicit Euler method.
-    //!
     ExplicitEulerTableau() {
       this->name  = "ExplicitEuler";
       this->type  = Type::ERK;
@@ -46,7 +45,6 @@ namespace Sandals
   }; // class ExplicitEulerTableau
 
   //! Class container for the Explicit Euler method.
-  //!
   template <Size N, Size M = 0>
   class ExplicitEuler : public RungeKutta<1, N, M>
   {
@@ -54,7 +52,6 @@ namespace Sandals
     using System = typename Implicit<N, M>::Pointer; //!< System type.
 
     //! Class constructor for a Explicit Euler solver given a Tableau reference.
-    //!
     ExplicitEuler() : RungeKutta<1, N, M>(ExplicitEulerTableau()) {}
 
     //! Class constructor for a Explicit Euler solver given a Tableau reference.

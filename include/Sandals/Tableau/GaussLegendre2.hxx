@@ -1,7 +1,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\
  * Copyright (c) 2025, Davide Stocco and Enrico Bertolazzi.                  *
  *                                                                           *
- * The Sandals project is distributed under the GNU GPLv3.                   *
+ * The Sandals project is distributed under the BSD 2-Clause License.        *
  *                                                                           *
  * Davide Stocco                                           Enrico Bertolazzi *
  * University of Trento                                 University of Trento *
@@ -50,7 +50,6 @@ namespace Sandals
   }; // class GaussLegendre2Tableau
 
   //! Class container for the Gauss-Legendre order 2 method.
-  //!
   template <Size N, Size M = 0>
   class GaussLegendre2 : public RungeKutta<1, N, M>
   {
@@ -58,7 +57,6 @@ namespace Sandals
     using System = typename Implicit<N, M>::Pointer; //!< System type.
 
     //! Class constructor for a Gauss-Legendre order 2 solver given a Tableau reference.
-    //!
     GaussLegendre2() : RungeKutta<1, N, M>(GaussLegendre2Tableau()) {}
 
     //! Class constructor for a Gauss-Legendre order 2 solver given a Tableau reference.

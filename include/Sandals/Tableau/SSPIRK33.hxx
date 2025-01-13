@@ -1,7 +1,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\
  * Copyright (c) 2025, Davide Stocco and Enrico Bertolazzi.                  *
  *                                                                           *
- * The Sandals project is distributed under the GNU GPLv3.                   *
+ * The Sandals project is distributed under the BSD 2-Clause License.        *
  *                                                                           *
  * Davide Stocco                                           Enrico Bertolazzi *
  * University of Trento                                 University of Trento *
@@ -55,8 +55,7 @@ namespace Sandals
     }
   }; // class SSPIRK33Tableau
 
-  //! Class container for the 3-stage diagonally-implicit strong-stability preserving Runge-Kutta
-  //! order 3 method.
+  //! Class container for the 3-stage diagonally-implicit strong-stability preserving Runge-Kutta order 3 method.
   template <Size N, Size M = 0>
   class SSPIRK33 : public RungeKutta<3, N, M>
   {

@@ -1,7 +1,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\
  * Copyright (c) 2025, Davide Stocco and Enrico Bertolazzi.                  *
  *                                                                           *
- * The Sandals project is distributed under the GNU GPLv3.                   *
+ * The Sandals project is distributed under the BSD 2-Clause License.        *
  *                                                                           *
  * Davide Stocco                                           Enrico Bertolazzi *
  * University of Trento                                 University of Trento *
@@ -46,7 +46,6 @@ namespace Sandals {
 
   public:
     //! Class constructor for the explicit ODE system.
-    //!
     Explicit() : Implicit<N, M>(Type::EXPLICIT, "(missing name)") {}
 
     //! Class constructor for the explicit ODE system.
@@ -55,7 +54,9 @@ namespace Sandals {
 
     //! Evaluate the ODE system \f$ \mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, t) \f$.
     //!
-    //! \f[ \mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, t) = \mathbf{x}^{\prime} - \mathbf{f}(\mathbf{x}, t) \f]
+    //! \f[
+    //! \mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, t) = \mathbf{x}^{\prime} - \mathbf{f}(\mathbf{x}, t)
+    //! \f]
     //!
     //! \param[in] x States \f$ \mathbf{x} \f$.
     //! \param[in] x_dot States derivative \f$ \mathbf{x}^{\prime} \f$.
@@ -69,10 +70,12 @@ namespace Sandals {
     //! Evaluate the Jacobian of the ODE system function \f$ \mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime},
     //! t) \f$ with respect to the states \f$ \mathbf{x} \f$
     //!
-    //! \f[ \mathbf{JF}_{\mathbf{x}}(\mathbf{x}, \mathbf{x}^{\prime}, t) =
+    //! \f[
+    //! \mathbf{JF}_{\mathbf{x}}(\mathbf{x}, \mathbf{x}^{\prime}, t) =
     //! \displaystyle\frac{\partial\mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, t)}{\partial\mathbf{x}} =
     //! -\displaystyle\frac{\partial\mathbf{f}(\mathbf{x}, \mathbf{x}^{\prime}, t)}{\partial\mathbf{x}} =
-    //! -\mathbf{Jf}_{\mathbf{x}}(\mathbf{x}, t) \text{.} \f]
+    //! -\mathbf{Jf}_{\mathbf{x}}(\mathbf{x}, t) \text{.}
+    //! \f]
     //!
     //! \param[in] x States \f$ \mathbf{x} \f$.
     //! \param[in] x_dot States derivative \f$ \mathbf{x}^{\prime} \f$.
@@ -86,9 +89,11 @@ namespace Sandals {
     //! Evaluate the Jacobian of the ODE system function \f$ \mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, t)
     //! \f$ with respect to the states derivative \f$ \mathbf{x}^{\prime} \f$
     //!
-    //! \f[ \mathbf{JF}_{\mathbf{x}^{\prime}}(\mathbf{x}, \mathbf{x}^{\prime}, t) = \displaystyle
+    //! \f[
+    //! \mathbf{JF}_{\mathbf{x}^{\prime}}(\mathbf{x}, \mathbf{x}^{\prime}, t) = \displaystyle
     //! \frac{\partial\mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, t)}{\partial\mathbf{x}^{\prime}} =
-    //! \mathbf{I} \text{.} \f]
+    //! \mathbf{I} \text{.}
+    //! \f]
     //!
     //! \param[in] x States \f$ \mathbf{x} \f$.
     //! \param[in] x_dot States derivative \f$ \mathbf{x}^{\prime} \f$.
@@ -108,8 +113,10 @@ namespace Sandals {
     //! Evaluate the Jacobian of the explicit ODE system function \f$ \mathbf{f}(\mathbf{x}, t) \f$
     //! with respect to the states \f$ \mathbf{x} \f$
     //!
-    //! \f[ \mathbf{Jf}_{\mathbf{x}}(\mathbf{x}, t) =
-    //! \displaystyle\frac{\partial\mathbf{f}(\mathbf{x}, t)}{\partial\mathbf{x}} \text{.} \f]
+    //! \f[
+    //! \mathbf{Jf}_{\mathbf{x}}(\mathbf{x}, t) =
+    //! \displaystyle\frac{\partial\mathbf{f}(\mathbf{x}, t)}{\partial\mathbf{x}} \text{.}
+    //! \f]
     //!
     //! \param[in] x States \f$ \mathbf{x} \f$.
     //! \param[in] t Independent variable (or time) \f$ t \f$.

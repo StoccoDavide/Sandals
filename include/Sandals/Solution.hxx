@@ -1,7 +1,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\
  * Copyright (c) 2025, Davide Stocco and Enrico Bertolazzi.                  *
  *                                                                           *
- * The Sandals project is distributed under the GNU GPLv3.                   *
+ * The Sandals project is distributed under the BSD 2-Clause License.        *
  *                                                                           *
  * Davide Stocco                                           Enrico Bertolazzi *
  * University of Trento                                 University of Trento *
@@ -60,7 +60,6 @@ namespace Sandals {
     MatrixM h; //!< Invariants solution matrix \f$ \mathbf{H} \f$.
 
     //! Class constructor for the Solution class.
-    //!
     Solution() : t(0), x(Vector::Zero(N, 0)), h(Vector::Zero(M, 0)) {}
 
     //! Class constructor for the Solution class given the independent variable (or time) and states sizes.
@@ -85,7 +84,6 @@ namespace Sandals {
     }
 
     //! Clear the independent variable (or time) vector and states matrix.
-    //!
     void clear()
     {
       this->t.resize(0);

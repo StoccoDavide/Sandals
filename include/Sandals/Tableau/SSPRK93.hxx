@@ -1,7 +1,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\
  * Copyright (c) 2025, Davide Stocco and Enrico Bertolazzi.                  *
  *                                                                           *
- * The Sandals project is distributed under the GNU GPLv3.                   *
+ * The Sandals project is distributed under the BSD 2-Clause License.        *
  *                                                                           *
  * Davide Stocco                                           Enrico Bertolazzi *
  * University of Trento                                 University of Trento *
@@ -42,7 +42,6 @@ namespace Sandals
     using Tableau<9>::Matrix;
 
     //! Class constructor for the 9-stage strong-stability preserving Runge-Kutta order 3 method.
-    //!
     SSPRK93Tableau() {
       this->name  = "SSPRK93";
       this->type  = Type::ERK;

@@ -1,7 +1,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\
  * Copyright (c) 2025, Davide Stocco and Enrico Bertolazzi.                  *
  *                                                                           *
- * The Sandals project is distributed under the GNU GPLv3.                   *
+ * The Sandals project is distributed under the BSD 2-Clause License.        *
  *                                                                           *
  * Davide Stocco                                           Enrico Bertolazzi *
  * University of Trento                                 University of Trento *
@@ -60,6 +60,7 @@
 
 namespace Sandals
 {
+
 
   /*\
    |      _    _ _
@@ -192,6 +193,21 @@ namespace Sandals
   static Matrix9 const ONES_MAT9     = Matrix9::Ones();              //!< Ones \f$ 9 \times 9 \f$ matrix static constant object.
   static Matrix9 const IDENTITY_MAT9 = Matrix9::Identity();          //!< Identity \f$ 9 \times 9 \f$ matrix static constant object.
 
+  //! Print Sandals library information.
+  //! \param[in] os Output stream.
+  void Info(std::ostream &os) {
+    os
+      << "* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *" << std::endl
+      << "* Copyright (c) 2025, Davide Stocco and Enrico Bertolazzi.                  *" << std::endl
+      << "*                                                                           *" << std::endl
+      << "* The Sandals project is distributed under the BSD 2-Clause License.        *" << std::endl
+      << "*                                                                           *" << std::endl
+      << "* Davide Stocco                                           Enrico Bertolazzi *" << std::endl
+      << "* University of Trento                                 University of Trento *" << std::endl
+      << "* e-mail: davide.stocco@unitn.it         e-mail: enrico.bertolazzi@unitn.it *" << std::endl
+      << "* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *" << std::endl;
+  }
+
 } // namespace Sandals
 
 // Finite difference derivative
@@ -205,8 +221,6 @@ namespace Sandals
 // ODE/DAE system of equations
 #include "Sandals/System/Implicit.hxx"
 #include "Sandals/System/Explicit.hxx"
-#include "Sandals/System/Linear.hxx"
-#include "Sandals/System/SemiExplicit.hxx"
 
 // Runge-Kutta integrator
 #include "Sandals/Tableau.hxx"

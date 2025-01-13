@@ -1,7 +1,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\
  * Copyright (c) 2025, Davide Stocco and Enrico Bertolazzi.                  *
  *                                                                           *
- * The Sandals project is distributed under the GNU GPLv3.                   *
+ * The Sandals project is distributed under the BSD 2-Clause License.        *
  *                                                                           *
  * Davide Stocco                                           Enrico Bertolazzi *
  * University of Trento                                 University of Trento *
@@ -45,7 +45,6 @@ namespace Sandals
 
   public:
     //! Class constructor for the Broyden solver.
-    //!
     Broyden() {}
 
     //! Get the Broyden solver name.
@@ -61,15 +60,12 @@ namespace Sandals
     void type(Type t_type) {this->m_type = t_type;}
 
     //! Enable the \em good Broyden solver.
-    //!
     void enable_good_mode() {this->m_type = Type::GOOD;}
 
     //! Enable the \em bad Broyden solver.
-    //!
     void enable_bad_mode() {this->m_type = Type::BAD;}
 
     //! Enable the \em combined Broyden solver.
-    //!
     void enable_combined_mode() {this->m_type = Type::COMBINED;}
 
     //! Solve nonlinear system of equations \f$ \mathbf{F}(\mathbf{x}) = \mathbf{0} \f$.

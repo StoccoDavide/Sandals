@@ -1,7 +1,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\
  * Copyright (c) 2025, Davide Stocco and Enrico Bertolazzi.                  *
  *                                                                           *
- * The Sandals project is distributed under the GNU GPLv3.                   *
+ * The Sandals project is distributed under the BSD 2-Clause License.        *
  *                                                                           *
  * Davide Stocco                                           Enrico Bertolazzi *
  * University of Trento                                 University of Trento *
@@ -40,7 +40,6 @@ namespace Sandals
     using Tableau<6>::Matrix;
 
     //! Class constructor for the Runge-Kutta-Fehlberg 4(5) method.
-    //!
     Fehlberg45Tableau() {
       this->name        = "Fehlberg45";
       this->type        = Type::ERK;
@@ -67,7 +66,6 @@ namespace Sandals
     using System = typename Implicit<N, M>::Pointer; //!< System type.
 
     //! Class constructor for a Runge-Kutta-Fehlberg 4(5) solver given a Tableau reference.
-    //!
     Fehlberg45() : RungeKutta<6, N, M>(Fehlberg45Tableau()) {}
 
     //! Class constructor for a Runge-Kutta-Fehlberg 4(5) solver given a Tableau reference.

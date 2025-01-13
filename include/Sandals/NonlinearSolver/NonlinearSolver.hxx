@@ -1,7 +1,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\
  * Copyright (c) 2025, Davide Stocco and Enrico Bertolazzi.                  *
  *                                                                           *
- * The Sandals project is distributed under the GNU GPLv3.                   *
+ * The Sandals project is distributed under the BSD 2-Clause License.        *
  *                                                                           *
  * Davide Stocco                                           Enrico Bertolazzi *
  * University of Trento                                 University of Trento *
@@ -56,7 +56,6 @@ namespace Sandals
 
   public:
     //! Class constructor for the nonlinear solver.
-    //!
     NonlinearSolver() {}
 
     //! Get the tolerance \f$ \epsilon \f$.
@@ -138,15 +137,12 @@ namespace Sandals
     }
 
     //! Enable solver's verbose mode.
-    //!
     void enable_verbose_mode() {this->m_verbose = true;}
 
     //! Disable solver's verbose mode.
-    //!
     void disable_verbose_mode() {this->m_verbose = false;}
 
     //! Get the number of algorithm iterations.
-    //!
     Size iterations() const {return this->m_iterations;}
 
     //! Get the number of function evaluations.
@@ -199,7 +195,6 @@ namespace Sandals
 
   protected:
     //! Reset solver internal counters and variables.
-    //!
     void reset()
     {
       this->m_iterations           = Size(0);

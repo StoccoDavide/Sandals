@@ -1,7 +1,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\
  * Copyright (c) 2025, Davide Stocco and Enrico Bertolazzi.                  *
  *                                                                           *
- * The Sandals project is distributed under the GNU GPLv3.                   *
+ * The Sandals project is distributed under the BSD 2-Clause License.        *
  *                                                                           *
  * Davide Stocco                                           Enrico Bertolazzi *
  * University of Trento                                 University of Trento *
@@ -37,7 +37,6 @@ namespace Sandals
     using Tableau<5>::Matrix;
 
     //! Class constructor for the 5-stage Runge-Kutta-Chebyshev order 1 method.
-    //!
     Chebyshev51Tableau() {
       this->name  = "Chebyshev51";
       this->type  = Type::ERK;
@@ -60,7 +59,6 @@ namespace Sandals
     using System = typename Implicit<N, M>::Pointer; //!< System type.
 
     //! Class constructor for a 5-stage Runge-Kutta-Chebyshev order 1 solver given a Tableau reference.
-    //!
     Chebyshev51() : RungeKutta<5, N, M>(Chebyshev51Tableau()) {}
 
     //! Class constructor for a 5-stage Runge-Kutta-Chebyshev order 1 solver given a Tableau reference.
