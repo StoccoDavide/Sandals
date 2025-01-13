@@ -1,7 +1,7 @@
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Copyright (c) 2025, Davide Stocco and Enrico Bertolazzi.                    #
 #                                                                             #
-# The Sandals project is distributed under the GNU GPLv3.                     #
+# The Sandals project is distributed under the BSD 2-Clause License.          #
 #                                                                             #
 # Davide Stocco                                             Enrico Bertolazzi #
 # University of Trento                                   University of Trento #
@@ -25,18 +25,18 @@ BUILD_BENCHMARKS = false
 
 case RUBY_PLATFORM
 when /mingw|mswin/
-  PARALLEL = ''
-  QUIET    = ''
+  PARALLEL = ""
+  QUIET    = ""
 else
   require 'etc'
   cmakeversion = %x( cmake --version ).scan(/\d+\.\d+\.\d+/).last
   mm = cmakeversion.split('.');
   if mm[0].to_i > 3 || (mm[0].to_i == 3 && mm[1].to_i >= 12) then
     PARALLEL = "--parallel #{Etc.nprocessors} "
-    QUIET    = ''
+    QUIET    = ""
   else
-    PARALLEL = ''
-    QUIET    = ''
+    PARALLEL = ""
+    QUIET    = ""
   end
 end
 
@@ -50,8 +50,6 @@ else
   # Windows
   task :default => [:build_windows]
 end
-
-file_base = File.expand_path(File.dirname(__FILE__)).to_s
 
 cmd_cmake_build = "-G Ninja"
 if BUILD_TESTS then
@@ -79,10 +77,10 @@ task :default => [:build]
 
 TESTS = []
 
-desc "run tests"
+desc "Run tests"
 task :run do
   puts "run test".yellow
-  Dir.glob('bin/*') do |cmd|
+  Dir.glob('build/tests/test_*') do |cmd|
     next if cmd =~ /.manifest$|.dSYM$/
     puts "execute: #{cmd}".yellow
     sh cmd
@@ -110,15 +108,15 @@ task :build_gen do
   FileUtils.cd '..'
 end
 
-desc 'compile for OsX'
+desc "Compile for OsX"
 task :build_osx => :build_gen do |t, args|
 end
 
-desc 'compile for Linux'
+desc "Compile for Linux"
 task :build_linux => :build_gen do |t, args|
 end
 
-desc "compile for Visual Studio [default year=2017, bits=x64]"
+desc "Compile for Visual Studio [default year=2017, bits=x64]"
 task :build_win, [:year, :bits] do |t, args|
 
   args.with_defaults( :year => "2017", :bits => "x64" )
@@ -143,7 +141,7 @@ task :build_win, [:year, :bits] do |t, args|
   FileUtils.cd '..'
 end
 
-desc "build for OsX/Linux/Windows"
+desc "Build for OsX/Linux/Windows"
 task :build do
   if (/cygwin|mswin|mingw|bccwin|wince|emx/ =~ RUBY_PLATFORM) != nil then
     # Linux
@@ -162,22 +160,22 @@ task :clean_gen do
   FileUtils.rm_rf 'lib3rd'
 end
 
-desc "clean for OsX"
+desc "Clean for OsX"
 task :clean_osx => :clean_gen do
 end
 
-desc "clean for Linux"
+desc "Clean for Linux"
 task :clean_linux => :clean_gen do
 end
 
-desc "clean for Windows"
+desc "Clean for Windows"
 task :clean_win do
   FileUtils.rm_rf 'lib'
   FileUtils.rm_rf 'lib3rd'
   FileUtils.rm_rf 'vs_*'
 end
 
-desc "clean for OsX/Linux/Windows"
+desc "Clean for OsX/Linux/Windows"
 task :clean do
   if (/cygwin|mswin|mingw|bccwin|wince|emx/ =~ RUBY_PLATFORM) != nil then
     # Linux
