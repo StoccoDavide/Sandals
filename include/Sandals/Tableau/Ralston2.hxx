@@ -15,9 +15,9 @@
 
 namespace Sandals
 {
-  //! \brief Butcher tableau for the Ralston's order 2 method.
+  //! \brief Butcher tableau for the Ralston's (or minimal truncation error) order 2 method.
   //!
-  //! Butcher tableau for the Ralston's order 2 method:
+  //! Butcher tableau for the Ralston's (or minimal truncation error) order 2 method:
   //!
   //! \f[
   //! \begin{array}{c|cc}
@@ -34,7 +34,7 @@ namespace Sandals
     using Tableau<2>::Vector;
     using Tableau<2>::Matrix;
 
-    //! Class constructor for the Ralston's order 2 method.
+    //! Class constructor for the Ralston's (or minimal truncation error) order 2 method.
     Ralston2Tableau() {
       this->name  = "Ralston2";
       this->type  = Type::ERK;
@@ -46,17 +46,19 @@ namespace Sandals
     }
   }; // class Ralston2Tableau
 
-  //! Class container for the Ralston's order 2 method.
+  //! Class container for the Ralston's (or minimal truncation error) order 2 method.
   template <Size N, Size M = 0>
   class Ralston2 : public RungeKutta<2, N, M>
   {
   public:
     using System = typename Implicit<N, M>::Pointer; //!< System type.
 
-    //! Class constructor for a Ralston's order 2 solver given a Tableau reference.
+    //! Class constructor for a Ralston's (or minimal truncation error) order 2 solver given a
+    //! Tableau reference.
     Ralston2() : RungeKutta<2, N, M>(Ralston2Tableau()) {}
 
-    //! Class constructor for a Ralston's order 2 solver given a Tableau reference.
+    //! Class constructor for a Ralston's (or minimal truncation error) order 2 solver given a
+    //! Tableau reference.
     //! \param[in] t_system The system reference.
     Ralston2(System t_system) : RungeKutta<2, N, M>(Ralston2Tableau(), t_system) {}
 

@@ -13,12 +13,16 @@
 #ifndef INCLUDE_SANDALS_HH
 #define INCLUDE_SANDALS_HH
 
+// C++ standard libraries
 #include <iostream>
 #include <string>
 #include <cmath>
 #include <vector>
 #include <map>
 #include <numeric>
+#include <chrono>
+
+// Eigen library
 #include <Eigen/Dense>
 
 // Print Sandals errors
@@ -212,6 +216,9 @@ namespace Sandals
 
 // Finite difference derivative
 //#include "Sandals/FiniteDifference.hxx"
+
+// Time measurement
+#include "Sandals/TicToc.hxx"
 
 // Nonlinear systems of equations solvers
 #include "Sandals/NonlinearSolver/NonlinearSolver.hxx"

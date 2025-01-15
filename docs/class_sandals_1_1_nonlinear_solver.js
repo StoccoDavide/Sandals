@@ -33,6 +33,7 @@ var class_sandals_1_1_nonlinear_solver =
     [ "solve_damped", "class_sandals_1_1_nonlinear_solver.html#ade45ef1caaeb596f90fc98c4252cdbf2", null ],
     [ "tolerance", "class_sandals_1_1_nonlinear_solver.html#a755a3ee84d93ddb8954b0cee1e70a5af", null ],
     [ "tolerance", "class_sandals_1_1_nonlinear_solver.html#af4465aa3c2a7ba163635d88913714846", null ],
+    [ "verbose_mode", "class_sandals_1_1_nonlinear_solver.html#a9980f441ca5cb7c19d6fa5f8ef90de5c", null ],
     [ "m_alpha", "class_sandals_1_1_nonlinear_solver.html#ad627c4c03517e3d478e0253362e47789", null ],
     [ "m_converged", "class_sandals_1_1_nonlinear_solver.html#a7d305af90bef717e8570ccb047be7eef", null ],
     [ "m_function", "class_sandals_1_1_nonlinear_solver.html#adad1ac60833498528ab7679978034686", null ],

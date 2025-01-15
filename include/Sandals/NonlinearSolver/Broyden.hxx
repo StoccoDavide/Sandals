@@ -68,6 +68,10 @@ namespace Sandals
     //! Enable the \em combined Broyden solver.
     void enable_combined_mode() {this->m_type = Type::COMBINED;}
 
+    //! Set the Broyden solver type.
+    //! \param[in] t_type The Broyden solver type.
+    void set_type(Type t_type) {this->m_type = t_type;}
+
     //! Solve nonlinear system of equations \f$ \mathbf{F}(\mathbf{x}) = \mathbf{0} \f$.
     //! \param[in] x_ini The initialization point.
     //! \param[out] x_sol The solution point.

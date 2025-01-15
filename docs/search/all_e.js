@@ -20,6 +20,7 @@ var searchData=
   ['ones_5fvec7_17',['ONES_VEC7',['../namespace_sandals.html#a4e3f61a89d1bdd03ec9eb8c37e7c8d83',1,'Sandals']]],
   ['ones_5fvec8_18',['ONES_VEC8',['../namespace_sandals.html#a5ebfb178df62b492ea9872d5a0994ced',1,'Sandals']]],
   ['ones_5fvec9_19',['ONES_VEC9',['../namespace_sandals.html#a24a303ecf36532a8f13802780c5c526c',1,'Sandals']]],
-  ['order_20',['order',['../struct_sandals_1_1_tableau.html#a169ac5d428448178b8066a561357283a',1,'Sandals::Tableau::order'],['../class_sandals_1_1_runge_kutta.html#ab3de60f054833be00aeb4b5920c9ed79',1,'Sandals::RungeKutta::order()']]],
-  ['order_5fe_21',['order_e',['../struct_sandals_1_1_tableau.html#ac57c3c6d246d691dc335c24aa2f71e89',1,'Sandals::Tableau']]]
+  ['operator_3d_20',['operator=',['../class_sandals_1_1_runge_kutta.html#a74be194fb1df4d1919e9c4b6b521b9c5',1,'Sandals::RungeKutta::operator=()'],['../class_sandals_1_1_tic_toc.html#a56af3846c3db14635e405a7c872f0b7d',1,'Sandals::TicToc::operator=()']]],
+  ['order_21',['order',['../struct_sandals_1_1_tableau.html#a169ac5d428448178b8066a561357283a',1,'Sandals::Tableau::order'],['../class_sandals_1_1_runge_kutta.html#ab3de60f054833be00aeb4b5920c9ed79',1,'Sandals::RungeKutta::order()']]],
+  ['order_5fe_22',['order_e',['../struct_sandals_1_1_tableau.html#ac57c3c6d246d691dc335c24aa2f71e89',1,'Sandals::Tableau']]]
 ];

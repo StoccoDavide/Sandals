@@ -67,8 +67,8 @@ namespace Sandals {
       return x_dot - this->f(x, t);
     }
 
-    //! Evaluate the Jacobian of the ODE system function \f$ \mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime},
-    //! t) \f$ with respect to the states \f$ \mathbf{x} \f$
+    //! Evaluate the Jacobian of the implicit ODE system function \f$ \mathbf{F}(\mathbf{x},
+    //! \mathbf{x}^{\prime}, t) \f$ with respect to the states \f$ \mathbf{x} \f$
     //!
     //! \f[
     //! \mathbf{JF}_{\mathbf{x}}(\mathbf{x}, \mathbf{x}^{\prime}, t) =
@@ -86,8 +86,8 @@ namespace Sandals {
       return -this->Jf_x(x, t);
     }
 
-    //! Evaluate the Jacobian of the ODE system function \f$ \mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, t)
-    //! \f$ with respect to the states derivative \f$ \mathbf{x}^{\prime} \f$
+    //! Evaluate the Jacobian of the implicit ODE system function \f$ \mathbf{F}(\mathbf{x},
+    //! \mathbf{x}^{\prime}, t) \f$ with respect to the states derivative \f$ \mathbf{x}^{\prime} \f$
     //!
     //! \f[
     //! \mathbf{JF}_{\mathbf{x}^{\prime}}(\mathbf{x}, \mathbf{x}^{\prime}, t) = \displaystyle
@@ -122,6 +122,63 @@ namespace Sandals {
     //! \param[in] t Independent variable (or time) \f$ t \f$.
     //! \return The Jacobian \f$ \mathbf{Jf}_{\mathbf{x}}(\mathbf{x}, t) \f$.
     virtual MatrixN Jf_x(VectorN const &x, Real t) const = 0;
+
+    //! Time reversal of the explicit ODE system function \f$ \mathbf{f}(\mathbf{x}, t) = -\mathbf{f}(
+    //! \mathbf{x}, -t) \f$.
+    //! \param[in] x States \f$ \mathbf{x} \f$.
+    //! \param[in] t Independent variable (or time) \f$ t \f$.
+    //! \return The time-reversed system function \f$ \mathbf{f}(\mathbf{x}, -t) \f$.
+    VectorN f_reverse(VectorN const &x, Real t) const
+    {
+      return -this->f(x, -t);
+    }
+
+    //! Time reversal of the Jacobian of the explicit ODE system function \f$ \mathbf{f}(\mathbf{x}, t) \f$
+    //! with respect to the states \f$ \mathbf{x} = -\mathbf{Jf}_{\mathbf{x}}(\mathbf{x}, -t) \f$.
+    //! \param[in] x States \f$ \mathbf{x} \f$.
+    //! \param[in] t Independent variable (or time) \f$ t \f$.
+    //! \return The time-reversed Jacobian \f$ \mathbf{Jf}_{\mathbf{x}}(\mathbf{x}, -t) \f$.
+    MatrixN Jf_x_reverse(VectorN const &x, Real t) const
+    {
+      return -this->Jf_x(x, -t);
+    }
+
+    //! Time reversal of the implicit ODE system function \f$ \mathbf{F}(\mathbf{x}, \mathbf{x}^{
+    //! \prime}, t) = -\mathbf{F}(\mathbf{x}, -\mathbf{x}^{\prime}, -t) \f$.
+    //! \param[in] x States \f$ \mathbf{x} \f$.
+    //! \param[in] x_dot States derivative \f$ \mathbf{x}^{\prime} \f$.
+    //! \param[in] t Independent variable (or time) \f$ t \f$.
+    //! \return The time-reversed system function \f$ \mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, -t) \f$.
+    VectorN F_reverse(VectorN const &x, VectorN const &x_dot, Real t) const
+    {
+      return -x_dot - this->f(x, -t);
+    }
+
+    //! Time reversal of the Jacobian of the implicit ODE system function \f$ \mathbf{F}(\mathbf{x},
+    //! \mathbf{x}^{\prime}, t) \f$ with respect to the states \f$ \mathbf{x} = -\mathbf{JF}_{\mathbf{x}}
+    //! (\mathbf{x}, -\mathbf{x}^{\prime}, -t) \f$.
+    //! \param[in] x States \f$ \mathbf{x} \f$.
+    //! \param[in] x_dot States derivative \f$ \mathbf{x}^{\prime} \f$.
+    //! \param[in] t Independent variable (or time) \f$ t \f$.
+    //! \return The time-reversed Jacobian \f$ \mathbf{JF}_{\mathbf{x}}(\mathbf{x}, -\mathbf{x}^{\prime},
+    //! -t) \f$.
+    MatrixN JF_x_reverse(VectorN const &x, VectorN const &/*x_dot*/, Real t) const
+    {
+      return -this->Jf_x(x, -t);
+    }
+
+    //! Time reversal of the Jacobian of the implicit ODE system function \f$ \mathbf{F}(\mathbf{x},
+    //! \mathbf{x}^{\prime}, t) \f$ with respect to the states derivative \f$ \mathbf{x}^{\prime} =
+    //! -\mathbf{JF}_{\mathbf{x}^{\prime}}(\mathbf{x}, -\mathbf{x}^{\prime}, -t) \f$.
+    //! \param[in] x States \f$ \mathbf{x} \f$.
+    //! \param[in] x_dot States derivative \f$ \mathbf{x}^{\prime} \f$.
+    //! \param[in] t Independent variable (or time) \f$ t \f$.
+    //! \return The time-reversed Jacobian \f$ \mathbf{JF}_{\mathbf{x}^{\prime}}(\mathbf{x}, -\mathbf{x}^{
+    //! \prime}, -t) \f$.
+    MatrixN JF_x_dot_reverse(VectorN const &/*x*/, VectorN const &/*x_dot*/, Real /*t*/) const
+    {
+      return -MatrixN::Identity();
+    }
 
   }; // class Explicit
 

@@ -22,7 +22,6 @@ var annotated_dup =
       [ "Implicit", "class_sandals_1_1_implicit.html", "class_sandals_1_1_implicit" ],
       [ "ImplicitEuler", "class_sandals_1_1_implicit_euler.html", "class_sandals_1_1_implicit_euler" ],
       [ "ImplicitEulerTableau", "class_sandals_1_1_implicit_euler_tableau.html", "class_sandals_1_1_implicit_euler_tableau" ],
-      [ "Linear", "class_sandals_1_1_linear.html", "class_sandals_1_1_linear" ],
       [ "LobattoIIIA2", "class_sandals_1_1_lobatto_i_i_i_a2.html", "class_sandals_1_1_lobatto_i_i_i_a2" ],
       [ "LobattoIIIA2Tableau", "class_sandals_1_1_lobatto_i_i_i_a2_tableau.html", "class_sandals_1_1_lobatto_i_i_i_a2_tableau" ],
       [ "MTE22", "class_sandals_1_1_m_t_e22.html", "class_sandals_1_1_m_t_e22" ],
@@ -42,7 +41,6 @@ var annotated_dup =
       [ "RK4", "class_sandals_1_1_r_k4.html", "class_sandals_1_1_r_k4" ],
       [ "RK4Tableau", "class_sandals_1_1_r_k4_tableau.html", "class_sandals_1_1_r_k4_tableau" ],
       [ "RungeKutta", "class_sandals_1_1_runge_kutta.html", "class_sandals_1_1_runge_kutta" ],
-      [ "SemiExplicit", "class_sandals_1_1_semi_explicit.html", "class_sandals_1_1_semi_explicit" ],
       [ "Solution", "struct_sandals_1_1_solution.html", "struct_sandals_1_1_solution" ],
       [ "SSPIRK33", "class_sandals_1_1_s_s_p_i_r_k33.html", "class_sandals_1_1_s_s_p_i_r_k33" ],
       [ "SSPIRK33Tableau", "class_sandals_1_1_s_s_p_i_r_k33_tableau.html", "class_sandals_1_1_s_s_p_i_r_k33_tableau" ],
@@ -60,6 +58,7 @@ var annotated_dup =
       [ "SSPRK43Tableau", "class_sandals_1_1_s_s_p_r_k43_tableau.html", "class_sandals_1_1_s_s_p_r_k43_tableau" ],
       [ "SSPRK93", "class_sandals_1_1_s_s_p_r_k93.html", "class_sandals_1_1_s_s_p_r_k93" ],
       [ "SSPRK93Tableau", "class_sandals_1_1_s_s_p_r_k93_tableau.html", "class_sandals_1_1_s_s_p_r_k93_tableau" ],
-      [ "Tableau", "struct_sandals_1_1_tableau.html", "struct_sandals_1_1_tableau" ]
+      [ "Tableau", "struct_sandals_1_1_tableau.html", "struct_sandals_1_1_tableau" ],
+      [ "TicToc", "class_sandals_1_1_tic_toc.html", "class_sandals_1_1_tic_toc" ]
     ] ]
 ];

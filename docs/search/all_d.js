@@ -25,5 +25,6 @@ var searchData=
   ['newton_3c_20n_20_2as_20_3e_22',['Newton&lt; N *S &gt;',['../class_sandals_1_1_newton.html',1,'Sandals']]],
   ['nonlinear_20solvers_23',['Nonlinear solvers',['../class_sandals_1_1_nonlinear_solver.html#autotoc_md2',1,'']]],
   ['nonlinearsolver_24',['NonlinearSolver',['../class_sandals_1_1_nonlinear_solver.html',1,'Sandals::NonlinearSolver&lt; N &gt;'],['../class_sandals_1_1_nonlinear_solver.html#ae1332c9d67af66a33a1c5eb9e31b82e6',1,'Sandals::NonlinearSolver::NonlinearSolver()']]],
-  ['nonlinearsolver_2ehxx_25',['NonlinearSolver.hxx',['../_nonlinear_solver_8hxx.html',1,'']]]
+  ['nonlinearsolver_2ehxx_25',['NonlinearSolver.hxx',['../_nonlinear_solver_8hxx.html',1,'']]],
+  ['nonlinearsolver_3c_20n_20_2as_20_3e_26',['NonlinearSolver&lt; N *S &gt;',['../class_sandals_1_1_nonlinear_solver.html',1,'Sandals']]]
 ];

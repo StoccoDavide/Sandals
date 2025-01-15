@@ -22,6 +22,7 @@ BUILD_DEBUG      = false
 BUILD_TESTS      = true
 BUILD_EXAMPLES   = false
 BUILD_BENCHMARKS = false
+ENABLE_PLOTTING  = true
 
 case RUBY_PLATFORM
 when /mingw|mswin/
@@ -71,6 +72,11 @@ if BUILD_DEBUG then
   cmd_cmake_build += ' -DCMAKE_BUILD_TYPE:VAR=Debug --loglevel=STATUS '
 else
   cmd_cmake_build += ' -DCMAKE_BUILD_TYPE:VAR=Release --loglevel=STATUS '
+end
+if ENABLE_PLOTTING then
+  cmd_cmake_build += ' -DSANDALS_ENABLE_PLOTTING:VAR=true '
+else
+  cmd_cmake_build += ' -DSANDALS_ENABLE_PLOTTING:VAR=false '
 end
 
 task :default => [:build]

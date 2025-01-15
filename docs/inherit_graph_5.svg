@@ -29,9 +29,9 @@
 </g>
 </g>
 <!-- Node0&#45;&gt;Node1 -->
-<g id="edge21_Node000000_Node000001" class="edge">
+<g id="edge18_Node000000_Node000001" class="edge">
 <title>Node0&#45;&gt;Node1</title>
-<g id="a_edge21_Node000000_Node000001"><a xlink:title=" ">
+<g id="a_edge18_Node000000_Node000001"><a xlink:title=" ">
 <path fill="none" stroke="#63b8ff" d="M75.09,-149.86C91.86,-169.21 117.58,-195.79 145,-212.62 150.04,-215.72 155.52,-218.47 161.13,-220.91"/>
 <polygon fill="#63b8ff" stroke="#63b8ff" points="77.94,-147.81 68.8,-142.43 72.59,-152.33 77.94,-147.81"/>
 </a>
@@ -47,9 +47,9 @@
 </g>
 </g>
 <!-- Node0&#45;&gt;Node2 -->
-<g id="edge22_Node000000_Node000002" class="edge">
+<g id="edge19_Node000000_Node000002" class="edge">
 <title>Node0&#45;&gt;Node2</title>
-<g id="a_edge22_Node000000_Node000002"><a xlink:title=" ">
+<g id="a_edge19_Node000000_Node000002"><a xlink:title=" ">
 <path fill="none" stroke="#63b8ff" d="M89.8,-146.89C106.09,-156.33 126.09,-167.01 145,-174.62 153.41,-178.01 162.63,-181 171.53,-183.54"/>
 <polygon fill="#63b8ff" stroke="#63b8ff" points="91.88,-144.05 81.49,-141.98 88.32,-150.08 91.88,-144.05"/>
 </a>
@@ -66,9 +66,9 @@
 </g>
 </g>
 <!-- Node0&#45;&gt;Node3 -->
-<g id="edge23_Node000000_Node000003" class="edge">
+<g id="edge20_Node000000_Node000003" class="edge">
 <title>Node0&#45;&gt;Node3</title>
-<g id="a_edge23_Node000000_Node000003"><a xlink:title=" ">
+<g id="a_edge20_Node000000_Node000003"><a xlink:title=" ">
 <path fill="none" stroke="#63b8ff" d="M120.81,-135.86C135.12,-138.1 150.08,-140.45 163.75,-142.59"/>
 <polygon fill="#63b8ff" stroke="#63b8ff" points="121.42,-132.41 110.99,-134.32 120.33,-139.33 121.42,-132.41"/>
 </a>
@@ -85,9 +85,9 @@
 </g>
 </g>
 <!-- Node0&#45;&gt;Node4 -->
-<g id="edge24_Node000000_Node000004" class="edge">
+<g id="edge21_Node000000_Node000004" class="edge">
 <title>Node0&#45;&gt;Node4</title>
-<g id="a_edge24_Node000000_Node000004"><a xlink:title=" ">
+<g id="a_edge21_Node000000_Node000004"><a xlink:title=" ">
 <path fill="none" stroke="#63b8ff" d="M120.55,-115.84C135.22,-113.63 150.59,-111.32 164.55,-109.22"/>
 <polygon fill="#63b8ff" stroke="#63b8ff" points="120.36,-112.33 111,-117.27 121.41,-119.25 120.36,-112.33"/>
 </a>
@@ -96,7 +96,7 @@
 <!-- Node5 -->
 <g id="Node000005" class="node">
 <title>Node5</title>
-<g id="a_Node000005"><a xlink:href="class_sandals_1_1_s_s_p_i_r_k33.html" target="_top" xlink:title=" ">
+<g id="a_Node000005"><a xlink:href="class_sandals_1_1_s_s_p_i_r_k33.html" target="_top" xlink:title="Class container for the 3&#45;stage diagonally&#45;implicit strong&#45;stability preserving Runge&#45;Kutta order 3 m...">
 <polygon fill="white" stroke="#666666" points="271.62,-67.88 160.38,-67.88 160.38,-37.38 271.62,-37.38 271.62,-67.88"/>
 <text text-anchor="start" x="168.38" y="-54.38" font-family="Helvetica,sans-Serif" font-size="10.00">Sandals::SSPIRK33&lt;</text>
 <text text-anchor="middle" x="216" y="-43.12" font-family="Helvetica,sans-Serif" font-size="10.00"> N, M &gt;</text>
@@ -104,9 +104,9 @@
 </g>
 </g>
 <!-- Node0&#45;&gt;Node5 -->
-<g id="edge25_Node000000_Node000005" class="edge">
+<g id="edge22_Node000000_Node000005" class="edge">
 <title>Node0&#45;&gt;Node5</title>
-<g id="a_edge25_Node000000_Node000005"><a xlink:title=" ">
+<g id="a_edge22_Node000000_Node000005"><a xlink:title=" ">
 <path fill="none" stroke="#63b8ff" d="M92.01,-104.45C108,-95.6 127.15,-85.54 145,-77.62 152.31,-74.38 160.19,-71.24 167.93,-68.35"/>
 <polygon fill="#63b8ff" stroke="#63b8ff" points="90.33,-101.38 83.32,-109.32 93.76,-107.48 90.33,-101.38"/>
 </a>
@@ -122,9 +122,9 @@
 </g>
 </g>
 <!-- Node0&#45;&gt;Node6 -->
-<g id="edge26_Node000000_Node000006" class="edge">
+<g id="edge23_Node000000_Node000006" class="edge">
 <title>Node0&#45;&gt;Node6</title>
-<g id="a_edge26_Node000000_Node000006"><a xlink:title=" ">
+<g id="a_edge23_Node000000_Node000006"><a xlink:title=" ">
 <path fill="none" stroke="#63b8ff" d="M72.1,-100.87C88.21,-78.74 114.62,-47.05 145,-28.62 150.92,-25.03 157.53,-22.11 164.26,-19.73"/>
 <polygon fill="#63b8ff" stroke="#63b8ff" points="69.44,-98.57 66.53,-108.75 75.16,-102.61 69.44,-98.57"/>
 </a>

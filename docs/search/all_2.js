@@ -7,9 +7,10 @@ var searchData=
   ['chebyshev51tableau_4',['Chebyshev51Tableau',['../class_sandals_1_1_chebyshev51_tableau.html',1,'Sandals::Chebyshev51Tableau'],['../class_sandals_1_1_chebyshev51_tableau.html#a50d8e3921b8fa4f0a9bc4edd18e711f6',1,'Sandals::Chebyshev51Tableau::Chebyshev51Tableau()']]],
   ['check_5',['check',['../struct_sandals_1_1_tableau.html#aeaac243b711e2e27fcd398376d2b6f66',1,'Sandals::Tableau']]],
   ['clear_6',['clear',['../struct_sandals_1_1_solution.html#a120b6a1f244f6411fd0ea89c0cded43b',1,'Sandals::Solution']]],
-  ['cmd_7',['CMD',['../_runge_kutta_8hxx.html#a0a5ceb9ceb914e08d345410b561cb37a',1,'CMD:&#160;RungeKutta.hxx'],['../_runge_kutta_8hxx.html#a0a5ceb9ceb914e08d345410b561cb37a',1,'CMD:&#160;RungeKutta.hxx'],['../_runge_kutta_8hxx.html#a0a5ceb9ceb914e08d345410b561cb37a',1,'CMD:&#160;RungeKutta.hxx'],['../_runge_kutta_8hxx.html#a0a5ceb9ceb914e08d345410b561cb37a',1,'CMD:&#160;RungeKutta.hxx'],['../_tableau_8hxx.html#a0a5ceb9ceb914e08d345410b561cb37a',1,'CMD:&#160;Tableau.hxx'],['../_tableau_8hxx.html#a0a5ceb9ceb914e08d345410b561cb37a',1,'CMD:&#160;Tableau.hxx']]],
-  ['compute_5forder_8',['compute_order',['../struct_sandals_1_1_tableau.html#a461100293de56e8ad87ec2cc7b5eee69',1,'Sandals::Tableau']]],
-  ['conservative_5fresize_9',['conservative_resize',['../struct_sandals_1_1_solution.html#ac22b536769cd0dd36c30c9e2f115cebc',1,'Sandals::Solution']]],
-  ['constrained_20minimization_20problem_10',['Constrained minimization problem',['../class_sandals_1_1_runge_kutta.html#autotoc_md15',1,'']]],
-  ['converged_11',['converged',['../class_sandals_1_1_nonlinear_solver.html#a059b4cc0f4be78bddaeeafd22af2791d',1,'Sandals::NonlinearSolver']]]
+  ['clock_7',['Clock',['../class_sandals_1_1_tic_toc.html#ae92ee63e94888cab822085c7257420a2',1,'Sandals::TicToc']]],
+  ['cmd_8',['CMD',['../_runge_kutta_8hxx.html#a0a5ceb9ceb914e08d345410b561cb37a',1,'CMD:&#160;RungeKutta.hxx'],['../_runge_kutta_8hxx.html#a0a5ceb9ceb914e08d345410b561cb37a',1,'CMD:&#160;RungeKutta.hxx'],['../_runge_kutta_8hxx.html#a0a5ceb9ceb914e08d345410b561cb37a',1,'CMD:&#160;RungeKutta.hxx'],['../_runge_kutta_8hxx.html#a0a5ceb9ceb914e08d345410b561cb37a',1,'CMD:&#160;RungeKutta.hxx'],['../_runge_kutta_8hxx.html#a0a5ceb9ceb914e08d345410b561cb37a',1,'CMD:&#160;RungeKutta.hxx'],['../_tableau_8hxx.html#a0a5ceb9ceb914e08d345410b561cb37a',1,'CMD:&#160;Tableau.hxx'],['../_tableau_8hxx.html#a0a5ceb9ceb914e08d345410b561cb37a',1,'CMD:&#160;Tableau.hxx']]],
+  ['compute_5forder_9',['compute_order',['../struct_sandals_1_1_tableau.html#a461100293de56e8ad87ec2cc7b5eee69',1,'Sandals::Tableau']]],
+  ['conservative_5fresize_10',['conservative_resize',['../struct_sandals_1_1_solution.html#ac22b536769cd0dd36c30c9e2f115cebc',1,'Sandals::Solution']]],
+  ['constrained_20minimization_20problem_11',['Constrained minimization problem',['../class_sandals_1_1_runge_kutta.html#autotoc_md15',1,'']]],
+  ['converged_12',['converged',['../class_sandals_1_1_nonlinear_solver.html#a059b4cc0f4be78bddaeeafd22af2791d',1,'Sandals::NonlinearSolver']]]
 ];

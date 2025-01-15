@@ -1,11 +1,11 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
 <area shape="rect" id="Node000000" href="$struct_sandals_1_1_tableau.html" title=" " alt="" coords="5,80,158,106"/>
 <area shape="rect" id="Node000001" href="$class_sandals_1_1_r_k4_tableau.html" title="Butcher tableau for the Runge&#45;Kutta order 4 method." alt="" coords="223,5,370,31"/>
-<area shape="poly" id="edge52_Node000000_Node000001" title=" " alt="" coords="125,71,205,40,240,29,241,34,207,45,127,76"/>
+<area shape="poly" id="edge49_Node000000_Node000001" title=" " alt="" coords="125,71,205,40,240,29,241,34,207,45,127,76"/>
 <area shape="rect" id="Node000002" href="$class_sandals_1_1_ralston4_tableau.html" title="Butcher tableau for the Ralston&#39;s order 4 method." alt="" coords="210,55,383,80"/>
-<area shape="poly" id="edge53_Node000000_Node000002" title=" " alt="" coords="173,79,209,75,210,80,174,85"/>
+<area shape="poly" id="edge50_Node000000_Node000002" title=" " alt="" coords="173,79,209,75,210,80,174,85"/>
 <area shape="rect" id="Node000003" href="$class_sandals_1_1_s_s_p_r_k42_tableau.html" title="Butcher tableau for the 4&#45;stage strong&#45;stability preserving Runge&#45;Kutta order 2 method." alt="" coords="206,104,387,130"/>
-<area shape="poly" id="edge54_Node000000_Node000003" title=" " alt="" coords="173,100,206,104,205,109,173,106"/>
+<area shape="poly" id="edge51_Node000000_Node000003" title=" " alt="" coords="173,100,206,104,205,109,173,106"/>
 <area shape="rect" id="Node000004" href="$class_sandals_1_1_s_s_p_r_k43_tableau.html" title="Butcher tableau for the 4&#45;stage strong&#45;stability preserving Runge&#45;Kutta order 3 method." alt="" coords="206,153,387,179"/>
-<area shape="poly" id="edge55_Node000000_Node000004" title=" " alt="" coords="128,110,207,140,242,150,240,155,205,145,126,114"/>
+<area shape="poly" id="edge52_Node000000_Node000004" title=" " alt="" coords="128,110,207,140,242,150,240,155,205,145,126,114"/>
 </map>

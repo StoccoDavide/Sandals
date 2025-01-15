@@ -13,8 +13,10 @@ var searchData=
   ['vector9_10',['Vector9',['../namespace_sandals.html#a91fc5f246e5e906c5370c844354f71a8',1,'Sandals']]],
   ['vectork_11',['VectorK',['../class_sandals_1_1_runge_kutta.html#a99c0d30c763dcc611b28f043e367e7d6',1,'Sandals::RungeKutta']]],
   ['vectorm_12',['VectorM',['../class_sandals_1_1_runge_kutta.html#acfdd9d893261fb06fecbc1440714d325',1,'Sandals::RungeKutta::VectorM'],['../class_sandals_1_1_implicit.html#a1034885c899bd8f9c433b1a77a0b8021',1,'Sandals::Implicit::VectorM']]],
-  ['vectorn_13',['VectorN',['../class_sandals_1_1_runge_kutta.html#ac3bc627dcd5af191b69fc446d0d2ec0f',1,'Sandals::RungeKutta::VectorN'],['../class_sandals_1_1_explicit.html#ad27fbb707a3028a7c231f1eb6179270d',1,'Sandals::Explicit::VectorN'],['../class_sandals_1_1_implicit.html#abd4b889562c414cc162f676af42032b4',1,'Sandals::Implicit::VectorN'],['../class_sandals_1_1_linear.html#a22fbe6901c619317be129d5e5f07f51b',1,'Sandals::Linear::VectorN'],['../class_sandals_1_1_semi_explicit.html#a26560e97f2516c0e62399ca9ae5b18de',1,'Sandals::SemiExplicit::VectorN']]],
+  ['vectorn_13',['VectorN',['../class_sandals_1_1_runge_kutta.html#ac3bc627dcd5af191b69fc446d0d2ec0f',1,'Sandals::RungeKutta::VectorN'],['../class_sandals_1_1_explicit.html#ad27fbb707a3028a7c231f1eb6179270d',1,'Sandals::Explicit::VectorN'],['../class_sandals_1_1_implicit.html#abd4b889562c414cc162f676af42032b4',1,'Sandals::Implicit::VectorN']]],
   ['vectorp_14',['VectorP',['../class_sandals_1_1_runge_kutta.html#a627d73d0dfb4ff40324303b8f3976e46',1,'Sandals::RungeKutta']]],
   ['vectors_15',['VectorS',['../class_sandals_1_1_runge_kutta.html#ab9982a107add8a389c807eee17b32434',1,'Sandals::RungeKutta']]],
-  ['vectorx_16',['VectorX',['../namespace_sandals.html#a080688e002c472e6b23d2028ffe840ea',1,'Sandals']]]
+  ['vectorx_16',['VectorX',['../namespace_sandals.html#a080688e002c472e6b23d2028ffe840ea',1,'Sandals']]],
+  ['verbose_17',['verbose',['../class_sandals_1_1_runge_kutta.html#a7847140c2da9b40dd03e7c5c91825bdd',1,'Sandals::RungeKutta']]],
+  ['verbose_5fmode_18',['verbose_mode',['../class_sandals_1_1_nonlinear_solver.html#a9980f441ca5cb7c19d6fa5f8ef90de5c',1,'Sandals::NonlinearSolver']]]
 ];

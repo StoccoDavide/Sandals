@@ -27,9 +27,9 @@
 </g>
 </g>
 <!-- Node0&#45;&gt;Node1 -->
-<g id="edge38_Node000000_Node000001" class="edge">
+<g id="edge35_Node000000_Node000001" class="edge">
 <title>Node0&#45;&gt;Node1</title>
-<g id="a_edge38_Node000000_Node000001"><a xlink:title=" ">
+<g id="a_edge35_Node000000_Node000001"><a xlink:title=" ">
 <path fill="none" stroke="#63b8ff" d="M68.88,-158.59C83.69,-184.1 112.86,-227.69 150.25,-250.62 155.42,-253.8 161.08,-256.41 166.94,-258.57"/>
 <polygon fill="#63b8ff" stroke="#63b8ff" points="71.95,-156.91 64,-149.9 65.84,-160.33 71.95,-156.91"/>
 </a>
@@ -38,16 +38,16 @@
 <!-- Node2 -->
 <g id="Node000002" class="node">
 <title>Node2</title>
-<g id="a_Node000002"><a xlink:href="class_sandals_1_1_heun2_tableau.html" target="_top" xlink:title="Butcher tableau for the Heun&#39;s order 2 method.">
+<g id="a_Node000002"><a xlink:href="class_sandals_1_1_heun2_tableau.html" target="_top" xlink:title="Butcher tableau for the Heun&#39;s (or 2&#45;stage strong&#45;stability preserving Runge&#45;Kutta) order 2 method.">
 <polygon fill="white" stroke="#666666" points="292.25,-241.25 172.75,-241.25 172.75,-222 292.25,-222 292.25,-241.25"/>
 <text text-anchor="middle" x="232.5" y="-227.75" font-family="Helvetica,sans-Serif" font-size="10.00">Sandals::Heun2Tableau</text>
 </a>
 </g>
 </g>
 <!-- Node0&#45;&gt;Node2 -->
-<g id="edge39_Node000000_Node000002" class="edge">
+<g id="edge36_Node000000_Node000002" class="edge">
 <title>Node0&#45;&gt;Node2</title>
-<g id="a_edge39_Node000000_Node000002"><a xlink:title=" ">
+<g id="a_edge36_Node000000_Node000002"><a xlink:title=" ">
 <path fill="none" stroke="#63b8ff" d="M75.27,-156.82C92.56,-174.06 120.84,-199.4 150.25,-213.62 157.14,-216.96 164.66,-219.69 172.26,-221.91"/>
 <polygon fill="#63b8ff" stroke="#63b8ff" points="77.82,-154.43 68.33,-149.72 72.82,-159.32 77.82,-154.43"/>
 </a>
@@ -63,9 +63,9 @@
 </g>
 </g>
 <!-- Node0&#45;&gt;Node3 -->
-<g id="edge40_Node000000_Node000003" class="edge">
+<g id="edge37_Node000000_Node000003" class="edge">
 <title>Node0&#45;&gt;Node3</title>
-<g id="a_edge40_Node000000_Node000003"><a xlink:title=" ">
+<g id="a_edge37_Node000000_Node000003"><a xlink:title=" ">
 <path fill="none" stroke="#63b8ff" d="M89.58,-153.19C107.15,-160.92 129.61,-170.14 150.25,-176.62 159.62,-179.57 169.75,-182.22 179.57,-184.53"/>
 <polygon fill="#63b8ff" stroke="#63b8ff" points="91.27,-150.11 80.71,-149.22 88.41,-156.5 91.27,-150.11"/>
 </a>
@@ -74,16 +74,16 @@
 <!-- Node4 -->
 <g id="Node000004" class="node">
 <title>Node4</title>
-<g id="a_Node000004"><a xlink:href="class_sandals_1_1_m_t_e22_tableau.html" target="_top" xlink:title="Butcher tableau for the Minimal Truncation Error order 2 method.">
+<g id="a_Node000004"><a xlink:href="class_sandals_1_1_m_t_e22_tableau.html" target="_top" xlink:title="Butcher tableau for the minimal truncation error (or Ralston&#39;s) order 2 method.">
 <polygon fill="white" stroke="#666666" points="293.75,-167.25 171.25,-167.25 171.25,-148 293.75,-148 293.75,-167.25"/>
 <text text-anchor="middle" x="232.5" y="-153.75" font-family="Helvetica,sans-Serif" font-size="10.00">Sandals::MTE22Tableau</text>
 </a>
 </g>
 </g>
 <!-- Node0&#45;&gt;Node4 -->
-<g id="edge41_Node000000_Node000004" class="edge">
+<g id="edge38_Node000000_Node000004" class="edge">
 <title>Node0&#45;&gt;Node4</title>
-<g id="a_edge41_Node000000_Node000004"><a xlink:title=" ">
+<g id="a_edge38_Node000000_Node000004"><a xlink:title=" ">
 <path fill="none" stroke="#63b8ff" d="M125.66,-146.03C140.61,-147.66 156.36,-149.39 171.01,-151"/>
 <polygon fill="#63b8ff" stroke="#63b8ff" points="126.24,-142.57 115.92,-144.96 125.48,-149.53 126.24,-142.57"/>
 </a>
@@ -99,9 +99,9 @@
 </g>
 </g>
 <!-- Node0&#45;&gt;Node5 -->
-<g id="edge42_Node000000_Node000005" class="edge">
+<g id="edge39_Node000000_Node000005" class="edge">
 <title>Node0&#45;&gt;Node5</title>
-<g id="a_edge42_Node000000_Node000005"><a xlink:title=" ">
+<g id="a_edge39_Node000000_Node000005"><a xlink:title=" ">
 <path fill="none" stroke="#63b8ff" d="M125.62,-131.62C138.02,-130.33 150.97,-128.99 163.39,-127.7"/>
 <polygon fill="#63b8ff" stroke="#63b8ff" points="125.51,-128.11 115.92,-132.62 126.23,-135.07 125.51,-128.11"/>
 </a>
@@ -110,16 +110,16 @@
 <!-- Node6 -->
 <g id="Node000006" class="node">
 <title>Node6</title>
-<g id="a_Node000006"><a xlink:href="class_sandals_1_1_ralston2_tableau.html" target="_top" xlink:title="Butcher tableau for the Ralston&#39;s order 2 method.">
+<g id="a_Node000006"><a xlink:href="class_sandals_1_1_ralston2_tableau.html" target="_top" xlink:title="Butcher tableau for the Ralston&#39;s (or minimal truncation error) order 2 method.">
 <polygon fill="white" stroke="#666666" points="297.5,-93.25 167.5,-93.25 167.5,-74 297.5,-74 297.5,-93.25"/>
 <text text-anchor="middle" x="232.5" y="-79.75" font-family="Helvetica,sans-Serif" font-size="10.00">Sandals::Ralston2Tableau</text>
 </a>
 </g>
 </g>
 <!-- Node0&#45;&gt;Node6 -->
-<g id="edge43_Node000000_Node000006" class="edge">
+<g id="edge40_Node000000_Node000006" class="edge">
 <title>Node0&#45;&gt;Node6</title>
-<g id="a_edge43_Node000000_Node000006"><a xlink:title=" ">
+<g id="a_edge40_Node000000_Node000006"><a xlink:title=" ">
 <path fill="none" stroke="#63b8ff" d="M90.32,-124.18C107.8,-116.73 129.93,-107.91 150.25,-101.62 159.77,-98.68 170.07,-96.01 180.02,-93.69"/>
 <polygon fill="#63b8ff" stroke="#63b8ff" points="89.27,-120.83 81.48,-128.01 92.05,-127.25 89.27,-120.83"/>
 </a>
@@ -128,16 +128,16 @@
 <!-- Node7 -->
 <g id="Node000007" class="node">
 <title>Node7</title>
-<g id="a_Node000007"><a xlink:href="class_sandals_1_1_s_s_p_r_k22_tableau.html" target="_top" xlink:title="Butcher tableau for the 2&#45;stage strong&#45;stability preserving Runge&#45;Kutta order 2 method.">
+<g id="a_Node000007"><a xlink:href="class_sandals_1_1_s_s_p_r_k22_tableau.html" target="_top" xlink:title="Butcher tableau for the 2&#45;stage strong&#45;stability preserving Runge&#45;Kutta (or Heun) order 2 method.">
 <polygon fill="white" stroke="#666666" points="300.5,-56.25 164.5,-56.25 164.5,-37 300.5,-37 300.5,-56.25"/>
 <text text-anchor="middle" x="232.5" y="-42.75" font-family="Helvetica,sans-Serif" font-size="10.00">Sandals::SSPRK22Tableau</text>
 </a>
 </g>
 </g>
 <!-- Node0&#45;&gt;Node7 -->
-<g id="edge44_Node000000_Node000007" class="edge">
+<g id="edge41_Node000000_Node000007" class="edge">
 <title>Node0&#45;&gt;Node7</title>
-<g id="a_edge44_Node000000_Node000007"><a xlink:title=" ">
+<g id="a_edge41_Node000000_Node000007"><a xlink:title=" ">
 <path fill="none" stroke="#63b8ff" d="M75.31,-120.69C92.64,-103.67 120.95,-78.68 150.25,-64.62 156.89,-61.44 164.11,-58.81 171.42,-56.63"/>
 <polygon fill="#63b8ff" stroke="#63b8ff" points="72.93,-118.12 68.37,-127.68 77.9,-123.05 72.93,-118.12"/>
 </a>
@@ -153,9 +153,9 @@
 </g>
 </g>
 <!-- Node0&#45;&gt;Node8 -->
-<g id="edge45_Node000000_Node000008" class="edge">
+<g id="edge42_Node000000_Node000008" class="edge">
 <title>Node0&#45;&gt;Node8</title>
-<g id="a_edge45_Node000000_Node000008"><a xlink:title=" ">
+<g id="a_edge42_Node000000_Node000008"><a xlink:title=" ">
 <path fill="none" stroke="#63b8ff" d="M68.92,-118.84C83.79,-93.56 113.01,-50.36 150.25,-27.62 155.43,-24.46 161.1,-21.85 166.95,-19.7"/>
 <polygon fill="#63b8ff" stroke="#63b8ff" points="65.93,-117.02 64.03,-127.44 72.02,-120.48 65.93,-117.02"/>
 </a>

@@ -1,12 +1,7 @@
 var hierarchy =
 [
     [ "Sandals::Implicit< N, M >", "class_sandals_1_1_implicit.html", [
-      [ "Sandals::Explicit< N, H >", "class_sandals_1_1_explicit.html", [
-        [ "Sandals::SemiExplicit< N, H >", "class_sandals_1_1_semi_explicit.html", null ]
-      ] ],
-      [ "Sandals::Explicit< N, M >", "class_sandals_1_1_explicit.html", [
-        [ "Sandals::Linear< N, M >", "class_sandals_1_1_linear.html", null ]
-      ] ]
+      [ "Sandals::Explicit< N, M >", "class_sandals_1_1_explicit.html", null ]
     ] ],
     [ "Sandals::NonlinearSolver< N >", "class_sandals_1_1_nonlinear_solver.html", [
       [ "Sandals::Broyden< N *S >", "class_sandals_1_1_broyden.html", null ],
@@ -98,5 +93,6 @@ var hierarchy =
     ] ],
     [ "Sandals::Tableau< 9 >", "struct_sandals_1_1_tableau.html", [
       [ "Sandals::SSPRK93Tableau", "class_sandals_1_1_s_s_p_r_k93_tableau.html", null ]
-    ] ]
+    ] ],
+    [ "Sandals::TicToc", "class_sandals_1_1_tic_toc.html", null ]
 ];

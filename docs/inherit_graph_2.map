@@ -1,9 +1,9 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
 <area shape="rect" id="Node000000" href="$class_sandals_1_1_runge_kutta.html" title=" " alt="" coords="5,71,151,111"/>
-<area shape="rect" id="Node000001" href="$class_sandals_1_1_explicit_euler.html" title=" " alt="" coords="211,5,360,46"/>
-<area shape="poly" id="edge9_Node000000_Node000001" title=" " alt="" coords="158,63,218,44,219,49,160,68"/>
-<area shape="rect" id="Node000002" href="$class_sandals_1_1_gauss_legendre2.html" title=" " alt="" coords="199,71,373,111"/>
-<area shape="poly" id="edge10_Node000000_Node000002" title=" " alt="" coords="166,88,198,88,198,94,166,94"/>
+<area shape="rect" id="Node000001" href="$class_sandals_1_1_explicit_euler.html" title="Class container for the Explicit Euler method." alt="" coords="211,5,360,46"/>
+<area shape="poly" id="edge6_Node000000_Node000001" title=" " alt="" coords="158,63,218,44,219,49,160,68"/>
+<area shape="rect" id="Node000002" href="$class_sandals_1_1_gauss_legendre2.html" title="Class container for the Gauss&#45;Legendre order 2 method." alt="" coords="199,71,373,111"/>
+<area shape="poly" id="edge7_Node000000_Node000002" title=" " alt="" coords="166,88,198,88,198,94,166,94"/>
 <area shape="rect" id="Node000003" href="$class_sandals_1_1_implicit_euler.html" title="Class container for the Implicit Euler method." alt="" coords="212,136,360,177"/>
-<area shape="poly" id="edge11_Node000000_Node000003" title=" " alt="" coords="160,114,219,133,218,138,158,119"/>
+<area shape="poly" id="edge8_Node000000_Node000003" title=" " alt="" coords="160,114,219,133,218,138,158,119"/>
 </map>

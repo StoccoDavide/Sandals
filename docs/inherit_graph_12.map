@@ -1,9 +1,9 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
 <area shape="rect" id="Node000000" href="$struct_sandals_1_1_tableau.html" title=" " alt="" coords="5,55,158,80"/>
 <area shape="rect" id="Node000001" href="$class_sandals_1_1_explicit_euler_tableau.html" title="Butcher tableau for the Explicit Euler method." alt="" coords="218,5,412,31"/>
-<area shape="poly" id="edge34_Node000000_Node000001" title=" " alt="" coords="160,48,250,29,251,34,162,53"/>
+<area shape="poly" id="edge31_Node000000_Node000001" title=" " alt="" coords="160,48,250,29,251,34,162,53"/>
 <area shape="rect" id="Node000002" href="$class_sandals_1_1_gauss_legendre2_tableau.html" title="Butcher Tableau for the Gauss&#45;Legendre order 2 method." alt="" coords="206,55,425,80"/>
-<area shape="poly" id="edge35_Node000000_Node000002" title=" " alt="" coords="173,65,205,65,205,70,173,70"/>
+<area shape="poly" id="edge32_Node000000_Node000002" title=" " alt="" coords="173,65,205,65,205,70,173,70"/>
 <area shape="rect" id="Node000003" href="$class_sandals_1_1_implicit_euler_tableau.html" title="Butcher tableau for the Implicit Euler method." alt="" coords="219,104,412,130"/>
-<area shape="poly" id="edge36_Node000000_Node000003" title=" " alt="" coords="162,82,251,101,250,106,160,87"/>
+<area shape="poly" id="edge33_Node000000_Node000003" title=" " alt="" coords="162,82,251,101,250,106,160,87"/>
 </map>

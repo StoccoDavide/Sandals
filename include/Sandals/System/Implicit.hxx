@@ -152,6 +152,43 @@ namespace Sandals
     //! \return True if \f$ \mathbf{F}(\mathbf{x}, t) \f$ is in the domain of the ODE/DAE system.
     virtual bool in_domain(VectorN const &x, Real t) const = 0;
 
+    //! Time reversal of the implicit ODE system function \f$ \mathbf{F}(\mathbf{x}, \mathbf{x}^{
+    //! \prime}, t) = -\mathbf{F}(\mathbf{x}, -\mathbf{x}^{\prime}, -t) \f$.
+    //! \param[in] x States \f$ \mathbf{x} \f$.
+    //! \param[in] x_dot States derivative \f$ \mathbf{x}^{\prime} \f$.
+    //! \param[in] t Independent variable (or time) \f$ t \f$.
+    //! \return The time-reversed system function \f$ \mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, -t) \f$.
+    VectorN F_reverse(VectorN const &x, VectorN const &x_dot, Real t) const
+    {
+      return -this->F(x, -x_dot, -t);
+    }
+
+    //! Time reversal of the Jacobian of the implicit ODE system function \f$ \mathbf{F}(\mathbf{x},
+    //! \mathbf{x}^{\prime}, t) \f$ with respect to the states \f$ \mathbf{x} = -\mathbf{JF}_{\mathbf{x}}
+    //! (\mathbf{x}, -\mathbf{x}^{\prime}, -t) \f$.
+    //! \param[in] x States \f$ \mathbf{x} \f$.
+    //! \param[in] x_dot States derivative \f$ \mathbf{x}^{\prime} \f$.
+    //! \param[in] t Independent variable (or time) \f$ t \f$.
+    //! \return The time-reversed Jacobian \f$ \mathbf{JF}_{\mathbf{x}}(\mathbf{x}, -\mathbf{x}^{\prime},
+    //! -t) \f$.
+    MatrixN JF_x_reverse(VectorN const &x, VectorN const &x_dot, Real t) const
+    {
+      return -this->JF_x(x, -x_dot, -t);
+    }
+
+    //! Time reversal of the Jacobian of the implicit ODE system function \f$ \mathbf{F}(\mathbf{x},
+    //! \mathbf{x}^{\prime}, t) \f$ with respect to the states derivative \f$ \mathbf{x}^{\prime} =
+    //! -\mathbf{JF}_{\mathbf{x}^{\prime}}(\mathbf{x}, -\mathbf{x}^{\prime}, -t) \f$.
+    //! \param[in] x States \f$ \mathbf{x} \f$.
+    //! \param[in] x_dot States derivative \f$ \mathbf{x}^{\prime} \f$.
+    //! \param[in] t Independent variable (or time) \f$ t \f$.
+    //! \return The time-reversed Jacobian \f$ \mathbf{JF}_{\mathbf{x}^{\prime}}(\mathbf{x}, -\mathbf{x}^{
+    //! \prime}, -t) \f$.
+    MatrixN JF_x_dot_reverse(VectorN const &x, VectorN const &x_dot, Real t) const
+    {
+      return this->JF_x_dot(x, -x_dot, -t);
+    }
+
   }; // class Implicit
 
 } // namespace Sandals

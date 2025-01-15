@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['real_0',['Real',['../namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977',1,'Sandals']]]
+  ['pointer_0',['Pointer',['../class_sandals_1_1_explicit.html#ac022e502620116d1e9ad5fb92d31f1cb',1,'Sandals::Explicit::Pointer'],['../class_sandals_1_1_implicit.html#aed4cdcf289d11408f5b0503fcf171049',1,'Sandals::Implicit::Pointer']]]
 ];

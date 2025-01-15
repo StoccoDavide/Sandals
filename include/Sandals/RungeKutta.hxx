@@ -67,8 +67,9 @@ namespace Sandals {
     Real         m_max_safety_factor{1.5};           //!< Maximum safety factor for adaptive step \f$ f_{\min} \f$.
     Real         m_min_step{EPSILON_HIGH};           //!< Minimum step for advancing \f$ h_{\min} \f$.
     Size         m_max_substeps{5};                  //!< Maximum number of substeps.
-    bool         m_adaptive_step{false};             //!< Aadaptive step mode boolean.
+    bool         m_adaptive{true};              //!< Aadaptive step mode boolean.
     bool         m_verbose{false};                   //!< Verbose mode boolean.
+    bool         m_reverse{false};                   //!< Time reverse mode boolean.
 
     Eigen::FullPivLU<MatrixP> m_lu;                         //!< LU decomposition for the projection matrix.
     Real              m_projection_tolerance{EPSILON_HIGH}; //!< Projection tolerance \f$ \epsilon_{\text{proj}} \f$.
@@ -77,6 +78,12 @@ namespace Sandals {
 
 
   public:
+    //! Copy constructor for the timer.
+    RungeKutta(const RungeKutta &) = delete;
+
+    //! Assignment operator for the timer.
+    RungeKutta & operator=(RungeKutta const &) = delete;
+
     //! Class constructor for the Runge-Kutta method.
     //! \param[in] t_tableau The Tableau reference.
     RungeKutta(Tableau<S> const &t_tableau)
@@ -226,21 +233,39 @@ namespace Sandals {
     //! \param[in] t_max_substeps The maximum number of substeps.
     void max_substeps(Size t_max_substeps) {this->m_max_substeps = t_max_substeps;}
 
-    //! Enable verbose mode.
+    //! Enable the adaptive step mode.
+    void enable_adaptive_mode() {this->m_adaptive = true;}
+
+    //! Disable the adaptive step mode.
+    void disable_adaptive_mode() {this->m_adaptive = false;}
+
+    //! Set the adaptive step mode.
+    //! \param[in] t_adaptive The adaptive step mode.
+    void adaptive(bool t_adaptive) {this->m_adaptive = t_adaptive;}
+
+    //! Enable the verbose mode.
     void enable_verbose_mode() {this->m_verbose = true;}
 
-    //! Disable verbose mode.
+    //! Disable the verbose mode.
     void disable_verbose_mode() {this->m_verbose = false;}
 
-    //! Enable adaptive step mode.
-    void enable_adaptive_step() {this->m_adaptive_step = true;}
+    //! Set the verbose mode.
+    //! \param[in] t_verbose The verbose mode.
+    void verbose(bool t_verbose) {this->m_verbose = t_verbose;}
 
-    //! Disable adaptive step mode.
-    void disable_adaptive_step() {this->m_adaptive_step = false;}
+    //! Enable the time reverse mode.
+    void enable_reverse_mode() {this->m_reverse = true;}
+
+    //! Disable the time reverse mode.
+    void disable_reverse_mode() {this->m_reverse = false;}
+
+    //! Set the time reverse mode.
+    //! \param[in] t_reverse The time reverse mode.
+    void reverse(bool t_reverse) {this->m_reverse = t_reverse;}
 
     //! Get the projection tolerance.
     //! \return The projection tolerance.
-    Real & projection_tolerance() {return this->m_projection_tolerance;}
+    Real projection_tolerance() {return this->m_projection_tolerance;}
 
     //! Set the projection tolerance.
     //! \param[in] t_projection_tolerance The projection tolerance.
@@ -256,11 +281,15 @@ namespace Sandals {
     void max_projection_iterations(Size t_max_projection_iterations)
       {this->m_max_projection_iterationsations = t_max_projection_iterations;}
 
-    //! Enable projection mode.
+    //! Enable the projection mode.
     void enable_projection() {this->m_projection = true;}
 
-    //! Disable projection mode.
+    //! Disable the projection mode.
     void disable_projection() {this->m_projection = false;}
+
+    //! Set the projection mode.
+    //! \param[in] t_projection The projection mode.
+    void projection(bool t_projection) {this->m_projection = t_projection;}
 
     //! Compute step for the next advancing step according to the error control method. The
     //! error control method used is the local truncation error method, which is based on the
@@ -369,7 +398,11 @@ namespace Sandals {
       MatrixK K;
       for (Size i{0}; i < S; ++i) {
         x_node = x_old + K(all, seqN(0, i)) * this->m_tableau.A(i, seqN(0, i)).transpose();
-        K.col(i) = h_old * static_cast<Explicit<N, M> const *>(this->m_system.get())->f(x_node, t_old + h_old*this->m_tableau.c(i));
+        if (!this->m_reverse) {
+          K.col(i) = h_old * static_cast<Explicit<N, M> const *>(this->m_system.get())->f(x_node, t_old + h_old*this->m_tableau.c(i));
+        } else {
+          K.col(i) = h_old * static_cast<Explicit<N, M> const *>(this->m_system.get())->f_reverse(x_node, t_old + h_old*this->m_tableau.c(i));
+        }
       }
       if (!K.allFinite()) {return false;}
 
@@ -377,7 +410,7 @@ namespace Sandals {
       x_new = x_old + K * this->m_tableau.b;
 
       // Adapt next step
-      if (this->m_adaptive_step && this->m_tableau.is_embedded) {
+      if (this->m_adaptive && this->m_tableau.is_embedded) {
         VectorN x_emb = x_old + K * this->m_tableau.b_e;
         h_new = this->estimate_step(x_new, x_emb, h_old);
       }
@@ -404,10 +437,14 @@ namespace Sandals {
     //! \param[out] fun The residual of system to be solved.
     void erk_implicit_function(Size s, VectorN const &x, Real t, Real h, MatrixK const &K, VectorN &fun) const
     {
-      using Eigen::seqN;
       using Eigen::all;
+      using Eigen::seqN;
       VectorN x_node(x + K(all, seqN(0, s)) * this->m_tableau.A(s, seqN(0, s)).transpose());
-      fun = this->m_system->F(x_node, K.col(s)/h, t + h * this->m_tableau.c(s));
+      if (!this->m_reverse) {
+        fun = this->m_system->F(x_node, K.col(s)/h, t + h * this->m_tableau.c(s));
+      } else {
+        fun = this->m_system->F_reverse(x_node, K.col(s)/h, t + h * this->m_tableau.c(s));
+      }
     }
 
     //! Compute the Jacobian of the system of equations
@@ -446,7 +483,11 @@ namespace Sandals {
       using Eigen::all;
       using Eigen::seqN;
       VectorN x_node(x + K(all, seqN(0, s)) * this->m_tableau.A(s, seqN(0, s)).transpose());
-      jac = this->m_system->JF_x_dot(x_node, K.col(s)/h, t + h * this->m_tableau.c(s)) / h;
+      if (!this->m_reverse) {
+        jac = this->m_system->JF_x_dot(x_node, K.col(s)/h, t + h * this->m_tableau.c(s)) / h;
+      } else {
+        jac = this->m_system->JF_x_dot_reverse(x_node, K.col(s)/h, t + h * this->m_tableau.c(s)) / h;
+      }
     }
 
     //! Compute the new states \f$ \mathbf{x}_{k+1} \f$ at the next advancing step \f$ t_{k+1} = t_k
@@ -484,7 +525,7 @@ namespace Sandals {
       x_new = x_old + K * this->m_tableau.b;
 
       // Adapt next step
-      if (this->m_adaptive_step && this->m_tableau.is_embedded) {
+      if (this->m_adaptive && this->m_tableau.is_embedded) {
         VectorN x_emb(x_old + K * this->m_tableau.b_e);
         h_new = this->estimate_step(x_new, x_emb, h_old);
       }
@@ -524,12 +565,16 @@ namespace Sandals {
     //! \param[out] fun The residual of system to be solved.
     void irk_function(VectorN const &x, Real t, Real h, VectorK const &K, VectorK &fun) const
     {
-      VectorN x_node; // FIXME: can i avoid this temporary variables?
-      MatrixK K_mat{K.reshaped(N, S)}; // FIXME: can i avoid reshaping?
+      VectorN x_node;
+      MatrixK K_mat{K.reshaped(N, S)};
       MatrixK fun_mat;
       for (Size i{0}; i < S; ++i) {
         x_node = x + K_mat * this->m_tableau.A.row(i).transpose();
-        fun_mat.col(i) = this->m_system->F(x_node, K_mat.col(i)/h, t + h * this->m_tableau.c(i));
+        if (!this->m_reverse) {
+          fun_mat.col(i) = this->m_system->F(x_node, K_mat.col(i)/h, t + h * this->m_tableau.c(i));
+        } else {
+          fun_mat.col(i) = this->m_system->F_reverse(x_node, K_mat.col(i)/h, t + h * this->m_tableau.c(i));
+        }
       }
       fun = fun_mat.reshaped(N*S, 1);
     }
@@ -570,9 +615,9 @@ namespace Sandals {
     //! \param[out] jac The Jacobian of system to be solved.
     void irk_jacobian(VectorN const &x, Real t, Real h, VectorK const &K, MatrixJ &jac) const
     {
-      using Eigen::all;
       using Eigen::seqN;
 
+      // Reset the Jacobian matrix
       jac.setZero();
 
       // Loop through each equation of the system
@@ -587,8 +632,13 @@ namespace Sandals {
 
         // Compute the Jacobians with respect to x and x_dot
         x_dot_node = K_mat.col(i) / h;
-        JF_x       = this->m_system->JF_x(x_node, x_dot_node, t_node);
-        JF_x_dot   = this->m_system->JF_x_dot(x_node, x_dot_node, t_node);
+        if (!this->m_reverse){
+          JF_x       = this->m_system->JF_x(x_node, x_dot_node, t_node);
+          JF_x_dot   = this->m_system->JF_x_dot(x_node, x_dot_node, t_node);
+        } else {
+          JF_x       = this->m_system->JF_x_reverse(x_node, x_dot_node, t_node);
+          JF_x_dot   = this->m_system->JF_x_dot_reverse(x_node, x_dot_node, t_node);
+        }
 
         // Combine the Jacobians with respect to x and x_dot to obtain the Jacobian with respect to K
         idx = seqN(i*N, N);
@@ -631,7 +681,7 @@ namespace Sandals {
       x_new = x_old + K.reshaped(N, S) * this->m_tableau.b;
 
       // Adapt next step
-      if (this->m_adaptive_step && this->m_tableau.is_embedded) {
+      if (this->m_adaptive && this->m_tableau.is_embedded) {
         VectorN x_emb(x_old + K.reshaped(N, S) * this->m_tableau.b_e);
         h_new = this->estimate_step(x_new, x_emb, h_old);
       }
@@ -667,10 +717,14 @@ namespace Sandals {
     //! \param[out] fun The residual of system to be solved.
     void dirk_function(Size n, VectorN const &x, Real t, Real h, MatrixK const &K, VectorN &fun) const
     {
-      using Eigen::seqN;
       using Eigen::all;
+      using Eigen::seqN;
       VectorN x_node(x + K(all, seqN(0, n+1)) * this->m_tableau.A(n, seqN(0, n+1)).transpose());
-      fun = this->m_system->F(x_node, K.col(n)/h, t + h * this->m_tableau.c(n));
+      if (!this->m_reverse) {
+        fun = this->m_system->F(x_node, K.col(n)/h, t + h * this->m_tableau.c(n));
+      } else {
+        fun = this->m_system->F_reverse(x_node, K.col(n)/h, t + h * this->m_tableau.c(n));
+      }
     }
 
     //! Compute the Jacobian of the system of equations
@@ -711,8 +765,13 @@ namespace Sandals {
       Real t_node{t + h * this->m_tableau.c(n)};
       VectorN x_node(x + K(all, seqN(0, n+1)) * this->m_tableau.A(n, seqN(0, n+1)).transpose());
       VectorN x_dot_node(K.col(n)/h);
-      jac = this->m_tableau.A(n,n) * this->m_system->JF_x(x_node, x_dot_node, t_node) +
-        this->m_system->JF_x_dot(x_node, x_dot_node, t_node) / h;
+      if (!this->m_reverse) {
+        jac = this->m_tableau.A(n,n) * this->m_system->JF_x(x_node, x_dot_node, t_node) +
+          this->m_system->JF_x_dot(x_node, x_dot_node, t_node) / h;
+      } else {
+        jac = this->m_tableau.A(n,n) * this->m_system->JF_x_reverse(x_node, x_dot_node, t_node) +
+          this->m_system->JF_x_dot_reverse(x_node, x_dot_node, t_node) / h;
+      }
     }
 
     //! Compute the new states \f$ \mathbf{x}_{k+1} \f$ at the next advancing step \f$ t_{k+1} = t_k
@@ -750,7 +809,7 @@ namespace Sandals {
       x_new = x_old + K * this->m_tableau.b;
 
       // Adapt next step
-      if (this->m_adaptive_step && this->m_tableau.is_embedded) {
+      if (this->m_adaptive && this->m_tableau.is_embedded) {
         VectorN x_emb(x_old + K * this->m_tableau.b_e);
         h_new = this->estimate_step(x_new, x_emb, h_old);
       }
@@ -836,14 +895,12 @@ namespace Sandals {
             // If the substepping index is too high, abort the integration
             k += 2;
             SANDALS_ASSERT(k < max_k, CMD "in " << this->m_tableau.name << " solver, at t = " <<
-              t_tmp << ", integration failed with d_t = " << h_tmp << ", aborting.");
+              t_tmp << ", integration failed with h = " << h_tmp << ", aborting.");
             return false;
 
             // Otherwise, try again with a smaller step
-            if (this->m_verbose) {
-              SANDALS_WARNING(CMD "in " << this->m_tableau.name << " solver, at t = " <<
-                t_tmp << ", integration failed, adding substepping layer.");
-            }
+            if (this->m_verbose) {SANDALS_WARNING(CMD "in " << this->m_tableau.name << " solver, " <<
+              "at t = " << t_tmp << ", integration failed, adding substepping layer.");}
             h_tmp /= Real(2.0);
             continue;
           }
@@ -908,15 +965,15 @@ namespace Sandals {
         // Saturate the suggested timestep
         mesh_point_bool = std::abs(t_step - t_mesh(step+1)) < SQRT_EPSILON;
         saturation_bool = t_step + h_new_step > t_mesh(step+1) + SQRT_EPSILON;
-        if (this->m_adaptive_step && !mesh_point_bool && saturation_bool) {
-          h_tmp_step = h_new_step;
+        if (this->m_adaptive && this->m_tableau.is_embedded && !mesh_point_bool && saturation_bool) {
+          h_tmp_step = h_new_step; // Used to store the previous step and keep the integration pace
           h_step     = t_mesh(step+1) - t_step;
         } else {
           h_step = h_new_step;
         }
 
         // Store solution if the step is a mesh point
-        if (!this->m_adaptive_step || mesh_point_bool) {
+        if (!this->m_adaptive || mesh_point_bool) {
           // Update temporaries
           step += 1;
           h_step = h_tmp_step;
@@ -942,12 +999,12 @@ namespace Sandals {
     //! \return True if the system is successfully solved, false otherwise.
     bool adaptive_solve(VectorX const &t_mesh, VectorN const &ics, Solution &sol)
     {
+      using Eigen::all;
       using Eigen::last;
 
       #define CMD "Sandals::RungeKutta::adaptive_solve(...): "
 
       // Instantiate output
-      this->enable_adaptive_step();
       Real h_step{t_mesh(1) - t_mesh(0)}, h_new_step, scale{100.0};
       Real h_min{std::max(this->m_min_step, h_step/scale)}, h_max{scale*h_step};
       if (this->m_tableau.is_embedded) {
@@ -971,7 +1028,7 @@ namespace Sandals {
         this->advance(sol.x.col(step), sol.t(step), h_step, x_step, h_new_step);
 
         // Saturate the suggested timestep
-        if (this->m_adaptive_step && this->m_tableau.is_embedded) {
+        if (this->m_adaptive && this->m_tableau.is_embedded) {
           h_step = std::max(std::min(h_new_step, h_max), h_min);
         }
 
@@ -1004,8 +1061,8 @@ namespace Sandals {
     //! \param[out] x_projected The projected states \f$ \mathbf{x} \f$ closest to the invariants
     //! manifold \f$ \mathbf{h} (\mathbf{x}, t) = \mathbf{0} \f$.
     //! \return True if the solution is successfully projected, false otherwise.
-    bool project(VectorN const &x, Real t, VectorN &x_projected) {
-
+    bool project(VectorN const &x, Real t, VectorN &x_projected)
+    {
       #define CMD "Sandals::RungeKutta::project(...): "
 
       // Check if there are any constraints
@@ -1050,8 +1107,7 @@ namespace Sandals {
           // Update the solution
           x_projected.noalias() += x_step(Eigen::seqN(0, N));
         }
-        SANDALS_WARNING(CMD "maximum number of iterations reached with residual ||h||_inf = " <<
-          h.norm() << ".");
+        if (this->m_verbose) {SANDALS_WARNING(CMD "maximum number of iterations reached.");}
         return false;
       } else {
         return true;
@@ -1069,9 +1125,9 @@ namespace Sandals {
     //! \param[out] x_projected The projected states \f$ \mathbf{x} \f$ closest to the invariants
     //! manifold \f$ \mathbf{h} (\mathbf{x}, t) = \mathbf{0} \f$.
     //! \return True if the solution is successfully projected, false otherwise.
-    bool project_ics(VectorN const &x, Real t, std::vector<Size> const &
-      projected_equations, std::vector<Size> const & projected_invariants, VectorN &x_projected) const {
-
+    bool project_ics(VectorN const &x, Real t, std::vector<Size> const & projected_equations,
+      std::vector<Size> const & projected_invariants, VectorN &x_projected) const
+    {
       #define CMD "Sandals::RungeKutta::project_ics(...): "
 
       Size X{static_cast<Size>(projected_equations.size())};
@@ -1124,7 +1180,7 @@ namespace Sandals {
           // Update the solution
           x_projected(projected_equations).noalias() += x_step;
         }
-        SANDALS_WARNING(CMD "maximum number of iterations reached.");
+        if (this->m_verbose) {SANDALS_WARNING(CMD "maximum number of iterations reached.");}
         return false;
       } else {
         return true;
@@ -1136,21 +1192,22 @@ namespace Sandals {
     //! Estimate the order of the Runge-Kutta method.
     //! \param[in] t_mesh The vector of time meshes with same initial and final time with *fixed* step.
     //! \param[in] ics Initial conditions \f$ \mathbf{x}(t = 0) \f$.
-    //! \param[in] sol The *analytical* solution of the system over the mesh of independent variable.
+    //! \param[in] sol The *analytical* solution function.
     //! \return The estimated order of the method.
-    Real estimate_order(std::vector<VectorX> const &t_mesh, VectorN const &ics, std::vector<MatrixX> &sol) {
+    Real estimate_order(std::vector<VectorX> const &t_mesh, VectorN const &ics, std::function<MatrixX(VectorX)> &sol)
+    {
+      using Eigen::last;
 
       #define CMD "Sandals::RungeKutta::estimate_order(...): "
 
-      SANDALS_ASSERT(t_mesh.size() > 1, CMD "expected at least two time meshes.");
-      SANDALS_ASSERT(sol.size() == t_mesh.size(), CMD "expected the same number of analytical solutions.");
+      SANDALS_ASSERT(t_mesh.size() > Size(1), CMD "expected at least two time meshes.");
 
       for (Size i{0}; i < static_cast<Size>(t_mesh.size()); ++i) {
 
         // Check if the time mesh has the same initial and final time
-        SANDALS_ASSERT((t_mesh[0].template head<1>() - t_mesh[i].template head<1>()).norm() < SQRT_EPSILON,
+        SANDALS_ASSERT((t_mesh[0](0) - t_mesh[i](0)) < SQRT_EPSILON,
           CMD "expected the same initial time.");
-        SANDALS_ASSERT((t_mesh[0].template tail<1>() - t_mesh[i].template tail<1>()).norm() < SQRT_EPSILON,
+        SANDALS_ASSERT((t_mesh[0](last) - t_mesh[i](last)) < SQRT_EPSILON,
           CMD "expected the same final time.");
 
         // Check if the mesh step is fixed all over the time mesh
@@ -1162,19 +1219,26 @@ namespace Sandals {
 
       // Solve the system for each time scale
       Solution sol_num;
+      MatrixX sol_ana;
       VectorX h_vec(t_mesh.size()), e_vec(t_mesh.size());
       for (Size i{0}; i < static_cast<Size>(t_mesh.size()); ++i) {
         SANDALS_ASSERT(this->solve(t_mesh[i], ics, sol_num), CMD "failed to solve the system for " <<
           "the" << i << "-th time mesh.");
-        h_vec(i) = std::abs(t_mesh[i](1) - t_mesh[i](0));
-        e_vec(i) = (sol[i].row(0) - sol_num.x.row(0)).array().abs().maxCoeff();
+        sol_ana = sol(sol_num.t);
+        SANDALS_ASSERT(sol_ana.rows() == sol_num.x.rows(),
+          CMD "expected the same number of states in analytical solution.");
+        SANDALS_ASSERT(sol_ana.cols() == sol_num.x.cols(),
+          CMD "expected the same number of steps in analytical solution.");
+        h_vec(i) = std::abs(sol_num.t(1) - sol_num.t(0));
+        e_vec(i) = (sol_ana - sol_num.x).array().abs().maxCoeff();
       }
 
       // Compute the order of the method thorugh least squares
       VectorX A(h_vec.array().log());
       VectorX b(e_vec.array().log());
-      VectorX x((A.transpose() * A).ldlt().solve(A.transpose() * b));
-      return x(0);
+      return ((A.transpose() * A).ldlt().solve(A.transpose() * b))(0);
+
+      #undef CMD
     }
 
   }; // class RungeKutta

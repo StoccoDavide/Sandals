@@ -1,7 +1,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\
  * Copyright (c) 2025, Davide Stocco and Enrico Bertolazzi.                  *
  *                                                                           *
- * The Sandals project is distributed under the GNU GPLv3.                   *
+ * The Sandals project is distributed under the BSD 2-Clause License.        *
  *                                                                           *
  * Davide Stocco                                           Enrico Bertolazzi *
  * University of Trento                                 University of Trento *
@@ -9,24 +9,31 @@
 \* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 #include "Sandals.hh"
-#include "OscillatorImplicit.hh"
-#include "OscillatorExplicit.hh"
-#include <matplot/matplot.h>
+#include "ODEs/ThreeBodyImplicit.hh"
+#include "ODEs/ThreeBodyExplicit.hh"
+
+#ifdef SANDALS_ENABLE_PLOTTING
+  #include <matplot/matplot.h>
+#endif
 
 using namespace Sandals;
+#ifdef SANDALS_ENABLE_PLOTTING
 using namespace matplot;
+#endif
 
 int main() {
-  RK4<2,1>::Time time = Eigen::VectorXd::LinSpaced(100, 0.0, 100.0);
+  RK4<12, 0>::Time time = Eigen::VectorXd::LinSpaced(1000, 0.0, 100.0);
 
-  OscillatorImplicit system_implicit;
-  RK4<2,1> integrator_implicit(std::make_shared<OscillatorImplicit>(system_implicit));
+  ThreeBodyImplicit system_implicit;
+  RK4<12, 0> integrator_implicit(std::make_shared<ThreeBodyImplicit>(system_implicit));
   integrator_implicit.enable_projection();
-  RK4<2,1>::Solution solution_implicit;
-  RK4<2,1>::Solution solution_implicit_adaptive;
+  integrator_implicit.enable_reverse_mode();
+  RK4<12, 0>::Solution solution_implicit;
+  RK4<12, 0>::Solution solution_implicit_adaptive;
   integrator_implicit.solve(time, system_implicit.ics(), solution_implicit);
   integrator_implicit.adaptive_solve(time, system_implicit.ics(), solution_implicit_adaptive);
 
+  #ifdef SANDALS_ENABLE_PLOTTING
   auto fig_1a = figure();
   figure(fig_1a);
   plot(
@@ -46,15 +53,18 @@ int main() {
   plot(
     solution_implicit_adaptive.std_t(), solution_implicit_adaptive.std_h(0)
   );
+  #endif
 
-  OscillatorExplicit system_explicit;
-  RK4<2,1> integrator_explicit(std::make_shared<OscillatorExplicit>(system_explicit));
+  ThreeBodyExplicit system_explicit;
+  RK4<12, 0> integrator_explicit(std::make_shared<ThreeBodyExplicit>(system_explicit));
   integrator_explicit.enable_projection();
-  RK4<2,1>::Solution solution_explicit;
-  RK4<2,1>::Solution solution_explicit_adaptive;
+  integrator_explicit.enable_reverse_mode();
+  RK4<12, 0>::Solution solution_explicit;
+  RK4<12, 0>::Solution solution_explicit_adaptive;
   integrator_explicit.solve(time, system_explicit.ics(), solution_explicit);
   integrator_explicit.adaptive_solve(time, system_explicit.ics(), solution_explicit_adaptive);
 
+  #ifdef SANDALS_ENABLE_PLOTTING
   auto fig_2a = figure();
   figure(fig_2a);
   plot(
@@ -76,6 +86,7 @@ int main() {
   );
 
   show();
+  #endif
 
   return 0;
 }

@@ -10,6 +10,7 @@ var class_sandals_1_1_broyden =
     [ "enable_combined_mode", "class_sandals_1_1_broyden.html#a2c5a2470ed7db6bdf8c1f3a8cc5b8a34", null ],
     [ "enable_good_mode", "class_sandals_1_1_broyden.html#a2570f869cce06d6672759bccc78f089a", null ],
     [ "name", "class_sandals_1_1_broyden.html#a3f8c6a2ca490eb5842b3a924b0a44249", null ],
+    [ "set_type", "class_sandals_1_1_broyden.html#a29585c66a69f8ba738e2ca01ee73d59c", null ],
     [ "solve", "class_sandals_1_1_broyden.html#af756c1debbfae81e4dd6b139d9787c86", null ],
     [ "solve_damped", "class_sandals_1_1_broyden.html#a00a2b40aef1d1391e4088bf22f4daf3a", null ],
     [ "type", "class_sandals_1_1_broyden.html#a0bfa4db3590c288ac7b6aa3a4601bee3", null ],

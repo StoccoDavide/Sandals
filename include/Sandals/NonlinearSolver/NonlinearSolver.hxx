@@ -142,6 +142,10 @@ namespace Sandals
     //! Disable solver's verbose mode.
     void disable_verbose_mode() {this->m_verbose = false;}
 
+    //! Set solver's verbose mode.
+    //! \param[in] t_verbose The verbose mode boolean flag.
+    void verbose_mode(bool t_verbose) {this->m_verbose = t_verbose;}
+
     //! Get the number of algorithm iterations.
     Size iterations() const {return this->m_iterations;}
 
