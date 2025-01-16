@@ -93,6 +93,10 @@ if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
   if(BUILD_EXAMPLES)
     add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/examples)
   endif()
+
+  if(SANDALS_ENABLE_PLOTTING)
+    target_compile_definitions(Sandals INTERFACE SANDALS_ENABLE_PLOTTING)
+  endif()
 endif()
 
 if(MSVC)

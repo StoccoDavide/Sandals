@@ -52,31 +52,31 @@ else
   task :default => [:build_windows]
 end
 
-cmd_cmake_build = "-G Ninja"
+cmd_cmake_build = "-G Ninja "
 if BUILD_TESTS then
-  cmd_cmake_build += ' -DBUILD_TESTS:VAR=true '
+  cmd_cmake_build += "-DBUILD_TESTS:VAR=true "
 else
-  cmd_cmake_build += ' -DBUILD_TESTS:VAR=false '
+  cmd_cmake_build += "-DBUILD_TESTS:VAR=false "
 end
 if BUILD_EXAMPLES then
-  cmd_cmake_build += ' -DBUILD_EXAMPLES:VAR=true '
+  cmd_cmake_build += "-DBUILD_EXAMPLES:VAR=true "
 else
-  cmd_cmake_build += ' -DBUILD_EXAMPLES:VAR=false '
+  cmd_cmake_build += "-DBUILD_EXAMPLES:VAR=false "
 end
 if BUILD_BENCHMARKS then
-  cmd_cmake_build += ' -DBUILD_BENCHMARKS:VAR=true '
+  cmd_cmake_build += "-DBUILD_BENCHMARKS:VAR=true "
 else
-  cmd_cmake_build += ' -DBUILD_BENCHMARKS:VAR=false '
+  cmd_cmake_build += "-DBUILD_BENCHMARKS:VAR=false "
 end
 if BUILD_DEBUG then
-  cmd_cmake_build += ' -DCMAKE_BUILD_TYPE:VAR=Debug --loglevel=STATUS '
+  cmd_cmake_build += "-DCMAKE_BUILD_TYPE:VAR=Debug "
 else
-  cmd_cmake_build += ' -DCMAKE_BUILD_TYPE:VAR=Release --loglevel=STATUS '
+  cmd_cmake_build += "-DCMAKE_BUILD_TYPE:VAR=Release "
 end
 if ENABLE_PLOTTING then
-  cmd_cmake_build += ' -DSANDALS_ENABLE_PLOTTING:VAR=true '
+  cmd_cmake_build += "-DSANDALS_ENABLE_PLOTTING:VAR=true "
 else
-  cmd_cmake_build += ' -DSANDALS_ENABLE_PLOTTING:VAR=false '
+  cmd_cmake_build += "-DSANDALS_ENABLE_PLOTTING:VAR=false "
 end
 
 task :default => [:build]

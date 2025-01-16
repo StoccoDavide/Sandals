@@ -150,6 +150,38 @@ SandalsUtils := module()
     return out;
   end proc: # DoJacobian
 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  export DoTensor := proc(
+    mat::Matrix,
+    lst::{Vector, list},
+    $)::Array;
+
+    description "Differentiate a matrix <mat> with respect to a list of functions <lst>.";
+
+    local i, j, k, m, n, l, out;
+
+    # Extract dimensions
+    m := LinearAlgebra:-RowDimension(mat);
+    n := LinearAlgebra:-ColumnDimension(mat);
+    if type(lst, Vector) then
+      l := LinearAlgebra:-Dimension(lst);
+    else
+      l := nops(lst);
+    end if;
+
+    # Differentiate
+    out := Array(1..m, 1..n, 1..l);
+    for i from 1 to m do
+      for j from 1 to n do
+        for k from 1 to l do
+          out[i, j, k] := SandalsUtils:-DoDiff(mat[i, j], lst[k]);
+        end do;
+      end do;
+    end do;
+    return out;
+  end proc: # DoTensor
+
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 end module: # SandalsUtils

@@ -61,6 +61,8 @@ namespace Sandals
   }; // class RadauIIA5Tableau
 
   //! Class container for the Radau IIA order 5 method.
+  //! \tparam N The dimension of the ODE/DAE system.
+  //! \tparam M The dimension of the invariants manifold.
   template <Size N, Size M = 0>
   class RadauIIA5 : public RungeKutta<3, N, M>
   {

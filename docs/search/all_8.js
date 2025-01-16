@@ -17,7 +17,7 @@ var searchData=
   ['impliciteuler_14',['ImplicitEuler',['../class_sandals_1_1_implicit_euler.html',1,'Sandals::ImplicitEuler&lt; N, M &gt;'],['../class_sandals_1_1_implicit_euler.html#ae9d34899e27dc5a998581621e345d632',1,'Sandals::ImplicitEuler::ImplicitEuler()'],['../class_sandals_1_1_implicit_euler.html#a8f04b4804269e8556ca8326335b31203',1,'Sandals::ImplicitEuler::ImplicitEuler(System t_system)']]],
   ['impliciteuler_2ehxx_15',['ImplicitEuler.hxx',['../_implicit_euler_8hxx.html',1,'']]],
   ['impliciteulertableau_16',['ImplicitEulerTableau',['../class_sandals_1_1_implicit_euler_tableau.html',1,'Sandals::ImplicitEulerTableau'],['../class_sandals_1_1_implicit_euler_tableau.html#a26fc11ecf05e0a8c8d53d28944b77c5b',1,'Sandals::ImplicitEulerTableau::ImplicitEulerTableau()']]],
-  ['in_5fdomain_17',['in_domain',['../class_sandals_1_1_implicit.html#aa20cc23a8b35a4601a38f73fc2cd06e7',1,'Sandals::Implicit']]],
+  ['in_5fdomain_17',['in_domain',['../class_sandals_1_1_implicit.html#a1a1b670ee411ad2435083a763c5c9d15',1,'Sandals::Implicit']]],
   ['include_5fsandals_5fhh_18',['INCLUDE_SANDALS_HH',['../_sandals_8hh.html#a70a11d4c7ab480b16210f9fe1549fafc',1,'Sandals.hh']]],
   ['info_19',['Info',['../namespace_sandals.html#af7e92dbe412047eb67132168b372a27f',1,'Sandals']]],
   ['info_20',['info',['../class_sandals_1_1_runge_kutta.html#abcf7cba25da4ad3a2231d2b2fce0dfb5',1,'Sandals::RungeKutta']]],
@@ -37,5 +37,6 @@ var searchData=
   ['is_5fexplicit_34',['is_explicit',['../class_sandals_1_1_implicit.html#ab153cc1bf5946845e32ee237420e98a6',1,'Sandals::Implicit']]],
   ['is_5fimplicit_35',['is_implicit',['../class_sandals_1_1_implicit.html#a5223f90739dfa0634560e360d97b0783',1,'Sandals::Implicit']]],
   ['is_5firk_36',['is_irk',['../class_sandals_1_1_runge_kutta.html#a6b5bd17b347dea1ee4bcd09484f24d15',1,'Sandals::RungeKutta']]],
-  ['iterations_37',['iterations',['../class_sandals_1_1_nonlinear_solver.html#a4f7ce939cc8313b762d10f64df63bb76',1,'Sandals::NonlinearSolver']]]
+  ['is_5fsemiexplicit_37',['is_semiexplicit',['../class_sandals_1_1_implicit.html#aba5f905eefb2332868af26e3a4be2d2d',1,'Sandals::Implicit']]],
+  ['iterations_38',['iterations',['../class_sandals_1_1_nonlinear_solver.html#a4f7ce939cc8313b762d10f64df63bb76',1,'Sandals::NonlinearSolver']]]
 ];

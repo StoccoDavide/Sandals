@@ -299,7 +299,13 @@ Nonlinear solvers</h1>
 \[  \mathbf{F}(\mathbf{x}) = \mathbf{0} \text{,} \quad \mathbf{F}: \mathbb{R}^{n} \rightarrow \mathbb{R}^{n} \text{.}
 \]
 </p>
-<p> and finding the root of the function \(\mathbf{F}\) by iteratively updating the current iterate \(\mathbf{x}_k\) until convergence is achieved. The solvers require the function \(\mathbf{F}\) and its <a class="el" href="#afa043950d7d07db2b48a257d1ed6a40d" title="Jacobian function type.">Jacobian</a> matrix \(\mathbf{JF}_{\mathbf{x}}\) to be provided by the user. The <a class="el" href="#afa043950d7d07db2b48a257d1ed6a40d" title="Jacobian function type.">Jacobian</a> matrix can be computed analytically or numerically, depending on the problem's complexity and the user's preference. Nontheless, quasi-Newton methods, such as <a class="el" href="class_sandals_1_1_broyden.html" title="Class container for the (damped) Broyden&#39;s method.">Broyden</a>'s method, are designed to approximate the <a class="el" href="#afa043950d7d07db2b48a257d1ed6a40d" title="Jacobian function type.">Jacobian</a> matrix iteratively, avoiding the need to compute it explicitly.   </p>
+<p> and finding the root of the function \(\mathbf{F}\) by iteratively updating the current iterate \(\mathbf{x}_k\) until convergence is achieved. The solvers require the function \(\mathbf{F}\) and its <a class="el" href="#afa043950d7d07db2b48a257d1ed6a40d" title="Jacobian function type.">Jacobian</a> matrix \(\mathbf{JF}_{\mathbf{x}}\) to be provided by the user. The <a class="el" href="#afa043950d7d07db2b48a257d1ed6a40d" title="Jacobian function type.">Jacobian</a> matrix can be computed analytically or numerically, depending on the problem's complexity and the user's preference. Nontheless, quasi-Newton methods, such as <a class="el" href="class_sandals_1_1_broyden.html" title="Class container for the (damped) Broyden&#39;s method.">Broyden</a>'s method, are designed to approximate the <a class="el" href="#afa043950d7d07db2b48a257d1ed6a40d" title="Jacobian function type.">Jacobian</a> matrix iteratively, avoiding the need to compute it explicitly.  </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">N</td><td>The dimension of the nonlinear system of equations. </td></tr>
+  </table>
+  </dd>
+</dl>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
 <a id="abf328882e8633352092875ce9aea564f" name="abf328882e8633352092875ce9aea564f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#abf328882e8633352092875ce9aea564f">&#9670;&#160;</a></span>Function</h2>

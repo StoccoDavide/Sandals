@@ -47,6 +47,8 @@ namespace Sandals
   }; // class LobattoIIIA2Tableau
 
   //! Class container for the Lobatto IIIA order 2 method.
+  //! \tparam N The dimension of the ODE/DAE system.
+  //! \tparam M The dimension of the invariants manifold.
   template <Size N, Size M = 0>
   class LobattoIIIA2 : public RungeKutta<2, N, M>
   {

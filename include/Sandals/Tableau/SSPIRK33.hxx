@@ -56,6 +56,8 @@ namespace Sandals
   }; // class SSPIRK33Tableau
 
   //! Class container for the 3-stage diagonally-implicit strong-stability preserving Runge-Kutta order 3 method.
+  //! \tparam N The dimension of the ODE/DAE system.
+  //! \tparam M The dimension of the invariants manifold.
   template <Size N, Size M = 0>
   class SSPIRK33 : public RungeKutta<3, N, M>
   {

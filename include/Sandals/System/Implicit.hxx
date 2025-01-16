@@ -30,16 +30,18 @@ namespace Sandals
   //! Class container for the system of inplicit ordinary differential equations (ODEs) or differential
   //! algebraic equations (DAEs) of the type \f$ \mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, t) =
   //! \mathbf{0} \f$, with invariants manifold \f$ \mathbf{h}(\mathbf{x}, t) = \mathbf{0} \f$.
+  //! \tparam N The dimension of the implicit ODE system.
+  //! \tparam M The dimension of the invariants manifold.
   template <Size N, Size M>
   class Implicit
   {
   public:
-    using Type = enum class Type : Size {IMPLICIT=0, EXPLICIT=1}; //!< System type enumeration.
-    using Pointer = std::shared_ptr<Implicit<N, M>>; //!< Shared pointer to an implicit ODE system.
-    using VectorN = Eigen::Vector<Real, N>;          //!< Templetized vector type.
-    using MatrixN = Eigen::Matrix<Real, N, N>;       //!< Templetized matrix type.
-    using VectorM = Eigen::Vector<Real, M>;          //!< Templetized vector type.
-    using MatrixM = Eigen::Matrix<Real, M, N>;       //!< Templetized matrix type.
+    using Type = enum class Type : Size {IMPLICIT=0, EXPLICIT=1, SEMIEXPLICIT=1}; //!< System type enumeration.
+    using Pointer  = std::shared_ptr<Implicit<N, M>>; //!< Shared pointer to an implicit ODE system.
+    using VectorF  = Eigen::Vector<Real, N>;          //!< Templetized vector type.
+    using MatrixJF = Eigen::Matrix<Real, N, N>;       //!< Templetized matrix type.
+    using VectorH  = Eigen::Vector<Real, M>;          //!< Templetized vector type.
+    using MatrixJH = Eigen::Matrix<Real, M, N>;       //!< Templetized matrix type.
 
   private:
     Type        m_type{Type::IMPLICIT}; //!< ODE/DAE system type.
@@ -74,6 +76,10 @@ namespace Sandals
     //! \return True if the ODE/DAE system is explicit, false otherwise.
     bool is_explicit() const {return this->m_type == Type::EXPLICIT;}
 
+    //! Check if the ODE/DAE system is semi-explicit.
+    //! \return True if the ODE/DAE system is semi-explicit, false otherwise.
+    bool is_semiexplicit() const {return this->m_type == Type::SEMIEXPLICIT;}
+
     //! Get the ODE/DAE system name reference.
     //! \return The ODE/DAE system name reference.
     std::string & name() {return this->m_name;}
@@ -95,7 +101,7 @@ namespace Sandals
     //! \param[in] x_dot States derivative \f$ \mathbf{x}^{\prime} \f$.
     //! \param[in] t Independent variable (or time) \f$ t \f$.
     //! \return The system function \f$ \mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, t) \f$.
-    virtual VectorN F(VectorN const &x, VectorN const &x_dot, Real t) const = 0;
+    virtual VectorF F(VectorF const &x, VectorF const &x_dot, Real t) const = 0;
 
     //! Evaluate the Jacobian of the ODE/DAE system function \f$ \mathbf{F}(\mathbf{x},
     //! \mathbf{x}^{\prime}, t) \f$ with respect to the states \f$ \mathbf{x} \f$
@@ -109,7 +115,7 @@ namespace Sandals
     //! \param[in] x_dot States derivative \f$ \mathbf{x}^{\prime} \f$.
     //! \param[in] t Independent variable (or time) \f$ t \f$.
     //! \return The Jacobian \f$ \mathbf{JF}_{\mathbf{x}}(\mathbf{x}, \mathbf{x}^{\prime}, t) \f$.
-    virtual MatrixN JF_x(VectorN const &x, VectorN const &x_dot, Real t) const = 0;
+    virtual MatrixJF JF_x(VectorF const &x, VectorF const &x_dot, Real t) const = 0;
 
     //! Evaluate the Jacobian of the ODE/DAE system function \f$ \mathbf{F}(\mathbf{x},
     //! \mathbf{x}^{\prime}, t) \f$ with respect to the states derivative \f$ \mathbf{x}^{\prime} \f$
@@ -124,13 +130,13 @@ namespace Sandals
     //! \param[in] x_dot States derivative \f$ \mathbf{x}^{\prime} \f$.
     //! \param[in] t Independent variable (or time) \f$ t \f$.
     //! \return The Jacobian \f$ \mathbf{JF}_{\mathbf{x}^{\prime}}(\mathbf{x}, \mathbf{x}^{\prime}, t) \f$.
-    virtual MatrixN JF_x_dot(VectorN const &x, VectorN const &x_dot, Real t) const = 0;
+    virtual MatrixJF JF_x_dot(VectorF const &x, VectorF const &x_dot, Real t) const = 0;
 
     //! Evaluate the ODE/DAE system invariants \f$ \mathbf{h}(\mathbf{x}, t) \f$.
     //! \param[in] x States \f$ \mathbf{x} \f$.
     //! \param[in] t Independent variable (or time) \f$ t \f$.
     //! \return The system invariants \f$ \mathbf{h}(\mathbf{x}, t) \f$.
-    virtual VectorM h(VectorN const &x, Real t) const = 0;
+    virtual VectorH h(VectorF const &x, Real t) const = 0;
 
     //! Evaluate the Jacobian of the ODE/DAE system invariants \f$ \mathbf{h}(\mathbf{x}, t) \f$
     //! with respect to the states \f$ \mathbf{x} \f$
@@ -143,14 +149,14 @@ namespace Sandals
     //! \param[in] x States \f$ \mathbf{x} \f$.
     //! \param[in] t Independent variable (or time) \f$ t \f$.
     //! \return The Jacobian \f$ \mathbf{Jh}_{\mathbf{x}}(\mathbf{x}, \mathbf{x}^{\prime}, t) \f$.
-    virtual MatrixM Jh_x(VectorN const &x, Real t) const = 0;
+    virtual MatrixJH Jh_x(VectorF const &x, Real t) const = 0;
 
     //! Return true if the values \f$ \mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, t) \f$ is in the
     //! domain of the ODE/DAE system.
     //! \param[in] x States \f$ \mathbf{x} \f$.
     //! \param[in] t Independent variable (or time) \f$ t \f$.
     //! \return True if \f$ \mathbf{F}(\mathbf{x}, t) \f$ is in the domain of the ODE/DAE system.
-    virtual bool in_domain(VectorN const &x, Real t) const = 0;
+    virtual bool in_domain(VectorF const &x, Real t) const = 0;
 
     //! Time reversal of the implicit ODE system function \f$ \mathbf{F}(\mathbf{x}, \mathbf{x}^{
     //! \prime}, t) = -\mathbf{F}(\mathbf{x}, -\mathbf{x}^{\prime}, -t) \f$.
@@ -158,7 +164,7 @@ namespace Sandals
     //! \param[in] x_dot States derivative \f$ \mathbf{x}^{\prime} \f$.
     //! \param[in] t Independent variable (or time) \f$ t \f$.
     //! \return The time-reversed system function \f$ \mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, -t) \f$.
-    VectorN F_reverse(VectorN const &x, VectorN const &x_dot, Real t) const
+    VectorF F_reverse(VectorF const &x, VectorF const &x_dot, Real t) const
     {
       return -this->F(x, -x_dot, -t);
     }
@@ -171,7 +177,7 @@ namespace Sandals
     //! \param[in] t Independent variable (or time) \f$ t \f$.
     //! \return The time-reversed Jacobian \f$ \mathbf{JF}_{\mathbf{x}}(\mathbf{x}, -\mathbf{x}^{\prime},
     //! -t) \f$.
-    MatrixN JF_x_reverse(VectorN const &x, VectorN const &x_dot, Real t) const
+    MatrixJF JF_x_reverse(VectorF const &x, VectorF const &x_dot, Real t) const
     {
       return -this->JF_x(x, -x_dot, -t);
     }
@@ -184,7 +190,7 @@ namespace Sandals
     //! \param[in] t Independent variable (or time) \f$ t \f$.
     //! \return The time-reversed Jacobian \f$ \mathbf{JF}_{\mathbf{x}^{\prime}}(\mathbf{x}, -\mathbf{x}^{
     //! \prime}, -t) \f$.
-    MatrixN JF_x_dot_reverse(VectorN const &x, VectorN const &x_dot, Real t) const
+    MatrixJF JF_x_dot_reverse(VectorF const &x, VectorF const &x_dot, Real t) const
     {
       return this->JF_x_dot(x, -x_dot, -t);
     }

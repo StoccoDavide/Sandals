@@ -28,6 +28,8 @@ namespace Sandals
   //! \brief Class container for the (damped) Newton's method with affine invariant step.
   //!
   //! \includedoc docs/markdown/Newton.md
+  //!
+  //! \tparam N The dimension of the nonlinear system of equations.
   template <Size N>
   class Newton : public NonlinearSolver<N>
   {

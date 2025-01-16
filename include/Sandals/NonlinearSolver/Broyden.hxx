@@ -28,6 +28,8 @@ namespace Sandals
   //! \brief Class container for the (damped) Broyden's method.
   //!
   //! \includedoc docs/markdown/Broyden.md
+  //!
+  //! \tparam N The dimension of the nonlinear system of equations.
   template <Size N>
   class Broyden : public NonlinearSolver<N>
   {

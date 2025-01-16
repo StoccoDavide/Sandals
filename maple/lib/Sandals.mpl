@@ -27,7 +27,7 @@ module Sandals()
   local m_VerboseMode := false;
   local m_WarningMode := true;
   local m_TimeLimit   := 0.1;
-  local m_SystemType  := 'Empty';
+  local m_SystemType  := "Empty";
   local m_x           := [];
   local m_F           := [];
   local m_f           := [];
@@ -65,14 +65,13 @@ module Sandals()
 
     lib_base_path := NULL;
     for i in [libname] do
-      if evalb(StringTools:-Search("Sandals", i) <> 0) then
+      if (StringTools:-Search("Sandals", i) <> 0) then
         lib_base_path := i;
       end if;
     end do;
-    if evalb(lib_base_path = NULL) then
+    if (lib_base_path = NULL) then
       error "cannot find 'Sandals' module.";
     end if;
-    protect('Empty', 'Implicit', 'Explicit', 'SemiExplicit');
     return NULL;
   end proc: # ModuleLoad
 
@@ -82,7 +81,6 @@ module Sandals()
 
     description "'Sandals' module unload procedure.";
 
-    unprotect('Empty', 'Implicit', 'Explicit', 'SemiExplicit');
     return NULL;
   end proc: # ModuleUnload
 
@@ -190,7 +188,7 @@ module Sandals()
 
     description "Set the time limit of the module to <x>.";
 
-    if evalb(x < 0) then
+    if (x < 0) then
       error("time limit must be a non-negative number.");
     end if;
 
@@ -218,7 +216,7 @@ module Sandals()
 
     description "Reset the library.";
 
-    _self:-m_SystemType := 'Empty';
+    _self:-m_SystemType := "Empty";
     _self:-m_x := [];
     _self:-m_F := [];
     _self:-m_f := [];
@@ -247,39 +245,34 @@ module Sandals()
 
     description "Get the vector of state variables.";
 
-    if evalb(_self:-m_x = []) then
+    if (_self:-m_SystemType = "Empty") then
       error("system not yet available, please load the system first.");
+    elif (_self:-m_SystemType = "Implicit") or (_self:-m_SystemType = "Explicit") or
+      (_self:-m_SystemType = "SemiExplicit") then
+      return _self:-m_x;
+    else
+      error("unknown system type '%1'.", _self:-m_SystemType);
     end if;
-    return _self:-m_x;
   end proc: # GetX
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  export GetImplicitF::static := proc(
+  export GetF::static := proc(
     _self::Sandals,
     $)::Vector;
 
     description "Get the vector F(x,x',t) of the implicit system F(x,x',t) = 0.";
 
-    if evalb(_self:-m_F = []) then
+    if (_self:-m_SystemType = "Empty") then
       error("system not yet available, please load the system first.");
+    elif (_self:-m_SystemType = "Explicit") then
+      return _self:-m_f;
+    elif (_self:-m_SystemType = "Implicit") or (_self:-m_SystemType = "SemiExplicit") then
+      return _self:-m_F;
+    else
+      error("unknown system type '%1'.", _self:-m_SystemType);
     end if;
-    return _self:-m_F;
-  end proc: # GetImplicitF
-
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  export GetExplicitF::static := proc(
-    _self::Sandals,
-    $)::Vector;
-
-    description "Get the right-hand side vector f(x,t) of the explicit system x' = f(x,t).";
-
-    if evalb(_self:-m_F = []) then
-      error("system not yet available, please load the system first.");
-    end if;
-    return _self:-m_F;
-  end proc: # GetExplicitF
+  end proc: # GetF
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -289,10 +282,14 @@ module Sandals()
 
     description "Get the mass matrix of the semi-explicit system.";
 
-    if evalb(_self:-m_A = []) then
+    if (_self:-m_SystemType = "Empty") then
       error("system not yet available, please load the system first.");
+    elif (_self:-m_SystemType = "Implicit") or (_self:-m_SystemType = "Explicit") or
+      (_self:-m_SystemType = "SemiExplicit") then
+      return _self:-m_A;
+    else
+      error("unknown system type '%1'.", _self:-m_SystemType);
     end if;
-    return _self:-m_A;
   end proc: # GetA
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -301,28 +298,17 @@ module Sandals()
     _self::Sandals,
     $)::Vector;
 
-    description "Get the force vector of the semi-explicit system.";
+    description "Get the right-hand side vector of the semi-explicit system.";
 
-    if evalb(_self:-m_b = []) then
+    if (_self:-m_SystemType = "Empty") then
       error("system not yet available, please load the system first.");
+    elif (_self:-m_SystemType = "Implicit") or (_self:-m_SystemType = "Explicit") or
+      (_self:-m_SystemType = "SemiExplicit") then
+      return _self:-m_b;
+    else
+      error("unknown system type '%1'.", _self:-m_SystemType);
     end if;
-    return _self:-m_b;
   end proc: # GetB
-
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  export GetSemiExplicitF::static := proc(
-    _self::Sandals,
-    $)::Vector;
-
-    description "Get the right-hand side of the semi-explicit system x' = A(x,t)^{-1} b(x,t) = f(x,t) "
-      "(no simplification is performed).";
-
-    if evalb(_self:-m_A = []) or evalb(_self:-m_b = []) then
-      error("system not yet available, please load the system first.");
-    end if;
-    return LinearAlgebra:-LinearSolve(_self:-m_A, _self:-m_b);
-  end proc: # GetSemiExplicitF
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -332,31 +318,43 @@ module Sandals()
 
     description "Get the invariants of the system.";
 
-    if evalb(_self:-m_h = []) then
+    if (_self:-m_SystemType = "Empty") then
       error("system not yet available, please load the system first.");
+    elif (_self:-m_SystemType = "Implicit") or (_self:-m_SystemType = "Explicit") or
+      (_self:-m_SystemType = "SemiExplicit") then
+      return _self:-m_h;
+    else
+      error("unknown system type '%1'.", _self:-m_SystemType);
     end if;
-    return _self:-m_h;
   end proc: # GetH
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  export GetDifferentialEquations::static := proc(
+  export GetDifferentalEquations::static := proc(
     _self::Sandals,
     {
-      explicit::boolean := false
+    invert::boolean := false
     }, $)::list;
 
     description "Get the differential equations of the system as an implicit system F(x,x',t) = 0, "
-    "an explicit system x' = f(x,t), or a semi-explicit system A(x,t)x' = b(x,t) or x' = A(x,t)^{-1} "
-    "b(x,t) = f(x,t).";
+      "an explicit system x' = f(x,t), or a semi-explicit system A(x,t)x' = b(x,t). If <invert> is "
+      "activated, than the system x' = A(x,t)^{-1}b(x,t) is returned.";
 
     local out;
 
     # Store the differential equations
-    if evalb(explicit = true) then
+    if (_self:-m_SystemType = "Empty") then
+      error("system not yet available, please load the system first.");
+    elif (_self:-m_SystemType = "Implicit") then
+      out := _self:-m_F;
+    elif (_self:-m_SystemType = "Explicit") then
+      out := diff(_self:-m_x, t) - _self:-m_f;
+    elif (_self:-m_SystemType = "SemiExplicit") and not invert then
       out := _self:-m_A.diff(_self:-m_x, t) - _self:-m_b;
-    else
+    elif (_self:-m_SystemType = "SemiExplicit") and invert then
       out := diff(_self:-m_x, t) - LinearAlgebra:-LinearSolve(_self:-m_A, _self:-m_b);
+    else
+      error("unknown system type '%1'.", _self:-m_SystemType);
     end if;
 
     # Try to simplify
@@ -378,105 +376,204 @@ module Sandals()
 
     description "Get the invariants of the system.";
 
-    if evalb(_self:-m_h = []) then
+    if (_self:-m_SystemType = "Empty") then
       error("system not yet available, please load the system first.");
+    elif (_self:-m_SystemType = "Implicit") or (_self:-m_SystemType = "Explicit") or
+      (_self:-m_SystemType = "SemiExplicit") then
+      return convert(_self:-m_h, list);
+    else
+      error("unknown system type '%1'.", _self:-m_SystemType);
     end if;
-    return convert(_self:-m_h, list);
   end proc: # GetInvariants
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  export GetSystemEquations::static := proc(
+  export GetEquations::static := proc(
     _self::Sandals,
     {
-      explicit::boolean := false
+    invert::boolean := false
     }, $)::list;
 
     description "Get the differential equations of the system as an implicit system F(x,x',t) = 0, "
-    "an explicit system x' = f(x,t), or a semi-explicit system A(x,t)x' = b(x,t) or x' = A(x,t)^{-1} "
-    "b(x,t) = f(x,t), plus the invariants h(x,t) = 0.";
+      "an explicit system x' = f(x,t), or a semi-explicit system A(x,t)x' = b(x,t), plus the invariants "
+      "h(x,t) = 0. If <invert> is activated, than the system x' = A(x,t)^{-1}b(x,t) is returned.";
 
     return [
-      op(_self:-GetDifferentialEquations(_self, parse("explicit") = explicit)),
+      op(_self:-GetDifferentalEquations(_self, parse("invert") = invert)),
       op(_self:-GetInvariants(_self))
     ];
-  end proc: # GetSystemEquations
-
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  export RemoveTimeStates::static := proc(
-    _self::Sandals,
-    expr::{algebraic, list(algebraic),
-           algebraic = algebraic, list(algebraic = algebraic)},
-    $)::{algebraic, list(algebraic),
-         algebraic = algebraic, list(algebraic = algebraic)};
-
-    description "Remove the time states from the system.";
-
-    return subs(
-      op(map(x -> diff(x, t) = cat(op(0, x), __dot), _self:-m_x)),
-      op(map(x -> x = op(0, x), _self:-m_x)),
-      expr
-    );
-  end proc: # RemoveTimeStates
+  end proc: # GetEquations
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   export DiffOrder := proc(
     _self::Sandals,
-    vars::{list, Vector},
-    eqns::{list, Vector},
+    eqns::list,
+    vars::list,
     $)::nonnegint;
 
     description "Return the differential order of the system.";
 
-    local vars_tmp, eqns_tmp;
-
-    vars_tmp := `if`(not type(vars, list), convert(vars, list), vars);
-    eqns_tmp := `if`(not type(eqns, list), convert(eqns, list), eqns);
-
-    return max(map(y -> op(map(x -> PDEtools:-difforder(x), eqns_tmp)), vars_tmp));
-  end proc: # DiffOrder
+    return max(map(y -> op(map(x -> PDEtools:-difforder(x), eqns)), vars))
+  end proc: # SystemDegree
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   export LoadMatrices::static := proc(
-    _self::Sandals
-    # _passed::{list, Vector},
-    )
+    _self::Sandals,
+    vars::{list, Vector},
+    eqns::{list, Vector},
+    invs::{list, Vector} := [],
+    {
+    type::{string} := "Implicit"
+    }, $)
 
-    description "Load the matrices from an explicit system x' = f(x,t) with "
-      "and state vector <x> and right-hand side <f>, or a semi-explicit system "
-      "A(x,t)x' = b(x,t) with mass matrix <A>, forcing term <b> and state "
-      "vector <x>. Lastly, system invariants <h> must be specified.";
+    description "Load the equations from a system of type <type> with equations <eqns>, states "
+      "<vars>, equations <eqns>, and optional invariants <invs>.";
 
-    # Check if the system is already loaded
-    if evalb(_self:-m_SystemType <> 'Empty') then
-      if _self:-m_VerboseMode then
-        WARNING("Sandals::LoadMatrices(...): a system of ODEs is already loaded, internal data will "
-        "be overwritten.");
-      end if;
-      _self:-Reset(_self);
+    # Check if the system differential order is 1
+    if (_self:-DiffOrder(_self, eqns, vars) <> 1) then
+      error("differential order must be 1 but got %1.", _self:-DiffOrder(_self, eqns, vars));
     end if;
 
-    # Set system type
-    _self:-m_SystemType := 'Loaded';
-
-    # Collect input arguments
-    if evalb(_npassed < 4) then
-      error("no system to load.");
-    elif evalb(_npassed = 4) then
-      _self:-m_x := `if`(not type(_passed[2], Vector), convert(_passed[2], Vector), _passed[2]);
-      _self:-m_A := Matrix(LinearAlgebra:-Dimension(_self:-m_x), shape = identity);
-      _self:-m_b := `if`(not type(_passed[3], Vector), convert(_passed[3], Vector), _passed[3]);
-      _self:-m_h := `if`(not type(_passed[4], Vector), convert(_passed[4], Vector), _passed[4]);
-    elif evalb(_npassed = 5) then
-      _self:-m_x := `if`(not type(_passed[2], Vector), convert(_passed[2], Vector), _passed[2]);
-      _self:-m_A := `if`(not type(_passed[3], Matrix), convert(_passed[3], Matrix), _passed[3]);
-      _self:-m_b := `if`(not type(_passed[4], Vector), convert(_passed[4], Vector), _passed[4]);
-      _self:-m_h := `if`(not type(_passed[5], Vector), convert(_passed[5], Vector), _passed[5]);
+    if (type = "Implicit") then
+      return _self:-LoadImplicitSystem(_self, vars, eqns, invs);
+    elif (type = "Explicit") then
+      return _self:-LoadExplicitSystem(_self, vars, eqns, invs, parse("invert") = true);
+    elif (type = "SemiExplicit") then
+      return _self:-LoadExplicitSystem(_self, vars, eqns, invs, parse("invert") = false);
     else
-      error("invalid input arguments.");
+      error("unknown system type '%1'.", type);
+    end if;
+
+    return NULL;
+  end proc: # LoadSystem
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  export LoadSystem::static := proc(
+    _self::Sandals,
+    vars::{list, Vector},
+    eqns::{list, Vector},
+    invs::{list, Vector} := [],
+    {
+    type::{string} := "Implicit"
+    }, $)
+
+    description "Load the equations from a system of type <type> with equations <eqns>, states "
+      "<vars>, equations <eqns>, and optional invariants <invs>.";
+
+    # Check if the system differential order is 1
+    if (_self:-DiffOrder(_self, eqns, vars) <> 1) then
+      error("differential order must be 1 but got %1.", _self:-DiffOrder(_self, eqns, vars));
+    end if;
+
+    if (type = "Implicit") then
+      return _self:-LoadImplicitSystem(_self, vars, eqns, invs);
+    elif (type = "Explicit") then
+      return _self:-LoadExplicitSystem(_self, vars, eqns, invs, parse("invert") = true);
+    elif (type = "SemiExplicit") then
+      return _self:-LoadExplicitSystem(_self, vars, eqns, invs, parse("invert") = false);
+    else
+      error("unknown system type '%1'.", type);
+    end if;
+
+    return NULL;
+  end proc: # LoadSystem
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  export LoadImplicitSystem::static := proc(
+    _self::Sandals,
+    vars::{list, Vector},
+    eqns::{list, Vector},
+    invs::{list, Vector} := [],
+    $)
+
+    description "Load the equations from an implicit system F(x,x',t) = 0 with equations <eqns>, "
+      "states <vars>, equations <eqns>, and optional invariants <invs>.";
+
+      # Reset the system
+      _self:-Reset(_self);
+
+    # Store the system data
+    _self:-m_x := `if`(not type(vars, Vector), convert(vars, Vector), vars);
+    _self:-m_F := `if`(not type(eqns, Vector), convert(eqns, Vector), eqns);
+    _self:-m_h := `if`(not type(invs, list), convert(invs, list), invs);
+    _self:-m_SystemType := "Implicit";
+
+    # Check if the differential order of h is null
+    if has(_self:-m_h, diff) then
+      error("invalid invariants detected.");
+    end if;
+
+    # Simplify the vector F
+    try
+      _self:-m_F := timelimit(_self:-m_TimeLimit, simplify(_self:-m_F));
+    catch "time expired":
+      WARNING("time expired, simplify(F) interrupted.");
+    end try;
+
+    # Simplify the vector h
+    try
+      _self:-m_h := timelimit(_self:-m_TimeLimit, simplify(_self:-m_h));
+    catch "time expired":
+      WARNING("time expired, simplify(h) interrupted.");
+    end try;
+
+    return NULL;
+  end proc: # LoadImplicitSystem
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  export LoadExplicitSystem::static := proc(
+    _self::Sandals,
+    vars::{list, Vector},
+    eqns::{list, Vector},
+    invs::{list, Vector} := [],
+    {
+    invert::boolean := true
+    }, $)
+
+    description "Load the equations from an explicit system x' = f(x,t) or semi-explicit system "
+      "M(x,t)x' = b(x,t) with equations <eqns>, states <vars>, equations <eqns>, and optional "
+      "invariants <invs>. If <invert> is activated, than the system is transformed into an explicit "
+      "form x' = A(x,t)^{-1}b(x,t).";
+
+    # Reset the system
+    _self:-Reset(_self);
+
+    # Store the system data
+    _self:-m_x := `if`(not type(vars, Vector), convert(vars, Vector), vars);
+    _self:-m_h := `if`(not type(invs, list), convert(invs, list), invs);
+    _self:-m_A, _self:-m_b := LinearAlgebra:-GenerateMatrix(
+      `if`(not type(eqns, list), convert(eqns, list), eqns),
+      diff(`if`(not type(vars, list), convert(vars, list), vars), t)
+    );
+
+    # Check if the system can be transformed into an explicit form
+    if (LinearAlgebra:-RowDimension(_self:-m_A) <> LinearAlgebra:-ColumnDimension(_self:-m_A)) then
+      _self:-Reset(_self);
+      error("the system cannot be transformed into an explicit form, the "
+        "matrix M is not square.");
+      return NULL;
+    end if;
+
+    if (LinearAlgebra:-Rank(_self:-m_A) <> LinearAlgebra:-ColumnDimension(_self:-m_A)) then
+      _self:-Reset(_self);
+      error("the system cannot be transformed into an explicit form, the "
+        "matrix M is not full rank.");
+      return NULL;
+    end if;
+
+    # Store the system data
+    if invert then
+      _self:-m_f := LinearAlgebra:-LinearSolve(_self:-m_A, _self:-m_b);
+      _self:-m_SystemType := "Explicit";
+      _self:-m_A := [];
+      _self:-m_b := [];
+    else
+      _self:-m_SystemType := "SemiExplicit";
     end if;
 
     # Check if the differential order of h is null
@@ -520,31 +617,85 @@ module Sandals()
     end try;
 
     return NULL;
-  end proc: # LoadMatrices
+  end proc: # LoadExplicitSystem
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  export LoadEquations::static := proc(
+  export ToImplicit::static := proc(
     _self::Sandals,
-    vars::{list, Vector},
-    eqns::{list, Vector},
-    invs::{list, Vector} := [],
     $)
 
-    description "Load the equations from an explicit system x' = f(x,t) with "
-      "and states <vars>, equations <eqns>, and optional invariants <invs>.";
+    description "Convert the system to an implicit form F(x,x',t) = 0.";
 
-    local x, A, b, h;
+    local eqns;
 
-    x    := `if`(not type(vars, Vector), convert(vars, Vector), vars);
-    A, b := LinearAlgebra:-GenerateMatrix(
-      `if`(not type(eqns, list), convert(eqns, list), eqns),
-      diff(`if`(not type(vars, list), convert(vars, list), vars), t)
-    );
-    h := `if`(not type(invs, list), convert(invs, list), invs);
-    _self:-LoadMatrices(_self, x, A, b, h);
+    if (_self:-m_SystemType = "Empty") then
+      error("system not yet available, please load the system first.");
+    elif (_self:-m_SystemType = "Implicit") then
+      # Nothing to do
+    elif (_self:-m_SystemType = "Explicit") then
+      eqns := diff(_self:-m_x, t) - _self:-m_f;
+    elif (_self:-m_SystemType = "SemiExplicit") then
+      eqns := _self:-m_A.diff(_self:-m_x, t) - _self:-m_b;
+    else
+      error("unknown system type '%1'.", _self:-m_SystemType);
+    end if;
+    _self:-LoadImplicitSystem(_self, _self:-m_x, eqns, _self:-m_h);
+
     return NULL;
-  end proc: # LoadEquations
+  end proc: # ToImplicit
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  export ToExplicit::static := proc(
+    _self::Sandals,
+    $)
+
+    description "Convert the system to an explicit form x' = f(x,t).";
+
+    local eqns;
+
+    if (_self:-m_SystemType = "Empty") then
+      error("system not yet available, please load the system first.");
+    elif (_self:-m_SystemType = "Implicit") then
+      eqns := _self:-m_F;
+    elif (_self:-m_SystemType = "Explicit") then
+      # Nothing to do
+    elif (_self:-m_SystemType = "SemiExplicit") then
+      eqns := _self:-m_A.diff(_self:-m_x, t) - _self:-m_b
+    else
+      error("unknown system type '%1'.", _self:-m_SystemType);
+    end if;
+    _self:-LoadExplicitSystem(_self, _self:-m_x, eqns, _self:-m_h, parse("invert") = true);
+
+    return NULL;
+  end proc: # ToExplicit
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  export ToSemiExplicit::static := proc(
+    _self::Sandals,
+    $)
+
+    description "Convert the system to a semi-explicit form A(x,t)x' = b(x,t).";
+
+    local eqns;
+
+    if (_self:-m_SystemType = "Empty") then
+      error("system not yet available, please load the system first.");
+    elif (_self:-m_SystemType = "Implicit") then
+      eqns := _self:-m_F;
+    elif (_self:-m_SystemType = "Explicit") then
+      eqns := diff(_self:-m_x, t) - _self:-m_f;
+    elif (_self:-m_SystemType = "SemiExplicit") then
+      # Nothing to do
+    else
+      error("unknown system type '%1'.", _self:-m_SystemType);
+    end if;
+    _self:-LoadExplicitSystem(_self, _self:-m_x, eqns, _self:-m_h, parse("invert") = false);
+
+    return NULL;
+  end proc: # ToSemiExplicit
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -552,7 +703,6 @@ module Sandals()
     _self::Sandals,
     name::string,
     {
-    type::string                   := "Explicit",
     data::list(symbol = algebraic) := [],
     info::string                   := "No class description provided."
     }, $)::string;
@@ -561,57 +711,26 @@ module Sandals()
       "output file './<fname>.m', optional internal class data <data>, and class information string "
       "<info>.";
 
-    local x, A, b, f, h;
-
     # Get system data
-    if evalb(_self:-m_SystemType = 'Empty') then
+    if (_self:-m_SystemType = "Empty") then
       error("no system loaded yet.");
     end if;
 
-    # Get system data
-    x := _self:-m_x;
-    A := _self:-m_A;
-    b := _self:-m_b;
-    h := _self:-m_h;
-
     # Generate class body string
-    if evalb(type = "Explicit") then
-
-      # Check if the system can be transformed into an explicit form
-      if evalb(LinearAlgebra:-RowDimension(A) <> LinearAlgebra:-ColumnDimension(A) ) then
-        error("the system cannot be transformed into an explicit form, the "
-          "matrix A is not square.");
-        return NULL;
-      end if;
-
-      if evalb(LinearAlgebra:-Rank(A) <> LinearAlgebra:-ColumnDimension(A)) then
-        error("the system cannot be transformed into an explicit form, the "
-          "matrix A is not full rank.");
-        return NULL;
-      end if;
-
-      # Try to solve the system
-      f := LinearAlgebra:-LinearSolve(A, b);
-      try
-        f := timelimit(_self:-m_TimeLimit, simplify(f));
-      catch "time expired":
-        WARNING("time expired, simplify(f) interrupted.");
-      end try;
-
-      # Generate class body string
-      return SandalsCodegen:-ExplicitSystemToCpp(
-        name, x, f, h, parse("data") = data, parse("info") = info
+    if (_self:-m_SystemType = "Implicit") then
+      return SandalsCodegen:-ImplicitToCpp(
+        name, _self:-m_x, _self:-m_F, _self:-m_h, parse("data") = data, parse("info") = info
       );
-
-    elif evalb(type = "Implicit") then
-
-      # Generate class body string
-      return SandalsCodegen:-ImplicitSystemToCpp(
-        name, x, A, b, h, parse("data") = data, parse("info") = info
+    elif (_self:-m_SystemType = "Explicit") then
+      return SandalsCodegen:-ExplicitToCpp(
+        name, _self:-m_x, _self:-m_f, _self:-m_h, parse("data") = data, parse("info") = info
       );
-
+    elif (_self:-m_SystemType = "SemiExplicit") then
+      return SandalsCodegen:-SemiExplicitToCpp(
+        name, _self:-m_x, _self:-m_A, _self:-m_b, _self:-m_h, parse("data") = data, parse("info") = info
+      );
     else
-      error("unknown Sandals class type '%1'.", type);
+      error("unknown Sandals class type '%1'.", _self:-m_SystemType);
     end if;
     return "";
   end proc: # TranslateToCpp
@@ -622,24 +741,33 @@ module Sandals()
     _self::Sandals,
     name::string,
     {
-    type::string                   := "Explicit",
+    type::string                   := _self:-m_SystemType,
     path::string                   := "./",
     data::list(symbol = algebraic) := [],
     info::string                   := "No class description provided."
     }, $)
 
-    description "Generate C++ code for the loaded system with name <name>, Sandals class <type>, "
-    "output file '<path>/<name>.hh', optional internal class data <data>, and class information "
-    "string <info>.";
+    description "Generate C++ code for the loaded system with name <name>, Sandals class <type> "
+      "(""Implicit"", ""Explicit"" ,""SemiExplicit""), output file '<path>/<name>.hh', optional "
+      "internal class data <data>, and class information string <info>. Notice that if the type is "
+      "not specified, the system type is used. Instead, if the type is specified, and it is different "
+      "from the system type, the system is converted to the specified type.";
 
-    SandalsCodegen:-GenerateFile(
-      cat(path, "/", name, ".hh"),
-      _self:-TranslateToCpp(
-        _self, name,
-        parse("type") = type,
-        parse("data") = data,
-        parse("info") = info
-      )
+    if (type <> _self:-m_SystemType) then
+      if (type = "Implicit") then
+        _self:-ToImplicit(_self);
+      elif (type = "Explicit") then
+        _self:-ToExplicit(_self);
+      elif (type = "SemiExplicit") then
+        _self:-ToSemiExplicit(_self);
+      else
+        error("unknown Sandals class type '%1'.", type);
+      end if;
+        WARNING("system converted to '%1' class.", type);
+    end if;
+
+    SandalsCodegen:-GenerateFile(cat(path, "/", name, ".hh"), _self:-TranslateToCpp(
+      _self, name, parse("data") = data, parse("info") = info)
     );
     return NULL;
   end proc: # GenerateCppCode

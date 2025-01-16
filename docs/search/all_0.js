@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['a_0',['A',['../struct_sandals_1_1_tableau.html#abbd2a2dc79f4d3192bf1b09703a9b610',1,'Sandals::Tableau::A'],['../class_sandals_1_1_runge_kutta.html#afe33bda1d96ba8610dfc4575a04cca15',1,'Sandals::RungeKutta::A() const']]],
+  ['a_0',['A',['../struct_sandals_1_1_tableau.html#abbd2a2dc79f4d3192bf1b09703a9b610',1,'Sandals::Tableau::A'],['../class_sandals_1_1_runge_kutta.html#afe33bda1d96ba8610dfc4575a04cca15',1,'Sandals::RungeKutta::A()'],['../class_sandals_1_1_semi_explicit.html#a307e2686557ee22f85f93ba6285c8bc0',1,'Sandals::SemiExplicit::A()']]],
   ['absolute_5ftolerance_1',['absolute_tolerance',['../class_sandals_1_1_runge_kutta.html#a27a9f6692a44e123808f8c8b2c2d9059',1,'Sandals::RungeKutta::absolute_tolerance()'],['../class_sandals_1_1_runge_kutta.html#a53e68c06cce6d036185ba836aec50759',1,'Sandals::RungeKutta::absolute_tolerance(Real t_absolute_tolerance)']]],
   ['adaptive_2',['adaptive',['../class_sandals_1_1_runge_kutta.html#ac7c5c50506a79776b647826f667170c0',1,'Sandals::RungeKutta']]],
   ['adaptive_5fsolve_3',['adaptive_solve',['../class_sandals_1_1_runge_kutta.html#aa8895f7adf9114f032635a1a00db40ed',1,'Sandals::RungeKutta']]],

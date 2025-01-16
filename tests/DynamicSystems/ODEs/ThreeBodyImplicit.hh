@@ -91,15 +91,16 @@ private:
   Real m_m_3{1.0}; // Body 3 mass
 
 public:
-  using Matrix0  = Eigen::Matrix<Real, 0, 12>;
-  using Vector12 = Eigen::Matrix<Real, 12, 1>;
-  using Matrix12 = Eigen::Matrix<Real, 12, 12>;
+  using VectorF  = typename Implicit<12, 0>::VectorF;
+  using MatrixJF = typename Implicit<12, 0>::MatrixJF;
+  using VectorH  = typename Implicit<12, 0>::VectorH;
+  using MatrixJH = typename Implicit<12, 0>::MatrixJH;
 
   ThreeBodyImplicit() : Implicit<12, 0>("ThreeBodyImplicit") {}
 
   ~ThreeBodyImplicit() {}
 
-  Vector12 F(Vector12 const &x, Vector12 const &x_dot, Real /*t*/)  const override
+  VectorF F(VectorF const &x, VectorF const &x_dot, Real /*t*/)  const override
   {
     #define CMD "Sandals::ThreeBodyImplicit::F(...): "
 
@@ -109,7 +110,7 @@ public:
     Real d_23{std::sqrt(std::pow(x(1) - x(2), 2.0) + std::pow(x(4) - x(5), 2.0))};
 
     // Compute the output
-    Vector12 F;
+    VectorF F;
     F <<
       x_dot(0)  - x(6),
       x_dot(1)  - x(7),
@@ -129,7 +130,7 @@ public:
     #undef CMD
   }
 
-  Matrix12 JF_x(Vector12 const &x, Vector12 const &/*x_dot*/, Real /*t*/) const override
+  MatrixJF JF_x(VectorF const &x, VectorF const &/*x_dot*/, Real /*t*/) const override
   {
     #define CMD "Sandals::ThreeBodyImplicit::JF(...): "
 
@@ -139,7 +140,7 @@ public:
     Real d_23{std::sqrt(std::pow(x(1) - x(2), 2.0) + std::pow(x(4) - x(5), 2.0))};
 
     // Compute the Jacobian of the three body problem
-    Matrix12 JF_x;
+    MatrixJF JF_x;
     JF_x <<
       0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 0.0,
       0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0,
@@ -195,18 +196,18 @@ public:
     #undef CMD
   }
 
-  Matrix12 JF_x_dot(Vector12 const &/*x*/, Vector12 const &/*x_dot*/, Real /*t*/) const override
-  {return Matrix12::Identity();}
+  MatrixJF JF_x_dot(VectorF const &/*x*/, VectorF const &/*x_dot*/, Real /*t*/) const override
+  {return MatrixJF::Identity();}
 
-  Vector0 h(Vector12 const &/*x*/, Real /*t*/) const override {return Vector0::Zero();}
+  VectorH h(VectorF const &/*x*/, Real /*t*/) const override {return VectorH::Zero();}
 
-  Matrix0 Jh_x(Vector12 const &/*x*/, Real /*t*/) const override {return Matrix0::Zero();}
+  MatrixJH Jh_x(VectorF const &/*x*/, Real /*t*/) const override {return MatrixJH::Zero();}
 
-  bool in_domain(Vector12 const &/*x*/, Real /*t*/) const override {return true;}
+  bool in_domain(VectorF const &/*x*/, Real /*t*/) const override {return true;}
 
-  Vector12 ics() const
+  VectorF ics() const
   {
-    Vector12 ics;
+    VectorF ics;
     ics <<
       0.97000436,
      -0.97000436,

@@ -28,6 +28,8 @@ namespace Sandals
   //! \brief Class container for the nonlinear solver.
   //!
   //! \includedoc docs/markdown/NonlinearSolver.md
+  //!
+  //! \tparam N The dimension of the nonlinear system of equations.
   template <Size N>
   class NonlinearSolver
   {

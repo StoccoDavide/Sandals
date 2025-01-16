@@ -47,6 +47,8 @@ namespace Sandals
   }; // class Ralston2Tableau
 
   //! Class container for the Ralston's (or minimal truncation error) order 2 method.
+  //! \tparam N The dimension of the ODE/DAE system.
+  //! \tparam M The dimension of the invariants manifold.
   template <Size N, Size M = 0>
   class Ralston2 : public RungeKutta<2, N, M>
   {

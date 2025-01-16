@@ -28,22 +28,26 @@ namespace Sandals {
   //! </em> Runge-Kutta methods.
   //!
   //! \includedoc docs/markdown/RungeKutta.md
+  //!
+  //! \tparam S The number of stages of the Runge-Kutta method.
+  //! \tparam N The dimension of the ODE/DAE system.
+  //! \tparam M The dimension of the invariants manifold.
   template <Size S, Size N, Size M>
   class RungeKutta
   {
-    using VectorK = Eigen::Vector<Real, N*S>;         //!< Templetized vector type.
-    using MatrixK = Eigen::Matrix<Real, N, S>;        //!< Templetized matrix type.
-    using MatrixJ = Eigen::Matrix<Real, N*S, N*S>;    //!< Templetized matrix type.
-    using SolverK = NonlinearSolver<N*S>;             //!< Templetized nonlinear solver type for IRK methods.
-    using SolverN = NonlinearSolver<N>;               //!< Templetized nonlinear solver type for ERK and DIRK methods.
-    using VectorS = typename Tableau<S>::Vector;      //!< Templetized vector type.
-    using MatrixS = typename Tableau<S>::Matrix;      //!< Templetized matrix type.
-    using VectorN = typename Implicit<N, M>::VectorN; //!< Templetized vector type.
-    using MatrixN = typename Implicit<N, M>::MatrixN; //!< Templetized matrix type.
-    using VectorM = typename Implicit<N, M>::VectorM; //!< Templetized vector type.
-    using MatrixM = typename Implicit<N, M>::MatrixM; //!< Templetized matrix type.
-    using VectorP = Eigen::Matrix<Real, N+M, 1>;      //!< Templetized vector type.
-    using MatrixP = Eigen::Matrix<Real, N+M, N+M>;    //!< Templetized matrix type.
+    using VectorK = Eigen::Vector<Real, N*S>;          //!< Templetized vector type.
+    using MatrixK = Eigen::Matrix<Real, N, S>;         //!< Templetized matrix type.
+    using MatrixJ = Eigen::Matrix<Real, N*S, N*S>;     //!< Templetized matrix type.
+    using SolverK = NonlinearSolver<N*S>;              //!< Templetized nonlinear solver type for IRK methods.
+    using SolverN = NonlinearSolver<N>;                //!< Templetized nonlinear solver type for ERK and DIRK methods.
+    using VectorS = typename Tableau<S>::Vector;       //!< Templetized vector type.
+    using MatrixS = typename Tableau<S>::Matrix;       //!< Templetized matrix type.
+    using VectorN = typename Implicit<N, M>::VectorF;  //!< Templetized vector type.
+    using MatrixN = typename Implicit<N, M>::MatrixJF; //!< Templetized matrix type.
+    using VectorM = typename Implicit<N, M>::VectorH;  //!< Templetized vector type.
+    using MatrixM = typename Implicit<N, M>::MatrixJH; //!< Templetized matrix type.
+    using VectorP = Eigen::Matrix<Real, N+M, 1>;       //!< Templetized vector type.
+    using MatrixP = Eigen::Matrix<Real, N+M, N+M>;     //!< Templetized matrix type.
 
   public:
     using System   = typename Implicit<N, M>::Pointer;    //!< Shared pointer to an implicit ODE/DAE system.

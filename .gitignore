@@ -40,7 +40,12 @@
 # Ipe
 *autosave.ipe
 
+# Matlab
+*.asv
+*.mltbx
+
 # Maple
+*.mla
 *.bak
 
 # Temporary directory

@@ -91,15 +91,16 @@ private:
   Real m_m_3{1.0}; // Body 3 mass
 
 public:
-  using Matrix0  = Eigen::Matrix<Real, 0, 12>;
-  using Vector12 = Eigen::Matrix<Real, 12, 1>;
-  using Matrix12 = Eigen::Matrix<Real, 12, 12>;
+  using VectorF  = typename Explicit<12, 0>::VectorF;
+  using MatrixJF = typename Explicit<12, 0>::MatrixJF;
+  using VectorH  = typename Explicit<12, 0>::VectorH;
+  using MatrixJH = typename Explicit<12, 0>::MatrixJH;
 
   ThreeBodyExplicit() : Explicit<12, 0>("ThreeBodyExplicit") {}
 
   ~ThreeBodyExplicit() {}
 
-  Vector12 f(Vector12 const &x, Real /*t*/)  const override
+  VectorF f(VectorF const &x, Real /*t*/)  const override
   {
     #define CMD "Sandals::ThreeBodyExplicit::f(...): "
 
@@ -109,7 +110,7 @@ public:
     Real d_23{std::sqrt(std::pow(x(1) - x(2), 2.0) + std::pow(x(4) - x(5), 2.0))};
 
     // Compute the output
-    Vector12 f;
+    VectorF f;
     f <<
       x(6),
       x(7),
@@ -129,7 +130,7 @@ public:
     #undef CMD
   }
 
-  Matrix12 Jf_x(Vector12 const &x, Real /*t*/) const override
+  MatrixJF Jf_x(VectorF const &x, Real /*t*/) const override
   {
     #define CMD "Sandals::ThreeBodyExplicit::Jf_x(...): "
 
@@ -139,7 +140,7 @@ public:
     Real d_23{std::sqrt(std::pow(x(1) - x(2), 2.0) + std::pow(x(4) - x(5), 2.0))};
 
     // Compute the Jacobian of the three body problem
-    Matrix12 Jf_x;
+    MatrixJF Jf_x;
     Jf_x <<
       0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0,
       0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0,
@@ -195,15 +196,15 @@ public:
     #undef CMD
   }
 
-  Vector0 h(Vector12 const &/*x*/, Real /*t*/) const override {return Vector0::Zero();}
+  VectorH h(VectorF const &/*x*/, Real /*t*/) const override {return VectorH::Zero();}
 
-  Matrix0 Jh_x(Vector12 const &/*x*/, Real /*t*/) const override {return Matrix0::Zero();}
+  MatrixJH Jh_x(VectorF const &/*x*/, Real /*t*/) const override {return MatrixJH::Zero();}
 
-  bool in_domain(Vector12 const &/*x*/, Real /*t*/) const override {return true;}
+  bool in_domain(VectorF const &/*x*/, Real /*t*/) const override {return true;}
 
-  Vector12 ics() const
+  VectorF ics() const
   {
-    Vector12 ics;
+    VectorF ics;
     ics <<
       0.97000436,
      -0.97000436,

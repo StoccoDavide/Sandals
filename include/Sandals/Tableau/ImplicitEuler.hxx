@@ -45,6 +45,8 @@ namespace Sandals
   }; // class ImplicitEulerTableau
 
   //! Class container for the Implicit Euler method.
+  //! \tparam N The dimension of the ODE/DAE system.
+  //! \tparam M The dimension of the invariants manifold.
   template <Size N, Size M = 0>
   class ImplicitEuler : public RungeKutta<1, N, M>
   {

@@ -48,6 +48,8 @@ namespace Sandals {
   //! \f]
   //!
   //! Such a solution can be retrieved as standard library vectors or Eigen library vectors.
+  //! \tparam N The dimension of the ODE/DAE system.
+  //! \tparam M The dimension of the invariants manifold.
   template <Size N, Size M = 0>
   struct Solution
   {

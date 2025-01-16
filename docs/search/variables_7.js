@@ -12,7 +12,7 @@ var searchData=
   ['m_5fiterations_9',['m_iterations',['../class_sandals_1_1_nonlinear_solver.html#ab5d50fb5f92a2808260cd8c863c4c851',1,'Sandals::NonlinearSolver']]],
   ['m_5fjacobian_10',['m_jacobian',['../class_sandals_1_1_nonlinear_solver.html#ae3d1ffe6e404ffac07f2b64a0966e9ff',1,'Sandals::NonlinearSolver']]],
   ['m_5fjacobian_5fevaluations_11',['m_jacobian_evaluations',['../class_sandals_1_1_nonlinear_solver.html#a8d620501804cae03dea1107e6821a1b4',1,'Sandals::NonlinearSolver']]],
-  ['m_5flu_12',['m_lu',['../class_sandals_1_1_newton.html#a3b4d35e5a6049873da7f18f042c024c2',1,'Sandals::Newton::m_lu'],['../class_sandals_1_1_runge_kutta.html#a1f64f42b9a65470f89ac3a6b41e77a9a',1,'Sandals::RungeKutta::m_lu']]],
+  ['m_5flu_12',['m_lu',['../class_sandals_1_1_newton.html#a3b4d35e5a6049873da7f18f042c024c2',1,'Sandals::Newton::m_lu'],['../class_sandals_1_1_runge_kutta.html#a1f64f42b9a65470f89ac3a6b41e77a9a',1,'Sandals::RungeKutta::m_lu'],['../class_sandals_1_1_semi_explicit.html#a8c3cf2c8b6effb9d3194fe61cf634279',1,'Sandals::SemiExplicit::m_lu']]],
   ['m_5fmax_5ffunction_5fevaluations_13',['m_max_function_evaluations',['../class_sandals_1_1_nonlinear_solver.html#a97c77a81e30a7badddf3627856e8e8ed',1,'Sandals::NonlinearSolver']]],
   ['m_5fmax_5fiterations_14',['m_max_iterations',['../class_sandals_1_1_nonlinear_solver.html#ace8b8215eaa90e55d5550210bc239c1f',1,'Sandals::NonlinearSolver']]],
   ['m_5fmax_5fjacobian_5fevaluations_15',['m_max_jacobian_evaluations',['../class_sandals_1_1_nonlinear_solver.html#a0a071645728b0e427c3f40d156d5f849',1,'Sandals::NonlinearSolver']]],

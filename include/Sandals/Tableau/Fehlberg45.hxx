@@ -59,6 +59,8 @@ namespace Sandals
   }; // class Fehlberg45Tableau
 
   //! Class container for the Runge-Kutta-Fehlberg 4(5) method.
+  //! \tparam N The dimension of the ODE/DAE system.
+  //! \tparam M The dimension of the invariants manifold.
   template <Size N, Size M = 0>
   class Fehlberg45 : public RungeKutta<6, N, M>
   {

@@ -34,7 +34,8 @@ var searchData=
   ['explicit_20dynamic_20systems_31',['explicit dynamic systems',['../class_sandals_1_1_runge_kutta.html#autotoc_md12',1,'DIRK methods for explicit dynamic systems'],['../class_sandals_1_1_runge_kutta.html#autotoc_md6',1,'ERK methods for explicit dynamic systems'],['../class_sandals_1_1_runge_kutta.html#autotoc_md9',1,'IRK methods for explicit dynamic systems']]],
   ['explicit_20runge_20kutta_20methods_32',['Explicit Runge-Kutta methods',['../class_sandals_1_1_runge_kutta.html#autotoc_md5',1,'']]],
   ['explicit_2ehxx_33',['Explicit.hxx',['../_explicit_8hxx.html',1,'']]],
-  ['expliciteuler_34',['ExplicitEuler',['../class_sandals_1_1_explicit_euler.html',1,'Sandals::ExplicitEuler&lt; N, M &gt;'],['../class_sandals_1_1_explicit_euler.html#a872cd387664dafecae6073ef5836e24b',1,'Sandals::ExplicitEuler::ExplicitEuler()'],['../class_sandals_1_1_explicit_euler.html#a93fcf056ec7b929fde4ede100cdb2d28',1,'Sandals::ExplicitEuler::ExplicitEuler(System t_system)']]],
-  ['expliciteuler_2ehxx_35',['ExplicitEuler.hxx',['../_explicit_euler_8hxx.html',1,'']]],
-  ['expliciteulertableau_36',['ExplicitEulerTableau',['../class_sandals_1_1_explicit_euler_tableau.html',1,'Sandals::ExplicitEulerTableau'],['../class_sandals_1_1_explicit_euler_tableau.html#a82d9f8e66a15866a29ebc7acbc76500d',1,'Sandals::ExplicitEulerTableau::ExplicitEulerTableau()']]]
+  ['explicit_3c_20n_2c_200_20_3e_34',['Explicit&lt; N, 0 &gt;',['../class_sandals_1_1_explicit.html',1,'Sandals']]],
+  ['expliciteuler_35',['ExplicitEuler',['../class_sandals_1_1_explicit_euler.html',1,'Sandals::ExplicitEuler&lt; N, M &gt;'],['../class_sandals_1_1_explicit_euler.html#a872cd387664dafecae6073ef5836e24b',1,'Sandals::ExplicitEuler::ExplicitEuler()'],['../class_sandals_1_1_explicit_euler.html#a93fcf056ec7b929fde4ede100cdb2d28',1,'Sandals::ExplicitEuler::ExplicitEuler(System t_system)']]],
+  ['expliciteuler_2ehxx_36',['ExplicitEuler.hxx',['../_explicit_euler_8hxx.html',1,'']]],
+  ['expliciteulertableau_37',['ExplicitEulerTableau',['../class_sandals_1_1_explicit_euler_tableau.html',1,'Sandals::ExplicitEulerTableau'],['../class_sandals_1_1_explicit_euler_tableau.html#a82d9f8e66a15866a29ebc7acbc76500d',1,'Sandals::ExplicitEulerTableau::ExplicitEulerTableau()']]]
 ];

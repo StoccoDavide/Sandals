@@ -47,6 +47,8 @@ namespace Sandals
   }; // class SSPRK22Tableau
 
   //! Class container for the 2-stage strong-stability preserving Runge-Kutta (or Heun) order 2 method.
+  //! \tparam N The dimension of the ODE/DAE system.
+  //! \tparam M The dimension of the invariants manifold.
   template <Size N, Size M = 0>
   class SSPRK22 : public RungeKutta<2, N, M>
   {

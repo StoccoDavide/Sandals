@@ -63,6 +63,8 @@ namespace Sandals
   }; // class SSPRK104Tableau
 
   //! Class container for the 10-stage strong-stability preserving Runge-Kutta order 4 method.
+  //! \tparam N The dimension of the ODE/DAE system.
+  //! \tparam M The dimension of the invariants manifold.
   template <Size N, Size M = 0>
   class SSPRK104 : public RungeKutta<10, N, M>
   {

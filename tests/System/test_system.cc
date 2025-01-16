@@ -9,8 +9,9 @@
 \* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 #include "Sandals.hh"
-#include "ODEs/ThreeBodyImplicit.hh"
-#include "ODEs/ThreeBodyExplicit.hh"
+#include "ODEs/OscillatorImplicit.hh"
+#include "ODEs/OscillatorExplicit.hh"
+#include "ODEs/OscillatorSemiExplicit.hh"
 
 #ifdef SANDALS_ENABLE_PLOTTING
   #include <matplot/matplot.h>
@@ -22,14 +23,14 @@ using namespace matplot;
 #endif
 
 int main() {
-  RK4<12, 0>::Time time = Eigen::VectorXd::LinSpaced(1000, 0.0, 100.0);
+  RK4<2, 1>::Time time = Eigen::VectorXd::LinSpaced(1000, 0.0, 100.0);
 
-  ThreeBodyImplicit system_implicit;
-  RK4<12, 0> integrator_implicit(std::make_shared<ThreeBodyImplicit>(system_implicit));
+  OscillatorImplicit system_implicit;
+  RK4<2, 1> integrator_implicit(std::make_shared<OscillatorImplicit>(system_implicit));
   integrator_implicit.enable_projection();
   integrator_implicit.enable_reverse_mode();
-  RK4<12, 0>::Solution solution_implicit;
-  RK4<12, 0>::Solution solution_implicit_adaptive;
+  RK4<2, 1>::Solution solution_implicit;
+  RK4<2, 1>::Solution solution_implicit_adaptive;
   integrator_implicit.solve(time, system_implicit.ics(), solution_implicit);
   integrator_implicit.adaptive_solve(time, system_implicit.ics(), solution_implicit_adaptive);
 
@@ -55,12 +56,13 @@ int main() {
   );
   #endif
 
-  ThreeBodyExplicit system_explicit;
-  RK4<12, 0> integrator_explicit(std::make_shared<ThreeBodyExplicit>(system_explicit));
+
+  OscillatorExplicit system_explicit;
+  RK4<2,1> integrator_explicit(std::make_shared<OscillatorExplicit>(system_explicit));
   integrator_explicit.enable_projection();
   integrator_explicit.enable_reverse_mode();
-  RK4<12, 0>::Solution solution_explicit;
-  RK4<12, 0>::Solution solution_explicit_adaptive;
+  RK4<2,1>::Solution solution_explicit;
+  RK4<2,1>::Solution solution_explicit_adaptive;
   integrator_explicit.solve(time, system_explicit.ics(), solution_explicit);
   integrator_explicit.adaptive_solve(time, system_explicit.ics(), solution_explicit_adaptive);
 
@@ -83,6 +85,37 @@ int main() {
   );
   plot(
     solution_explicit_adaptive.std_t(), solution_explicit_adaptive.std_h(0)
+  );
+  #endif
+
+  OscillatorSemiExplicit system_semiexplicit;
+  RK4<2, 1> integrator_semiexplicit(std::make_shared<OscillatorSemiExplicit>(system_semiexplicit));
+  integrator_semiexplicit.enable_projection();
+  integrator_semiexplicit.enable_reverse_mode();
+  RK4<2, 1>::Solution solution_semiexplicit;
+  RK4<2, 1>::Solution solution_semiexplicit_adaptive;
+  integrator_semiexplicit.solve(time, system_semiexplicit.ics(), solution_semiexplicit);
+  integrator_semiexplicit.adaptive_solve(time, system_semiexplicit.ics(), solution_semiexplicit_adaptive);
+
+  #ifdef SANDALS_ENABLE_PLOTTING
+  auto fig_3a = figure();
+  figure(fig_3a);
+  plot(
+    solution_semiexplicit.std_t(), solution_semiexplicit.std_x(0),
+    solution_semiexplicit.std_t(), solution_semiexplicit.std_x(1)
+  );
+  plot(
+    solution_semiexplicit_adaptive.std_t(), solution_semiexplicit_adaptive.std_x(0),
+    solution_semiexplicit_adaptive.std_t(), solution_semiexplicit_adaptive.std_x(1)
+  );
+
+  auto fig_3b = figure();
+  figure(fig_3b);
+  plot(
+    solution_semiexplicit.std_t(), solution_semiexplicit.std_h(0)
+  );
+  plot(
+    solution_semiexplicit_adaptive.std_t(), solution_semiexplicit_adaptive.std_h(0)
   );
 
   show();

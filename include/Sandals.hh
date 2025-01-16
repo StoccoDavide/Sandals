@@ -228,6 +228,7 @@ namespace Sandals
 // ODE/DAE system of equations
 #include "Sandals/System/Implicit.hxx"
 #include "Sandals/System/Explicit.hxx"
+#include "Sandals/System/SemiExplicit.hxx"
 
 // Runge-Kutta integrator
 #include "Sandals/Tableau.hxx"

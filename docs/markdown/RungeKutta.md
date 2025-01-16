@@ -8,12 +8,13 @@ ODEs and DAEs can be expressed in several forms. While these forms may be mathem
 
 - *Explicit* form: \f$\mathbf{x}^\prime = \mathbf{f}(\mathbf{x}, t)\f$.
 - *Implicit* form: \f$\mathbf{F}(t\mathbf{x}, \mathbf{x}^\prime, t) = \mathbf{0}\f$.
+- *SemiExplicit* form: \f$\mathbf{A}(\mathbf{x}, t)\mathbf{x}^\prime = \mathbf{b}(\mathbf{x}, t)\f$.
 
-The implicit form is the most general and is frequently used to represent DAEs. However, the explicit forms is more commonly employed for ODEs.
+The implicit form is the most general and is frequently used to represent DAEs. However, the explicit forms is more commonly employed for ODEs. However, the explicit and semi-explicit forms are more commonly employed for ODEs. Note that the semi-explicit form is a subset of the explicit form. Consequently, the Runge-Kutta methods we implement will be specialized only for the explicit and implicit forms.
 
 ## Explicit Runge-Kutta methods
 
-Explicit Runge-Kutta (ERK) methods are among the simplest numerical techniques for solving ordinary differential equations. These methods are termed "explicit" because they typically avoid solving nonlinear systems at each step. Instead, the solution is computed directly using function evaluations. However, this holds only if the derivatives of the dynamic system's states, \f$\mathbf{x}^\prime\f$, can be computed directly or via matrix inversion. This is possible when the dynamic system can be expressed in an explicit form.
+Explicit Runge-Kutta (ERK) methods are among the simplest numerical techniques for solving ordinary differential equations. These methods are termed "explicit" because they typically avoid solving nonlinear systems at each step. Instead, the solution is computed directly using function evaluations. However, this holds only if the derivatives of the dynamic system's states, \f$\mathbf{x}^\prime\f$, can be computed directly or via matrix inversion. This is possible when the dynamic system can be expressed in an explicit or semi-explicit form.
 
 ### ERK methods for explicit dynamic systems
 

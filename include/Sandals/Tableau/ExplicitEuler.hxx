@@ -45,6 +45,8 @@ namespace Sandals
   }; // class ExplicitEulerTableau
 
   //! Class container for the Explicit Euler method.
+  //! \tparam N The dimension of the ODE/DAE system.
+  //! \tparam M The dimension of the invariants manifold.
   template <Size N, Size M = 0>
   class ExplicitEuler : public RungeKutta<1, N, M>
   {

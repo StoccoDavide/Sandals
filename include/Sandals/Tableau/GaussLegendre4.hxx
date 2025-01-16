@@ -54,6 +54,8 @@ namespace Sandals
   }; // class GaussLegendre4Tableau
 
   //! Class container for the Gauss-Legendre order 4 method.
+  //! \tparam N The dimension of the ODE/DAE system.
+  //! \tparam M The dimension of the invariants manifold.
   template <Size N, Size M = 0>
   class GaussLegendre4 : public RungeKutta<2, N, M>
   {

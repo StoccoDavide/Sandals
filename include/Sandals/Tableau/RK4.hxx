@@ -51,6 +51,8 @@ namespace Sandals
   }; // class RK4Tableau
 
   //! Class container for the Runge-Kutta order 4 method.
+  //! \tparam N The dimension of the ODE/DAE system.
+  //! \tparam M The dimension of the invariants manifold.
   template <Size N, Size M = 0>
   class RK4 : public RungeKutta<4, N, M>
   {

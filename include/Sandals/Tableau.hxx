@@ -27,6 +27,8 @@ namespace Sandals {
   //! \brief Struct container for the Butcher tableau of a Runge-Kutta method.
   //!
   //! \includedoc docs/markdown/Tableau.md
+  //!
+  //! \tparam S The size of the Butcher tableau.
   template <Size S>
   struct Tableau
   {
