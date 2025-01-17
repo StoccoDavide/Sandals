@@ -1,12 +1,12 @@
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# Copyright (c) 2025, Davide Stocco and Enrico Bertolazzi.                    #
-#                                                                             #
-# The Sandals project is distributed under the BSD 2-Clause License.          #
-#                                                                             #
-# Davide Stocco                                             Enrico Bertolazzi #
-# University of Trento                                   University of Trento #
-# e-mail: davide.stocco@unitn.it           e-mail: enrico.bertolazzi@unitn.it #
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Copyright (c) 2025, Davide Stocco and Enrico Bertolazzi.                                        #
+#                                                                                                 #
+# The Sandals project is distributed under the BSD 2-Clause License.                              #
+#                                                                                                 #
+# Davide Stocco                                                                 Enrico Bertolazzi #
+# University of Trento                                                       University of Trento #
+# e-mail: davide.stocco@unitn.it                               e-mail: enrico.bertolazzi@unitn.it #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 cmake_minimum_required(VERSION 3.14)
 
@@ -140,5 +140,3 @@ install(FILES
   ${CMAKE_CURRENT_BINARY_DIR}/SandalsConfigVersion.cmake
   DESTINATION lib/cmake/Sandals
 )
-
-# That's all folks!

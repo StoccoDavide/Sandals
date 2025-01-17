@@ -1,19 +1,12 @@
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-#              ____                  _       _ _   _ _   _ _                  #
-#             / ___|  __ _ _ __   __| | __ _| | | | | |_(_) |___              #
-#             \___ \ / _` | '_ \ / _` |/ _` | | | | | __| | / __|             #
-#              ___) | (_| | | | | (_| | (_| | | |_| | |_| | \__ \             #
-#             |____/ \__,_|_| |_|\__,_|\__,_|_|\___/ \__|_|_|___/             #
-#                                                                             #
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-
-# Authors: Davide Stocco (University of Trento)
-#          Enrico Bertolazzi (University of Trento)
-#
-# License: BSD 2-Clause License
-#
-# This is a module for the 'SandalsUtils' module. It contains the auxiliary functions to be used in
-# the 'Sandals' module.
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Copyright (c) 2025, Davide Stocco and Enrico Bertolazzi.                                        #
+#                                                                                                 #
+# The Sandals project is distributed under the BSD 2-Clause License.                              #
+#                                                                                                 #
+# Davide Stocco                                                                 Enrico Bertolazzi #
+# University of Trento                                                       University of Trento #
+# e-mail: davide.stocco@unitn.it                               e-mail: enrico.bertolazzi@unitn.it #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 SandalsUtils := module()
 
@@ -185,5 +178,3 @@ SandalsUtils := module()
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 end module: # SandalsUtils
-
-# That's all folks!

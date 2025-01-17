@@ -1,12 +1,12 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\
- * Copyright (c) 2025, Davide Stocco and Enrico Bertolazzi.                  *
- *                                                                           *
- * The Sandals project is distributed under the BSD 2-Clause License.        *
- *                                                                           *
- * Davide Stocco                                           Enrico Bertolazzi *
- * University of Trento                                 University of Trento *
- * e-mail: davide.stocco@unitn.it         e-mail: enrico.bertolazzi@unitn.it *
-\* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\
+ * Copyright (c) 2025, Davide Stocco and Enrico Bertolazzi.                                      *
+ *                                                                                               *
+ * The Sandals project is distributed under the BSD 2-Clause License.                            *
+ *                                                                                               *
+ * Davide Stocco                                                               Enrico Bertolazzi *
+ * University of Trento                                                     University of Trento *
+ * e-mail: davide.stocco@unitn.it                             e-mail: enrico.bertolazzi@unitn.it *
+\* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 #pragma once
 
@@ -201,15 +201,15 @@ namespace Sandals
   //! \param[in] os Output stream.
   void Info(std::ostream &os) {
     os
-      << "* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *" << std::endl
-      << "* Copyright (c) 2025, Davide Stocco and Enrico Bertolazzi.                  *" << std::endl
-      << "*                                                                           *" << std::endl
-      << "* The Sandals project is distributed under the BSD 2-Clause License.        *" << std::endl
-      << "*                                                                           *" << std::endl
-      << "* Davide Stocco                                           Enrico Bertolazzi *" << std::endl
-      << "* University of Trento                                 University of Trento *" << std::endl
-      << "* e-mail: davide.stocco@unitn.it         e-mail: enrico.bertolazzi@unitn.it *" << std::endl
-      << "* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *" << std::endl;
+      << "* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *" << std::endl
+      << "* Copyright (c) 2025, Davide Stocco and Enrico Bertolazzi.                                      *" << std::endl
+      << "*                                                                                               *" << std::endl
+      << "* The Sandals project is distributed under the BSD 2-Clause License.                            *" << std::endl
+      << "*                                                                                               *" << std::endl
+      << "* Davide Stocco                                                               Enrico Bertolazzi *" << std::endl
+      << "* University of Trento                                                     University of Trento *" << std::endl
+      << "* e-mail: davide.stocco@unitn.it                             e-mail: enrico.bertolazzi@unitn.it *" << std::endl
+      << "* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *" << std::endl;
   }
 
 } // namespace Sandals

@@ -51,5 +51,3 @@ Here's what the license entails:
 4. You can use this software for commercial purposes.
 5. This software is provided without warranty.
 6. The software author or license can not be held liable for any damages inflicted by the software.
-
-## That's all folks!

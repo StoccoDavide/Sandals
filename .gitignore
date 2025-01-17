@@ -48,5 +48,6 @@
 *.mla
 *.bak
 
-# Temporary directory
-tmp
+# Temporary directories
+bin/
+tmp/

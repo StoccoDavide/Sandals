@@ -1,12 +1,12 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\
- * Copyright (c) 2025, Davide Stocco and Enrico Bertolazzi.                  *
- *                                                                           *
- * The Sandals project is distributed under the BSD 2-Clause License.        *
- *                                                                           *
- * Davide Stocco                                           Enrico Bertolazzi *
- * University of Trento                                 University of Trento *
- * e-mail: davide.stocco@unitn.it         e-mail: enrico.bertolazzi@unitn.it *
-\* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\
+ * Copyright (c) 2025, Davide Stocco and Enrico Bertolazzi.                                      *
+ *                                                                                               *
+ * The Sandals project is distributed under the BSD 2-Clause License.                            *
+ *                                                                                               *
+ * Davide Stocco                                                               Enrico Bertolazzi *
+ * University of Trento                                                     University of Trento *
+ * e-mail: davide.stocco@unitn.it                             e-mail: enrico.bertolazzi@unitn.it *
+\* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 #pragma once
 
@@ -24,7 +24,7 @@ namespace Sandals {
    |                     |___/
   \*/
 
-  //! \brief Class container for the generic \em implicit, \em explicit, and <em> diagonally implicit +
+  //! \brief Class container for the generic \em implicit, \em explicit, and <em> diagonally implicit
   //! </em> Runge-Kutta methods.
   //!
   //! \includedoc docs/markdown/RungeKutta.md

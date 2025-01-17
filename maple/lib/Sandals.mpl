@@ -1,19 +1,12 @@
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-#                    ____                  _       _                          #
-#                   / ___|  __ _ _ __   __| | __ _| |___                      #
-#                   \___ \ / _` | '_ \ / _` |/ _` | / __|                     #
-#                    ___) | (_| | | | | (_| | (_| | \__ \                     #
-#                   |____/ \__,_|_| |_|\__,_|\__,_|_|___/                     #
-#                                                                             #
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-
-# Current version authors:
-#   Davide Stocco     (University of Trento)
-#   Enrico Bertolazzi (University of Trento)
-#
-# License: BSD 2-Clause License
-#
-# This is a module for the 'Sandals' module.
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Copyright (c) 2025, Davide Stocco and Enrico Bertolazzi.                                        #
+#                                                                                                 #
+# The Sandals project is distributed under the BSD 2-Clause License.                              #
+#                                                                                                 #
+# Davide Stocco                                                                 Enrico Bertolazzi #
+# University of Trento                                                       University of Trento #
+# e-mail: davide.stocco@unitn.it                               e-mail: enrico.bertolazzi@unitn.it #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 unprotect('Sandals');
 module Sandals()
@@ -42,15 +35,15 @@ module Sandals()
     description "Print 'Sandals' module information.";
 
     printf(
-      "* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\n"
-      "* Copyright (c) 2025, Davide Stocco and Enrico Bertolazzi.                  *\n"
-      "*                                                                           *\n"
-      "* The Sandals project is distributed under the BSD 2-Clause License.        *\n"
-      "*                                                                           *\n"
-      "* Davide Stocco                                           Enrico Bertolazzi *\n"
-      "* University of Trento                                 University of Trento *\n"
-      "* e-mail: davide.stocco@unitn.it         e-mail: enrico.bertolazzi@unitn.it *\n"
-      "* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\n"
+      "* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\n"
+      "* Copyright (c) 2025, Davide Stocco and Enrico Bertolazzi.                                      *\n"
+      "*                                                                                               *\n"
+      "* The Sandals project is distributed under the BSD 2-Clause License.                            *\n"
+      "*                                                                                               *\n"
+      "* Davide Stocco                                                               Enrico Bertolazzi *\n"
+      "* University of Trento                                                     University of Trento *\n"
+      "* e-mail: davide.stocco@unitn.it                             e-mail: enrico.bertolazzi@unitn.it *\n"
+      "* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\n"
     );
     return NULL;
   end proc: # Info
@@ -703,32 +696,75 @@ module Sandals()
     _self::Sandals,
     name::string,
     {
-    data::list(symbol = algebraic) := [],
-    info::string                   := "No class description provided."
+    data::list(symbol = algebraic)               := [],
+    time::{list(numeric), range(numeric)}        := [],
+    ics::{Vector(algebraic), list(algebraic)}    := [],
+    domain::{Vector(algebraic), list(algebraic)} := [],
+    info::string                                 := "No class description provided."
     }, $)::string;
 
     description "Generate C++ code for the loaded system with name <name>, Sandals class <type>, "
-      "output file './<fname>.m', optional internal class data <data>, and class information string "
+      "output file './<fname>.m', optional internal class data <data>, integration time range "
+      "<time>, initial conditions <ics>, domain <domain> d(x,t) > 0, and class information string "
       "<info>.";
 
-    # Get system data
+    local time_lst, ics_vec;
+
+    # Check if the system is loaded
     if (_self:-m_SystemType = "Empty") then
       error("no system loaded yet.");
     end if;
 
+    # Check if time range is valid
+    if not type(time, list) then
+      time_lst := convert(time, list)
+    else
+      time_lst := time;
+    end if;
+
+    if (nops(time_lst) > 0) then
+      if (time_lst[1] = time_lst[2]) then
+        error("degenerate time range detected.");
+      elif (time_lst[2] < time_lst[1]) then
+        WARNING("decreasing time range detected, consider using the reverse time mode.");
+      end if;
+    end if;
+
+    # Check if the initial conditions are valid
+    if not type(ics, Vector) then
+      ics_vec := convert(ics, Vector)
+    else
+      ics_vec := ics;
+    end if;
+
+    if (LinearAlgebra:-Dimension(ics_vec) > 0) then
+      if (LinearAlgebra:-Dimension(ics_vec) <> LinearAlgebra:-Dimension(_self:-m_x)) then
+        error("invalid initial conditions detected.");
+      elif (nops(indets(ics_vec) minus convert(lhs~(data), set)) > 0) then
+        WARNING("initial conditions may contain unknown variables.");
+      end if;
+    end if;
+
+    # Check if the domain is valid
+    # FIXME:if nops(domain) > 0 then
+    #   if (nops(indets(domain) minus lhs~(data) minus {t, op(_self:-m_x)}) > 0) then
+    #     WARNING("domain may contain unknown variables.");
+    #   end if;
+    # end if;
+
     # Generate class body string
     if (_self:-m_SystemType = "Implicit") then
-      return SandalsCodegen:-ImplicitToCpp(
-        name, _self:-m_x, _self:-m_F, _self:-m_h, parse("data") = data, parse("info") = info
-      );
+      return SandalsCodegen:-ImplicitToCpp(name, _self:-m_x, _self:-m_F, _self:-m_h,
+        parse("data") = data, parse("time") = time, parse("ics") = ics, parse("domain") = domain,
+        parse("info") = info);
     elif (_self:-m_SystemType = "Explicit") then
-      return SandalsCodegen:-ExplicitToCpp(
-        name, _self:-m_x, _self:-m_f, _self:-m_h, parse("data") = data, parse("info") = info
-      );
+      return SandalsCodegen:-ExplicitToCpp(name, _self:-m_x, _self:-m_f, _self:-m_h,
+        parse("data") = data, parse("time") = time, parse("ics") = ics, parse("domain") = domain,
+        parse("info") = info);
     elif (_self:-m_SystemType = "SemiExplicit") then
-      return SandalsCodegen:-SemiExplicitToCpp(
-        name, _self:-m_x, _self:-m_A, _self:-m_b, _self:-m_h, parse("data") = data, parse("info") = info
-      );
+      return SandalsCodegen:-SemiExplicitToCpp(name, _self:-m_x, _self:-m_A, _self:-m_b, _self:-m_h,
+        parse("data") = data, parse("time") = time, parse("ics") = ics, parse("domain") = domain,
+        parse("info") = info);
     else
       error("unknown Sandals class type '%1'.", _self:-m_SystemType);
     end if;
@@ -741,16 +777,20 @@ module Sandals()
     _self::Sandals,
     name::string,
     {
-    type::string                   := _self:-m_SystemType,
-    path::string                   := "./",
-    data::list(symbol = algebraic) := [],
-    info::string                   := "No class description provided."
+    type::string                                 := _self:-m_SystemType,
+    path::string                                 := "./",
+    data::list(symbol = algebraic)               := [],
+    time::{list(numeric), range(numeric)}        := [],
+    ics::{Vector(algebraic), list(algebraic)}    := [],
+    domain::{Vector(algebraic), list(algebraic)} := [],
+    info::string                                 := "No class description provided."
     }, $)
 
     description "Generate C++ code for the loaded system with name <name>, Sandals class <type> "
       "(""Implicit"", ""Explicit"" ,""SemiExplicit""), output file '<path>/<name>.hh', optional "
-      "internal class data <data>, and class information string <info>. Notice that if the type is "
-      "not specified, the system type is used. Instead, if the type is specified, and it is different "
+      "internal class data <data>, integration time range <time>, initial conditions <ics>, domain "
+      "<domain> d(x,t) > 0, and class information string <info>. Notice that if the type is not "
+      "specified, the system type is used. Instead, if the type is specified, and it is different "
       "from the system type, the system is converted to the specified type.";
 
     if (type <> _self:-m_SystemType) then
@@ -766,14 +806,11 @@ module Sandals()
         WARNING("system converted to '%1' class.", type);
     end if;
 
-    SandalsCodegen:-GenerateFile(cat(path, "/", name, ".hh"), _self:-TranslateToCpp(
-      _self, name, parse("data") = data, parse("info") = info)
-    );
+    SandalsCodegen:-GenerateFile(cat(path, "/", name, ".hh"), _self:-TranslateToCpp(_self, name,
+      parse("data") = data, parse("time") = time, parse("ics") = ics, parse("info") = info));
     return NULL;
   end proc: # GenerateCppCode
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 end module: # Sandals
-
-# That's all folks!

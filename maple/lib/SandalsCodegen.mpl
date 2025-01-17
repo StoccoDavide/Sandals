@@ -1,19 +1,12 @@
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-#          ____                  _       _       ____          _              #
-#         / ___|  __ _ _ __   __| | __ _| |___ / ___|___   __| | ___          #
-#         \___ \ / _` | '_ \ / _` |/ _` | / __| |   / _ \ / _` |/ _ \         #
-#          ___) | (_| | | | | (_| | (_| | \__ \ |__| (_) | (_| |  __/         #
-#         |____/ \__,_|_| |_|\__,_|\__,_|_|___/\____\___/ \__,_|\___|         #
-#                                                                             #
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-
-# Authors: Davide Stocco (University of Trento)
-#          Enrico Bertolazzi (University of Trento)
-#
-# License: BSD 2-Clause License
-#
-# This is a module for the 'SandalsCodegen' module. It contains the functions to translate the Maple
-# code into C++ code.
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Copyright (c) 2025, Davide Stocco and Enrico Bertolazzi.                                        #
+#                                                                                                 #
+# The Sandals project is distributed under the BSD 2-Clause License.                              #
+#                                                                                                 #
+# Davide Stocco                                                                 Enrico Bertolazzi #
+# University of Trento                                                       University of Trento #
+# e-mail: davide.stocco@unitn.it                               e-mail: enrico.bertolazzi@unitn.it #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 SandalsCodegen := module()
 
@@ -168,18 +161,26 @@ SandalsCodegen := module()
   local GenerateProperties := proc(
     data::list(symbol),
     {
-    indent::string := "  "
+    propbool::list(boolean) := [seq(true, i = 1..nops(data))],
+    indent::string          := "  "
     }, $)::string;
 
-    description "Generate properties code from a list of data <data> and optional indentation <indent>.";
+    description "Generate properties code from a list of data <data>, boolean flags <propbool>, "
+      "and optional indentation <indent>.";
 
     local i, out;
 
-    if evalb(nops(data) > 0) then
+    if (nops(propbool) <> nops(data)) then
+      error("the number of properties' boolean must be equal to the number of properties.");
+    end if;
+
+    if has(propbool, true) then
       out := "";
       for i from 1 to nops(data) do
-        convert(data[i], string);
-        out := cat(out, indent, "using ", %, " = this->m_", %, ";\n");
+        if propbool[i] then
+          convert(data[i], string);
+          out := cat(out, indent, "Real const & ", %, " = this->m_", %, ";\n");
+        end if;
       end do;
     else
       out := cat(indent, "// No properties\n");
@@ -192,6 +193,7 @@ SandalsCodegen := module()
   local GenerateInputs := proc(
     vars::list(list(symbol)),
     {
+    varsbool::list(list(boolean)) := [seq([seq(true, j = 1..nops(vars[i]))], i = 1..nops(vars))],
     indent::string := "  ",
     label::string  := "in"
     }, $)::string;
@@ -201,13 +203,23 @@ SandalsCodegen := module()
 
     local i, j, out;
 
-    out := "";
-    for j from 1 to nops(vars) do
-      for i from 1 to nops(vars[j]) do
-        convert(vars[j][i], string);
-        out := cat(out, indent, "using ", %, " = ", label, "_", j-1, "(", i-1, ");\n");
+    if (nops(varsbool) <> nops(vars)) then
+      error("the number of variables' boolean must be equal to the number of variables.");
+    end if;
+
+    if has(varsbool, true) then
+      out := "";
+      for j from 1 to nops(vars) do
+        for i from 1 to nops(vars[j]) do
+          if varsbool[j][i] then
+            convert(vars[j][i], string);
+            out := cat(out, indent, "Real const & ", %, " = ", label, "_", j-1, "(", i-1, ");\n");
+          end if;
+        end do;
       end do;
-    end do;
+    else
+      out := cat(indent, "// No inputs' alias\n");
+    end if;
     return out;
   end proc: # GenerateInputs
 
@@ -229,7 +241,7 @@ SandalsCodegen := module()
 
     lst := [];
     out := "";
-    if has(false, evalb~(func = 0)) and evalb(mul(dims) > 0) then
+    if has(evalb~(func =~ 0), false) and (mul(dims) > 0) then
       out := cat(out, indent, label, "_", name, " <<\n", indent, indent);
       for i from 1 to mul(dims) do
         cur := [];
@@ -257,24 +269,35 @@ SandalsCodegen := module()
     varstype::list(string) := [seq("undefined", i = 1..nops(vars))],
     outtype::string        := "undefined",
     {
-    info::string    := "No description provided.",
-    indent::string  := "  "
+    varsbool::list(boolean) := [seq(true, i = 1..nops(vars))],
+    timebool::boolean       := true,
+    info::string            := "No description provided.",
+    spec::string            := "",
+    indent::string          := "  "
     }, $)::string;
 
-    description "Generate a function header for a function <name> with variables <vars>, "
-      "description <info>, variable type <varstype>, output type <outtype>, and indentation <indent>.";
+    description "Generate a function header for a function <name> with variables <vars>, description "
+      "<info>, variables types <varstype>, output type <outtype>, function specifier <spec>, "
+      "variables boolean flag <varsbool>, time boolean flag <timebool>, and indentation <indent>.";
 
     local i, out;
+
+    if (nops(varsbool) <> nops(vars)) then
+      error("the number of variables' boolean must be equal to the number of variables.");
+    elif (nops(varstype) <> nops(vars)) then
+      error("the number of variables' types must be equal to the number of variables.");
+    end if;
 
     out := cat(
       "// ", info, "\n",
       outtype, " ", name, "("
     );
     for i from 1 to nops(vars) do
-      out := cat(out, varstype[i], "in_", i, ", ");
+      out := cat(out,
+        varstype[i], " ", `if`(varsbool[i], cat("in_", i-1), cat("/*in_", i-1, "*/")), ", "
+      );
     end do;
-    return cat(out, "Real t) const override\n{\n");
-    return out;
+    return cat(out, "Real ", `if`(timebool, "t", "/*t*/"), ") ", spec, "\n{\n");
   end proc: # GenerateHeader
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -314,7 +337,7 @@ SandalsCodegen := module()
     local tmp;
 
     tmp := cat(seq(cat(dims[i], ", "), i = 1..nops(dims)-1), dims[-1]);
-    if evalb(nops(dims) <= 1) then
+    if (nops(dims) <= 1) then
       tmp := cat(tmp, ", 1");
     end if;
 
@@ -339,23 +362,27 @@ SandalsCodegen := module()
     data::list(symbol) := [],
     info::string       := "No info",
     label::string      := "out",
+    spec::string       := "",
     indent::string     := "  "
     }, $)::string;
 
     description "Translate the vector <vec> with variables <vars> into a C++ function named <name> "
       "and return it as a string. The optional arguments are class properties <data>, function "
-      "description <info>, output type <outtype>, label <label>, and indentation string <indent>.";
+      "description <info>, output type <outtype>, label <label>, function specifier <spec>, and "
+      "indentation string <indent>.";
 
-    local header, properties, inputs, elements, outputs, dims, lst;
+    local header, properties, inputs, elements, outputs, dims, lst, i, j, propbool, varsbool;
 
     # Extract the function properties
+    propbool := [seq(has(vec, data[i]), i = 1..nops(data))];
     properties := SandalsCodegen:-GenerateProperties(
-      data, parse("indent") = indent
+      data, parse("indent") = indent, parse("propbool") = propbool
     );
 
     # Extract the function inputs
+    varsbool := [seq([seq(has(vec, vars[i][j]), j = 1..nops(vars[i]))], i = 1..nops(vars))];
     inputs := SandalsCodegen:-GenerateInputs(
-      vars, parse("indent") = indent
+      vars, parse("indent") = indent, parse("varsbool") = varsbool
     );
 
     # Extract the function elements
@@ -370,7 +397,8 @@ SandalsCodegen := module()
     # Generate the method header
     header := SandalsCodegen:-GenerateHeader(
       name, vars, varstype, outtype,
-      parse("info") = info, parse("indent") = indent
+      parse("info") = info, parse("indent") = indent, parse("spec") = spec,
+      parse("timebool") = has(vec, t), parse("varsbool") = [seq(has(varsbool[i], true), i = 1..nops(vars))]
     );
 
     # Generate the elements
@@ -396,23 +424,27 @@ SandalsCodegen := module()
     data::list(symbol) := [],
     info::string       := "No info",
     label::string      := "out",
+    spec::string       := "",
     indent::string     := "  "
     }, $)::string;
 
     description "Translate the matrix <mat> with variables <vars> into a C++ function named <name> "
       "and return it as a string. The optional arguments are class properties <data>, function "
-      "description <info>, output type <outtype>, label <label>, and indentation string <indent>.";
+      "description <info>, output type <outtype>, label <label>, function specifier <spec>, and "
+      "indentation string <indent>.";
 
-    local header, properties, inputs, elements, outputs, dims, lst;
+    local header, properties, inputs, elements, outputs, dims, lst, i, j, propbool, varsbool;
 
     # Extract the function properties
+    propbool := [seq(has(mat, data[i]), i = 1..nops(data))];
     properties := SandalsCodegen:-GenerateProperties(
-      data, parse("indent") = indent
+      data, parse("indent") = indent, parse("propbool") = propbool
     );
 
     # Extract the function inputs
+    varsbool := [seq([seq(has(mat, vars[i][j]), j = 1..nops(vars[i]))], i = 1..nops(vars))];
     inputs := SandalsCodegen:-GenerateInputs(
-      vars, parse("indent") = indent
+      vars, parse("indent") = indent, parse("varsbool") = varsbool
     );
 
     # Extract the function elements
@@ -427,7 +459,8 @@ SandalsCodegen := module()
     # Generate the method header
     header := SandalsCodegen:-GenerateHeader(
       name, vars, varstype, outtype,
-      parse("info") = info, parse("indent") = indent
+      parse("info") = info, parse("indent") = indent, parse("spec") = spec,
+      parse("timebool") = has(mat, t), parse("varsbool") = [seq(has(varsbool[i], true), i = 1..nops(vars))]
     );
 
     # Generate the elements
@@ -454,14 +487,17 @@ SandalsCodegen := module()
     data::list(symbol) := [],
     info::string       := "No info",
     label::string      := "out",
+    spec::string       := "",
     indent::string     := "  "
     }, $)::string;
 
     description "Translate the tensor <ten> with variables <vars> into a C++ function named <name> "
       "and return it as a string. The optional arguments are class properties <data>, function "
-      "description <info>, output type <outtype>, label <label>, and indentation string <indent>.";
+      "description <info>, output type <outtype>, label <label>, function specifier <spec>, and "
+      "indentation string <indent>.";
 
-    local dims, header, properties, inputs, elements, i, mat, outputs_tmp, lst_tmp, outputs, lst;
+    local dims, header, properties, inputs, elements, i, mat, outputs_tmp, lst_tmp, outputs, lst,
+      j, propbool, varsbool;
 
     # Check the tensor dimensions
     dims := op~(2, [ArrayDims(ten)]);
@@ -472,17 +508,18 @@ SandalsCodegen := module()
     end if;
 
     # Extract the function properties
+    propbool := [seq(has(ten, data[i]), i = 1..nops(data))];
     properties := SandalsCodegen:-GenerateProperties(
-      data, parse("indent") = indent
+      data, parse("indent") = indent, parse("propbool") = propbool
     );
 
     # Extract the function inputs
+    varsbool := [seq([seq(has(ten, vars[i][j]), j = 1..nops(vars[i]))], i = 1..nops(vars))];
     inputs := SandalsCodegen:-GenerateInputs(
-      vars, parse("indent") = indent
+      vars, parse("indent") = indent, parse("varsbool") = varsbool
     );
 
     # Extract the function elements
-
     lst := []; outputs := "";
     for i from 1 to dims[-1] do
       mat := convert(ten[1..-1, 1..-1, i], Matrix);
@@ -499,7 +536,8 @@ SandalsCodegen := module()
     # Generate the method header
     header := SandalsCodegen:-GenerateHeader(
       name, vars, varstype, outtype,
-      parse("info") = info, parse("indent") = indent
+      parse("info") = info, parse("indent") = indent, parse("spec") = spec,
+      parse("timebool") = has(ten, t), parse("varsbool") = [seq(has(varsbool[i], true), i = 1..nops(vars))]
     );
 
     # Generate the elements
@@ -517,7 +555,7 @@ SandalsCodegen := module()
 
   local GenerateConstructor := proc(
     name::string,
-    sys_type::string,
+    type::string,
     {
     num_eqns::nonnegint := 0,
     num_invs::nonnegint := 0,
@@ -526,22 +564,21 @@ SandalsCodegen := module()
     indent::string      := "  "
     }, $)::string;
 
-    description "Generate a constructor for a system named <name> with system type <sys_type>, "
+    description "Generate a constructor for a system named <name> with system type <type>, "
       "number of functions <num_eqns>, number of invariants <num_invs>, system data <data> and "
       "description <info>.";
 
     return cat(
       "// ", info, "\n",
-      name, "() : Explicit<", num_eqns, ", ", num_invs, ">(""", name, """) {}\n",
+      name, "() : ", type, "<", num_eqns, ", ", num_invs, ">(""", name, """) {}\n",
       "\n",
       `if`(nops(data) > 0, cat(
         "// ", info, "\n",
         name, "(", StringTools:-Delete(cat~(op(cat~("Real ", convert~(data, string), ", "))), -2..-1), ")\n",
-        indent, ": Explicit<", num_eqns, ", ", num_invs, ">(""", name, """)",
+        indent, ": ", type, "<", num_eqns, ", ", num_invs, ">(""", name, """)",
         cat~(op(cat~(", m_", convert~(data, string), "(", convert~(data, string), ")"))), " {}\n"),
         "")
     );
-
   end proc: # GenerateConstructor
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -559,10 +596,12 @@ SandalsCodegen := module()
     F::{Vector(algebraic), list(algebraic)},
     h::{Vector(algebraic), list(algebraic)},
     {
-    data::list(symbol = algebraic)   := [],
-    domain::list(symbol = algebraic) := [],
-    info::string                     := "No class description provided.",
-    indent::string                   := "  "
+    data::list(symbol = algebraic)               := [],
+    time::{list(numeric), range(numeric)}        := [],
+    ics::{Vector(algebraic), list(algebraic)}    := [],
+    domain::{Vector(algebraic), list(algebraic)} := [],
+    info::string                                 := "No class description provided.",
+    indent::string                               := "  "
     }, $)::string;
 
     description "Generate an implicit system for the first-order differential equations F(x,x',t) "
@@ -625,7 +664,7 @@ SandalsCodegen := module()
     i := indent;
 
     # Generate properties
-    if evalb(nops(data) > 0) then
+    if (nops(data) > 0) then
       properties := lhs~(data);
       data_str   := cat~(op(cat~(
         i, "Real m_", convert~(properties, string), "{", convert~(rhs~(data), string), "};\n"
@@ -641,22 +680,22 @@ SandalsCodegen := module()
 
     # Return output string
     return cat(
-      "/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\\\n"
-      " * Copyright (c) 2025, Davide Stocco and Enrico Bertolazzi.                  *\n"
-      " *                                                                           *\n"
-      " * The Sandals project is distributed under the BSD 2-Clause License.        *\n"
-      " *                                                                           *\n"
-      " * Davide Stocco                                           Enrico Bertolazzi *\n"
-      " * University of Trento                                 University of Trento *\n"
-      " * e-mail: davide.stocco@unitn.it         e-mail: enrico.bertolazzi@unitn.it *\n"
-      "\* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */\n"
+      "/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\\\n"
+      " * Copyright (c) 2025, Davide Stocco and Enrico Bertolazzi.                                      *\n"
+      " *                                                                                               *\n"
+      " * The Sandals project is distributed under the BSD 2-Clause License.                            *\n"
+      " *                                                                                               *\n"
+      " * Davide Stocco                                                               Enrico Bertolazzi *\n"
+      " * University of Trento                                                     University of Trento *\n"
+      " * e-mail: davide.stocco@unitn.it                             e-mail: enrico.bertolazzi@unitn.it *\n"
+      "\\* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */\n"
       "\n",
       "// C++ generated code for implicit system: ", name, "\n",
       "// This file has been automatically generated by Sandals.\n",
       "// DISCLAIMER: If you need to edit it, do it wisely!\n",
       "\n",
-      "#ifndef SANDALS_MAPLE_", StringTools:-UpperCase(name), "_IMPLICIT_HH\n"
-      "#define SANDALS_MAPLE_", StringTools:-UpperCase(name), "_IMPLICIT_HH\n"
+      "#ifndef SANDALS_MAPLE_", StringTools:-UpperCase(name), "_IMPLICIT_HH\n",
+      "#define SANDALS_MAPLE_", StringTools:-UpperCase(name), "_IMPLICIT_HH\n",
       "\n",
       "using namespace Sandals;\n"
       "using namespace std;\n"
@@ -668,10 +707,10 @@ SandalsCodegen := module()
       data_str,
       "\n",
       "public:\n",
-      i, "using VectorF  = typename Implicit<", num_eqns, ", ", num_eqns, ">::VectorF;\n",
-      i, "using MatrixJF = typename Implicit<", num_eqns, ", ", num_eqns, ">::MatrixJF;\n",
-      i, "using VectorH  = typename Implicit<", num_eqns, ", ", num_eqns, ">::VectorH;\n",
-      i, "using MatrixJH = typename Implicit<", num_eqns, ", ", num_eqns, ">::MatrixJH;\n",
+      i, "using VectorF  = typename Implicit<", num_eqns, ", ", num_invs, ">::VectorF;\n",
+      i, "using MatrixJF = typename Implicit<", num_eqns, ", ", num_invs, ">::MatrixJF;\n",
+      i, "using VectorH  = typename Implicit<", num_eqns, ", ", num_invs, ">::VectorH;\n",
+      i, "using MatrixJH = typename Implicit<", num_eqns, ", ", num_invs, ">::MatrixJH;\n",
       "\n",
       SandalsCodegen:-ApplyIndent(i, GenerateConstructor(
           name, "Implicit",
@@ -723,7 +762,7 @@ SandalsCodegen := module()
       "\n",
       i, "bool in_domain(VectorF const &/*x*/, Real /*t*/) const override {return true;}\n",
       "\n",
-      "} // class ", name, "\n",
+      "}; // class ", name, "\n",
       "\n",
       "#endif // SANDALS_MAPLE_", StringTools:-UpperCase(name), "_IMPLICIT_HH\n"
     );
@@ -744,10 +783,12 @@ SandalsCodegen := module()
     f::{Vector(algebraic), list(algebraic)},
     h::{Vector(algebraic), list(algebraic)},
     {
-    data::list(symbol = algebraic)   := [],
-    domain::list(symbol = algebraic) := [],
-    info::string                     := "No class description provided.",
-    indent::string                   := "  "
+    data::list(symbol = algebraic)               := [],
+    time::{list(numeric), range(numeric)}        := [],
+    ics::{Vector(algebraic), list(algebraic)}    := [],
+    domain::{Vector(algebraic), list(algebraic)} := [],
+    info::string                                 := "No class description provided.",
+    indent::string                               := "  "
     }, $)::string;
 
     description "Generate an explicit system for the first-order differential equations x' = f(x,t), "
@@ -793,7 +834,7 @@ SandalsCodegen := module()
     i := indent;
 
     # Generate properties
-    if evalb(nops(data) > 0) then
+    if (nops(data) > 0) then
       properties := lhs~(data);
       data_str   := cat~(op(cat~(
         i, "Real m_", convert~(properties, string), "{", convert~(rhs~(data), string), "};\n"
@@ -809,22 +850,22 @@ SandalsCodegen := module()
 
     # Return output string
     return cat(
-      "/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\\\n"
-      " * Copyright (c) 2025, Davide Stocco and Enrico Bertolazzi.                  *\n"
-      " *                                                                           *\n"
-      " * The Sandals project is distributed under the BSD 2-Clause License.        *\n"
-      " *                                                                           *\n"
-      " * Davide Stocco                                           Enrico Bertolazzi *\n"
-      " * University of Trento                                 University of Trento *\n"
-      " * e-mail: davide.stocco@unitn.it         e-mail: enrico.bertolazzi@unitn.it *\n"
-      "\* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */\n"
+      "/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\\\n"
+      " * Copyright (c) 2025, Davide Stocco and Enrico Bertolazzi.                                      *\n"
+      " *                                                                                               *\n"
+      " * The Sandals project is distributed under the BSD 2-Clause License.                            *\n"
+      " *                                                                                               *\n"
+      " * Davide Stocco                                                               Enrico Bertolazzi *\n"
+      " * University of Trento                                                     University of Trento *\n"
+      " * e-mail: davide.stocco@unitn.it                             e-mail: enrico.bertolazzi@unitn.it *\n"
+      "\\* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */\n"
       "\n",
       "// C++ generated code for explicit system: ", name, "\n",
       "// This file has been automatically generated by Sandals.\n",
       "// DISCLAIMER: If you need to edit it, do it wisely!\n",
       "\n",
-      "#ifndef SANDALS_MAPLE_", StringTools:-UpperCase(name), "_EXPLICIT_HH\n"
-      "#define SANDALS_MAPLE_", StringTools:-UpperCase(name), "_EXPLICIT_HH\n"
+      "#ifndef SANDALS_MAPLE_", StringTools:-UpperCase(name), "_EXPLICIT_HH\n",
+      "#define SANDALS_MAPLE_", StringTools:-UpperCase(name), "_EXPLICIT_HH\n",
       "\n",
       "using namespace Sandals;\n"
       "using namespace std;\n"
@@ -836,10 +877,10 @@ SandalsCodegen := module()
       data_str,
       "\n",
       "public:\n",
-      i, "using VectorF  = typename Explicit<", num_eqns, ", ", num_eqns, ">::VectorF;\n",
-      i, "using MatrixJF = typename Explicit<", num_eqns, ", ", num_eqns, ">::MatrixJF;\n",
-      i, "using VectorH  = typename Explicit<", num_eqns, ", ", num_eqns, ">::VectorH;\n",
-      i, "using MatrixJH = typename Explicit<", num_eqns, ", ", num_eqns, ">::MatrixJH;\n",
+      i, "using VectorF  = typename Explicit<", num_eqns, ", ", num_invs, ">::VectorF;\n",
+      i, "using MatrixJF = typename Explicit<", num_eqns, ", ", num_invs, ">::MatrixJF;\n",
+      i, "using VectorH  = typename Explicit<", num_eqns, ", ", num_invs, ">::VectorH;\n",
+      i, "using MatrixJH = typename Explicit<", num_eqns, ", ", num_invs, ">::MatrixJH;\n",
       "\n",
       SandalsCodegen:-ApplyIndent(i, GenerateConstructor(
           name, "Explicit",
@@ -884,7 +925,7 @@ SandalsCodegen := module()
       "\n",
       i, "bool in_domain(VectorF const &/*x*/, Real /*t*/) const override {return true;}\n",
       "\n",
-      "} // class ", name, "\n",
+      "}; // class ", name, "\n",
       "\n",
       "#endif // SANDALS_MAPLE_", StringTools:-UpperCase(name), "_EXPLICIT_HH\n"
     );
@@ -906,10 +947,12 @@ SandalsCodegen := module()
     b::{Vector(algebraic)},
     h::{Vector(algebraic), list(algebraic)},
     {
-    data::list(symbol = algebraic)   := [],
-    domain::list(symbol = algebraic) := [],
-    info::string                     := "No class description provided.",
-    indent::string                   := "  "
+    data::list(symbol = algebraic)               := [],
+    time::{list(numeric), range(numeric)}        := [],
+    ics::{Vector(algebraic), list(algebraic)}    := [],
+    domain::{Vector(algebraic), list(algebraic)} := [],
+    info::string                                 := "No class description provided.",
+    indent::string                               := "  "
     }, $)::string;
 
     description "Generate a semi-explicit system for the first-order differential equations A(x,t)."
@@ -918,7 +961,7 @@ SandalsCodegen := module()
       "code is set to <indent>.";
 
     local x_tmp, A_tmp, TA_x, b_tmp, Jb_x, h_tmp, Jh_x, rm_deps, i, data_str, properties, num_eqns,
-      num_invs;
+      num_invs, domain_tmp, domain_fun, time_tmp, time_prp, time_fun;
 
     # Store system states
     if not type(x, Vector) then
@@ -965,7 +1008,7 @@ SandalsCodegen := module()
     i := indent;
 
     # Generate properties
-    if evalb(nops(data) > 0) then
+    if (nops(data) > 0) then
       properties := lhs~(data);
       data_str   := cat~(op(cat~(
         i, "Real m_", convert~(properties, string), "{", convert~(rhs~(data), string), "};\n"
@@ -979,24 +1022,74 @@ SandalsCodegen := module()
     num_eqns := LinearAlgebra:-Dimension(b_tmp);
     num_invs := LinearAlgebra:-Dimension(h_tmp);
 
+    # Initial conditions function code generation
+
+    # Integration time function code generation
+    if not type(time, list) then
+      time_tmp := convert(time, list)
+    else
+      time_tmp := time;
+    end if;
+
+    if (nops(time_tmp) > 0) then
+      time_prp := SandalsCodegen:-ApplyIndent(i, cat(
+        "Real m_t_ini{" , time_tmp[1], "};\n"
+        "Real m_t_end{" , time_tmp[2], "};\n"
+      ));
+      time_fun := SandalsCodegen:-ApplyIndent(i, cat(
+        "// Return the initial integration time\n"
+        "Real t_ini() const {return this->m_t_ini;}\n"
+        "\n"
+        "// Return the final integration time\n"
+        "Real t_end() const {return this->m_t_end;}\n"
+        "\n"
+      ));
+    else
+      time_prp := cat(i, "// No integration time properties\n");
+      time_fun := "";
+    end if;
+
+    # Domain function code generation
+    if not type(domain, list) then
+      domain_tmp := convert(domain, list);
+    else
+      domain_tmp := domain;
+    end if;
+    if (nops(domain_tmp) > 0) then
+      error("Domain set not supported yet.");
+    #  domain_fun := SandalsCodegen:-ApplyIndent(i, SandalsCodegen:-VectorToCpp(
+    #    "in_domain", [x_tmp], domain_tmp,
+    #    ["VectorF const &"], "bool",
+    #    parse("data")    = properties,
+    #    parse("info")    = "Check if the state vector x is in the domain."
+    #    parse("indent")  = i
+    #  ));
+    else
+      domain_fun := SandalsCodegen:-ApplyIndent(i, cat(
+        "// Check if the state vector x is in the domain.\n",
+        "bool in_domain(VectorF const &/*x*/, Real /*t*/) const override {return true;}\n",
+        "\n"
+      ));
+    end if;
+
     # Return output string
     return cat(
-      "/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\\\n"
-      " * Copyright (c) 2025, Davide Stocco and Enrico Bertolazzi.                  *\n"
-      " *                                                                           *\n"
-      " * The Sandals project is distributed under the BSD 2-Clause License.        *\n"
-      " *                                                                           *\n"
-      " * Davide Stocco                                           Enrico Bertolazzi *\n"
-      " * University of Trento                                 University of Trento *\n"
-      " * e-mail: davide.stocco@unitn.it         e-mail: enrico.bertolazzi@unitn.it *\n"
-      "\* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */\n"
+      "/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\\\n"
+      " * Copyright (c) 2025, Davide Stocco and Enrico Bertolazzi.                                      *\n"
+      " *                                                                                               *\n"
+      " * The Sandals project is distributed under the BSD 2-Clause License.                            *\n"
+      " *                                                                                               *\n"
+      " * Davide Stocco                                                               Enrico Bertolazzi *\n"
+      " * University of Trento                                                     University of Trento *\n"
+      " * e-mail: davide.stocco@unitn.it                             e-mail: enrico.bertolazzi@unitn.it *\n"
+      "\\* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */\n"
       "\n",
       "// C++ generated code for semi-explicit system: ", name, "\n",
       "// This file has been automatically generated by Sandals.\n",
       "// DISCLAIMER: If you need to edit it, do it wisely!\n",
       "\n",
-      "#ifndef SANDALS_MAPLE_", StringTools:-UpperCase(name), "_SEMIEXPLICIT_HH\n"
-      "#define SANDALS_MAPLE_", StringTools:-UpperCase(name), "_SEMIEXPLICIT_HH\n"
+      "#ifndef SANDALS_MAPLE_", StringTools:-UpperCase(name), "_SEMIEXPLICIT_HH\n",
+      "#define SANDALS_MAPLE_", StringTools:-UpperCase(name), "_SEMIEXPLICIT_HH\n",
       "\n",
       "using namespace Sandals;\n"
       "using namespace std;\n"
@@ -1007,14 +1100,17 @@ SandalsCodegen := module()
       i, "// User data\n",
       data_str,
       "\n",
+      i, "// Integration time\n",
+      time_prp,
+      "\n",
       "public:\n",
-      i, "using VectorF  = typename SemiExplicit<", num_eqns, ", ", num_eqns, ">::VectorF;\n",
-      i, "using MatrixA  = typename SemiExplicit<", num_eqns, ", ", num_eqns, ">::MatrixA;\n",
-      i, "using TensorTA = typename SemiExplicit<", num_eqns, ", ", num_eqns, ">::TensorTA;\n",
-      i, "using VectorB  = typename SemiExplicit<", num_eqns, ", ", num_eqns, ">::VectorB;\n",
-      i, "using MatrixJB = typename SemiExplicit<", num_eqns, ", ", num_eqns, ">::MatrixJB;\n",
-      i, "using VectorH  = typename SemiExplicit<", num_eqns, ", ", num_eqns, ">::VectorH;\n",
-      i, "using MatrixJH = typename SemiExplicit<", num_eqns, ", ", num_eqns, ">::MatrixJH;\n",
+      i, "using VectorF  = typename SemiExplicit<", num_eqns, ", ", num_invs, ">::VectorF;\n",
+      i, "using MatrixA  = typename SemiExplicit<", num_eqns, ", ", num_invs, ">::MatrixA;\n",
+      i, "using TensorTA = typename SemiExplicit<", num_eqns, ", ", num_invs, ">::TensorTA;\n",
+      i, "using VectorB  = typename SemiExplicit<", num_eqns, ", ", num_invs, ">::VectorB;\n",
+      i, "using MatrixJB = typename SemiExplicit<", num_eqns, ", ", num_invs, ">::MatrixJB;\n",
+      i, "using VectorH  = typename SemiExplicit<", num_eqns, ", ", num_invs, ">::VectorH;\n",
+      i, "using MatrixJH = typename SemiExplicit<", num_eqns, ", ", num_invs, ">::MatrixJH;\n",
       "\n",
       SandalsCodegen:-ApplyIndent(i, GenerateConstructor(
           name, "SemiExplicit",
@@ -1029,6 +1125,7 @@ SandalsCodegen := module()
           "A", [x_tmp], A_tmp,
           ["VectorF const &"], "MatrixA",
           parse("data")    = properties,
+          parse("spec")    = "const override",
           parse("info")    = "Evaluate the mass matrix A.",
           parse("indent")  = i
       )),
@@ -1037,6 +1134,7 @@ SandalsCodegen := module()
           "TA_x", [x_tmp], TA_x,
           ["VectorF const &"], "TensorTA",
           parse("data")    = properties,
+          parse("spec")    = "const override",
           parse("info")    = "Evaluate the tensor of A with respect to x.",
           parse("indent")  = i
       )),
@@ -1045,14 +1143,16 @@ SandalsCodegen := module()
           "b", [x_tmp], b_tmp,
           ["VectorF const &"], "VectorB",
           parse("data")    = properties,
+          parse("spec")    = "const override",
           parse("info")    = "Evaluate the function b.",
           parse("indent")  = i
       )),
       "\n",
       SandalsCodegen:-ApplyIndent(i, SandalsCodegen:-MatrixToCpp(
           "Jb_x", [x_tmp], Jb_x,
-          ["VectorF const &"], "VectorJB",
+          ["VectorF const &"], "MatrixJB",
           parse("data")    = properties,
+          parse("spec")    = "const override",
           parse("info")    = "Evaluate the Jacobian of b with respect to x.",
           parse("indent")  = i
       )),
@@ -1061,6 +1161,7 @@ SandalsCodegen := module()
           "h", [x_tmp], h_tmp,
           ["VectorF const &"], "VectorH",
           parse("data")    = properties,
+          parse("spec")    = "const override",
           parse("info")    = "Calculate the vector h of the invariants.",
           parse("indent")  = i
       )),
@@ -1069,13 +1170,14 @@ SandalsCodegen := module()
           "Jh_x", [x_tmp], Jh_x,
           ["VectorF const &"], "MatrixJH",
           parse("data")    = properties,
+          parse("spec")    = "const override",
           parse("info")    = "Calculate the Jacobian of h with respect to x.",
           parse("indent")  = i
       )),
       "\n",
-      i, "bool in_domain(VectorF const &/*x*/, Real /*t*/) const override {return true;}\n",
-      "\n",
-      "} // class ", name, "\n",
+      domain_fun,
+      time_fun,
+      "}; // class ", name, "\n",
       "\n",
       "#endif // SANDALS_MAPLE_", StringTools:-UpperCase(name), "_SEMIEXPLICIT_HH\n"
     );
@@ -1084,5 +1186,3 @@ SandalsCodegen := module()
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 end module: # SandalsCodegen
-
-# That's all folks!
