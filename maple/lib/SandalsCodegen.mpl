@@ -210,12 +210,17 @@ SandalsCodegen := module()
     if has(varsbool, true) then
       out := "";
       for j from 1 to nops(vars) do
-        for i from 1 to nops(vars[j]) do
-          if varsbool[j][i] then
-            convert(vars[j][i], string);
-            out := cat(out, indent, "Real const & ", %, " = ", label, "_", j-1, "(", i-1, ");\n");
-          end if;
-        end do;
+        if (nops(vars[j]) > 1) then
+          for i from 1 to nops(vars[j]) do
+            if varsbool[j][i] then
+              convert(vars[j][i], string);
+              out := cat(out, indent, "Real const & ", %, " = ", label, "_", j-1, "(", i-1, ");\n");
+            end if;
+          end do;
+        elif (nops(vars[j]) = 1) and varsbool[j][1] then
+          convert(vars[j][1], string);
+          out := cat(out, indent, "Real const & ", %, " = ", label, "_", j-1, ";\n");
+        end if;
       end do;
     else
       out := cat(indent, "// No inputs' alias\n");
@@ -270,7 +275,6 @@ SandalsCodegen := module()
     outtype::string        := "undefined",
     {
     varsbool::list(boolean) := [seq(true, i = 1..nops(vars))],
-    timebool::boolean       := true,
     info::string            := "No description provided.",
     spec::string            := "",
     indent::string          := "  "
@@ -278,7 +282,7 @@ SandalsCodegen := module()
 
     description "Generate a function header for a function <name> with variables <vars>, description "
       "<info>, variables types <varstype>, output type <outtype>, function specifier <spec>, "
-      "variables boolean flag <varsbool>, time boolean flag <timebool>, and indentation <indent>.";
+      "variables boolean flag <varsbool>, and indentation <indent>.";
 
     local i, out;
 
@@ -297,7 +301,7 @@ SandalsCodegen := module()
         varstype[i], " ", `if`(varsbool[i], cat("in_", i-1), cat("/*in_", i-1, "*/")), ", "
       );
     end do;
-    return cat(out, "Real ", `if`(timebool, "t", "/*t*/"), ") ", spec, "\n{\n");
+    return cat(`if`(nops(vars) > 0, StringTools:-Delete(out, -2..-1), out), ") ", spec, "\n{\n");
   end proc: # GenerateHeader
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -398,7 +402,7 @@ SandalsCodegen := module()
     header := SandalsCodegen:-GenerateHeader(
       name, vars, varstype, outtype,
       parse("info") = info, parse("indent") = indent, parse("spec") = spec,
-      parse("timebool") = has(vec, t), parse("varsbool") = [seq(has(varsbool[i], true), i = 1..nops(vars))]
+      parse("varsbool") = [seq(has(varsbool[i], true), i = 1..nops(vars))]
     );
 
     # Generate the elements
@@ -460,7 +464,7 @@ SandalsCodegen := module()
     header := SandalsCodegen:-GenerateHeader(
       name, vars, varstype, outtype,
       parse("info") = info, parse("indent") = indent, parse("spec") = spec,
-      parse("timebool") = has(mat, t), parse("varsbool") = [seq(has(varsbool[i], true), i = 1..nops(vars))]
+      parse("varsbool") = [seq(has(varsbool[i], true), i = 1..nops(vars))]
     );
 
     # Generate the elements
@@ -537,7 +541,7 @@ SandalsCodegen := module()
     header := SandalsCodegen:-GenerateHeader(
       name, vars, varstype, outtype,
       parse("info") = info, parse("indent") = indent, parse("spec") = spec,
-      parse("timebool") = has(ten, t), parse("varsbool") = [seq(has(varsbool[i], true), i = 1..nops(vars))]
+      parse("varsbool") = [seq(has(varsbool[i], true), i = 1..nops(vars))]
     );
 
     # Generate the elements
@@ -582,6 +586,119 @@ SandalsCodegen := module()
   end proc: # GenerateConstructor
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  local GenerateIcs := proc(
+    ics::{Vector(algebraic), list(algebraic)},
+    {
+    data::list(algebraic) := [],
+    indent::string        := "  "
+    }, $)::string;
+
+    description "Generate initial conditions for a system with initial conditions <ics>, system data "
+      "<data>, and indentation <indent>.";
+
+    local ics_tmp;
+
+    if not type(ics, Vector) then
+      ics_tmp := convert(ics, Vector);
+    else
+      ics_tmp := ics;
+    end if;
+
+    if (LinearAlgebra:-Dimension(ics_tmp) > 0) then
+      return SandalsCodegen:-ApplyIndent(indent, SandalsCodegen:-VectorToCpp(
+        "ics", [], ics_tmp,
+        [], "VectorF",
+        parse("data")   = data,
+        parse("spec")   = "const",
+        parse("info")   = "Evaluate the initial conditions.",
+        parse("indent") = indent
+      ));
+    else
+      return "";
+    end if;
+  end proc: # GenerateIcs
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  local GenerateTime := proc(
+    time::{list(numeric), range(numeric)},
+    {
+    indent::string := "  "
+    }, $)
+
+    description "Generate time properties and functions for a system with integration time <time> "
+      "and indentation <indent>.";
+
+    local time_tmp, time_prp, time_fun, ics_fun;
+
+    if not type(time, list) then
+      time_tmp := convert(time, list)
+    else
+      time_tmp := time;
+    end if;
+
+    if (nops(time_tmp) > 0) then
+      time_prp := SandalsCodegen:-ApplyIndent(indent, cat(
+        "Real m_t_ini{" , time_tmp[1], "};\n"
+        "Real m_t_end{" , time_tmp[2], "};\n"
+      ));
+      time_fun := SandalsCodegen:-ApplyIndent(indent, cat(
+        "// Return the initial integration time\n"
+        "Real t_ini() const {return this->m_t_ini;}\n"
+        "\n"
+        "// Return the final integration time\n"
+        "Real t_end() const {return this->m_t_end;}\n"
+        "\n"
+      ));
+    else
+      time_prp := cat(indent, "// No integration time properties\n");
+      time_fun := "";
+    end if;
+    return time_prp, time_fun;
+  end proc: # GenerateTime
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  local GenerateDomain := proc(
+    vars::list(list(symbol)),
+    domain::{Vector({`<`, `<=`}), list({`<`, `<=`})},
+    {
+    data::list(symbol) := [],
+    indent::string     := "  "
+    }, $)::string;
+
+    description "Generate domain properties and functions for a system with variables <vars>, "
+      "domain set <domain>, system data <data>, and indentation <indent>.";
+
+    local domain_tmp, domain_prp, domain_fun;
+
+    if not type(domain, list) then
+      domain_tmp := convert(domain, list);
+    else
+      domain_tmp := domain;
+    end if;
+
+    if (nops(domain_tmp) > 0) then
+      error("domain set not implemented yet.");
+      return SandalsCodegen:-ApplyIndent(indent, SandalsCodegen:-VectorToCpp(
+        "in_domain", vars, domain_tmp,
+        [], "VectorF",
+        parse("data")   = data,
+        parse("spec")   = "const",
+        parse("info")   = "Check if the system is in the defined domain.",
+        parse("indent") = indent
+      ));
+    else
+      domain_fun := SandalsCodegen:-ApplyIndent(indent, cat(
+        "// Check if the system is in the defined domain.\n",
+        "bool in_domain(VectorF const &/*x*/, Real /*t*/) const override {return true;}\n",
+        "\n"
+      ));
+    end if;
+  end proc: # GenerateDomain
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   #   ___                 _ _      _ _
   #  |_ _|_ __ ___  _ __ | (_) ___(_) |_
   #   | || '_ ` _ \| '_ \| | |/ __| | __|
@@ -596,20 +713,21 @@ SandalsCodegen := module()
     F::{Vector(algebraic), list(algebraic)},
     h::{Vector(algebraic), list(algebraic)},
     {
-    data::list(symbol = algebraic)               := [],
-    time::{list(numeric), range(numeric)}        := [],
-    ics::{Vector(algebraic), list(algebraic)}    := [],
-    domain::{Vector(algebraic), list(algebraic)} := [],
-    info::string                                 := "No class description provided.",
-    indent::string                               := "  "
+    data::list(symbol = algebraic)            := [],
+    time::{list(numeric), range(numeric)}     := [],
+    ics::{Vector(algebraic), list(algebraic)} := [],
+    info::string                              := "No class description provided.",
+    indent::string                            := "  ",
+    domain::{Vector({`<`, `<=`}), list({`<`, `<=`})} := []
     }, $)::string;
 
     description "Generate an implicit system for the first-order differential equations F(x,x',t) "
-      "= 0, with function <F>, invariants <h>, system data <data>, domain set <domain>, and "
-      "description <info>. The indentation of the output code is set to <indent>.";
+      "= 0, with function <F>, invariants <h>, system data <data>, integration time interval <time>, "
+      "initial condistions <ics>, domain set <domain>, and description <info>. The indentation of "
+      "the output code is set to <indent>.";
 
     local x_tmp, x_dot_tmp, mk_x_dot, rm_x_deps, rm_x_dot_deps, F_tmp, JF_x, JF_x_dot, h_tmp, Jh_x,
-      rm_deps, i, data_str, properties, num_eqns, num_invs;
+      rm_deps, i, data_str, properties, num_eqns, num_invs, time_prp, time_fun, ics_fun, domain_fun;
 
     # Store system states
     if not type(x, Vector) then
@@ -674,6 +792,17 @@ SandalsCodegen := module()
       properties := [];
     end if;
 
+    # Initial conditions function code generation
+    ics_fun := SandalsCodegen:-GenerateIcs(ics, parse("data") = properties, parse("indent") = i);
+
+    # Integration time function code generation
+    time_prp, time_fun := SandalsCodegen:-GenerateTime(time, parse("indent") = i);
+
+    # Domain function code generation
+    domain_fun := SandalsCodegen:-GenerateDomain(
+      [x_tmp, [t]], domain, parse("data") = properties, parse("indent") = i
+    );
+
     # Compute template arguments
     num_eqns := LinearAlgebra:-Dimension(F_tmp);
     num_invs := LinearAlgebra:-Dimension(h_tmp);
@@ -713,55 +842,63 @@ SandalsCodegen := module()
       i, "using MatrixJH = typename Implicit<", num_eqns, ", ", num_invs, ">::MatrixJH;\n",
       "\n",
       SandalsCodegen:-ApplyIndent(i, GenerateConstructor(
-          name, "Implicit",
-          parse("num_eqns") = num_eqns,
-          parse("num_invs") = num_invs,
-          parse("data")     = properties,
-          parse("info")     = "Class constructor.",
-          parse("indent")   = i
+        name, "Implicit",
+        parse("num_eqns") = num_eqns,
+        parse("num_invs") = num_invs,
+        parse("data")     = properties,
+        parse("info")     = "Class constructor.",
+        parse("indent")   = i
       )),
       "\n",
       SandalsCodegen:-ApplyIndent(i, SandalsCodegen:-VectorToCpp(
-          "F", [x_tmp, x_dot_tmp], F_tmp,
-          ["VectorF const &", "VectorF const &"], "VectorF",
-          parse("data")    = properties,
-          parse("info")    = "Evaluate the function F.",
-          parse("indent")  = i
+        "F", [x_tmp, x_dot_tmp, [t]], F_tmp,
+        ["VectorF const &", "VectorF const &", "Real"], "VectorF",
+        parse("data")   = properties,
+        parse("spec")   = "const override",
+        parse("info")   = "Evaluate the function F.",
+        parse("indent") = i
       )),
       "\n",
       SandalsCodegen:-ApplyIndent(i, SandalsCodegen:-MatrixToCpp(
-          "JF_x", [x_tmp, x_dot_tmp], JF_x,
-          ["VectorF const &", "VectorF const &"], "MatrixJF",
-          parse("data")    = properties,
-          parse("info")    = "Evaluate the Jacobian of F with respect to x.",
-          parse("indent")  = i
+        "JF_x", [x_tmp, x_dot_tmp, [t]], JF_x,
+        ["VectorF const &", "VectorF const &", "Real"], "MatrixJF",
+        parse("data")   = properties,
+        parse("spec")   = "const override",
+        parse("info")   = "Evaluate the Jacobian of F with respect to x.",
+        parse("indent") = i
       )),
       SandalsCodegen:-ApplyIndent(i, SandalsCodegen:-MatrixToCpp(
-          "JF_x_dot", [x_tmp, x_dot_tmp], JF_x_dot,
-          ["VectorF const &", "VectorF const &"], "MatrixJF",
-          parse("data")    = properties,
-          parse("info")    = "Evaluate the Jacobian of F with respect to x_dot.",
-          parse("indent")  = i
+        "JF_x_dot", [x_tmp, x_dot_tmp, [t]], JF_x_dot,
+        ["VectorF const &", "VectorF const &", "Real"], "MatrixJF",
+        parse("data")   = properties,
+        parse("spec")   = "const override",
+        parse("info")   = "Evaluate the Jacobian of F with respect to x_dot.",
+        parse("indent") = i
       )),
       "\n",
       SandalsCodegen:-ApplyIndent(i, SandalsCodegen:-VectorToCpp(
-          "h", [x_tmp], h_tmp,
-          ["VectorF const &"], "VectorH",
-          parse("data")    = properties,
-          parse("info")    = "Calculate the vector h of the invariants.",
-          parse("indent")  = i
+        "h", [x_tmp, [t]], h_tmp,
+        ["VectorF const &", "Real"], "VectorH",
+        parse("data")   = properties,
+        parse("spec")   = "const override",
+        parse("info")   = "Calculate the vector h of the invariants.",
+        parse("indent") = i
       )),
       "\n",
       SandalsCodegen:-ApplyIndent(i, SandalsCodegen:-MatrixToCpp(
-          "Jh_x", [x_tmp], Jh_x,
-          ["VectorF const &"], "MatrixJH",
-          parse("data")    = properties,
-          parse("info")    = "Calculate the Jacobian of h with respect to x.",
-          parse("indent")  = i
+        "Jh_x", [x_tmp, [t]], Jh_x,
+        ["VectorF const &", "Real"], "MatrixJH",
+        parse("data")   = properties,
+        parse("spec")   = "const override",
+        parse("info")   = "Calculate the Jacobian of h with respect to x.",
+        parse("indent") = i
       )),
       "\n",
       i, "bool in_domain(VectorF const &/*x*/, Real /*t*/) const override {return true;}\n",
       "\n",
+      time_fun,
+      ics_fun,
+      domain_fun,
       "}; // class ", name, "\n",
       "\n",
       "#endif // SANDALS_MAPLE_", StringTools:-UpperCase(name), "_IMPLICIT_HH\n"
@@ -783,19 +920,21 @@ SandalsCodegen := module()
     f::{Vector(algebraic), list(algebraic)},
     h::{Vector(algebraic), list(algebraic)},
     {
-    data::list(symbol = algebraic)               := [],
-    time::{list(numeric), range(numeric)}        := [],
-    ics::{Vector(algebraic), list(algebraic)}    := [],
-    domain::{Vector(algebraic), list(algebraic)} := [],
-    info::string                                 := "No class description provided.",
-    indent::string                               := "  "
+    data::list(symbol = algebraic)            := [],
+    time::{list(numeric), range(numeric)}     := [],
+    ics::{Vector(algebraic), list(algebraic)} := [],
+    info::string                              := "No class description provided.",
+    indent::string                            := "  ",
+    domain::{Vector({`<`, `<=`}), list({`<`, `<=`})} := []
     }, $)::string;
 
     description "Generate an explicit system for the first-order differential equations x' = f(x,t), "
-      "withstates variables <x>, right-hand side <f>, invariants <h>, system data <data>, domain "
-      "set <domain>, and description <info>. The indentation of the output code is set to <indent>.";
+      "withstates variables <x>, right-hand side <f>, invariants <h>, system data <data>, integration "
+      "time interval <time>, initial condistions <ics>, domain set <domain>, and description <info>. "
+      "The indentation of the output code is set to <indent>.";
 
-    local x_tmp, b_tmp, Jb_x, h_tmp, Jh_x, rm_deps, i, data_str, properties, num_eqns, num_invs;
+    local x_tmp, b_tmp, Jb_x, h_tmp, Jh_x, rm_deps, i, data_str, properties, num_eqns, num_invs,
+      time_prp, time_fun, ics_fun, domain_fun;
 
     # Store system states
     if not type(x, Vector) then
@@ -844,6 +983,17 @@ SandalsCodegen := module()
       properties := [];
     end if;
 
+    # Initial conditions function code generation
+    ics_fun := SandalsCodegen:-GenerateIcs(ics, parse("data") = properties, parse("indent") = i);
+
+    # Integration time function code generation
+    time_prp, time_fun := SandalsCodegen:-GenerateTime(time, parse("indent") = i);
+
+    # Domain function code generation
+    domain_fun := SandalsCodegen:-GenerateDomain(
+      [x_tmp, [t]], domain, parse("data") = properties, parse("indent") = i
+    );
+
     # Compute template arguments
     num_eqns := LinearAlgebra:-Dimension(b_tmp);
     num_invs := LinearAlgebra:-Dimension(h_tmp);
@@ -883,48 +1033,55 @@ SandalsCodegen := module()
       i, "using MatrixJH = typename Explicit<", num_eqns, ", ", num_invs, ">::MatrixJH;\n",
       "\n",
       SandalsCodegen:-ApplyIndent(i, GenerateConstructor(
-          name, "Explicit",
-          parse("num_eqns") = num_eqns,
-          parse("num_invs") = num_invs,
-          parse("data")     = properties,
-          parse("info")     = "Class constructor.",
-          parse("indent")   = i
+        name, "Explicit",
+        parse("num_eqns") = num_eqns,
+        parse("num_invs") = num_invs,
+        parse("data")     = properties,
+        parse("info")     = "Class constructor.",
+        parse("indent")   = i
       )),
       "\n",
       SandalsCodegen:-ApplyIndent(i, SandalsCodegen:-VectorToCpp(
-          "f", [x_tmp], b_tmp,
-          ["VectorF const &"], "VectorF",
-          parse("data")    = properties,
-          parse("info")    = "Evaluate the function f.",
-          parse("indent")  = i
+        "f", [x_tmp, [t]], b_tmp,
+        ["VectorF const &", "Real"], "VectorF",
+        parse("data")   = properties,
+        parse("spec")   = "const override",
+        parse("info")   = "Evaluate the function f.",
+        parse("indent") = i
       )),
       "\n",
       SandalsCodegen:-ApplyIndent(i, SandalsCodegen:-MatrixToCpp(
-          "Jb_x", [x_tmp], Jb_x,
-          ["VectorF const &"], "MatrixJF",
-          parse("data")    = properties,
-          parse("info")    = "Evaluate the Jacobian of f with respect to x.",
-          parse("indent")  = i
+        "Jb_x", [x_tmp, [t]], Jb_x,
+        ["VectorF const &", "Real"], "MatrixJF",
+        parse("data")   = properties,
+        parse("spec")   = "const override",
+        parse("info")   = "Evaluate the Jacobian of f with respect to x.",
+        parse("indent") = i
       )),
       "\n",
       SandalsCodegen:-ApplyIndent(i, SandalsCodegen:-VectorToCpp(
-          "h", [x_tmp], h_tmp,
-          ["VectorF const &"], "VectorH",
-          parse("data")    = properties,
-          parse("info")    = "Calculate the vector h of the invariants.",
-          parse("indent")  = i
+        "h", [x_tmp, [t]], h_tmp,
+        ["VectorF const &", "Real"], "VectorH",
+        parse("data")   = properties,
+        parse("spec")   = "const override",
+        parse("info")   = "Calculate the vector h of the invariants.",
+        parse("indent") = i
       )),
       "\n",
       SandalsCodegen:-ApplyIndent(i, SandalsCodegen:-MatrixToCpp(
-          "Jh_x", [x_tmp], Jh_x,
-          ["VectorF const &"], "MatrixJH",
-          parse("data")    = properties,
-          parse("info")    = "Calculate the Jacobian of h with respect to x.",
-          parse("indent")  = i
+        "Jh_x", [x_tmp, [t]], Jh_x,
+        ["VectorF const &", "Real"], "MatrixJH",
+        parse("data")   = properties,
+        parse("spec")   = "const override",
+        parse("info")   = "Calculate the Jacobian of h with respect to x.",
+        parse("indent") = i
       )),
       "\n",
       i, "bool in_domain(VectorF const &/*x*/, Real /*t*/) const override {return true;}\n",
       "\n",
+      time_fun,
+      ics_fun,
+      domain_fun,
       "}; // class ", name, "\n",
       "\n",
       "#endif // SANDALS_MAPLE_", StringTools:-UpperCase(name), "_EXPLICIT_HH\n"
@@ -947,21 +1104,21 @@ SandalsCodegen := module()
     b::{Vector(algebraic)},
     h::{Vector(algebraic), list(algebraic)},
     {
-    data::list(symbol = algebraic)               := [],
-    time::{list(numeric), range(numeric)}        := [],
-    ics::{Vector(algebraic), list(algebraic)}    := [],
-    domain::{Vector(algebraic), list(algebraic)} := [],
-    info::string                                 := "No class description provided.",
-    indent::string                               := "  "
+    data::list(symbol = algebraic)            := [],
+    time::{list(numeric), range(numeric)}     := [],
+    ics::{Vector(algebraic), list(algebraic)} := [],
+    info::string                              := "No class description provided.",
+    indent::string                            := "  ",
+    domain::{Vector({`<`, `<=`}), list({`<`, `<=`})} := []
     }, $)::string;
 
     description "Generate a semi-explicit system for the first-order differential equations A(x,t)."
       "x' = b(x,t), with states variables <x>, mass matrix <A>, right-hand side <b>, invariants <h>, "
-      "system data <data>, domain set <domain>, and description <info>. The indentation of the output "
-      "code is set to <indent>.";
+      "system data <data>, integration time interval <time>, initial condistions <ics>, domain set "
+      "<domain>, and description <info>. The indentation of the output code is set to <indent>.";
 
     local x_tmp, A_tmp, TA_x, b_tmp, Jb_x, h_tmp, Jh_x, rm_deps, i, data_str, properties, num_eqns,
-      num_invs, domain_tmp, domain_fun, time_tmp, time_prp, time_fun;
+      num_invs, time_prp, time_fun, ics_fun, domain_fun;
 
     # Store system states
     if not type(x, Vector) then
@@ -1018,59 +1175,20 @@ SandalsCodegen := module()
       properties := [];
     end if;
 
+    # Initial conditions function code generation
+    ics_fun := SandalsCodegen:-GenerateIcs(ics, parse("data") = properties, parse("indent") = i);
+
+    # Integration time function code generation
+    time_prp, time_fun := SandalsCodegen:-GenerateTime(time, parse("indent") = i);
+
+    # Domain function code generation
+    domain_fun := SandalsCodegen:-GenerateDomain(
+      [x_tmp, [t]], domain, parse("data") = properties, parse("indent") = i
+    );
+
     # Compute template arguments
     num_eqns := LinearAlgebra:-Dimension(b_tmp);
     num_invs := LinearAlgebra:-Dimension(h_tmp);
-
-    # Initial conditions function code generation
-
-    # Integration time function code generation
-    if not type(time, list) then
-      time_tmp := convert(time, list)
-    else
-      time_tmp := time;
-    end if;
-
-    if (nops(time_tmp) > 0) then
-      time_prp := SandalsCodegen:-ApplyIndent(i, cat(
-        "Real m_t_ini{" , time_tmp[1], "};\n"
-        "Real m_t_end{" , time_tmp[2], "};\n"
-      ));
-      time_fun := SandalsCodegen:-ApplyIndent(i, cat(
-        "// Return the initial integration time\n"
-        "Real t_ini() const {return this->m_t_ini;}\n"
-        "\n"
-        "// Return the final integration time\n"
-        "Real t_end() const {return this->m_t_end;}\n"
-        "\n"
-      ));
-    else
-      time_prp := cat(i, "// No integration time properties\n");
-      time_fun := "";
-    end if;
-
-    # Domain function code generation
-    if not type(domain, list) then
-      domain_tmp := convert(domain, list);
-    else
-      domain_tmp := domain;
-    end if;
-    if (nops(domain_tmp) > 0) then
-      error("Domain set not supported yet.");
-    #  domain_fun := SandalsCodegen:-ApplyIndent(i, SandalsCodegen:-VectorToCpp(
-    #    "in_domain", [x_tmp], domain_tmp,
-    #    ["VectorF const &"], "bool",
-    #    parse("data")    = properties,
-    #    parse("info")    = "Check if the state vector x is in the domain."
-    #    parse("indent")  = i
-    #  ));
-    else
-      domain_fun := SandalsCodegen:-ApplyIndent(i, cat(
-        "// Check if the state vector x is in the domain.\n",
-        "bool in_domain(VectorF const &/*x*/, Real /*t*/) const override {return true;}\n",
-        "\n"
-      ));
-    end if;
 
     # Return output string
     return cat(
@@ -1113,70 +1231,71 @@ SandalsCodegen := module()
       i, "using MatrixJH = typename SemiExplicit<", num_eqns, ", ", num_invs, ">::MatrixJH;\n",
       "\n",
       SandalsCodegen:-ApplyIndent(i, GenerateConstructor(
-          name, "SemiExplicit",
-          parse("num_eqns") = num_eqns,
-          parse("num_invs") = num_invs,
-          parse("data")     = properties,
-          parse("info")     = "Class constructor.",
-          parse("indent")   = i
+        name, "SemiExplicit",
+        parse("num_eqns") = num_eqns,
+        parse("num_invs") = num_invs,
+        parse("data")     = properties,
+        parse("info")     = "Class constructor.",
+        parse("indent")   = i
       )),
       "\n",
       SandalsCodegen:-ApplyIndent(i, SandalsCodegen:-MatrixToCpp(
-          "A", [x_tmp], A_tmp,
-          ["VectorF const &"], "MatrixA",
-          parse("data")    = properties,
-          parse("spec")    = "const override",
-          parse("info")    = "Evaluate the mass matrix A.",
-          parse("indent")  = i
+        "A", [x_tmp, [t]], A_tmp,
+        ["VectorF const &", "Real"], "MatrixA",
+        parse("data")   = properties,
+        parse("spec")   = "const override",
+        parse("info")   = "Evaluate the mass matrix A.",
+        parse("indent") = i
       )),
       "\n",
       SandalsCodegen:-ApplyIndent(i, SandalsCodegen:-TensorToCpp(
-          "TA_x", [x_tmp], TA_x,
-          ["VectorF const &"], "TensorTA",
-          parse("data")    = properties,
-          parse("spec")    = "const override",
-          parse("info")    = "Evaluate the tensor of A with respect to x.",
-          parse("indent")  = i
+        "TA_x", [x_tmp, [t]], TA_x,
+        ["VectorF const &", "Real"], "TensorTA",
+        parse("data")   = properties,
+        parse("spec")   = "const override",
+        parse("info")   = "Evaluate the tensor of A with respect to x.",
+        parse("indent") = i
       )),
       "\n",
       SandalsCodegen:-ApplyIndent(i, SandalsCodegen:-VectorToCpp(
-          "b", [x_tmp], b_tmp,
-          ["VectorF const &"], "VectorB",
-          parse("data")    = properties,
-          parse("spec")    = "const override",
-          parse("info")    = "Evaluate the function b.",
-          parse("indent")  = i
+        "b", [x_tmp, [t]], b_tmp,
+        ["VectorF const &", "Real"], "VectorB",
+        parse("data")   = properties,
+        parse("spec")   = "const override",
+        parse("info")   = "Evaluate the function b.",
+        parse("indent") = i
       )),
       "\n",
       SandalsCodegen:-ApplyIndent(i, SandalsCodegen:-MatrixToCpp(
-          "Jb_x", [x_tmp], Jb_x,
-          ["VectorF const &"], "MatrixJB",
-          parse("data")    = properties,
-          parse("spec")    = "const override",
-          parse("info")    = "Evaluate the Jacobian of b with respect to x.",
-          parse("indent")  = i
+        "Jb_x", [x_tmp, [t]], Jb_x,
+        ["VectorF const &", "Real"], "MatrixJB",
+        parse("data")   = properties,
+        parse("spec")   = "const override",
+        parse("info")   = "Evaluate the Jacobian of b with respect to x.",
+        parse("indent") = i
       )),
       "\n",
       SandalsCodegen:-ApplyIndent(i, SandalsCodegen:-VectorToCpp(
-          "h", [x_tmp], h_tmp,
-          ["VectorF const &"], "VectorH",
-          parse("data")    = properties,
-          parse("spec")    = "const override",
-          parse("info")    = "Calculate the vector h of the invariants.",
-          parse("indent")  = i
+        "h", [x_tmp, [t]], h_tmp,
+        ["VectorF const &", "Real"], "VectorH",
+        parse("data")   = properties,
+        parse("spec")   = "const override",
+        parse("info")   = "Calculate the vector h of the invariants.",
+        parse("indent") = i
       )),
       "\n",
       SandalsCodegen:-ApplyIndent(i, SandalsCodegen:-MatrixToCpp(
-          "Jh_x", [x_tmp], Jh_x,
-          ["VectorF const &"], "MatrixJH",
-          parse("data")    = properties,
-          parse("spec")    = "const override",
-          parse("info")    = "Calculate the Jacobian of h with respect to x.",
-          parse("indent")  = i
+        "Jh_x", [x_tmp, [t]], Jh_x,
+        ["VectorF const &", "Real"], "MatrixJH",
+        parse("data")   = properties,
+        parse("spec")   = "const override",
+        parse("info")   = "Calculate the Jacobian of h with respect to x.",
+        parse("indent") = i
       )),
       "\n",
-      domain_fun,
       time_fun,
+      ics_fun,
+      domain_fun,
       "}; // class ", name, "\n",
       "\n",
       "#endif // SANDALS_MAPLE_", StringTools:-UpperCase(name), "_SEMIEXPLICIT_HH\n"

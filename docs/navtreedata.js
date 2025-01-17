@@ -31,7 +31,6 @@ var NAVTREE =
     ] ],
     [ "Authors", "index.html#autotoc_md21", null ],
     [ "License", "index.html#autotoc_md22", null ],
-    [ "That's all folks!", "index.html#autotoc_md23", null ],
     [ "Namespaces", "namespaces.html", [
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
       [ "Namespace Members", "namespacemembers.html", [

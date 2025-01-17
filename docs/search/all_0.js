@@ -5,8 +5,7 @@ var searchData=
   ['adaptive_2',['adaptive',['../class_sandals_1_1_runge_kutta.html#ac7c5c50506a79776b647826f667170c0',1,'Sandals::RungeKutta']]],
   ['adaptive_5fsolve_3',['adaptive_solve',['../class_sandals_1_1_runge_kutta.html#aa8895f7adf9114f032635a1a00db40ed',1,'Sandals::RungeKutta']]],
   ['advance_4',['advance',['../class_sandals_1_1_runge_kutta.html#ae007044419daa96fb4b4d18760079566',1,'Sandals::RungeKutta']]],
-  ['all_20folks_5',['That&apos;s all folks!',['../index.html#autotoc_md23',1,'']]],
-  ['alpha_6',['alpha',['../class_sandals_1_1_nonlinear_solver.html#ad7d4af47ef5cd00be23a1fd1ce348cd8',1,'Sandals::NonlinearSolver::alpha() const'],['../class_sandals_1_1_nonlinear_solver.html#adf8e2bb7fe66aa8778e0e4349d8ed241',1,'Sandals::NonlinearSolver::alpha(Real t_alpha)']]],
-  ['and_20butcher_20tableaus_7',['Runge-Kutta methods and Butcher tableaus',['../class_sandals_1_1_runge_kutta.html#autotoc_md3',1,'']]],
-  ['authors_8',['Authors',['../index.html#autotoc_md21',1,'']]]
+  ['alpha_5',['alpha',['../class_sandals_1_1_nonlinear_solver.html#ad7d4af47ef5cd00be23a1fd1ce348cd8',1,'Sandals::NonlinearSolver::alpha() const'],['../class_sandals_1_1_nonlinear_solver.html#adf8e2bb7fe66aa8778e0e4349d8ed241',1,'Sandals::NonlinearSolver::alpha(Real t_alpha)']]],
+  ['and_20butcher_20tableaus_6',['Runge-Kutta methods and Butcher tableaus',['../class_sandals_1_1_runge_kutta.html#autotoc_md3',1,'']]],
+  ['authors_7',['Authors',['../index.html#autotoc_md21',1,'']]]
 ];

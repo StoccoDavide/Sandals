@@ -35,5 +35,3 @@ file(GLOB_RECURSE TABLEAU_TESTS "${CMAKE_CURRENT_SOURCE_DIR}/Tableau/test_*.cc")
 add_executable(test_tableau ${TABLEAU_TESTS})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/DynamicSystems)
 target_link_libraries(test_tableau PRIVATE Sandals GTest::gtest)
-
-# That's all folks!

@@ -696,11 +696,11 @@ module Sandals()
     _self::Sandals,
     name::string,
     {
-    data::list(symbol = algebraic)               := [],
-    time::{list(numeric), range(numeric)}        := [],
-    ics::{Vector(algebraic), list(algebraic)}    := [],
-    domain::{Vector(algebraic), list(algebraic)} := [],
-    info::string                                 := "No class description provided."
+    data::list(symbol = algebraic)            := [],
+    time::{list(numeric), range(numeric)}     := [],
+    ics::{Vector(algebraic), list(algebraic)} := [],
+    info::string                              := "No class description provided.",
+    domain::{Vector({`<`, `<=`}), list({`<`, `<=`})} := []
     }, $)::string;
 
     description "Generate C++ code for the loaded system with name <name>, Sandals class <type>, "
@@ -777,13 +777,13 @@ module Sandals()
     _self::Sandals,
     name::string,
     {
-    type::string                                 := _self:-m_SystemType,
-    path::string                                 := "./",
-    data::list(symbol = algebraic)               := [],
-    time::{list(numeric), range(numeric)}        := [],
-    ics::{Vector(algebraic), list(algebraic)}    := [],
-    domain::{Vector(algebraic), list(algebraic)} := [],
-    info::string                                 := "No class description provided."
+    type::string                              := _self:-m_SystemType,
+    path::string                              := "./",
+    data::list(symbol = algebraic)            := [],
+    time::{list(numeric), range(numeric)}     := [],
+    ics::{Vector(algebraic), list(algebraic)} := [],
+    info::string                              := "No class description provided.",
+    domain::{Vector({`<`, `<=`}), list({`<`, `<=`})} := []
     }, $)
 
     description "Generate C++ code for the loaded system with name <name>, Sandals class <type> "
@@ -807,7 +807,8 @@ module Sandals()
     end if;
 
     SandalsCodegen:-GenerateFile(cat(path, "/", name, ".hh"), _self:-TranslateToCpp(_self, name,
-      parse("data") = data, parse("time") = time, parse("ics") = ics, parse("info") = info));
+      parse("data") = data, parse("time") = time, parse("ics") = ics, parse("domain") = domain,
+      parse("info") = info));
     return NULL;
   end proc: # GenerateCppCode
 
