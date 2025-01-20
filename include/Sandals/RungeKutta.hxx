@@ -71,7 +71,7 @@ namespace Sandals {
     Real         m_max_safety_factor{1.5};           //!< Maximum safety factor for adaptive step \f$ f_{\min} \f$.
     Real         m_min_step{EPSILON_HIGH};           //!< Minimum step for advancing \f$ h_{\min} \f$.
     Size         m_max_substeps{5};                  //!< Maximum number of substeps.
-    bool         m_adaptive{true};              //!< Aadaptive step mode boolean.
+    bool         m_adaptive{true};                   //!< Aadaptive step mode boolean.
     bool         m_verbose{false};                   //!< Verbose mode boolean.
     bool         m_reverse{false};                   //!< Time reverse mode boolean.
 
@@ -237,15 +237,27 @@ namespace Sandals {
     //! \param[in] t_max_substeps The maximum number of substeps.
     void max_substeps(Size t_max_substeps) {this->m_max_substeps = t_max_substeps;}
 
+    //! Get the adaptive step mode.
+    //! \return The adaptive step mode.
+    bool adaptive_mode() {return this->m_adaptive;}
+
+    //! Set the adaptive step mode.
+    //! \param[in] t_adaptive The adaptive step mode.
+    void adaptive(bool t_adaptive) {this->m_adaptive = t_adaptive;}
+
     //! Enable the adaptive step mode.
     void enable_adaptive_mode() {this->m_adaptive = true;}
 
     //! Disable the adaptive step mode.
     void disable_adaptive_mode() {this->m_adaptive = false;}
 
-    //! Set the adaptive step mode.
-    //! \param[in] t_adaptive The adaptive step mode.
-    void adaptive(bool t_adaptive) {this->m_adaptive = t_adaptive;}
+    //! Get the verbose mode.
+    //! \return The verbose mode.
+    bool verbose_mode() {return this->m_verbose;}
+
+    //! Set the verbose mode.
+    //! \param[in] t_verbose The verbose mode.
+    void verbose_mode(bool t_verbose) {this->m_verbose = t_verbose;}
 
     //! Enable the verbose mode.
     void enable_verbose_mode() {this->m_verbose = true;}
@@ -253,19 +265,19 @@ namespace Sandals {
     //! Disable the verbose mode.
     void disable_verbose_mode() {this->m_verbose = false;}
 
-    //! Set the verbose mode.
-    //! \param[in] t_verbose The verbose mode.
-    void verbose(bool t_verbose) {this->m_verbose = t_verbose;}
+    //! Get the time reverse mode.
+    //! \return The time reverse mode.
+    bool reverse_mode() {return this->m_reverse;}
+
+    //! Set the time reverse mode.
+    //! \param[in] t_reverse The time reverse mode.
+    void reverse(bool t_reverse) {this->m_reverse = t_reverse;}
 
     //! Enable the time reverse mode.
     void enable_reverse_mode() {this->m_reverse = true;}
 
     //! Disable the time reverse mode.
     void disable_reverse_mode() {this->m_reverse = false;}
-
-    //! Set the time reverse mode.
-    //! \param[in] t_reverse The time reverse mode.
-    void reverse(bool t_reverse) {this->m_reverse = t_reverse;}
 
     //! Get the projection tolerance.
     //! \return The projection tolerance.
@@ -285,15 +297,19 @@ namespace Sandals {
     void max_projection_iterations(Size t_max_projection_iterations)
       {this->m_max_projection_iterationsations = t_max_projection_iterations;}
 
+    //! Get projection mode.
+    //! \return The projection mode.
+    bool projection() {return this->m_projection;}
+
+    //! Set the projection mode.
+    //! \param[in] t_projection The projection mode.
+    void projection(bool t_projection) {this->m_projection = t_projection;}
+
     //! Enable the projection mode.
     void enable_projection() {this->m_projection = true;}
 
     //! Disable the projection mode.
     void disable_projection() {this->m_projection = false;}
-
-    //! Set the projection mode.
-    //! \param[in] t_projection The projection mode.
-    void projection(bool t_projection) {this->m_projection = t_projection;}
 
     //! Compute step for the next advancing step according to the error control method. The
     //! error control method used is the local truncation error method, which is based on the
@@ -671,6 +687,7 @@ namespace Sandals {
     bool irk_step(VectorN const &x_old, Real t_old, Real h_old, VectorN &x_new, Real &h_new)
     {
       VectorK K;
+      VectorK K_ini(VectorK::Zero());
 
       // Check if the solver converged
       if (!this->m_solverK->solve(
@@ -678,7 +695,7 @@ namespace Sandals {
             {this->irk_function(x_old, t_old, h_old, K_fun, fun);},
           [this, &x_old, t_old, h_old](VectorK const &K_jac, MatrixJ &jac)
             {this->irk_jacobian(x_old, t_old, h_old, K_jac, jac);},
-          VectorK::Zero(), K))
+          K_ini, K))
         {return false;}
 
       // Perform the step and obtain the next state
@@ -831,6 +848,11 @@ namespace Sandals {
     //! \return True if the step is successfully computed, false otherwise.
     bool step(VectorN const &x_old, Real t_old, Real h_old, VectorN &x_new, Real &h_new)
     {
+      #define CMD "Sandals::RungeKutta::step(...): "
+
+      SANDALS_ASSERT(this->m_system.in_domain(x_old, t_old), CMD "in " << this->m_tableau.name <<
+        " solver, at t = " << t_old << ", x = " << x_old.transpose() << ", system out of domain.");
+
       if (this->is_erk() && this->m_system->is_explicit()) {
         return this->erk_explicit_step(x_old, t_old, h_old, x_new, h_new);
       } else if (this->is_erk() && this->m_system->is_implicit()) {
@@ -1007,6 +1029,15 @@ namespace Sandals {
       using Eigen::last;
 
       #define CMD "Sandals::RungeKutta::adaptive_solve(...): "
+
+      // Check if the adaptive method is enabled and the method is embedded
+      if (!this->is_embedded()) {
+        SANDALS_WARNING(CMD "the method is not embedded, using solve(...) method.");
+        return this->solve(t_mesh, ics, sol);
+      } else if (!this->m_adaptive) {
+        SANDALS_WARNING(CMD "adaptive method is disabled, using solve(...) method.");
+        return this->solve(t_mesh, ics, sol);
+      }
 
       // Instantiate output
       Real h_step{t_mesh(1) - t_mesh(0)}, h_new_step, scale{100.0};
