@@ -10,7 +10,7 @@
 
 SandalsUtils := module()
 
-  description "Utilities for the 'Sandals' module.";
+  description "Utilities for the ""SandalsUtils"" module.";
 
   option package,
          load   = ModuleLoad,
@@ -19,14 +19,14 @@ SandalsUtils := module()
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   local ModuleLoad := proc()
-    description "'SandalsUtils' module load procedure.";
+    description """SandalsUtils"" module load procedure.";
     return NULL;
   end proc: # ModuleLoad
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   local ModuleUnload := proc()
-    description "'SandalsUtils' module unload procedure.";
+    description """SandalsUtils"" module unload procedure.";
     return NULL;
   end proc: # ModuleUnload
 

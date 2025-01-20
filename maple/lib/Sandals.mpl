@@ -11,7 +11,7 @@
 unprotect('Sandals');
 module Sandals()
 
-  description "'Sandals' module.";
+  description """Sandals"" module.";
 
   option object;
 
@@ -32,7 +32,7 @@ module Sandals()
 
   export Info::static := proc()
 
-    description "Print 'Sandals' module information.";
+    description "Print ""Sandals"" module information.";
 
     printf(
       "* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\n"
@@ -52,7 +52,7 @@ module Sandals()
 
   export ModuleLoad::static := proc()
 
-    description "'Sandals' module load procedure.";
+    description """Sandals"" module load procedure.";
 
     local i, lib_base_path;
 
@@ -63,7 +63,7 @@ module Sandals()
       end if;
     end do;
     if (lib_base_path = NULL) then
-      error "cannot find 'Sandals' module.";
+      error "cannot find ""Sandals"" module.";
     end if;
     return NULL;
   end proc: # ModuleLoad
@@ -71,9 +71,7 @@ module Sandals()
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   export ModuleUnload::static := proc()
-
-    description "'Sandals' module unload procedure.";
-
+    description """Sandals"" module unload procedure.";
     return NULL;
   end proc: # ModuleUnload
 
@@ -244,7 +242,7 @@ module Sandals()
       (_self:-m_SystemType = "SemiExplicit") then
       return _self:-m_x;
     else
-      error("unknown system type '%1'.", _self:-m_SystemType);
+      error("unknown system type ""%1"".", _self:-m_SystemType);
     end if;
   end proc: # GetX
 
@@ -263,7 +261,7 @@ module Sandals()
     elif (_self:-m_SystemType = "Implicit") or (_self:-m_SystemType = "SemiExplicit") then
       return _self:-m_F;
     else
-      error("unknown system type '%1'.", _self:-m_SystemType);
+      error("unknown system type ""%1"".", _self:-m_SystemType);
     end if;
   end proc: # GetF
 
@@ -281,7 +279,7 @@ module Sandals()
       (_self:-m_SystemType = "SemiExplicit") then
       return _self:-m_A;
     else
-      error("unknown system type '%1'.", _self:-m_SystemType);
+      error("unknown system type ""%1"".", _self:-m_SystemType);
     end if;
   end proc: # GetA
 
@@ -299,7 +297,7 @@ module Sandals()
       (_self:-m_SystemType = "SemiExplicit") then
       return _self:-m_b;
     else
-      error("unknown system type '%1'.", _self:-m_SystemType);
+      error("unknown system type ""%1"".", _self:-m_SystemType);
     end if;
   end proc: # GetB
 
@@ -317,7 +315,7 @@ module Sandals()
       (_self:-m_SystemType = "SemiExplicit") then
       return _self:-m_h;
     else
-      error("unknown system type '%1'.", _self:-m_SystemType);
+      error("unknown system type ""%1"".", _self:-m_SystemType);
     end if;
   end proc: # GetH
 
@@ -347,7 +345,7 @@ module Sandals()
     elif (_self:-m_SystemType = "SemiExplicit") and invert then
       out := diff(_self:-m_x, t) - LinearAlgebra:-LinearSolve(_self:-m_A, _self:-m_b);
     else
-      error("unknown system type '%1'.", _self:-m_SystemType);
+      error("unknown system type ""%1"".", _self:-m_SystemType);
     end if;
 
     # Try to simplify
@@ -375,7 +373,7 @@ module Sandals()
       (_self:-m_SystemType = "SemiExplicit") then
       return convert(_self:-m_h, list);
     else
-      error("unknown system type '%1'.", _self:-m_SystemType);
+      error("unknown system type ""%1"".", _self:-m_SystemType);
     end if;
   end proc: # GetInvariants
 
@@ -436,7 +434,7 @@ module Sandals()
     elif (type = "SemiExplicit") then
       return _self:-LoadExplicitSystem(_self, vars, eqns, invs, parse("invert") = false);
     else
-      error("unknown system type '%1'.", type);
+      error("unknown system type ""%1"".", type);
     end if;
 
     return NULL;
@@ -468,7 +466,7 @@ module Sandals()
     elif (type = "SemiExplicit") then
       return _self:-LoadExplicitSystem(_self, vars, eqns, invs, parse("invert") = false);
     else
-      error("unknown system type '%1'.", type);
+      error("unknown system type ""%1"".", type);
     end if;
 
     return NULL;
@@ -486,13 +484,13 @@ module Sandals()
     description "Load the equations from an implicit system F(x,x',t) = 0 with equations <eqns>, "
       "states <vars>, equations <eqns>, and optional invariants <invs>.";
 
-      # Reset the system
-      _self:-Reset(_self);
+    # Reset the system
+    _self:-Reset(_self);
 
     # Store the system data
     _self:-m_x := `if`(not type(vars, Vector), convert(vars, Vector), vars);
     _self:-m_F := `if`(not type(eqns, Vector), convert(eqns, Vector), eqns);
-    _self:-m_h := `if`(not type(invs, list), convert(invs, list), invs);
+    _self:-m_h := `if`(not type(invs, Vector), convert(invs, Vector), invs);
     _self:-m_SystemType := "Implicit";
 
     # Check if the differential order of h is null
@@ -538,7 +536,7 @@ module Sandals()
 
     # Store the system data
     _self:-m_x := `if`(not type(vars, Vector), convert(vars, Vector), vars);
-    _self:-m_h := `if`(not type(invs, list), convert(invs, list), invs);
+    _self:-m_h := `if`(not type(invs, Vector), convert(invs, Vector), invs);
     _self:-m_A, _self:-m_b := LinearAlgebra:-GenerateMatrix(
       `if`(not type(eqns, list), convert(eqns, list), eqns),
       diff(`if`(not type(vars, list), convert(vars, list), vars), t)
@@ -631,7 +629,7 @@ module Sandals()
     elif (_self:-m_SystemType = "SemiExplicit") then
       eqns := _self:-m_A.diff(_self:-m_x, t) - _self:-m_b;
     else
-      error("unknown system type '%1'.", _self:-m_SystemType);
+      error("unknown system type ""%1"".", _self:-m_SystemType);
     end if;
     _self:-LoadImplicitSystem(_self, _self:-m_x, eqns, _self:-m_h);
 
@@ -657,7 +655,7 @@ module Sandals()
     elif (_self:-m_SystemType = "SemiExplicit") then
       eqns := _self:-m_A.diff(_self:-m_x, t) - _self:-m_b
     else
-      error("unknown system type '%1'.", _self:-m_SystemType);
+      error("unknown system type ""%1"".", _self:-m_SystemType);
     end if;
     _self:-LoadExplicitSystem(_self, _self:-m_x, eqns, _self:-m_h, parse("invert") = true);
 
@@ -683,7 +681,7 @@ module Sandals()
     elif (_self:-m_SystemType = "SemiExplicit") then
       # Nothing to do
     else
-      error("unknown system type '%1'.", _self:-m_SystemType);
+      error("unknown system type ""%1"".", _self:-m_SystemType);
     end if;
     _self:-LoadExplicitSystem(_self, _self:-m_x, eqns, _self:-m_h, parse("invert") = false);
 
@@ -692,108 +690,37 @@ module Sandals()
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  export TranslateToCpp::static := proc(
-    _self::Sandals,
-    name::string,
-    {
-    data::list(symbol = algebraic)            := [],
-    time::{list(numeric), range(numeric)}     := [],
-    ics::{Vector(algebraic), list(algebraic)} := [],
-    info::string                              := "No class description provided.",
-    domain::{Vector({`<`, `<=`}), list({`<`, `<=`})} := []
-    }, $)::string;
-
-    description "Generate C++ code for the loaded system with name <name>, Sandals class <type>, "
-      "output file './<fname>.m', optional internal class data <data>, integration time range "
-      "<time>, initial conditions <ics>, domain <domain> d(x,t) > 0, and class information string "
-      "<info>.";
-
-    local time_lst, ics_vec;
-
-    # Check if the system is loaded
-    if (_self:-m_SystemType = "Empty") then
-      error("no system loaded yet.");
-    end if;
-
-    # Check if time range is valid
-    if not type(time, list) then
-      time_lst := convert(time, list)
-    else
-      time_lst := time;
-    end if;
-
-    if (nops(time_lst) > 0) then
-      if (time_lst[1] = time_lst[2]) then
-        error("degenerate time range detected.");
-      elif (time_lst[2] < time_lst[1]) then
-        WARNING("decreasing time range detected, consider using the reverse time mode.");
-      end if;
-    end if;
-
-    # Check if the initial conditions are valid
-    if not type(ics, Vector) then
-      ics_vec := convert(ics, Vector)
-    else
-      ics_vec := ics;
-    end if;
-
-    if (LinearAlgebra:-Dimension(ics_vec) > 0) then
-      if (LinearAlgebra:-Dimension(ics_vec) <> LinearAlgebra:-Dimension(_self:-m_x)) then
-        error("invalid initial conditions detected.");
-      elif (nops(indets(ics_vec) minus convert(lhs~(data), set)) > 0) then
-        WARNING("initial conditions may contain unknown variables.");
-      end if;
-    end if;
-
-    # Check if the domain is valid
-    # FIXME:if nops(domain) > 0 then
-    #   if (nops(indets(domain) minus lhs~(data) minus {t, op(_self:-m_x)}) > 0) then
-    #     WARNING("domain may contain unknown variables.");
-    #   end if;
-    # end if;
-
-    # Generate class body string
-    if (_self:-m_SystemType = "Implicit") then
-      return SandalsCodegen:-ImplicitToCpp(name, _self:-m_x, _self:-m_F, _self:-m_h,
-        parse("data") = data, parse("time") = time, parse("ics") = ics, parse("domain") = domain,
-        parse("info") = info);
-    elif (_self:-m_SystemType = "Explicit") then
-      return SandalsCodegen:-ExplicitToCpp(name, _self:-m_x, _self:-m_f, _self:-m_h,
-        parse("data") = data, parse("time") = time, parse("ics") = ics, parse("domain") = domain,
-        parse("info") = info);
-    elif (_self:-m_SystemType = "SemiExplicit") then
-      return SandalsCodegen:-SemiExplicitToCpp(name, _self:-m_x, _self:-m_A, _self:-m_b, _self:-m_h,
-        parse("data") = data, parse("time") = time, parse("ics") = ics, parse("domain") = domain,
-        parse("info") = info);
-    else
-      error("unknown Sandals class type '%1'.", _self:-m_SystemType);
-    end if;
-    return "";
-  end proc: # TranslateToCpp
-
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
   export GenerateCppCode::static := proc(
     _self::Sandals,
     name::string,
     {
-    type::string                              := _self:-m_SystemType,
-    path::string                              := "./",
-    data::list(symbol = algebraic)            := [],
-    time::{list(numeric), range(numeric)}     := [],
-    ics::{Vector(algebraic), list(algebraic)} := [],
-    info::string                              := "No class description provided.",
-    domain::{Vector({`<`, `<=`}), list({`<`, `<=`})} := []
+    type::string                                     := _self:-m_SystemType,
+    path::string                                     := "./",
+    indent::string                                   := "  ",
+    data::list(symbol = algebraic)                   := [],
+    time::{list(numeric), range(numeric)}            := [],
+    ics::{Vector(algebraic), list(algebraic)}        := [],
+    domain::{Vector({`<`, `<=`}), list({`<`, `<=`})} := [],
+    user_function::list(string)                      := [],
+    comp_sequence::list(symbol = algebraic)          := [],
+    info::string            := "No class description provided.",
+    vars_info::list(string) := [seq(cat("State variable ", i), i = 1 .. nops(_self:-m_x))],
+    data_info::list(string) := [seq(cat("Data variable ", i), i = 1 .. nops(data))]
     }, $)
 
     description "Generate C++ code for the loaded system with name <name>, Sandals class <type> "
-      "(""Implicit"", ""Explicit"" ,""SemiExplicit""), output file '<path>/<name>.hh', optional "
+      "(""Implicit"", ""Explicit"" ,""SemiExplicit""), output file ""<path>/<name>.hh"", optional "
       "internal class data <data>, integration time range <time>, initial conditions <ics>, domain "
       "<domain> d(x,t) > 0, and class information string <info>. Notice that if the type is not "
       "specified, the system type is used. Instead, if the type is specified, and it is different "
       "from the system type, the system is converted to the specified type.";
 
-    if (type <> _self:-m_SystemType) then
+    local cg, class_str;
+
+    # Check if the system is loaded and the type is valid
+    if (_self:-m_SystemType = "Empty") then
+      error("no system loaded yet.");
+    elif (type <> _self:-m_SystemType) then
       if (type = "Implicit") then
         _self:-ToImplicit(_self);
       elif (type = "Explicit") then
@@ -801,14 +728,54 @@ module Sandals()
       elif (type = "SemiExplicit") then
         _self:-ToSemiExplicit(_self);
       else
-        error("unknown Sandals class type '%1'.", type);
+        error("unknown Sandals class type ""%1"".", type);
       end if;
-        WARNING("system converted to '%1' class.", type);
+      if _self:-m_WarningMode then
+        WARNING("system converted to ""%1"" class.", type);
+      end if;
     end if;
 
-    SandalsCodegen:-GenerateFile(cat(path, "/", name, ".hh"), _self:-TranslateToCpp(_self, name,
-      parse("data") = data, parse("time") = time, parse("ics") = ics, parse("domain") = domain,
-      parse("info") = info));
+    # Check if the path exists
+    if not FileTools:-Exists(path) then
+      if _self:-m_WarningMode then
+        WARNING("directory ""%1"" has been created.", path);
+      end if;
+      FileTools:-MakeDirectory(path);
+    end if;
+
+    # Create the code generator object
+    cg := Object(SandalsCodegen);
+    cg:-SetVerboseMode(cg, _self:-m_VerboseMode);
+    cg:-SetWarningMode(cg, _self:-m_WarningMode);
+
+    # Stuffing the code generator object like a turkey
+    cg:-SetIndent(cg, indent);
+    cg:-SetInfo(cg, info);
+    cg:-SetVars(cg, convert(_self:-m_x, list));
+    cg:-SetVarsInfo(cg, vars_info);
+    cg:-SetData(cg, data);
+    cg:-SetDataInfo(cg, data_info);
+    cg:-SetTime(cg, time);
+    cg:-SetIcs(cg, convert(ics, list));
+    cg:-SetDomain(cg, convert(domain, list));
+    cg:-SetUserFunction(cg, user_function);
+    cg:-SetCompSequence(cg, comp_sequence);
+
+    # Generate class body string
+    if (_self:-m_SystemType = "Implicit") then
+      class_str := cg:-ImplicitToCpp(cg, name, _self:-m_F, _self:-m_h);
+    elif (_self:-m_SystemType = "Explicit") then
+      class_str := cg:-ExplicitToCpp(cg, name, _self:-m_f, _self:-m_h);
+    elif (_self:-m_SystemType = "SemiExplicit") then
+      class_str := cg:-SemiExplicitToCpp(cg, name, _self:-m_A, _self:-m_b, _self:-m_h);
+    else
+      error("unknown Sandals class type ""%1"".", _self:-m_SystemType);
+    end if;
+
+    # Generate the C++ code
+    cg:-GenerateFile(cat(path, "/", name, ".hh"), class_str);
+
+    # Return the results
     return NULL;
   end proc: # GenerateCppCode
 

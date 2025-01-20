@@ -8,51 +8,72 @@
 # e-mail: davide.stocco@unitn.it                               e-mail: enrico.bertolazzi@unitn.it #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
+unprotect('SandalsCodegen');
 SandalsCodegen := module()
 
-  description "Code Generation for the 'SandalsCodegen' module.";
+  description "Code Generation for the ""SandalsCodegen"" module.";
 
-  option package,
-         load   = ModuleLoad,
-         unload = ModuleUnload;
+  option object;
 
-  local m_WorkingDirectory;
+  local m_working_directory := "";
+  local m_verbose_mode      := true;
+  local m_warning_mode      := true;
+  local m_indent            := "  ";
+  local m_name              := [];
+  local m_info              := "";
+  local m_vars              := [];
+  local m_vars_info         := [];
+  local m_data              := [];
+  local m_data_info         := [];
+  local m_time              := [];
+  local m_ics               := [];
+  local m_domain            := [];
+  local m_user_function     := [];
+  local m_comp_sequence     := [];
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  local ModuleLoad := proc()
-    description "'SandalsCodegen' module load procedure.";
+  local ModuleLoad::static := proc()
+
+    description """SandalsCodegen"" module load procedure.";
+
+    local i, lib_base_path;
+
+    lib_base_path := NULL;
+    for i in [libname] do
+      if (StringTools:-Search("Sandals", i) <> 0) then
+        lib_base_path := i;
+      end if;
+    end do;
+    if (lib_base_path = NULL) then
+      error "cannot find ""Sandals"" module.";
+    end if;
     return NULL;
   end proc: # ModuleLoad
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  local ModuleUnload := proc()
-    description "'SandalsCodegen' module unload procedure.";
+  local ModuleUnload::static := proc()
+    description """SandalsCodegen"" module unload procedure.";
     return NULL;
   end proc: # ModuleUnload
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  export SetWorkingDirectory := proc(
-    dname::string,
+  export ModuleCopy::static := proc(
+    _self::SandalsCodegen,
+    proto::SandalsCodegen,
     $)
 
-    description "Set the working directory to <dname> for the code generation.";
+    description "Copy the objects <proto> into <self>.";
 
-    m_WorkingDirectory := cat(currentdir(), "/", dname, "/");
-    try
-      mkdir(m_WorkingDirectory);
-    catch:
-      printf("Working directory already exists.\n");
-    end try;
-    printf("Working directory: %s\n", m_WorkingDirectory);
-    return NULL;
-  end proc: # SetWorkingDirectory
+    _self:-m_working_directory := proto:-m_working_directory;
+    _self:-m_warning_mode      := proto:-m_warning_mode;
+  end proc: # ModuleCopy
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  export GenerateFile := proc(
+  export GenerateFile::static := proc(
     fname::string,
     str::string,
     $)
@@ -69,7 +90,7 @@ SandalsCodegen := module()
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  export ClearFile := proc(
+  export ClearFile::static := proc(
     fname::string,
     $)
 
@@ -85,61 +106,147 @@ SandalsCodegen := module()
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  export TranslateToCpp := proc(
-    expr_list::list,
-    $)
-
-    description "Convert a list of expressions <expr_list> into C++ code.";
-
-    local i, user_fun, out;
-
-    # Define language functions
-    user_fun := [];
-
-    # Define new language
-    CodeGeneration:-LanguageDefinition:-Define("NewC", extend = "C",
-      seq(AddFunction(user_fun[i], anything::numeric, user_fun[i]), i = 1..nops(user_fun)));
-
-    # Generate code
-    return SandalsCodegen:-ApplyIndent("Real ", CodeGeneration:-Translate(
-      expr_list,
-      language          = "NewC",
-      optimize          = true,
-      digits            = 30,
-      deducereturn      = false,
-      coercetypes       = false,
-      deducetypes       = false,
-      reduceanalysis    = false,
-      defaulttype       = numeric,
-      functionprecision = double,
-      output            = string
-    ));
-  end proc:
-
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  local BoundCode := proc(
-    code::string,
-    {
-    char::nonnegint := 120
-    }, $)::string;
-
-    description "Bound the code <code> with a character limit <char>.";
-
-    return cat(StringTools:-LengthSplit(code, char) ||~ "\n");
-
-  end proc: # BoundCode
-
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  local ApplyIndent := proc(
-    ind::string,
+  export ApplyPrefix::static := proc(
+    pre::string,
     str::string,
     $)::string;
 
-    description "Apply indentation <ind> to string <str>.";
+    description "Apply prefix <pre> to each line of the string <str>.";
 
     local out;
+
+    # Apply initial prefix
+    out := cat(pre, str);
+
+    # Apply prefix to each line
+    out := StringTools:-SubstituteAll(out, "\n", cat("\n", pre));
+
+    # Remove prefix from last line
+    out := StringTools:-Take(out, length(out) - length(pre));
+
+    # Remove prefix empty lines or lines with only spaces
+    out := StringTools:-SubstituteAll(out, "\n" || pre || "\n", "\n\n");
+
+    return out
+  end proc: # ApplyPrefix
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  export GetWorkingDirectory := proc(
+    _self::SandalsCodegen,
+    $)
+
+    description "Return the working directory.";
+
+    return _self:-m_working_directory;
+  end proc: # GetWorkingDirectory
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  export SetWorkingDirectory := proc(
+    _self::SandalsCodegen,
+    dname::string,
+    $)
+
+    description "Set the working directory to <dname> for the code generation.";
+
+    _self:-m_working_directory := cat(currentdir(), "/", dname, "/");
+    try
+      mkdir(_self:-m_working_directory);
+    catch:
+      printf("working directory already exists.\n");
+    end try;
+    printf("working directory: %s\n", _self:-m_working_directory);
+    return NULL;
+  end proc: # SetWorkingDirectory
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  export EnableVerboseMode::static := proc(
+    _self::SandalsCodegen,
+    $)
+
+    description "Enable the verbose mode.";
+
+    _self:-m_verbose_mode := true;
+    return NULL;
+  end proc: # EnableVerboseMode
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  export DisableVerboseMode::static := proc(
+    _self::SandalsCodegen,
+    $)
+
+    description "Disable the verbose mode.";
+
+    _self:-m_verbose_mode := false;
+    return NULL;
+  end proc: # DisableVerboseMode
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  export SetVerboseMode::static := proc(
+    _self::SandalsCodegen,
+    mode::boolean,
+    $)
+
+    description "Set the verbosity of the module to <mode>.";
+
+    _self:-m_verbose_mode := mode;
+    return NULL;
+  end proc: # SetVerboseMode
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  export EnableWarningMode::static := proc(
+    _self::SandalsCodegen,
+    $)
+
+    description "Enable the warning mode of the module.";
+
+    _self:-m_warning_mode := true;
+    return NULL;
+  end proc: # EnableWarningMode
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  export DisableWarningMode::static := proc(
+    _self::SandalsCodegen,
+    $)
+
+    description "Disable the warning mode of the module.";
+
+    _self:-m_warning_mode := false;
+    return NULL;
+  end proc: # DisableWarningMode
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  export SetWarningMode::static := proc(
+    _self::SandalsCodegen,
+    mode::boolean,
+    $)
+
+    description "Set the warning mode of the module to <mode>.";
+
+    _self:-m_warning_mode := mode;
+    return NULL;
+  end proc: # SetWarningMode
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  export ApplyIndent := proc(
+    _self::SandalsCodegen,
+    str::string,
+    $)::string;
+
+    description "Apply indentation at the beginning of each line of the string <str>.";
+
+    local out, ind;
+
+    # Retrieve indentation
+    ind := _self:-m_indent;
 
     # Apply initial indentation
     out := cat(ind, str);
@@ -158,96 +265,443 @@ SandalsCodegen := module()
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  local GenerateProperties := proc(
-    data::list(symbol),
-    {
-    propbool::list(boolean) := [seq(true, i = 1..nops(data))],
-    indent::string          := "  "
-    }, $)::string;
+  export GetIndent := proc(
+    _self::SandalsCodegen,
+    $)
 
-    description "Generate properties code from a list of data <data>, boolean flags <propbool>, "
-      "and optional indentation <indent>.";
+    description "Return the indentation string.";
 
-    local i, out;
-
-    if (nops(propbool) <> nops(data)) then
-      error("the number of properties' boolean must be equal to the number of properties.");
-    end if;
-
-    if has(propbool, true) then
-      out := "";
-      for i from 1 to nops(data) do
-        if propbool[i] then
-          convert(data[i], string);
-          out := cat(out, indent, "Real const & ", %, " = this->m_", %, ";\n");
-        end if;
-      end do;
-    else
-      out := cat(indent, "// No properties\n");
-    end if;
-    return out;
-  end proc: # GenerateProperties
+    return _self:-m_indent;
+  end proc: # GetIndent
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  local GenerateInputs := proc(
-    vars::list(list(symbol)),
-    {
-    varsbool::list(list(boolean)) := [seq([seq(true, j = 1..nops(vars[i]))], i = 1..nops(vars))],
-    indent::string := "  ",
-    label::string  := "in"
-    }, $)::string;
+  export SetIndent := proc(
+    _self::SandalsCodegen,
+    indent::string,
+    $)
 
-    description "Generate inputs code from a list of variables <vars>, label <label>, and "
-      "indentation <indent>.";
+    description "Set the indentation string to <indent>.";
 
-    local i, j, out;
+    _self:-m_indent := indent;
+    return NULL;
+  end proc: # SetIndent
 
-    if (nops(varsbool) <> nops(vars)) then
-      error("the number of variables' boolean must be equal to the number of variables.");
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  export GetInfo := proc(
+    _self::SandalsCodegen,
+    $)
+
+    description "Return the information string.";
+
+    return _self:-m_indent;
+  end proc: # GetInfo
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  export SetInfo := proc(
+    _self::SandalsCodegen,
+    info::string,
+    $)
+
+    description "Set the information string to <info>.";
+
+    _self:-m_info := info;
+    return NULL;
+  end proc: # SetInfo
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  export GetVars := proc(
+    _self::SandalsCodegen,
+    $)::list(function);
+
+    description "Return the variables list.";
+
+    return _self:-m_vars;
+  end proc: # GetVars
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  export SetVars := proc(
+    _self::SandalsCodegen,
+    vars::list(function),
+    $)
+
+    description "Set the variables list to <vars>.";
+
+    _self:-m_vars      := vars;
+    _self:-m_vars_info := _self:-SetVarsInfo(_self,
+      [seq(cat("State variable ", i), i = 1..nops(_self:-m_vars))]);
+    return NULL;
+  end proc: # SetVars
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  export GetVarsInfo := proc(
+    _self::SandalsCodegen,
+    $)::list(string);
+
+    description "Return the variables information list.";
+
+    return _self:-m_vars_info;
+  end proc: # GetVarsInfo
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  export SetVarsInfo := proc(
+    _self::SandalsCodegen,
+    vars_info::list(string),
+    $)
+
+    description "Set the variables information list to <vars_info>.";
+
+    if not (nops(_self:-m_vars) > 0) and not (nops(vars_info) <> nops(_self:-m_vars)) then
+      error("the number of variables' information must be equal to the number of variables.");
     end if;
 
-    if has(varsbool, true) then
+    _self:-m_vars_info := vars_info;
+    return NULL;
+  end proc: # SetVarsInfo
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  export GetData := proc(
+    _self::SandalsCodegen,
+    $)::list(symbol = algebraic);
+
+    description "Return the data variables list.";
+
+    return _self:-m_data;
+  end proc: # GetData
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  export SetData := proc(
+    _self::SandalsCodegen,
+    data::list(symbol = algebraic),
+    $)
+
+    description "Set the data variables list to <data>.";
+
+    _self:-m_data      := data;
+    _self:-m_data_info := _self:-SetDataInfo(_self,
+      [seq(cat("Data variable ", i), i = 1..nops(_self:-m_data))]);
+    return NULL;
+  end proc: # SetData
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  export GetDataInfo := proc(
+    _self::SandalsCodegen,
+    $)::list(string);
+
+    description "Return the data variables information list.";
+
+    return _self:-m_data_info;
+  end proc: # GetDataInfo
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  export SetDataInfo := proc(
+    _self::SandalsCodegen,
+    data_info::list(string),
+    $)
+
+    description "Set the data variables information list to <data_info>.";
+
+    if not (nops(_self:-m_data) > 0) and not (nops(data_info) <> nops(_self:-m_data)) then
+      error("the number of data' information must be equal to the number of data variables.");
+    end if;
+
+    _self:-m_data_info := data_info;
+    return NULL;
+  end proc: # SetDataInfo
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  export GetTime := proc(
+    _self::SandalsCodegen,
+    $)::list(numeric);
+
+    description "Return the integration time.";
+
+    return _self:-m_time;
+  end proc: # GetTime
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  export SetTime := proc(
+    _self::SandalsCodegen,
+    time::{list(numeric), range(numeric)},
+    $)
+
+    description "Set the integration time to <time>.";
+
+    local time_lst;
+
+    if not type(time, list) then
+      time_lst := convert(time, list)
+    else
+      time_lst := time;
+    end if;
+
+    if (nops(time_lst) > 0) then
+      if (time_lst[1] = time_lst[2]) then
+        error("degenerate time range detected.");
+      elif (time_lst[2] < time_lst[1]) then
+        if _self:-m_warning_mode then
+          WARNING("decreasing time range detected, consider using the reverse time mode.");
+        end if;
+      end if;
+    end if;
+
+    _self:-m_time := time;
+    return NULL;
+  end proc: # SetTime
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  export GetIcs := proc(
+    _self::SandalsCodegen,
+    $)::list(algebraic);
+
+    description "Return the integration initial conditions.";
+
+    return _self:-m_ics;
+  end proc: # GetIcs
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  export SetIcs := proc(
+    _self::SandalsCodegen,
+    ics::list(algebraic),
+    $)
+
+    description "Set the integration initial conditions to <ics>.";
+
+    local tmp;
+
+    tmp := indets(ics) minus convert(lhs~(_self:-m_data), set);
+
+    if (nops(ics) > 0) then
+      if (nops(ics) <> nops(_self:-m_vars)) then
+        error("invalid initial conditions detected.");
+      elif (nops(tmp) > 0) then
+        if _self:-m_warning_mode then
+          WARNING("initial conditions contain the unknown variables {%1}.", tmp);
+        end if;
+      end if;
+    end if;
+
+    _self:-m_ics := ics;
+    return NULL;
+  end proc: # SetIcs
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  export SetUserFunction := proc(
+    _self::SandalsCodegen,
+    user_function::list(string),
+    $)
+
+    description "Set the user function to <user_function>.";
+
+    _self:-m_user_function := user_function;
+    return NULL;
+  end proc: # SetUserFunction
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  export GetUserFunction := proc(
+    _self::SandalsCodegen,
+    $)::list(string);
+
+    description "Return the user function.";
+
+    return _self:-m_user_function;
+  end proc: # GetUserFunction
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  export SetCompSequence := proc(
+    _self::SandalsCodegen,
+    comp_sequence::list(symbol = algebraic),
+    $)
+
+    description "Set the computation sequence to <comp_sequence>.";
+
+    _self:-m_comp_sequence := comp_sequence;
+    return NULL;
+  end proc: # SetCompSequence
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  export GetCompSequence := proc(
+    _self::SandalsCodegen,
+    $)::list(symbol = algebraic);
+
+    description "Return the computation sequence.";
+
+    return _self:-m_comp_sequence;
+  end proc: # GetCompSequence
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  export SetDomain := proc(
+    _self::SandalsCodegen,
+    domain::list({`<`, `<=`}),
+    $)
+
+    description "Set the domain to <domain>.";
+
+    _self:-m_domain := domain;
+    return NULL;
+  end proc: # SetDomain
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  export GetDomain := proc(
+    _self::SandalsCodegen,
+    $)::list({`<`, `<=`});
+
+    description "Return the domain.";
+
+    return _self:-m_domain;
+  end proc: # GetDomain
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  export TranslateToCpp := proc(
+    _self::SandalsCodegen,
+    expr_list::list,
+    $)
+
+    description "Convert a list of expressions <expr_list> into C++ code.";
+
+    local i, fun;
+
+    # Define language functions
+    fun := ["floor", "ceil", "round", "trunc", "erf", op(_self:-m_user_function)];
+
+    # Define new language
+    CodeGeneration:-LanguageDefinition:-Define("NewC", extend = "C",
+      seq(AddFunction(fun[i], anything::numeric, fun[i]), i = 1..nops(fun)));
+
+    # Generate code
+    return _self:-ApplyPrefix("Real ", CodeGeneration:-Translate(
+      expr_list,
+      language          = "NewC",
+      optimize          = true,
+      digits            = 30,
+      deducereturn      = false,
+      coercetypes       = false,
+      deducetypes       = false,
+      reduceanalysis    = false,
+      defaulttype       = numeric,
+      functionprecision = double,
+      output            = string
+    ));
+  end proc:
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  export GenerateData := proc(
+    _self::SandalsCodegen,
+    data_bool::list(boolean),
+    $)::string;
+
+    description "Generate data extraction code, boolean flags <data_bool> are used to select the "
+      "data variables to extract.";
+
+    local data, i, out;
+
+    data := lhs~(_self:-m_data);
+
+    if has(data_bool, true) then
       out := "";
-      for j from 1 to nops(vars) do
-        if (nops(vars[j]) > 1) then
-          for i from 1 to nops(vars[j]) do
-            if varsbool[j][i] then
-              convert(vars[j][i], string);
-              out := cat(out, indent, "Real const & ", %, " = ", label, "_", j-1, "(", i-1, ");\n");
-            end if;
-          end do;
-        elif (nops(vars[j]) = 1) and varsbool[j][1] then
-          convert(vars[j][1], string);
-          out := cat(out, indent, "Real const & ", %, " = ", label, "_", j-1, ";\n");
+      for i from 1 to nops(data) do
+        if data_bool[i] then
+          convert(data[i], string);
+          out := cat(out, _self:-m_indent, "Real const & ", %, " = this->m_", %, ";\n");
         end if;
       end do;
     else
-      out := cat(indent, "// No inputs' alias\n");
+      out := cat(_self:-m_indent, "// No data\n");
+    end if;
+    return out;
+  end proc: # GenerateData
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  export GenerateInputs := proc(
+    _self::SandalsCodegen,
+    vars::list(list(symbol)),
+    vars_bool::list(list(boolean)),
+    vars_info::list(list(string)),
+    {
+    label::string := "in"
+    }, $)::string;
+
+    description "Generate inputs extraction code, boolean flags <vars_bool> are used to select the "
+      "variables to extract. Variables information <vars_info> are used to provide a description of "
+      "them. A label <label> is used to prefix the variables.";
+
+    local i, j, out;
+
+    if (nops(vars_bool) <> nops(vars)) then
+      error("the number of variables' boolean must be equal to the number of variables.");
+    end if;
+
+    if has(vars_bool, true) then
+      out := "";
+      for j from 1 to nops(vars) do
+        if (nops(vars_bool[j]) <> nops(vars[j])) then
+          error("the number of variables' boolean must be equal to the number of variables.");
+        end if;
+        if (nops(vars[j]) > 1) then
+          for i from 1 to nops(vars[j]) do
+            if vars_bool[j][i] then
+              convert(vars[j][i], string);
+              out := cat(out, _self:-m_indent, "Real const & ", %, " = ", label, "_", j-1, "(", i-1,
+                "); // ", vars_info[j][i], "\n");
+            end if;
+          end do;
+        elif (nops(vars[j]) = 1) and vars_bool[j][1] then
+          convert(vars[j][1], string);
+          out := cat(out, _self:-m_indent, "Real const & ", %, " = ", label, "_", j-1, "; // ",
+            vars_info[j][1], "\n");
+        end if;
+      end do;
+    else
+      out := cat(_self:-m_indent, "// No inputs' alias\n");
     end if;
     return out;
   end proc: # GenerateInputs
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  local ExtractElements := proc(
+  export ExtractElements := proc(
+    _self::SandalsCodegen,
     name::string,
     func::{list, Vector, Matrix, Array},
     dims::list(nonnegint),
     {
-    label::string  := "out",
-    indent::string := "  "
+    label::string  := "out"
     }, $)::list, string;
 
-    description "Extract elements for a n-dimensional function <func> with name <name>, dimensions "
-      "<dims>, label <label>, and indentation <indent>.";
+    description "Extract elements for a n-dimensional function <func> with name <name>, and "
+      "dimensions <dims>. A label <label> is used to prefix the variables.";
 
     local i, j, idx, lst, out, cur, tmp, str;
 
     lst := [];
     out := "";
     if has(evalb~(func =~ 0), false) and (mul(dims) > 0) then
-      out := cat(out, indent, label, "_", name, " <<\n", indent, indent);
+      out := cat(out, _self:-m_indent, label, "_", name, " <<\n", _self:-m_indent, _self:-m_indent);
       for i from 1 to mul(dims) do
         cur := [];
         idx := i-1;
@@ -261,44 +715,44 @@ SandalsCodegen := module()
       end do;
       out := cat(StringTools:-Delete(out, -2..-1), ";\n");
     else
-      out := cat(out, indent, label, "_", name, ".setZero();\n");
+      out := cat(out, _self:-m_indent, label, "_", name, ".setZero();\n");
     end if;
     return lst, out;
   end proc: # ExtractElements
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  local GenerateHeader := proc(
+  export GenerateHeader := proc(
+    _self::SandalsCodegen,
     name::string,
     vars::list(list(symbol)),
-    varstype::list(string) := [seq("undefined", i = 1..nops(vars))],
-    outtype::string        := "undefined",
+    vars_type::list(string),
+    vars_bool::list(boolean),
+    out_type::string,
     {
-    varsbool::list(boolean) := [seq(true, i = 1..nops(vars))],
-    info::string            := "No description provided.",
-    spec::string            := "",
-    indent::string          := "  "
+    info::string := "No description provided.",
+    spec::string := ""
     }, $)::string;
 
-    description "Generate a function header for a function <name> with variables <vars>, description "
-      "<info>, variables types <varstype>, output type <outtype>, function specifier <spec>, "
-      "variables boolean flag <varsbool>, and indentation <indent>.";
+    description "Generate a function header for a function <name> with variables <vars>, variables "
+      "types <vars_type>, output type <out_type>, and variables boolean flag <vars_bool>. The "
+      "optional arguments are function description <info>, and function specifier <spec>.";
 
     local i, out;
 
-    if (nops(varsbool) <> nops(vars)) then
+    if (nops(vars_bool) <> nops(vars)) then
       error("the number of variables' boolean must be equal to the number of variables.");
-    elif (nops(varstype) <> nops(vars)) then
+    elif (nops(vars_type) <> nops(vars)) then
       error("the number of variables' types must be equal to the number of variables.");
     end if;
 
     out := cat(
       "// ", info, "\n",
-      outtype, " ", name, "("
+      out_type, " ", name, "("
     );
     for i from 1 to nops(vars) do
       out := cat(out,
-        varstype[i], " ", `if`(varsbool[i], cat("in_", i-1), cat("/*in_", i-1, "*/")), ", "
+        vars_type[i], " ", `if`(vars_bool[i], cat("in_", i-1), cat("/*in_", i-1, "*/")), ", "
       );
     end do;
     return cat(`if`(nops(vars) > 0, StringTools:-Delete(out, -2..-1), out), ") ", spec, "\n{\n");
@@ -306,37 +760,36 @@ SandalsCodegen := module()
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  local GenerateElements := proc(
+  export GenerateElements := proc(
+    _self::SandalsCodegen,
     func::{list, Vector, Matrix, Array},
-    {
-    indent::string := "  "
-    }, $)::string;
+    $)::string;
 
-    description "Generate code for elements <func> with indentation <indent>.";
+    description "Generate code for elements <func>.";
 
-    SandalsCodegen:-TranslateToCpp(func);
-    return SandalsCodegen:-ApplyIndent(indent,
+    _self:-TranslateToCpp(_self, func);
+    return _self:-ApplyIndent(_self,
       `if`(% = "", "// No body\n", cat(%%, %))
     );
   end proc: # GenerateElements
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  local GenerateBody := proc(
+  export GenerateBody := proc(
+    _self::SandalsCodegen,
     name::string,
     dims::list(nonnegint),
     {
-    header::string     := "No header",
-    properties::string := "No properties",
-    inputs::string     := "No inputs",
-    elements::string   := "No elements",
-    outputs::string    := "No outputs",
-    indent::string     := "  "
+    header::string   := "No header",
+    data::string     := "No data",
+    inputs::string   := "No inputs",
+    elements::string := "No elements",
+    outputs::string  := "No outputs"
     }, $)::string;
 
     description "Generate code for function body for a function <name> with dimensions <dims>, "
-      "header <header>, properties <properties>, inputs <inputs>, elements <elements>, output "
-      "type <type>, and indentation <indent>.";
+      "header <header>, data <data>, inputs <inputs>, elements <elements>, and outputs "
+      "<outputs>.";
 
     local tmp;
 
@@ -347,161 +800,173 @@ SandalsCodegen := module()
 
     return cat(
       header,
-      indent, "// Create properties' aliases\n", properties, "\n",
-      indent, "// Create inputs' aliases\n",     inputs,     "\n",
-      indent, "// Evaluate function\n",          elements,   "\n",
-      indent, "// Store outputs\n",              outputs,   "}\n"
+      _self:-m_indent, "// Create data' aliases\n", data, "\n",
+      _self:-m_indent, "// Create inputs' aliases\n", inputs, "\n",
+      _self:-m_indent, "// Evaluate function\n", elements, "\n",
+      _self:-m_indent, "// Store outputs\n", outputs, "}\n"
     );
   end proc: # GenerateBody
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  local VectorToCpp := proc(
+  export VectorToCpp := proc(
+    _self::SandalsCodegen,
     name::string,
     vars::list(list(symbol)),
     vec::{list, Vector},
-    varstype::list(string) := [seq("undefined", i = 1..nops(vars))],
-    outtype::string        := "undefined",
+    vars_type::list(string),
+    vars_info::list(list(string)),
+    out_type::string,
     {
-    data::list(symbol) := [],
-    info::string       := "No info",
-    label::string      := "out",
-    spec::string       := "",
-    indent::string     := "  "
+    info::string := "No info",
+    spec::string := ""
     }, $)::string;
 
     description "Translate the vector <vec> with variables <vars> into a C++ function named <name> "
-      "and return it as a string. The optional arguments are class properties <data>, function "
-      "description <info>, output type <outtype>, label <label>, function specifier <spec>, and "
-      "indentation string <indent>.";
+      "and return it as a string. Variable types and return type are specified with <vars_type> and "
+      "<out_type>. The optional arguments are function description <info>, and function specifier "
+      "<spec>.";
 
-    local header, properties, inputs, elements, outputs, dims, lst, i, j, propbool, varsbool;
+    local vec_tmp, data_bool, vars_bool, i, j, data, header, inputs, elements, outputs, dims, lst,
+      comp_sequence;
 
-    # Extract the function properties
-    propbool := [seq(has(vec, data[i]), i = 1..nops(data))];
-    properties := SandalsCodegen:-GenerateProperties(
-      data, parse("indent") = indent, parse("propbool") = propbool
-    );
+    if (nops(vars) <> nops(vars_type)) then
+      error("the number of variables' types must be equal to the number of variables.");
+    end if;
+
+    if not type(vec, Vector) then
+      vec_tmp := convert(vec, Vector)
+    else
+      vec_tmp := vec;
+    end if;
+
+    # Create boolean flags for the variables
+    data_bool := [seq(has(vec_tmp, _self:-m_data[i]), i = 1..nops(_self:-m_data))];
+    vars_bool := [seq([seq(has(vec_tmp, vars[i][j]), j = 1..nops(vars[i]))], i = 1..nops(vars))];
+
+    # Extract the function data
+    data := _self:-GenerateData(_self, data_bool);
 
     # Extract the function inputs
-    varsbool := [seq([seq(has(vec, vars[i][j]), j = 1..nops(vars[i]))], i = 1..nops(vars))];
-    inputs := SandalsCodegen:-GenerateInputs(
-      vars, parse("indent") = indent, parse("varsbool") = varsbool
-    );
+    inputs := _self:-GenerateInputs(_self, vars, vars_bool, vars_info);
 
     # Extract the function elements
-    dims := [LinearAlgebra:-Dimension(vec)];
-    lst, outputs := SandalsCodegen:-ExtractElements(
-      name, vec, dims,
-      parse("indent") = indent, parse("label") = label
-    );
-    outputs := cat(indent, outtype, " ", label, "_", name, ";\n", outputs);
-    outputs := cat(outputs, indent, "return ", label, "_", name, ";\n");
+    dims := [LinearAlgebra:-Dimension(vec_tmp)];
+    lst, outputs := _self:-ExtractElements(_self, name, vec_tmp, dims);
+    outputs := cat(_self:-m_indent, out_type, " ", label, "_", name, ";\n", outputs);
+    outputs := cat(outputs, _self:-m_indent, "return ", label, "_", name, ";\n");
 
     # Generate the method header
-    header := SandalsCodegen:-GenerateHeader(
-      name, vars, varstype, outtype,
-      parse("info") = info, parse("indent") = indent, parse("spec") = spec,
-      parse("varsbool") = [seq(has(varsbool[i], true), i = 1..nops(vars))]
+    vars_bool := [seq(has(vars_bool[i], true), i = 1..nops(vars))];
+    header := _self:-GenerateHeader(
+      _self, name, vars, vars_type, vars_bool, out_type, parse("info") = info, parse("spec") = spec
     );
 
+    # Generate the evaluation sequence
+    # comp_sequence := _self:-GenerateElements(
+    #   _self, selectremove[flatten](x -> has(vec, x), _self:-m_comp_sequence)
+    # );
+
     # Generate the elements
-    elements := SandalsCodegen:-GenerateElements(lst);
+    elements := _self:-GenerateElements(_self, lst);
 
     # Generate the generated code
-    return SandalsCodegen:-GenerateBody(
-      name, dims,
-      parse("header")   = header,   parse("properties") = properties, parse("inputs")  = inputs,
-      parse("elements") = elements, parse("indent")     = indent,     parse("outputs") = outputs
+    return _self:-GenerateBody(
+      _self, name, dims, parse("header") = header, parse("data") = data, parse("inputs") = inputs,
+      (*parse("comp_sequence") = comp_sequence,*) parse("elements") = elements, parse("outputs") = outputs
     );
   end proc: # VectorToCpp
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  local MatrixToCpp := proc(
+  export MatrixToCpp := proc(
+    _self::SandalsCodegen,
     name::string,
     vars::list(list(symbol)),
     mat::Matrix,
-    varstype::list(string) := [seq("undefined", i = 1..nops(vars))],
-    outtype::string        := "undefined",
+    vars_type::list(string),
+    vars_info::list(list(string)),
+    out_type::string,
     {
-    data::list(symbol) := [],
-    info::string       := "No info",
-    label::string      := "out",
-    spec::string       := "",
-    indent::string     := "  "
+    info::string := "No info",
+    spec::string := ""
     }, $)::string;
 
     description "Translate the matrix <mat> with variables <vars> into a C++ function named <name> "
-      "and return it as a string. The optional arguments are class properties <data>, function "
-      "description <info>, output type <outtype>, label <label>, function specifier <spec>, and "
-      "indentation string <indent>.";
+      "and return it as a string. Variable types and return type are specified with <vars_type> and "
+      "<out_type>. The optional arguments are function description <info>, and function specifier "
+      "<spec>.";
 
-    local header, properties, inputs, elements, outputs, dims, lst, i, j, propbool, varsbool;
+    local data_bool, vars_bool, i, j, data, header, inputs, elements, outputs, dims, lst,
+      comp_sequence;
 
-    # Extract the function properties
-    propbool := [seq(has(mat, data[i]), i = 1..nops(data))];
-    properties := SandalsCodegen:-GenerateProperties(
-      data, parse("indent") = indent, parse("propbool") = propbool
-    );
+    if (nops(vars) <> nops(vars_type)) then
+      error("the number of variables' types must be equal to the number of variables.");
+    end if;
+
+    # Create boolean flags for the variables
+    data_bool := [seq(has(mat, _self:-m_data[i]), i = 1..nops(_self:-m_data))];
+    vars_bool := [seq([seq(has(mat, vars[i][j]), j = 1..nops(vars[i]))], i = 1..nops(vars))];
+
+    # Extract the function data
+    data := _self:-GenerateData(_self, data_bool);
 
     # Extract the function inputs
-    varsbool := [seq([seq(has(mat, vars[i][j]), j = 1..nops(vars[i]))], i = 1..nops(vars))];
-    inputs := SandalsCodegen:-GenerateInputs(
-      vars, parse("indent") = indent, parse("varsbool") = varsbool
-    );
+    inputs := _self:-GenerateInputs(_self, vars, vars_bool, vars_info);
 
     # Extract the function elements
     dims := [LinearAlgebra:-Dimensions(mat)];
-    lst, outputs := SandalsCodegen:-ExtractElements(
-      name, mat, dims,
-      parse("indent") = indent, parse("label") = label
-    );
-    outputs := cat(indent, outtype, " ", label, "_", name, ";\n", outputs);
-    outputs := cat(outputs, indent, "return ", label, "_", name, ";\n");
+    lst, outputs := _self:-ExtractElements(_self, name, mat, dims);
+    outputs := cat(_self:-m_indent, out_type, " ", label, "_", name, ";\n", outputs);
+    outputs := cat(outputs, _self:-m_indent, "return ", label, "_", name, ";\n");
 
     # Generate the method header
-    header := SandalsCodegen:-GenerateHeader(
-      name, vars, varstype, outtype,
-      parse("info") = info, parse("indent") = indent, parse("spec") = spec,
-      parse("varsbool") = [seq(has(varsbool[i], true), i = 1..nops(vars))]
+    vars_bool := [seq(has(vars_bool[i], true), i = 1..nops(vars))];
+    header := _self:-GenerateHeader(
+      _self, name, vars, vars_type, vars_bool, out_type, parse("info") = info, parse("spec") = spec
     );
 
-    # Generate the elements
-    elements := SandalsCodegen:-GenerateElements(lst);
+    # Generate the evaluation sequence
+    # comp_sequence := _self:-GenerateElements(
+    #   _self, selectremove[flatten](x -> has(mat, x), _self:-m_comp_sequence)
+    # );
 
-    # Store the results
-    return SandalsCodegen:-GenerateBody(
-      name, dims,
-      parse("header")   = header,   parse("properties") = properties, parse("inputs")  = inputs,
-      parse("elements") = elements, parse("indent")     = indent,     parse("outputs") = outputs
+    # Generate the elements
+    elements := _self:-GenerateElements(_self, lst);
+
+    # Generate the generated code
+    return _self:-GenerateBody(
+      _self, name, dims, parse("header") = header, parse("data") = data, parse("inputs") = inputs,
+      (*parse("comp_sequence") = comp_sequence,*) parse("elements") = elements, parse("outputs") = outputs
     );
   end proc: # MatrixToCpp
 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  local TensorToCpp := proc(
+  export TensorToCpp := proc(
+    _self::SandalsCodegen,
     name::string,
     vars::list(list(symbol)),
     ten::Array,
-    varstype::list(string) := [seq("undefined", i = 1..nops(vars))],
-    outtype::string        := "undefined",
+    vars_type::list(string),
+    vars_info::list(list(string)),
+    out_type::string,
     {
-    data::list(symbol) := [],
-    info::string       := "No info",
-    label::string      := "out",
-    spec::string       := "",
-    indent::string     := "  "
+    info::string := "No info",
+    spec::string := ""
     }, $)::string;
 
     description "Translate the tensor <ten> with variables <vars> into a C++ function named <name> "
-      "and return it as a string. The optional arguments are class properties <data>, function "
-      "description <info>, output type <outtype>, label <label>, function specifier <spec>, and "
-      "indentation string <indent>.";
+      "and return it as a string. Variable types and return type are specified with <vars_type> and "
+      "<out_type>. The optional arguments are function description <info>, and function specifier "
+      "<spec>.";
 
-    local dims, header, properties, inputs, elements, i, mat, outputs_tmp, lst_tmp, outputs, lst,
-      j, propbool, varsbool;
+    local data_bool, vars_bool, i, j, data, header, inputs, elements, outputs_tmp, lst_tmp, outputs,
+      mat, lst, dims, comp_sequence;
+
+    if (nops(vars) <> nops(vars_type)) then
+      error("the number of variables' types must be equal to the number of variables.");
+    end if;
 
     # Check the tensor dimensions
     dims := op~(2, [ArrayDims(ten)]);
@@ -511,108 +976,92 @@ SandalsCodegen := module()
       error("only 3-dimensional tensors are supported.");
     end if;
 
-    # Extract the function properties
-    propbool := [seq(has(ten, data[i]), i = 1..nops(data))];
-    properties := SandalsCodegen:-GenerateProperties(
-      data, parse("indent") = indent, parse("propbool") = propbool
-    );
+    # Create boolean flags for the variables
+    data_bool := [seq(has(ten, _self:-m_data[i]), i = 1..nops(_self:-m_data))];
+    vars_bool := [seq([seq(has(ten, vars[i][j]), j = 1..nops(vars[i]))], i = 1..nops(vars))];
+
+    # Extract the function data
+    data := _self:-GenerateData(_self, data_bool);
 
     # Extract the function inputs
-    varsbool := [seq([seq(has(ten, vars[i][j]), j = 1..nops(vars[i]))], i = 1..nops(vars))];
-    inputs := SandalsCodegen:-GenerateInputs(
-      vars, parse("indent") = indent, parse("varsbool") = varsbool
-    );
+    inputs := _self:-GenerateInputs(_self, vars, vars_bool, vars_info);
 
     # Extract the function elements
     lst := []; outputs := "";
     for i from 1 to dims[-1] do
       mat := convert(ten[1..-1, 1..-1, i], Matrix);
-      lst_tmp, outputs_tmp := SandalsCodegen:-ExtractElements(
-        cat(name, "[", i-1, "]"), mat, dims[1..-2],
-        parse("indent") = indent, parse("label") = label
+      lst_tmp, outputs_tmp := _self:-ExtractElements(
+        _self, cat(name, "[", i-1, "]"), mat, dims[1..-2]
       );
       lst     := [op(lst), op(lst_tmp)];
       outputs := cat(outputs, outputs_tmp);
     end do;
-    outputs := cat(indent, outtype, " ", label, "_", name, "(", dims[-1], ");\n", outputs);
-    outputs := cat(outputs, indent, "return ", label, "_", name, ";\n");
+    outputs := cat(_self:-m_indent, out_type, " ", label, "_", name, "(", dims[-1], ");\n", outputs);
+    outputs := cat(outputs, _self:-m_indent, "return ", label, "_", name, ";\n");
 
     # Generate the method header
-    header := SandalsCodegen:-GenerateHeader(
-      name, vars, varstype, outtype,
-      parse("info") = info, parse("indent") = indent, parse("spec") = spec,
-      parse("varsbool") = [seq(has(varsbool[i], true), i = 1..nops(vars))]
+    vars_bool := [seq(has(vars_bool[i], true), i = 1..nops(vars))];
+    header := _self:-GenerateHeader(
+      _self, name, vars, vars_type, vars_bool, out_type, parse("info") = info, parse("spec") = spec
     );
 
+    # Generate the evaluation sequence
+    # comp_sequence := _self:-GenerateElements(
+    #   _self, selectremove[flatten](x -> has(ten, x), _self:-m_comp_sequence)
+    # );
+
     # Generate the elements
-    elements := SandalsCodegen:-GenerateElements(lst);
+    elements := _self:-GenerateElements(_self, lst);
 
     # Generate the generated code
-    return SandalsCodegen:-GenerateBody(
-      name, dims,
-      parse("header")   = header,   parse("properties") = properties, parse("inputs")  = inputs,
-      parse("elements") = elements, parse("indent")     = indent,     parse("outputs") = outputs
+    return _self:-GenerateBody(
+      _self, name, dims, parse("header") = header, parse("data") = data, parse("inputs") = inputs,
+      (*parse("comp_sequence") = comp_sequence,*) parse("elements") = elements, parse("outputs") = outputs
     );
   end proc: # TensorToCpp
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  local GenerateConstructor := proc(
+  export GenerateConstructor := proc(
+    _self::SandalsCodegen,
     name::string,
     type::string,
     {
     num_eqns::nonnegint := 0,
     num_invs::nonnegint := 0,
-    data::list(symbol)  := [],
-    info::string        := "Class constructor.",
-    indent::string      := "  "
+    info::string        := "Class constructor."
     }, $)::string;
 
-    description "Generate a constructor for a system named <name> with system type <type>, "
-      "number of functions <num_eqns>, number of invariants <num_invs>, system data <data> and "
-      "description <info>.";
+    description "Generate a constructor for a system named <name> with system type <type>, number "
+      "of functions <num_eqns>, number of invariants <num_invs>, and description <info>.";
 
     return cat(
       "// ", info, "\n",
       name, "() : ", type, "<", num_eqns, ", ", num_invs, ">(""", name, """) {}\n",
       "\n",
-      `if`(nops(data) > 0, cat(
+      `if`(nops(_self:-m_data) > 0, cat(
         "// ", info, "\n",
-        name, "(", StringTools:-Delete(cat~(op(cat~("Real ", convert~(data, string), ", "))), -2..-1), ")\n",
-        indent, ": ", type, "<", num_eqns, ", ", num_invs, ">(""", name, """)",
-        cat~(op(cat~(", m_", convert~(data, string), "(", convert~(data, string), ")"))), " {}\n"),
+        name, "(", StringTools:-Delete(cat~(op(cat~("Real ", convert~(_self:-m_data, string), ", "))), -2..-1), ")\n",
+        _self:-m_indent, ": ", type, "<", num_eqns, ", ", num_invs, ">(""", name, """)",
+        cat~(op(cat~(", m_", convert~(lhs~(_self:-m_data), string), "(", convert~(rhs~(_self:-m_data), string), ")"))), " {}\n"),
         "")
     );
   end proc: # GenerateConstructor
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  local GenerateIcs := proc(
-    ics::{Vector(algebraic), list(algebraic)},
-    {
-    data::list(algebraic) := [],
-    indent::string        := "  "
-    }, $)::string;
+  export GenerateIcs := proc(
+    _self::SandalsCodegen,
+    $)::string;
 
-    description "Generate initial conditions for a system with initial conditions <ics>, system data "
-      "<data>, and indentation <indent>.";
+    description "Generate initial conditions function.";
 
-    local ics_tmp;
-
-    if not type(ics, Vector) then
-      ics_tmp := convert(ics, Vector);
-    else
-      ics_tmp := ics;
-    end if;
-
-    if (LinearAlgebra:-Dimension(ics_tmp) > 0) then
-      return SandalsCodegen:-ApplyIndent(indent, SandalsCodegen:-VectorToCpp(
-        "ics", [], ics_tmp,
-        [], "VectorF",
-        parse("data")   = data,
-        parse("spec")   = "const",
-        parse("info")   = "Evaluate the initial conditions.",
-        parse("indent") = indent
+    if (nops(_self:-m_ics) > 0) then
+      return _self:-ApplyIndent(_self, _self:-VectorToCpp(
+        _self, "ics", [], _self:-m_ics,
+        [], [], "VectorF",
+        parse("info") = "Evaluate the initial conditions.",
+        parse("spec") = "const"
       ));
     else
       return "";
@@ -621,29 +1070,17 @@ SandalsCodegen := module()
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  local GenerateTime := proc(
-    time::{list(numeric), range(numeric)},
-    {
-    indent::string := "  "
-    }, $)
+  export GenerateTime := proc(
+    _self::SandalsCodegen,
+    $)
 
-    description "Generate time properties and functions for a system with integration time <time> "
-      "and indentation <indent>.";
+    description "Generate integration time data and functions.";
 
-    local time_tmp, time_prp, time_fun, ics_fun;
-
-    if not type(time, list) then
-      time_tmp := convert(time, list)
-    else
-      time_tmp := time;
-    end if;
-
-    if (nops(time_tmp) > 0) then
-      time_prp := SandalsCodegen:-ApplyIndent(indent, cat(
-        "Real m_t_ini{" , time_tmp[1], "};\n"
-        "Real m_t_end{" , time_tmp[2], "};\n"
-      ));
-      time_fun := SandalsCodegen:-ApplyIndent(indent, cat(
+    if (nops(_self:-m_time) > 0) then
+      return _self:-ApplyIndent(_self, cat(
+        "Real m_t_ini{" , _self:-m_time[1], "};\n"
+        "Real m_t_end{" , _self:-m_time[2], "};\n"
+      )), _self:-ApplyIndent(_self, cat(
         "// Return the initial integration time\n"
         "Real t_ini() const {return this->m_t_ini;}\n"
         "\n"
@@ -652,45 +1089,30 @@ SandalsCodegen := module()
         "\n"
       ));
     else
-      time_prp := cat(indent, "// No integration time properties\n");
-      time_fun := "";
+      return cat(indent, "// No integration time data\n"), "";
     end if;
-    return time_prp, time_fun;
+    return time_data, time_fun;
   end proc: # GenerateTime
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  local GenerateDomain := proc(
-    vars::list(list(symbol)),
-    domain::{Vector({`<`, `<=`}), list({`<`, `<=`})},
-    {
-    data::list(symbol) := [],
-    indent::string     := "  "
-    }, $)::string;
+  export GenerateDomain := proc(
+    _self::SandalsCodegen,
+    $)::string;
 
-    description "Generate domain properties and functions for a system with variables <vars>, "
-      "domain set <domain>, system data <data>, and indentation <indent>.";
+    description "Generate domain function.";
 
-    local domain_tmp, domain_prp, domain_fun;
-
-    if not type(domain, list) then
-      domain_tmp := convert(domain, list);
-    else
-      domain_tmp := domain;
-    end if;
-
-    if (nops(domain_tmp) > 0) then
+    if (nops(_self:-m_domain) > 0) then
       error("domain set not implemented yet.");
-      return SandalsCodegen:-ApplyIndent(indent, SandalsCodegen:-VectorToCpp(
-        "in_domain", vars, domain_tmp,
-        [], "VectorF",
-        parse("data")   = data,
-        parse("spec")   = "const",
-        parse("info")   = "Check if the system is in the defined domain.",
-        parse("indent") = indent
+      return _self:-ApplyIndent(_self, _self:-VectorToCpp(
+        "in_domain", [_self:-m_vars, [t]], _self:-m_domain,
+        ["VectorF const &", "Real"], [_self:-m_vars_info, _self:-m_vars_info ||~ " derivative", "Time"],
+        "VectorF",
+        parse("spec") = "const",
+        parse("info") = "Check if the system is in the defined domain."
       ));
     else
-      domain_fun := SandalsCodegen:-ApplyIndent(indent, cat(
+      return _self:-ApplyIndent(_self, cat(
         "// Check if the system is in the defined domain.\n",
         "bool in_domain(VectorF const &/*x*/, Real /*t*/) const override {return true;}\n",
         "\n"
@@ -708,42 +1130,30 @@ SandalsCodegen := module()
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   export ImplicitToCpp := proc(
+    _self::SandalsCodegen,
     name::string,
-    x::{Vector(algebraic), list(algebraic)},
-    F::{Vector(algebraic), list(algebraic)},
-    h::{Vector(algebraic), list(algebraic)},
-    {
-    data::list(symbol = algebraic)            := [],
-    time::{list(numeric), range(numeric)}     := [],
-    ics::{Vector(algebraic), list(algebraic)} := [],
-    info::string                              := "No class description provided.",
-    indent::string                            := "  ",
-    domain::{Vector({`<`, `<=`}), list({`<`, `<=`})} := []
-    }, $)::string;
+    F::Vector(algebraic),
+    h::Vector(algebraic),
+    $)::string;
 
     description "Generate an implicit system for the first-order differential equations F(x,x',t) "
-      "= 0, with function <F>, invariants <h>, system data <data>, integration time interval <time>, "
-      "initial condistions <ics>, domain set <domain>, and description <info>. The indentation of "
-      "the output code is set to <indent>.";
+      "= 0, with function <F>, and invariants <h>.";
 
-    local x_tmp, x_dot_tmp, mk_x_dot, rm_x_deps, rm_x_dot_deps, F_tmp, JF_x, JF_x_dot, h_tmp, Jh_x,
-      rm_deps, i, data_str, properties, num_eqns, num_invs, time_prp, time_fun, ics_fun, domain_fun;
+    local x, x_dot, mk_x_dot, rm_x_deps, rm_x_dot_deps, F_tmp, JF_x, JF_x_dot, h_tmp, Jh_x, rm_deps,
+      i, data_str, data_lhs, num_eqns, num_invs, time_data, time_fun, ics_fun, domain_fun, vars_info_dot,
+      vars_info;
 
     # Store system states
-    if not type(x, Vector) then
-      x_tmp := convert(x, Vector);
-    else
-      x_tmp := x;
-    end if;
-    x_dot_tmp := map(i -> convert(cat(op(0, i), "_dot"), symbol)(op(1..-1, i)), x);
+    x     := _self:-m_vars;
+    x_dot := map(i -> convert(cat(op(0, i), "_dot"), symbol)(op(1..-1, i)), x);
 
     # Prepare veriables for substitution
     # diff(x, t) -> x_dot(t)
-    mk_x_dot := convert(diff(x_tmp, t) =~ x_dot_tmp, list);
+    mk_x_dot := convert(diff(x, t) =~ x_dot, list);
     # x(t) -> x
-    rm_x_deps := convert(x_tmp =~ op~(0, x_tmp), list);
+    rm_x_deps := convert(x =~ op~(0, x), list);
     # x_dot(t) -> x_dot
-    rm_x_dot_deps := convert(x_dot_tmp =~ op~(0, x_dot_tmp), list);
+    rm_x_dot_deps := convert(x_dot =~ op~(0, x_dot), list);
 
     # Compose substitutions
     rm_deps := [
@@ -751,27 +1161,16 @@ SandalsCodegen := module()
       op(rm_x_dot_deps) # x_dot(t) -> x_dot
     ];
 
-    # Store system function and calculate Jacobians
-    if not type(F, Vector) then
-      F_tmp := convert(F, Vector);
-    else
-      F_tmp := F;
-    end if;
-    F_tmp    := subs(op(mk_x_dot), F_tmp);
-    JF_x     := SandalsUtils:-DoJacobian(F_tmp, x_tmp);
-    JF_x_dot := SandalsUtils:-DoJacobian(F_tmp, x_dot_tmp);
-
-    # Store system invariants and calculate Jacobian
-    if not type(h, Vector) then
-      h_tmp := convert(h, Vector);
-    else
-      h_tmp := h;
-    end if;
-    Jh_x := SandalsUtils:-DoJacobian(h_tmp, x_tmp);
+    # Calculate Jacobians
+    F_tmp    := subs(op(mk_x_dot), F);
+    JF_x     := SandalsUtils:-DoJacobian(F, x);
+    JF_x_dot := SandalsUtils:-DoJacobian(F, x_dot);
+    h_tmp    := subs(op(mk_x_dot), h);
+    Jh_x     := SandalsUtils:-DoJacobian(h, x);
 
     # Generate expressions with proper variables dependencices
-    x_tmp     := convert(subs(op(rm_deps), x_tmp), list);
-    x_dot_tmp := convert(subs(op(rm_deps), x_dot_tmp), list);
+    x         := convert(subs(op(rm_deps), x), list);
+    x_dot     := convert(subs(op(rm_deps), x_dot), list);
     F_tmp     := subs(op(rm_deps), F_tmp);
     JF_x      := subs(op(rm_deps), JF_x);
     JF_x_dot  := subs(op(rm_deps), JF_x_dot);
@@ -779,33 +1178,36 @@ SandalsCodegen := module()
     Jh_x      := subs(op(rm_deps), Jh_x);
 
     # Function utilities strings
-    i := indent;
+    i := _self:-m_indent;
 
-    # Generate properties
-    if (nops(data) > 0) then
-      properties := lhs~(data);
-      data_str   := cat~(op(cat~(
-        i, "Real m_", convert~(properties, string), "{", convert~(rhs~(data), string), "};\n"
+    # Generate internal class data
+    if (nops(_self:-m_data) > 0) then
+      data_lhs := lhs~(_self:-m_data);
+      data_str := cat~(op(cat~(
+        i, "Real m_", convert~(data_lhs, string), "{", convert~(rhs~(_self:-m_data), string), "}; // ",
+        _self:-m_data_info, "\n"
       )));
     else
-      data_str   := cat(i, "// No Properties\n");
-      properties := [];
+      data_str := cat(i, "// No Properties\n");
+      data_lhs := [];
     end if;
 
     # Initial conditions function code generation
-    ics_fun := SandalsCodegen:-GenerateIcs(ics, parse("data") = properties, parse("indent") = i);
+    ics_fun := _self:-GenerateIcs(_self);
 
     # Integration time function code generation
-    time_prp, time_fun := SandalsCodegen:-GenerateTime(time, parse("indent") = i);
+    time_data, time_fun := _self:-GenerateTime(_self);
 
     # Domain function code generation
-    domain_fun := SandalsCodegen:-GenerateDomain(
-      [x_tmp, [t]], domain, parse("data") = properties, parse("indent") = i
-    );
+    domain_fun := _self:-GenerateDomain(_self);
 
     # Compute template arguments
     num_eqns := LinearAlgebra:-Dimension(F_tmp);
     num_invs := LinearAlgebra:-Dimension(h_tmp);
+
+    # Variables information
+    vars_info_dot := [_self:-m_vars_info, _self:-m_vars_info ||~ " derivative", ["Time"]];
+    vars_info     := [_self:-m_vars_info, ["Time"]];
 
     # Return output string
     return cat(
@@ -829,7 +1231,7 @@ SandalsCodegen := module()
       "using namespace Sandals;\n"
       "using namespace std;\n"
       "\n",
-      "// ", info, "\n",
+      "// ", _self:-m_info, "\n",
       "class ", name, " : public Implicit<", num_eqns, ", ", num_invs, ">\n",
       "{\n",
       i, "// User data\n",
@@ -841,60 +1243,48 @@ SandalsCodegen := module()
       i, "using VectorH  = typename Implicit<", num_eqns, ", ", num_invs, ">::VectorH;\n",
       i, "using MatrixJH = typename Implicit<", num_eqns, ", ", num_invs, ">::MatrixJH;\n",
       "\n",
-      SandalsCodegen:-ApplyIndent(i, GenerateConstructor(
-        name, "Implicit",
+      _self:-ApplyIndent(_self, _self:-GenerateConstructor(
+        _self, name, "Implicit",
         parse("num_eqns") = num_eqns,
         parse("num_invs") = num_invs,
-        parse("data")     = properties,
-        parse("info")     = "Class constructor.",
-        parse("indent")   = i
+        parse("info")     = "Class constructor."
       )),
       "\n",
-      SandalsCodegen:-ApplyIndent(i, SandalsCodegen:-VectorToCpp(
-        "F", [x_tmp, x_dot_tmp, [t]], F_tmp,
-        ["VectorF const &", "VectorF const &", "Real"], "VectorF",
-        parse("data")   = properties,
-        parse("spec")   = "const override",
-        parse("info")   = "Evaluate the function F.",
-        parse("indent") = i
+      _self:-ApplyIndent(_self, _self:-VectorToCpp(
+        _self, "F", [x, x_dot, [t]], F_tmp,
+        ["VectorF const &", "VectorF const &", "Real"], vars_info_dot, "VectorF",
+        parse("spec") = "const override",
+        parse("info") = "Evaluate the function F."
       )),
       "\n",
-      SandalsCodegen:-ApplyIndent(i, SandalsCodegen:-MatrixToCpp(
-        "JF_x", [x_tmp, x_dot_tmp, [t]], JF_x,
-        ["VectorF const &", "VectorF const &", "Real"], "MatrixJF",
-        parse("data")   = properties,
-        parse("spec")   = "const override",
-        parse("info")   = "Evaluate the Jacobian of F with respect to x.",
-        parse("indent") = i
+      _self:-ApplyIndent(_self, _self:-MatrixToCpp(
+        _self, "JF_x", [x, x_dot, [t]], JF_x,
+        ["VectorF const &", "VectorF const &", "Real"], vars_info_dot, "MatrixJF",
+        parse("spec") = "const override",
+        parse("info") = "Evaluate the Jacobian of F with respect to x."
       )),
-      SandalsCodegen:-ApplyIndent(i, SandalsCodegen:-MatrixToCpp(
-        "JF_x_dot", [x_tmp, x_dot_tmp, [t]], JF_x_dot,
-        ["VectorF const &", "VectorF const &", "Real"], "MatrixJF",
-        parse("data")   = properties,
-        parse("spec")   = "const override",
-        parse("info")   = "Evaluate the Jacobian of F with respect to x_dot.",
-        parse("indent") = i
+      _self:-ApplyIndent(_self, _self:-MatrixToCpp(
+        _self, "JF_x_dot", [x, x_dot, [t]], JF_x_dot,
+        ["VectorF const &", "VectorF const &", "Real"], vars_info_dot, "MatrixJF",
+        parse("spec") = "const override",
+        parse("info") = "Evaluate the Jacobian of F with respect to x_dot."
       )),
       "\n",
-      SandalsCodegen:-ApplyIndent(i, SandalsCodegen:-VectorToCpp(
-        "h", [x_tmp, [t]], h_tmp,
-        ["VectorF const &", "Real"], "VectorH",
-        parse("data")   = properties,
-        parse("spec")   = "const override",
-        parse("info")   = "Calculate the vector h of the invariants.",
-        parse("indent") = i
+      _self:-ApplyIndent(_self, _self:-VectorToCpp(
+        _self, "h", [x, [t]], h_tmp,
+        ["VectorF const &", "Real"], vars_info,
+        "VectorH",
+        parse("spec") = "const override",
+        parse("info") = "Calculate the vector h of the invariants."
       )),
       "\n",
-      SandalsCodegen:-ApplyIndent(i, SandalsCodegen:-MatrixToCpp(
-        "Jh_x", [x_tmp, [t]], Jh_x,
-        ["VectorF const &", "Real"], "MatrixJH",
-        parse("data")   = properties,
-        parse("spec")   = "const override",
-        parse("info")   = "Calculate the Jacobian of h with respect to x.",
-        parse("indent") = i
+      _self:-ApplyIndent(_self, _self:-MatrixToCpp(
+        _self, "Jh_x", [x, [t]], Jh_x,
+        ["VectorF const &", "Real"], vars_info,
+        "MatrixJH",
+        parse("spec") = "const override",
+        parse("info") = "Calculate the Jacobian of h with respect to x."
       )),
-      "\n",
-      i, "bool in_domain(VectorF const &/*x*/, Real /*t*/) const override {return true;}\n",
       "\n",
       time_fun,
       ics_fun,
@@ -915,88 +1305,61 @@ SandalsCodegen := module()
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   export ExplicitToCpp := proc(
+    _self::SandalsCodegen,
     name::string,
-    x::{Vector(algebraic), list(algebraic)},
-    f::{Vector(algebraic), list(algebraic)},
-    h::{Vector(algebraic), list(algebraic)},
-    {
-    data::list(symbol = algebraic)            := [],
-    time::{list(numeric), range(numeric)}     := [],
-    ics::{Vector(algebraic), list(algebraic)} := [],
-    info::string                              := "No class description provided.",
-    indent::string                            := "  ",
-    domain::{Vector({`<`, `<=`}), list({`<`, `<=`})} := []
-    }, $)::string;
+    f::Vector(algebraic),
+    h::Vector(algebraic),
+    $)::string;
 
     description "Generate an explicit system for the first-order differential equations x' = f(x,t), "
-      "withstates variables <x>, right-hand side <f>, invariants <h>, system data <data>, integration "
-      "time interval <time>, initial condistions <ics>, domain set <domain>, and description <info>. "
-      "The indentation of the output code is set to <indent>.";
+      "withstates variables <x>, right-hand side <f>, and invariants <h>.";
 
-    local x_tmp, b_tmp, Jb_x, h_tmp, Jh_x, rm_deps, i, data_str, properties, num_eqns, num_invs,
-      time_prp, time_fun, ics_fun, domain_fun;
+    local x, f_tmp, Jf_x, h_tmp, Jh_x, rm_deps, i, data_str, data_lhs, num_eqns, num_invs,
+      time_data, time_fun, ics_fun, domain_fun, vars_info;
 
     # Store system states
-    if not type(x, Vector) then
-      x_tmp := convert(x, Vector);
-    else
-      x_tmp := x;
-    end if;
+    x := _self:-m_vars;
 
     # Prepare veriables for substitution (x(t) -> x)
-    rm_deps := convert(x_tmp =~ op~(0, x_tmp), list);
-
-    # Store system right-hand side function and calculate Jacobian
-    if not type(f, Vector) then
-      b_tmp := convert(f, Vector);
-    else
-      b_tmp := f;
-    end if;
-    Jb_x := SandalsUtils:-DoJacobian(b_tmp, x_tmp);
-
-    # Store system invariants and calculate Jacobian
-    if not type(h, Vector) then
-      h_tmp := convert(h, Vector);
-    else
-      h_tmp := h;
-    end if;
-    Jh_x := SandalsUtils:-DoJacobian(h_tmp, x_tmp);
+    rm_deps := convert(x =~ op~(0, x), list);
 
     # Generate expressions with proper variables dependencices
-    x_tmp := convert(subs(op(rm_deps), x_tmp), list);
-    b_tmp := subs(op(rm_deps), b_tmp);
-    Jb_x  := subs(op(rm_deps), Jb_x);
-    h_tmp := subs(op(rm_deps), h_tmp);
-    Jh_x  := subs(op(rm_deps), Jh_x);
+    x := convert(subs(op(rm_deps), x), list);
+    f_tmp := subs(op(rm_deps), f);
+    Jf_x  := subs(op(rm_deps), SandalsUtils:-DoJacobian(f, x));
+    h_tmp := subs(op(rm_deps), h);
+    Jh_x  := subs(op(rm_deps), SandalsUtils:-DoJacobian(h, x));
 
     # Function utilities strings
-    i := indent;
+    i := _self:-m_indent;
 
-    # Generate properties
-    if (nops(data) > 0) then
-      properties := lhs~(data);
-      data_str   := cat~(op(cat~(
-        i, "Real m_", convert~(properties, string), "{", convert~(rhs~(data), string), "};\n"
+    # Generate internal class data
+    if (nops(_self:-m_data) > 0) then
+      data_lhs := lhs~(_self:-m_data);
+      data_str := cat~(op(cat~(
+        i, "Real m_", convert~(data_lhs, string), "{", convert~(rhs~(_self:-m_data), string), "}; // ",
+        _self:-m_data_info, "\n"
       )));
     else
       data_str   := cat(i, "// No Properties\n");
-      properties := [];
+      data_lhs := [];
     end if;
 
     # Initial conditions function code generation
-    ics_fun := SandalsCodegen:-GenerateIcs(ics, parse("data") = properties, parse("indent") = i);
+    ics_fun := _self:-GenerateIcs(_self);
 
     # Integration time function code generation
-    time_prp, time_fun := SandalsCodegen:-GenerateTime(time, parse("indent") = i);
+    time_data, time_fun := _self:-GenerateTime(_self);
 
     # Domain function code generation
-    domain_fun := SandalsCodegen:-GenerateDomain(
-      [x_tmp, [t]], domain, parse("data") = properties, parse("indent") = i
-    );
+    domain_fun := _self:-GenerateDomain(_self);
 
     # Compute template arguments
-    num_eqns := LinearAlgebra:-Dimension(b_tmp);
+    num_eqns := LinearAlgebra:-Dimension(f_tmp);
     num_invs := LinearAlgebra:-Dimension(h_tmp);
+
+    # Variables information
+    vars_info := [_self:-m_vars_info, ["Time"]];
 
     # Return output string
     return cat(
@@ -1020,7 +1383,7 @@ SandalsCodegen := module()
       "using namespace Sandals;\n"
       "using namespace std;\n"
       "\n",
-      "// ", info, "\n",
+      "// ", _self:-m_info, "\n",
       "class ", name, " : public Explicit<", num_eqns, ", ", num_invs, ">\n",
       "{\n",
       i, "// User data\n",
@@ -1032,52 +1395,40 @@ SandalsCodegen := module()
       i, "using VectorH  = typename Explicit<", num_eqns, ", ", num_invs, ">::VectorH;\n",
       i, "using MatrixJH = typename Explicit<", num_eqns, ", ", num_invs, ">::MatrixJH;\n",
       "\n",
-      SandalsCodegen:-ApplyIndent(i, GenerateConstructor(
-        name, "Explicit",
+      _self:-ApplyIndent(_self, _self:-GenerateConstructor(
+        _self, name, "Explicit",
         parse("num_eqns") = num_eqns,
         parse("num_invs") = num_invs,
-        parse("data")     = properties,
-        parse("info")     = "Class constructor.",
-        parse("indent")   = i
+        parse("info")     = "Class constructor."
       )),
       "\n",
-      SandalsCodegen:-ApplyIndent(i, SandalsCodegen:-VectorToCpp(
-        "f", [x_tmp, [t]], b_tmp,
-        ["VectorF const &", "Real"], "VectorF",
-        parse("data")   = properties,
-        parse("spec")   = "const override",
-        parse("info")   = "Evaluate the function f.",
-        parse("indent") = i
+      _self:-ApplyIndent(_self, _self:-VectorToCpp(
+        _self, "f", [x, [t]], f_tmp,
+        ["VectorF const &", "Real"], vars_info, "VectorF",
+        parse("spec") = "const override",
+        parse("info") = "Evaluate the function f."
       )),
       "\n",
-      SandalsCodegen:-ApplyIndent(i, SandalsCodegen:-MatrixToCpp(
-        "Jb_x", [x_tmp, [t]], Jb_x,
-        ["VectorF const &", "Real"], "MatrixJF",
-        parse("data")   = properties,
-        parse("spec")   = "const override",
-        parse("info")   = "Evaluate the Jacobian of f with respect to x.",
-        parse("indent") = i
+      _self:-ApplyIndent(_self, _self:-MatrixToCpp(
+        _self, "Jf_x", [x, [t]], Jf_x,
+        ["VectorF const &", "Real"], vars_info, "MatrixJF",
+        parse("spec") = "const override",
+        parse("info") = "Evaluate the Jacobian of f with respect to x."
       )),
       "\n",
-      SandalsCodegen:-ApplyIndent(i, SandalsCodegen:-VectorToCpp(
-        "h", [x_tmp, [t]], h_tmp,
-        ["VectorF const &", "Real"], "VectorH",
-        parse("data")   = properties,
-        parse("spec")   = "const override",
-        parse("info")   = "Calculate the vector h of the invariants.",
-        parse("indent") = i
+      _self:-ApplyIndent(_self, _self:-VectorToCpp(
+        _self, "h", [x, [t]], h_tmp,
+        ["VectorF const &", "Real"], vars_info, "VectorH",
+        parse("spec") = "const override",
+        parse("info") = "Calculate the vector h of the invariants."
       )),
       "\n",
-      SandalsCodegen:-ApplyIndent(i, SandalsCodegen:-MatrixToCpp(
-        "Jh_x", [x_tmp, [t]], Jh_x,
-        ["VectorF const &", "Real"], "MatrixJH",
-        parse("data")   = properties,
-        parse("spec")   = "const override",
-        parse("info")   = "Calculate the Jacobian of h with respect to x.",
-        parse("indent") = i
+      _self:-ApplyIndent(_self, _self:-MatrixToCpp(
+        _self, "Jh_x", [x, [t]], Jh_x,
+        ["VectorF const &", "Real"], vars_info, "MatrixJH",
+        parse("spec") = "const override",
+        parse("info") = "Calculate the Jacobian of h with respect to x."
       )),
-      "\n",
-      i, "bool in_domain(VectorF const &/*x*/, Real /*t*/) const override {return true;}\n",
       "\n",
       time_fun,
       ics_fun,
@@ -1098,97 +1449,72 @@ SandalsCodegen := module()
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   export SemiExplicitToCpp := proc(
+    _self::SandalsCodegen,
     name::string,
-    x::{Vector(algebraic), list(algebraic)},
-    A::{Matrix(algebraic)},
-    b::{Vector(algebraic)},
-    h::{Vector(algebraic), list(algebraic)},
-    {
-    data::list(symbol = algebraic)            := [],
-    time::{list(numeric), range(numeric)}     := [],
-    ics::{Vector(algebraic), list(algebraic)} := [],
-    info::string                              := "No class description provided.",
-    indent::string                            := "  ",
-    domain::{Vector({`<`, `<=`}), list({`<`, `<=`})} := []
-    }, $)::string;
+    A::Matrix(algebraic),
+    b::Vector(algebraic),
+    h::Vector(algebraic),
+    $)::string;
 
     description "Generate a semi-explicit system for the first-order differential equations A(x,t)."
-      "x' = b(x,t), with states variables <x>, mass matrix <A>, right-hand side <b>, invariants <h>, "
-      "system data <data>, integration time interval <time>, initial condistions <ics>, domain set "
-      "<domain>, and description <info>. The indentation of the output code is set to <indent>.";
+      "x' = b(x,t), with states variables <x>, mass matrix <A>, right-hand side <b>, and invariants "
+      "<h>.";
 
-    local x_tmp, A_tmp, TA_x, b_tmp, Jb_x, h_tmp, Jh_x, rm_deps, i, data_str, properties, num_eqns,
-      num_invs, time_prp, time_fun, ics_fun, domain_fun;
+    local x, A_tmp, TA_x, b_tmp, Jb_x, h_tmp, Jh_x, rm_deps, i, data_str, data_lhs, num_eqns,
+      num_invs, time_data, time_fun, ics_fun, domain_fun, vars_info;
 
     # Store system states
-    if not type(x, Vector) then
-      x_tmp := convert(x, Vector);
-    else
-      x_tmp := x;
-    end if;
+    x := _self:-m_vars;
 
     # Prepare veriables for substitution (x(t) -> x)
-    rm_deps := convert(x_tmp =~ op~(0, x_tmp), list);
+    rm_deps := convert(x =~ op~(0, x), list);
 
     # Store system right-hand side function and calculate Jacobian
-    if not type(A, Matrix) then
-      A_tmp := convert(A, Matrix);
-    else
-      A_tmp := A;
-    end if;
-    if not type(b, Vector) then
-      b_tmp := convert(b, Vector);
-    else
-      b_tmp := b;
-    end if;
-    TA_x := SandalsUtils:-DoTensor(A_tmp, x_tmp);
-    Jb_x := SandalsUtils:-DoJacobian(b_tmp, x_tmp);
+    TA_x := SandalsUtils:-DoTensor(A, x);
+    Jb_x := SandalsUtils:-DoJacobian(b, x);
 
     # Store system invariants and calculate Jacobian
-    if not type(h, Vector) then
-      h_tmp := convert(h, Vector);
-    else
-      h_tmp := h;
-    end if;
-    Jh_x := SandalsUtils:-DoJacobian(h_tmp, x_tmp);
+    Jh_x := SandalsUtils:-DoJacobian(h, x);
 
     # Generate expressions with proper variables dependencices
-    x_tmp := convert(subs(op(rm_deps), x_tmp), list);
-    A_tmp := subs(op(rm_deps), A_tmp);
+    x     := convert(subs(op(rm_deps), x), list);
+    A_tmp := subs(op(rm_deps), A);
     TA_x  := subs(op(rm_deps), TA_x);
-    b_tmp := subs(op(rm_deps), b_tmp);
+    b_tmp := subs(op(rm_deps), b);
     Jb_x  := subs(op(rm_deps), Jb_x);
-    h_tmp := subs(op(rm_deps), h_tmp);
+    h_tmp := subs(op(rm_deps), h);
     Jh_x  := subs(op(rm_deps), Jh_x);
 
     # Function utilities strings
-    i := indent;
+    i := _self:-m_indent;
 
-    # Generate properties
-    if (nops(data) > 0) then
-      properties := lhs~(data);
-      data_str   := cat~(op(cat~(
-        i, "Real m_", convert~(properties, string), "{", convert~(rhs~(data), string), "};\n"
+    # Generate internal class data
+    if (nops(_self:-m_data) > 0) then
+      data_lhs := lhs~(_self:-m_data);
+      data_str := cat~(op(cat~(
+        i, "Real m_", convert~(data_lhs, string), "{", convert~(rhs~(_self:-m_data), string), "}; // ",
+        _self:-m_data_info, "\n"
       )));
     else
       data_str   := cat(i, "// No Properties\n");
-      properties := [];
+      data_lhs := [];
     end if;
 
     # Initial conditions function code generation
-    ics_fun := SandalsCodegen:-GenerateIcs(ics, parse("data") = properties, parse("indent") = i);
+    ics_fun := _self:-GenerateIcs(_self);
 
     # Integration time function code generation
-    time_prp, time_fun := SandalsCodegen:-GenerateTime(time, parse("indent") = i);
+    time_data, time_fun := _self:-GenerateTime(_self);
 
     # Domain function code generation
-    domain_fun := SandalsCodegen:-GenerateDomain(
-      [x_tmp, [t]], domain, parse("data") = properties, parse("indent") = i
-    );
+    domain_fun := _self:-GenerateDomain(_self);
 
     # Compute template arguments
-    num_eqns := LinearAlgebra:-Dimension(b_tmp);
-    num_invs := LinearAlgebra:-Dimension(h_tmp);
+    num_eqns := LinearAlgebra:-Dimension(b);
+    num_invs := LinearAlgebra:-Dimension(h);
+
+    # Variables information
+    vars_info := [_self:-m_vars_info, ["Time"]];
 
     # Return output string
     return cat(
@@ -1212,14 +1538,14 @@ SandalsCodegen := module()
       "using namespace Sandals;\n"
       "using namespace std;\n"
       "\n",
-      "// ", info, "\n",
+      "// ", _self:-m_info, "\n",
       "class ", name, " : public SemiExplicit<", num_eqns, ", ", num_invs, ">\n",
       "{\n",
       i, "// User data\n",
       data_str,
       "\n",
       i, "// Integration time\n",
-      time_prp,
+      time_data,
       "\n",
       "public:\n",
       i, "using VectorF  = typename SemiExplicit<", num_eqns, ", ", num_invs, ">::VectorF;\n",
@@ -1230,67 +1556,53 @@ SandalsCodegen := module()
       i, "using VectorH  = typename SemiExplicit<", num_eqns, ", ", num_invs, ">::VectorH;\n",
       i, "using MatrixJH = typename SemiExplicit<", num_eqns, ", ", num_invs, ">::MatrixJH;\n",
       "\n",
-      SandalsCodegen:-ApplyIndent(i, GenerateConstructor(
-        name, "SemiExplicit",
+      _self:-ApplyIndent(_self, _self:-GenerateConstructor(
+        _self, name, "SemiExplicit",
         parse("num_eqns") = num_eqns,
         parse("num_invs") = num_invs,
-        parse("data")     = properties,
-        parse("info")     = "Class constructor.",
-        parse("indent")   = i
+        parse("info")     = "Class constructor."
       )),
       "\n",
-      SandalsCodegen:-ApplyIndent(i, SandalsCodegen:-MatrixToCpp(
-        "A", [x_tmp, [t]], A_tmp,
-        ["VectorF const &", "Real"], "MatrixA",
-        parse("data")   = properties,
-        parse("spec")   = "const override",
-        parse("info")   = "Evaluate the mass matrix A.",
-        parse("indent") = i
+      _self:-ApplyIndent(_self, _self:-MatrixToCpp(
+        _self, "A", [x, [t]], A_tmp,
+        ["VectorF const &", "Real"], vars_info, "MatrixA",
+        parse("spec") = "const override",
+        parse("info") = "Evaluate the mass matrix A."
       )),
       "\n",
-      SandalsCodegen:-ApplyIndent(i, SandalsCodegen:-TensorToCpp(
-        "TA_x", [x_tmp, [t]], TA_x,
-        ["VectorF const &", "Real"], "TensorTA",
-        parse("data")   = properties,
-        parse("spec")   = "const override",
-        parse("info")   = "Evaluate the tensor of A with respect to x.",
-        parse("indent") = i
+      _self:-ApplyIndent(_self, _self:-TensorToCpp(
+        _self, "TA_x", [x, [t]], TA_x,
+        ["VectorF const &", "Real"], vars_info, "TensorTA",
+        parse("spec") = "const override",
+        parse("info") = "Evaluate the tensor of A with respect to x."
       )),
       "\n",
-      SandalsCodegen:-ApplyIndent(i, SandalsCodegen:-VectorToCpp(
-        "b", [x_tmp, [t]], b_tmp,
-        ["VectorF const &", "Real"], "VectorB",
-        parse("data")   = properties,
-        parse("spec")   = "const override",
-        parse("info")   = "Evaluate the function b.",
-        parse("indent") = i
+      _self:-ApplyIndent(_self, _self:-VectorToCpp(
+        _self, "b", [x, [t]], b_tmp,
+        ["VectorF const &", "Real"], vars_info, "VectorB",
+        parse("spec") = "const override",
+        parse("info") = "Evaluate the function b."
       )),
       "\n",
-      SandalsCodegen:-ApplyIndent(i, SandalsCodegen:-MatrixToCpp(
-        "Jb_x", [x_tmp, [t]], Jb_x,
-        ["VectorF const &", "Real"], "MatrixJB",
-        parse("data")   = properties,
-        parse("spec")   = "const override",
-        parse("info")   = "Evaluate the Jacobian of b with respect to x.",
-        parse("indent") = i
+      _self:-ApplyIndent(_self, _self:-MatrixToCpp(
+        _self, "Jb_x", [x, [t]], Jb_x,
+        ["VectorF const &", "Real"], vars_info, "MatrixJB",
+        parse("spec") = "const override",
+        parse("info") = "Evaluate the Jacobian of b with respect to x."
       )),
       "\n",
-      SandalsCodegen:-ApplyIndent(i, SandalsCodegen:-VectorToCpp(
-        "h", [x_tmp, [t]], h_tmp,
-        ["VectorF const &", "Real"], "VectorH",
-        parse("data")   = properties,
-        parse("spec")   = "const override",
-        parse("info")   = "Calculate the vector h of the invariants.",
-        parse("indent") = i
+      _self:-ApplyIndent(_self, _self:-VectorToCpp(
+        _self, "h", [x, [t]], h_tmp,
+        ["VectorF const &", "Real"], vars_info, "VectorH",
+        parse("spec") = "const override",
+        parse("info") = "Calculate the vector h of the invariants."
       )),
       "\n",
-      SandalsCodegen:-ApplyIndent(i, SandalsCodegen:-MatrixToCpp(
-        "Jh_x", [x_tmp, [t]], Jh_x,
-        ["VectorF const &", "Real"], "MatrixJH",
-        parse("data")   = properties,
-        parse("spec")   = "const override",
-        parse("info")   = "Calculate the Jacobian of h with respect to x.",
-        parse("indent") = i
+      _self:-ApplyIndent(_self, _self:-MatrixToCpp(
+        _self, "Jh_x", [x, [t]], Jh_x,
+        ["VectorF const &", "Real"], vars_info, "MatrixJH",
+        parse("spec") = "const override",
+        parse("info") = "Calculate the Jacobian of h with respect to x."
       )),
       "\n",
       time_fun,
