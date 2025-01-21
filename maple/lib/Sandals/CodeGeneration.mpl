@@ -11,7 +11,7 @@
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 # Code generation
-local m_path          := "./";
+local m_path          := ".";
 local m_indent        := "  ";
 local m_name          := "Untitled";
 local m_info          := "No class description available.";
@@ -32,10 +32,10 @@ export ResetCodeGeneration := proc(
 
   description "Reset the code generation parameters.";
 
-  _self:-m_path          := "./";
+  _self:-m_path          := ".";
   _self:-m_indent        := "  ";
   _self:-m_name          := "Untitled";
-  _self:-m_info          := "";
+  _self:-m_info          := "No class description available.";
   _self:-m_vars_info     := [];
   _self:-m_data          := [];
   _self:-m_data_info     := [];
@@ -50,31 +50,32 @@ end proc: # ResetCodeGeneration
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export CopyCodeGeneration := proc(
-    _self::Sandals,
-    proto::Sandals,
-    $)
+  _self::Sandals,
+  proto::Sandals,
+  $)
 
-    description "Copy the objects <proto> into <self>.";
+  description "Copy the objects <proto> into <self>.";
 
-    _self:-m_path          := proto:-m_path;
-    _self:-m_indent        := proto:-m_indent;
-    _self:-m_name          := proto:-m_name;
-    _self:-m_info          := proto:-m_info;
-    _self:-m_vars_info     := proto:-m_vars_info;
-    _self:-m_data          := proto:-m_data;
-    _self:-m_data_info     := proto:-m_data_info;
-    _self:-m_time          := proto:-m_time;
-    _self:-m_ics           := proto:-m_ics;
-    _self:-m_domain        := proto:-m_domain;
-    _self:-m_user_function := proto:-m_user_function;
-    _self:-m_comp_sequence := proto:-m_comp_sequence;
-  end proc: # CopyCodeGeneration
+  _self:-m_path          := proto:-m_path;
+  _self:-m_indent        := proto:-m_indent;
+  _self:-m_name          := proto:-m_name;
+  _self:-m_info          := proto:-m_info;
+  _self:-m_vars_info     := proto:-m_vars_info;
+  _self:-m_data          := proto:-m_data;
+  _self:-m_data_info     := proto:-m_data_info;
+  _self:-m_time          := proto:-m_time;
+  _self:-m_ics           := proto:-m_ics;
+  _self:-m_domain        := proto:-m_domain;
+  _self:-m_user_function := proto:-m_user_function;
+  _self:-m_comp_sequence := proto:-m_comp_sequence;
+  return NULL;
+end proc: # CopyCodeGeneration
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export GetPath := proc(
   _self::Sandals,
-  $)
+  $)::string;
 
   description "Return the path string.";
 
@@ -90,6 +91,10 @@ export SetPath := proc(
 
   description "Set the path string to <path>.";
 
+  if StringTools:-IsSuffix("/", path) then
+    path := StringTools:-Take(path, length(path) - 1);
+  end if;
+
   _self:-m_path := path;
   return NULL;
 end proc: # SetPath
@@ -98,7 +103,7 @@ end proc: # SetPath
 
 export GetIndent := proc(
   _self::Sandals,
-  $)
+  $)::string;
 
   description "Return the indentation string.";
 
@@ -112,11 +117,35 @@ export SetIndent := proc(
   indent::string,
   $)
 
-  description "Set the indentation string to <indent>.";
+  description "Set the indentation size to <indent>.";
 
   _self:-m_indent := indent;
   return NULL;
 end proc: # SetIndent
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+export GetIndentSize := proc(
+  _self::Sandals,
+  $)::nonnegint;
+
+  description "Return the indentation string.";
+
+  return length(_self:-m_indent);
+end proc: # GetIndentSize
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+export SetIndentSize := proc(
+  _self::Sandals,
+  size::nonnegint,
+  $)
+
+  description "Set the indentation size to <size>.";
+
+  _self:-m_indent := cat(seq(" ", i = 1..size));
+  return NULL;
+end proc: # SetIndentSize
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -146,7 +175,7 @@ end proc: # SetName
 
 export GetInfo := proc(
   _self::Sandals,
-  $)
+  $)::string;
 
   description "Return the information string.";
 
@@ -735,7 +764,7 @@ export TranslateDomainFunction := proc(
   end if;
 
   # Create boolean flags for the variables
-  data_bool := [seq(has(domain, _self:-m_data[i]), i = 1..nops(_self:-m_data))];
+  data_bool := [seq(has(domain, lhs(_self:-m_data[i])), i = 1..nops(_self:-m_data))];
   vars_bool := [seq([seq(has(domain, vars[i][j]), j = 1..nops(vars[i]))], i = 1..nops(vars))];
 
   # Extract the function data
@@ -823,7 +852,7 @@ export TranslateVectorFunction := proc(
   end if;
 
   # Create boolean flags for the variables
-  data_bool := [seq(has(vec_tmp, _self:-m_data[i]), i = 1..nops(_self:-m_data))];
+  data_bool := [seq(has(vec_tmp, lhs(_self:-m_data[i])), i = 1..nops(_self:-m_data))];
   vars_bool := [seq([seq(has(vec_tmp, vars[i][j]), j = 1..nops(vars[i]))], i = 1..nops(vars))];
 
   # Extract the function data
@@ -894,7 +923,7 @@ export TranslateMatrixFunction := proc(
   end if;
 
   # Create boolean flags for the variables
-  data_bool := [seq(has(mat, _self:-m_data[i]), i = 1..nops(_self:-m_data))];
+  data_bool := [seq(has(mat, lhs(_self:-m_data[i])), i = 1..nops(_self:-m_data))];
   vars_bool := [seq([seq(has(mat, vars[i][j]), j = 1..nops(vars[i]))], i = 1..nops(vars))];
 
   # Extract the function data
@@ -973,7 +1002,7 @@ export TranslateTensorFunction := proc(
   end if;
 
   # Create boolean flags for the variables
-  data_bool := [seq(has(ten, _self:-m_data[i]), i = 1..nops(_self:-m_data))];
+  data_bool := [seq(has(ten, lhs(_self:-m_data[i])), i = 1..nops(_self:-m_data))];
   vars_bool := [seq([seq(has(ten, vars[i][j]), j = 1..nops(vars[i]))], i = 1..nops(vars))];
 
   # Extract the function data
@@ -1060,17 +1089,27 @@ export GenerateClassConstructor := proc(
   description "Generate a constructor for a system named <name> with system type <type>, number "
     "of functions <num_eqns>, number of invariants <num_invs>, and description <info>.";
 
+  local tmp;
+
+  tmp := convert~(lhs~(_self:-m_data), string);
   return cat(
     "// ", info, "\n",
     name, "() : ", type, "<", num_eqns, ", ", num_invs, ">(""", name, """) {}\n",
-    "\n",
     `if`(nops(_self:-m_data) > 0, cat(
-      "// ", info, "\n",
-      name, "(", StringTools:-Delete(cat~(op(cat~("Real ", convert~(_self:-m_data, string), ", "))), -2..-1), ")\n",
-      _self:-m_indent, ": ", type, "<", num_eqns, ", ", num_invs, ">(""", name, """)",
-      cat~(op(cat~(", m_", convert~(lhs~(_self:-m_data), string), "(", convert~(rhs~(_self:-m_data), string), ")"))), " {}\n"),
-      "")
-  );
+      #"// ", info, "\n",
+      #name, "(", StringTools:-Delete(cat~(op(cat~("Real ", convert~(_self:-m_data, string), ", "))), -2..-1), ")\n",
+      #_self:-m_indent, ": ", type, "<", num_eqns, ", ", num_invs, ">(""", name, """)",
+      #cat~(op(cat~(", m_", tmp, "(", convert~(rhs~(_self:-m_data), string), ")"))), " {}\n",
+      #"\n",
+      cat~(op(cat~(
+        "\n"
+        "// ", _self:-m_data_info, " getter.\n",
+        "Real get_", tmp, "() const {return this->m_", tmp, ";}\n\n",
+        "// ", _self:-m_data_info, " setter.\n",
+        "void set_", tmp, "(Real t_", tmp, ") {this->m_", tmp, " = t_", tmp, ";}\n"
+      )))
+    ), "")
+    );
 end proc: # GenerateClassConstructor
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1324,7 +1363,7 @@ export CheckDefinition := proc(
 
   local ind;
 
-  ind := indets(expr)
+  ind := indets(expr, {symbol, function})
     minus {t} minus convert(_self:-m_vars, set) minus convert(diff~(_self:-m_vars, t), set)
     minus convert(lhs~(_self:-m_data), set)
     minus convert(lhs~(_self:-m_comp_sequence), set)

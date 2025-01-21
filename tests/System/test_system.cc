@@ -10,21 +10,21 @@
 
 #include "Sandals.hh"
 
-#include "ODEs/OscillatorImplicit.hh"
-#include "ODEs/OscillatorExplicit.hh"
-#include "ODEs/OscillatorSemiExplicit.hh"
+#include "OscillatorImplicit.hh"
+#include "OscillatorExplicit.hh"
+#include "OscillatorSemiExplicit.hh"
 
-#include "ODEs/SimplePendulumImplicit.hh"
-#include "ODEs/SimplePendulumExplicit.hh"
-#include "ODEs/SimplePendulumSemiExplicit.hh"
+#include "SimplePendulumImplicit.hh"
+#include "SimplePendulumExplicit.hh"
+#include "SimplePendulumSemiExplicit.hh"
 
-#include "ODEs/SinCosImplicit.hh"
-#include "ODEs/SinCosExplicit.hh"
-#include "ODEs/SinCosSemiExplicit.hh"
+#include "SinCosImplicit.hh"
+#include "SinCosExplicit.hh"
+#include "SinCosSemiExplicit.hh"
 
-#include "ODEs/ThreeBodyImplicit.hh"
-#include "ODEs/ThreeBodyExplicit.hh"
-#include "ODEs/ThreeBodySemiExplicit.hh"
+#include "ThreeBodyImplicit.hh"
+#include "ThreeBodyExplicit.hh"
+#include "ThreeBodySemiExplicit.hh"
 
 #ifdef SANDALS_ENABLE_PLOTTING
   #include <matplot/matplot.h>

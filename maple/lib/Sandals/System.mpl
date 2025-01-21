@@ -254,67 +254,33 @@ end proc: # GetEquations
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export DiffOrder := proc(
-  _self::Sandals,
+export DiffOrder::static := proc(
   eqns::list,
   vars::list,
   $)::nonnegint;
 
   description "Return the differential order of the system.";
 
-  return max(map(y -> op(map(x -> PDEtools:-difforder(x), eqns)), vars))
-end proc: # SystemDegree
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-export LoadMatrices := proc(
-  _self::Sandals,
-  vars::{list, Vector},
-  eqns::{list, Vector},
-  invs::{list, Vector} := [],
-  {
-  type::{string} := "Implicit"
-  }, $)
-
-  description "Load the equations from a system of type <type> with equations <eqns>, states "
-    "<vars>, equations <eqns>, and optional invariants <invs>.";
-
-  # Check if the system differential order is 1
-  if (_self:-DiffOrder(_self, eqns, vars) <> 1) then
-    error("differential order must be 1 but got %1.", _self:-DiffOrder(_self, eqns, vars));
-  end if;
-
-  if (type = "Implicit") then
-    return _self:-LoadImplicitSystem(_self, vars, eqns, invs);
-  elif (type = "Explicit") then
-    return _self:-LoadExplicitSystem(_self, vars, eqns, invs, parse("invert") = true);
-  elif (type = "SemiExplicit") then
-    return _self:-LoadExplicitSystem(_self, vars, eqns, invs, parse("invert") = false);
+  if (nops(eqns) = 0) then
+    return 0;
   else
-    error("unknown system type ""%1"".", type);
+    return max(map(y -> op(map(x -> PDEtools:-difforder(x), eqns)), vars));
   end if;
-
-  return NULL;
-end proc: # LoadSystem
+end proc: # SystemDegree
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export LoadSystem := proc(
   _self::Sandals,
-  vars::{list, Vector},
-  eqns::{list, Vector},
-  invs::{list, Vector} := [],
+  vars::{list(function), Vector(function)},
+  eqns::{list({`=`, algebraic}), Vector({`=`, algebraic})},
+  invs::{list({`=`, algebraic}), Vector({`=`, algebraic})} := [],
   {
-  type::{string} := "Implicit"
+  type::string := "Implicit"
   }, $)
 
   description "Load the equations from a system of type <type> with equations <eqns>, states "
     "<vars>, equations <eqns>, and optional invariants <invs>.";
-
-  # Check if the system differential order is 1
-  if (_self:-DiffOrder(_self, eqns, vars) <> 1) then
-    error("differential order must be 1 but got %1.", _self:-DiffOrder(_self, eqns, vars));
-  end if;
 
   if (type = "Implicit") then
     return _self:-LoadImplicitSystem(_self, vars, eqns, invs);
@@ -333,23 +299,40 @@ end proc: # LoadSystem
 
 export LoadImplicitSystem := proc(
   _self::Sandals,
-  vars::{list, Vector},
-  eqns::{list, Vector},
-  invs::{list, Vector} := [],
+  vars::{list(function), Vector(function)},
+  eqns::{list({`=`, algebraic}), Vector({`=`, algebraic})},
+  invs::{list({`=`, algebraic}), Vector({`=`, algebraic})} := [],
   $)
 
   description "Load the equations from an implicit system F(x,x',t) = 0 with equations <eqns>, "
     "states <vars>, equations <eqns>, and optional invariants <invs>.";
 
+  local vars_tmp, eqns_tmp, invs_tmp;
+
+  # Check if the system differential order is 1 on the equations
+  vars_tmp := `if`(not type(vars, list), convert(vars, list), vars);
+  eqns_tmp := `if`(not type(eqns, list), convert(eqns, list), eqns);
+  eqns_tmp := map(x -> `if`(type(x, `=`), lhs(x) - rhs(x), x), eqns_tmp);
+  if (_self:-DiffOrder(eqns_tmp, vars_tmp) <> 1) then
+    error("equations' differential order must be 1 but got %1.", _self:-DiffOrder(eqns_tmp, vars_tmp));
+  end if;
+
+  # Check if the system differential order is 0 on the invariants
+  invs_tmp := `if`(not type(invs, list), convert(invs, list), invs);
+  invs_tmp :=  map(x -> `if`(type(x, `=`), lhs(x) - rhs(x), x), invs_tmp);
+  if (_self:-DiffOrder(invs_tmp, vars_tmp) <> 0) then
+    error("invariants' differential order must be 0 but got %1.", _self:-DiffOrder(invs_tmp, vars_tmp));
+  end if;
+
   # Reset the system
   _self:-ResetSystem(_self);
 
   # Set the state variables
-  _self:-SetVars(_self, `if`(not type(vars, list), convert(vars, list), vars));
+  _self:-SetVars(_self, vars_tmp);
 
   # Store the system data
-  _self:-m_F := `if`(not type(eqns, Vector), convert(eqns, Vector), eqns);
-  _self:-m_h := `if`(not type(invs, Vector), convert(invs, Vector), invs);
+  _self:-m_F := `if`(not type(eqns_tmp, Vector), convert(eqns_tmp, Vector), eqns_tmp);
+  _self:-m_h := convert(invs_tmp, Vector);;
   _self:-m_system_type := "Implicit";
 
   # Check if the differential order of h is null
@@ -378,9 +361,9 @@ end proc: # LoadImplicitSystem
 
 export LoadExplicitSystem := proc(
   _self::Sandals,
-  vars::{list, Vector},
-  eqns::{list, Vector},
-  invs::{list, Vector} := [],
+  vars::{list(function), Vector(function)},
+  eqns::{list({`=`, algebraic}), Vector({`=`, algebraic})},
+  invs::{list({`=`, algebraic}), Vector({`=`, algebraic})} := [],
   {
   invert::boolean := true
   }, $)
@@ -390,18 +373,32 @@ export LoadExplicitSystem := proc(
     "invariants <invs>. If <invert> is activated, than the system is transformed into an explicit "
     "form x' = A(x,t)^{-1}b(x,t).";
 
+  local vars_tmp, eqns_tmp, invs_tmp;
+
+  # Check if the system differential order is 1 on the equations
+  vars_tmp := `if`(not type(vars, list), convert(vars, list), vars);
+  eqns_tmp := `if`(not type(eqns, list), convert(eqns, list), eqns);
+  eqns_tmp := map(x -> `if`(type(x, `=`), lhs(x) - rhs(x), x), eqns_tmp);
+  if (_self:-DiffOrder(eqns_tmp, vars_tmp) <> 1) then
+    error("equations' differential order must be 1 but got %1.", _self:-DiffOrder(eqns_tmp, vars_tmp));
+  end if;
+
+  # Check if the system differential order is 0 on the invariants
+  invs_tmp := `if`(not type(invs, list), convert(invs, list), invs);
+  invs_tmp :=  map(x -> `if`(type(x, `=`), lhs(x) - rhs(x), x), invs_tmp);
+  if (_self:-DiffOrder(invs_tmp, vars_tmp) <> 0) then
+    error("invariants' differential order must be 0 but got %1.", _self:-DiffOrder(invs_tmp, vars_tmp));
+  end if;
+
   # Reset the system
   _self:-ResetSystem(_self);
 
   # Set the state variables
-  _self:-SetVars(_self, `if`(not type(vars, list), convert(vars, list), vars));
+  _self:-SetVars(_self, vars_tmp);
 
   # Store the system data
-  _self:-m_h := `if`(not type(invs, Vector), convert(invs, Vector), invs);
-  _self:-m_A, _self:-m_b := LinearAlgebra:-GenerateMatrix(
-    `if`(not type(eqns, list), convert(eqns, list), eqns),
-    diff(`if`(not type(vars, list), convert(vars, list), vars), t)
-  );
+  _self:-m_h := convert(invs_tmp, Vector);
+  _self:-m_A, _self:-m_b := LinearAlgebra:-GenerateMatrix(eqns_tmp, diff(vars_tmp, t));
 
   # Check if the system can be transformed into an explicit form
   if (LinearAlgebra:-RowDimension(_self:-m_A) <> LinearAlgebra:-ColumnDimension(_self:-m_A)) then

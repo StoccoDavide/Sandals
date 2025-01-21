@@ -15,3 +15,7 @@
 - [x] Computation sequence before functions evaluation
 - [x] Custom user-defined functions
 - [ ] Support user-defined functions and computation sequence dependency on states
+
+## Benchmarks
+
+- [ ] Maple benchmark generation

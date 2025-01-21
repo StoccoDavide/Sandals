@@ -9,8 +9,8 @@
 \* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 #include "Sandals.hh"
-#include "ODEs/SinCosImplicit.hh"
-#include "ODEs/SinCosExplicit.hh"
+#include "SinCosImplicit.hh"
+#include "SinCosExplicit.hh"
 #include <gtest/gtest.h>
 
 using namespace Sandals;
