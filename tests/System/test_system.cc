@@ -9,9 +9,22 @@
 \* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 #include "Sandals.hh"
+
 #include "ODEs/OscillatorImplicit.hh"
 #include "ODEs/OscillatorExplicit.hh"
 #include "ODEs/OscillatorSemiExplicit.hh"
+
+#include "ODEs/SimplePendulumImplicit.hh"
+#include "ODEs/SimplePendulumExplicit.hh"
+#include "ODEs/SimplePendulumSemiExplicit.hh"
+
+#include "ODEs/SinCosImplicit.hh"
+#include "ODEs/SinCosExplicit.hh"
+#include "ODEs/SinCosSemiExplicit.hh"
+
+#include "ODEs/ThreeBodyImplicit.hh"
+#include "ODEs/ThreeBodyExplicit.hh"
+#include "ODEs/ThreeBodySemiExplicit.hh"
 
 #ifdef SANDALS_ENABLE_PLOTTING
   #include <matplot/matplot.h>

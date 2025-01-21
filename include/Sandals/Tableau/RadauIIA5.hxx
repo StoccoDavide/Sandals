@@ -60,6 +60,8 @@ namespace Sandals
     }
   }; // class RadauIIA5Tableau
 
+  //! \brief Class container for the Radau IIA order 5 method.
+  //!
   //! Class container for the Radau IIA order 5 method.
   //! \tparam N The dimension of the ODE/DAE system.
   //! \tparam M The dimension of the invariants manifold.

@@ -72,7 +72,8 @@ var NAVTREEINDEX0 =
 "_runge_kutta_8hxx.html#a0a5ceb9ceb914e08d345410b561cb37a":[5,0,0,0,3,3],
 "_runge_kutta_8hxx.html#a0a5ceb9ceb914e08d345410b561cb37a":[5,0,0,0,3,4],
 "_runge_kutta_8hxx.html#a0a5ceb9ceb914e08d345410b561cb37a":[5,0,0,0,3,5],
-"_runge_kutta_8hxx.html#a7be2a905117b87d5ceeb770481ea138c":[5,0,0,0,3,6],
+"_runge_kutta_8hxx.html#a0a5ceb9ceb914e08d345410b561cb37a":[5,0,0,0,3,6],
+"_runge_kutta_8hxx.html#a7be2a905117b87d5ceeb770481ea138c":[5,0,0,0,3,7],
 "_runge_kutta_8hxx_source.html":[5,0,0,0,3],
 "_s_s_p_i_r_k33_8hxx.html":[5,0,0,0,2,17],
 "_s_s_p_i_r_k33_8hxx.html#a5aa223747c5dccec197f27f8e40b3902":[5,0,0,0,2,17,2],
@@ -248,6 +249,5 @@ var NAVTREEINDEX0 =
 "class_sandals_1_1_gauss_legendre4.html#a63de46200dc9c037edd615fe65e2dcd4":[4,0,0,10,2],
 "class_sandals_1_1_gauss_legendre4.html#a71c986cacd78b311878d924a02d160f3":[3,0,0,10,1],
 "class_sandals_1_1_gauss_legendre4.html#a71c986cacd78b311878d924a02d160f3":[4,0,0,10,1],
-"class_sandals_1_1_gauss_legendre4_tableau.html":[3,0,0,11],
-"class_sandals_1_1_gauss_legendre4_tableau.html":[4,0,0,11]
+"class_sandals_1_1_gauss_legendre4_tableau.html":[3,0,0,11]
 };

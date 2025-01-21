@@ -21,7 +21,7 @@
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:href="class_sandals_1_1_explicit_euler.html" target="_top" xlink:title=" ">
+<g id="a_Node000001"><a xlink:href="class_sandals_1_1_explicit_euler.html" target="_top" xlink:title="Class container for the Explicit Euler method.">
 <polygon fill="white" stroke="#666666" points="266.38,-128.5 154.38,-128.5 154.38,-98 266.38,-98 266.38,-128.5"/>
 <text text-anchor="start" x="162.38" y="-115" font-family="Helvetica,sans-Serif" font-size="10.00">Sandals::ExplicitEuler</text>
 <text text-anchor="middle" x="210.38" y="-103.75" font-family="Helvetica,sans-Serif" font-size="10.00">&lt; N, M &gt;</text>
@@ -40,7 +40,7 @@
 <!-- Node2 -->
 <g id="Node000002" class="node">
 <title>Node2</title>
-<g id="a_Node000002"><a xlink:href="class_sandals_1_1_gauss_legendre2.html" target="_top" xlink:title=" ">
+<g id="a_Node000002"><a xlink:href="class_sandals_1_1_gauss_legendre2.html" target="_top" xlink:title="Class container for the Gauss&#45;Legendre order 2 method.">
 <polygon fill="white" stroke="#666666" points="275.75,-79.5 145,-79.5 145,-49 275.75,-49 275.75,-79.5"/>
 <text text-anchor="start" x="153" y="-66" font-family="Helvetica,sans-Serif" font-size="10.00">Sandals::GaussLegendre2</text>
 <text text-anchor="middle" x="210.38" y="-54.75" font-family="Helvetica,sans-Serif" font-size="10.00">&lt; N, M &gt;</text>
@@ -59,7 +59,7 @@
 <!-- Node3 -->
 <g id="Node000003" class="node">
 <title>Node3</title>
-<g id="a_Node000003"><a xlink:href="class_sandals_1_1_implicit_euler.html" target="_top" xlink:title=" ">
+<g id="a_Node000003"><a xlink:href="class_sandals_1_1_implicit_euler.html" target="_top" xlink:title="Class container for the Implicit Euler method.">
 <polygon fill="white" stroke="#666666" points="266,-30.5 154.75,-30.5 154.75,0 266,0 266,-30.5"/>
 <text text-anchor="start" x="162.75" y="-17" font-family="Helvetica,sans-Serif" font-size="10.00">Sandals::ImplicitEuler</text>
 <text text-anchor="middle" x="210.38" y="-5.75" font-family="Helvetica,sans-Serif" font-size="10.00">&lt; N, M &gt;</text>

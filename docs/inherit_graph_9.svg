@@ -21,7 +21,7 @@
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:href="class_sandals_1_1_s_s_p_r_k93.html" target="_top" xlink:title=" ">
+<g id="a_Node000001"><a xlink:href="class_sandals_1_1_s_s_p_r_k93.html" target="_top" xlink:title="Class container for the 9&#45;stage strong&#45;stability preserving Runge&#45;Kutta order 3 method.">
 <polygon fill="white" stroke="#666666" points="287,-24.88 145,-24.88 145,-5.63 287,-5.63 287,-24.88"/>
 <text text-anchor="middle" x="216" y="-11.38" font-family="Helvetica,sans-Serif" font-size="10.00">Sandals::SSPRK93&lt; N, M &gt;</text>
 </a>

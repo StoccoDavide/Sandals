@@ -49,6 +49,8 @@ namespace Sandals
     }
   }; // class GaussLegendre2Tableau
 
+  //! \brief Class container for the Gauss-Legendre order 2 method.
+  //!
   //! Class container for the Gauss-Legendre order 2 method.
   //! \tparam N The dimension of the ODE/DAE system.
   //! \tparam M The dimension of the invariants manifold.

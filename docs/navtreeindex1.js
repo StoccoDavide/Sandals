@@ -1,5 +1,6 @@
 var NAVTREEINDEX1 =
 {
+"class_sandals_1_1_gauss_legendre4_tableau.html":[4,0,0,11],
 "class_sandals_1_1_gauss_legendre4_tableau.html#ad6265b86c9fe76f023a9caf1ead383d8":[3,0,0,11,0],
 "class_sandals_1_1_gauss_legendre4_tableau.html#ad6265b86c9fe76f023a9caf1ead383d8":[4,0,0,11,0],
 "class_sandals_1_1_gauss_legendre6.html":[3,0,0,12],
@@ -248,6 +249,5 @@ var NAVTREEINDEX1 =
 "class_sandals_1_1_nonlinear_solver.html#aed1aec262d71ebaf77bb595460581990":[4,0,0,26,29],
 "class_sandals_1_1_nonlinear_solver.html#aef06b4918b0f772e434beee595faa30c":[3,0,0,26,3],
 "class_sandals_1_1_nonlinear_solver.html#aef06b4918b0f772e434beee595faa30c":[4,0,0,26,3],
-"class_sandals_1_1_nonlinear_solver.html#af168971b86d783772bc2d70852543d2e":[3,0,0,26,9],
-"class_sandals_1_1_nonlinear_solver.html#af168971b86d783772bc2d70852543d2e":[4,0,0,26,9]
+"class_sandals_1_1_nonlinear_solver.html#af168971b86d783772bc2d70852543d2e":[3,0,0,26,9]
 };

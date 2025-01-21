@@ -46,8 +46,9 @@ namespace Sandals
     }
   }; // class Heun2Tableau
 
-  //! Class container for the Heun's (or 2-stage strong-stability preserving Runge-Kutta) order 2
-  //! method.
+  //! \brief Class container for the Heun's (or 2-stage strong-stability preserving Runge-Kutta) order 2 method.
+  //!
+  //! Class container for the Heun's (or 2-stage strong-stability preserving Runge-Kutta) order 2 method.
   //! \tparam N The dimension of the ODE/DAE system.
   //! \tparam M The dimension of the invariants manifold.
   template <Size N, Size M = 0>

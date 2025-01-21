@@ -21,7 +21,7 @@
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:href="class_sandals_1_1_gauss_legendre6.html" target="_top" xlink:title=" ">
+<g id="a_Node000001"><a xlink:href="class_sandals_1_1_gauss_legendre6.html" target="_top" xlink:title="Class container for the Gauss&#45;Legendre order 6 method.">
 <polygon fill="white" stroke="#666666" points="281.38,-251.88 150.62,-251.88 150.62,-221.38 281.38,-221.38 281.38,-251.88"/>
 <text text-anchor="start" x="158.62" y="-238.38" font-family="Helvetica,sans-Serif" font-size="10.00">Sandals::GaussLegendre6</text>
 <text text-anchor="middle" x="216" y="-227.12" font-family="Helvetica,sans-Serif" font-size="10.00">&lt; N, M &gt;</text>
@@ -40,7 +40,7 @@
 <!-- Node2 -->
 <g id="Node000002" class="node">
 <title>Node2</title>
-<g id="a_Node000002"><a xlink:href="class_sandals_1_1_heun3.html" target="_top" xlink:title=" ">
+<g id="a_Node000002"><a xlink:href="class_sandals_1_1_heun3.html" target="_top" xlink:title="Class container for the Heun&#39;s order 3 method.">
 <polygon fill="white" stroke="#666666" points="278.75,-203.25 153.25,-203.25 153.25,-184 278.75,-184 278.75,-203.25"/>
 <text text-anchor="middle" x="216" y="-189.75" font-family="Helvetica,sans-Serif" font-size="10.00">Sandals::Heun3&lt; N, M &gt;</text>
 </a>
@@ -58,7 +58,7 @@
 <!-- Node3 -->
 <g id="Node000003" class="node">
 <title>Node3</title>
-<g id="a_Node000003"><a xlink:href="class_sandals_1_1_radau_i_i_a5.html" target="_top" xlink:title=" ">
+<g id="a_Node000003"><a xlink:href="class_sandals_1_1_radau_i_i_a5.html" target="_top" xlink:title="Class container for the Radau IIA order 5 method.">
 <polygon fill="white" stroke="#666666" points="267.88,-165.88 164.12,-165.88 164.12,-135.38 267.88,-135.38 267.88,-165.88"/>
 <text text-anchor="start" x="172.12" y="-152.38" font-family="Helvetica,sans-Serif" font-size="10.00">Sandals::RadauIIA5</text>
 <text text-anchor="middle" x="216" y="-141.12" font-family="Helvetica,sans-Serif" font-size="10.00">&lt; N, M &gt;</text>
@@ -77,7 +77,7 @@
 <!-- Node4 -->
 <g id="Node000004" class="node">
 <title>Node4</title>
-<g id="a_Node000004"><a xlink:href="class_sandals_1_1_ralston3.html" target="_top" xlink:title=" ">
+<g id="a_Node000004"><a xlink:href="class_sandals_1_1_ralston3.html" target="_top" xlink:title="Class container for the Ralston&#39;s order 3 method.">
 <polygon fill="white" stroke="#666666" points="267.12,-116.88 164.88,-116.88 164.88,-86.38 267.12,-86.38 267.12,-116.88"/>
 <text text-anchor="start" x="172.88" y="-103.38" font-family="Helvetica,sans-Serif" font-size="10.00">Sandals::Ralston3&lt;</text>
 <text text-anchor="middle" x="216" y="-92.12" font-family="Helvetica,sans-Serif" font-size="10.00"> N, M &gt;</text>
@@ -96,7 +96,7 @@
 <!-- Node5 -->
 <g id="Node000005" class="node">
 <title>Node5</title>
-<g id="a_Node000005"><a xlink:href="class_sandals_1_1_s_s_p_i_r_k33.html" target="_top" xlink:title=" ">
+<g id="a_Node000005"><a xlink:href="class_sandals_1_1_s_s_p_i_r_k33.html" target="_top" xlink:title="Class container for the 3&#45;stage diagonally&#45;implicit strong&#45;stability preserving Runge&#45;Kutta order 3 m...">
 <polygon fill="white" stroke="#666666" points="271.62,-67.88 160.38,-67.88 160.38,-37.38 271.62,-37.38 271.62,-67.88"/>
 <text text-anchor="start" x="168.38" y="-54.38" font-family="Helvetica,sans-Serif" font-size="10.00">Sandals::SSPIRK33&lt;</text>
 <text text-anchor="middle" x="216" y="-43.12" font-family="Helvetica,sans-Serif" font-size="10.00"> N, M &gt;</text>
@@ -115,7 +115,7 @@
 <!-- Node6 -->
 <g id="Node000006" class="node">
 <title>Node6</title>
-<g id="a_Node000006"><a xlink:href="class_sandals_1_1_s_s_p_r_k33.html" target="_top" xlink:title=" ">
+<g id="a_Node000006"><a xlink:href="class_sandals_1_1_s_s_p_r_k33.html" target="_top" xlink:title="Class container for the 3&#45;stage strong&#45;stability preserving Runge&#45;Kutta order 3 method.">
 <polygon fill="white" stroke="#666666" points="287,-19.25 145,-19.25 145,0 287,0 287,-19.25"/>
 <text text-anchor="middle" x="216" y="-5.75" font-family="Helvetica,sans-Serif" font-size="10.00">Sandals::SSPRK33&lt; N, M &gt;</text>
 </a>

@@ -8,7 +8,7 @@ var searchData=
   ['problem_5',['Constrained minimization problem',['../class_sandals_1_1_runge_kutta.html#autotoc_md15',1,'']]],
   ['project_6',['project',['../class_sandals_1_1_runge_kutta.html#ad3cf3ad60d5f35ed5b8c70f4d6d8aea3',1,'Sandals::RungeKutta']]],
   ['project_5fics_7',['project_ics',['../class_sandals_1_1_runge_kutta.html#ad929c19213b9d273f0d555b45fa5ed38',1,'Sandals::RungeKutta']]],
-  ['projection_8',['projection',['../class_sandals_1_1_runge_kutta.html#a58740f8e35a9491ab83c58b8cca3f515',1,'Sandals::RungeKutta']]],
+  ['projection_8',['projection',['../class_sandals_1_1_runge_kutta.html#ac9f120ec274cb7168a2b8740110f3a97',1,'Sandals::RungeKutta::projection()'],['../class_sandals_1_1_runge_kutta.html#a58740f8e35a9491ab83c58b8cca3f515',1,'Sandals::RungeKutta::projection(bool t_projection)']]],
   ['projection_20on_20the_20invariants_20manifold_9',['Projection on the invariants manifold',['../class_sandals_1_1_runge_kutta.html#autotoc_md14',1,'']]],
   ['projection_5ftolerance_10',['projection_tolerance',['../class_sandals_1_1_runge_kutta.html#a2030d15246c774dc0c32a31c6c9baaa4',1,'Sandals::RungeKutta::projection_tolerance()'],['../class_sandals_1_1_runge_kutta.html#a52f0bdd2b41dd67da89e91358978208b',1,'Sandals::RungeKutta::projection_tolerance(Real t_projection_tolerance)']]]
 ];

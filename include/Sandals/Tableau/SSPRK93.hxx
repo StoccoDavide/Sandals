@@ -60,6 +60,8 @@ namespace Sandals
         }
       }; // class SSPRK93Tableau
 
+  //! \brief Class container for the 9-stage strong-stability preserving Runge-Kutta order 3 method.
+  //!
   //! Class container for the 9-stage strong-stability preserving Runge-Kutta order 3 method.
   //! \tparam N The dimension of the ODE/DAE system.
   //! \tparam M The dimension of the invariants manifold.

@@ -46,6 +46,8 @@ namespace Sandals
     }
   }; // class MTE22Tableau
 
+  //! \brief Class container for the minimal truncation error (or Ralston's) order 2 method.
+  //!
   //! Class container for the minimal truncation error (or Ralston's) order 2 method.
   //! \tparam N The dimension of the ODE/DAE system.
   //! \tparam M The dimension of the invariants manifold.

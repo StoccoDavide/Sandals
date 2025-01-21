@@ -21,7 +21,7 @@
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:href="class_sandals_1_1_gauss_legendre4.html" target="_top" xlink:title=" ">
+<g id="a_Node000001"><a xlink:href="class_sandals_1_1_gauss_legendre4.html" target="_top" xlink:title="Class container for the Gauss&#45;Legendre order 4 method.">
 <polygon fill="white" stroke="#666666" points="281.38,-337.5 150.62,-337.5 150.62,-307 281.38,-307 281.38,-337.5"/>
 <text text-anchor="start" x="158.62" y="-324" font-family="Helvetica,sans-Serif" font-size="10.00">Sandals::GaussLegendre4</text>
 <text text-anchor="middle" x="216" y="-312.75" font-family="Helvetica,sans-Serif" font-size="10.00">&lt; N, M &gt;</text>
@@ -40,7 +40,7 @@
 <!-- Node2 -->
 <g id="Node000002" class="node">
 <title>Node2</title>
-<g id="a_Node000002"><a xlink:href="class_sandals_1_1_heun2.html" target="_top" xlink:title=" ">
+<g id="a_Node000002"><a xlink:href="class_sandals_1_1_heun2.html" target="_top" xlink:title="Class container for the Heun&#39;s (or 2&#45;stage strong&#45;stability preserving Runge&#45;Kutta) order 2 method.">
 <polygon fill="white" stroke="#666666" points="278.75,-288.88 153.25,-288.88 153.25,-269.62 278.75,-269.62 278.75,-288.88"/>
 <text text-anchor="middle" x="216" y="-275.38" font-family="Helvetica,sans-Serif" font-size="10.00">Sandals::Heun2&lt; N, M &gt;</text>
 </a>
@@ -58,7 +58,7 @@
 <!-- Node3 -->
 <g id="Node000003" class="node">
 <title>Node3</title>
-<g id="a_Node000003"><a xlink:href="class_sandals_1_1_lobatto_i_i_i_a2.html" target="_top" xlink:title=" ">
+<g id="a_Node000003"><a xlink:href="class_sandals_1_1_lobatto_i_i_i_a2.html" target="_top" xlink:title="Class container for the Lobatto IIIA order 2 method.">
 <polygon fill="white" stroke="#666666" points="271.25,-251.5 160.75,-251.5 160.75,-221 271.25,-221 271.25,-251.5"/>
 <text text-anchor="start" x="168.75" y="-238" font-family="Helvetica,sans-Serif" font-size="10.00">Sandals::LobattoIIIA2</text>
 <text text-anchor="middle" x="216" y="-226.75" font-family="Helvetica,sans-Serif" font-size="10.00">&lt; N, M &gt;</text>
@@ -77,7 +77,7 @@
 <!-- Node4 -->
 <g id="Node000004" class="node">
 <title>Node4</title>
-<g id="a_Node000004"><a xlink:href="class_sandals_1_1_m_t_e22.html" target="_top" xlink:title=" ">
+<g id="a_Node000004"><a xlink:href="class_sandals_1_1_m_t_e22.html" target="_top" xlink:title="Class container for the minimal truncation error (or Ralston&#39;s) order 2 method.">
 <polygon fill="white" stroke="#666666" points="280.25,-202.88 151.75,-202.88 151.75,-183.62 280.25,-183.62 280.25,-202.88"/>
 <text text-anchor="middle" x="216" y="-189.38" font-family="Helvetica,sans-Serif" font-size="10.00">Sandals::MTE22&lt; N, M &gt;</text>
 </a>
@@ -95,7 +95,7 @@
 <!-- Node5 -->
 <g id="Node000005" class="node">
 <title>Node5</title>
-<g id="a_Node000005"><a xlink:href="class_sandals_1_1_radau_i_i_a3.html" target="_top" xlink:title=" ">
+<g id="a_Node000005"><a xlink:href="class_sandals_1_1_radau_i_i_a3.html" target="_top" xlink:title="Class container for the Radau IIA order 3 method.">
 <polygon fill="white" stroke="#666666" points="267.88,-165.5 164.12,-165.5 164.12,-135 267.88,-135 267.88,-165.5"/>
 <text text-anchor="start" x="172.12" y="-152" font-family="Helvetica,sans-Serif" font-size="10.00">Sandals::RadauIIA3</text>
 <text text-anchor="middle" x="216" y="-140.75" font-family="Helvetica,sans-Serif" font-size="10.00">&lt; N, M &gt;</text>
@@ -114,7 +114,7 @@
 <!-- Node6 -->
 <g id="Node000006" class="node">
 <title>Node6</title>
-<g id="a_Node000006"><a xlink:href="class_sandals_1_1_ralston2.html" target="_top" xlink:title=" ">
+<g id="a_Node000006"><a xlink:href="class_sandals_1_1_ralston2.html" target="_top" xlink:title="Class container for the Ralston&#39;s (or minimal truncation error) order 2 method.">
 <polygon fill="white" stroke="#666666" points="267.12,-116.5 164.88,-116.5 164.88,-86 267.12,-86 267.12,-116.5"/>
 <text text-anchor="start" x="172.88" y="-103" font-family="Helvetica,sans-Serif" font-size="10.00">Sandals::Ralston2&lt;</text>
 <text text-anchor="middle" x="216" y="-91.75" font-family="Helvetica,sans-Serif" font-size="10.00"> N, M &gt;</text>
@@ -133,7 +133,7 @@
 <!-- Node7 -->
 <g id="Node000007" class="node">
 <title>Node7</title>
-<g id="a_Node000007"><a xlink:href="class_sandals_1_1_s_s_p_r_k22.html" target="_top" xlink:title=" ">
+<g id="a_Node000007"><a xlink:href="class_sandals_1_1_s_s_p_r_k22.html" target="_top" xlink:title="Class container for the 2&#45;stage strong&#45;stability preserving Runge&#45;Kutta (or Heun) order 2 method.">
 <polygon fill="white" stroke="#666666" points="287,-67.88 145,-67.88 145,-48.62 287,-48.62 287,-67.88"/>
 <text text-anchor="middle" x="216" y="-54.38" font-family="Helvetica,sans-Serif" font-size="10.00">Sandals::SSPRK22&lt; N, M &gt;</text>
 </a>
@@ -151,7 +151,7 @@
 <!-- Node8 -->
 <g id="Node000008" class="node">
 <title>Node8</title>
-<g id="a_Node000008"><a xlink:href="class_sandals_1_1_s_s_p_r_k22star.html" target="_top" xlink:title=" ">
+<g id="a_Node000008"><a xlink:href="class_sandals_1_1_s_s_p_r_k22star.html" target="_top" xlink:title="Class container for the optimal 2&#45;stage strong&#45;stability preserving Runge&#45;Kutta order 2 method.">
 <polygon fill="white" stroke="#666666" points="275.38,-30.5 156.62,-30.5 156.62,0 275.38,0 275.38,-30.5"/>
 <text text-anchor="start" x="164.62" y="-17" font-family="Helvetica,sans-Serif" font-size="10.00">Sandals::SSPRK22star</text>
 <text text-anchor="middle" x="216" y="-5.75" font-family="Helvetica,sans-Serif" font-size="10.00">&lt; N, M &gt;</text>

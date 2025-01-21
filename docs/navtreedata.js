@@ -64,10 +64,10 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "_broyden_8hxx.html",
-"class_sandals_1_1_gauss_legendre4_tableau.html#ad6265b86c9fe76f023a9caf1ead383d8",
-"class_sandals_1_1_nonlinear_solver.html#af4465aa3c2a7ba163635d88913714846",
-"class_sandals_1_1_runge_kutta.html#abcf7cba25da4ad3a2231d2b2fce0dfb5",
-"functions_func_v.html"
+"class_sandals_1_1_gauss_legendre4_tableau.html",
+"class_sandals_1_1_nonlinear_solver.html#af168971b86d783772bc2d70852543d2e",
+"class_sandals_1_1_runge_kutta.html#ab7c8d6f728a7dac67d596a49eb3422e6",
+"functions_func_l.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronization';

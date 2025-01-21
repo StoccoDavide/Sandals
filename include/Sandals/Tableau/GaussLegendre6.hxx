@@ -61,6 +61,8 @@ namespace Sandals
     }
   }; // class GaussLegendre6Tableau
 
+  //! \brief Class container for the Gauss-Legendre order 6 method.
+  //!
   //! Class container for the Gauss-Legendre order 6 method.
   //! \tparam N The dimension of the ODE/DAE system.
   //! \tparam M The dimension of the invariants manifold.

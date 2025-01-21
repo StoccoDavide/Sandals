@@ -21,7 +21,7 @@
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:href="class_sandals_1_1_chebyshev51.html" target="_top" xlink:title=" ">
+<g id="a_Node000001"><a xlink:href="class_sandals_1_1_chebyshev51.html" target="_top" xlink:title="Class container for the 5&#45;stage Runge&#45;Kutta&#45;Chebyshev order 1 method.">
 <polygon fill="white" stroke="#666666" points="262.25,-30.5 145,-30.5 145,0 262.25,0 262.25,-30.5"/>
 <text text-anchor="start" x="153" y="-17" font-family="Helvetica,sans-Serif" font-size="10.00">Sandals::Chebyshev51</text>
 <text text-anchor="middle" x="203.62" y="-5.75" font-family="Helvetica,sans-Serif" font-size="10.00">&lt; N, M &gt;</text>

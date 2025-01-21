@@ -51,6 +51,8 @@ namespace Sandals
     }
   }; // class Chebyshev51Tableau
 
+  //! \brief Class container for the 5-stage Runge-Kutta-Chebyshev order 1 method.
+  //!
   //! Class container for the 5-stage Runge-Kutta-Chebyshev order 1 method.
   //! \tparam N The dimension of the ODE/DAE system.
   //! \tparam M The dimension of the invariants manifold.

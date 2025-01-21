@@ -44,6 +44,8 @@ namespace Sandals
     }
   }; // class ExplicitEulerTableau
 
+  //! \brief Class container for the Explicit Euler method.
+  //!
   //! Class container for the Explicit Euler method.
   //! \tparam N The dimension of the ODE/DAE system.
   //! \tparam M The dimension of the invariants manifold.

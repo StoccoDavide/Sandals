@@ -16,7 +16,8 @@ var searchData=
   ['residuals_13',['residuals',['../class_sandals_1_1_nonlinear_solver.html#aa76843782eac01f8fb1fd83cb9a9d3aa',1,'Sandals::NonlinearSolver']]],
   ['resize_14',['resize',['../struct_sandals_1_1_solution.html#a9d49e9eddc5db7db0fbc91213f75a76a',1,'Sandals::Solution']]],
   ['reverse_15',['reverse',['../class_sandals_1_1_runge_kutta.html#ab8cbc1f848e8836b496f7c7603f41360',1,'Sandals::RungeKutta']]],
-  ['rk4_16',['RK4',['../class_sandals_1_1_r_k4.html#abe36eea81d60a264fd06bb5b09c1a883',1,'Sandals::RK4::RK4()'],['../class_sandals_1_1_r_k4.html#a027693254b1c48544b88da41926b6f62',1,'Sandals::RK4::RK4(System t_system)']]],
-  ['rk4tableau_17',['RK4Tableau',['../class_sandals_1_1_r_k4_tableau.html#adad9e5e98eac4fe5ed9bb1c77ecebaa7',1,'Sandals::RK4Tableau']]],
-  ['rungekutta_18',['RungeKutta',['../class_sandals_1_1_runge_kutta.html#a78216a3218bc9959921d1a7ed31bd6fd',1,'Sandals::RungeKutta::RungeKutta(const RungeKutta &amp;)=delete'],['../class_sandals_1_1_runge_kutta.html#a43e2f5376368bbabf25852ead4af71a4',1,'Sandals::RungeKutta::RungeKutta(Tableau&lt; S &gt; const &amp;t_tableau)'],['../class_sandals_1_1_runge_kutta.html#a8f75e38fa8ffae173afe9488d2d43397',1,'Sandals::RungeKutta::RungeKutta(Tableau&lt; S &gt; const &amp;t_tableau, System t_system)']]]
+  ['reverse_5fmode_16',['reverse_mode',['../class_sandals_1_1_runge_kutta.html#a61ef11dcd3caa03fe8891d32b8b3183c',1,'Sandals::RungeKutta']]],
+  ['rk4_17',['RK4',['../class_sandals_1_1_r_k4.html#abe36eea81d60a264fd06bb5b09c1a883',1,'Sandals::RK4::RK4()'],['../class_sandals_1_1_r_k4.html#a027693254b1c48544b88da41926b6f62',1,'Sandals::RK4::RK4(System t_system)']]],
+  ['rk4tableau_18',['RK4Tableau',['../class_sandals_1_1_r_k4_tableau.html#adad9e5e98eac4fe5ed9bb1c77ecebaa7',1,'Sandals::RK4Tableau']]],
+  ['rungekutta_19',['RungeKutta',['../class_sandals_1_1_runge_kutta.html#a78216a3218bc9959921d1a7ed31bd6fd',1,'Sandals::RungeKutta::RungeKutta(const RungeKutta &amp;)=delete'],['../class_sandals_1_1_runge_kutta.html#a43e2f5376368bbabf25852ead4af71a4',1,'Sandals::RungeKutta::RungeKutta(Tableau&lt; S &gt; const &amp;t_tableau)'],['../class_sandals_1_1_runge_kutta.html#a8f75e38fa8ffae173afe9488d2d43397',1,'Sandals::RungeKutta::RungeKutta(Tableau&lt; S &gt; const &amp;t_tableau, System t_system)']]]
 ];

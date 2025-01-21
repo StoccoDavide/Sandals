@@ -22,13 +22,13 @@ class SimplePendulumSemiExplicit : public SemiExplicit<2, 0>
   VectorF m_ics{1.0, 0.0}; // Initial conditions
 
 public:
-  using VectorF  = typename SemiExplicit<2, 1>::VectorF;
-  using MatrixA  = typename SemiExplicit<2, 1>::MatrixA;
-  using TensorTA = typename SemiExplicit<2, 1>::TensorTA;
-  using VectorB  = typename SemiExplicit<2, 1>::VectorB;
-  using MatrixJB = typename SemiExplicit<2, 1>::MatrixJB;
-  using VectorH  = typename SemiExplicit<2, 1>::VectorH;
-  using MatrixJH = typename SemiExplicit<2, 1>::MatrixJH;
+  using VectorF  = typename SemiExplicit<2, 0>::VectorF;
+  using MatrixA  = typename SemiExplicit<2, 0>::MatrixA;
+  using TensorTA = typename SemiExplicit<2, 0>::TensorTA;
+  using VectorB  = typename SemiExplicit<2, 0>::VectorB;
+  using MatrixJB = typename SemiExplicit<2, 0>::MatrixJB;
+  using VectorH  = typename SemiExplicit<2, 0>::VectorH;
+  using MatrixJH = typename SemiExplicit<2, 0>::MatrixJH;
 
   SimplePendulumSemiExplicit() : SemiExplicit<2, 0>("SimplePendulumSemiExplicit") {}
 
@@ -63,9 +63,9 @@ public:
     return Jb_x;
   }
 
-  Vector0 h(VectorF const &/*x*/, Real /*t*/) const override {return Vector0::Zero();}
+  VectorH h(VectorF const &/*x*/, Real /*t*/) const override {return VectorH::Zero();}
 
-  Matrix0 Jh_x(VectorF const &/*x*/, Real /*t*/) const override {return Matrix0::Zero();}
+  MatrixJH Jh_x(VectorF const &/*x*/, Real /*t*/) const override {return MatrixJH::Zero();}
 
   bool in_domain(VectorF const &/*x*/, Real /*t*/) const override {return true;}
 

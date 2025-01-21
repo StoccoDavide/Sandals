@@ -20,6 +20,5 @@ var searchData=
   ['vectorp_17',['VectorP',['../class_sandals_1_1_runge_kutta.html#a627d73d0dfb4ff40324303b8f3976e46',1,'Sandals::RungeKutta']]],
   ['vectors_18',['VectorS',['../class_sandals_1_1_runge_kutta.html#ab9982a107add8a389c807eee17b32434',1,'Sandals::RungeKutta']]],
   ['vectorx_19',['VectorX',['../namespace_sandals.html#a080688e002c472e6b23d2028ffe840ea',1,'Sandals']]],
-  ['verbose_20',['verbose',['../class_sandals_1_1_runge_kutta.html#a7847140c2da9b40dd03e7c5c91825bdd',1,'Sandals::RungeKutta']]],
-  ['verbose_5fmode_21',['verbose_mode',['../class_sandals_1_1_nonlinear_solver.html#a9980f441ca5cb7c19d6fa5f8ef90de5c',1,'Sandals::NonlinearSolver']]]
+  ['verbose_5fmode_20',['verbose_mode',['../class_sandals_1_1_nonlinear_solver.html#a9980f441ca5cb7c19d6fa5f8ef90de5c',1,'Sandals::NonlinearSolver::verbose_mode()'],['../class_sandals_1_1_runge_kutta.html#a9782ec922b5f2564a2bab9d37952fda7',1,'Sandals::RungeKutta::verbose_mode()'],['../class_sandals_1_1_runge_kutta.html#a939ca5e9d807b73e51ceb954ae8f5a4c',1,'Sandals::RungeKutta::verbose_mode(bool t_verbose)']]]
 ];

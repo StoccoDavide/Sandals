@@ -47,6 +47,8 @@ namespace Sandals
     }
   }; // class SSPRK22starTableau
 
+  //! \brief Class container for the optimal 2-stage strong-stability preserving Runge-Kutta order 2 method.
+  //!
   //! Class container for the optimal 2-stage strong-stability preserving Runge-Kutta order 2 method.
   //! \tparam N The dimension of the ODE/DAE system.
   //! \tparam M The dimension of the invariants manifold.

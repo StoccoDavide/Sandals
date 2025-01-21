@@ -19,29 +19,29 @@ private:
   VectorF m_ics{0.0, 1.0}; // Initial conditions
 
 public:
-  using VectorF  = typename SemiExplicit<2, 1>::VectorF;
-  using MatrixA  = typename SemiExplicit<2, 1>::MatrixA;
-  using TensorTA = typename SemiExplicit<2, 1>::TensorTA;
-  using VectorB  = typename SemiExplicit<2, 1>::VectorB;
-  using MatrixJB = typename SemiExplicit<2, 1>::MatrixJB;
-  using VectorH  = typename SemiExplicit<2, 1>::VectorH;
-  using MatrixJH = typename SemiExplicit<2, 1>::MatrixJH;
+  using VectorF  = typename SemiExplicit<2, 0>::VectorF;
+  using MatrixA  = typename SemiExplicit<2, 0>::MatrixA;
+  using TensorTA = typename SemiExplicit<2, 0>::TensorTA;
+  using VectorB  = typename SemiExplicit<2, 0>::VectorB;
+  using MatrixJB = typename SemiExplicit<2, 0>::MatrixJB;
+  using VectorH  = typename SemiExplicit<2, 0>::VectorH;
+  using MatrixJH = typename SemiExplicit<2, 0>::MatrixJH;
 
 
   SinCosSemiExplicit() : SemiExplicit<2, 0>("SinCosSemiExplicit") {}
 
   ~SinCosSemiExplicit() {}
 
-  Matrix2 A(VectorF const &/*x*/, Real /*t*/) const override
+  MatrixA A(VectorF const &/*x*/, Real /*t*/) const override
   {
-    Matrix2 A;
+    MatrixA A;
     A.setIdentity();
     return A;
   }
 
-  Tensor2 TA_x(VectorF const &/*x*/, Real /*t*/) const override
+  TensorTA TA_x(VectorF const &/*x*/, Real /*t*/) const override
   {
-    std::vector<Matrix2> TA_x(2);
+    TensorTA TA_x(2);
     TA_x[0].setZero();
     TA_x[1].setZero();
     return TA_x;

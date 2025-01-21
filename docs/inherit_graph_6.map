@@ -1,11 +1,11 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
 <area shape="rect" id="Node000000" href="$class_sandals_1_1_runge_kutta.html" title=" " alt="" coords="5,84,151,125"/>
-<area shape="rect" id="Node000001" href="$class_sandals_1_1_r_k4.html" title=" " alt="" coords="216,5,371,31"/>
+<area shape="rect" id="Node000001" href="$class_sandals_1_1_r_k4.html" title="Class container for the Runge&#45;Kutta order 4 method." alt="" coords="216,5,371,31"/>
 <area shape="poly" id="edge26_Node000000_Node000001" title=" " alt="" coords="127,74,198,41,234,29,236,34,200,46,129,79"/>
-<area shape="rect" id="Node000002" href="$class_sandals_1_1_ralston4.html" title=" " alt="" coords="225,55,362,96"/>
+<area shape="rect" id="Node000002" href="$class_sandals_1_1_ralston4.html" title="Class container for the Ralston&#39;s order 4 method." alt="" coords="225,55,362,96"/>
 <area shape="poly" id="edge27_Node000000_Node000002" title=" " alt="" coords="166,90,224,82,225,87,166,96"/>
-<area shape="rect" id="Node000003" href="$class_sandals_1_1_s_s_p_r_k42.html" title=" " alt="" coords="199,120,388,146"/>
+<area shape="rect" id="Node000003" href="$class_sandals_1_1_s_s_p_r_k42.html" title="Class container for the 4&#45;stage strong&#45;stability preserving Runge&#45;Kutta order 2 method." alt="" coords="199,120,388,146"/>
 <area shape="poly" id="edge28_Node000000_Node000003" title=" " alt="" coords="167,114,199,118,198,123,166,119"/>
-<area shape="rect" id="Node000004" href="$class_sandals_1_1_s_s_p_r_k43.html" title=" " alt="" coords="199,169,388,195"/>
+<area shape="rect" id="Node000004" href="$class_sandals_1_1_s_s_p_r_k43.html" title="Class container for the 4&#45;stage strong&#45;stability preserving Runge&#45;Kutta order 3 method." alt="" coords="199,169,388,195"/>
 <area shape="poly" id="edge29_Node000000_Node000004" title=" " alt="" coords="136,130,200,156,234,166,233,171,198,161,134,135"/>
 </map>
