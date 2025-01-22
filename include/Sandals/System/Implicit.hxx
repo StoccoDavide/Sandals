@@ -199,4 +199,4 @@ namespace Sandals
 
 } // namespace Sandals
 
-#endif // SANDALS_ImPLICIT_SYSTEM_HXX
+#endif // SANDALS_IMPLICIT_SYSTEM_HXX
