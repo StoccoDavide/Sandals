@@ -21,7 +21,7 @@ local m_h             := [];
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export ResetSystem := proc(
+export ResetSystem::static := proc(
   _self::Sandals,
   $)
 
@@ -39,7 +39,7 @@ end proc: # ResetSystem
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export CopySystem := proc(
+export CopySystem::static := proc(
   _self::Sandals,
   proto::Sandals,
   $)
@@ -58,7 +58,7 @@ end proc: # CopySystem
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export GetSystemType := proc(
+export GetSystemType::static := proc(
   _self::Sandals,
   $)::symbol;
 
@@ -69,7 +69,7 @@ end proc: # GetSystemType
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export GetVars := proc(
+export GetVars::static := proc(
   _self::Sandals,
   $)::list(function);
 
@@ -87,7 +87,7 @@ end proc: # GetVars
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export SetVars := proc(
+export SetVars::static := proc(
   _self::Sandals,
   vars::list(function),
   {
@@ -104,7 +104,7 @@ end proc: # SetVars
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export GetF := proc(
+export GetF::static := proc(
   _self::Sandals,
   $)::Vector;
 
@@ -123,7 +123,7 @@ end proc: # GetF
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export GetA := proc(
+export GetA::static := proc(
   _self::Sandals,
   $)::Matrix;
 
@@ -141,7 +141,7 @@ end proc: # GetA
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export GetB := proc(
+export GetB::static := proc(
   _self::Sandals,
   $)::Vector;
 
@@ -159,7 +159,7 @@ end proc: # GetB
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export GetH := proc(
+export GetH::static := proc(
   _self::Sandals,
   $)::Vector;
 
@@ -177,7 +177,7 @@ end proc: # GetH
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export GetDifferentalEquations := proc(
+export GetDifferentalEquations::static := proc(
   _self::Sandals,
   {
   invert::boolean := false
@@ -218,7 +218,7 @@ end proc: # GetDifferentialEquations
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export GetInvariants := proc(
+export GetInvariants::static := proc(
   _self::Sandals,
   $)::list;
 
@@ -236,7 +236,7 @@ end proc: # GetInvariants
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export GetEquations := proc(
+export GetEquations::static := proc(
   _self::Sandals,
   {
   invert::boolean := false
@@ -270,7 +270,7 @@ end proc: # SystemDegree
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export LoadSystem := proc(
+export LoadSystem::static := proc(
   _self::Sandals,
   vars::{list(function), Vector(function)},
   eqns::{list({`=`, algebraic}), Vector({`=`, algebraic})},
@@ -297,7 +297,7 @@ end proc: # LoadSystem
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export LoadImplicitSystem := proc(
+export LoadImplicitSystem::static := proc(
   _self::Sandals,
   vars::{list(function), Vector(function)},
   eqns::{list({`=`, algebraic}), Vector({`=`, algebraic})},
@@ -359,7 +359,7 @@ end proc: # LoadImplicitSystem
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export LoadExplicitSystem := proc(
+export LoadExplicitSystem::static := proc(
   _self::Sandals,
   vars::{list(function), Vector(function)},
   eqns::{list({`=`, algebraic}), Vector({`=`, algebraic})},
@@ -470,7 +470,7 @@ end proc: # LoadExplicitSystem
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export ToImplicit := proc(
+export ToImplicit::static := proc(
   _self::Sandals,
   $)
 
@@ -497,7 +497,7 @@ end proc: # ToImplicit
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export ToExplicit := proc(
+export ToExplicit::static := proc(
   _self::Sandals,
   $)
 
@@ -524,7 +524,7 @@ end proc: # ToExplicit
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export ToSemiExplicit := proc(
+export ToSemiExplicit::static := proc(
   _self::Sandals,
   $)
 

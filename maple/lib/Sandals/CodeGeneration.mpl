@@ -26,7 +26,7 @@ local m_comp_sequence := [];
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export ResetCodeGeneration := proc(
+export ResetCodeGeneration::static := proc(
   _self::Sandals,
   $)
 
@@ -49,7 +49,7 @@ end proc: # ResetCodeGeneration
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export CopyCodeGeneration := proc(
+export CopyCodeGeneration::static := proc(
   _self::Sandals,
   proto::Sandals,
   $)
@@ -73,7 +73,7 @@ end proc: # CopyCodeGeneration
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export GetPath := proc(
+export GetPath::static := proc(
   _self::Sandals,
   $)::string;
 
@@ -84,7 +84,7 @@ end proc: # GetPath
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export SetPath := proc(
+export SetPath::static := proc(
   _self::Sandals,
   path::string,
   $)
@@ -101,7 +101,7 @@ end proc: # SetPath
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export GetIndent := proc(
+export GetIndent::static := proc(
   _self::Sandals,
   $)::string;
 
@@ -112,7 +112,7 @@ end proc: # GetIndent
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export SetIndent := proc(
+export SetIndent::static := proc(
   _self::Sandals,
   indent::string,
   $)
@@ -125,7 +125,7 @@ end proc: # SetIndent
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export GetIndentSize := proc(
+export GetIndentSize::static := proc(
   _self::Sandals,
   $)::nonnegint;
 
@@ -136,7 +136,7 @@ end proc: # GetIndentSize
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export SetIndentSize := proc(
+export SetIndentSize::static := proc(
   _self::Sandals,
   size::nonnegint,
   $)
@@ -149,7 +149,7 @@ end proc: # SetIndentSize
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export GetName := proc(
+export GetName::static := proc(
   _self::Sandals,
   $)
 
@@ -160,7 +160,7 @@ end proc: # GetName
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export SetName := proc(
+export SetName::static := proc(
   _self::Sandals,
   name::string,
   $)
@@ -173,7 +173,7 @@ end proc: # SetName
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export GetInfo := proc(
+export GetInfo::static := proc(
   _self::Sandals,
   $)::string;
 
@@ -184,7 +184,7 @@ end proc: # GetInfo
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export SetInfo := proc(
+export SetInfo::static := proc(
   _self::Sandals,
   info::string,
   $)
@@ -197,7 +197,7 @@ end proc: # SetInfo
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export GetVarsInfo := proc(
+export GetVarsInfo::static := proc(
   _self::Sandals,
   $)::list(string);
 
@@ -208,7 +208,7 @@ end proc: # GetVarsInfo
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export SetVarsInfo := proc(
+export SetVarsInfo::static := proc(
   _self::Sandals,
   vars_info::list(string),
   $)
@@ -225,7 +225,7 @@ end proc: # SetVarsInfo
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export GetData := proc(
+export GetData::static := proc(
   _self::Sandals,
   $)::list(symbol = algebraic);
 
@@ -236,7 +236,7 @@ end proc: # GetData
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export SetData := proc(
+export SetData::static := proc(
   _self::Sandals,
   data::list(symbol = algebraic),
   {
@@ -253,7 +253,7 @@ end proc: # SetData
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export GetDataInfo := proc(
+export GetDataInfo::static := proc(
   _self::Sandals,
   $)::list(string);
 
@@ -264,7 +264,7 @@ end proc: # GetDataInfo
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export SetDataInfo := proc(
+export SetDataInfo::static := proc(
   _self::Sandals,
   data_info::list(string),
   $)
@@ -281,7 +281,7 @@ end proc: # SetDataInfo
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export GetTime := proc(
+export GetTime::static := proc(
   _self::Sandals,
   $)::list(numeric);
 
@@ -292,7 +292,7 @@ end proc: # GetTime
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export SetTime := proc(
+export SetTime::static := proc(
   _self::Sandals,
   time::{list(numeric), range(numeric)},
   $)
@@ -323,7 +323,7 @@ end proc: # SetTime
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export GetIcs := proc(
+export GetIcs::static := proc(
   _self::Sandals,
   $)::list(algebraic);
 
@@ -334,7 +334,7 @@ end proc: # GetIcs
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export SetIcs := proc(
+export SetIcs::static := proc(
   _self::Sandals,
   ics::{list(algebraic), Vector(algebraic)},
   $)
@@ -357,7 +357,7 @@ end proc: # SetIcs
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export SetDomain := proc(
+export SetDomain::static := proc(
   _self::Sandals,
   domain::list({`=`, `<`, `<=`}),
   $)
@@ -370,7 +370,7 @@ end proc: # SetDomain
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export GetDomain := proc(
+export GetDomain::static := proc(
   _self::Sandals,
   $)::list({`=`, `<`, `<=`});
 
@@ -381,7 +381,7 @@ end proc: # GetDomain
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export SetUserFunction := proc(
+export SetUserFunction::static := proc(
   _self::Sandals,
   user_function::list({symbol, function}),
   $)
@@ -398,7 +398,7 @@ end proc: # SetUserFunction
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export GetUserFunction := proc(
+export GetUserFunction::static := proc(
   _self::Sandals,
   $)::list({symbol, function});
 
@@ -409,7 +409,7 @@ end proc: # GetUserFunction
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export GetUserFunctionNames := proc(
+export GetUserFunctionNames::static := proc(
   _self::Sandals,
   $)::list(symbol);
 
@@ -420,7 +420,7 @@ end proc: # GetUserFunctionNames
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export SetCompSequence := proc(
+export SetCompSequence::static := proc(
   _self::Sandals,
   comp_sequence::list({symbol, function} = algebraic),
   $)
@@ -437,7 +437,7 @@ end proc: # SetCompSequence
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export GetCompSequence := proc(
+export GetCompSequence::static := proc(
   _self::Sandals,
   $)::list({symbol, function} = algebraic);
 
@@ -507,7 +507,7 @@ end proc: # ApplyPrefix
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export Indent := proc(
+export Indent::static := proc(
   _self::Sandals,
   str::string,
   $)::string;
@@ -519,7 +519,7 @@ end proc: # Indent
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export Translate := proc(
+export Translate::static := proc(
   _self::Sandals,
   expr_list::list,
   $)
@@ -556,7 +556,7 @@ end proc:
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export ExtractData := proc(
+export ExtractData::static := proc(
   _self::Sandals,
   data_bool::list(boolean),
   $)::string;
@@ -573,18 +573,19 @@ export ExtractData := proc(
     for i from 1 to nops(data) do
       if data_bool[i] then
         convert(data[i], string);
-        out := cat(out, _self:-m_indent, "Real const & ", %, " = this->m_", %, ";\n");
+        out := cat(out,
+        _self:-m_indent, "Real const & ", %, " = this->m_", %, "; // ", _self:-m_data_info[i], "\n");
       end if;
     end do;
   else
-    out := cat(_self:-m_indent, "// No data\n");
+    out := cat(_self:-m_indent, "// None\n");
   end if;
   return out;
 end proc: # ExtractData
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export ExtractInputs := proc(
+export ExtractInputs::static := proc(
   _self::Sandals,
   vars::list(list(symbol)),
   vars_bool::list(list(boolean)),
@@ -622,14 +623,14 @@ export ExtractInputs := proc(
       end if;
     end do;
   else
-    out := cat(_self:-m_indent, "// No inputs' alias\n");
+    out := cat(_self:-m_indent, "// None\n");
   end if;
   return out;
 end proc: # ExtractInputs
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export ExtractElements := proc(
+export ExtractElements::static := proc(
   _self::Sandals,
   name::string,
   func::{list, Vector, Matrix, Array},
@@ -666,7 +667,7 @@ end proc: # ExtractElements
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export GenerateFunctionHeader := proc(
+export GenerateFunctionHeader::static := proc(
   _self::Sandals,
   name::string,
   vars::list(list(symbol)),
@@ -704,7 +705,7 @@ end proc: # GenerateFunctionHeader
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export GenerateFunctionBody := proc(
+export GenerateFunctionBody::static := proc(
   _self::Sandals,
   name::string,
   dims::list(nonnegint),
@@ -733,14 +734,14 @@ export GenerateFunctionBody := proc(
     _self:-m_indent, "// Create data' aliases\n", data, "\n",
     _self:-m_indent, "// Create inputs' aliases\n", inputs, "\n",
     _self:-m_indent, "// Evaluate computation sequence\n", comp_sequence, "\n",
-    _self:-m_indent, "// Evaluate function\n", elements, "\n",
-    _self:-m_indent, "// Store outputs\n", outputs, "}\n"
+    _self:-m_indent, "// Evaluate function entries\n", elements, "\n",
+    _self:-m_indent, "// Return results\n", outputs, "}\n"
   );
 end proc: # GenerateFunctionBody
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export TranslateDomainFunction := proc(
+export TranslateDomainFunction::static := proc(
   _self::Sandals,
   name::string,
   vars::list(list(symbol)),
@@ -801,14 +802,14 @@ export TranslateDomainFunction := proc(
   if (nops(comp_sequence) > 0) then
     comp_sequence := _self:-Indent(_self, _self:-Translate(_self, comp_sequence));
   else
-    comp_sequence := cat(_self:-m_indent, "// No computation sequence\n");
+    comp_sequence := cat(_self:-m_indent, "// Nothing to evaluate\n");
   end if;
 
   # Generate the elements
   if (nops(lst) > 0) then
     elements := _self:-Indent(_self, _self:-Translate(_self, lst));
   else
-    elements := cat(_self:-m_indent, "// No elements\n");
+    elements := cat(_self:-m_indent, "// Nothing to evaluate\n");
   end if;
 
   # Generate the generated code
@@ -820,7 +821,7 @@ end proc: # TranslateDomainFunction
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export TranslateVectorFunction := proc(
+export TranslateVectorFunction::static := proc(
   _self::Sandals,
   name::string,
   vars::list(list(symbol)),
@@ -878,14 +879,14 @@ export TranslateVectorFunction := proc(
   if (nops(comp_sequence) > 0) then
     comp_sequence := _self:-Indent(_self, _self:-Translate(_self, comp_sequence));
   else
-    comp_sequence := cat(_self:-m_indent, "// No computation sequence\n");
+    comp_sequence := cat(_self:-m_indent, "// Nothing to evaluate\n");
   end if;
 
   # Generate the elements
   if (nops(lst) > 0) then
     elements := _self:-Indent(_self, _self:-Translate(_self, lst));
   else
-    elements := cat(_self:-m_indent, "// No elements\n");
+    elements := cat(_self:-m_indent, "// Nothing to evaluate\n");
   end if;
 
   # Generate the generated code
@@ -897,7 +898,7 @@ end proc: # TranslateVectorFunction
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export TranslateMatrixFunction := proc(
+export TranslateMatrixFunction::static := proc(
   _self::Sandals,
   name::string,
   vars::list(list(symbol)),
@@ -949,14 +950,14 @@ export TranslateMatrixFunction := proc(
   if (nops(comp_sequence) > 0) then
     comp_sequence := _self:-Indent(_self, _self:-Translate(_self, comp_sequence));
   else
-    comp_sequence := cat(_self:-m_indent, "// No computation sequence\n");
+    comp_sequence := cat(_self:-m_indent, "// Nothing to evaluate\n");
   end if;
 
   # Generate the elements
   if (nops(lst) > 0) then
     elements := _self:-Indent(_self, _self:-Translate(_self, lst));
   else
-    elements := cat(_self:-m_indent, "// No elements\n");
+    elements := cat(_self:-m_indent, "// Nothing to evaluate\n");
   end if;
 
   # Generate the generated code
@@ -968,7 +969,7 @@ end proc: # TranslateMatrixFunction
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export TranslateTensorFunction := proc(
+export TranslateTensorFunction::static := proc(
   _self::Sandals,
   name::string,
   vars::list(list(symbol)),
@@ -1035,14 +1036,14 @@ export TranslateTensorFunction := proc(
   if (nops(comp_sequence) > 0) then
     comp_sequence := _self:-Indent(_self, _self:-Translate(_self, comp_sequence));
   else
-    comp_sequence := cat(_self:-m_indent, "// No computation sequence\n");
+    comp_sequence := cat(_self:-m_indent, "// Nothing to evaluate\n");
   end if;
 
   # Generate the elements
   if (nops(lst) > 0) then
     elements := _self:-Indent(_self, _self:-Translate(_self, lst));
   else
-    elements := cat(_self:-m_indent, "// No elements\n");
+    elements := cat(_self:-m_indent, "// Nothing to evaluate\n");
   end if;
 
   # Generate the generated code
@@ -1054,7 +1055,7 @@ end proc: # TranslateTensorFunction
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export GenerateClassData := proc(
+export GenerateClassData::static := proc(
   _self::Sandals,
   $)::string;
 
@@ -1069,14 +1070,14 @@ export GenerateClassData := proc(
       "// ", _self:-m_data_info, "\n"
     )));
   else
-    out := cat(_self:-m_indent, "// No data members\n");
+    out := cat(_self:-m_indent, "// None\n");
   end if;
   return out;
 end proc: # GenerateClassData
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export GenerateClassConstructor := proc(
+export GenerateClassConstructor::static := proc(
   _self::Sandals,
   name::string,
   type::string,
@@ -1114,7 +1115,7 @@ end proc: # GenerateClassConstructor
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export GenerateClassIcs := proc(
+export GenerateClassIcs::static := proc(
   _self::Sandals,
   $)::string;
 
@@ -1134,7 +1135,7 @@ end proc: # GenerateClassIcs
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export GenerateClassTime := proc(
+export GenerateClassTime::static := proc(
   _self::Sandals,
   $)
 
@@ -1155,7 +1156,7 @@ end proc: # GenerateClassTime
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export GenerateClassDomain := proc(
+export GenerateClassDomain::static := proc(
   _self::Sandals,
   $)::string;
 
@@ -1191,7 +1192,7 @@ end proc: # GenerateClassDomain
 #                |_|
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export TranslateImplicitSystem := proc(
+export TranslateImplicitSystem::static := proc(
   _self::Sandals,
   name::string,
   F::Vector(algebraic),
@@ -1286,7 +1287,7 @@ export TranslateImplicitSystem := proc(
     "// ", _self:-m_info, "\n",
     "class ", name, " : public Implicit<", num_eqns, ", ", num_invs, ">\n",
     "{\n",
-    i, "// User data\n",
+    i, "// Class data\n",
     data_str,
     "\n",
     "public:\n",
@@ -1352,7 +1353,7 @@ end proc: # TranslateImplicitSystem
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export CheckDefinition := proc(
+export CheckDefinition::static := proc(
   _self::Sandals,
   name::string,
   expr::{list, Vector, Matrix, Array},
@@ -1381,7 +1382,7 @@ end proc: # CheckDefinition
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export GenerateCode := proc(
+export GenerateCode::static := proc(
   _self::Sandals,
   name::string := _self:-m_name,
   {
@@ -1455,7 +1456,7 @@ end proc: # GenerateCode
 #             |_|
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export TranslateExplicitSystem := proc(
+export TranslateExplicitSystem::static := proc(
   _self::Sandals,
   name::string,
   f::Vector(algebraic),
@@ -1528,7 +1529,7 @@ export TranslateExplicitSystem := proc(
     "// ", _self:-m_info, "\n",
     "class ", name, " : public Explicit<", num_eqns, ", ", num_invs, ">\n",
     "{\n",
-    i, "// User data\n",
+    i, "// Class data\n",
     data_str,
     "\n",
     "public:\n",
@@ -1593,7 +1594,7 @@ end proc: # TranslateExplicitSystem
 #                                    |_|
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export TranslateSemiExplicitSystem := proc(
+export TranslateSemiExplicitSystem::static := proc(
   _self::Sandals,
   name::string,
   A::Matrix(algebraic),
@@ -1677,7 +1678,7 @@ export TranslateSemiExplicitSystem := proc(
     "// ", _self:-m_info, "\n",
     "class ", name, " : public SemiExplicit<", num_eqns, ", ", num_invs, ">\n",
     "{\n",
-    i, "// User data\n",
+    i, "// Class data\n",
     data_str,
     "\n",
     "public:\n",

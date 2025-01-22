@@ -15,7 +15,7 @@ local m_working_directory := "";
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export ResetWorkingDirectory := proc(
+export ResetWorkingDirectory::static := proc(
   _self::Sandals,
   $)
 
@@ -27,7 +27,7 @@ end proc: # ResetWorkingDirectory
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export CopyWorkingDirectory := proc(
+export CopyWorkingDirectory::static := proc(
   _self::Sandals,
   proto::Sandals,
   $)
@@ -40,7 +40,7 @@ end proc: # CopyWorkingDirectory
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export GetWorkingDirectory := proc(
+export GetWorkingDirectory::static := proc(
   _self::Sandals,
   $)
 
@@ -51,7 +51,7 @@ end proc: # GetWorkingDirectory
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export SetWorkingDirectory := proc(
+export SetWorkingDirectory::static := proc(
   _self::Sandals,
   dname::string,
   $)

@@ -5,7 +5,6 @@ var searchData=
   ['ralston2_2ehxx_2',['Ralston2.hxx',['../_ralston2_8hxx.html',1,'']]],
   ['ralston3_2ehxx_3',['Ralston3.hxx',['../_ralston3_8hxx.html',1,'']]],
   ['ralston4_2ehxx_4',['Ralston4.hxx',['../_ralston4_8hxx.html',1,'']]],
-  ['readme_2emd_5',['README.md',['../_r_e_a_d_m_e_8md.html',1,'']]],
-  ['rk4_2ehxx_6',['RK4.hxx',['../_r_k4_8hxx.html',1,'']]],
-  ['rungekutta_2ehxx_7',['RungeKutta.hxx',['../_runge_kutta_8hxx.html',1,'']]]
+  ['rk4_2ehxx_5',['RK4.hxx',['../_r_k4_8hxx.html',1,'']]],
+  ['rungekutta_2ehxx_6',['RungeKutta.hxx',['../_runge_kutta_8hxx.html',1,'']]]
 ];

@@ -70,7 +70,7 @@ MathJax.Hub.Config({
    <div id="projectname">Sandals
    &#160;<span id="projectnumber">v0.0.0</span>
    </div>
-   <div id="projectbrief">Integrating ODEs and DAEs with style</div>
+   <div id="projectbrief">A header-only ODEs/DAEs integrator</div>
   </td>
  </tr>
  </tbody>
@@ -138,26 +138,36 @@ $(function(){initNavTree('index.html',''); initResizable(true); });
 </div>
 
 <div><div class="header">
-  <div class="headertitle"><div class="title"><a class="el" href="namespace_sandals.html">Sandals</a> </div></div>
+  <div class="headertitle"><div class="title"><a class="el" href="namespace_sandals.html" title="The namespace for the Sandals library.">Sandals</a> </div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="md__r_e_a_d_m_e"></a></p>
-<blockquote class="doxtable">
-<p>One comfortable integration step at a time! </p>
-</blockquote>
-<p><code><a class="el" href="namespace_sandals.html">Sandals</a></code> is a library for the numerical integration of Ordinary Differential Equations (ODEs) and Differential Algebraic Equations (DAEs) written in C++17. It is a porting of the <code>Indigo</code> integration library present at <a href="https://StoccoDavide.github.io/Indigo">this link</a>, which is written in MATLAB.</p>
-<p>Are you looking for the online documentation? Visit <a href="https://stoccodavide.github.io/Sandals/">this link</a>!</p>
+<div class="textblock"><p><a class="anchor" id="md_docs_2markdown_2_mainpage"></a></p>
+<p><code><a class="el" href="namespace_sandals.html" title="The namespace for the Sandals library.">Sandals</a></code> is a library for the numerical integration of Ordinary Differential Equations (ODEs) and Differential Algebraic Equations (DAEs) written in C++17.</p>
 <h1><a class="anchor" id="autotoc_md18"></a>
 Installation</h1>
 <h2><a class="anchor" id="autotoc_md19"></a>
 Prerequisites</h2>
+<p><code><a class="el" href="namespace_sandals.html" title="The namespace for the Sandals library.">Sandals</a></code> carries a set of minimal dependencies. Here's what you need to get started:</p>
 <ul>
-<li>CMake &gt;= 3.10</li>
-<li>C++ compiler with C++17 support</li>
-<li>Eigen3</li>
+<li>C++ compiler with <a href="https://en.cppreference.com/w/cpp/17"><code>C++17</code></a> support</li>
+<li><a href="https://cmake.org"><code>CMake</code></a> &gt;= 3.10</li>
+<li><a href="https://eigen.tuxfamily.org/index.php?title=Main_Page"><code>Eigen3</code></a> &gt;= 3.4.0</li>
+<li><a href="https://alandefreitas.github.io/matplotplusplus/"><code>Matplot++</code></a> &gt;= 1.2.0 for plotting (optional).</li>
 </ul>
+<p>The <code>Matplot++</code> library is optional and only required if you want to plot the results of your simulations and is currently used to plot the results of some tests.</p>
 <h2><a class="anchor" id="autotoc_md20"></a>
 Build</h2>
+<ol type="1">
+<li>Clone the repository. <div class="fragment"><div class="line">git clone git@github.com:StoccoDavide/Sandals.git</div>
+</div><!-- fragment --></li>
+<li>Create a build directory. <div class="fragment"><div class="line">mkdir build</div>
+<div class="line">cd build</div>
+</div><!-- fragment --></li>
+<li>Build the project. <div class="fragment"><div class="line">cmake ..</div>
+</div><!-- fragment --></li>
+<li>Install the project. <div class="fragment"><div class="line">make install</div>
+</div><!-- fragment --></li>
+</ol>
 <h1><a class="anchor" id="autotoc_md21"></a>
 Authors</h1>
 <ul>
@@ -178,7 +188,7 @@ Authors</h1>
 <div class="line">                                                       ▀▀▀</div>
 </div><!-- fragment --><h1><a class="anchor" id="autotoc_md22"></a>
 License</h1>
-<p>The <code><a class="el" href="namespace_sandals.html">Sandals</a></code> project is distributed under the BSD 2-Clause License - see the <a href="https://StoccoDavide.github.io/Sandals/LICENSE">LICENSE</a> file for details.</p>
+<p>The <code><a class="el" href="namespace_sandals.html" title="The namespace for the Sandals library.">Sandals</a></code> project is distributed under the BSD 2-Clause License - see the <a href="https://StoccoDavide.github.io/Sandals/LICENSE">LICENSE</a> file for details.</p>
 <p>Here's what the license entails:</p>
 <ol type="1">
 <li>Anyone can copy, modify and distribute this software.</li>

@@ -71,7 +71,7 @@ module Sandals()
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  export ModuleCopy := proc(
+  export ModuleCopy::static := proc(
     _self::Sandals,
     proto::Sandals,
     $)
@@ -95,7 +95,7 @@ module Sandals()
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  export Reset := proc(
+  export Reset::static := proc(
     _self::Sandals,
     label::{symbol, string} := NULL,
     $)
@@ -120,7 +120,7 @@ module Sandals()
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  export EnableVerboseMode := proc(
+  export EnableVerboseMode::static := proc(
     _self::Sandals,
     $)
 
@@ -132,7 +132,7 @@ module Sandals()
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  export DisableVerboseMode := proc(
+  export DisableVerboseMode::static := proc(
     _self::Sandals,
     $)
 
@@ -144,7 +144,7 @@ module Sandals()
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  export SetVerboseMode := proc(
+  export SetVerboseMode::static := proc(
     _self::Sandals,
     mode::boolean,
     $)
@@ -157,7 +157,7 @@ module Sandals()
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  export EnableWarningMode := proc(
+  export EnableWarningMode::static := proc(
     _self::Sandals,
     $)
 
@@ -169,7 +169,7 @@ module Sandals()
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  export DisableWarningMode := proc(
+  export DisableWarningMode::static := proc(
     _self::Sandals,
     $)
 
@@ -181,7 +181,7 @@ module Sandals()
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  export SetWarningMode := proc(
+  export SetWarningMode::static := proc(
     _self::Sandals,
     mode::boolean,
     $)
@@ -194,7 +194,7 @@ module Sandals()
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  export SetTimeLimit := proc(
+  export SetTimeLimit::static := proc(
     _self::Sandals,
     x::numeric,
     $)
@@ -211,7 +211,7 @@ module Sandals()
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  export GetTimeLimit := proc(
+  export GetTimeLimit::static := proc(
     _self::Sandals,
     $)::numeric;
 
@@ -228,4 +228,5 @@ $include "./lib/Sandals/System.mpl"
 $include "./lib/Sandals/CodeGeneration.mpl"
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 end module: # Sandals

@@ -70,7 +70,7 @@ MathJax.Hub.Config({
    <div id="projectname">Sandals
    &#160;<span id="projectnumber">v0.0.0</span>
    </div>
-   <div id="projectbrief">Integrating ODEs and DAEs with style</div>
+   <div id="projectbrief">A header-only ODEs/DAEs integrator</div>
   </td>
  </tr>
  </tbody>
@@ -555,7 +555,7 @@ IRK methods for implicit dynamic systems</h3>
 \]
 </p>
 <blockquote class="doxtable">
-<p><b>NOTE:</b> In <code><a class="el" href="namespace_sandals.html">Sandals</a></code>, the implementation of IRK methods is unified for both explicit and implicit dynamical systems. IRK methods inherently require solving nonlinear systems, irrespective of the system's form. Creating a specialized version for explicit systems would not yield significant computational advantages, as the complexity of solving the nonlinear system remains. Consequently, only the IRK method for implicit dynamical systems is implemented. </p>
+<p><b>NOTE:</b> In <code><a class="el" href="namespace_sandals.html" title="The namespace for the Sandals library.">Sandals</a></code>, the implementation of IRK methods is unified for both explicit and implicit dynamical systems. IRK methods inherently require solving nonlinear systems, irrespective of the system's form. Creating a specialized version for explicit systems would not yield significant computational advantages, as the complexity of solving the nonlinear system remains. Consequently, only the IRK method for implicit dynamical systems is implemented. </p>
 </blockquote>
 <h2><a class="anchor" id="autotoc_md11"></a>
 Diagonally implicit Runge-Kutta methods</h2>
@@ -605,11 +605,11 @@ DIRK methods for implicit dynamic systems</h3>
 \]
 </p>
 <blockquote class="doxtable">
-<p><b>NOTE:</b> As with IRK methods, the implementation of DIRK methods for explicit and implicit dynamic systems in <code><a class="el" href="namespace_sandals.html">Sandals</a></code> is unified. Since solving the nonlinear system is inherent to DIRK methods, a specialized version for explicit systems would not significantly reduce computational complexity. Consequently, only the DIRK method for implicit dynamic systems is implemented. </p>
+<p><b>NOTE:</b> As with IRK methods, the implementation of DIRK methods for explicit and implicit dynamic systems in <code><a class="el" href="namespace_sandals.html" title="The namespace for the Sandals library.">Sandals</a></code> is unified. Since solving the nonlinear system is inherent to DIRK methods, a specialized version for explicit systems would not significantly reduce computational complexity. Consequently, only the DIRK method for implicit dynamic systems is implemented. </p>
 </blockquote>
 <h1><a class="anchor" id="autotoc_md14"></a>
 Projection on the invariants manifold</h1>
-<p>In many applications, the dynamic system's states must satisfy certain constraints, which are typically expressed as invariants. For example, in mechanical systems, the constraints may represent the conservation of energy or momentum. In such cases, the states must be projected onto the manifold defined by the invariants to ensure that the system's dynamics are physically consistent. In <code><a class="el" href="namespace_sandals.html">Sandals</a></code>, the projection is performed using a simple iterative method, where the states are updated until the invariants are satisfied within a specified tolerance. In other words, at each step, the states are adjusted to ensure that the invariants are preserved.</p>
+<p>In many applications, the dynamic system's states must satisfy certain constraints, which are typically expressed as invariants. For example, in mechanical systems, the constraints may represent the conservation of energy or momentum. In such cases, the states must be projected onto the manifold defined by the invariants to ensure that the system's dynamics are physically consistent. In <code><a class="el" href="namespace_sandals.html" title="The namespace for the Sandals library.">Sandals</a></code>, the projection is performed using a simple iterative method, where the states are updated until the invariants are satisfied within a specified tolerance. In other words, at each step, the states are adjusted to ensure that the invariants are preserved.</p>
 <h2><a class="anchor" id="autotoc_md15"></a>
 Constrained minimization problem</h2>
 <p>Consider the constrained minimization problem   </p><p class="formulaDsp">

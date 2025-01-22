@@ -70,7 +70,7 @@ MathJax.Hub.Config({
    <div id="projectname">Sandals
    &#160;<span id="projectnumber">v0.0.0</span>
    </div>
-   <div id="projectbrief">Integrating ODEs and DAEs with style</div>
+   <div id="projectbrief">A header-only ODEs/DAEs integrator</div>
   </td>
  </tr>
  </tbody>
@@ -293,7 +293,7 @@ Protected Attributes</h2></td></tr>
 <div class="textblock"><div class="compoundTemplParams">template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> N&gt;<br />
 class Sandals::NonlinearSolver&lt; N &gt;</div><h1><a class="anchor" id="autotoc_md2"></a>
 Nonlinear solvers</h1>
-<p>This section describes the nonlinear solvers implemented in <code><a class="el" href="namespace_sandals.html">Sandals</a></code>. The available solvers are <em><a class="el" href="class_sandals_1_1_newton.html" title="Class container for the (damped) Newton&#39;s method with affine invariant step.">Newton</a></em>'s method and <em><a class="el" href="class_sandals_1_1_broyden.html" title="Class container for the (damped) Broyden&#39;s method.">Broyden</a></em>'s method, both designed to solve nonlinear systems of equations. <a class="el" href="class_sandals_1_1_newton.html" title="Class container for the (damped) Newton&#39;s method with affine invariant step.">Newton</a>'s method is a well-known classical approach, while <a class="el" href="class_sandals_1_1_broyden.html" title="Class container for the (damped) Broyden&#39;s method.">Broyden</a>'s method is a quasi-Newton technique that approximates the <a class="el" href="#afa043950d7d07db2b48a257d1ed6a40d" title="Jacobian function type.">Jacobian</a> matrix for improved efficiency in certain scenarios.</p>
+<p>This section describes the nonlinear solvers implemented in <code><a class="el" href="namespace_sandals.html" title="The namespace for the Sandals library.">Sandals</a></code>. The available solvers are <em><a class="el" href="class_sandals_1_1_newton.html" title="Class container for the (damped) Newton&#39;s method with affine invariant step.">Newton</a></em>'s method and <em><a class="el" href="class_sandals_1_1_broyden.html" title="Class container for the (damped) Broyden&#39;s method.">Broyden</a></em>'s method, both designed to solve nonlinear systems of equations. <a class="el" href="class_sandals_1_1_newton.html" title="Class container for the (damped) Newton&#39;s method with affine invariant step.">Newton</a>'s method is a well-known classical approach, while <a class="el" href="class_sandals_1_1_broyden.html" title="Class container for the (damped) Broyden&#39;s method.">Broyden</a>'s method is a quasi-Newton technique that approximates the <a class="el" href="#afa043950d7d07db2b48a257d1ed6a40d" title="Jacobian function type.">Jacobian</a> matrix for improved efficiency in certain scenarios.</p>
 <p>The nonlinear solvers are implemented for solving problems of the form   </p><p class="formulaDsp">
 \[  \mathbf{F}(\mathbf{x}) = \mathbf{0} \text{,} \quad \mathbf{F}: \mathbb{R}^{n} \rightarrow \mathbb{R}^{n} \text{.}
 \]

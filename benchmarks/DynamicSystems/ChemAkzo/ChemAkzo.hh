@@ -21,7 +21,7 @@ using namespace std;
 // No class description available.
 class ChemAkzo : public Implicit<6, 0>
 {
-  // User data
+  // Class data
   Real m_k_1{18.7}; // Data variable 1
   Real m_k_2{.58}; // Data variable 2
   Real m_k_3{.9e-1}; // Data variable 3
@@ -99,15 +99,15 @@ public:
   VectorF F(VectorF const & in_0, VectorF const & in_1, Real /*in_2*/) const override
   {
     // Create data' aliases
-    Real const & k_1 = this->m_k_1;
-    Real const & k_2 = this->m_k_2;
-    Real const & k_3 = this->m_k_3;
-    Real const & k_4 = this->m_k_4;
-    Real const & K = this->m_K;
-    Real const & klA = this->m_klA;
-    Real const & K_s = this->m_K_s;
-    Real const & p_CO2 = this->m_p_CO2;
-    Real const & H = this->m_H;
+    Real const & k_1 = this->m_k_1; // Data variable 1
+    Real const & k_2 = this->m_k_2; // Data variable 2
+    Real const & k_3 = this->m_k_3; // Data variable 3
+    Real const & k_4 = this->m_k_4; // Data variable 4
+    Real const & K = this->m_K; // Data variable 5
+    Real const & klA = this->m_klA; // Data variable 6
+    Real const & K_s = this->m_K_s; // Data variable 7
+    Real const & p_CO2 = this->m_p_CO2; // Data variable 8
+    Real const & H = this->m_H; // Data variable 9
 
     // Create inputs' aliases
     Real const & y_1 = in_0(0); // State variable 1
@@ -123,9 +123,9 @@ public:
     Real const & y_5_dot = in_1(4); // State variable 5 derivative
 
     // Evaluate computation sequence
-    // No computation sequence
+    // Nothing to evaluate
 
-    // Evaluate function
+    // Evaluate function entries
     Real t1 = y_1 * y_1;
     Real t2 = t1 * t1;
     Real t3 = t2 * k_1;
@@ -147,7 +147,7 @@ public:
     Real out_4 = t19 * (y_5_dot * K - t5 * t21 - t14 + t16);
     Real out_5 = -K_s * y_1 * y_4 + y_6;
 
-    // Store outputs
+    // Return results
     VectorF out_F;
     out_F <<
       out_0, out_1, out_2, out_3, out_4, out_5;
@@ -158,14 +158,14 @@ public:
   MatrixJF JF_x(VectorF const & in_0, VectorF const & /*in_1*/, Real /*in_2*/) const override
   {
     // Create data' aliases
-    Real const & k_1 = this->m_k_1;
-    Real const & k_2 = this->m_k_2;
-    Real const & k_3 = this->m_k_3;
-    Real const & k_4 = this->m_k_4;
-    Real const & K = this->m_K;
-    Real const & klA = this->m_klA;
-    Real const & K_s = this->m_K_s;
-    Real const & H = this->m_H;
+    Real const & k_1 = this->m_k_1; // Data variable 1
+    Real const & k_2 = this->m_k_2; // Data variable 2
+    Real const & k_3 = this->m_k_3; // Data variable 3
+    Real const & k_4 = this->m_k_4; // Data variable 4
+    Real const & K = this->m_K; // Data variable 5
+    Real const & klA = this->m_klA; // Data variable 6
+    Real const & K_s = this->m_K_s; // Data variable 7
+    Real const & H = this->m_H; // Data variable 9
 
     // Create inputs' aliases
     Real const & y_1 = in_0(0); // State variable 1
@@ -176,9 +176,9 @@ public:
     Real const & y_6 = in_0(5); // State variable 6
 
     // Evaluate computation sequence
-    // No computation sequence
+    // Nothing to evaluate
 
-    // Evaluate function
+    // Evaluate function entries
     Real t1 = y_1 * y_1;
     Real t2 = t1 * y_1;
     Real t4 = sqrt(y_2);
@@ -234,7 +234,7 @@ public:
     Real out_5_4 = -2 * out_5_1;
     Real out_5_5 = 1;
 
-    // Store outputs
+    // Return results
     MatrixJF out_JF_x;
     out_JF_x <<
       out_0_0, out_0_1, out_0_2, out_0_3, out_0_4, out_0_5, out_1_0, out_1_1, out_1_2, out_1_3, out_1_4, out_1_5, out_2_0, out_2_1, out_2_2, out_2_3, out_2_4, out_2_5, out_3_0, out_3_1, out_3_2, out_3_3, out_3_4, out_3_5, out_4_0, out_4_1, out_4_2, out_4_3, out_4_4, out_4_5, out_5_0, out_5_1, out_5_2, out_5_3, out_5_4, out_5_5;
@@ -244,18 +244,18 @@ public:
   MatrixJF JF_x_dot(VectorF const & /*in_0*/, VectorF const & /*in_1*/, Real /*in_2*/) const override
   {
     // Create data' aliases
-    // No data
+    // None
 
     // Create inputs' aliases
-    // No inputs' alias
+    // None
 
     // Evaluate computation sequence
-    // No computation sequence
+    // Nothing to evaluate
 
-    // Evaluate function
-    // No elements
+    // Evaluate function entries
+    // Nothing to evaluate
 
-    // Store outputs
+    // Return results
     MatrixJF out_JF_x_dot;
     out_JF_x_dot.setZero();
     return out_JF_x_dot;
@@ -265,18 +265,18 @@ public:
   VectorH h(VectorF const & /*in_0*/, Real /*in_1*/) const override
   {
     // Create data' aliases
-    // No data
+    // None
 
     // Create inputs' aliases
-    // No inputs' alias
+    // None
 
     // Evaluate computation sequence
-    // No computation sequence
+    // Nothing to evaluate
 
-    // Evaluate function
-    // No elements
+    // Evaluate function entries
+    // Nothing to evaluate
 
-    // Store outputs
+    // Return results
     VectorH out_h;
     out_h.setZero();
     return out_h;
@@ -286,18 +286,18 @@ public:
   MatrixJH Jh_x(VectorF const & /*in_0*/, Real /*in_1*/) const override
   {
     // Create data' aliases
-    // No data
+    // None
 
     // Create inputs' aliases
-    // No inputs' alias
+    // None
 
     // Evaluate computation sequence
-    // No computation sequence
+    // Nothing to evaluate
 
-    // Evaluate function
-    // No elements
+    // Evaluate function entries
+    // Nothing to evaluate
 
-    // Store outputs
+    // Return results
     MatrixJH out_Jh_x;
     out_Jh_x.setZero();
     return out_Jh_x;
@@ -316,15 +316,15 @@ public:
   VectorF ics() const
   {
     // Create data' aliases
-    Real const & K_s = this->m_K_s;
+    Real const & K_s = this->m_K_s; // Data variable 7
 
     // Create inputs' aliases
-    // No inputs' alias
+    // None
 
     // Evaluate computation sequence
-    // No computation sequence
+    // Nothing to evaluate
 
-    // Evaluate function
+    // Evaluate function entries
     Real out_0 = 0.444e0;
     Real out_1 = 0.123e-2;
     Real out_2 = 0.0e0;
@@ -332,7 +332,7 @@ public:
     Real out_4 = 0.0e0;
     Real out_5 = 0.3108e-2 * K_s;
 
-    // Store outputs
+    // Return results
     VectorF out_ics;
     out_ics <<
       out_0, out_1, out_2, out_3, out_4, out_5;

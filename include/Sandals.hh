@@ -61,10 +61,12 @@
   }
 #endif
 
-
+//! \namespace Sandals
+//! \brief The namespace for the Sandals library.
+//!
+//! The namespace contains all the classes and functions of the Sandals library.
 namespace Sandals
 {
-
 
   /*\
    |      _    _ _

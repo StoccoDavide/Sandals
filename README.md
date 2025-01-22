@@ -1,21 +1,19 @@
 # Sandals
 
-> One comfortable integration step at a time!
-
-`Sandals` is a library for the numerical integration of Ordinary Differential Equations (ODEs) and Differential Algebraic Equations (DAEs) written in C++17. It is a porting of the `Indigo` integration library present at [this link](https://StoccoDavide.github.io/Indigo), which is written in MATLAB.
+`Sandals` is a library for the numerical integration of Ordinary Differential Equations (ODEs) and Differential Algebraic Equations (DAEs) written in C++17.
 
 Are you looking for the online documentation? Visit [this link](https://stoccodavide.github.io/Sandals/)!
 
-## Installation
+### Dependencies
 
-### Prerequisites
+`Sandals` carries a set of minimal dependencies. Here's what you need to get started:
 
-- CMake >= 3.10
-- C++ compiler with C++17 support
-- Eigen3
+- C++ compiler with [`C++17`](https://en.cppreference.com/w/cpp/17) support
+- [`CMake`](https://cmake.org) >= 3.10
+- [`Eigen3`](https://eigen.tuxfamily.org/index.php?title=Main_Page) >= 3.4.0
+- [`Matplot++`](https://alandefreitas.github.io/matplotplusplus/) >= 1.2.0 for plotting (optional).
 
-### Build
-
+The `Matplot++` library is optional and only required if you want to plot the results of your simulations and is currently used to plot the results of some tests.
 
 ## Authors
 
