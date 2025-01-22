@@ -17,7 +17,7 @@ get_version_from_git()
 
 project(Sandals
   VERSION ${SANDALS_VERSION}
-  DESCRIPTION "A header-only library for numerical integration of ODEs/DAEs"
+  DESCRIPTION "A header-only ODEs/DAEs integrator"
   HOMEPAGE_URL "https://github.com/StoccoDavide/Sandals"
   LANGUAGES CXX
 )
