@@ -221,9 +221,6 @@ namespace Sandals
 
 } // namespace Sandals
 
-// Finite difference derivative
-//#include "Sandals/FiniteDifference.hxx"
-
 // Time measurement
 #include "Sandals/TicToc.hxx"
 

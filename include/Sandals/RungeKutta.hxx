@@ -1262,11 +1262,12 @@ namespace Sandals {
         A.template block<N, N>(0, 0) = MatrixN::Identity();
         for (Size k{0}; k < this->m_max_projection_iterations; ++k) {
 
-          // Standard projection method
-          //     [A]         {x}    =        {b}
-          // / I  Jh_x^T \ /   dx   \   / x_t - x_k \
-          // |           | |        | = |           |
-          // \ Jh_x    0 / \ lambda /   \    -h     /
+          /* Standard projection method
+               [A]         {x}    =        {b}
+           / I  Jh_x^T \ /   dx   \   / x_t - x_k \
+           |           | |        | = |           |
+           \ Jh_x    0 / \ lambda /   \    -h     /
+          */
 
           // Evaluate the invariants vector and its Jacobian
           h    = this->m_system->h(x_projected, t);
@@ -1333,11 +1334,12 @@ namespace Sandals {
         Eigen::FullPivLU<MatrixX> lu;
         for (Size k{0}; k < this->m_max_projection_iterations; ++k) {
 
-          // Standard projection method
-          //     [A]         {x}    =        {b}
-          // / I  Jh_x^T \ /   dx   \   / x_t - x_k \
-          // |           | |        | = |           |
-          // \ Jh_x    0 / \ lambda /   \    -h     /
+          /* Standard projection method
+               [A]         {x}    =        {b}
+           / I  Jh_x^T \ /   dx   \   / x_t - x_k \
+           |           | |        | = |           |
+           \ Jh_x    0 / \ lambda /   \    -h     /
+          */
 
           // Evaluate the invariants vector and its Jacobian
           h    = this->m_system->h(x_projected, t);

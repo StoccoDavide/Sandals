@@ -68,6 +68,6 @@ function(write_version_file)
     set(VERSION_STRING "${VERSION_STRING}-${SANDALS_VERSION_PRERELEASE}")
   endif()
 
-  file(WRITE "${CMAKE_CURRENT_SOURCE_DIR}/VERSION" "v${VERSION_STRING}")
+  file(WRITE "${CMAKE_CURRENT_SOURCE_DIR}/VERSION" "${VERSION_STRING}")
 
 endfunction()
