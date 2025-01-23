@@ -55,7 +55,6 @@ namespace Sandals {
     using System   = typename Implicit<N, M>::Pointer;    /**< Shared pointer to an implicit ODE/DAE system. */
     using Type     = typename Tableau<S>::Type;           /**< Runge-Kutta type enumeration. */
     using Time     = Eigen::Vector<Real, Eigen::Dynamic>; /**< Templetized vector type for the independent variable (or time). */
-    using Solution = Solution<N, M>;                      /**< Templetized structure type for solution. */
 
   private:
     SolverN     *m_solverN;                          /**< Nonlinear solver for ERK and DIRK methods. */
@@ -1109,7 +1108,7 @@ namespace Sandals {
     * \param[out] sol The solution of the system over the mesh of independent variable.
     * \return True if the system is successfully solved, false otherwise.
     */
-    bool solve(VectorX const &t_mesh, VectorN const &ics, Solution &sol)
+    bool solve(VectorX const &t_mesh, VectorN const &ics, Solution<N, M> &sol)
     {
       using Eigen::last;
 
@@ -1171,7 +1170,7 @@ namespace Sandals {
     * \param[out] sol The solution of the system over the mesh of independent variable.
     * \return True if the system is successfully solved, false otherwise.
     */
-    bool adaptive_solve(VectorX const &t_mesh, VectorN const &ics, Solution &sol)
+    bool adaptive_solve(VectorX const &t_mesh, VectorN const &ics, Solution<N, M> &sol)
     {
       using Eigen::all;
       using Eigen::last;
@@ -1409,7 +1408,7 @@ namespace Sandals {
       }
 
       // Solve the system for each time scale
-      Solution sol_num;
+      Solution<N, M> sol_num;
       MatrixX sol_ana;
       VectorX h_vec(t_mesh.size()), e_vec(t_mesh.size());
       for (Size i{0}; i < static_cast<Size>(t_mesh.size()); ++i) {

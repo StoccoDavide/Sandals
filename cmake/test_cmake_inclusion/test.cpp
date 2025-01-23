@@ -3,6 +3,6 @@
 
 int main()
 {
-  Sandals::Info(std::cout) << std::endl;
+  Sandals::Info(std::cout);
   return 0;
 }
