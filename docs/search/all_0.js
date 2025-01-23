@@ -4,9 +4,10 @@ var searchData=
   ['absolute_5ftolerance_1',['absolute_tolerance',['../class_sandals_1_1_runge_kutta.html#a27a9f6692a44e123808f8c8b2c2d9059',1,'Sandals::RungeKutta::absolute_tolerance()'],['../class_sandals_1_1_runge_kutta.html#a53e68c06cce6d036185ba836aec50759',1,'Sandals::RungeKutta::absolute_tolerance(Real t_absolute_tolerance)']]],
   ['adaptive_2',['adaptive',['../class_sandals_1_1_runge_kutta.html#ac7c5c50506a79776b647826f667170c0',1,'Sandals::RungeKutta']]],
   ['adaptive_5fmode_3',['adaptive_mode',['../class_sandals_1_1_runge_kutta.html#a7bac2789bca572458f9167ef81f19e41',1,'Sandals::RungeKutta']]],
-  ['adaptive_5fsolve_4',['adaptive_solve',['../class_sandals_1_1_runge_kutta.html#aa8895f7adf9114f032635a1a00db40ed',1,'Sandals::RungeKutta']]],
+  ['adaptive_5fsolve_4',['adaptive_solve',['../class_sandals_1_1_runge_kutta.html#ae83e6688e3a05605ee13365fcb3d4939',1,'Sandals::RungeKutta']]],
   ['advance_5',['advance',['../class_sandals_1_1_runge_kutta.html#ae007044419daa96fb4b4d18760079566',1,'Sandals::RungeKutta']]],
   ['alpha_6',['alpha',['../class_sandals_1_1_nonlinear_solver.html#ad7d4af47ef5cd00be23a1fd1ce348cd8',1,'Sandals::NonlinearSolver::alpha() const'],['../class_sandals_1_1_nonlinear_solver.html#adf8e2bb7fe66aa8778e0e4349d8ed241',1,'Sandals::NonlinearSolver::alpha(Real t_alpha)']]],
   ['and_20butcher_20tableaus_7',['Runge-Kutta methods and Butcher tableaus',['../class_sandals_1_1_runge_kutta.html#autotoc_md3',1,'']]],
-  ['authors_8',['Authors',['../index.html#autotoc_md21',1,'']]]
+  ['and_20dirty_8',['Quick and dirty',['../index.html#autotoc_md19',1,'']]],
+  ['authors_9',['Authors',['../index.html#autotoc_md21',1,'']]]
 ];

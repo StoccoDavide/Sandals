@@ -7,7 +7,6 @@ var searchData=
   ['broyden_20s_20method_4',['Broyden&apos;s method',['../class_sandals_1_1_broyden.html#autotoc_md0',1,'']]],
   ['broyden_2ehxx_5',['Broyden.hxx',['../_broyden_8hxx.html',1,'']]],
   ['broyden_3c_20n_20_2as_20_3e_6',['Broyden&lt; N *S &gt;',['../class_sandals_1_1_broyden.html',1,'Sandals']]],
-  ['build_7',['Build',['../index.html#autotoc_md20',1,'']]],
-  ['butcher_20tableau_8',['Butcher tableau',['../struct_sandals_1_1_tableau.html#autotoc_md16',1,'']]],
-  ['butcher_20tableaus_9',['Runge-Kutta methods and Butcher tableaus',['../class_sandals_1_1_runge_kutta.html#autotoc_md3',1,'']]]
+  ['butcher_20tableau_7',['Butcher tableau',['../struct_sandals_1_1_tableau.html#autotoc_md16',1,'']]],
+  ['butcher_20tableaus_8',['Runge-Kutta methods and Butcher tableaus',['../class_sandals_1_1_runge_kutta.html#autotoc_md3',1,'']]]
 ];

@@ -365,55 +365,52 @@ $(function(){initNavTree('_sandals_8hh_source.html',''); initResizable(true); })
 <div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span> </div>
 <div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span>} <span class="comment">// namespace Sandals</span></div>
 <div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span> </div>
-<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span><span class="comment">// Finite difference derivative</span></div>
-<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span><span class="comment">//#include &quot;Sandals/FiniteDifference.hxx&quot;</span></div>
+<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span><span class="comment">// Time measurement</span></div>
+<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span><span class="preprocessor">#include &quot;<a class="code" href="_tic_toc_8hxx.html">Sandals/TicToc.hxx</a>&quot;</span></div>
 <div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span> </div>
-<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span><span class="comment">// Time measurement</span></div>
-<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span><span class="preprocessor">#include &quot;<a class="code" href="_tic_toc_8hxx.html">Sandals/TicToc.hxx</a>&quot;</span></div>
-<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span> </div>
-<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span><span class="comment">// Nonlinear systems of equations solvers</span></div>
-<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span><span class="preprocessor">#include &quot;<a class="code" href="_nonlinear_solver_8hxx.html">Sandals/NonlinearSolver/NonlinearSolver.hxx</a>&quot;</span></div>
-<div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span><span class="preprocessor">#include &quot;<a class="code" href="_newton_8hxx.html">Sandals/NonlinearSolver/Newton.hxx</a>&quot;</span></div>
-<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span><span class="preprocessor">#include &quot;<a class="code" href="_broyden_8hxx.html">Sandals/NonlinearSolver/Broyden.hxx</a>&quot;</span></div>
-<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span> </div>
-<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span><span class="comment">// ODE/DAE system of equations</span></div>
-<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span><span class="preprocessor">#include &quot;<a class="code" href="_implicit_8hxx.html">Sandals/System/Implicit.hxx</a>&quot;</span></div>
-<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span><span class="preprocessor">#include &quot;<a class="code" href="_explicit_8hxx.html">Sandals/System/Explicit.hxx</a>&quot;</span></div>
-<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span><span class="preprocessor">#include &quot;<a class="code" href="_semi_explicit_8hxx.html">Sandals/System/SemiExplicit.hxx</a>&quot;</span></div>
-<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span> </div>
-<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span><span class="comment">// Runge-Kutta integrator</span></div>
-<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span><span class="preprocessor">#include &quot;<a class="code" href="_tableau_8hxx.html">Sandals/Tableau.hxx</a>&quot;</span></div>
-<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span><span class="preprocessor">#include &quot;<a class="code" href="_solution_8hxx.html">Sandals/Solution.hxx</a>&quot;</span></div>
-<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span><span class="preprocessor">#include &quot;<a class="code" href="_runge_kutta_8hxx.html">Sandals/RungeKutta.hxx</a>&quot;</span></div>
-<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span> </div>
-<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span><span class="comment">// Butcher tableau for Runge-Kutta methods</span></div>
-<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span><span class="preprocessor">#include &quot;<a class="code" href="_chebyshev51_8hxx.html">Sandals/Tableau/Chebyshev51.hxx</a>&quot;</span></div>
-<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span><span class="preprocessor">#include &quot;<a class="code" href="_explicit_euler_8hxx.html">Sandals/Tableau/ExplicitEuler.hxx</a>&quot;</span></div>
-<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span><span class="preprocessor">#include &quot;<a class="code" href="_fehlberg45_8hxx.html">Sandals/Tableau/Fehlberg45.hxx</a>&quot;</span></div>
-<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span><span class="preprocessor">#include &quot;<a class="code" href="_gauss_legendre2_8hxx.html">Sandals/Tableau/GaussLegendre2.hxx</a>&quot;</span></div>
-<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span><span class="preprocessor">#include &quot;<a class="code" href="_gauss_legendre4_8hxx.html">Sandals/Tableau/GaussLegendre4.hxx</a>&quot;</span></div>
-<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span><span class="preprocessor">#include &quot;<a class="code" href="_gauss_legendre6_8hxx.html">Sandals/Tableau/GaussLegendre6.hxx</a>&quot;</span></div>
-<div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span><span class="preprocessor">#include &quot;<a class="code" href="_heun2_8hxx.html">Sandals/Tableau/Heun2.hxx</a>&quot;</span></div>
-<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span><span class="preprocessor">#include &quot;<a class="code" href="_heun3_8hxx.html">Sandals/Tableau/Heun3.hxx</a>&quot;</span></div>
-<div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span><span class="preprocessor">#include &quot;<a class="code" href="_lobatto_i_i_i_a2_8hxx.html">Sandals/Tableau/LobattoIIIA2.hxx</a>&quot;</span></div>
-<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span><span class="preprocessor">#include &quot;<a class="code" href="_implicit_euler_8hxx.html">Sandals/Tableau/ImplicitEuler.hxx</a>&quot;</span></div>
-<div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span><span class="preprocessor">#include &quot;<a class="code" href="_m_t_e22_8hxx.html">Sandals/Tableau/MTE22.hxx</a>&quot;</span></div>
-<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span><span class="preprocessor">#include &quot;<a class="code" href="_radau_i_i_a3_8hxx.html">Sandals/Tableau/RadauIIA3.hxx</a>&quot;</span></div>
-<div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span><span class="preprocessor">#include &quot;<a class="code" href="_radau_i_i_a5_8hxx.html">Sandals/Tableau/RadauIIA5.hxx</a>&quot;</span></div>
-<div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span><span class="preprocessor">#include &quot;<a class="code" href="_ralston2_8hxx.html">Sandals/Tableau/Ralston2.hxx</a>&quot;</span></div>
-<div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span><span class="preprocessor">#include &quot;<a class="code" href="_ralston3_8hxx.html">Sandals/Tableau/Ralston3.hxx</a>&quot;</span></div>
-<div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span><span class="preprocessor">#include &quot;<a class="code" href="_ralston4_8hxx.html">Sandals/Tableau/Ralston4.hxx</a>&quot;</span></div>
-<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span><span class="preprocessor">#include &quot;<a class="code" href="_r_k4_8hxx.html">Sandals/Tableau/RK4.hxx</a>&quot;</span></div>
-<div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span><span class="preprocessor">#include &quot;<a class="code" href="_s_s_p_i_r_k33_8hxx.html">Sandals/Tableau/SSPIRK33.hxx</a>&quot;</span></div>
-<div class="line"><a id="l00264" name="l00264"></a><span class="lineno">  264</span><span class="preprocessor">#include &quot;<a class="code" href="_s_s_p_r_k22_8hxx.html">Sandals/Tableau/SSPRK22.hxx</a>&quot;</span></div>
-<div class="line"><a id="l00265" name="l00265"></a><span class="lineno">  265</span><span class="preprocessor">#include &quot;<a class="code" href="_s_s_p_r_k22star_8hxx.html">Sandals/Tableau/SSPRK22star.hxx</a>&quot;</span></div>
-<div class="line"><a id="l00266" name="l00266"></a><span class="lineno">  266</span><span class="preprocessor">#include &quot;<a class="code" href="_s_s_p_r_k33_8hxx.html">Sandals/Tableau/SSPRK33.hxx</a>&quot;</span></div>
-<div class="line"><a id="l00267" name="l00267"></a><span class="lineno">  267</span><span class="preprocessor">#include &quot;<a class="code" href="_s_s_p_r_k42_8hxx.html">Sandals/Tableau/SSPRK42.hxx</a>&quot;</span></div>
-<div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span><span class="preprocessor">#include &quot;<a class="code" href="_s_s_p_r_k43_8hxx.html">Sandals/Tableau/SSPRK43.hxx</a>&quot;</span></div>
-<div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span><span class="preprocessor">#include &quot;<a class="code" href="_s_s_p_r_k93_8hxx.html">Sandals/Tableau/SSPRK93.hxx</a>&quot;</span></div>
-<div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span><span class="preprocessor">#include &quot;<a class="code" href="_s_s_p_r_k104_8hxx.html">Sandals/Tableau/SSPRK104.hxx</a>&quot;</span></div>
-<div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span> </div>
-<div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span><span class="preprocessor">#endif </span><span class="comment">// INCLUDE_SANDALS_HH</span></div>
+<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span><span class="comment">// Nonlinear systems of equations solvers</span></div>
+<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span><span class="preprocessor">#include &quot;<a class="code" href="_nonlinear_solver_8hxx.html">Sandals/NonlinearSolver/NonlinearSolver.hxx</a>&quot;</span></div>
+<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span><span class="preprocessor">#include &quot;<a class="code" href="_newton_8hxx.html">Sandals/NonlinearSolver/Newton.hxx</a>&quot;</span></div>
+<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span><span class="preprocessor">#include &quot;<a class="code" href="_broyden_8hxx.html">Sandals/NonlinearSolver/Broyden.hxx</a>&quot;</span></div>
+<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span> </div>
+<div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span><span class="comment">// ODE/DAE system of equations</span></div>
+<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span><span class="preprocessor">#include &quot;<a class="code" href="_implicit_8hxx.html">Sandals/System/Implicit.hxx</a>&quot;</span></div>
+<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span><span class="preprocessor">#include &quot;<a class="code" href="_explicit_8hxx.html">Sandals/System/Explicit.hxx</a>&quot;</span></div>
+<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span><span class="preprocessor">#include &quot;<a class="code" href="_semi_explicit_8hxx.html">Sandals/System/SemiExplicit.hxx</a>&quot;</span></div>
+<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span> </div>
+<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span><span class="comment">// Runge-Kutta integrator</span></div>
+<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span><span class="preprocessor">#include &quot;<a class="code" href="_tableau_8hxx.html">Sandals/Tableau.hxx</a>&quot;</span></div>
+<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span><span class="preprocessor">#include &quot;<a class="code" href="_solution_8hxx.html">Sandals/Solution.hxx</a>&quot;</span></div>
+<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span><span class="preprocessor">#include &quot;<a class="code" href="_runge_kutta_8hxx.html">Sandals/RungeKutta.hxx</a>&quot;</span></div>
+<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span> </div>
+<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span><span class="comment">// Butcher tableau for Runge-Kutta methods</span></div>
+<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span><span class="preprocessor">#include &quot;<a class="code" href="_chebyshev51_8hxx.html">Sandals/Tableau/Chebyshev51.hxx</a>&quot;</span></div>
+<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span><span class="preprocessor">#include &quot;<a class="code" href="_explicit_euler_8hxx.html">Sandals/Tableau/ExplicitEuler.hxx</a>&quot;</span></div>
+<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span><span class="preprocessor">#include &quot;<a class="code" href="_fehlberg45_8hxx.html">Sandals/Tableau/Fehlberg45.hxx</a>&quot;</span></div>
+<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span><span class="preprocessor">#include &quot;<a class="code" href="_gauss_legendre2_8hxx.html">Sandals/Tableau/GaussLegendre2.hxx</a>&quot;</span></div>
+<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span><span class="preprocessor">#include &quot;<a class="code" href="_gauss_legendre4_8hxx.html">Sandals/Tableau/GaussLegendre4.hxx</a>&quot;</span></div>
+<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span><span class="preprocessor">#include &quot;<a class="code" href="_gauss_legendre6_8hxx.html">Sandals/Tableau/GaussLegendre6.hxx</a>&quot;</span></div>
+<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span><span class="preprocessor">#include &quot;<a class="code" href="_heun2_8hxx.html">Sandals/Tableau/Heun2.hxx</a>&quot;</span></div>
+<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span><span class="preprocessor">#include &quot;<a class="code" href="_heun3_8hxx.html">Sandals/Tableau/Heun3.hxx</a>&quot;</span></div>
+<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span><span class="preprocessor">#include &quot;<a class="code" href="_lobatto_i_i_i_a2_8hxx.html">Sandals/Tableau/LobattoIIIA2.hxx</a>&quot;</span></div>
+<div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span><span class="preprocessor">#include &quot;<a class="code" href="_implicit_euler_8hxx.html">Sandals/Tableau/ImplicitEuler.hxx</a>&quot;</span></div>
+<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span><span class="preprocessor">#include &quot;<a class="code" href="_m_t_e22_8hxx.html">Sandals/Tableau/MTE22.hxx</a>&quot;</span></div>
+<div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span><span class="preprocessor">#include &quot;<a class="code" href="_radau_i_i_a3_8hxx.html">Sandals/Tableau/RadauIIA3.hxx</a>&quot;</span></div>
+<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span><span class="preprocessor">#include &quot;<a class="code" href="_radau_i_i_a5_8hxx.html">Sandals/Tableau/RadauIIA5.hxx</a>&quot;</span></div>
+<div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span><span class="preprocessor">#include &quot;<a class="code" href="_ralston2_8hxx.html">Sandals/Tableau/Ralston2.hxx</a>&quot;</span></div>
+<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span><span class="preprocessor">#include &quot;<a class="code" href="_ralston3_8hxx.html">Sandals/Tableau/Ralston3.hxx</a>&quot;</span></div>
+<div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span><span class="preprocessor">#include &quot;<a class="code" href="_ralston4_8hxx.html">Sandals/Tableau/Ralston4.hxx</a>&quot;</span></div>
+<div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span><span class="preprocessor">#include &quot;<a class="code" href="_r_k4_8hxx.html">Sandals/Tableau/RK4.hxx</a>&quot;</span></div>
+<div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span><span class="preprocessor">#include &quot;<a class="code" href="_s_s_p_i_r_k33_8hxx.html">Sandals/Tableau/SSPIRK33.hxx</a>&quot;</span></div>
+<div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span><span class="preprocessor">#include &quot;<a class="code" href="_s_s_p_r_k22_8hxx.html">Sandals/Tableau/SSPRK22.hxx</a>&quot;</span></div>
+<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span><span class="preprocessor">#include &quot;<a class="code" href="_s_s_p_r_k22star_8hxx.html">Sandals/Tableau/SSPRK22star.hxx</a>&quot;</span></div>
+<div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span><span class="preprocessor">#include &quot;<a class="code" href="_s_s_p_r_k33_8hxx.html">Sandals/Tableau/SSPRK33.hxx</a>&quot;</span></div>
+<div class="line"><a id="l00264" name="l00264"></a><span class="lineno">  264</span><span class="preprocessor">#include &quot;<a class="code" href="_s_s_p_r_k42_8hxx.html">Sandals/Tableau/SSPRK42.hxx</a>&quot;</span></div>
+<div class="line"><a id="l00265" name="l00265"></a><span class="lineno">  265</span><span class="preprocessor">#include &quot;<a class="code" href="_s_s_p_r_k43_8hxx.html">Sandals/Tableau/SSPRK43.hxx</a>&quot;</span></div>
+<div class="line"><a id="l00266" name="l00266"></a><span class="lineno">  266</span><span class="preprocessor">#include &quot;<a class="code" href="_s_s_p_r_k93_8hxx.html">Sandals/Tableau/SSPRK93.hxx</a>&quot;</span></div>
+<div class="line"><a id="l00267" name="l00267"></a><span class="lineno">  267</span><span class="preprocessor">#include &quot;<a class="code" href="_s_s_p_r_k104_8hxx.html">Sandals/Tableau/SSPRK104.hxx</a>&quot;</span></div>
+<div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span> </div>
+<div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span><span class="preprocessor">#endif </span><span class="comment">// INCLUDE_SANDALS_HH</span></div>
 <div class="ttc" id="a_broyden_8hxx_html"><div class="ttname"><a href="_broyden_8hxx.html">Broyden.hxx</a></div></div>
 <div class="ttc" id="a_chebyshev51_8hxx_html"><div class="ttname"><a href="_chebyshev51_8hxx.html">Chebyshev51.hxx</a></div></div>
 <div class="ttc" id="a_explicit_8hxx_html"><div class="ttname"><a href="_explicit_8hxx.html">Explicit.hxx</a></div></div>

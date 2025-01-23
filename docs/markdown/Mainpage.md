@@ -4,36 +4,78 @@
 
 ## Installation
 
-### Prerequisites
+### Quick and dirty
 
-`Sandals` carries a set of minimal dependencies. Here's what you need to get started:
+`Sandals` is a header-only library that depends only on [`Eigen`](https://eigen.tuxfamily.org/index.php?title=Main_Page) (version >= 3.4.0), so the quick and dirty way of installing it is by simply copying the `include` directory to your project and make sure to have [`Eigen`](https://eigen.tuxfamily.org/index.php?title=Main_Page) available however you see fit. Alternatively, you can do things properly and use `CMake` (version >= 3.14).
 
-- C++ compiler with [`C++17`](https://en.cppreference.com/w/cpp/17) support
-- [`CMake`](https://cmake.org) >= 3.10
-- [`Eigen3`](https://eigen.tuxfamily.org/index.php?title=Main_Page) >= 3.4.0
-- [`Matplot++`](https://alandefreitas.github.io/matplotplusplus/) >= 1.2.0 for plotting (optional).
+Optionally, you can also install [`Matplot++`](https://alandefreitas.github.io/matplotplusplus/) (version >= 1.2.0) to plot the results of your simulations.
 
-The `Matplot++` library is optional and only required if you want to plot the results of your simulations and is currently used to plot the results of some tests.
+### CMake
 
-### Build
+If you are using CMake, you can add the library as a subdirectory in your project.
 
-1. Clone the repository.
-   ```bash
-   git clone git@github.com:StoccoDavide/Sandals.git
-    ```
-2. Create a build directory.
-    ```bash
-    mkdir build
-    cd build
-    ```
-3. Build the project.
-   ```bash
-    cmake ..
-    ```
-4. Install the project.
-    ```bash
-    make install
-    ```
+```cmake
+add_subdirectory(path/to/Sandals)
+target_link_libraries(your_target PRIVATE Sandals::Sandals)
+```
+
+You can use `FetchContent` to download the library from GitHub.
+
+```cmake
+include(FetchContent)
+
+# Optionally specify a custom path to fetch content to
+set(FETCHCONTENT_BASE_DIR "path/to/your/dependencies")
+fetchcontent_declare(
+  Sandals
+  GIT_REPOSITORY https://github.com/StoccoDavide/Sandals.git
+  GIT_TAG        main
+)
+fetchcontent_makeavailable(Sandals)
+target_link_libraries(your_target PRIVATE Sandals::Sandals)
+```
+
+If you already have `Sandals` somewhere on your system, you can use `find_pacakge` directly.
+
+```cmake
+# Optionally specify a custom path to find content from
+list(APPEND CMAKE_PREFIX_PATH "path/to/your/dependencies")
+find_package(
+  Sandals
+  ${YOUR_DESIRED_SANDALS_VERSION}
+  NO_MODULE
+)
+
+target_link_libraries(your_target PRIVATE Sandals::Sandals)
+```
+
+Since we are nice people, we also show you how to conditionally use `FetchContent` based if you already have the library or not.
+
+```cmake
+# Optionally specify a custom path to find content from
+list(APPEND CMAKE_PREFIX_PATH "path/to/your/dependencies")
+find_package(
+  Sandals
+  ${YOUR_DESIRED_SANDALS_VERSION}
+  NO_MODULE
+)
+
+if(NOT TARGET Sandals::Sandals)
+  include(FetchContent)
+
+  # Optionally specify a custom path to fetch content to
+  set(FETCHCONTENT_BASE_DIR "path/to/your/dependencies")
+  fetchcontent_declare(
+    Sandals
+    GIT_REPOSITORY https://github.com/StoccoDavide/Sandals.git
+    GIT_TAG        main
+  )
+
+  fetchcontent_makeavailable(Sandals)
+endif()
+
+target_link_libraries(your_target PRIVATE Sandals::Sandals)
+```
 
 ## Authors
 

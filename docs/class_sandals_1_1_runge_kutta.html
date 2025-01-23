@@ -162,8 +162,6 @@ Public Types</h2></td></tr>
 <tr class="separator:a98dec4eaa62dcd4c361e885b569dba2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae3aab42699fc6b14107c09150a7d7f87" id="r_ae3aab42699fc6b14107c09150a7d7f87"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae3aab42699fc6b14107c09150a7d7f87">Time</a> = Eigen::Vector&lt;<a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a>, Eigen::Dynamic&gt;</td></tr>
 <tr class="separator:ae3aab42699fc6b14107c09150a7d7f87"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab537c1bd080c67093490ababa7fe010d" id="r_ab537c1bd080c67093490ababa7fe010d"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab537c1bd080c67093490ababa7fe010d">Solution</a> = <a class="el" href="#ab537c1bd080c67093490ababa7fe010d">Solution</a>&lt;N, M&gt;</td></tr>
-<tr class="separator:ab537c1bd080c67093490ababa7fe010d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -307,10 +305,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a0dbe3780790d34742842ff3d9b664444"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae007044419daa96fb4b4d18760079566" id="r_ae007044419daa96fb4b4d18760079566"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae007044419daa96fb4b4d18760079566">advance</a> (<a class="el" href="#aaf57c000d14d242f80c702643c85dd2a">VectorN</a> const &amp;x_old, <a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> t_old, <a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> h_old, <a class="el" href="#aaf57c000d14d242f80c702643c85dd2a">VectorN</a> &amp;x_new, <a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> &amp;h_new)</td></tr>
 <tr class="separator:ae007044419daa96fb4b4d18760079566"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad5b4f1fa1996233694af065bee4e358c" id="r_ad5b4f1fa1996233694af065bee4e358c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad5b4f1fa1996233694af065bee4e358c">solve</a> (<a class="el" href="namespace_sandals.html#a080688e002c472e6b23d2028ffe840ea">VectorX</a> const &amp;t_mesh, <a class="el" href="#aaf57c000d14d242f80c702643c85dd2a">VectorN</a> const &amp;ics, <a class="el" href="#ab537c1bd080c67093490ababa7fe010d">Solution</a> &amp;sol)</td></tr>
-<tr class="separator:ad5b4f1fa1996233694af065bee4e358c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa8895f7adf9114f032635a1a00db40ed" id="r_aa8895f7adf9114f032635a1a00db40ed"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa8895f7adf9114f032635a1a00db40ed">adaptive_solve</a> (<a class="el" href="namespace_sandals.html#a080688e002c472e6b23d2028ffe840ea">VectorX</a> const &amp;t_mesh, <a class="el" href="#aaf57c000d14d242f80c702643c85dd2a">VectorN</a> const &amp;ics, <a class="el" href="#ab537c1bd080c67093490ababa7fe010d">Solution</a> &amp;sol)</td></tr>
-<tr class="separator:aa8895f7adf9114f032635a1a00db40ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac6f7b105257824d4ed8568cd684ad7a5" id="r_ac6f7b105257824d4ed8568cd684ad7a5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac6f7b105257824d4ed8568cd684ad7a5">solve</a> (<a class="el" href="namespace_sandals.html#a080688e002c472e6b23d2028ffe840ea">VectorX</a> const &amp;t_mesh, <a class="el" href="#aaf57c000d14d242f80c702643c85dd2a">VectorN</a> const &amp;ics, <a class="el" href="struct_sandals_1_1_solution.html">Solution</a>&lt; N, M &gt; &amp;sol)</td></tr>
+<tr class="separator:ac6f7b105257824d4ed8568cd684ad7a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae83e6688e3a05605ee13365fcb3d4939" id="r_ae83e6688e3a05605ee13365fcb3d4939"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae83e6688e3a05605ee13365fcb3d4939">adaptive_solve</a> (<a class="el" href="namespace_sandals.html#a080688e002c472e6b23d2028ffe840ea">VectorX</a> const &amp;t_mesh, <a class="el" href="#aaf57c000d14d242f80c702643c85dd2a">VectorN</a> const &amp;ics, <a class="el" href="struct_sandals_1_1_solution.html">Solution</a>&lt; N, M &gt; &amp;sol)</td></tr>
+<tr class="separator:ae83e6688e3a05605ee13365fcb3d4939"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad3cf3ad60d5f35ed5b8c70f4d6d8aea3" id="r_ad3cf3ad60d5f35ed5b8c70f4d6d8aea3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad3cf3ad60d5f35ed5b8c70f4d6d8aea3">project</a> (<a class="el" href="#aaf57c000d14d242f80c702643c85dd2a">VectorN</a> const &amp;x, <a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> t, <a class="el" href="#aaf57c000d14d242f80c702643c85dd2a">VectorN</a> &amp;x_projected)</td></tr>
 <tr class="separator:ad3cf3ad60d5f35ed5b8c70f4d6d8aea3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad929c19213b9d273f0d555b45fa5ed38" id="r_ad929c19213b9d273f0d555b45fa5ed38"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad929c19213b9d273f0d555b45fa5ed38">project_ics</a> (<a class="el" href="#aaf57c000d14d242f80c702643c85dd2a">VectorN</a> const &amp;x, <a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> t, std::vector&lt; <a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> &gt; const &amp;projected_equations, std::vector&lt; <a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> &gt; const &amp;projected_invariants, <a class="el" href="#aaf57c000d14d242f80c702643c85dd2a">VectorN</a> &amp;x_projected) const</td></tr>
@@ -755,23 +753,6 @@ template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d44
 </table>
 </div><div class="memdoc">
 <p>Templetized matrix type. </p>
-
-</div>
-</div>
-<a id="ab537c1bd080c67093490ababa7fe010d" name="ab537c1bd080c67093490ababa7fe010d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab537c1bd080c67093490ababa7fe010d">&#9670;&#160;</a></span>Solution</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> S, <a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> N, <a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> M&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">using <a class="el" href="class_sandals_1_1_runge_kutta.html">Sandals::RungeKutta</a>&lt; S, N, M &gt;::Solution = <a class="el" href="#ab537c1bd080c67093490ababa7fe010d">Solution</a>&lt;N, M&gt;</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Templetized structure type for solution. </p>
 
 </div>
 </div>
@@ -1252,8 +1233,8 @@ template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d44
 
 </div>
 </div>
-<a id="aa8895f7adf9114f032635a1a00db40ed" name="aa8895f7adf9114f032635a1a00db40ed"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa8895f7adf9114f032635a1a00db40ed">&#9670;&#160;</a></span>adaptive_solve()</h2>
+<a id="ae83e6688e3a05605ee13365fcb3d4939" name="ae83e6688e3a05605ee13365fcb3d4939"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae83e6688e3a05605ee13365fcb3d4939">&#9670;&#160;</a></span>adaptive_solve()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1276,7 +1257,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d44
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="#ab537c1bd080c67093490ababa7fe010d">Solution</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>sol</em></span>&#160;)</td>
+          <td class="paramtype"><a class="el" href="struct_sandals_1_1_solution.html">Solution</a>&lt; N, M &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>sol</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -3520,8 +3501,8 @@ template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d44
 
 </div>
 </div>
-<a id="ad5b4f1fa1996233694af065bee4e358c" name="ad5b4f1fa1996233694af065bee4e358c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad5b4f1fa1996233694af065bee4e358c">&#9670;&#160;</a></span>solve()</h2>
+<a id="ac6f7b105257824d4ed8568cd684ad7a5" name="ac6f7b105257824d4ed8568cd684ad7a5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac6f7b105257824d4ed8568cd684ad7a5">&#9670;&#160;</a></span>solve()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -3544,7 +3525,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d44
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="#ab537c1bd080c67093490ababa7fe010d">Solution</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>sol</em></span>&#160;)</td>
+          <td class="paramtype"><a class="el" href="struct_sandals_1_1_solution.html">Solution</a>&lt; N, M &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>sol</em></span>&#160;)</td>
         </tr>
       </table>
   </td>

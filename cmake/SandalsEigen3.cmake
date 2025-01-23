@@ -16,8 +16,8 @@ if(NOT TARGET Eigen3::Eigen)
 
   set(FETCHCONTENT_BASE_DIR "${SANDALS_THIRD_PARTY_DIR}")
   fetchcontent_declare(
-      Eigen3
-      URL "https://gitlab.com/libeigen/eigen/-/archive/${EIGEN_REQUIRED_VERSION}/eigen-${EIGEN_REQUIRED_VERSION}.tar.gz"
+    Eigen3
+    URL "https://gitlab.com/libeigen/eigen/-/archive/${EIGEN_REQUIRED_VERSION}/eigen-${EIGEN_REQUIRED_VERSION}.tar.gz"
   )
 
   fetchcontent_makeavailable(Eigen3)

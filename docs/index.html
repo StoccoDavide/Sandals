@@ -147,29 +147,61 @@ $(function(){initNavTree('index.html',''); initResizable(true); });
 <h1><a class="anchor" id="autotoc_md18"></a>
 Installation</h1>
 <h2><a class="anchor" id="autotoc_md19"></a>
-Prerequisites</h2>
-<p><code><a class="el" href="namespace_sandals.html" title="The namespace for the Sandals library.">Sandals</a></code> carries a set of minimal dependencies. Here's what you need to get started:</p>
-<ul>
-<li>C++ compiler with <a href="https://en.cppreference.com/w/cpp/17"><code>C++17</code></a> support</li>
-<li><a href="https://cmake.org"><code>CMake</code></a> &gt;= 3.10</li>
-<li><a href="https://eigen.tuxfamily.org/index.php?title=Main_Page"><code>Eigen3</code></a> &gt;= 3.4.0</li>
-<li><a href="https://alandefreitas.github.io/matplotplusplus/"><code>Matplot++</code></a> &gt;= 1.2.0 for plotting (optional).</li>
-</ul>
-<p>The <code>Matplot++</code> library is optional and only required if you want to plot the results of your simulations and is currently used to plot the results of some tests.</p>
+Quick and dirty</h2>
+<p><code><a class="el" href="namespace_sandals.html" title="The namespace for the Sandals library.">Sandals</a></code> is a header-only library that depends only on <a href="https://eigen.tuxfamily.org/index.php?title=Main_Page"><code>Eigen</code></a> (version &gt;= 3.4.0), so the quick and dirty way of installing it is by simply copying the <code>include</code> directory to your project and make sure to have <a href="https://eigen.tuxfamily.org/index.php?title=Main_Page"><code>Eigen</code></a> available however you see fit. Alternatively, you can do things properly and use <code>CMake</code> (version &gt;= 3.14).</p>
+<p>Optionally, you can also install <a href="https://alandefreitas.github.io/matplotplusplus/"><code>Matplot++</code></a> (version &gt;= 1.2.0) to plot the results of your simulations.</p>
 <h2><a class="anchor" id="autotoc_md20"></a>
-Build</h2>
-<ol type="1">
-<li>Clone the repository. <div class="fragment"><div class="line">git clone git@github.com:StoccoDavide/Sandals.git</div>
-</div><!-- fragment --></li>
-<li>Create a build directory. <div class="fragment"><div class="line">mkdir build</div>
-<div class="line">cd build</div>
-</div><!-- fragment --></li>
-<li>Build the project. <div class="fragment"><div class="line">cmake ..</div>
-</div><!-- fragment --></li>
-<li>Install the project. <div class="fragment"><div class="line">make install</div>
-</div><!-- fragment --></li>
-</ol>
-<h1><a class="anchor" id="autotoc_md21"></a>
+CMake</h2>
+<p>If you are using CMake, you can add the library as a subdirectory in your project.</p>
+<div class="fragment"><div class="line">add_subdirectory(path/to/Sandals)</div>
+<div class="line">target_link_libraries(your_target PRIVATE Sandals::Sandals)</div>
+</div><!-- fragment --><p>You can use <code>FetchContent</code> to download the library from GitHub.</p>
+<div class="fragment"><div class="line">include(FetchContent)</div>
+<div class="line"> </div>
+<div class="line"># Optionally specify a custom path to fetch content to</div>
+<div class="line">set(FETCHCONTENT_BASE_DIR &quot;path/to/your/dependencies&quot;)</div>
+<div class="line">fetchcontent_declare(</div>
+<div class="line">  Sandals</div>
+<div class="line">  GIT_REPOSITORY https://github.com/StoccoDavide/Sandals.git</div>
+<div class="line">  GIT_TAG        main</div>
+<div class="line">)</div>
+<div class="line">fetchcontent_makeavailable(Sandals)</div>
+<div class="line">target_link_libraries(your_target PRIVATE Sandals::Sandals)</div>
+</div><!-- fragment --><p>If you already have <code><a class="el" href="namespace_sandals.html" title="The namespace for the Sandals library.">Sandals</a></code> somewhere on your system, you can use <code>find_pacakge</code> directly.</p>
+<div class="fragment"><div class="line"># Optionally specify a custom path to find content from</div>
+<div class="line">list(APPEND CMAKE_PREFIX_PATH &quot;path/to/your/dependencies&quot;)</div>
+<div class="line">find_package(</div>
+<div class="line">  Sandals</div>
+<div class="line">  ${YOUR_DESIRED_SANDALS_VERSION}</div>
+<div class="line">  NO_MODULE</div>
+<div class="line">)</div>
+<div class="line"> </div>
+<div class="line">target_link_libraries(your_target PRIVATE Sandals::Sandals)</div>
+</div><!-- fragment --><p>Since we are nice people, we also show you how to conditionally use <code>FetchContent</code> based if you already have the library or not.</p>
+<div class="fragment"><div class="line"># Optionally specify a custom path to find content from</div>
+<div class="line">list(APPEND CMAKE_PREFIX_PATH &quot;path/to/your/dependencies&quot;)</div>
+<div class="line">find_package(</div>
+<div class="line">  Sandals</div>
+<div class="line">  ${YOUR_DESIRED_SANDALS_VERSION}</div>
+<div class="line">  NO_MODULE</div>
+<div class="line">)</div>
+<div class="line"> </div>
+<div class="line">if(NOT TARGET Sandals::Sandals)</div>
+<div class="line">  include(FetchContent)</div>
+<div class="line"> </div>
+<div class="line">  # Optionally specify a custom path to fetch content to</div>
+<div class="line">  set(FETCHCONTENT_BASE_DIR &quot;path/to/your/dependencies&quot;)</div>
+<div class="line">  fetchcontent_declare(</div>
+<div class="line">    Sandals</div>
+<div class="line">    GIT_REPOSITORY https://github.com/StoccoDavide/Sandals.git</div>
+<div class="line">    GIT_TAG        main</div>
+<div class="line">  )</div>
+<div class="line"> </div>
+<div class="line">  fetchcontent_makeavailable(Sandals)</div>
+<div class="line">endif()</div>
+<div class="line"> </div>
+<div class="line">target_link_libraries(your_target PRIVATE Sandals::Sandals)</div>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md21"></a>
 Authors</h1>
 <ul>
 <li>Davide Stocco <br  />

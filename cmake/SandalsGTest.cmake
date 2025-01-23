@@ -16,8 +16,8 @@ if(NOT TARGET GTest::gtest)
 
   set(FETCHCONTENT_BASE_DIR "${SANDALS_THIRD_PARTY_DIR}")
   fetchcontent_declare(
-      GTest
-      URL https://github.com/google/googletest/archive/504ea69cf7e9947be54f808a09b7b08988e84b5f.zip
+    GTest
+    URL https://github.com/google/googletest/archive/504ea69cf7e9947be54f808a09b7b08988e84b5f.zip
   )
 
   # For Windows: Prevent overriding the parent project's compiler/linker settings
