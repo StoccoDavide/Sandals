@@ -54,6 +54,7 @@ MathJax.Hub.Config({
 <link href="custom.css" rel="stylesheet" type="text/css"/>
 <link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
 <link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+<link href="custom-alternative.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <!-- https://tholman.com/github-corners/ -->
@@ -157,41 +158,30 @@ $(function(){initNavTree('class_sandals_1_1_explicit.html',''); initResizable(tr
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
 Public Types</h2></td></tr>
 <tr class="memitem:ac022e502620116d1e9ad5fb92d31f1cb" id="r_ac022e502620116d1e9ad5fb92d31f1cb"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac022e502620116d1e9ad5fb92d31f1cb">Pointer</a> = std::shared_ptr&lt;<a class="el" href="class_sandals_1_1_explicit.html">Explicit</a>&lt;N, M&gt;&gt;</td></tr>
-<tr class="memdesc:ac022e502620116d1e9ad5fb92d31f1cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shared pointer to an explicit ODE system.  <br /></td></tr>
 <tr class="separator:ac022e502620116d1e9ad5fb92d31f1cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae51aa15d9bafa2aab57177faf50887cd" id="r_ae51aa15d9bafa2aab57177faf50887cd"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae51aa15d9bafa2aab57177faf50887cd">VectorF</a> = typename <a class="el" href="class_sandals_1_1_implicit.html">Implicit</a>&lt;N, M&gt;::VectorF</td></tr>
-<tr class="memdesc:ae51aa15d9bafa2aab57177faf50887cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Templetized vector type.  <br /></td></tr>
 <tr class="separator:ae51aa15d9bafa2aab57177faf50887cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6054c4902d353950db74e4d50d699160" id="r_a6054c4902d353950db74e4d50d699160"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6054c4902d353950db74e4d50d699160">MatrixJF</a> = typename <a class="el" href="class_sandals_1_1_implicit.html">Implicit</a>&lt;N, M&gt;::MatrixJF</td></tr>
-<tr class="memdesc:a6054c4902d353950db74e4d50d699160"><td class="mdescLeft">&#160;</td><td class="mdescRight">Templetized matrix type.  <br /></td></tr>
 <tr class="separator:a6054c4902d353950db74e4d50d699160"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ace5ce370e63a642ee4c57c3e72ce0fee" id="r_ace5ce370e63a642ee4c57c3e72ce0fee"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ace5ce370e63a642ee4c57c3e72ce0fee">Type</a> = typename <a class="el" href="class_sandals_1_1_implicit.html">Implicit</a>&lt;N, M&gt;::Type</td></tr>
-<tr class="memdesc:ace5ce370e63a642ee4c57c3e72ce0fee"><td class="mdescLeft">&#160;</td><td class="mdescRight">System type enumeration.  <br /></td></tr>
 <tr class="separator:ace5ce370e63a642ee4c57c3e72ce0fee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_types_class_sandals_1_1_implicit"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pub_types_class_sandals_1_1_implicit')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit&lt; N, M &gt;</a></td></tr>
 <tr class="memitem:a7c39143b1583ad7d6f2e79436745fa84 inherit pub_types_class_sandals_1_1_implicit" id="r_a7c39143b1583ad7d6f2e79436745fa84"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_implicit.html#a7c39143b1583ad7d6f2e79436745fa84">Type</a> = enum class <a class="el" href="class_sandals_1_1_implicit.html#a7c39143b1583ad7d6f2e79436745fa84">Type</a> : <a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> {IMPLICIT=0, EXPLICIT=1, SEMIEXPLICIT=1}</td></tr>
-<tr class="memdesc:a7c39143b1583ad7d6f2e79436745fa84 inherit pub_types_class_sandals_1_1_implicit"><td class="mdescLeft">&#160;</td><td class="mdescRight">System type enumeration.  <br /></td></tr>
 <tr class="separator:a7c39143b1583ad7d6f2e79436745fa84 inherit pub_types_class_sandals_1_1_implicit"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aed4cdcf289d11408f5b0503fcf171049 inherit pub_types_class_sandals_1_1_implicit" id="r_aed4cdcf289d11408f5b0503fcf171049"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_implicit.html#aed4cdcf289d11408f5b0503fcf171049">Pointer</a> = std::shared_ptr&lt;<a class="el" href="class_sandals_1_1_implicit.html">Implicit</a>&lt;N, M&gt;&gt;</td></tr>
-<tr class="memdesc:aed4cdcf289d11408f5b0503fcf171049 inherit pub_types_class_sandals_1_1_implicit"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shared pointer to an implicit ODE system.  <br /></td></tr>
 <tr class="separator:aed4cdcf289d11408f5b0503fcf171049 inherit pub_types_class_sandals_1_1_implicit"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a62a744b82f5a0172711c1882f81ab5c0 inherit pub_types_class_sandals_1_1_implicit" id="r_a62a744b82f5a0172711c1882f81ab5c0"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_implicit.html#a62a744b82f5a0172711c1882f81ab5c0">VectorF</a> = Eigen::Vector&lt;<a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a>, N&gt;</td></tr>
-<tr class="memdesc:a62a744b82f5a0172711c1882f81ab5c0 inherit pub_types_class_sandals_1_1_implicit"><td class="mdescLeft">&#160;</td><td class="mdescRight">Templetized vector type.  <br /></td></tr>
 <tr class="separator:a62a744b82f5a0172711c1882f81ab5c0 inherit pub_types_class_sandals_1_1_implicit"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a84a0e42a2e0949854c62036495c4f6a7 inherit pub_types_class_sandals_1_1_implicit" id="r_a84a0e42a2e0949854c62036495c4f6a7"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_implicit.html#a84a0e42a2e0949854c62036495c4f6a7">MatrixJF</a> = Eigen::Matrix&lt;<a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a>, N, N&gt;</td></tr>
-<tr class="memdesc:a84a0e42a2e0949854c62036495c4f6a7 inherit pub_types_class_sandals_1_1_implicit"><td class="mdescLeft">&#160;</td><td class="mdescRight">Templetized matrix type.  <br /></td></tr>
 <tr class="separator:a84a0e42a2e0949854c62036495c4f6a7 inherit pub_types_class_sandals_1_1_implicit"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa23e308dcf4be601f2ce0a3869572fdd inherit pub_types_class_sandals_1_1_implicit" id="r_aa23e308dcf4be601f2ce0a3869572fdd"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_implicit.html#aa23e308dcf4be601f2ce0a3869572fdd">VectorH</a> = Eigen::Vector&lt;<a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a>, M&gt;</td></tr>
-<tr class="memdesc:aa23e308dcf4be601f2ce0a3869572fdd inherit pub_types_class_sandals_1_1_implicit"><td class="mdescLeft">&#160;</td><td class="mdescRight">Templetized vector type.  <br /></td></tr>
 <tr class="separator:aa23e308dcf4be601f2ce0a3869572fdd inherit pub_types_class_sandals_1_1_implicit"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aab938cb2398b1726eb64e33c14e686a2 inherit pub_types_class_sandals_1_1_implicit" id="r_aab938cb2398b1726eb64e33c14e686a2"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_implicit.html#aab938cb2398b1726eb64e33c14e686a2">MatrixJH</a> = Eigen::Matrix&lt;<a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a>, M, N&gt;</td></tr>
-<tr class="memdesc:aab938cb2398b1726eb64e33c14e686a2 inherit pub_types_class_sandals_1_1_implicit"><td class="mdescLeft">&#160;</td><td class="mdescRight">Templetized matrix type.  <br /></td></tr>
 <tr class="separator:aab938cb2398b1726eb64e33c14e686a2 inherit pub_types_class_sandals_1_1_implicit"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:af5911d351e2a6a7423a9edee62d77ddf" id="r_af5911d351e2a6a7423a9edee62d77ddf"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af5911d351e2a6a7423a9edee62d77ddf">Explicit</a> ()</td></tr>
-<tr class="memdesc:af5911d351e2a6a7423a9edee62d77ddf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Class constructor for the explicit ODE system.  <br /></td></tr>
 <tr class="separator:af5911d351e2a6a7423a9edee62d77ddf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a499e1db19771c080e593678ad0b83758" id="r_a499e1db19771c080e593678ad0b83758"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a499e1db19771c080e593678ad0b83758">Explicit</a> (std::string t_name)</td></tr>
 <tr class="separator:a499e1db19771c080e593678ad0b83758"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -217,12 +207,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a1b03e2c7bff48063f04cd6aa793e36bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_class_sandals_1_1_implicit"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pub_methods_class_sandals_1_1_implicit')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit&lt; N, M &gt;</a></td></tr>
 <tr class="memitem:ac8148e5b06a57abcf3eea14eb3e66017 inherit pub_methods_class_sandals_1_1_implicit" id="r_ac8148e5b06a57abcf3eea14eb3e66017"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_implicit.html#ac8148e5b06a57abcf3eea14eb3e66017">Implicit</a> ()</td></tr>
-<tr class="memdesc:ac8148e5b06a57abcf3eea14eb3e66017 inherit pub_methods_class_sandals_1_1_implicit"><td class="mdescLeft">&#160;</td><td class="mdescRight">Class constructor for an implicit ODE/DAE system.  <br /></td></tr>
 <tr class="separator:ac8148e5b06a57abcf3eea14eb3e66017 inherit pub_methods_class_sandals_1_1_implicit"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abc0e197c480d9cfbb84149081abf16b6 inherit pub_methods_class_sandals_1_1_implicit" id="r_abc0e197c480d9cfbb84149081abf16b6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_implicit.html#abc0e197c480d9cfbb84149081abf16b6">Implicit</a> (std::string t_name)</td></tr>
 <tr class="separator:abc0e197c480d9cfbb84149081abf16b6 inherit pub_methods_class_sandals_1_1_implicit"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a991edef11036604ae06d341cfceba047 inherit pub_methods_class_sandals_1_1_implicit" id="r_a991edef11036604ae06d341cfceba047"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_implicit.html#a991edef11036604ae06d341cfceba047">~Implicit</a> ()</td></tr>
-<tr class="memdesc:a991edef11036604ae06d341cfceba047 inherit pub_methods_class_sandals_1_1_implicit"><td class="mdescLeft">&#160;</td><td class="mdescRight">Class destructor for an implicit ODE/DAE system.  <br /></td></tr>
 <tr class="separator:a991edef11036604ae06d341cfceba047 inherit pub_methods_class_sandals_1_1_implicit"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa120573f73b165697fcfd72149221881 inherit pub_methods_class_sandals_1_1_implicit" id="r_aa120573f73b165697fcfd72149221881"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_sandals_1_1_implicit.html#a7c39143b1583ad7d6f2e79436745fa84">Type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_implicit.html#aa120573f73b165697fcfd72149221881">type</a> () const</td></tr>
 <tr class="separator:aa120573f73b165697fcfd72149221881 inherit pub_methods_class_sandals_1_1_implicit"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -285,6 +273,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d44
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Templetized matrix type. </p>
 
 </div>
 </div>
@@ -301,6 +290,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d44
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Shared pointer to an explicit ODE system. </p>
 
 </div>
 </div>
@@ -317,6 +307,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d44
         </tr>
       </table>
 </div><div class="memdoc">
+<p>System type enumeration. </p>
 
 </div>
 </div>
@@ -333,6 +324,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d44
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Templetized vector type. </p>
 
 </div>
 </div>
@@ -399,6 +391,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d44
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Class constructor for the explicit ODE system. </p>
 
 </div>
 </div>

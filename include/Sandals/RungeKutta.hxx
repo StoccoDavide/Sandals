@@ -24,344 +24,460 @@ namespace Sandals {
    |                     |___/
   \*/
 
-  //! \brief Class container for the generic \em implicit, \em explicit, and <em> diagonally implicit
-  //! </em> Runge-Kutta methods.
-  //!
-  //! \includedoc docs/markdown/RungeKutta.md
-  //!
-  //! \tparam S The number of stages of the Runge-Kutta method.
-  //! \tparam N The dimension of the ODE/DAE system.
-  //! \tparam M The dimension of the invariants manifold.
+  /**
+  * \brief Class container for the generic \em implicit, \em explicit, and <em> diagonally implicit
+  * </em> Runge-Kutta methods.
+  *
+  * \includedoc docs/markdown/RungeKutta.md
+  *
+  * \tparam S The number of stages of the Runge-Kutta method.
+  * \tparam N The dimension of the ODE/DAE system.
+  * \tparam M The dimension of the invariants manifold.
+  */
   template <Size S, Size N, Size M>
   class RungeKutta
   {
-    using VectorK = Eigen::Vector<Real, N*S>;          //!< Templetized vector type.
-    using MatrixK = Eigen::Matrix<Real, N, S>;         //!< Templetized matrix type.
-    using MatrixJ = Eigen::Matrix<Real, N*S, N*S>;     //!< Templetized matrix type.
-    using SolverK = NonlinearSolver<N*S>;              //!< Templetized nonlinear solver type for IRK methods.
-    using SolverN = NonlinearSolver<N>;                //!< Templetized nonlinear solver type for ERK and DIRK methods.
-    using VectorS = typename Tableau<S>::Vector;       //!< Templetized vector type.
-    using MatrixS = typename Tableau<S>::Matrix;       //!< Templetized matrix type.
-    using VectorN = typename Implicit<N, M>::VectorF;  //!< Templetized vector type.
-    using MatrixN = typename Implicit<N, M>::MatrixJF; //!< Templetized matrix type.
-    using VectorM = typename Implicit<N, M>::VectorH;  //!< Templetized vector type.
-    using MatrixM = typename Implicit<N, M>::MatrixJH; //!< Templetized matrix type.
-    using VectorP = Eigen::Matrix<Real, N+M, 1>;       //!< Templetized vector type.
-    using MatrixP = Eigen::Matrix<Real, N+M, N+M>;     //!< Templetized matrix type.
+    using VectorK = Eigen::Vector<Real, N*S>;          /**< Templetized vector type. */
+    using MatrixK = Eigen::Matrix<Real, N, S>;         /**< Templetized matrix type. */
+    using MatrixJ = Eigen::Matrix<Real, N*S, N*S>;     /**< Templetized matrix type. */
+    using SolverK = NonlinearSolver<N*S>;              /**< Templetized nonlinear solver type for IRK methods. */
+    using SolverN = NonlinearSolver<N>;                /**< Templetized nonlinear solver type for ERK and DIRK methods. */
+    using VectorS = typename Tableau<S>::Vector;       /**< Templetized vector type. */
+    using MatrixS = typename Tableau<S>::Matrix;       /**< Templetized matrix type. */
+    using VectorN = typename Implicit<N, M>::VectorF;  /**< Templetized vector type. */
+    using MatrixN = typename Implicit<N, M>::MatrixJF; /**< Templetized matrix type. */
+    using VectorM = typename Implicit<N, M>::VectorH;  /**< Templetized vector type. */
+    using MatrixM = typename Implicit<N, M>::MatrixJH; /**< Templetized matrix type. */
+    using VectorP = Eigen::Matrix<Real, N+M, 1>;       /**< Templetized vector type. */
+    using MatrixP = Eigen::Matrix<Real, N+M, N+M>;     /**< Templetized matrix type. */
 
   public:
-    using System   = typename Implicit<N, M>::Pointer;    //!< Shared pointer to an implicit ODE/DAE system.
-    using Type     = typename Tableau<S>::Type;           //!< Runge-Kutta type enumeration.
-    using Time     = Eigen::Vector<Real, Eigen::Dynamic>; //!< Templetized vector type for the independent variable (or time).
-    using Solution = Solution<N, M>;                      //!< Templetized structure type for solution.
+    using System   = typename Implicit<N, M>::Pointer;    /**< Shared pointer to an implicit ODE/DAE system. */
+    using Type     = typename Tableau<S>::Type;           /**< Runge-Kutta type enumeration. */
+    using Time     = Eigen::Vector<Real, Eigen::Dynamic>; /**< Templetized vector type for the independent variable (or time). */
+    using Solution = Solution<N, M>;                      /**< Templetized structure type for solution. */
 
   private:
-    SolverN     *m_solverN;                          //!< Nonlinear solver for ERK and DIRK methods.
-    Newton<N>    m_newtonN;                          //!< Newton solver for ERK and DIRK methods.
-    Broyden<N>   m_broydenN;                         //!< Broyden solver for ERK and DIRK methods.
-    SolverK     *m_solverK;                          //!< Nonlinear solver for IRK methods.
-    Newton<N*S>  m_newtonK;                          //!< Newton solver for IRK methods.
-    Broyden<N*S> m_broydenK;                         //!< Broyden solver for IRK methods.
-    Tableau<S>   m_tableau;                          //!< Butcher tableau of the Runge-Kutta method.
-    System       m_system;                           //!< ODE/DAE system object pointer.
-    Real         m_absolute_tolerance{EPSILON_HIGH}; //!< Absolute tolerance for adaptive step \f$ \epsilon_{\text{abs}} \f$.
-    Real         m_relative_tolerance{EPSILON_HIGH}; //!< Relative tolerance for adaptive step \f$ \epsilon_{\text{rel}} \f$.
-    Real         m_safety_factor{0.9};               //!< Safety factor for adaptive step \f$ f \f$.
-    Real         m_min_safety_factor{0.2};           //!< Minimum safety factor for adaptive step \f$ f_{\max} \f$.
-    Real         m_max_safety_factor{1.5};           //!< Maximum safety factor for adaptive step \f$ f_{\min} \f$.
-    Real         m_min_step{EPSILON_HIGH};           //!< Minimum step for advancing \f$ h_{\min} \f$.
-    Size         m_max_substeps{5};                  //!< Maximum number of substeps.
-    bool         m_adaptive{true};                   //!< Aadaptive step mode boolean.
-    bool         m_verbose{false};                   //!< Verbose mode boolean.
-    bool         m_reverse{false};                   //!< Time reverse mode boolean.
+    SolverN     *m_solverN;                          /**< Nonlinear solver for ERK and DIRK methods. */
+    Newton<N>    m_newtonN;                          /**< Newton solver for ERK and DIRK methods. */
+    Broyden<N>   m_broydenN;                         /**< Broyden solver for ERK and DIRK methods. */
+    SolverK     *m_solverK;                          /**< Nonlinear solver for IRK methods. */
+    Newton<N*S>  m_newtonK;                          /**< Newton solver for IRK methods. */
+    Broyden<N*S> m_broydenK;                         /**< Broyden solver for IRK methods. */
+    Tableau<S>   m_tableau;                          /**< Butcher tableau of the Runge-Kutta method. */
+    System       m_system;                           /**< ODE/DAE system object pointer. */
+    Real         m_absolute_tolerance{EPSILON_HIGH}; /**< Absolute tolerance for adaptive step \f$ \epsilon_{\text{abs}} \f$. */
+    Real         m_relative_tolerance{EPSILON_HIGH}; /**< Relative tolerance for adaptive step \f$ \epsilon_{\text{rel}} \f$. */
+    Real         m_safety_factor{0.9};               /**< Safety factor for adaptive step \f$ f \f$. */
+    Real         m_min_safety_factor{0.2};           /**< Minimum safety factor for adaptive step \f$ f_{\max} \f$. */
+    Real         m_max_safety_factor{1.5};           /**< Maximum safety factor for adaptive step \f$ f_{\min} \f$. */
+    Real         m_min_step{EPSILON_HIGH};           /**< Minimum step for advancing \f$ h_{\min} \f$. */
+    Size         m_max_substeps{5};                  /**< Maximum number of substeps. */
+    bool         m_adaptive{true};                   /**< Aadaptive step mode boolean. */
+    bool         m_verbose{false};                   /**< Verbose mode boolean. */
+    bool         m_reverse{false};                   /**< Time reverse mode boolean. */
 
-    Eigen::FullPivLU<MatrixP> m_lu;                         //!< LU decomposition for the projection matrix.
-    Real              m_projection_tolerance{EPSILON_HIGH}; //!< Projection tolerance \f$ \epsilon_{\text{proj}} \f$.
-    Size              m_max_projection_iterations{5};       //!< Maximum number of projection steps.
-    bool              m_projection{true};                   //!< Aadaptive step mode boolean.
+    Eigen::FullPivLU<MatrixP> m_lu;                         /**< LU decomposition for the projection matrix. */
+    Real              m_projection_tolerance{EPSILON_HIGH}; /**< Projection tolerance \f$ \epsilon_{\text{proj}} \f$. */
+    Size              m_max_projection_iterations{5};       /**< Maximum number of projection steps. */
+    bool              m_projection{true};                   /**< Aadaptive step mode boolean. */
 
 
   public:
-    //! Copy constructor for the timer.
+    /**
+    * Copy constructor for the timer.
+    */
     RungeKutta(const RungeKutta &) = delete;
 
-    //! Assignment operator for the timer.
+    /**
+    * Assignment operator for the timer.
+    */
     RungeKutta & operator=(RungeKutta const &) = delete;
 
-    //! Class constructor for the Runge-Kutta method.
-    //! \param[in] t_tableau The Tableau reference.
+    /**
+    * Class constructor for the Runge-Kutta method.
+    * \param[in] t_tableau The Tableau reference.
+    */
     RungeKutta(Tableau<S> const &t_tableau)
       : m_tableau(t_tableau) {
       this->m_solverN = &this->m_newtonN;
       this->m_solverK = &this->m_newtonK;
     }
 
-    //! Class constructor for the Runge-Kutta method.
-    //! \param[in] t_tableau The Tableau reference.
-    //! \param[in] t_system The ODE/DAE system shared pointer.
+    /**
+    * Class constructor for the Runge-Kutta method.
+    * \param[in] t_tableau The Tableau reference.
+    * \param[in] t_system The ODE/DAE system shared pointer.
+    */
     RungeKutta(Tableau<S> const &t_tableau, System t_system)
       : m_tableau(t_tableau), m_system(t_system) {
       this->m_solverN = &this->m_newtonN;
       this->m_solverK = &this->m_newtonK;
     }
 
-    //! Enable the Newton nonlinear solver for implicit methods.
+    /**
+    * Enable the Newton nonlinear solver for implicit methods.
+    */
     void enable_newton() {
       this->m_solverN = &this->m_newtonN;
       this->m_solverK = &this->m_newtonK;
     }
 
-    //! Enable the Broyden nonlinear solver for implicit methods.
+    /**
+    * Enable the Broyden nonlinear solver for implicit methods.
+    */
     void enable_broyden() {
       this->m_solverN = &this->m_broydenN;
       this->m_solverK = &this->m_broydenK;
     }
 
-    //! Get the enumeration type of the Runge-Kutta method.
-    //! \return The enumeration type of the Runge-Kutta method.
+    /**
+    * Get the enumeration type of the Runge-Kutta method.
+    * \return The enumeration type of the Runge-Kutta method.
+    */
     Type type() const {return this->m_tableau.type;}
 
-    //! Check if the method is an explicit Runge-Kutta (ERK) method.
-    //! \return True if the method is an explicit Runge-Kutta method, false otherwise.
+    /**
+    * Check if the method is an explicit Runge-Kutta (ERK) method.
+    * \return True if the method is an explicit Runge-Kutta method, false otherwise.
+    */
     bool is_erk() const {return this->m_tableau.type == Type::ERK;}
 
-    //! Check if the method is an implicit Runge-Kutta (IRK) method.
-    //! \return True if the method is an implicit Runge-Kutta method, false otherwise.
+    /**
+    * Check if the method is an implicit Runge-Kutta (IRK) method.
+    * \return True if the method is an implicit Runge-Kutta method, false otherwise.
+    */
     bool is_irk() const {return this->m_tableau.type == Type::IRK;}
 
-    //! Check if the method is a diagonally implicit Runge-Kutta (DIRK) method.
-    //! \return True if the method is a diagonally implicit Runge-Kutta method, false otherwise.
+    /**
+    * Check if the method is a diagonally implicit Runge-Kutta (DIRK) method.
+    * \return True if the method is a diagonally implicit Runge-Kutta method, false otherwise.
+    */
     bool is_dirk() const {return this->m_tableau.type == Type::DIRK;}
 
-    //! Get the Butcher Tableau reference.
-    //! \return The Tableau reference.
+    /**
+    * Get the Butcher Tableau reference.
+    * \return The Tableau reference.
+    */
     Tableau<S> & tableau() {return this->m_tableau;}
 
-    //! Get the Butcher Tableau const reference.
-    //! \return The Tableau const reference.
+    /**
+    * Get the Butcher Tableau const reference.
+    * \return The Tableau const reference.
+    */
     Tableau<S> const & tableau() const {return this->m_tableau;}
 
-    //! Get the stages \f$ s \f$ number of the Runge-Kutta method.
-    //! \return The stages \f$ s \f$ number of the Runge-Kutta method.
+    /**
+    * Get the stages \f$ s \f$ number of the Runge-Kutta method.
+    * \return The stages \f$ s \f$ number of the Runge-Kutta method.
+    */
     Size stages() const {return S;}
 
-    //! Get the name of the Runge-Kutta method.
-    //! \return The name of the Runge-Kutta method.
+    /**
+    * Get the name of the Runge-Kutta method.
+    * \return The name of the Runge-Kutta method.
+    */
     std::string name() const {return this->m_tableau.name;}
 
-    //! Get the order \f$ p \f$ of the Runge-Kutta method.
-    //! \return The order \f$ p \f$ of the Runge-Kutta method.
+    /**
+    * Get the order \f$ p \f$ of the Runge-Kutta method.
+    * \return The order \f$ p \f$ of the Runge-Kutta method.
+    */
     Size order() const {return this->m_tableau.order;}
 
-    //! Check if the Runge-Kutta method is embedded.
-    //! \return True if the Runge-Kutta method is embedded, false otherwise.
+    /**
+    * Check if the Runge-Kutta method is embedded.
+    * \return True if the Runge-Kutta method is embedded, false otherwise.
+    */
     bool is_embedded() const {return this->m_tableau.is_embedded;}
 
-    //! Get the Butcher tableau matrix \f$ \mathbf{A} \f$.
-    //! \return The Butcher tableau matrix \f$ \mathbf{A} \f$.
+    /**
+    * Get the Butcher tableau matrix \f$ \mathbf{A} \f$.
+    * \return The Butcher tableau matrix \f$ \mathbf{A} \f$.
+    */
     MatrixS A() const {return this->m_tableau.A;}
 
-    //! Get the Butcher tableau weights vector \f$ \mathbf{b} \f$.
-    //! \return The Butcher tableau weights vector \f$ \mathbf{b} \f$.
+    /**
+    * Get the Butcher tableau weights vector \f$ \mathbf{b} \f$.
+    * \return The Butcher tableau weights vector \f$ \mathbf{b} \f$.
+    */
     VectorS b() const {return this->m_tableau.b;}
 
-    //! Get the Butcher tableau embedded weights vector \f$ \hat{\mathbf{b}} \f$.
-    //! \return The Butcher tableau embedded weights vector \f$ \hat{\mathbf{b}} \f$.
+    /**
+    * Get the Butcher tableau embedded weights vector \f$ \hat{\mathbf{b}} \f$.
+    * \return The Butcher tableau embedded weights vector \f$ \hat{\mathbf{b}} \f$.
+    */
     VectorS b_embedded() const {return this->m_tableau.b_e;}
 
-    //! Get the Butcher tableau nodes vector \f$ \mathbf{c} \f$.
-    //! \return The Butcher tableau nodes vector \f$ \mathbf{c} \f$.
+    /**
+    * Get the Butcher tableau nodes vector \f$ \mathbf{c} \f$.
+    * \return The Butcher tableau nodes vector \f$ \mathbf{c} \f$.
+    */
     VectorS c() const {return c;}
 
-    //! Get the ODE/DAE system shared pointer.
-    //! \return The ODE/DAE system shared pointer.
+    /**
+    * Get the ODE/DAE system shared pointer.
+    * \return The ODE/DAE system shared pointer.
+    */
     System ode() {return this->m_system;}
 
-    //! Set the ODE/DAE system shared pointer.
-    //! \param[in] t_system The ODE/DAE system shared pointer.
+    /**
+    * Set the ODE/DAE system shared pointer.
+    * \param[in] t_system The ODE/DAE system shared pointer.
+    */
     void ode(System t_system) {this->m_system = t_system;}
 
-    //! Get the adaptive step absolute tolerance \f$ \epsilon_{\text{abs}} \f$.
-    //! \return The adaptive step absolute tolerance \f$ \epsilon_{\text{abs}} \f$.
+    /**
+    * Get the adaptive step absolute tolerance \f$ \epsilon_{\text{abs}} \f$.
+    * \return The adaptive step absolute tolerance \f$ \epsilon_{\text{abs}} \f$.
+    */
     Real absolute_tolerance() {return this->m_absolute_tolerance;}
 
-    //! Get the adaptive step absolute tolerance reference \f$ \epsilon_{\text{abs}} \f$.
-    //! \param[in] t_absolute_tolerance The adaptive step absolute tolerance \f$ \epsilon_{\text{abs}} \f$.
+    /**
+    * Get the adaptive step absolute tolerance reference \f$ \epsilon_{\text{abs}} \f$.
+    * \param[in] t_absolute_tolerance The adaptive step absolute tolerance \f$ \epsilon_{\text{abs}} \f$.
+    */
     void absolute_tolerance(Real t_absolute_tolerance) {this->m_absolute_tolerance = t_absolute_tolerance;}
 
-    //! Get the adaptive step relative tolerance \f$ \epsilon_{\text{rel}} \f$.
-    //! \return The adaptive step relative tolerance \f$ \epsilon_{\text{rel}} \f$.
+    /**
+    * Get the adaptive step relative tolerance \f$ \epsilon_{\text{rel}} \f$.
+    * \return The adaptive step relative tolerance \f$ \epsilon_{\text{rel}} \f$.
+    */
     Real relative_tolerance() {return this->m_relative_tolerance;}
 
-    //! Get the adaptive step relative tolerance reference \f$ \epsilon_{\text{rel}} \f$.
-    //! \param[in] t_relative_tolerance The adaptive step relative tolerance \f$ \epsilon_{\text{rel}} \f$.
+    /**
+    * Get the adaptive step relative tolerance reference \f$ \epsilon_{\text{rel}} \f$.
+    * \param[in] t_relative_tolerance The adaptive step relative tolerance \f$ \epsilon_{\text{rel}} \f$.
+    */
     void relative_tolerance(Real t_relative_tolerance) {this->m_relative_tolerance = t_relative_tolerance;}
 
-    //! Get the safety factor for adaptive step \f$ f \f$.
-    //! \return The safety factor for adaptive step \f$ f \f$.
+    /**
+    * Get the safety factor for adaptive step \f$ f \f$.
+    * \return The safety factor for adaptive step \f$ f \f$.
+    */
     Real & safety_factor() {return this->m_safety_factor;}
 
-    //! Set safety factor for adaptive step \f$ f \f$.
-    //! \param[in] t_safety_factor The safety factor for adaptive step \f$ f \f$.
+    /**
+    * Set safety factor for adaptive step \f$ f \f$.
+    * \param[in] t_safety_factor The safety factor for adaptive step \f$ f \f$.
+    */
     void safety_factor(Real t_safety_factor) {this->m_safety_factor = t_safety_factor;}
 
-    //! Get the minimum safety factor for adaptive step \f$ f_{\min} \f$.
-    //! \return The minimum safety factor for adaptive step \f$ f_{\min} \f$.
+    /**
+    * Get the minimum safety factor for adaptive step \f$ f_{\min} \f$.
+    * \return The minimum safety factor for adaptive step \f$ f_{\min} \f$.
+    */
     Real & min_safety_factor() {return this->m_min_safety_factor;}
 
-    //! Set the minimum safety factor for adaptive step \f$ f_{\min} \f$.
-    //! \param[in] t_min_safety_factor The minimum safety factor for adaptive step \f$ f_{\min} \f$.
+    /**
+    * Set the minimum safety factor for adaptive step \f$ f_{\min} \f$.
+    * \param[in] t_min_safety_factor The minimum safety factor for adaptive step \f$ f_{\min} \f$.
+    */
     void min_safety_factor(Real t_min_safety_factor) {this->m_min_safety_factor = t_min_safety_factor;}
 
-    //! Get the maximum safety factor for adaptive step \f$ f_{\max} \f$.
-    //! \return The maximum safety factor for adaptive step \f$ f_{\max} \f$.
+    /**
+    * Get the maximum safety factor for adaptive step \f$ f_{\max} \f$.
+    * \return The maximum safety factor for adaptive step \f$ f_{\max} \f$.
+    */
     Real & max_safety_factor() {return this->m_max_safety_factor;}
 
-    //! Set the maximum safety factor for adaptive step \f$ f_{\max} \f$.
-    //! \param[in] t_max_safety_factor The maximum safety factor for adaptive step \f$ f_{\max} \f$.
+    /**
+    * Set the maximum safety factor for adaptive step \f$ f_{\max} \f$.
+    * \param[in] t_max_safety_factor The maximum safety factor for adaptive step \f$ f_{\max} \f$.
+    */
     void max_safety_factor(Real t_max_safety_factor) {this->m_max_safety_factor = t_max_safety_factor;}
 
-    //! Get the minimum step for advancing \f$ h_{\min} \f$.
-    //! \return The minimum step for advancing \f$ h_{\min} \f$.
+    /**
+    * Get the minimum step for advancing \f$ h_{\min} \f$.
+    * \return The minimum step for advancing \f$ h_{\min} \f$.
+    */
     Real & min_step() {return this->m_min_step;}
 
-    //! Set the minimum step for advancing \f$ h_{\min} \f$.
-    //! \param[in] t_min_step The minimum step for advancing \f$ h_{\min} \f$.
+    /**
+    * Set the minimum step for advancing \f$ h_{\min} \f$.
+    * \param[in] t_min_step The minimum step for advancing \f$ h_{\min} \f$.
+    */
     void min_step(Real t_min_step) {this->m_min_step = t_min_step;}
 
-    //! Get the maximum number of substeps.
-    //! \return The maximum number of substeps.
+    /**
+    * Get the maximum number of substeps.
+    * \return The maximum number of substeps.
+    */
     Size & max_substeps() {return this->m_max_substeps;}
 
-    //! Set the maximum number of substeps.
-    //! \param[in] t_max_substeps The maximum number of substeps.
+    /**
+    * Set the maximum number of substeps.
+    * \param[in] t_max_substeps The maximum number of substeps.
+    */
     void max_substeps(Size t_max_substeps) {this->m_max_substeps = t_max_substeps;}
 
-    //! Get the adaptive step mode.
-    //! \return The adaptive step mode.
+    /**
+    * Get the adaptive step mode.
+    * \return The adaptive step mode.
+    */
     bool adaptive_mode() {return this->m_adaptive;}
 
-    //! Set the adaptive step mode.
-    //! \param[in] t_adaptive The adaptive step mode.
+    /**
+    * Set the adaptive step mode.
+    * \param[in] t_adaptive The adaptive step mode.
+    */
     void adaptive(bool t_adaptive) {this->m_adaptive = t_adaptive;}
 
-    //! Enable the adaptive step mode.
+    /**
+    * Enable the adaptive step mode.
+    */
     void enable_adaptive_mode() {this->m_adaptive = true;}
 
-    //! Disable the adaptive step mode.
+    /**
+    * Disable the adaptive step mode.
+    */
     void disable_adaptive_mode() {this->m_adaptive = false;}
 
-    //! Get the verbose mode.
-    //! \return The verbose mode.
+    /**
+    * Get the verbose mode.
+    * \return The verbose mode.
+    */
     bool verbose_mode() {return this->m_verbose;}
 
-    //! Set the verbose mode.
-    //! \param[in] t_verbose The verbose mode.
+    /**
+    * Set the verbose mode.
+    * \param[in] t_verbose The verbose mode.
+    */
     void verbose_mode(bool t_verbose) {this->m_verbose = t_verbose;}
 
-    //! Enable the verbose mode.
+    /**
+    * Enable the verbose mode.
+    */
     void enable_verbose_mode() {this->m_verbose = true;}
 
-    //! Disable the verbose mode.
+    /**
+    * Disable the verbose mode.
+    */
     void disable_verbose_mode() {this->m_verbose = false;}
 
-    //! Get the time reverse mode.
-    //! \return The time reverse mode.
+    /**
+    * Get the time reverse mode.
+    * \return The time reverse mode.
+    */
     bool reverse_mode() {return this->m_reverse;}
 
-    //! Set the time reverse mode.
-    //! \param[in] t_reverse The time reverse mode.
+    /**
+    * Set the time reverse mode.
+    * \param[in] t_reverse The time reverse mode.
+    */
     void reverse(bool t_reverse) {this->m_reverse = t_reverse;}
 
-    //! Enable the time reverse mode.
+    /**
+    * Enable the time reverse mode.
+    */
     void enable_reverse_mode() {this->m_reverse = true;}
 
-    //! Disable the time reverse mode.
+    /**
+    * Disable the time reverse mode.
+    */
     void disable_reverse_mode() {this->m_reverse = false;}
 
-    //! Get the projection tolerance.
-    //! \return The projection tolerance.
+    /**
+    * Get the projection tolerance.
+    * \return The projection tolerance.
+    */
     Real projection_tolerance() {return this->m_projection_tolerance;}
 
-    //! Set the projection tolerance.
-    //! \param[in] t_projection_tolerance The projection tolerance.
+    /**
+    * Set the projection tolerance.
+    * \param[in] t_projection_tolerance The projection tolerance.
+    */
     void projection_tolerance(Real t_projection_tolerance)
       {this->m_projection_tolerance = t_projection_tolerance;}
 
-    //! Get the maximum number of projection iterations.
-    //! \return The maximum number of projection iterations.
+    /**
+    * Get the maximum number of projection iterations.
+    * \return The maximum number of projection iterations.
+    */
     Size & max_projection_iterations() {return this->m_max_projection_iterationsations;}
 
-    //! Set the maximum number of projection iterations.
-    //! \param[in] t_max_projection_iterations The maximum number of projection iterations.
+    /**
+    * Set the maximum number of projection iterations.
+    * \param[in] t_max_projection_iterations The maximum number of projection iterations.
+    */
     void max_projection_iterations(Size t_max_projection_iterations)
       {this->m_max_projection_iterationsations = t_max_projection_iterations;}
 
-    //! Get projection mode.
-    //! \return The projection mode.
+    /**
+    * Get projection mode.
+    * \return The projection mode.
+    */
     bool projection() {return this->m_projection;}
 
-    //! Set the projection mode.
-    //! \param[in] t_projection The projection mode.
+    /**
+    * Set the projection mode.
+    * \param[in] t_projection The projection mode.
+    */
     void projection(bool t_projection) {this->m_projection = t_projection;}
 
-    //! Enable the projection mode.
+    /**
+    * Enable the projection mode.
+    */
     void enable_projection() {this->m_projection = true;}
 
-    //! Disable the projection mode.
+    /**
+    * Disable the projection mode.
+    */
     void disable_projection() {this->m_projection = false;}
 
-    //! Compute step for the next advancing step according to the error control method. The
-    //! error control method used is the local truncation error method, which is based on the
-    //! following formula
-    //!
-    //! \f[
-    //! e = \sqrt{\frac{1}{n} \displaystyle\sum_{i=1}{n}\left(\frac
-    //!   {\mathbf{x} - \hat{\mathbf{x}}}
-    //!   {s c_i}
-    //! \right)^2}
-    //! \f]
-    //!
-    //! where \f$ \mathbf{x} \f$ is the approximation of the states at computed
-    //! with higher order method of \f$ p \f$, and \f$ \hat{\mathbf{x}} \f$ is the
-    //! approximation of the states at computed with lower order method of \f$
-    //! \hat{p} \f$. To compute the suggested step for the next advancing step
-    //! \f$ h_{k+1} \f$, The error is compared to \f$ 1 \f$ in order to find
-    //! an optimal step size. From the error behaviour \f$ e \approx Ch^{q+1} \f$
-    //! and from \f$ 1 \approx Ch_{opt}^{q+1} \f$ (where \f$ q = \min(p,\hat{p}) \f$)
-    //! the optimal step size is obtained as
-    //!
-    //! \f[
-    //! h_{opt} = h \left( \frac{1}{e} \right)^{\frac{1}{q+1}}
-    //! \f]
-    //!
-    //! We multiply the previous quation by a safety factor \f$ f \f$, usually
-    //! \f$ f = 0.8 \f$, \f$ 0.9 \f$, \f$ (0.25)^{1/(q+1)} \f$, or \f$ (0.38)^{1/(q+1)} \f$,
-    //! so that the error will be acceptable the next time with high probability.
-    //! Further, \f$ h \f$ is not allowed to increase nor to decrease too fast.
-    //! So we put:
-    //!
-    //! \f[
-    //! h_{new} = h \min\left(f_{\max}, \max\left(f_{\min}, f \left(\frac{1}{e}\right)^{\frac{1}{q+1}}
-    //! \right) \right)
-    //! \f]
-    //!
-    //! for the new step size. Then, if \f$ e \leq 1 \f$, the computed step is
-    //! accepted and the solution is advanced to \f$ \mathbf{x} \f$ and a new step
-    //! is tried with \f$ h_{new} \f$ as step size. Else, the step is rejected
-    //! and the computations are repeated with the new step size \f$ h_{new} \f$.
-    //! Typially, \f$ f \f$ is set in the interval \f$ [0.8, 0.9] \f$,
-    //! \f$ f_{\max} \f$ is set in the interval \f$ [1.5, 5] \f$, and \f$ f_{min} \f$
-    //! is set in the interval \f$ [0.1, 0.2] \f$.
-    //!
-    //! \note The error control method is only available if the  adaptive step mode is enabled. The
-    //! implementation of the error control method \em should be overridden in the derived class to
-    //! provide a more accurate and efficient error control based on the specific Runge-Kutta method.
-    //! \param[in] x States approximation \f$ \mathbf{x}_{k+1} \f$.
-    //! \param[in] x_e States approximation \f$ \hat{\mathbf{x}}_{k+1} \f$ computed with the embedded
-    //! weights vector \f$ \hat{\mathbf{b}} \f$.
-    //! \param[in] h_k Actual advancing step \f$ h_k \f$.
-    //! \return The suggested step for the next integration step \f$ h_{k+1}^\star \f$.
+    /**
+    * Compute step for the next advancing step according to the error control method. The
+    * error control method used is the local truncation error method, which is based on the
+    * following formula
+    *
+    * \f[
+    * e = \sqrt{\frac{1}{n} \displaystyle\sum_{i=1}{n}\left(\frac
+    *   {\mathbf{x} - \hat{\mathbf{x}}}
+    *   {s c_i}
+    * \right)^2}
+    * \f]
+    *
+    * where \f$ \mathbf{x} \f$ is the approximation of the states at computed
+    * with higher order method of \f$ p \f$, and \f$ \hat{\mathbf{x}} \f$ is the
+    * approximation of the states at computed with lower order method of \f$
+    * \hat{p} \f$. To compute the suggested step for the next advancing step
+    * \f$ h_{k+1} \f$, The error is compared to \f$ 1 \f$ in order to find
+    * an optimal step size. From the error behaviour \f$ e \approx Ch^{q+1} \f$
+    * and from \f$ 1 \approx Ch_{opt}^{q+1} \f$ (where \f$ q = \min(p,\hat{p}) \f$)
+    * the optimal step size is obtained as
+    *
+    * \f[
+    * h_{opt} = h \left( \frac{1}{e} \right)^{\frac{1}{q+1}}
+    * \f]
+    *
+    * We multiply the previous quation by a safety factor \f$ f \f$, usually
+    * \f$ f = 0.8 \f$, \f$ 0.9 \f$, \f$ (0.25)^{1/(q+1)} \f$, or \f$ (0.38)^{1/(q+1)} \f$,
+    * so that the error will be acceptable the next time with high probability.
+    * Further, \f$ h \f$ is not allowed to increase nor to decrease too fast.
+    * So we put:
+    *
+    * \f[
+    * h_{new} = h \min\left(f_{\max}, \max\left(f_{\min}, f \left(\frac{1}{e}\right)^{\frac{1}{q+1}}
+    * \right) \right)
+    * \f]
+    *
+    * for the new step size. Then, if \f$ e \leq 1 \f$, the computed step is
+    * accepted and the solution is advanced to \f$ \mathbf{x} \f$ and a new step
+    * is tried with \f$ h_{new} \f$ as step size. Else, the step is rejected
+    * and the computations are repeated with the new step size \f$ h_{new} \f$.
+    * Typially, \f$ f \f$ is set in the interval \f$ [0.8, 0.9] \f$,
+    * \f$ f_{\max} \f$ is set in the interval \f$ [1.5, 5] \f$, and \f$ f_{min} \f$
+    * is set in the interval \f$ [0.1, 0.2] \f$.
+    *
+    * \note The error control method is only available if the  adaptive step mode is enabled. The
+    * implementation of the error control method \em should be overridden in the derived class to
+    * provide a more accurate and efficient error control based on the specific Runge-Kutta method.
+    * \param[in] x States approximation \f$ \mathbf{x}_{k+1} \f$.
+    * \param[in] x_e States approximation \f$ \hat{\mathbf{x}}_{k+1} \f$ computed with the embedded
+    * weights vector \f$ \hat{\mathbf{b}} \f$.
+    * \param[in] h_k Actual advancing step \f$ h_k \f$.
+    * \return The suggested step for the next integration step \f$ h_{k+1}^\star \f$.
+    */
     Real estimate_step(VectorN const &x, VectorN const &x_e, Real h_k) const
     {
       return h_k * std::min(this->m_max_safety_factor, std::max(this->m_min_safety_factor,
@@ -370,8 +486,10 @@ namespace Sandals {
         )).array().abs().maxCoeff()));
     }
 
-    //! Print the Runge-Kutta method information to the output stream.
-    //! \param os The output stream.
+    /**
+    * Print the Runge-Kutta method information to the output stream.
+    * \param os The output stream.
+    */
     void info(std::ostream &os) const {
       os
         << "Runge-Kutta method:\t" << this->name() << std::endl
@@ -397,17 +515,19 @@ namespace Sandals {
      |
     \*/
 
-    //! Compute the new states \f$ \mathbf{x}_{k+1} \f$ at the next advancing step \f$ t_{k+1} = t_k
-    //! + h_k \f$ using an explicit Runge-Kutta method, given an explicit system of the form \f$
-    //! \mathbf{x}^\prime = \mathbf{f}(\mathbf{x}, t) \f$. If the method is embedded, the step for
-    //! the next advancing step \f$ h_{k+1}^\star \f$ is also computed according to the error control
-    //! method.
-    //! \param[in] x_old States \f$ \mathbf{x}_k \f$ at the \f$ k \f$-th step.
-    //! \param[in] t_old Independent variable (or time) \f$ t_k \f$ at the \f$ k \f$-th step.
-    //! \param[in] h_old Advancing step \f$ h_k \f$ at the \f$ k \f$-th step.
-    //! \param[out] x_new Computed states \f$ \mathbf{x}_{k+1} \f$ at the \f$ (k+1) \f$-th step.
-    //! \param[out] h_new The suggested step \f$ h_{k+1}^\star \f$ for the next advancing step.
-    //! \return True if the step is successfully computed, false otherwise.
+    /**
+    * Compute the new states \f$ \mathbf{x}_{k+1} \f$ at the next advancing step \f$ t_{k+1} = t_k
+    * + h_k \f$ using an explicit Runge-Kutta method, given an explicit system of the form \f$
+    * \mathbf{x}^\prime = \mathbf{f}(\mathbf{x}, t) \f$. If the method is embedded, the step for
+    * the next advancing step \f$ h_{k+1}^\star \f$ is also computed according to the error control
+    * method.
+    * \param[in] x_old States \f$ \mathbf{x}_k \f$ at the \f$ k \f$-th step.
+    * \param[in] t_old Independent variable (or time) \f$ t_k \f$ at the \f$ k \f$-th step.
+    * \param[in] h_old Advancing step \f$ h_k \f$ at the \f$ k \f$-th step.
+    * \param[out] x_new Computed states \f$ \mathbf{x}_{k+1} \f$ at the \f$ (k+1) \f$-th step.
+    * \param[out] h_new The suggested step \f$ h_{k+1}^\star \f$ for the next advancing step.
+    * \return True if the step is successfully computed, false otherwise.
+    */
     bool erk_explicit_step(VectorN const &x_old, Real t_old, Real h_old, VectorN &x_new, Real &h_new) const
     {
       using Eigen::all;
@@ -437,24 +557,26 @@ namespace Sandals {
       return true;
     }
 
-    //! Compute the residual of system to be solved, which is given by the values of the system
-    //!
-    //! \f[
-    //! \begin{array}{l}
-    //!   \mathbf{F}_n \left(\mathbf{x} + \displaystyle\sum_{j=1}^{n-1} a_{nj}\tilde{\mathbf{K}}_j,
-    //!   \displaystyle\frac{\tilde{\mathbf{K}}_n}{h}, t + h c_n\right)
-    //! \end{array} \text{.}
-    //! \f]
-    //!
-    //! where \f$ \tilde{\mathbf{K}} = h \mathbf{K} \f$.
-    //! \note If \f$ h \gets 0 \f$, then the first guess to solve the nonlinear system
-    //! is given by \f$ \tilde{\mathbf{K}} = \mathbf{0} \f$.
-    //! \param[in] s Stage index \f$ s \f$.
-    //! \param[in] x States \f$ \mathbf{x} \f$.
-    //! \param[in] t Independent variable (or time) \f$ t \f$.
-    //! \param[in] h Advancing step \f$ h \f$.
-    //! \param[in] K Variables \f$ \tilde{\mathbf{K}} = h \mathbf{K} \f$ of the system to be solved.
-    //! \param[out] fun The residual of system to be solved.
+    /**
+    * Compute the residual of system to be solved, which is given by the values of the system
+    *
+    * \f[
+    * \begin{array}{l}
+    *   \mathbf{F}_n \left(\mathbf{x} + \displaystyle\sum_{j=1}^{n-1} a_{nj}\tilde{\mathbf{K}}_j,
+    *   \displaystyle\frac{\tilde{\mathbf{K}}_n}{h}, t + h c_n\right)
+    * \end{array} \text{.}
+    * \f]
+    *
+    * where \f$ \tilde{\mathbf{K}} = h \mathbf{K} \f$.
+    * \note If \f$ h \gets 0 \f$, then the first guess to solve the nonlinear system
+    * is given by \f$ \tilde{\mathbf{K}} = \mathbf{0} \f$.
+    * \param[in] s Stage index \f$ s \f$.
+    * \param[in] x States \f$ \mathbf{x} \f$.
+    * \param[in] t Independent variable (or time) \f$ t \f$.
+    * \param[in] h Advancing step \f$ h \f$.
+    * \param[in] K Variables \f$ \tilde{\mathbf{K}} = h \mathbf{K} \f$ of the system to be solved.
+    * \param[out] fun The residual of system to be solved.
+    */
     void erk_implicit_function(Size s, VectorN const &x, Real t, Real h, MatrixK const &K, VectorN &fun) const
     {
       using Eigen::all;
@@ -467,37 +589,39 @@ namespace Sandals {
       }
     }
 
-    //! Compute the Jacobian of the system of equations
-    //!
-    //! \f[
-    //! \begin{array}{l}
-    //!   \mathbf{F}_n \left(\mathbf{x} + \displaystyle\sum_{j=1}^{n-1} a_{nj}\tilde{\mathbf{K}}_j,
-    //!   \displaystyle\frac{\tilde{\mathbf{K}}_n}{h}, t + h c_n\right)
-    //! \end{array} \text{.}
-    //! \f]
-    //!
-    //! with respect to the \f$ \tilde{\mathbf{K}}_n = h \mathbf{K}_n \f$ variables. The Jacobian
-    //! matrix of the \f$ n \f$-th equation with respect to the \f$ \tilde{\mathbf{K}}_n \f$ variables
-    //! is given by
-    //!
-    //! \f[
-    //!   \frac{\partial\mathbf{F}_n}{\partial\tilde{\mathbf{K}}_n}\left(\mathbf{x} + \displaystyle
-    //!   \sum_{j=1}^{n-1} a_{nj}\tilde{\mathbf{K}}_j, \displaystyle\frac{\tilde{\mathbf{K}}_n}{h},
-    //!   t + h c_n \right) = a_{nj} \mathbf{JF}_x + \displaystyle\frac{1}{h}\begin{cases}
-    //!   \mathbf{JF}_{x^{\prime}} & n = j \\
-    //!   0 & n \neq j
-    //! \end{cases} \text{,}
-    //! \f]
-    //!
-    //! for \f$ j = 1, 2, \ldots, s \f$.
-    //! \note If \f$ h \rightarrow 0 \f$, then the first guess to solve the nonlinear system
-    //! is given by \f$ \tilde{\mathbf{K}} = \mathbf{0} \f$.
-    //! \param[in] s Stage index \f$ s \f$.
-    //! \param[in] x States \f$ \mathbf{x} \f$.
-    //! \param[in] t Independent variable (or time) \f$ t \f$.
-    //! \param[in] h Advancing step \f$ h \f$.
-    //! \param[in] K Variables \f$ h \mathbf{K} \f$ of the system to be solved.
-    //! \param[out] jac The Jacobian of system to be solved.
+    /**
+    * Compute the Jacobian of the system of equations
+    *
+    * \f[
+    * \begin{array}{l}
+    *   \mathbf{F}_n \left(\mathbf{x} + \displaystyle\sum_{j=1}^{n-1} a_{nj}\tilde{\mathbf{K}}_j,
+    *   \displaystyle\frac{\tilde{\mathbf{K}}_n}{h}, t + h c_n\right)
+    * \end{array} \text{.}
+    * \f]
+    *
+    * with respect to the \f$ \tilde{\mathbf{K}}_n = h \mathbf{K}_n \f$ variables. The Jacobian
+    * matrix of the \f$ n \f$-th equation with respect to the \f$ \tilde{\mathbf{K}}_n \f$ variables
+    * is given by
+    *
+    * \f[
+    *   \frac{\partial\mathbf{F}_n}{\partial\tilde{\mathbf{K}}_n}\left(\mathbf{x} + \displaystyle
+    *   \sum_{j=1}^{n-1} a_{nj}\tilde{\mathbf{K}}_j, \displaystyle\frac{\tilde{\mathbf{K}}_n}{h},
+    *   t + h c_n \right) = a_{nj} \mathbf{JF}_x + \displaystyle\frac{1}{h}\begin{cases}
+    *   \mathbf{JF}_{x^{\prime}} & n = j \\
+    *   0 & n \neq j
+    * \end{cases} \text{,}
+    * \f]
+    *
+    * for \f$ j = 1, 2, \ldots, s \f$.
+    * \note If \f$ h \rightarrow 0 \f$, then the first guess to solve the nonlinear system
+    * is given by \f$ \tilde{\mathbf{K}} = \mathbf{0} \f$.
+    * \param[in] s Stage index \f$ s \f$.
+    * \param[in] x States \f$ \mathbf{x} \f$.
+    * \param[in] t Independent variable (or time) \f$ t \f$.
+    * \param[in] h Advancing step \f$ h \f$.
+    * \param[in] K Variables \f$ h \mathbf{K} \f$ of the system to be solved.
+    * \param[out] jac The Jacobian of system to be solved.
+    */
     void erk_implicit_jacobian(Size s, VectorN const &x, Real t, Real h, MatrixK const &K, MatrixN &jac) const
     {
       using Eigen::all;
@@ -510,17 +634,19 @@ namespace Sandals {
       }
     }
 
-    //! Compute the new states \f$ \mathbf{x}_{k+1} \f$ at the next advancing step \f$ t_{k+1} = t_k
-    //! + h_k \f$ using an explicit Runge-Kutta method, given an explicit system of the form \f$
-    //! \mathbf{x}^\prime = \mathbf{f}(\mathbf{x}, t) \f$. If the method is embedded, the step for
-    //! the next advancing step \f$ h_{k+1}^\star \f$ is also computed according to the error control
-    //! method.
-    //! \param[in] x_old States \f$ \mathbf{x}_k \f$ at the \f$ k \f$-th step.
-    //! \param[in] t_old Independent variable (or time) \f$ t_k \f$ at the \f$ k \f$-th step.
-    //! \param[in] h_old Advancing step \f$ h_k \f$ at the \f$ k \f$-th step.
-    //! \param[out] x_new Computed states \f$ \mathbf{x}_{k+1} \f$ at the \f$ (k+1) \f$-th step.
-    //! \param[out] h_new The suggested step \f$ h_{k+1}^\star \f$ for the next advancing step.
-    //! \return True if the step is successfully computed, false otherwise.
+    /**
+    * Compute the new states \f$ \mathbf{x}_{k+1} \f$ at the next advancing step \f$ t_{k+1} = t_k
+    * + h_k \f$ using an explicit Runge-Kutta method, given an explicit system of the form \f$
+    * \mathbf{x}^\prime = \mathbf{f}(\mathbf{x}, t) \f$. If the method is embedded, the step for
+    * the next advancing step \f$ h_{k+1}^\star \f$ is also computed according to the error control
+    * method.
+    * \param[in] x_old States \f$ \mathbf{x}_k \f$ at the \f$ k \f$-th step.
+    * \param[in] t_old Independent variable (or time) \f$ t_k \f$ at the \f$ k \f$-th step.
+    * \param[in] h_old Advancing step \f$ h_k \f$ at the \f$ k \f$-th step.
+    * \param[out] x_new Computed states \f$ \mathbf{x}_{k+1} \f$ at the \f$ (k+1) \f$-th step.
+    * \param[out] h_new The suggested step \f$ h_{k+1}^\star \f$ for the next advancing step.
+    * \return True if the step is successfully computed, false otherwise.
+    */
     bool erk_implicit_step(VectorN const &x_old, Real t_old, Real h_old, VectorN &x_new, Real &h_new) const
     {
       MatrixK K;
@@ -561,28 +687,30 @@ namespace Sandals {
      |
     \*/
 
-    //! Compute the residual of system to be solved, which is given by the values of the system
-    //!
-    //! \f[
-    //! \begin{cases}
-    //!   \mathbf{F}_1 \left(\mathbf{x} + \displaystyle\sum_{j=1}^{s} a_{1j}\tilde{\mathbf{K}}_j,
-    //!   \displaystyle\frac{\tilde{\mathbf{K}}_1}{h}, t + h c_1\right) \\
-    //!   \mathbf{F}_2 \left(\mathbf{x} + \displaystyle\sum_{j=1}^{s} a_{2j}\tilde{\mathbf{K}}_j,
-    //!   \displaystyle\frac{\tilde{\mathbf{K}}_2}{h}, t + h c_2\right) \\[-0.5em]
-    //!   \vdots \\[-0.5em]
-    //!   \mathbf{F}_s \left(\mathbf{x} + \displaystyle\sum_{j=1}^{s} a_{sj}\tilde{\mathbf{K}}_j,
-    //!   \displaystyle\frac{\tilde{\mathbf{K}}_s}{h}, t + h c_s\right)
-    //! \end{cases}
-    //! \f]
-    //!
-    //! where \f$ \tilde{\mathbf{K}} = h \mathbf{K} \f$.
-    //! \note If \f$ h \gets 0 \f$, then the first guess to solve the nonlinear system
-    //! is given by \f$ \tilde{\mathbf{K}} = \mathbf{0} \f$.
-    //! \param[in] x States \f$ \mathbf{x} \f$.
-    //! \param[in] t Independent variable (or time) \f$ t \f$.
-    //! \param[in] h Advancing step \f$ h \f$.
-    //! \param[in] K Variables \f$ \tilde{\mathbf{K}} = h \mathbf{K} \f$ of the system to be solved.
-    //! \param[out] fun The residual of system to be solved.
+    /**
+    * Compute the residual of system to be solved, which is given by the values of the system
+    *
+    * \f[
+    * \begin{cases}
+    *   \mathbf{F}_1 \left(\mathbf{x} + \displaystyle\sum_{j=1}^{s} a_{1j}\tilde{\mathbf{K}}_j,
+    *   \displaystyle\frac{\tilde{\mathbf{K}}_1}{h}, t + h c_1\right) \\
+    *   \mathbf{F}_2 \left(\mathbf{x} + \displaystyle\sum_{j=1}^{s} a_{2j}\tilde{\mathbf{K}}_j,
+    *   \displaystyle\frac{\tilde{\mathbf{K}}_2}{h}, t + h c_2\right) \\[-0.5em]
+    *   \vdots \\[-0.5em]
+    *   \mathbf{F}_s \left(\mathbf{x} + \displaystyle\sum_{j=1}^{s} a_{sj}\tilde{\mathbf{K}}_j,
+    *   \displaystyle\frac{\tilde{\mathbf{K}}_s}{h}, t + h c_s\right)
+    * \end{cases}
+    * \f]
+    *
+    * where \f$ \tilde{\mathbf{K}} = h \mathbf{K} \f$.
+    * \note If \f$ h \gets 0 \f$, then the first guess to solve the nonlinear system
+    * is given by \f$ \tilde{\mathbf{K}} = \mathbf{0} \f$.
+    * \param[in] x States \f$ \mathbf{x} \f$.
+    * \param[in] t Independent variable (or time) \f$ t \f$.
+    * \param[in] h Advancing step \f$ h \f$.
+    * \param[in] K Variables \f$ \tilde{\mathbf{K}} = h \mathbf{K} \f$ of the system to be solved.
+    * \param[out] fun The residual of system to be solved.
+    */
     void irk_function(VectorN const &x, Real t, Real h, VectorK const &K, VectorK &fun) const
     {
       VectorN x_node;
@@ -599,40 +727,42 @@ namespace Sandals {
       fun = fun_mat.reshaped(N*S, 1);
     }
 
-    //! Compute the Jacobian of the system of equations
-    //!
-    //! \f[
-    //! \begin{cases}
-    //!   \mathbf{F}_1 \left(\mathbf{x} + \displaystyle\sum_{j=1}^{s} a_{1j}\tilde{\mathbf{K}}_j,
-    //!   \displaystyle\frac{\tilde{\mathbf{K}}_1}{h}, t + h c_1\right) \\
-    //!   \mathbf{F}_2 \left(\mathbf{x} + \displaystyle\sum_{j=1}^{s} a_{2j}\tilde{\mathbf{K}}_j,
-    //!   \displaystyle\frac{\tilde{\mathbf{K}}_2}{h}, t + h c_2\right) \\[-0.5em]
-    //!   \vdots \\[-0.5em]
-    //!   \mathbf{F}_s \left(\mathbf{x} + \displaystyle\sum_{j=1}^{s} a_{sj}\tilde{\mathbf{K}}_j,
-    //!   \displaystyle\frac{\tilde{\mathbf{K}}_s}{h}, t + h c_s\right)
-    //! \end{cases} \text{.}
-    //! \f]
-    //!
-    //! with respect to the \f$ \tilde{\mathbf{K}} = h \mathbf{K} \f$ variables. The \f$ ij \f$-th
-    //! Jacobian matrix entry is given by
-    //!
-    //! \f[
-    //!   \frac{\partial\mathbf{F}_i}{\partial\tilde{\mathbf{K}}_j}\left(\mathbf{x} + \displaystyle
-    //!   \sum_{j=1}^s a_{ij}\tilde{\mathbf{K}}_j, \displaystyle\frac{\tilde{\mathbf{K}}_i}{h}, t +
-    //!   h c_i \right) = a_{ij} \mathbf{JF}_x + \displaystyle\frac{1}{h}\begin{cases}
-    //!   \mathbf{JF}_{x^{\prime}} & i = j \\
-    //!   0 & i \neq j
-    //! \end{cases} \text{,}
-    //!
-    //! \f]
-    //! for \f$ i = 1, 2, \ldots, s \f$ and \f$ j = 1, 2, \ldots, s \f$.
-    //! \note If \f$ h \rightarrow 0 \f$, then the first guess to solve the nonlinear system
-    //! is given by \f$ \tilde{\mathbf{K}} = \mathbf{0} \f$.
-    //! \param[in] x States \f$ \mathbf{x} \f$.
-    //! \param[in] t Independent variable (or time) \f$ t \f$.
-    //! \param[in] h Advancing step \f$ h \f$.
-    //! \param[in] K Variables \f$ h \mathbf{K} \f$ of the system to be solved.
-    //! \param[out] jac The Jacobian of system to be solved.
+    /**
+    * Compute the Jacobian of the system of equations
+    *
+    * \f[
+    * \begin{cases}
+    *   \mathbf{F}_1 \left(\mathbf{x} + \displaystyle\sum_{j=1}^{s} a_{1j}\tilde{\mathbf{K}}_j,
+    *   \displaystyle\frac{\tilde{\mathbf{K}}_1}{h}, t + h c_1\right) \\
+    *   \mathbf{F}_2 \left(\mathbf{x} + \displaystyle\sum_{j=1}^{s} a_{2j}\tilde{\mathbf{K}}_j,
+    *   \displaystyle\frac{\tilde{\mathbf{K}}_2}{h}, t + h c_2\right) \\[-0.5em]
+    *   \vdots \\[-0.5em]
+    *   \mathbf{F}_s \left(\mathbf{x} + \displaystyle\sum_{j=1}^{s} a_{sj}\tilde{\mathbf{K}}_j,
+    *   \displaystyle\frac{\tilde{\mathbf{K}}_s}{h}, t + h c_s\right)
+    * \end{cases} \text{.}
+    * \f]
+    *
+    * with respect to the \f$ \tilde{\mathbf{K}} = h \mathbf{K} \f$ variables. The \f$ ij \f$-th
+    * Jacobian matrix entry is given by
+    *
+    * \f[
+    *   \frac{\partial\mathbf{F}_i}{\partial\tilde{\mathbf{K}}_j}\left(\mathbf{x} + \displaystyle
+    *   \sum_{j=1}^s a_{ij}\tilde{\mathbf{K}}_j, \displaystyle\frac{\tilde{\mathbf{K}}_i}{h}, t +
+    *   h c_i \right) = a_{ij} \mathbf{JF}_x + \displaystyle\frac{1}{h}\begin{cases}
+    *   \mathbf{JF}_{x^{\prime}} & i = j \\
+    *   0 & i \neq j
+    * \end{cases} \text{,}
+    *
+    * \f]
+    * for \f$ i = 1, 2, \ldots, s \f$ and \f$ j = 1, 2, \ldots, s \f$.
+    * \note If \f$ h \rightarrow 0 \f$, then the first guess to solve the nonlinear system
+    * is given by \f$ \tilde{\mathbf{K}} = \mathbf{0} \f$.
+    * \param[in] x States \f$ \mathbf{x} \f$.
+    * \param[in] t Independent variable (or time) \f$ t \f$.
+    * \param[in] h Advancing step \f$ h \f$.
+    * \param[in] K Variables \f$ h \mathbf{K} \f$ of the system to be solved.
+    * \param[out] jac The Jacobian of system to be solved.
+    */
     void irk_jacobian(VectorN const &x, Real t, Real h, VectorK const &K, MatrixJ &jac) const
     {
       using Eigen::seqN;
@@ -673,17 +803,19 @@ namespace Sandals {
       }
     }
 
-    //! Compute the new states \f$ \mathbf{x}_{k+1} \f$ at the next advancing step \f$ t_{k+1} = t_k
-    //! + h_k \f$ using an implicit Runge-Kutta method, given an implicit system of the form \f$
-    //! \mathbf{F}(\mathbf{x}, \mathbf{x}^\prime, t) = \mathbf{0} \f$. If the method is embedded,
-    //! the step for the next advancing step \f$ h_{k+1}^\star \f$ is also computed according to the
-    //! error control method.
-    //! \param[in] x_old States \f$ \mathbf{x}_k \f$ at the \f$ k \f$-th step.
-    //! \param[in] t_old Independent variable (or time) \f$ t_k \f$ at the \f$ k \f$-th step.
-    //! \param[in] h_old Advancing step \f$ h_k \f$ at the \f$ k \f$-th step.
-    //! \param[out] x_new Computed states \f$ \mathbf{x}_{k+1} \f$ at the \f$ (k+1) \f$-th step.
-    //! \param[out] h_new The suggested step \f$ h_{k+1}^\star \f$ for the next advancing step.
-    //! \return True if the step is successfully computed, false otherwise.
+    /**
+    * Compute the new states \f$ \mathbf{x}_{k+1} \f$ at the next advancing step \f$ t_{k+1} = t_k
+    * + h_k \f$ using an implicit Runge-Kutta method, given an implicit system of the form \f$
+    * \mathbf{F}(\mathbf{x}, \mathbf{x}^\prime, t) = \mathbf{0} \f$. If the method is embedded,
+    * the step for the next advancing step \f$ h_{k+1}^\star \f$ is also computed according to the
+    * error control method.
+    * \param[in] x_old States \f$ \mathbf{x}_k \f$ at the \f$ k \f$-th step.
+    * \param[in] t_old Independent variable (or time) \f$ t_k \f$ at the \f$ k \f$-th step.
+    * \param[in] h_old Advancing step \f$ h_k \f$ at the \f$ k \f$-th step.
+    * \param[out] x_new Computed states \f$ \mathbf{x}_{k+1} \f$ at the \f$ (k+1) \f$-th step.
+    * \param[out] h_new The suggested step \f$ h_{k+1}^\star \f$ for the next advancing step.
+    * \return True if the step is successfully computed, false otherwise.
+    */
     bool irk_step(VectorN const &x_old, Real t_old, Real h_old, VectorN &x_new, Real &h_new)
     {
       VectorK K;
@@ -718,24 +850,26 @@ namespace Sandals {
      |
     \*/
 
-    //! Compute the residual of system to be solved, which is given by the values of the system
-    //!
-    //! \f[
-    //! \begin{array}{l}
-    //!   \mathbf{F}_n \left(\mathbf{x} + \displaystyle\sum_{j=1}^n a_{nj}\tilde{\mathbf{K}}_j,
-    //!   \displaystyle\frac{\tilde{\mathbf{K}}_n}{h}, t + h c_n\right)
-    //! \end{array} \text{.}
-    //! \f]
-    //!
-    //! where \f$ \tilde{\mathbf{K}} = h \mathbf{K} \f$.
-    //! \note If \f$ h \gets 0 \f$, then the first guess to solve the nonlinear system
-    //! is given by \f$ \tilde{\mathbf{K}} = \mathbf{0} \f$.
-    //! \param[in] n Equation index \f$ n \f$.
-    //! \param[in] x States \f$ \mathbf{x} \f$.
-    //! \param[in] t Independent variable (or time) \f$ t \f$.
-    //! \param[in] h Advancing step \f$ h \f$.
-    //! \param[in] K Variables \f$ \tilde{\mathbf{K}} = h \mathbf{K} \f$ of the system to be solved.
-    //! \param[out] fun The residual of system to be solved.
+    /**
+    * Compute the residual of system to be solved, which is given by the values of the system
+    *
+    * \f[
+    * \begin{array}{l}
+    *   \mathbf{F}_n \left(\mathbf{x} + \displaystyle\sum_{j=1}^n a_{nj}\tilde{\mathbf{K}}_j,
+    *   \displaystyle\frac{\tilde{\mathbf{K}}_n}{h}, t + h c_n\right)
+    * \end{array} \text{.}
+    * \f]
+    *
+    * where \f$ \tilde{\mathbf{K}} = h \mathbf{K} \f$.
+    * \note If \f$ h \gets 0 \f$, then the first guess to solve the nonlinear system
+    * is given by \f$ \tilde{\mathbf{K}} = \mathbf{0} \f$.
+    * \param[in] n Equation index \f$ n \f$.
+    * \param[in] x States \f$ \mathbf{x} \f$.
+    * \param[in] t Independent variable (or time) \f$ t \f$.
+    * \param[in] h Advancing step \f$ h \f$.
+    * \param[in] K Variables \f$ \tilde{\mathbf{K}} = h \mathbf{K} \f$ of the system to be solved.
+    * \param[out] fun The residual of system to be solved.
+    */
     void dirk_function(Size n, VectorN const &x, Real t, Real h, MatrixK const &K, VectorN &fun) const
     {
       using Eigen::all;
@@ -748,37 +882,39 @@ namespace Sandals {
       }
     }
 
-    //! Compute the Jacobian of the system of equations
-    //!
-    //! \f[
-    //! \begin{array}{l}
-    //!   \mathbf{F}_n \left(\mathbf{x} + \displaystyle\sum_{j=1}^n a_{nj}\tilde{\mathbf{K}}_j,
-    //!   \displaystyle\frac{\tilde{\mathbf{K}}_n}{h}, t + h c_n\right)
-    //! \end{array} \text{.}
-    //! \f]
-    //!
-    //! with respect to the \f$ \tilde{\mathbf{K}}_n = h \mathbf{K}_n \f$ variables. The Jacobian
-    //! matrix of the \f$ n \f$-th equation with respect to the \f$ \tilde{\mathbf{K}}_n \f$ variables
-    //! is given by
-    //!
-    //! \f[
-    //!   \frac{\partial\mathbf{F}_n}{\partial\tilde{\mathbf{K}}_n}\left(\mathbf{x} + \displaystyle
-    //!   \sum_{j=1}^n a_{nj}\tilde{\mathbf{K}}_j, \displaystyle\frac{\tilde{\mathbf{K}}_n}{h},
-    //!   t + h c_n \right) = a_{nj} \mathbf{JF}_x + \displaystyle\frac{1}{h}\begin{cases}
-    //!   \mathbf{JF}_{x^{\prime}} & n = j \\
-    //!   0 & n \neq j
-    //! \end{cases} \text{,}
-    //! \f]
-    //!
-    //! for \f$ j = 1, 2, \ldots, s \f$.
-    //! \note If \f$ h \rightarrow 0 \f$, then the first guess to solve the nonlinear system
-    //! is given by \f$ \tilde{\mathbf{K}} = \mathbf{0} \f$.
-    //! \param[in] n Equation index \f$ n \f$.
-    //! \param[in] x States \f$ \mathbf{x} \f$.
-    //! \param[in] t Independent variable (or time) \f$ t \f$.
-    //! \param[in] h Advancing step \f$ h \f$.
-    //! \param[in] K Variables \f$ h \mathbf{K} \f$ of the system to be solved.
-    //! \param[out] jac The Jacobian of system to be solved.
+    /**
+    * Compute the Jacobian of the system of equations
+    *
+    * \f[
+    * \begin{array}{l}
+    *   \mathbf{F}_n \left(\mathbf{x} + \displaystyle\sum_{j=1}^n a_{nj}\tilde{\mathbf{K}}_j,
+    *   \displaystyle\frac{\tilde{\mathbf{K}}_n}{h}, t + h c_n\right)
+    * \end{array} \text{.}
+    * \f]
+    *
+    * with respect to the \f$ \tilde{\mathbf{K}}_n = h \mathbf{K}_n \f$ variables. The Jacobian
+    * matrix of the \f$ n \f$-th equation with respect to the \f$ \tilde{\mathbf{K}}_n \f$ variables
+    * is given by
+    *
+    * \f[
+    *   \frac{\partial\mathbf{F}_n}{\partial\tilde{\mathbf{K}}_n}\left(\mathbf{x} + \displaystyle
+    *   \sum_{j=1}^n a_{nj}\tilde{\mathbf{K}}_j, \displaystyle\frac{\tilde{\mathbf{K}}_n}{h},
+    *   t + h c_n \right) = a_{nj} \mathbf{JF}_x + \displaystyle\frac{1}{h}\begin{cases}
+    *   \mathbf{JF}_{x^{\prime}} & n = j \\
+    *   0 & n \neq j
+    * \end{cases} \text{,}
+    * \f]
+    *
+    * for \f$ j = 1, 2, \ldots, s \f$.
+    * \note If \f$ h \rightarrow 0 \f$, then the first guess to solve the nonlinear system
+    * is given by \f$ \tilde{\mathbf{K}} = \mathbf{0} \f$.
+    * \param[in] n Equation index \f$ n \f$.
+    * \param[in] x States \f$ \mathbf{x} \f$.
+    * \param[in] t Independent variable (or time) \f$ t \f$.
+    * \param[in] h Advancing step \f$ h \f$.
+    * \param[in] K Variables \f$ h \mathbf{K} \f$ of the system to be solved.
+    * \param[out] jac The Jacobian of system to be solved.
+    */
     void dirk_jacobian(Size n, VectorN const &x, Real t, Real h, MatrixK const &K, MatrixN &jac) const
     {
       using Eigen::all;
@@ -795,17 +931,19 @@ namespace Sandals {
       }
     }
 
-    //! Compute the new states \f$ \mathbf{x}_{k+1} \f$ at the next advancing step \f$ t_{k+1} = t_k
-    //! + h_k \f$ using an diagonally implicit Runge-Kutta method, given an implicit system of the
-    //! form \f$ \mathbf{F}(\mathbf{x}, \mathbf{x}^\prime, t) = \mathbf{0} \f$. If the method is
-    //! embedded, the step for the next advancing step \f$ h_{k+1}^\star \f$ is also computed
-    //! according to the error control method.
-    //! \param[in] x_old States \f$ \mathbf{x}_k \f$ at the \f$ k \f$-th step.
-    //! \param[in] t_old Independent variable (or time) \f$ t_k \f$ at the \f$ k \f$-th step.
-    //! \param[in] h_old Advancing step \f$ h_k \f$ at the \f$ k \f$-th step.
-    //! \param[out] x_new Computed states \f$ \mathbf{x}_{k+1} \f$ at the \f$ (k+1) \f$-th step.
-    //! \param[out] h_new The suggested step \f$ h_{k+1}^\star \f$ for the next advancing step.
-    //! \return True if the step is successfully computed, false otherwise.
+    /**
+    * Compute the new states \f$ \mathbf{x}_{k+1} \f$ at the next advancing step \f$ t_{k+1} = t_k
+    * + h_k \f$ using an diagonally implicit Runge-Kutta method, given an implicit system of the
+    * form \f$ \mathbf{F}(\mathbf{x}, \mathbf{x}^\prime, t) = \mathbf{0} \f$. If the method is
+    * embedded, the step for the next advancing step \f$ h_{k+1}^\star \f$ is also computed
+    * according to the error control method.
+    * \param[in] x_old States \f$ \mathbf{x}_k \f$ at the \f$ k \f$-th step.
+    * \param[in] t_old Independent variable (or time) \f$ t_k \f$ at the \f$ k \f$-th step.
+    * \param[in] h_old Advancing step \f$ h_k \f$ at the \f$ k \f$-th step.
+    * \param[out] x_new Computed states \f$ \mathbf{x}_{k+1} \f$ at the \f$ (k+1) \f$-th step.
+    * \param[out] h_new The suggested step \f$ h_{k+1}^\star \f$ for the next advancing step.
+    * \return True if the step is successfully computed, false otherwise.
+    */
     bool dirk_step(VectorN const &x_old, Real t_old, Real h_old, VectorN &x_new, Real &h_new) const
     {
       MatrixK K;
@@ -837,20 +975,22 @@ namespace Sandals {
       return true;
     }
 
-    //! Compute a step using a generic integration method for a system of the form \f$ \mathbf{F}(
-    //! \mathbf{x}, \mathbf{x}^\prime, t) = \mathbf{0} \f$. The step is automatically selected
-    //! based on the system properties and the integration method properties.
-    //! \param[in] x_old States \f$ \mathbf{x}_k \f$ at the \f$ k \f$-th step.
-    //! \param[in] t_old Independent variable (or time) \f$ t_k \f$ at the \f$ k \f$-th step.
-    //! \param[in] h_old Advancing step \f$ h_k \f$ at the \f$ k \f$-th step.
-    //! \param[out] x_new Computed states \f$ \mathbf{x}_{k+1} \f$ at the \f$ (k+1) \f$-th step.
-    //! \param[out] h_new The suggested step \f$ h_{k+1}^\star \f$ for the next advancing step.
-    //! \return True if the step is successfully computed, false otherwise.
+    /**
+    * Compute a step using a generic integration method for a system of the form \f$ \mathbf{F}(
+    * \mathbf{x}, \mathbf{x}^\prime, t) = \mathbf{0} \f$. The step is automatically selected
+    * based on the system properties and the integration method properties.
+    * \param[in] x_old States \f$ \mathbf{x}_k \f$ at the \f$ k \f$-th step.
+    * \param[in] t_old Independent variable (or time) \f$ t_k \f$ at the \f$ k \f$-th step.
+    * \param[in] h_old Advancing step \f$ h_k \f$ at the \f$ k \f$-th step.
+    * \param[out] x_new Computed states \f$ \mathbf{x}_{k+1} \f$ at the \f$ (k+1) \f$-th step.
+    * \param[out] h_new The suggested step \f$ h_{k+1}^\star \f$ for the next advancing step.
+    * \return True if the step is successfully computed, false otherwise.
+    */
     bool step(VectorN const &x_old, Real t_old, Real h_old, VectorN &x_new, Real &h_new)
     {
       #define CMD "Sandals::RungeKutta::step(...): "
 
-      SANDALS_ASSERT(this->m_system.in_domain(x_old, t_old), CMD "in " << this->m_tableau.name <<
+      SANDALS_ASSERT(this->m_system->in_domain(x_old, t_old), CMD "in " << this->m_tableau.name <<
         " solver, at t = " << t_old << ", x = " << x_old.transpose() << ", system out of domain.");
 
       if (this->is_erk() && this->m_system->is_explicit()) {
@@ -862,19 +1002,23 @@ namespace Sandals {
       } else {
         return this->irk_step(x_old, t_old, h_old, x_new, h_new);
       }
+
+      #undef CMD
     }
 
-    //! Advance using a generic integration method for a system of the form \f$ \mathbf{F}(\mathbf{x},
-    //! \mathbf{x}^\prime, t) = \mathbf{0} \f$. The step is automatically selected based on the
-    //! system properties and the integration method properties. In the advvancing step, the system
-    //! solution is also projected on the manifold \f$ \mathbf{h}(\mathbf{x}, t) \f$. Substepping
-    //! may be also used to if the integration step fails with the current step size.
-    //! \param[in] x_old States \f$ \mathbf{x}_k \f$ at the \f$ k \f$-th step.
-    //! \param[in] t_old Independent variable (or time) \f$ t_k \f$ at the \f$ k \f$-th step.
-    //! \param[in] h_old Advancing step \f$ h_k \f$ at the \f$ k \f$-th step.
-    //! \param[out] x_new Computed states \f$ \mathbf{x}_{k+1} \f$ at the \f$ (k+1) \f$-th step.
-    //! \param[out] h_new The suggested step \f$ h_{k+1}^\star \f$ for the next advancing step.
-    //! \return True if the step is successfully computed, false otherwise.
+    /**
+    * Advance using a generic integration method for a system of the form \f$ \mathbf{F}(\mathbf{x},
+    * \mathbf{x}^\prime, t) = \mathbf{0} \f$. The step is automatically selected based on the
+    * system properties and the integration method properties. In the advvancing step, the system
+    * solution is also projected on the manifold \f$ \mathbf{h}(\mathbf{x}, t) \f$. Substepping
+    * may be also used to if the integration step fails with the current step size.
+    * \param[in] x_old States \f$ \mathbf{x}_k \f$ at the \f$ k \f$-th step.
+    * \param[in] t_old Independent variable (or time) \f$ t_k \f$ at the \f$ k \f$-th step.
+    * \param[in] h_old Advancing step \f$ h_k \f$ at the \f$ k \f$-th step.
+    * \param[out] x_new Computed states \f$ \mathbf{x}_{k+1} \f$ at the \f$ (k+1) \f$-th step.
+    * \param[out] h_new The suggested step \f$ h_{k+1}^\star \f$ for the next advancing step.
+    * \return True if the step is successfully computed, false otherwise.
+    */
     bool advance(VectorN const &x_old, Real t_old, Real h_old, VectorN &x_new, Real &h_new)
     {
       #define CMD "Sandals::RungeKutta::advance(...): "
@@ -956,13 +1100,15 @@ namespace Sandals {
       #undef CMD
     }
 
-    //! Solve the system and calculate the approximate solution over the independent variable  (or
-    //! time) mesh\f$ \mathbf{t} = \left[ t_1, t_2, \ldots, t_n \right]^\top \f$. The step size is fixed
-    //! and given by \f$ h = t_{k+1} - t_k \f$.
-    //! \param[in] t_mesh Independent variable (or time) mesh \f$ \mathbf{t} \f$.
-    //! \param[in] ics Initial conditions \f$ \mathbf{x}(t = 0) \f$.
-    //! \param[out] sol The solution of the system over the mesh of independent variable.
-    //! \return True if the system is successfully solved, false otherwise.
+    /**
+    * Solve the system and calculate the approximate solution over the independent variable  (or
+    * time) mesh\f$ \mathbf{t} = \left[ t_1, t_2, \ldots, t_n \right]^\top \f$. The step size is fixed
+    * and given by \f$ h = t_{k+1} - t_k \f$.
+    * \param[in] t_mesh Independent variable (or time) mesh \f$ \mathbf{t} \f$.
+    * \param[in] ics Initial conditions \f$ \mathbf{x}(t = 0) \f$.
+    * \param[out] sol The solution of the system over the mesh of independent variable.
+    * \return True if the system is successfully solved, false otherwise.
+    */
     bool solve(VectorX const &t_mesh, VectorN const &ics, Solution &sol)
     {
       using Eigen::last;
@@ -1016,13 +1162,15 @@ namespace Sandals {
       return true;
     }
 
-    //! Solve the system and calculate the approximate solution over the suggested independent
-    //! variable mesh \f$ \mathbf{t} = \left[ t_1, t_2, \ldots, t_n \right]^\top \f$, the step size
-    //! is automatically computed based on the error control method.
-    //! \param[in] t_mesh Independent variable (or time) mesh \f$ \mathbf{t} \f$.
-    //! \param[in] ics Initial conditions \f$ \mathbf{x}(t = 0) \f$.
-    //! \param[out] sol The solution of the system over the mesh of independent variable.
-    //! \return True if the system is successfully solved, false otherwise.
+    /**
+    * Solve the system and calculate the approximate solution over the suggested independent
+    * variable mesh \f$ \mathbf{t} = \left[ t_1, t_2, \ldots, t_n \right]^\top \f$, the step size
+    * is automatically computed based on the error control method.
+    * \param[in] t_mesh Independent variable (or time) mesh \f$ \mathbf{t} \f$.
+    * \param[in] ics Initial conditions \f$ \mathbf{x}(t = 0) \f$.
+    * \param[out] sol The solution of the system over the mesh of independent variable.
+    * \return True if the system is successfully solved, false otherwise.
+    */
     bool adaptive_solve(VectorX const &t_mesh, VectorN const &ics, Solution &sol)
     {
       using Eigen::all;
@@ -1089,13 +1237,15 @@ namespace Sandals {
       #undef CMD
     }
 
-    //! Project the system solution \f$ \mathbf{x} \f$ on the invariants \f$ \mathbf{h} (\mathbf{x},
-    //! t) = \mathbf{0} \f$.
-    //! \param[in] x The initial guess for the states \f$\widetilde{\mathbf{x}} \f$.
-    //! \param[in] t The independent variable (or time) \f$ t \f$ at which the states are evaluated.
-    //! \param[out] x_projected The projected states \f$ \mathbf{x} \f$ closest to the invariants
-    //! manifold \f$ \mathbf{h} (\mathbf{x}, t) = \mathbf{0} \f$.
-    //! \return True if the solution is successfully projected, false otherwise.
+    /**
+    * Project the system solution \f$ \mathbf{x} \f$ on the invariants \f$ \mathbf{h} (\mathbf{x},
+    * t) = \mathbf{0} \f$.
+    * \param[in] x The initial guess for the states \f$\widetilde{\mathbf{x}} \f$.
+    * \param[in] t The independent variable (or time) \f$ t \f$ at which the states are evaluated.
+    * \param[out] x_projected The projected states \f$ \mathbf{x} \f$ closest to the invariants
+    * manifold \f$ \mathbf{h} (\mathbf{x}, t) = \mathbf{0} \f$.
+    * \return True if the solution is successfully projected, false otherwise.
+    */
     bool project(VectorN const &x, Real t, VectorN &x_projected)
     {
       #define CMD "Sandals::RungeKutta::project(...): "
@@ -1151,15 +1301,17 @@ namespace Sandals {
       #undef CMD
     }
 
-    //! Project the system solution \f$ \mathbf{x} \f$ on the invariants \f$ \mathbf{h} (\mathbf{x},
-    //! t) = \mathbf{0} \f$.
-    //! \param[in] x The initial guess for the states \f$\widetilde{\mathbf{x}} \f$.
-    //! \param[in] t The independent variable (or time) \f$ t \f$ at which the states are evaluated.
-    //! \param[in] projected_equations The indices of the states to be projected.
-    //! \param[in] projected_invariants The indices of the invariants to be projected.
-    //! \param[out] x_projected The projected states \f$ \mathbf{x} \f$ closest to the invariants
-    //! manifold \f$ \mathbf{h} (\mathbf{x}, t) = \mathbf{0} \f$.
-    //! \return True if the solution is successfully projected, false otherwise.
+    /**
+    * Project the system solution \f$ \mathbf{x} \f$ on the invariants \f$ \mathbf{h} (\mathbf{x},
+    * t) = \mathbf{0} \f$.
+    * \param[in] x The initial guess for the states \f$\widetilde{\mathbf{x}} \f$.
+    * \param[in] t The independent variable (or time) \f$ t \f$ at which the states are evaluated.
+    * \param[in] projected_equations The indices of the states to be projected.
+    * \param[in] projected_invariants The indices of the invariants to be projected.
+    * \param[out] x_projected The projected states \f$ \mathbf{x} \f$ closest to the invariants
+    * manifold \f$ \mathbf{h} (\mathbf{x}, t) = \mathbf{0} \f$.
+    * \return True if the solution is successfully projected, false otherwise.
+    */
     bool project_ics(VectorN const &x, Real t, std::vector<Size> const & projected_equations,
       std::vector<Size> const & projected_invariants, VectorN &x_projected) const
     {
@@ -1224,11 +1376,13 @@ namespace Sandals {
       #undef CMD
     }
 
-    //! Estimate the order of the Runge-Kutta method.
-    //! \param[in] t_mesh The vector of time meshes with same initial and final time with *fixed* step.
-    //! \param[in] ics Initial conditions \f$ \mathbf{x}(t = 0) \f$.
-    //! \param[in] sol The *analytical* solution function.
-    //! \return The estimated order of the method.
+    /**
+    * Estimate the order of the Runge-Kutta method.
+    * \param[in] t_mesh The vector of time meshes with same initial and final time with *fixed* step.
+    * \param[in] ics Initial conditions \f$ \mathbf{x}(t = 0) \f$.
+    * \param[in] sol The *analytical* solution function.
+    * \return The estimated order of the method.
+    */
     Real estimate_order(std::vector<VectorX> const &t_mesh, VectorN const &ics, std::function<MatrixX(VectorX)> &sol)
     {
       using Eigen::last;

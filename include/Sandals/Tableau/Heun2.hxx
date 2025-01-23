@@ -15,18 +15,20 @@
 
 namespace Sandals
 {
-  //! \brief Butcher tableau for the Heun's (or 2-stage strong-stability preserving Runge-Kutta) order 2 method.
-  //!
-  //! Butcher tableau for the Heun's (or 2-stage strong-stability preserving Runge-Kutta) order 2 method:
-  //!
-  //! \f[
-  //! \begin{array}{c|cc}
-  //!   0 &   0 &   0 \\
-  //!   1 &   1 &   0 \\
-  //!   \hline
-  //!     & 1/2 & 1/2
-  //! \end{array} \text{.}
-  //! \f]
+  /**
+  * \brief Butcher tableau for the Heun's (or 2-stage strong-stability preserving Runge-Kutta) order 2 method.
+  *
+  * Butcher tableau for the Heun's (or 2-stage strong-stability preserving Runge-Kutta) order 2 method:
+  *
+  * \f[
+  * \begin{array}{c|cc}
+  *   0 &   0 &   0 \\
+  *   1 &   1 &   0 \\
+  *   \hline
+  *     & 1/2 & 1/2
+  * \end{array} \text{.}
+  * \f]
+  */
   class Heun2Tableau : public Tableau<2>
   {
   public:
@@ -34,7 +36,9 @@ namespace Sandals
     using Tableau<2>::Vector;
     using Tableau<2>::Matrix;
 
-    //! Class constructor for the Heun's (or 2-stage strong-stability preserving Runge-Kutta) order 2 method.
+    /**
+    * Class constructor for the Heun's (or 2-stage strong-stability preserving Runge-Kutta) order 2 method.
+    */
     Heun2Tableau() {
       this->name  = "Heun2";
       this->type  = Type::ERK;
@@ -46,24 +50,30 @@ namespace Sandals
     }
   }; // class Heun2Tableau
 
-  //! \brief Class container for the Heun's (or 2-stage strong-stability preserving Runge-Kutta) order 2 method.
-  //!
-  //! Class container for the Heun's (or 2-stage strong-stability preserving Runge-Kutta) order 2 method.
-  //! \tparam N The dimension of the ODE/DAE system.
-  //! \tparam M The dimension of the invariants manifold.
+  /**
+  * \brief Class container for the Heun's (or 2-stage strong-stability preserving Runge-Kutta) order 2 method.
+  *
+  * Class container for the Heun's (or 2-stage strong-stability preserving Runge-Kutta) order 2 method.
+  * \tparam N The dimension of the ODE/DAE system.
+  * \tparam M The dimension of the invariants manifold.
+  */
   template <Size N, Size M = 0>
   class Heun2 : public RungeKutta<2, N, M>
   {
   public:
-    using System = typename Implicit<N, M>::Pointer; //!< System type.
+    using System = typename Implicit<N, M>::Pointer; /**< System type. */
 
-    //! Class constructor for a Heun's (or 2-stage strong-stability preserving Runge-Kutta) order 2
-    //! solver given a Tableau reference.
+    /**
+    * Class constructor for a Heun's (or 2-stage strong-stability preserving Runge-Kutta) order 2
+    * solver given a Tableau reference.
+    */
     Heun2() : RungeKutta<2, N, M>(Heun2Tableau()) {}
 
-    //! Class constructor for a Heun's (or 2-stage strong-stability preserving Runge-Kutta) order 2
-    //! solver given a Tableau reference.
-    //! \param[in] t_system The system reference.
+    /**
+    * Class constructor for a Heun's (or 2-stage strong-stability preserving Runge-Kutta) order 2
+    * solver given a Tableau reference.
+    * \param[in] t_system The system reference.
+    */
     Heun2(System t_system) : RungeKutta<2, N, M>(Heun2Tableau(), t_system) {}
 
   }; // class Heun2

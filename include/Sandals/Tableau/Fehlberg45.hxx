@@ -15,23 +15,25 @@
 
 namespace Sandals
 {
-  //! \brief Butcher tableau for the Runge-Kutta-Fehlberg 4(5) method.
-  //!
-  //! Butcher tableau for the Runge-Kutta-Fehlberg 4(5) method:
-  //!
-  //! \f[
-  //! \begin{array}{c|cccccc}
-  //!         0 &         0 &          0 &          0 &           0 &      0 &    0 \\
-  //!       1/4 &       1/4 &          0 &          0 &           0 &      0 &    0 \\
-  //!       3/8 &      3/32 &       9/32 &          0 &           0 &      0 &    0 \\
-  //!     12/13 & 1932/2197 & -7200/2197 &  7296/2197 &           0 &      0 &    0 \\
-  //!         1 &   439/216 &         -8 &   3680/513 &   -845/4104 &      0 &    0 \\
-  //!       1/2 &     -8/27 &          2 & -3544/2565 &   1859/4104 & -11/40 &    0 \\
-  //!   \hline
-  //!           &    16/135 &          0 & 6656/12825 & 28561/56430 &  -9/50 & 2/55 \\
-  //!           &    25/216 &          0 & 1408/2565  & 2197/4104   &  -1/5  &    0 \\
-  //! \end{array} \text{.}
-  //! \f]
+  /**
+  * \brief Butcher tableau for the Runge-Kutta-Fehlberg 4(5) method.
+  *
+  * Butcher tableau for the Runge-Kutta-Fehlberg 4(5) method:
+  *
+  * \f[
+  * \begin{array}{c|cccccc}
+  *         0 &         0 &          0 &          0 &           0 &      0 &    0 \\
+  *       1/4 &       1/4 &          0 &          0 &           0 &      0 &    0 \\
+  *       3/8 &      3/32 &       9/32 &          0 &           0 &      0 &    0 \\
+  *     12/13 & 1932/2197 & -7200/2197 &  7296/2197 &           0 &      0 &    0 \\
+  *         1 &   439/216 &         -8 &   3680/513 &   -845/4104 &      0 &    0 \\
+  *       1/2 &     -8/27 &          2 & -3544/2565 &   1859/4104 & -11/40 &    0 \\
+  *   \hline
+  *           &    16/135 &          0 & 6656/12825 & 28561/56430 &  -9/50 & 2/55 \\
+  *           &    25/216 &          0 & 1408/2565  & 2197/4104   &  -1/5  &    0 \\
+  * \end{array} \text{.}
+  * \f]
+  */
   class Fehlberg45Tableau : public Tableau<6>
   {
   public:
@@ -39,7 +41,9 @@ namespace Sandals
     using Tableau<6>::Vector;
     using Tableau<6>::Matrix;
 
-    //! Class constructor for the Runge-Kutta-Fehlberg 4(5) method.
+    /**
+    * Class constructor for the Runge-Kutta-Fehlberg 4(5) method.
+    */
     Fehlberg45Tableau() {
       this->name        = "Fehlberg45";
       this->type        = Type::ERK;
@@ -58,22 +62,28 @@ namespace Sandals
     }
   }; // class Fehlberg45Tableau
 
-  //! \brief Class container for the Runge-Kutta-Fehlberg 4(5) method.
-  //!
-  //! Class container for the Runge-Kutta-Fehlberg 4(5) method.
-  //! \tparam N The dimension of the ODE/DAE system.
-  //! \tparam M The dimension of the invariants manifold.
+  /**
+  * \brief Class container for the Runge-Kutta-Fehlberg 4(5) method.
+  *
+  * Class container for the Runge-Kutta-Fehlberg 4(5) method.
+  * \tparam N The dimension of the ODE/DAE system.
+  * \tparam M The dimension of the invariants manifold.
+  */
   template <Size N, Size M = 0>
   class Fehlberg45 : public RungeKutta<6, N, M>
   {
   public:
-    using System = typename Implicit<N, M>::Pointer; //!< System type.
+    using System = typename Implicit<N, M>::Pointer; /**< System type. */
 
-    //! Class constructor for a Runge-Kutta-Fehlberg 4(5) solver given a Tableau reference.
+    /**
+    * Class constructor for a Runge-Kutta-Fehlberg 4(5) solver given a Tableau reference.
+    */
     Fehlberg45() : RungeKutta<6, N, M>(Fehlberg45Tableau()) {}
 
-    //! Class constructor for a Runge-Kutta-Fehlberg 4(5) solver given a Tableau reference.
-    //! \param[in] t_system The system reference.
+    /**
+    * Class constructor for a Runge-Kutta-Fehlberg 4(5) solver given a Tableau reference.
+    * \param[in] t_system The system reference.
+    */
     Fehlberg45(System t_system) : RungeKutta<6, N, M>(Fehlberg45Tableau(), t_system) {}
 
   }; // class Fehlberg45

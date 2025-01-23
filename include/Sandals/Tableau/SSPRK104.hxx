@@ -15,26 +15,28 @@
 
 namespace Sandals
 {
-  //! \brief Butcher tableau for the 10-stage strong-stability preserving Runge-Kutta order 4 method.
-  //!
-  //! Butcher tableau for the 10-stage strong-stability preserving Runge-Kutta order 4 method:
-  //!
-  //! \f[
-  //! \begin{array}{c|cccccccccc}
-  //!             0 &            0 &            0 &            0 &            0 &            0 &            0 &            0 &            0 &            0 &            0 \\
-  //!   \frac{1}{6} &  \frac{1}{6} &            0 &            0 &            0 &            0 &            0 &            0 &            0 &            0 &            0 \\
-  //!   \frac{1}{3} &  \frac{1}{6} &  \frac{1}{6} &            0 &            0 &            0 &            0 &            0 &            0 &            0 &            0 \\
-  //!   \frac{1}{2} &  \frac{1}{6} &  \frac{1}{6} &  \frac{1}{6} &            0 &            0 &            0 &            0 &            0 &            0 &            0 \\
-  //!   \frac{2}{3} &  \frac{1}{6} &  \frac{1}{6} &  \frac{1}{6} &  \frac{1}{6} &            0 &            0 &            0 &            0 &            0 &            0 \\
-  //!   \frac{1}{3} & \frac{1}{15} & \frac{1}{15} & \frac{1}{15} & \frac{1}{15} & \frac{1}{15} &            0 &            0 &            0 &            0 &            0 \\
-  //!   \frac{1}{2} & \frac{1}{15} & \frac{1}{15} & \frac{1}{15} & \frac{1}{15} & \frac{1}{15} &  \frac{1}{6} &            0 &            0 &            0 &            0 \\
-  //!   \frac{2}{3} & \frac{1}{15} & \frac{1}{15} & \frac{1}{15} & \frac{1}{15} & \frac{1}{15} &  \frac{1}{6} &  \frac{1}{6} &            0 &            0 &            0 \\
-  //!   \frac{5}{6} & \frac{1}{15} & \frac{1}{15} & \frac{1}{15} & \frac{1}{15} & \frac{1}{15} &  \frac{1}{6} &  \frac{1}{6} &  \frac{1}{6} &            0 &            0 \\
-  //!             1 & \frac{1}{15} & \frac{1}{15} & \frac{1}{15} & \frac{1}{15} & \frac{1}{15} &  \frac{1}{6} &  \frac{1}{6} &  \frac{1}{6} &  \frac{1}{6} &            0 \\
-  //!   \hline
-  //!               & \frac{1}{10} & \frac{1}{10} & \frac{1}{10} & \frac{1}{10} & \frac{1}{10} & \frac{1}{10} & \frac{1}{10} & \frac{1}{10} & \frac{1}{10} & \frac{1}{10}
-  //! \end{array} \text{.}
-  //! \f]
+  /**
+  * \brief Butcher tableau for the 10-stage strong-stability preserving Runge-Kutta order 4 method.
+  *
+  * Butcher tableau for the 10-stage strong-stability preserving Runge-Kutta order 4 method:
+  *
+  * \f[
+  * \begin{array}{c|cccccccccc}
+  *             0 &            0 &            0 &            0 &            0 &            0 &            0 &            0 &            0 &            0 &            0 \\
+  *   \frac{1}{6} &  \frac{1}{6} &            0 &            0 &            0 &            0 &            0 &            0 &            0 &            0 &            0 \\
+  *   \frac{1}{3} &  \frac{1}{6} &  \frac{1}{6} &            0 &            0 &            0 &            0 &            0 &            0 &            0 &            0 \\
+  *   \frac{1}{2} &  \frac{1}{6} &  \frac{1}{6} &  \frac{1}{6} &            0 &            0 &            0 &            0 &            0 &            0 &            0 \\
+  *   \frac{2}{3} &  \frac{1}{6} &  \frac{1}{6} &  \frac{1}{6} &  \frac{1}{6} &            0 &            0 &            0 &            0 &            0 &            0 \\
+  *   \frac{1}{3} & \frac{1}{15} & \frac{1}{15} & \frac{1}{15} & \frac{1}{15} & \frac{1}{15} &            0 &            0 &            0 &            0 &            0 \\
+  *   \frac{1}{2} & \frac{1}{15} & \frac{1}{15} & \frac{1}{15} & \frac{1}{15} & \frac{1}{15} &  \frac{1}{6} &            0 &            0 &            0 &            0 \\
+  *   \frac{2}{3} & \frac{1}{15} & \frac{1}{15} & \frac{1}{15} & \frac{1}{15} & \frac{1}{15} &  \frac{1}{6} &  \frac{1}{6} &            0 &            0 &            0 \\
+  *   \frac{5}{6} & \frac{1}{15} & \frac{1}{15} & \frac{1}{15} & \frac{1}{15} & \frac{1}{15} &  \frac{1}{6} &  \frac{1}{6} &  \frac{1}{6} &            0 &            0 \\
+  *             1 & \frac{1}{15} & \frac{1}{15} & \frac{1}{15} & \frac{1}{15} & \frac{1}{15} &  \frac{1}{6} &  \frac{1}{6} &  \frac{1}{6} &  \frac{1}{6} &            0 \\
+  *   \hline
+  *               & \frac{1}{10} & \frac{1}{10} & \frac{1}{10} & \frac{1}{10} & \frac{1}{10} & \frac{1}{10} & \frac{1}{10} & \frac{1}{10} & \frac{1}{10} & \frac{1}{10}
+  * \end{array} \text{.}
+  * \f]
+  */
   class SSPRK104Tableau : public Tableau<10>
   {
   public:
@@ -42,7 +44,9 @@ namespace Sandals
     using Tableau<10>::Vector;
     using Tableau<10>::Matrix;
 
-    //! Class constructor for the 10-stage strong-stability preserving Runge-Kutta order 4 method.
+    /**
+    * Class constructor for the 10-stage strong-stability preserving Runge-Kutta order 4 method.
+    */
     SSPRK104Tableau() {
       this->name  = "SSPRK104";
       this->type  = Type::ERK;
@@ -62,24 +66,30 @@ namespace Sandals
     }
   }; // class SSPRK104Tableau
 
-  //! \brief Class container for the 10-stage strong-stability preserving Runge-Kutta order 4 method.
-  //!
-  //! Class container for the 10-stage strong-stability preserving Runge-Kutta order 4 method.
-  //! \tparam N The dimension of the ODE/DAE system.
-  //! \tparam M The dimension of the invariants manifold.
+  /**
+  * \brief Class container for the 10-stage strong-stability preserving Runge-Kutta order 4 method.
+  *
+  * Class container for the 10-stage strong-stability preserving Runge-Kutta order 4 method.
+  * \tparam N The dimension of the ODE/DAE system.
+  * \tparam M The dimension of the invariants manifold.
+  */
   template <Size N, Size M = 0>
   class SSPRK104 : public RungeKutta<10, N, M>
   {
   public:
-    using System = typename Implicit<N, M>::Pointer; //!< System type.
+    using System = typename Implicit<N, M>::Pointer; /**< System type. */
 
-    //! Class constructor for a 10-stage strong-stability preserving Runge-Kutta order 4 solver given
-    //! a Tableau reference.
+    /**
+    * Class constructor for a 10-stage strong-stability preserving Runge-Kutta order 4 solver given
+    * a Tableau reference.
+    */
     SSPRK104() : RungeKutta<10, N, M>(SSPRK104Tableau()) {}
 
-    //! Class constructor for a 10-stage strong-stability preserving Runge-Kutta order 4 solver given
-    //! a Tableau reference.
-    //! \param[in] t_system The system reference.
+    /**
+    * Class constructor for a 10-stage strong-stability preserving Runge-Kutta order 4 solver given
+    * a Tableau reference.
+    * \param[in] t_system The system reference.
+    */
     SSPRK104(System t_system) : RungeKutta<10, N, M>(SSPRK104Tableau(), t_system) {}
 
   }; // class SSPRK104

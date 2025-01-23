@@ -24,31 +24,35 @@ namespace Sandals {
    |
   \*/
 
-  //! \brief Struct container for the Butcher tableau of a Runge-Kutta method.
-  //!
-  //! \includedoc docs/markdown/Tableau.md
-  //!
-  //! \tparam S The size of the Butcher tableau.
+  /**
+  * \brief Struct container for the Butcher tableau of a Runge-Kutta method.
+  *
+  * \includedoc docs/markdown/Tableau.md
+  *
+  * \tparam S The size of the Butcher tableau.
+  */
   template <Size S>
   struct Tableau
   {
-    using Type = enum class type : Size {ERK=0, IRK=1, DIRK=2}; //!< Runge-Kutta type enumeration.
-    using Vector = Eigen::Vector<Real, S>;    //!< Templetized vector type.
-    using Matrix = Eigen::Matrix<Real, S, S>; //!< Templetized matrix type.
+    using Type = enum class type : Size {ERK=0, IRK=1, DIRK=2}; /**< Runge-Kutta type enumeration. */
+    using Vector = Eigen::Vector<Real, S>;    /**< Templetized vector type. */
+    using Matrix = Eigen::Matrix<Real, S, S>; /**< Templetized matrix type. */
 
-    std::string name;                //!< Name of the Runge-Kutta method.
-    Type        type;                //!< Runge-Kutta type.
-    Size        order;               //!< Order of the Runge-Kutta method.
-    Size        order_e{-1};         //!< Order of the Runge-Kutta embedded method.
-    Matrix      A;                   //!< Matrix \f$ \mathbf{A} \f$.
-    Vector      b;                   //!< Weights vector \f$ \mathbf{b} \f$.
-    Vector      b_e{Vector::Zero()}; //!< Embedded weights vector \f$ \hat{\mathbf{b}} \f$.
-    Vector      c;                   //!< Nodes vector \f$ \mathbf{c} \f$.
-    bool        is_embedded{false};  //!< Embedded method boolean.
+    std::string name;                /**< Name of the Runge-Kutta method. */
+    Type        type;                /**< Runge-Kutta type. */
+    Size        order;               /**< Order of the Runge-Kutta method. */
+    Size        order_e{-1};         /**< Order of the Runge-Kutta embedded method. */
+    Matrix      A;                   /**< Matrix \f$ \mathbf{A} \f$. */
+    Vector      b;                   /**< Weights vector \f$ \mathbf{b} \f$. */
+    Vector      b_e{Vector::Zero()}; /**< Embedded weights vector \f$ \hat{\mathbf{b}} \f$. */
+    Vector      c;                   /**< Nodes vector \f$ \mathbf{c} \f$. */
+    bool        is_embedded{false};  /**< Embedded method boolean. */
 
-    //! Check the Butcher tableau consistency for a generic Runge-Kutta method.
-    //! \param[in] verbose Verbosity flag.
-    //! \return True if the Butcher tableau is consistent and its order is verified, false otherwise.
+    /**
+    * Check the Butcher tableau consistency for a generic Runge-Kutta method.
+    * \param[in] verbose Verbosity flag.
+    * \return True if the Butcher tableau is consistent and its order is verified, false otherwise.
+    */
     bool check(bool verbose = false) const {
 
       #define CMD "Sandals::" << this->name << "::check(...): "
@@ -96,14 +100,16 @@ namespace Sandals {
 
   private:
 
-    //! Check the order of a Runge-Kutta method according to the conditions taken from: *A family of
-    //! embedded Runge-Kutta formulae*, J. R. Dormand and P. J. Prince, Journal of Computational and
-    //! Applied Mathematics, volume 6(1), 1980. DOI 10.1016/0771-0509(80)90013-3.
-    //! \param[in] A Matrix \f$ \mathbf{A} \f$.
-    //! \param[in] b Weights vector \f$ \mathbf{b} \f$ or embedded weights vector \f$ \hat{\mathbf{b}} \f$.
-    //! \param[in] c Nodes vector \f$ \mathbf{c} \f$.
-    //! \param[in] verbose Verbosity flag.
-    //! \return The calculated order of the Runge-Kutta method.
+    /**
+    * Check the order of a Runge-Kutta method according to the conditions taken from: *A family of
+    * embedded Runge-Kutta formulae*, J. R. Dormand and P. J. Prince, Journal of Computational and
+    * Applied Mathematics, volume 6(1), 1980. DOI 10.1016/0771-0509(80)90013-3.
+    * \param[in] A Matrix \f$ \mathbf{A} \f$.
+    * \param[in] b Weights vector \f$ \mathbf{b} \f$ or embedded weights vector \f$ \hat{\mathbf{b}} \f$.
+    * \param[in] c Nodes vector \f$ \mathbf{c} \f$.
+    * \param[in] verbose Verbosity flag.
+    * \return The calculated order of the Runge-Kutta method.
+    */
     Size compute_order(Matrix const &A, Vector const &b, Vector const &c, bool verbose = false) const {
 
       #define CMD "Sandals::" << this->name << "::tableau_order(...): "

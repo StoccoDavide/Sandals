@@ -15,19 +15,21 @@
 
 namespace Sandals
 {
-  //! \brief Butcher tableau for the Ralston's order 3 method.
-  //!
-  //! Butcher tableau for the Ralston's order 3 method:
-  //!
-  //! \f[
-  //! \begin{array}{c|ccc}
-  //!     0 &   0 &   0 &   0 \\
-  //!   1/2 & 1/2 &   0 &   0 \\
-  //!   3/4 &   0 & 3/4 &   0 \\
-  //!   \hline
-  //!       & 2/9 & 1/3 & 4/9
-  //! \end{array} \text{.}
-  //! \f]
+  /**
+  * \brief Butcher tableau for the Ralston's order 3 method.
+  *
+  * Butcher tableau for the Ralston's order 3 method:
+  *
+  * \f[
+  * \begin{array}{c|ccc}
+  *     0 &   0 &   0 &   0 \\
+  *   1/2 & 1/2 &   0 &   0 \\
+  *   3/4 &   0 & 3/4 &   0 \\
+  *   \hline
+  *       & 2/9 & 1/3 & 4/9
+  * \end{array} \text{.}
+  * \f]
+  */
   class Ralston3Tableau : public Tableau<3>
   {
   public:
@@ -35,7 +37,9 @@ namespace Sandals
     using Tableau<3>::Vector;
     using Tableau<3>::Matrix;
 
-    //! Class constructor for the Ralston's order 3 method.
+    /**
+    * Class constructor for the Ralston's order 3 method.
+    */
     Ralston3Tableau() {
       this->name  = "Ralston3";
       this->type  = Type::ERK;
@@ -48,22 +52,28 @@ namespace Sandals
     }
   }; // class Ralston3Tableau
 
-  //! \brief Class container for the Ralston's order 3 method.
-  //!
-  //! Class container for the Ralston's order 3 method.
-  //! \tparam N The dimension of the ODE/DAE system.
-  //! \tparam M The dimension of the invariants manifold.
+  /**
+  * \brief Class container for the Ralston's order 3 method.
+  *
+  * Class container for the Ralston's order 3 method.
+  * \tparam N The dimension of the ODE/DAE system.
+  * \tparam M The dimension of the invariants manifold.
+  */
   template <Size N, Size M = 0>
   class Ralston3 : public RungeKutta<3, N, M>
   {
   public:
-    using System = typename Implicit<N, M>::Pointer; //!< System type.
+    using System = typename Implicit<N, M>::Pointer; /**< System type. */
 
-    //! Class constructor for a Ralston's order 3 solver given a Tableau reference.
+    /**
+    * Class constructor for a Ralston's order 3 solver given a Tableau reference.
+    */
     Ralston3() : RungeKutta<3, N, M>(Ralston3Tableau()) {}
 
-    //! Class constructor for a Ralston's order 3 solver given a Tableau reference.
-    //! \param[in] t_system The system reference.
+    /**
+    * Class constructor for a Ralston's order 3 solver given a Tableau reference.
+    * \param[in] t_system The system reference.
+    */
     Ralston3(System t_system) : RungeKutta<3, N, M>(Ralston3Tableau(), t_system) {}
 
   }; // class Ralston3

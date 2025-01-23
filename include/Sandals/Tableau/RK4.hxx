@@ -15,20 +15,22 @@
 
 namespace Sandals
 {
-  //! \brief Butcher tableau for the Runge-Kutta order 4 method.
-  //!
-  //! Butcher tableau for the Runge-Kutta order 4 method:
-  //!
-  //! \f[
-  //! \begin{array}{c|cccc}
-  //!     0 &   0 &   0 &   0 &   0 \\
-  //!   1/2 & 1/2 &   0 &   0 &   0 \\
-  //!   1/2 &   0 & 1/2 &   0 &   0 \\
-  //!     1 &   0 &   0 &   1 &   0 \\
-  //!   \hline
-  //!       & 1/6 & 1/3 & 1/3 & 1/6
-  //! \end{array} \text{.}
-  //! \f]
+  /**
+  * \brief Butcher tableau for the Runge-Kutta order 4 method.
+  *
+  * Butcher tableau for the Runge-Kutta order 4 method:
+  *
+  * \f[
+  * \begin{array}{c|cccc}
+  *     0 &   0 &   0 &   0 &   0 \\
+  *   1/2 & 1/2 &   0 &   0 &   0 \\
+  *   1/2 &   0 & 1/2 &   0 &   0 \\
+  *     1 &   0 &   0 &   1 &   0 \\
+  *   \hline
+  *       & 1/6 & 1/3 & 1/3 & 1/6
+  * \end{array} \text{.}
+  * \f]
+  */
   class RK4Tableau : public Tableau<4>
   {
   public:
@@ -36,7 +38,9 @@ namespace Sandals
     using Tableau<4>::Vector;
     using Tableau<4>::Matrix;
 
-    //! Class constructor for the RK4 method.
+    /**
+    * Class constructor for the RK4 method.
+    */
     RK4Tableau() {
       this->name  = "RK4";
       this->type  = Type::ERK;
@@ -50,22 +54,28 @@ namespace Sandals
     }
   }; // class RK4Tableau
 
-  //! \brief Class container for the Runge-Kutta order 4 method.
-  //!
-  //! Class container for the Runge-Kutta order 4 method.
-  //! \tparam N The dimension of the ODE/DAE system.
-  //! \tparam M The dimension of the invariants manifold.
+  /**
+  * \brief Class container for the Runge-Kutta order 4 method.
+  *
+  * Class container for the Runge-Kutta order 4 method.
+  * \tparam N The dimension of the ODE/DAE system.
+  * \tparam M The dimension of the invariants manifold.
+  */
   template <Size N, Size M = 0>
   class RK4 : public RungeKutta<4, N, M>
   {
   public:
-    using System = typename Implicit<N, M>::Pointer; //!< System type.
+    using System = typename Implicit<N, M>::Pointer; /**< System type. */
 
-    //! Class constructor for a Runge-Kutta order 4 solver given a Tableau reference.
+    /**
+    * Class constructor for a Runge-Kutta order 4 solver given a Tableau reference.
+    */
     RK4() : RungeKutta<4, N, M>(RK4Tableau()) {}
 
-    //! Class constructor for a Runge-Kutta order 4 solver given a Tableau reference.
-    //! \param[in] t_system The system reference.
+    /**
+    * Class constructor for a Runge-Kutta order 4 solver given a Tableau reference.
+    * \param[in] t_system The system reference.
+    */
     RK4(System t_system) : RungeKutta<4, N, M>(RK4Tableau(), t_system) {}
 
   }; // class RK4

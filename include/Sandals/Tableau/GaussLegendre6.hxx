@@ -15,26 +15,30 @@
 
 namespace Sandals
 {
-  // Symplectic Runge-Kutta Methods of High Order Based on W-Transformation, Kaifeng Xia, Yuhao Cong
-  // and Geng Sun. Journal of Applied Analysis ans Computation, Volume 7, Number 3, 2017(8), 1185-1199
-  // http://www.jaac-online.com/data/article/jaac/preview/pdf/20170325.pdf
+  /*
+  Symplectic Runge-Kutta Methods of High Order Based on W-Transformation, Kaifeng Xia, Yuhao Cong
+  and Geng Sun. Journal of Applied Analysis ans Computation, Volume 7, Number 3, 2017(8), 1185-1199
+  http://www.jaac-online.com/data/article/jaac/preview/pdf/20170325.pdf
+  */
 
-  //! \brief Butcher tableau for the Gauss-Legendre order 6 method.
-  //!
-  //! Butcher tableau for the Gauss-Legendre order 6 method:
-  //!
-  //! \f[
-  //! \begin{array}{c|ccc}
-  //!   1/2-t_1 &     w & z-t_2 & w-t_4 \\
-  //!       1/2 & w+t_3 &     z & w-t_3 \\
-  //!   1/2+t_1 & w+t_4 & z+t_2 &     w \\
-  //!   \hline
-  //!         &  5/18 &   4/9 &  5/18
-  //! \end{array} \text{,}
-  //! \f]
-  //!
-  //! with \f$ t_1 = \sqrt{15}/10 \f$, \f$ t_2 = \sqrt{15}/15 \f$, \f$ t_3 = \sqrt{15}/24 \f$, \f$
-  //! t_4 = \sqrt{15}/30 \f$, \f$ w = 5/36 \f$, and \f$ z = 2/9 \f$.
+  /**
+  * \brief Butcher tableau for the Gauss-Legendre order 6 method.
+  *
+  * Butcher tableau for the Gauss-Legendre order 6 method:
+  *
+  * \f[
+  * \begin{array}{c|ccc}
+  *   1/2-t_1 &     w & z-t_2 & w-t_4 \\
+  *       1/2 & w+t_3 &     z & w-t_3 \\
+  *   1/2+t_1 & w+t_4 & z+t_2 &     w \\
+  *   \hline
+  *         &  5/18 &   4/9 &  5/18
+  * \end{array} \text{,}
+  * \f]
+  *
+  * with \f$ t_1 = \sqrt{15}/10 \f$, \f$ t_2 = \sqrt{15}/15 \f$, \f$ t_3 = \sqrt{15}/24 \f$, \f$
+  * t_4 = \sqrt{15}/30 \f$, \f$ w = 5/36 \f$, and \f$ z = 2/9 \f$.
+  */
   class GaussLegendre6Tableau : public Tableau<3>
   {
   public:
@@ -42,7 +46,9 @@ namespace Sandals
     using Tableau<3>::Vector;
     using Tableau<3>::Matrix;
 
-    //! Class constructor for the Gauss-Legendre order 6 method.
+    /**
+    * Class constructor for the Gauss-Legendre order 6 method.
+    */
     GaussLegendre6Tableau() {
       this->name  = "GaussLegendre6";
       this->type  = Type::IRK;
@@ -61,22 +67,28 @@ namespace Sandals
     }
   }; // class GaussLegendre6Tableau
 
-  //! \brief Class container for the Gauss-Legendre order 6 method.
-  //!
-  //! Class container for the Gauss-Legendre order 6 method.
-  //! \tparam N The dimension of the ODE/DAE system.
-  //! \tparam M The dimension of the invariants manifold.
+  /**
+  * \brief Class container for the Gauss-Legendre order 6 method.
+  *
+  * Class container for the Gauss-Legendre order 6 method.
+  * \tparam N The dimension of the ODE/DAE system.
+  * \tparam M The dimension of the invariants manifold.
+  */
   template <Size N, Size M = 0>
   class GaussLegendre6 : public RungeKutta<3, N, M>
   {
   public:
-    using System = typename Implicit<N, M>::Pointer; //!< System type.
+    using System = typename Implicit<N, M>::Pointer; /**< System type. */
 
-    //! Class constructor for a Runge-Kutta solver given a Tableau reference.
+    /**
+    * Class constructor for a Runge-Kutta solver given a Tableau reference.
+    */
     GaussLegendre6() : RungeKutta<3, N, M>(GaussLegendre6Tableau()) {}
 
-    //! Class constructor for a Runge-Kutta solver given a Tableau reference.
-    //! \param[in] t_system The system reference.
+    /**
+    * Class constructor for a Runge-Kutta solver given a Tableau reference.
+    * \param[in] t_system The system reference.
+    */
     GaussLegendre6(System t_system) : RungeKutta<3, N, M>(GaussLegendre6Tableau(), t_system) {}
 
   }; // class GaussLegendre6

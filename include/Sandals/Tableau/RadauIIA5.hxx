@@ -15,30 +15,32 @@
 
 namespace Sandals
 {
-  //! \brief Butcher tableau for the Radau IIA order 3 method.
-  //!
-  //! Butcher tableau for the Radau IIA order 5 method:
-  //!
-  //! \f[
-  //! \begin{array}{c|ccc}
-  //!   \frac{2}{5} - \frac{\sqrt{6}}{10} &
-  //!   \frac{11}{45} - \frac{7 \sqrt{6}}{360} &
-  //!   \frac{37}{225} - \frac{169 \sqrt{6}}{1800}  &
-  //!   -\frac{2}{225} + \frac{\sqrt{6}}{75}  \\
-  //!   \frac{2}{5} + \frac{\sqrt{6}}{10} &
-  //!   \frac{37}{225} + \frac{169 \sqrt{6}}{1800} &
-  //!   \frac{11}{45} + \frac{7 \sqrt{6}}{360} &
-  //!   -\frac{2}{225} - \frac{\sqrt{6}}{75} \\
-  //!   1 &
-  //!   \frac{4}{9} - \frac{\sqrt{6}}{36} &
-  //!   \frac{4}{9} + \frac{\sqrt{6}}{36} &
-  //!   \frac{1}{9} \\
-  //!   \hline
-  //!     & \frac{4}{9} - \frac{\sqrt{6}}{36} &
-  //!       \frac{4}{9} + \frac{\sqrt{6}}{36} &
-  //!       \frac{1}{9} \\
-  //! \end{array} \text{.}
-  //! \f]
+  /**
+  * \brief Butcher tableau for the Radau IIA order 3 method.
+  *
+  * Butcher tableau for the Radau IIA order 5 method:
+  *
+  * \f[
+  * \begin{array}{c|ccc}
+  *   \frac{2}{5} - \frac{\sqrt{6}}{10} &
+  *   \frac{11}{45} - \frac{7 \sqrt{6}}{360} &
+  *   \frac{37}{225} - \frac{169 \sqrt{6}}{1800}  &
+  *   -\frac{2}{225} + \frac{\sqrt{6}}{75}  \\
+  *   \frac{2}{5} + \frac{\sqrt{6}}{10} &
+  *   \frac{37}{225} + \frac{169 \sqrt{6}}{1800} &
+  *   \frac{11}{45} + \frac{7 \sqrt{6}}{360} &
+  *   -\frac{2}{225} - \frac{\sqrt{6}}{75} \\
+  *   1 &
+  *   \frac{4}{9} - \frac{\sqrt{6}}{36} &
+  *   \frac{4}{9} + \frac{\sqrt{6}}{36} &
+  *   \frac{1}{9} \\
+  *   \hline
+  *     & \frac{4}{9} - \frac{\sqrt{6}}{36} &
+  *       \frac{4}{9} + \frac{\sqrt{6}}{36} &
+  *       \frac{1}{9} \\
+  * \end{array} \text{.}
+  * \f]
+  */
   class RadauIIA5Tableau : public Tableau<3>
   {
   public:
@@ -46,7 +48,9 @@ namespace Sandals
     using Tableau<3>::Vector;
     using Tableau<3>::Matrix;
 
-    //! Class constructor for the Radau IIA order 5 method.
+    /**
+    * Class constructor for the Radau IIA order 5 method.
+    */
     RadauIIA5Tableau() {
       this->name  = "RadauIIA5";
       this->type  = Type::IRK;
@@ -60,22 +64,28 @@ namespace Sandals
     }
   }; // class RadauIIA5Tableau
 
-  //! \brief Class container for the Radau IIA order 5 method.
-  //!
-  //! Class container for the Radau IIA order 5 method.
-  //! \tparam N The dimension of the ODE/DAE system.
-  //! \tparam M The dimension of the invariants manifold.
+  /**
+  * \brief Class container for the Radau IIA order 5 method.
+  *
+  * Class container for the Radau IIA order 5 method.
+  * \tparam N The dimension of the ODE/DAE system.
+  * \tparam M The dimension of the invariants manifold.
+  */
   template <Size N, Size M = 0>
   class RadauIIA5 : public RungeKutta<3, N, M>
   {
   public:
-    using System = typename Implicit<N, M>::Pointer; //!< System type.
+    using System = typename Implicit<N, M>::Pointer; /**< System type. */
 
-    //! Class constructor for a Radau IIA order 5 solver given a Tableau reference.
+    /**
+    * Class constructor for a Radau IIA order 5 solver given a Tableau reference.
+    */
     RadauIIA5() : RungeKutta<3, N, M>(RadauIIA5Tableau()) {}
 
-    //! Class constructor for a Radau IIA order 5 solver given a Tableau reference.
-    //! \param[in] t_system The system reference.
+    /**
+    * Class constructor for a Radau IIA order 5 solver given a Tableau reference.
+    * \param[in] t_system The system reference.
+    */
     RadauIIA5(System t_system) : RungeKutta<3, N, M>(RadauIIA5Tableau(), t_system) {}
 
   }; // class RadauIIA5

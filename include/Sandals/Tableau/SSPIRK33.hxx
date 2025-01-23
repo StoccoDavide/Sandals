@@ -15,20 +15,22 @@
 
 namespace Sandals
 {
-  //! \brief Butcher tableau for the 3-stage diagonally-implicit strong-stability preserving Runge-Kuttax order 3 method.
-  //!
-  //! Butcher tableau for the 3-stage diagonally-implicit strong-stability preserving Runge-Kutta
-  //! order 3 method:
-  //!
-  //! \f[
-  //! \begin{array}{c|ccc}
-  //!   \frac{1}{2}-\frac{\sqrt{2}}{4} & \frac{1}{2}-\frac{\sqrt{2}}{4} &                              0 &                              0 \\
-  //!                      \frac{1}{2} &             \frac{\sqrt{2}}{4} & \frac{1}{2}-\frac{\sqrt{2}}{4} &                              0 \\
-  //!   \frac{1}{2}+\frac{\sqrt{2}}{4} &             \frac{\sqrt{2}}{4} &             \frac{\sqrt{2}}{4} & \frac{1}{2}-\frac{\sqrt{2}}{4} \\
-  //!   \hline
-  //!                                  &                    \frac{1}{3} &        \frac{1}{3} & \frac{1}{3}
-  //!   \end{array} \text{.}
-  //! \f]
+  /**
+  * \brief Butcher tableau for the 3-stage diagonally-implicit strong-stability preserving Runge-Kuttax order 3 method.
+  *
+  * Butcher tableau for the 3-stage diagonally-implicit strong-stability preserving Runge-Kutta
+  * order 3 method:
+  *
+  * \f[
+  * \begin{array}{c|ccc}
+  *   \frac{1}{2}-\frac{\sqrt{2}}{4} & \frac{1}{2}-\frac{\sqrt{2}}{4} &                              0 &                              0 \\
+  *                      \frac{1}{2} &             \frac{\sqrt{2}}{4} & \frac{1}{2}-\frac{\sqrt{2}}{4} &                              0 \\
+  *   \frac{1}{2}+\frac{\sqrt{2}}{4} &             \frac{\sqrt{2}}{4} &             \frac{\sqrt{2}}{4} & \frac{1}{2}-\frac{\sqrt{2}}{4} \\
+  *   \hline
+  *                                  &                    \frac{1}{3} &        \frac{1}{3} & \frac{1}{3}
+  *   \end{array} \text{.}
+  * \f]
+  */
   class SSPIRK33Tableau : public Tableau<3>
   {
   public:
@@ -36,8 +38,10 @@ namespace Sandals
     using Tableau<3>::Vector;
     using Tableau<3>::Matrix;
 
-    //! Class constructor for the 3-stage diagonally-implicit strong-stability preserving Runge-Kutta
-    //! order 3 method.
+    /**
+    * Class constructor for the 3-stage diagonally-implicit strong-stability preserving Runge-Kutta
+    * order 3 method.
+    */
     SSPIRK33Tableau() {
       this->name  = "SSPIRK33";
       this->type  = Type::DIRK;
@@ -55,24 +59,30 @@ namespace Sandals
     }
   }; // class SSPIRK33Tableau
 
-  //! \brief Class container for the 3-stage diagonally-implicit strong-stability preserving Runge-Kutta order 3 method.
-  //!
-  //! Class container for the 3-stage diagonally-implicit strong-stability preserving Runge-Kutta order 3 method.
-  //! \tparam N The dimension of the ODE/DAE system.
-  //! \tparam M The dimension of the invariants manifold.
+  /**
+  * \brief Class container for the 3-stage diagonally-implicit strong-stability preserving Runge-Kutta order 3 method.
+  *
+  * Class container for the 3-stage diagonally-implicit strong-stability preserving Runge-Kutta order 3 method.
+  * \tparam N The dimension of the ODE/DAE system.
+  * \tparam M The dimension of the invariants manifold.
+  */
   template <Size N, Size M = 0>
   class SSPIRK33 : public RungeKutta<3, N, M>
   {
   public:
-    using System = typename Implicit<N, M>::Pointer; //!< System type.
+    using System = typename Implicit<N, M>::Pointer; /**< System type. */
 
-    //! Class constructor for a 3-stage strong-stability preserving Runge-Kutta order 3 solver given
-    //! a Tableau reference.
+    /**
+    * Class constructor for a 3-stage strong-stability preserving Runge-Kutta order 3 solver given
+    * a Tableau reference.
+    */
     SSPIRK33() : RungeKutta<3, N, M>(SSPIRK33Tableau()) {}
 
-    //! Class constructor for a 3-stage strong-stability preserving Runge-Kutta order 3 solver given
-    //! a Tableau reference.
-    //! \param[in] t_system The system reference.
+    /**
+    * Class constructor for a 3-stage strong-stability preserving Runge-Kutta order 3 solver given
+    * a Tableau reference.
+    * \param[in] t_system The system reference.
+    */
     SSPIRK33(System t_system) : RungeKutta<3, N, M>(SSPIRK33Tableau(), t_system) {}
 
   }; // class SSPIRK33

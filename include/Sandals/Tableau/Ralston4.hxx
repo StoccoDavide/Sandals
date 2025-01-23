@@ -15,31 +15,33 @@
 
 namespace Sandals
 {
-  //! \brief Butcher tableau for the Ralston's order 4 method.
-  //!
-  //! Butcher tableau for the Ralston's order 4 method:
-  //!
-  //! \f[
-  //! \begin{array}{c|ccccc}
-  //!   0           & 0   & 0 & 0 & 0 \\
-  //!   \frac{2}{5} & \frac{4}{10} & 0 & 0 & 0 \\
-  //!   \frac{7}{8}-\frac{3}{16}\sqrt{5} &
-  //!   \frac{357}{256}\sqrt{5}-\frac{2889}{1024} &
-  //!   \frac{3785}{1024}-\frac{405}{256}\sqrt{5} &
-  //!    0 &
-  //!    0 \\
-  //!   1 &
-  //!   \frac{1047}{3020}\sqrt{5}-\frac{673}{1208} &
-  //!   -\frac{975}{2552}-\frac{1523}{1276}\sqrt{5} &
-  //!   \frac{93408}{48169}+\frac{203968}{240845}\sqrt{5} &
-  //!   0 \\
-  //!   \hline
-  //!     & \frac{263}{1812}+\frac{2}{151}\sqrt{5} &
-  //!     \frac{125}{3828}-\frac{250}{957}\sqrt{5} &
-  //!     \frac{3426304}{5924787}+\frac{553984}{1974929}\sqrt{5} &
-  //!     \frac{10}{41}-\frac{4}{123}\sqrt{5}
-  //! \end{array} \text{.}
-  //! \f]
+  /**
+  * \brief Butcher tableau for the Ralston's order 4 method.
+  *
+  * Butcher tableau for the Ralston's order 4 method:
+  *
+  * \f[
+  * \begin{array}{c|ccccc}
+  *   0           & 0   & 0 & 0 & 0 \\
+  *   \frac{2}{5} & \frac{4}{10} & 0 & 0 & 0 \\
+  *   \frac{7}{8}-\frac{3}{16}\sqrt{5} &
+  *   \frac{357}{256}\sqrt{5}-\frac{2889}{1024} &
+  *   \frac{3785}{1024}-\frac{405}{256}\sqrt{5} &
+  *    0 &
+  *    0 \\
+  *   1 &
+  *   \frac{1047}{3020}\sqrt{5}-\frac{673}{1208} &
+  *   -\frac{975}{2552}-\frac{1523}{1276}\sqrt{5} &
+  *   \frac{93408}{48169}+\frac{203968}{240845}\sqrt{5} &
+  *   0 \\
+  *   \hline
+  *     & \frac{263}{1812}+\frac{2}{151}\sqrt{5} &
+  *     \frac{125}{3828}-\frac{250}{957}\sqrt{5} &
+  *     \frac{3426304}{5924787}+\frac{553984}{1974929}\sqrt{5} &
+  *     \frac{10}{41}-\frac{4}{123}\sqrt{5}
+  * \end{array} \text{.}
+  * \f]
+  */
   class Ralston4Tableau : public Tableau<4>
   {
   public:
@@ -47,7 +49,9 @@ namespace Sandals
     using Tableau<4>::Vector;
     using Tableau<4>::Matrix;
 
-    //! Class constructor for the Ralston's order 4 method.
+    /**
+    * Class constructor for the Ralston's order 4 method.
+    */
     Ralston4Tableau() {
       this->name  = "Ralston4";
       this->type  = Type::ERK;
@@ -74,22 +78,28 @@ namespace Sandals
     }
   }; // class Ralston4Tableau
 
-  //! \brief Class container for the Ralston's order 4 method.
-  //!
-  //! Class container for the Ralston's order 4 method.
-  //! \tparam N The dimension of the ODE/DAE system.
-  //! \tparam M The dimension of the invariants manifold.
+  /**
+  * \brief Class container for the Ralston's order 4 method.
+  *
+  * Class container for the Ralston's order 4 method.
+  * \tparam N The dimension of the ODE/DAE system.
+  * \tparam M The dimension of the invariants manifold.
+  */
   template <Size N, Size M = 0>
   class Ralston4 : public RungeKutta<4, N, M>
   {
   public:
-    using System = typename Implicit<N, M>::Pointer; //!< System type.
+    using System = typename Implicit<N, M>::Pointer; /**< System type. */
 
-    //! Class constructor for a Ralston's order 4 solver given a Tableau reference.
+    /**
+    * Class constructor for a Ralston's order 4 solver given a Tableau reference.
+    */
     Ralston4() : RungeKutta<4, N, M>(Ralston4Tableau()) {}
 
-    //! Class constructor for a Ralston's order 4 solver given a Tableau reference.
-    //! \param[in] t_system The system reference.
+    /**
+    * Class constructor for a Ralston's order 4 solver given a Tableau reference.
+    * \param[in] t_system The system reference.
+    */
     Ralston4(System t_system) : RungeKutta<4, N, M>(Ralston4Tableau(), t_system) {}
 
   }; // class Ralston4

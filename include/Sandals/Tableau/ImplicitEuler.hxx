@@ -15,17 +15,19 @@
 
 namespace Sandals
 {
-  //! \brief Butcher tableau for the Implicit Euler method.
-  //!
-  //! Butcher tableau for the Implicit Euler method:
-  //!
-  //! \f[
-  //! \begin{array}{c|c}
-  //!   1 & 1 \\
-  //!   \hline
-  //!     & 1
-  //! \end{array} \text{.}
-  //! \f]
+  /**
+  * \brief Butcher tableau for the Implicit Euler method.
+  *
+  * Butcher tableau for the Implicit Euler method:
+  *
+  * \f[
+  * \begin{array}{c|c}
+  *   1 & 1 \\
+  *   \hline
+  *     & 1
+  * \end{array} \text{.}
+  * \f]
+  */
   class ImplicitEulerTableau : public Tableau<1>
   {
   public:
@@ -33,7 +35,9 @@ namespace Sandals
     using Tableau<1>::Vector;
     using Tableau<1>::Matrix;
 
-    //! Class constructor for the Implicit Euler method.
+    /**
+    * Class constructor for the Implicit Euler method.
+    */
     ImplicitEulerTableau() {
       this->name  = "ImplicitEuler";
       this->type  = Type::IRK;
@@ -44,22 +48,28 @@ namespace Sandals
     }
   }; // class ImplicitEulerTableau
 
-  //! \brief Class container for the Implicit Euler method.
-  //!
-  //! Class container for the Implicit Euler method.
-  //! \tparam N The dimension of the ODE/DAE system.
-  //! \tparam M The dimension of the invariants manifold.
+  /**
+  * \brief Class container for the Implicit Euler method.
+  *
+  * Class container for the Implicit Euler method.
+  * \tparam N The dimension of the ODE/DAE system.
+  * \tparam M The dimension of the invariants manifold.
+  */
   template <Size N, Size M = 0>
   class ImplicitEuler : public RungeKutta<1, N, M>
   {
   public:
-    using System = typename Implicit<N, M>::Pointer; //!< System type.
+    using System = typename Implicit<N, M>::Pointer; /**< System type. */
 
-    //! Class constructor for a Implicit Euler solver given a Tableau reference.
+    /**
+    * Class constructor for a Implicit Euler solver given a Tableau reference.
+    */
     ImplicitEuler() : RungeKutta<1, N, M>(ImplicitEulerTableau()) {}
 
-    //! Class constructor for a Implicit Euler solver given a Tableau reference.
-    //! \param[in] t_system The system reference.
+    /**
+    * Class constructor for a Implicit Euler solver given a Tableau reference.
+    * \param[in] t_system The system reference.
+    */
     ImplicitEuler(System t_system) : RungeKutta<1, N, M>(ImplicitEulerTableau(), t_system) {}
 
   }; // class ImplicitEuler

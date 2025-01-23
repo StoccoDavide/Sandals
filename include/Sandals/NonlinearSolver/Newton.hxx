@@ -25,36 +25,44 @@ namespace Sandals
    |
   \*/
 
-  //! \brief Class container for the (damped) Newton's method with affine invariant step.
-  //!
-  //! \includedoc docs/markdown/Newton.md
-  //!
-  //! \tparam N The dimension of the nonlinear system of equations.
+  /**
+  * \brief Class container for the (damped) Newton's method with affine invariant step.
+  *
+  * \includedoc docs/markdown/Newton.md
+  *
+  * \tparam N The dimension of the nonlinear system of equations.
+  */
   template <Size N>
   class Newton : public NonlinearSolver<N>
   {
   public:
-    using Vector   = typename NonlinearSolver<N>::Vector;   //!< Templetized vector type.
-    using Matrix   = typename NonlinearSolver<N>::Matrix;   //!< Templetized matrix type.
-    using Function = typename NonlinearSolver<N>::Function; //!< Nonlinear function type.
-    using Jacobian = typename NonlinearSolver<N>::Jacobian; //!< Jacobian function type.
+    using Vector   = typename NonlinearSolver<N>::Vector;   /**< Templetized vector type. */
+    using Matrix   = typename NonlinearSolver<N>::Matrix;   /**< Templetized matrix type. */
+    using Function = typename NonlinearSolver<N>::Function; /**< Nonlinear function type. */
+    using Jacobian = typename NonlinearSolver<N>::Jacobian; /**< Jacobian function type. */
     using NonlinearSolver<N>::solve;
     using NonlinearSolver<N>::solve_damped;
 
   private:
-    Eigen::FullPivLU<Matrix> m_lu; //!< LU decomposition.
+    Eigen::FullPivLU<Matrix> m_lu; /**< LU decomposition. */
 
   public:
-    //! Class constructor for the Newton solver.
+    /**
+    * Class constructor for the Newton solver.
+    */
     Newton() {}
 
-    //! Get the Newton solver name.
-    //! \return The Newton solver name.
+    /**
+    * Get the Newton solver name.
+    * \return The Newton solver name.
+    */
     std::string name() const override {return "Newton";}
 
-    //! Solve nonlinear system of equations \f$ \mathbf{F}(\mathbf{x}) = \mathbf{0} \f$.
-    //! \param[in] x_ini The initialization point.
-    //! \param[out] x_sol The solution point.
+    /**
+    * Solve nonlinear system of equations \f$ \mathbf{F}(\mathbf{x}) = \mathbf{0} \f$.
+    * \param[in] x_ini The initialization point.
+    * \param[out] x_sol The solution point.
+    */
     bool solve(Vector const &x_ini, Vector &x_sol) override
     {
       // Reset internal variables
@@ -104,9 +112,11 @@ namespace Sandals
       return this->m_converged;
     }
 
-    //! Solve nonlinear system of equations \f$ \mathbf{F}(\mathbf{x}) = \mathbf{0} \f$ with damping.
-    //! \param[in] x_ini The initialization point.
-    //! \param[out] x_sol The solution point.
+    /**
+    * Solve nonlinear system of equations \f$ \mathbf{F}(\mathbf{x}) = \mathbf{0} \f$ with damping.
+    * \param[in] x_ini The initialization point.
+    * \param[out] x_sol The solution point.
+    */
     bool solve_damped(Vector const &x_ini, Vector &x_sol) override
     {
       // Setup internal variables

@@ -15,25 +15,27 @@
 
 namespace Sandals
 {
-  //! \brief Butcher tableau for the 9-stage strong-stability preserving Runge-Kutta order 3 method.
-  //!
-  //! Butcher tableau for the 9-stage strong-stability preserving Runge-Kutta order 3 method:
-  //!
-  //! \f[
-  //! \begin{array}{c|ccccccccc}
-  //!             0 &           0 &            0 &            0 &            0 &            0 &            0 &           0 &           0 &           0 \\
-  //!   \frac{1}{6} & \frac{1}{6} &            0 &            0 &            0 &            0 &            0 &           0 &           0 &           0 \\
-  //!   \frac{1}{3} & \frac{1}{6} &  \frac{1}{6} &            0 &            0 &            0 &            0 &           0 &           0 &           0 \\
-  //!   \frac{1}{2} & \frac{1}{6} &  \frac{1}{6} &  \frac{1}{6} &            0 &            0 &            0 &           0 &           0 &           0 \\
-  //!   \frac{2}{3} & \frac{1}{6} &  \frac{1}{6} &  \frac{1}{6} &  \frac{1}{6} &            0 &            0 &           0 &           0 &           0 \\
-  //!   \frac{5}{6} & \frac{1}{6} &  \frac{1}{6} &  \frac{1}{6} &  \frac{1}{6} &  \frac{1}{6} &            0 &           0 &           0 &           0 \\
-  //!   \frac{1}{2} & \frac{1}{6} & \frac{1}{15} & \frac{1}{15} & \frac{1}{15} & \frac{1}{15} & \frac{1}{15} &           0 &           0 &           0 \\
-  //!   \frac{2}{3} & \frac{1}{6} & \frac{1}{15} & \frac{1}{15} & \frac{1}{15} & \frac{1}{15} & \frac{1}{15} & \frac{1}{6} &           0 &           0 \\
-  //!   \frac{5}{6} & \frac{1}{6} & \frac{1}{15} & \frac{1}{15} & \frac{1}{15} & \frac{1}{15} & \frac{1}{15} & \frac{1}{6} & \frac{1}{6} &           0 \\
-  //!   \hline
-  //!               & \frac{1}{6} & \frac{1}{15} & \frac{1}{15} & \frac{1}{15} & \frac{1}{15} & \frac{1}{15} & \frac{1}{6} & \frac{1}{6} & \frac{1}{6}
-  //! \end{array} \text{.}
-  //! \f]
+  /**
+  * \brief Butcher tableau for the 9-stage strong-stability preserving Runge-Kutta order 3 method.
+  *
+  * Butcher tableau for the 9-stage strong-stability preserving Runge-Kutta order 3 method:
+  *
+  * \f[
+  * \begin{array}{c|ccccccccc}
+  *             0 &           0 &            0 &            0 &            0 &            0 &            0 &           0 &           0 &           0 \\
+  *   \frac{1}{6} & \frac{1}{6} &            0 &            0 &            0 &            0 &            0 &           0 &           0 &           0 \\
+  *   \frac{1}{3} & \frac{1}{6} &  \frac{1}{6} &            0 &            0 &            0 &            0 &           0 &           0 &           0 \\
+  *   \frac{1}{2} & \frac{1}{6} &  \frac{1}{6} &  \frac{1}{6} &            0 &            0 &            0 &           0 &           0 &           0 \\
+  *   \frac{2}{3} & \frac{1}{6} &  \frac{1}{6} &  \frac{1}{6} &  \frac{1}{6} &            0 &            0 &           0 &           0 &           0 \\
+  *   \frac{5}{6} & \frac{1}{6} &  \frac{1}{6} &  \frac{1}{6} &  \frac{1}{6} &  \frac{1}{6} &            0 &           0 &           0 &           0 \\
+  *   \frac{1}{2} & \frac{1}{6} & \frac{1}{15} & \frac{1}{15} & \frac{1}{15} & \frac{1}{15} & \frac{1}{15} &           0 &           0 &           0 \\
+  *   \frac{2}{3} & \frac{1}{6} & \frac{1}{15} & \frac{1}{15} & \frac{1}{15} & \frac{1}{15} & \frac{1}{15} & \frac{1}{6} &           0 &           0 \\
+  *   \frac{5}{6} & \frac{1}{6} & \frac{1}{15} & \frac{1}{15} & \frac{1}{15} & \frac{1}{15} & \frac{1}{15} & \frac{1}{6} & \frac{1}{6} &           0 \\
+  *   \hline
+  *               & \frac{1}{6} & \frac{1}{15} & \frac{1}{15} & \frac{1}{15} & \frac{1}{15} & \frac{1}{15} & \frac{1}{6} & \frac{1}{6} & \frac{1}{6}
+  * \end{array} \text{.}
+  * \f]
+  */
   class SSPRK93Tableau : public Tableau<9>
   {
   public:
@@ -41,7 +43,9 @@ namespace Sandals
     using Tableau<9>::Vector;
     using Tableau<9>::Matrix;
 
-    //! Class constructor for the 9-stage strong-stability preserving Runge-Kutta order 3 method.
+    /**
+    * Class constructor for the 9-stage strong-stability preserving Runge-Kutta order 3 method.
+    */
     SSPRK93Tableau() {
       this->name  = "SSPRK93";
       this->type  = Type::ERK;
@@ -60,24 +64,30 @@ namespace Sandals
         }
       }; // class SSPRK93Tableau
 
-  //! \brief Class container for the 9-stage strong-stability preserving Runge-Kutta order 3 method.
-  //!
-  //! Class container for the 9-stage strong-stability preserving Runge-Kutta order 3 method.
-  //! \tparam N The dimension of the ODE/DAE system.
-  //! \tparam M The dimension of the invariants manifold.
+  /**
+  * \brief Class container for the 9-stage strong-stability preserving Runge-Kutta order 3 method.
+  *
+  * Class container for the 9-stage strong-stability preserving Runge-Kutta order 3 method.
+  * \tparam N The dimension of the ODE/DAE system.
+  * \tparam M The dimension of the invariants manifold.
+  */
   template <Size N, Size M = 0>
   class SSPRK93 : public RungeKutta<9, N, M>
   {
   public:
-    using System = typename Implicit<N, M>::Pointer; //!< System type.
+    using System = typename Implicit<N, M>::Pointer; /**< System type. */
 
-    //! Class constructor for a 9-stage strong-stability preserving Runge-Kutta order 3 solver given
-    //! a Tableau reference.
+    /**
+    * Class constructor for a 9-stage strong-stability preserving Runge-Kutta order 3 solver given
+    * a Tableau reference.
+    */
     SSPRK93() : RungeKutta<9, N, M>(SSPRK93Tableau()) {}
 
-    //! Class constructor for a 9-stage strong-stability preserving Runge-Kutta order 3 solver given
-    //! a Tableau reference.
-    //! \param[in] t_system The system reference.
+    /**
+    * Class constructor for a 9-stage strong-stability preserving Runge-Kutta order 3 solver given
+    * a Tableau reference.
+    * \param[in] t_system The system reference.
+    */
     SSPRK93(System t_system) : RungeKutta<9, N, M>(SSPRK93Tableau(), t_system) {}
 
   }; // class SSPRK93

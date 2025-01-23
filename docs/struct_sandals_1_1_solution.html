@@ -54,6 +54,7 @@ MathJax.Hub.Config({
 <link href="custom.css" rel="stylesheet" type="text/css"/>
 <link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
 <link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+<link href="custom-alternative.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <!-- https://tholman.com/github-corners/ -->
@@ -155,19 +156,15 @@ $(function(){initNavTree('struct_sandals_1_1_solution.html',''); initResizable(t
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
 Public Types</h2></td></tr>
 <tr class="memitem:a53b5d76fe47167457e6b1cf6cdf61fb2" id="r_a53b5d76fe47167457e6b1cf6cdf61fb2"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a53b5d76fe47167457e6b1cf6cdf61fb2">Vector</a> = Eigen::Vector&lt;<a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a>, Eigen::Dynamic&gt;</td></tr>
-<tr class="memdesc:a53b5d76fe47167457e6b1cf6cdf61fb2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Templetized vector type.  <br /></td></tr>
 <tr class="separator:a53b5d76fe47167457e6b1cf6cdf61fb2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a37772e7ebbaadcee7d60971bffb5ca93" id="r_a37772e7ebbaadcee7d60971bffb5ca93"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a37772e7ebbaadcee7d60971bffb5ca93">MatrixN</a> = Eigen::Matrix&lt;<a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a>, N, Eigen::Dynamic&gt;</td></tr>
-<tr class="memdesc:a37772e7ebbaadcee7d60971bffb5ca93"><td class="mdescLeft">&#160;</td><td class="mdescRight">Templetized matrix type.  <br /></td></tr>
 <tr class="separator:a37772e7ebbaadcee7d60971bffb5ca93"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a32d95d0cfeb6b725a07d1648c786fcc9" id="r_a32d95d0cfeb6b725a07d1648c786fcc9"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a32d95d0cfeb6b725a07d1648c786fcc9">MatrixM</a> = Eigen::Matrix&lt;<a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a>, M, Eigen::Dynamic&gt;</td></tr>
-<tr class="memdesc:a32d95d0cfeb6b725a07d1648c786fcc9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Templetized matrix type.  <br /></td></tr>
 <tr class="separator:a32d95d0cfeb6b725a07d1648c786fcc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ab7be68ff680045082227656471c0e907" id="r_ab7be68ff680045082227656471c0e907"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab7be68ff680045082227656471c0e907">Solution</a> ()</td></tr>
-<tr class="memdesc:ab7be68ff680045082227656471c0e907"><td class="mdescLeft">&#160;</td><td class="mdescRight">Class constructor for the <a class="el" href="struct_sandals_1_1_solution.html" title="Class container for the numerical solution of a system of ODEs/DAEs.">Solution</a> class.  <br /></td></tr>
 <tr class="separator:ab7be68ff680045082227656471c0e907"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a919d9e437cd8c8c44cf11aaa5e5bfd92" id="r_a919d9e437cd8c8c44cf11aaa5e5bfd92"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a919d9e437cd8c8c44cf11aaa5e5bfd92">Solution</a> (<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> <a class="el" href="#a5fb70ed770e0ec175ba03b8c7dfad8a4">size</a>)</td></tr>
 <tr class="separator:a919d9e437cd8c8c44cf11aaa5e5bfd92"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -176,7 +173,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ac22b536769cd0dd36c30c9e2f115cebc" id="r_ac22b536769cd0dd36c30c9e2f115cebc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac22b536769cd0dd36c30c9e2f115cebc">conservative_resize</a> (<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Size</a> <a class="el" href="#a5fb70ed770e0ec175ba03b8c7dfad8a4">size</a>)</td></tr>
 <tr class="separator:ac22b536769cd0dd36c30c9e2f115cebc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a120b6a1f244f6411fd0ea89c0cded43b" id="r_a120b6a1f244f6411fd0ea89c0cded43b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a120b6a1f244f6411fd0ea89c0cded43b">clear</a> ()</td></tr>
-<tr class="memdesc:a120b6a1f244f6411fd0ea89c0cded43b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clear the independent variable (or time) vector and states matrix.  <br /></td></tr>
 <tr class="separator:a120b6a1f244f6411fd0ea89c0cded43b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6c21241d1a1138151102e6b2cc72e0fd" id="r_a6c21241d1a1138151102e6b2cc72e0fd"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6c21241d1a1138151102e6b2cc72e0fd">is_empty</a> () const</td></tr>
 <tr class="separator:a6c21241d1a1138151102e6b2cc72e0fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -210,13 +206,10 @@ Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a182666e32eb7ba27f18f893e177391ba" id="r_a182666e32eb7ba27f18f893e177391ba"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a53b5d76fe47167457e6b1cf6cdf61fb2">Vector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a182666e32eb7ba27f18f893e177391ba">t</a></td></tr>
-<tr class="memdesc:a182666e32eb7ba27f18f893e177391ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Independent variable (or time) solution vector \( \mathbf{t} \).  <br /></td></tr>
 <tr class="separator:a182666e32eb7ba27f18f893e177391ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a77dad81242b5d554a27a58ce453ed1b0" id="r_a77dad81242b5d554a27a58ce453ed1b0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a37772e7ebbaadcee7d60971bffb5ca93">MatrixN</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a77dad81242b5d554a27a58ce453ed1b0">x</a></td></tr>
-<tr class="memdesc:a77dad81242b5d554a27a58ce453ed1b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">States solution matrix \( \mathbf{X} \).  <br /></td></tr>
 <tr class="separator:a77dad81242b5d554a27a58ce453ed1b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abcb9994cbf75434c8d7dc9c1d9602b05" id="r_abcb9994cbf75434c8d7dc9c1d9602b05"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a32d95d0cfeb6b725a07d1648c786fcc9">MatrixM</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abcb9994cbf75434c8d7dc9c1d9602b05">h</a></td></tr>
-<tr class="memdesc:abcb9994cbf75434c8d7dc9c1d9602b05"><td class="mdescLeft">&#160;</td><td class="mdescRight">Invariants solution matrix \( \mathbf{H} \).  <br /></td></tr>
 <tr class="separator:abcb9994cbf75434c8d7dc9c1d9602b05"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -259,6 +252,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d44
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Templetized matrix type. </p>
 
 </div>
 </div>
@@ -275,6 +269,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d44
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Templetized matrix type. </p>
 
 </div>
 </div>
@@ -291,6 +286,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d44
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Templetized vector type. </p>
 
 </div>
 </div>
@@ -319,6 +315,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d44
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Class constructor for the <a class="el" href="struct_sandals_1_1_solution.html" title="Class container for the numerical solution of a system of ODEs/DAEs.">Solution</a> class. </p>
 
 </div>
 </div>
@@ -380,6 +377,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d44
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Clear the independent variable (or time) vector and states matrix. </p>
 
 </div>
 </div>
@@ -891,6 +889,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d44
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Invariants solution matrix \( \mathbf{H} \). </p>
 
 </div>
 </div>
@@ -907,6 +906,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d44
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Independent variable (or time) solution vector \( \mathbf{t} \). </p>
 
 </div>
 </div>
@@ -923,6 +923,7 @@ template&lt;<a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d44
         </tr>
       </table>
 </div><div class="memdoc">
+<p>States solution matrix \( \mathbf{X} \). </p>
 
 </div>
 </div>

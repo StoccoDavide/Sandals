@@ -15,20 +15,22 @@
 
 namespace Sandals
 {
-  //! \brief Butcher tableau for the 4-stage strong-stability preserving Runge-Kutta order 3 method.
-  //!
-  //! Butcher tableau for the 4-stage strong-stability preserving Runge-Kutta order 3 method:
-  //!
-  //! \f[
-  //! \begin{array}{c|cccc}
-  //!             0 &           0 &           0 &           0 &          0 \\
-  //!   \frac{1}{2} & \frac{1}{2} &           0 &           0 &          0 \\
-  //!             1 & \frac{1}{2} & \frac{1}{2} &           0 &          0 \\
-  //!   \frac{1}{2} & \frac{1}{6} & \frac{1}{6} & \frac{1}{6} &          0 \\
-  //!   \hline
-  //!               & \frac{1}{6} & \frac{1}{6} & \frac{1}{6} & \frac{1}{2}
-  //! \end{array} \text{.}
-  //! \f]
+  /**
+  * \brief Butcher tableau for the 4-stage strong-stability preserving Runge-Kutta order 3 method.
+  *
+  * Butcher tableau for the 4-stage strong-stability preserving Runge-Kutta order 3 method:
+  *
+  * \f[
+  * \begin{array}{c|cccc}
+  *             0 &           0 &           0 &           0 &          0 \\
+  *   \frac{1}{2} & \frac{1}{2} &           0 &           0 &          0 \\
+  *             1 & \frac{1}{2} & \frac{1}{2} &           0 &          0 \\
+  *   \frac{1}{2} & \frac{1}{6} & \frac{1}{6} & \frac{1}{6} &          0 \\
+  *   \hline
+  *               & \frac{1}{6} & \frac{1}{6} & \frac{1}{6} & \frac{1}{2}
+  * \end{array} \text{.}
+  * \f]
+  */
   class SSPRK43Tableau : public Tableau<4>
   {
   public:
@@ -36,7 +38,9 @@ namespace Sandals
     using Tableau<4>::Vector;
     using Tableau<4>::Matrix;
 
-    //! Class constructor for the 4-stage strong-stability preserving Runge-Kutta order 3 method.
+    /**
+    * Class constructor for the 4-stage strong-stability preserving Runge-Kutta order 3 method.
+    */
     SSPRK43Tableau() {
       this->name  = "SSPRK43";
       this->type  = Type::ERK;
@@ -50,24 +54,30 @@ namespace Sandals
     }
   }; // class SSPRK43Tableau
 
-  //! \brief Class container for the 4-stage strong-stability preserving Runge-Kutta order 3 method.
-  //!
-  //! Class container for the 4-stage strong-stability preserving Runge-Kutta order 3 method.
-  //! \tparam N The dimension of the ODE/DAE system.
-  //! \tparam M The dimension of the invariants manifold.
+  /**
+  * \brief Class container for the 4-stage strong-stability preserving Runge-Kutta order 3 method.
+  *
+  * Class container for the 4-stage strong-stability preserving Runge-Kutta order 3 method.
+  * \tparam N The dimension of the ODE/DAE system.
+  * \tparam M The dimension of the invariants manifold.
+  */
   template <Size N, Size M = 0>
   class SSPRK43 : public RungeKutta<4, N, M>
   {
   public:
-    using System = typename Implicit<N, M>::Pointer; //!< System type.
+    using System = typename Implicit<N, M>::Pointer; /**< System type. */
 
-    //! Class constructor for a 4-stage strong-stability preserving Runge-Kutta order 3 solver given
-    //! a Tableau reference.
+    /**
+    * Class constructor for a 4-stage strong-stability preserving Runge-Kutta order 3 solver given
+    * a Tableau reference.
+    */
     SSPRK43() : RungeKutta<4, N, M>(SSPRK43Tableau()) {}
 
-    //! Class constructor for a 4-stage strong-stability preserving Runge-Kutta order 3 solver given
-    //! a Tableau reference.
-    //! \param[in] t_system The system reference.
+    /**
+    * Class constructor for a 4-stage strong-stability preserving Runge-Kutta order 3 solver given
+    * a Tableau reference.
+    * \param[in] t_system The system reference.
+    */
     SSPRK43(System t_system) : RungeKutta<4, N, M>(SSPRK43Tableau(), t_system) {}
 
   }; // class SSPRK43

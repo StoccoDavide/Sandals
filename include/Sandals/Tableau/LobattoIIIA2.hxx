@@ -15,18 +15,20 @@
 
 namespace Sandals
 {
-  //! \brief Butcher tableau for the Lobatto IIIA order 2 method.
-  //!
-  //! Butcher tableau for the Lobatto IIIA order 2 method:
-  //!
-  //! \f[
-  //! \begin{array}{c|cc}
-  //!   1/3 & 5/12 & -1/12 \\
-  //!     1 &  3/4 &   1/4 \\
-  //!   \hline
-  //!       &  3/4 &   1/4
-  //! \end{array} \text{.}
-  //! \f]
+  /**
+  * \brief Butcher tableau for the Lobatto IIIA order 2 method.
+  *
+  * Butcher tableau for the Lobatto IIIA order 2 method:
+  *
+  * \f[
+  * \begin{array}{c|cc}
+  *   1/3 & 5/12 & -1/12 \\
+  *     1 &  3/4 &   1/4 \\
+  *   \hline
+  *       &  3/4 &   1/4
+  * \end{array} \text{.}
+  * \f]
+  */
   class LobattoIIIA2Tableau : public Tableau<2>
   {
   public:
@@ -34,7 +36,9 @@ namespace Sandals
     using Tableau<2>::Vector;
     using Tableau<2>::Matrix;
 
-    //! Class constructor for the Lobatto IIIA order 2 method.
+    /**
+    * Class constructor for the Lobatto IIIA order 2 method.
+    */
     LobattoIIIA2Tableau() {
       this->name  = "LobattoIIIA2";
       this->type  = Type::DIRK;
@@ -46,22 +50,28 @@ namespace Sandals
     }
   }; // class LobattoIIIA2Tableau
 
-  //! \brief Class container for the Lobatto IIIA order 2 method.
-  //!
-  //! Class container for the Lobatto IIIA order 2 method.
-  //! \tparam N The dimension of the ODE/DAE system.
-  //! \tparam M The dimension of the invariants manifold.
+  /**
+  * \brief Class container for the Lobatto IIIA order 2 method.
+  *
+  * Class container for the Lobatto IIIA order 2 method.
+  * \tparam N The dimension of the ODE/DAE system.
+  * \tparam M The dimension of the invariants manifold.
+  */
   template <Size N, Size M = 0>
   class LobattoIIIA2 : public RungeKutta<2, N, M>
   {
   public:
-    using System = typename Implicit<N, M>::Pointer; //!< System type.
+    using System = typename Implicit<N, M>::Pointer; /**< System type. */
 
-    //! Class constructor for a Lobatto IIIA order 2 solver given a Tableau reference.
+    /**
+    * Class constructor for a Lobatto IIIA order 2 solver given a Tableau reference.
+    */
     LobattoIIIA2() : RungeKutta<2, N, M>(LobattoIIIA2Tableau()) {}
 
-    //! Class constructor for a Lobatto IIIA order 2 solver given a Tableau reference.
-    //! \param[in] t_system The system reference.
+    /**
+    * Class constructor for a Lobatto IIIA order 2 solver given a Tableau reference.
+    * \param[in] t_system The system reference.
+    */
     LobattoIIIA2(System t_system) : RungeKutta<2, N, M>(LobattoIIIA2Tableau(), t_system) {}
 
   }; // class LobattoIIIA2

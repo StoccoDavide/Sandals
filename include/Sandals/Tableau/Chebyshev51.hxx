@@ -15,20 +15,22 @@
 
 namespace Sandals
 {
-  //! \brief Butcher tableau for the 5-stage Runge-Kutta-Chebyshev order 1 method.
-  //!
-  //! Butcher tableau for the 5-stage Runge-Kutta-Chebyshev order 1 method:
-  //!
-  //! \f[
-  //! \begin{array}{c|ccccc}
-  //! & & & & & \\
-  //! \frac{1}{25} & \frac{1}{25} & & & & \\
-  //! \frac{4}{25} & \frac{2}{25} & \frac{2}{25} & & & \\
-  //! \frac{9}{25} & \frac{3}{25} & \frac{4}{25} & \frac{2}{25} & & \\
-  //! \frac{16}{25} & \frac{4}{25} & \frac{6}{25} & \frac{4}{25} & \frac{2}{25} & \\
-  //! \hline & \frac{1}{5} & \frac{8}{25} & \frac{6}{25} & \frac{4}{25} & \frac{2}{25}
-  //! \end{array} \text{.}
-  //! \f]
+  /**
+  * \brief Butcher tableau for the 5-stage Runge-Kutta-Chebyshev order 1 method.
+  *
+  * Butcher tableau for the 5-stage Runge-Kutta-Chebyshev order 1 method:
+  *
+  * \f[
+  * \begin{array}{c|ccccc}
+  * & & & & & \\
+  * \frac{1}{25} & \frac{1}{25} & & & & \\
+  * \frac{4}{25} & \frac{2}{25} & \frac{2}{25} & & & \\
+  * \frac{9}{25} & \frac{3}{25} & \frac{4}{25} & \frac{2}{25} & & \\
+  * \frac{16}{25} & \frac{4}{25} & \frac{6}{25} & \frac{4}{25} & \frac{2}{25} & \\
+  * \hline & \frac{1}{5} & \frac{8}{25} & \frac{6}{25} & \frac{4}{25} & \frac{2}{25}
+  * \end{array} \text{.}
+  * \f]
+  */
   class Chebyshev51Tableau : public Tableau<5>
   {
   public:
@@ -36,7 +38,9 @@ namespace Sandals
     using Tableau<5>::Vector;
     using Tableau<5>::Matrix;
 
-    //! Class constructor for the 5-stage Runge-Kutta-Chebyshev order 1 method.
+    /**
+    * Class constructor for the 5-stage Runge-Kutta-Chebyshev order 1 method.
+    */
     Chebyshev51Tableau() {
       this->name  = "Chebyshev51";
       this->type  = Type::ERK;
@@ -51,22 +55,28 @@ namespace Sandals
     }
   }; // class Chebyshev51Tableau
 
-  //! \brief Class container for the 5-stage Runge-Kutta-Chebyshev order 1 method.
-  //!
-  //! Class container for the 5-stage Runge-Kutta-Chebyshev order 1 method.
-  //! \tparam N The dimension of the ODE/DAE system.
-  //! \tparam M The dimension of the invariants manifold.
+  /**
+  * \brief Class container for the 5-stage Runge-Kutta-Chebyshev order 1 method.
+  *
+  * Class container for the 5-stage Runge-Kutta-Chebyshev order 1 method.
+  * \tparam N The dimension of the ODE/DAE system.
+  * \tparam M The dimension of the invariants manifold.
+  */
   template <Size N, Size M = 0>
   class Chebyshev51 : public RungeKutta<5, N, M>
   {
   public:
-    using System = typename Implicit<N, M>::Pointer; //!< System type.
+    using System = typename Implicit<N, M>::Pointer; /**< System type. */
 
-    //! Class constructor for a 5-stage Runge-Kutta-Chebyshev order 1 solver given a Tableau reference.
+    /**
+    * Class constructor for a 5-stage Runge-Kutta-Chebyshev order 1 solver given a Tableau reference.
+    */
     Chebyshev51() : RungeKutta<5, N, M>(Chebyshev51Tableau()) {}
 
-    //! Class constructor for a 5-stage Runge-Kutta-Chebyshev order 1 solver given a Tableau reference.
-    //! \param[in] t_system The system reference.
+    /**
+    * Class constructor for a 5-stage Runge-Kutta-Chebyshev order 1 solver given a Tableau reference.
+    * \param[in] t_system The system reference.
+    */
     Chebyshev51(System t_system) : RungeKutta<5, N, M>(Chebyshev51Tableau(), t_system) {}
 
   }; // class Chebyshev51
