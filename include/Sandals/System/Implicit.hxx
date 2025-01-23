@@ -34,11 +34,11 @@ namespace Sandals
   * \tparam N The dimension of the implicit ODE system.
   * \tparam M The dimension of the invariants manifold.
   */
-  template <Size N, Size M>
+  template <Integer N, Integer M>
   class Implicit
   {
   public:
-    using Type = enum class Type : Size {IMPLICIT=0, EXPLICIT=1, SEMIEXPLICIT=1}; /**< System type enumeration. */
+    using Type = enum class Type : Integer {IMPLICIT=0, EXPLICIT=1, SEMIEXPLICIT=1}; /**< System type enumeration. */
     using Pointer  = std::shared_ptr<Implicit<N, M>>; /**< Shared pointer to an implicit ODE system. */
     using VectorF  = Eigen::Vector<Real, N>;          /**< Templetized vector type. */
     using MatrixJF = Eigen::Matrix<Real, N, N>;       /**< Templetized matrix type. */
@@ -50,6 +50,7 @@ namespace Sandals
     std::string m_name;                 /**< Name of the ODE/DAE system. */
 
   protected:
+
     /**
     * Class constructor for an implicit ODE/DAE system.
     * \param[in] t_type The type of the implicit ODE/DAE system.
@@ -58,6 +59,7 @@ namespace Sandals
     Implicit(Type t_type, std::string t_name) : m_type(t_type), m_name(t_name) {}
 
   public:
+
     /**
     * Class constructor for an implicit ODE/DAE system.
     */
@@ -114,13 +116,13 @@ namespace Sandals
     * Get the number of equations of the ODE/DAE system.
     * \return The number of equations of the ODE/DAE system.
     */
-    Size equations_number() const {return N;}
+    Integer equations_number() const {return N;}
 
     /**
     * Get the number of invariants of the ODE/DAE system.
     * \return The number of invariants of the ODE/DAE system.
     */
-    Size invariants_number() const {return M;}
+    Integer invariants_number() const {return M;}
 
     /**
     * Evaluate the ODE/DAE system \f$ \mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, t) \f$.

@@ -32,7 +32,7 @@ namespace Sandals
   *
   * \tparam N The dimension of the nonlinear system of equations.
   */
-  template <Size N>
+  template <Integer N>
   class Newton : public NonlinearSolver<N>
   {
   public:
@@ -47,6 +47,7 @@ namespace Sandals
     Eigen::FullPivLU<Matrix> m_lu; /**< LU decomposition. */
 
   public:
+
     /**
     * Class constructor for the Newton solver.
     */
@@ -81,7 +82,7 @@ namespace Sandals
       // Algorithm iterations
       Real tolerance_residuals{this->m_tolerance};
       Real tolerance_step_norm{this->m_tolerance * this->m_tolerance};
-      for (this->m_iterations = Size(1); this->m_iterations < this->m_max_iterations; ++this->m_iterations)
+      for (this->m_iterations = Integer(1); this->m_iterations < this->m_max_iterations; ++this->m_iterations)
       {
 
         // Calculate step
@@ -135,7 +136,7 @@ namespace Sandals
       // Algorithm iterations
       Real tolerance_residuals{this->m_tolerance};
       Real tolerance_step_norm{this->m_tolerance * this->m_tolerance};
-      for (this->m_iterations = Size(1); this->m_iterations < this->m_max_iterations; ++this->m_iterations)
+      for (this->m_iterations = Integer(1); this->m_iterations < this->m_max_iterations; ++this->m_iterations)
       {
 
         // Calculate step
@@ -153,7 +154,7 @@ namespace Sandals
 
         // Relax the iteration process
         tau = Real(1.0);
-        for (this->m_relaxations = Size(0); this->m_relaxations < this->m_max_relaxations; ++this->m_relaxations)
+        for (this->m_relaxations = Integer(0); this->m_relaxations < this->m_max_relaxations; ++this->m_relaxations)
         {
           // Update point
           step_new = tau * step_old;

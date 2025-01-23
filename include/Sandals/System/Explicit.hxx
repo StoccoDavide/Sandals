@@ -33,7 +33,7 @@ namespace Sandals {
   * \tparam N The dimension of the explicit ODE system.
   * \tparam M The dimension of the invariants manifold.
   */
-  template <Size N, Size M>
+  template <Integer N, Integer M>
   class Explicit : public Implicit<N, M>
   {
   public:
@@ -43,6 +43,7 @@ namespace Sandals {
     using Type     = typename Implicit<N, M>::Type;     /**< System type enumeration. */
 
   protected:
+
     /**
     * Class constructor for an explicit ODE/DAE system.
     * \param[in] t_type The type of the explicit ODE/DAE system.
@@ -51,6 +52,7 @@ namespace Sandals {
     Explicit(Type t_type, std::string t_name) : Implicit<N, M>(t_type, t_name) {}
 
   public:
+
     /**
     * Class constructor for the explicit ODE system.
     */

@@ -34,7 +34,7 @@ namespace Sandals {
   * \tparam N The dimension of the semi-explicit ODE system.
   * \tparam M The dimension of the invariants manifold.
   */
-  template <Size N, Size M = 0>
+  template <Integer N, Integer M = 0>
   class SemiExplicit : public Explicit<N, M>
   {
   public:
@@ -51,6 +51,7 @@ namespace Sandals {
     mutable Eigen::FullPivLU<MatrixA> m_lu; /**< LU decomposition. */
 
   public:
+
     /**
     * Default class constructor for the semi-explicit ODE/DAE system.
     */
@@ -160,7 +161,7 @@ namespace Sandals {
     {
       TensorTA TA_x{this->TA_x(x, t)};
       MatrixJF tAp{MatrixJF::Zero()};
-      for (Size i{0}; i < N; ++i) {tAp.col(i) = TA_x[i] * x_dot;} // TODO: Check if TA_x.size() = N
+      for (Integer i{0}; i < N; ++i) {tAp.col(i) = TA_x[i] * x_dot;} // TODO: Check if TA_x.size() = N
       this->m_lu.compute(this->A(x, t));
       SANDALS_ASSERT(this->m_lu.rank() == N,
         "Sandals:SemiExplicit::Jf_x(...): singular mass matrix A detected.");

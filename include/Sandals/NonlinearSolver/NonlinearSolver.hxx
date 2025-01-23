@@ -32,7 +32,7 @@ namespace Sandals
   *
   * \tparam N The dimension of the nonlinear system of equations.
   */
-  template <Size N>
+  template <Integer N>
   class NonlinearSolver
   {
   public:
@@ -46,19 +46,20 @@ namespace Sandals
     Jacobian m_jacobian;                      /**< Jacobian function \f$ \mathbf{JF}_{\mathbf{x}} \f$. */
     Real     m_tolerance{EPSILON_HIGH};       /**< Solver tolerance \f$ \epsilon \f$. */
     Real     m_alpha{0.8};                    /**< Relaxation factor \f$ \alpha \f$. */
-    Size     m_max_iterations{100};           /**< Maximum number of allowed algorithm iterations. */
-    Size     m_max_function_evaluations{100}; /**< Maximum number of allowed function evaluations. */
-    Size     m_max_jacobian_evaluations{100}; /**< Maximum number of allowed Jacobian evaluations. */
-    Size     m_max_relaxations{10};           /**< Maximum number of allowed algorithm relaxations. */
+    Integer  m_max_iterations{100};           /**< Maximum number of allowed algorithm iterations. */
+    Integer  m_max_function_evaluations{100}; /**< Maximum number of allowed function evaluations. */
+    Integer  m_max_jacobian_evaluations{100}; /**< Maximum number of allowed Jacobian evaluations. */
+    Integer  m_max_relaxations{10};           /**< Maximum number of allowed algorithm relaxations. */
     bool     m_verbose{false};                /**< Verbose mode boolean flag. */
     bool     m_converged{false};              /**< Convergence boolean flag. */
     Real     m_residuals{0.0};                /**< Function residuals. */
-    Size     m_iterations{0};                 /**< Algorithm iterations number. */
-    Size     m_function_evaluations{0};       /**< Function evaluations number. */
-    Size     m_jacobian_evaluations{0};       /**< Jacobian evaluations number. */
-    Size     m_relaxations{0};                /**< Algorithm relaxations number. */
+    Integer  m_iterations{0};                 /**< Algorithm iterations number. */
+    Integer  m_function_evaluations{0};       /**< Function evaluations number. */
+    Integer  m_jacobian_evaluations{0};       /**< Jacobian evaluations number. */
+    Integer  m_relaxations{0};                /**< Algorithm relaxations number. */
 
   public:
+
     /**
     * Class constructor for the nonlinear solver.
     */
@@ -86,13 +87,13 @@ namespace Sandals
     * Get the number of maximum allowed iterations.
     * \return The number of maximum allowed iterations.
     */
-    Size max_iterations() const {return this->max_iterations;}
+    Integer max_iterations() const {return this->max_iterations;}
 
     /**
     * Set the number of maximum allowed iterations.
     * \param[in] t_max_iterations The number of maximum allowed iterations.
     */
-    void max_iterations(Size t_max_iterations) {
+    void max_iterations(Integer t_max_iterations) {
       SANDALS_ASSERT(!std::isnan(t_max_iterations) && std::isfinite(t_max_iterations),
         "Sandals::NonlinearSolver::max_iterations(...): invalid input detected.");
       this->m_max_iterations = t_max_iterations;
@@ -102,13 +103,13 @@ namespace Sandals
     * Get the number of maximum allowed function evaluations.
     * \return The number of maximum allowed function evaluations.
     */
-    Size max_function_evaluations() const {return this->m_max_function_evaluations;}
+    Integer max_function_evaluations() const {return this->m_max_function_evaluations;}
 
     /**
     * Set the number of maximum allowed function evaluations.
     * \param[in] t_max_fun_evaluations The number of maximum allowed function evaluations.
     */
-    void max_function_evaluations(Size t_max_fun_evaluations)
+    void max_function_evaluations(Integer t_max_fun_evaluations)
     {
       SANDALS_ASSERT(!std::isnan(t_max_fun_evaluations) && std::isfinite(t_max_fun_evaluations),
         "Sandals::NonlinearSolver::max_function_evaluations(...): invalid input detected.");
@@ -119,13 +120,13 @@ namespace Sandals
     * Get the number of maximum allowed Jacobian evaluations.
     * \return The number of maximum allowed Jacobian evaluations.
     */
-    Size max_jacobian_evaluations() const {return this->m_max_jacobian_evaluations;}
+    Integer max_jacobian_evaluations() const {return this->m_max_jacobian_evaluations;}
 
     /**
     * Set the number of maximum allowed Jacobian evaluations.
     * \param[in] t_max_jac_evaluations The number of maximum allowed Jacobian evaluations.
     */
-    void max_jacobian_evaluations(Size t_max_jac_evaluations)
+    void max_jacobian_evaluations(Integer t_max_jac_evaluations)
     {
       SANDALS_ASSERT(!std::isnan(t_max_jac_evaluations) && std::isfinite(t_max_jac_evaluations),
         "Sandals::NonlinearSolver::max_jacobian_evaluations(...): invalid input detected.");
@@ -136,13 +137,13 @@ namespace Sandals
     * Get the number of maximum allowed relaxations.
     * \return The number of maximum allowed relaxations.
     */
-    Size max_relaxations() const {return this->max_relaxations;}
+    Integer max_relaxations() const {return this->max_relaxations;}
 
     /**
     * Set the number of maximum allowed relaxations.
     * \param[in] t_max_relaxations The number of maximum allowed relaxations.
     */
-    void max_relaxations(Size t_max_relaxations)
+    void max_relaxations(Integer t_max_relaxations)
     {
       SANDALS_ASSERT(!std::isnan(t_max_relaxations) && std::isfinite(t_max_relaxations),
         "Sandals::NonlinearSolver::max_relaxations(...): invalid input detected.");
@@ -185,25 +186,25 @@ namespace Sandals
     /**
     * Get the number of algorithm iterations.
     */
-    Size iterations() const {return this->m_iterations;}
+    Integer iterations() const {return this->m_iterations;}
 
     /**
     * Get the number of function evaluations.
     * \return The number of function evaluations.
     */
-    Size function_evaluations() const {return this->m_function_evaluations;}
+    Integer function_evaluations() const {return this->m_function_evaluations;}
 
     /**
     * Get the number of function evaluations.
     * \return The number of function evaluations.
     */
-    Size jacobian_evaluations() const {return this->m_jacobian_evaluations;}
+    Integer jacobian_evaluations() const {return this->m_jacobian_evaluations;}
 
     /**
     * Get the number of algorithm relaxations.
     * \return The number of algorithm relaxations.
     */
-    Size relaxations() const {return this->m_relaxations;}
+    Integer relaxations() const {return this->m_relaxations;}
 
     /**
     * Get the number of function evaluations.
@@ -252,15 +253,16 @@ namespace Sandals
     virtual std::string name() const = 0;
 
   protected:
+
     /**
     * Reset solver internal counters and variables.
     */
     void reset()
     {
-      this->m_iterations           = Size(0);
-      this->m_function_evaluations = Size(0);
-      this->m_jacobian_evaluations = Size(0);
-      this->m_relaxations          = Size(0);
+      this->m_iterations           = Integer(0);
+      this->m_function_evaluations = Integer(0);
+      this->m_jacobian_evaluations = Integer(0);
+      this->m_relaxations          = Integer(0);
       this->m_residuals            = Real(0.0);
       this->m_converged            = false;
     }

@@ -31,17 +31,17 @@ namespace Sandals {
   *
   * \tparam S The size of the Butcher tableau.
   */
-  template <Size S>
+  template <Integer S>
   struct Tableau
   {
-    using Type = enum class type : Size {ERK=0, IRK=1, DIRK=2}; /**< Runge-Kutta type enumeration. */
+    using Type = enum class type : Integer {ERK=0, IRK=1, DIRK=2}; /**< Runge-Kutta type enumeration. */
     using Vector = Eigen::Vector<Real, S>;    /**< Templetized vector type. */
     using Matrix = Eigen::Matrix<Real, S, S>; /**< Templetized matrix type. */
 
     std::string name;                /**< Name of the Runge-Kutta method. */
     Type        type;                /**< Runge-Kutta type. */
-    Size        order;               /**< Order of the Runge-Kutta method. */
-    Size        order_e{-1};         /**< Order of the Runge-Kutta embedded method. */
+    Integer     order;               /**< Order of the Runge-Kutta method. */
+    Integer     order_e{-1};         /**< Order of the Runge-Kutta embedded method. */
     Matrix      A;                   /**< Matrix \f$ \mathbf{A} \f$. */
     Vector      b;                   /**< Weights vector \f$ \mathbf{b} \f$. */
     Vector      b_e{Vector::Zero()}; /**< Embedded weights vector \f$ \hat{\mathbf{b}} \f$. */
@@ -70,7 +70,7 @@ namespace Sandals {
       }
 
       // Check the order of the method
-      Size computed_order{compute_order(this->A, this->b, this->c, verbose)};
+      Integer computed_order{compute_order(this->A, this->b, this->c, verbose)};
       if (this->order != computed_order) {
         SANDALS_ASSERT_WARNING(!verbose, CMD "method order check failed, " << computed_order << " ≠ "
           << this->order << ".");
@@ -86,7 +86,7 @@ namespace Sandals {
       }
 
       // Check the embedded method order
-      Size computed_order_e{compute_order(this->A, this->b_e, this->c, verbose)};
+      Integer computed_order_e{compute_order(this->A, this->b_e, this->c, verbose)};
       if (this->order_e != computed_order_e) {
         SANDALS_ASSERT_WARNING(!verbose, CMD "embedded method order check failed, " << computed_order_e
           << " ≠ " << this->order_e << ".");
@@ -110,12 +110,12 @@ namespace Sandals {
     * \param[in] verbose Verbosity flag.
     * \return The calculated order of the Runge-Kutta method.
     */
-    Size compute_order(Matrix const &A, Vector const &b, Vector const &c, bool verbose = false) const {
+    Integer compute_order(Matrix const &A, Vector const &b, Vector const &c, bool verbose = false) const {
 
       #define CMD "Sandals::" << this->name << "::tableau_order(...): "
 
       // Temporary variables initialization
-      Size order{0};
+      Integer order{0};
       Real tolerance{std::pow(EPSILON, 2.0/3.0)};
 
       // Precheck consistency

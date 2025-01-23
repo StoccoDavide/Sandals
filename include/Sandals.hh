@@ -19,7 +19,6 @@
 #include <cmath>
 #include <vector>
 #include <map>
-#include <numeric>
 #include <memory>
 #include <chrono>
 
@@ -80,8 +79,8 @@ namespace Sandals
    |
   \*/
 
-  using Real = double; /**< Real number type. */
-  using Size = int;    /**< Size number type. */
+  using Real    = double; /**< Real number type. */
+  using Integer = int;    /**< Integer number type. */
 
   using Vector0 = Eigen::Vector<Real, 0>;    /**< \f$ 0 \times 1 \f$ vector of Real number type (column vector). */
   using Matrix0 = Eigen::Matrix<Real, 0, 0>; /**< \f$ 0 \times 0 \f$ matrix of Real number type. */

@@ -61,7 +61,7 @@ namespace Sandals
   * \tparam N The dimension of the ODE/DAE system.
   * \tparam M The dimension of the invariants manifold.
   */
-  template <Size N, Size M = 0>
+  template <Integer N, Integer M = 0>
   class SSPRK43 : public RungeKutta<4, N, M>
   {
   public:

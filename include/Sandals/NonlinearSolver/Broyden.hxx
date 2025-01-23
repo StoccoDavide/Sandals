@@ -32,11 +32,11 @@ namespace Sandals
   *
   * \tparam N The dimension of the nonlinear system of equations.
   */
-  template <Size N>
+  template <Integer N>
   class Broyden : public NonlinearSolver<N>
   {
   public:
-    using Type = enum class Type : Size {GOOD=0, BAD=1, COMBINED=2}; /**< Broyden solver type. */
+    using Type = enum class Type : Integer {GOOD=0, BAD=1, COMBINED=2}; /**< Broyden solver type. */
     using Vector   = typename NonlinearSolver<N>::Vector;   /**< Templetized vector type. */
     using Matrix   = typename NonlinearSolver<N>::Matrix;   /**< Templetized matrix type. */
     using Function = typename NonlinearSolver<N>::Function; /**< Nonlinear function type. */
@@ -48,6 +48,7 @@ namespace Sandals
     Type m_type{Type::COMBINED}; /**< ODE system type. */
 
   public:
+
     /**
     * Class constructor for the Broyden solver.
     */
@@ -116,7 +117,7 @@ namespace Sandals
       // Algorithm iterations
       Real tolerance_residuals{this->m_tolerance};
       Real tolerance_step_norm{this->m_tolerance * this->m_tolerance};
-      for (this->m_iterations = Size(1); this->m_iterations < this->m_max_iterations; ++this->m_iterations)
+      for (this->m_iterations = Integer(1); this->m_iterations < this->m_max_iterations; ++this->m_iterations)
       {
 
         // Calculate step
@@ -182,7 +183,7 @@ namespace Sandals
       // Algorithm iterations
       Real tolerance_residuals{this->m_tolerance};
       Real tolerance_step_norm{this->m_tolerance * this->m_tolerance};
-      for (this->m_iterations = Size(1); this->m_iterations < this->m_max_iterations; ++this->m_iterations)
+      for (this->m_iterations = Integer(1); this->m_iterations < this->m_max_iterations; ++this->m_iterations)
       {
 
         // Calculate step
@@ -198,7 +199,7 @@ namespace Sandals
 
         // Relax the iteration process
         tau = Real(1.0);
-        for (this->m_relaxations = Size(0); this->m_relaxations < this->m_max_relaxations; ++this->m_relaxations)
+        for (this->m_relaxations = Integer(0); this->m_relaxations < this->m_max_relaxations; ++this->m_relaxations)
         {
           // Update point
           step_new = tau * step_old;
@@ -254,7 +255,7 @@ namespace Sandals
       Vector tmp_1(jacobian_old * delta_function_new);
       Real tmp_2{delta_function_new.squaredNorm()};
       // Selection criteria: |(dx_new'*dx_old) / (dx_new'*J_old*dF_new)| < |(dF_new'*dF_old) / (dF_new'*dF_new)|
-      if (this->m_type == Type::COMBINED || this->m_type == Type::GOOD || this->iterations() < Size(2) ||
+      if (this->m_type == Type::COMBINED || this->m_type == Type::GOOD || this->iterations() < Integer(2) ||
           std::abs(delta_x_new.transpose() * delta_x_old) / std::abs(delta_x_new.transpose() * tmp_1)
           < std::abs(delta_function_new.transpose() * delta_function_old) / tmp_2) {
         // Broyden's Good solver: J_new = J_old - (J_old*dF_new-dx_new) / (C'*dF_new)*C', where C = J_old'*dx_new;

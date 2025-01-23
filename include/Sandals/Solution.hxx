@@ -52,7 +52,7 @@ namespace Sandals {
   * \tparam N The dimension of the ODE/DAE system.
   * \tparam M The dimension of the invariants manifold.
   */
-  template <Size N, Size M = 0>
+  template <Integer N, Integer M = 0>
   struct Solution
   {
     using Vector  = Eigen::Vector<Real, Eigen::Dynamic>;    /**< Templetized vector type. */
@@ -72,14 +72,14 @@ namespace Sandals {
     * Class constructor for the Solution class given the independent variable (or time) and states sizes.
     * \param[in] size The size of the independent variable (or time) vector and states matrix.
     */
-    Solution(Size size)
+    Solution(Integer size)
       : t(size), x(Vector::Zero(N, size)), h(Vector::Zero(M, size)) {}
 
     /**
     * Resize the independent variable (or time) vector and states matrix.
     * \param[in] size The size of the independent variable (or time) vector and states matrix.
     */
-    void resize(Size size) {
+    void resize(Integer size) {
       this->t.resize(size);
       this->x.resize(Eigen::NoChange, size);
       this->h.resize(Eigen::NoChange, size);
@@ -89,7 +89,7 @@ namespace Sandals {
     * Resize conserving the data of the independent variable (or time) vector and states matrix.
     * \param[in] size The size of the independent variable (or time) vector and states matrix.
     */
-    void conservative_resize(Size size) {
+    void conservative_resize(Integer size) {
       this->t.conservativeResize(size);
       this->x.conservativeResize(Eigen::NoChange, size);
       this->h.conservativeResize(Eigen::NoChange, size);
@@ -118,7 +118,7 @@ namespace Sandals {
     * Get the size of the independent variable (or time) vector and states matrix.
     * \return The size of the independent variable (or time) vector and states matrix.
     */
-    Size size() const {return this->t.size();}
+    Integer size() const {return this->t.size();}
 
     /**
     * Get the independent variable (or time) vector \f$ \mathbf{t} \f$ as a standard library vector.
@@ -140,7 +140,7 @@ namespace Sandals {
     * \param[in] i The index of the state vector.
     * \return The \f$ i \f$-th state vector as a standard library vector.
     */
-    std::vector<Real> std_x(Size i) const
+    std::vector<Real> std_x(Integer i) const
     {
       Vector tmp(this->x.row(i));
       return std::vector<Real>(tmp.data(), tmp.data() + tmp.size());
@@ -150,10 +150,10 @@ namespace Sandals {
     * Get a map of the states vectors \f$ \mathbf{X} \f$ as standard library vectors.
     * \return A map of the states vectors as standard library vectors.
     */
-    std::map<Size, std::vector<Real>> std_x() const
+    std::map<Integer, std::vector<Real>> std_x() const
     {
-      std::map<Size, std::vector<Real>> x_map;
-      for (Size i{0}; i < N; ++i) {x_map[i] = this->std_x(i);}
+      std::map<Integer, std::vector<Real>> x_map;
+      for (Integer i{0}; i < N; ++i) {x_map[i] = this->std_x(i);}
       return x_map;
     }
 
@@ -161,10 +161,10 @@ namespace Sandals {
     * Get a map of the states vectors \f$ \mathbf{X} \f$ as Eigen library vectors.
     * \return A map of the states vectors as Eigen library vectors.
     */
-    std::map<Size, Vector> eig_x() const
+    std::map<Integer, Vector> eig_x() const
     {
-      std::map<Size, Vector> x_map;
-      for (Size i{0}; i < N; ++i) {x_map[i] = this->x.row(i);}
+      std::map<Integer, Vector> x_map;
+      for (Integer i{0}; i < N; ++i) {x_map[i] = this->x.row(i);}
       return x_map;
     }
 
@@ -176,7 +176,7 @@ namespace Sandals {
     std::map<std::string, std::vector<Real>> std_x(std::vector<std::string> names) const
     {
       std::map<std::string, std::vector<Real>> x_map;
-      for (Size i{0}; i < N; ++i) {x_map[names[i]] = this->std_x(i);}
+      for (Integer i{0}; i < N; ++i) {x_map[names[i]] = this->std_x(i);}
       return x_map;
     }
 
@@ -188,7 +188,7 @@ namespace Sandals {
     std::map<std::string, Vector> eig_x(std::vector<std::string> names) const
     {
       std::map<std::string, Vector> x_map;
-      for (Size i{0}; i < N; ++i) {x_map[names[i]] = this->x.row(i);}
+      for (Integer i{0}; i < N; ++i) {x_map[names[i]] = this->x.row(i);}
       return x_map;
     }
 
@@ -197,7 +197,7 @@ namespace Sandals {
     * \param[in] i The index of the invariant vector.
     * \return The \f$ i \f$-th invariants vector as a standard library vector.
     */
-    std::vector<Real> std_h(Size i) const
+    std::vector<Real> std_h(Integer i) const
     {
       Vector tmp(this->h.row(i));
       return std::vector<Real>(tmp.data(), tmp.data() + tmp.size());
@@ -207,10 +207,10 @@ namespace Sandals {
     * Get a map of the invariants vectors \f$ \mathbf{H} \f$ as standard library vectors.
     * \return A map of the invariants vectors as standard library vectors.
     */
-    std::map<Size, std::vector<Real>> std_h() const
+    std::map<Integer, std::vector<Real>> std_h() const
     {
-      std::map<Size, std::vector<Real>> h_map;
-      for (Size i{0}; i < M; ++i) {h_map[i] = this->std_h(i);}
+      std::map<Integer, std::vector<Real>> h_map;
+      for (Integer i{0}; i < M; ++i) {h_map[i] = this->std_h(i);}
       return h_map;
     }
 
@@ -218,10 +218,10 @@ namespace Sandals {
     * Get a map of the invariants vectors \f$ \mathbf{H} \f$ as Eigen library vectors.
     * \return A map of the invariants vectors as Eigen library vectors.
     */
-    std::map<Size, Vector> eig_h() const
+    std::map<Integer, Vector> eig_h() const
     {
-      std::map<Size, Vector> h_map;
-      for (Size i{0}; i < M; ++i) {h_map[i] = this->h.row(i);}
+      std::map<Integer, Vector> h_map;
+      for (Integer i{0}; i < M; ++i) {h_map[i] = this->h.row(i);}
       return h_map;
     }
 
@@ -233,7 +233,7 @@ namespace Sandals {
     std::map<std::string, std::vector<Real>> std_h(std::vector<std::string> names) const
     {
       std::map<std::string, std::vector<Real>> h_map;
-      for (Size i{0}; i < M; ++i) {h_map[names[i]] = this->std_h(i);}
+      for (Integer i{0}; i < M; ++i) {h_map[names[i]] = this->std_h(i);}
       return h_map;
     }
 
@@ -245,7 +245,7 @@ namespace Sandals {
     std::map<std::string, Vector> eig_h(std::vector<std::string> names) const
     {
       std::map<std::string, Vector> h_map;
-      for (Size i{0}; i < M; ++i) {h_map[names[i]] = this->h.row(i);}
+      for (Integer i{0}; i < M; ++i) {h_map[names[i]] = this->h.row(i);}
       return h_map;
     }
   };

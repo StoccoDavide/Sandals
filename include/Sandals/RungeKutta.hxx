@@ -34,7 +34,7 @@ namespace Sandals {
   * \tparam N The dimension of the ODE/DAE system.
   * \tparam M The dimension of the invariants manifold.
   */
-  template <Size S, Size N, Size M>
+  template <Integer S, Integer N, Integer M>
   class RungeKutta
   {
     using VectorK = Eigen::Vector<Real, N*S>;          /**< Templetized vector type. */
@@ -71,18 +71,18 @@ namespace Sandals {
     Real         m_min_safety_factor{0.2};           /**< Minimum safety factor for adaptive step \f$ f_{\max} \f$. */
     Real         m_max_safety_factor{1.5};           /**< Maximum safety factor for adaptive step \f$ f_{\min} \f$. */
     Real         m_min_step{EPSILON_HIGH};           /**< Minimum step for advancing \f$ h_{\min} \f$. */
-    Size         m_max_substeps{5};                  /**< Maximum number of substeps. */
+    Integer      m_max_substeps{5};                  /**< Maximum number of substeps. */
     bool         m_adaptive{true};                   /**< Aadaptive step mode boolean. */
     bool         m_verbose{false};                   /**< Verbose mode boolean. */
     bool         m_reverse{false};                   /**< Time reverse mode boolean. */
 
     Eigen::FullPivLU<MatrixP> m_lu;                         /**< LU decomposition for the projection matrix. */
     Real              m_projection_tolerance{EPSILON_HIGH}; /**< Projection tolerance \f$ \epsilon_{\text{proj}} \f$. */
-    Size              m_max_projection_iterations{5};       /**< Maximum number of projection steps. */
+    Integer           m_max_projection_iterations{5};       /**< Maximum number of projection steps. */
     bool              m_projection{true};                   /**< Aadaptive step mode boolean. */
 
-
   public:
+
     /**
     * Copy constructor for the timer.
     */
@@ -170,7 +170,7 @@ namespace Sandals {
     * Get the stages \f$ s \f$ number of the Runge-Kutta method.
     * \return The stages \f$ s \f$ number of the Runge-Kutta method.
     */
-    Size stages() const {return S;}
+    Integer stages() const {return S;}
 
     /**
     * Get the name of the Runge-Kutta method.
@@ -182,7 +182,7 @@ namespace Sandals {
     * Get the order \f$ p \f$ of the Runge-Kutta method.
     * \return The order \f$ p \f$ of the Runge-Kutta method.
     */
-    Size order() const {return this->m_tableau.order;}
+    Integer order() const {return this->m_tableau.order;}
 
     /**
     * Check if the Runge-Kutta method is embedded.
@@ -302,13 +302,13 @@ namespace Sandals {
     * Get the maximum number of substeps.
     * \return The maximum number of substeps.
     */
-    Size & max_substeps() {return this->m_max_substeps;}
+    Integer & max_substeps() {return this->m_max_substeps;}
 
     /**
     * Set the maximum number of substeps.
     * \param[in] t_max_substeps The maximum number of substeps.
     */
-    void max_substeps(Size t_max_substeps) {this->m_max_substeps = t_max_substeps;}
+    void max_substeps(Integer t_max_substeps) {this->m_max_substeps = t_max_substeps;}
 
     /**
     * Get the adaptive step mode.
@@ -393,13 +393,13 @@ namespace Sandals {
     * Get the maximum number of projection iterations.
     * \return The maximum number of projection iterations.
     */
-    Size & max_projection_iterations() {return this->m_max_projection_iterationsations;}
+    Integer & max_projection_iterations() {return this->m_max_projection_iterationsations;}
 
     /**
     * Set the maximum number of projection iterations.
     * \param[in] t_max_projection_iterations The maximum number of projection iterations.
     */
-    void max_projection_iterations(Size t_max_projection_iterations)
+    void max_projection_iterations(Integer t_max_projection_iterations)
       {this->m_max_projection_iterationsations = t_max_projection_iterations;}
 
     /**
@@ -535,7 +535,7 @@ namespace Sandals {
       // Compute the K variables in the case of an explicit method and explicit system
       VectorN x_node;
       MatrixK K;
-      for (Size i{0}; i < S; ++i) {
+      for (Integer i{0}; i < S; ++i) {
         x_node = x_old + K(all, seqN(0, i)) * this->m_tableau.A(i, seqN(0, i)).transpose();
         if (!this->m_reverse) {
           K.col(i) = h_old * static_cast<Explicit<N, M> const *>(this->m_system.get())->f(x_node, t_old + h_old*this->m_tableau.c(i));
@@ -576,7 +576,7 @@ namespace Sandals {
     * \param[in] K Variables \f$ \tilde{\mathbf{K}} = h \mathbf{K} \f$ of the system to be solved.
     * \param[out] fun The residual of system to be solved.
     */
-    void erk_implicit_function(Size s, VectorN const &x, Real t, Real h, MatrixK const &K, VectorN &fun) const
+    void erk_implicit_function(Integer s, VectorN const &x, Real t, Real h, MatrixK const &K, VectorN &fun) const
     {
       using Eigen::all;
       using Eigen::seqN;
@@ -621,7 +621,7 @@ namespace Sandals {
     * \param[in] K Variables \f$ h \mathbf{K} \f$ of the system to be solved.
     * \param[out] jac The Jacobian of system to be solved.
     */
-    void erk_implicit_jacobian(Size s, VectorN const &x, Real t, Real h, MatrixK const &K, MatrixN &jac) const
+    void erk_implicit_jacobian(Integer s, VectorN const &x, Real t, Real h, MatrixK const &K, MatrixN &jac) const
     {
       using Eigen::all;
       using Eigen::seqN;
@@ -653,7 +653,7 @@ namespace Sandals {
       VectorN K_ini(VectorN::Zero());
 
       // Check if the solver converged
-      for (Size s{0}; s < S; ++s) {
+      for (Integer s{0}; s < S; ++s) {
         if (this->m_solverN->solve(
             [this, s, &K, &x_old, t_old, h_old](VectorN const &K_fun, VectorN &fun)
               {K.col(s) = K_fun; this->erk_implicit_function(s, x_old, t_old, h_old, K, fun);},
@@ -715,7 +715,7 @@ namespace Sandals {
       VectorN x_node;
       MatrixK K_mat{K.reshaped(N, S)};
       MatrixK fun_mat;
-      for (Size i{0}; i < S; ++i) {
+      for (Integer i{0}; i < S; ++i) {
         x_node = x + K_mat * this->m_tableau.A.row(i).transpose();
         if (!this->m_reverse) {
           fun_mat.col(i) = this->m_system->F(x_node, K_mat.col(i)/h, t + h * this->m_tableau.c(i));
@@ -775,7 +775,7 @@ namespace Sandals {
       VectorN x_node, x_dot_node;
       MatrixN JF_x, JF_x_dot;
       auto idx = seqN(0, N), jdx = seqN(0, N);
-      for (Size i{0}; i < S; ++i) {
+      for (Integer i{0}; i < S; ++i) {
         t_node = t + h * this->m_tableau.c(i);
         x_node = x + K_mat * this->m_tableau.A.row(i).transpose();
 
@@ -791,7 +791,7 @@ namespace Sandals {
 
         // Combine the Jacobians with respect to x and x_dot to obtain the Jacobian with respect to K
         idx = seqN(i*N, N);
-        for (Size j{0}; j < S; ++j) {
+        for (Integer j{0}; j < S; ++j) {
           jdx = seqN(j*N, N);
           if (i == j) {
             jac(idx, jdx) = this->m_tableau.A(i,j) * JF_x + JF_x_dot / h;
@@ -869,7 +869,7 @@ namespace Sandals {
     * \param[in] K Variables \f$ \tilde{\mathbf{K}} = h \mathbf{K} \f$ of the system to be solved.
     * \param[out] fun The residual of system to be solved.
     */
-    void dirk_function(Size n, VectorN const &x, Real t, Real h, MatrixK const &K, VectorN &fun) const
+    void dirk_function(Integer n, VectorN const &x, Real t, Real h, MatrixK const &K, VectorN &fun) const
     {
       using Eigen::all;
       using Eigen::seqN;
@@ -914,7 +914,7 @@ namespace Sandals {
     * \param[in] K Variables \f$ h \mathbf{K} \f$ of the system to be solved.
     * \param[out] jac The Jacobian of system to be solved.
     */
-    void dirk_jacobian(Size n, VectorN const &x, Real t, Real h, MatrixK const &K, MatrixN &jac) const
+    void dirk_jacobian(Integer n, VectorN const &x, Real t, Real h, MatrixK const &K, MatrixN &jac) const
     {
       using Eigen::all;
       using Eigen::seqN;
@@ -950,7 +950,7 @@ namespace Sandals {
       VectorN K_ini(VectorN::Zero());
 
       // Check if the solver converged at each step
-      for (Size n{0}; n < S; ++n) {
+      for (Integer n{0}; n < S; ++n) {
         if (this->m_solverN->solve(
             [this, n, &K, &x_old, t_old, h_old](VectorN const &K_fun, VectorN &fun)
               {K.col(n) = K_fun; this->dirk_function(n, x_old, t_old, h_old, K, fun);},
@@ -1033,7 +1033,7 @@ namespace Sandals {
         Real t_tmp{t_old}, h_tmp{h_old / Real(2.0)};
 
         // Substepping logic
-        Size max_k{this->m_max_substeps * this->m_max_substeps}, k{2};
+        Integer max_k{this->m_max_substeps * this->m_max_substeps}, k{2};
         Real h_new_tmp;
         while (k > 0) {
           // Calculate the next step with substepping logic
@@ -1121,7 +1121,7 @@ namespace Sandals {
       sol.h.col(0) = this->m_system->h(ics, t_mesh(0));
 
       // Update the current step
-      Size step{0};
+      Integer step{0};
       VectorN x_step{ics};
       Real t_step{t_mesh(0)}, h_step{t_mesh(1) - t_mesh(0)}, h_tmp_step{h_step}, h_new_step;
       bool mesh_point_bool, saturation_bool;
@@ -1190,7 +1190,7 @@ namespace Sandals {
       Real h_step{t_mesh(1) - t_mesh(0)}, h_new_step, scale{100.0};
       Real h_min{std::max(this->m_min_step, h_step/scale)}, h_max{scale*h_step};
       if (this->m_tableau.is_embedded) {
-        Size safety_length{static_cast<Size>(std::ceil(std::abs(t_mesh(last) - t_mesh(0))/h_min))};
+        Integer safety_length{static_cast<Integer>(std::ceil(std::abs(t_mesh(last) - t_mesh(0))/h_min))};
         sol.resize(safety_length);
       } else {
         sol.resize(t_mesh.size());
@@ -1202,7 +1202,7 @@ namespace Sandals {
       sol.h.col(0) = this->m_system->h(ics, t_mesh(0));
 
       // Instantiate temporary variables
-      Size step{0};
+      Integer step{0};
       VectorN x_step{ics};
 
       while (true) {
@@ -1251,7 +1251,7 @@ namespace Sandals {
 
       // Check if there are any constraints
       x_projected = x;
-      if (M > Size(0)) {
+      if (M > Integer(0)) {
 
         VectorM h;
         MatrixM Jh_x;
@@ -1259,7 +1259,7 @@ namespace Sandals {
         MatrixP A;
         A.setZero();
         A.template block<N, N>(0, 0) = MatrixN::Identity();
-        for (Size k{0}; k < this->m_max_projection_iterations; ++k) {
+        for (Integer k{0}; k < this->m_max_projection_iterations; ++k) {
 
           /* Standard projection method
                [A]         {x}    =        {b}
@@ -1312,17 +1312,17 @@ namespace Sandals {
     * manifold \f$ \mathbf{h} (\mathbf{x}, t) = \mathbf{0} \f$.
     * \return True if the solution is successfully projected, false otherwise.
     */
-    bool project_ics(VectorN const &x, Real t, std::vector<Size> const & projected_equations,
-      std::vector<Size> const & projected_invariants, VectorN &x_projected) const
+    bool project_ics(VectorN const &x, Real t, std::vector<Integer> const & projected_equations,
+      std::vector<Integer> const & projected_invariants, VectorN &x_projected) const
     {
       #define CMD "Sandals::RungeKutta::project_ics(...): "
 
-      Size X{static_cast<Size>(projected_equations.size())};
-      Size H{static_cast<Size>(projected_invariants.size())};
+      Integer X{static_cast<Integer>(projected_equations.size())};
+      Integer H{static_cast<Integer>(projected_invariants.size())};
 
       // Check if there are any constraints
       x_projected = x;
-      if (H > Size(0)) {
+      if (H > Integer(0)) {
 
         VectorM h;
         MatrixM Jh_x;
@@ -1331,7 +1331,7 @@ namespace Sandals {
         A.setZero();
         A.block(0, 0, X, X) = MatrixX::Identity(X+H, X+H);
         Eigen::FullPivLU<MatrixX> lu;
-        for (Size k{0}; k < this->m_max_projection_iterations; ++k) {
+        for (Integer k{0}; k < this->m_max_projection_iterations; ++k) {
 
           /* Standard projection method
                [A]         {x}    =        {b}
@@ -1390,9 +1390,9 @@ namespace Sandals {
 
       #define CMD "Sandals::RungeKutta::estimate_order(...): "
 
-      SANDALS_ASSERT(t_mesh.size() > Size(1), CMD "expected at least two time meshes.");
+      SANDALS_ASSERT(t_mesh.size() > Integer(1), CMD "expected at least two time meshes.");
 
-      for (Size i{0}; i < static_cast<Size>(t_mesh.size()); ++i) {
+      for (Integer i{0}; i < static_cast<Integer>(t_mesh.size()); ++i) {
 
         // Check if the time mesh has the same initial and final time
         SANDALS_ASSERT((t_mesh[0](0) - t_mesh[i](0)) < SQRT_EPSILON,
@@ -1401,7 +1401,7 @@ namespace Sandals {
           CMD "expected the same final time.");
 
         // Check if the mesh step is fixed all over the time mesh
-        for (Size j{1}; j < static_cast<Size>(t_mesh[i].size()); ++j) {
+        for (Integer j{1}; j < static_cast<Integer>(t_mesh[i].size()); ++j) {
           SANDALS_ASSERT((t_mesh[i](j) - t_mesh[i](j-1)) - (t_mesh[i](1) - t_mesh[i](0)) < SQRT_EPSILON,
             CMD "expected a fixed step.");
         }
@@ -1411,7 +1411,7 @@ namespace Sandals {
       Solution<N, M> sol_num;
       MatrixX sol_ana;
       VectorX h_vec(t_mesh.size()), e_vec(t_mesh.size());
-      for (Size i{0}; i < static_cast<Size>(t_mesh.size()); ++i) {
+      for (Integer i{0}; i < static_cast<Integer>(t_mesh.size()); ++i) {
         SANDALS_ASSERT(this->solve(t_mesh[i], ics, sol_num), CMD "failed to solve the system for " <<
           "the" << i << "-th time mesh.");
         sol_ana = sol(sol_num.t);
