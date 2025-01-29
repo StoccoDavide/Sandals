@@ -113,3 +113,7 @@ Here's what the license entails:
 4. You can use this software for commercial purposes.
 5. This software is provided without warranty.
 6. The software author or license can not be held liable for any damages inflicted by the software.
+
+## Acknowledgements
+
+The name `Sandals` has been suggested by [Mattia Piazza](https://github.com/Mattiapzz) as a poor imitation of the Lawrence Livermore National Laboratory's (LLNL) [`Sundials`](https://computing.llnl.gov/projects/sundials) (SUite of Nonlinear and DIfferential/ALgebraic Equation Solvers).

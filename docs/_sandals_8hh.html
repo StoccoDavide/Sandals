@@ -153,7 +153,6 @@ $(function(){initNavTree('_sandals_8hh.html',''); initResizable(true); });
 <code>#include &lt;cmath&gt;</code><br />
 <code>#include &lt;vector&gt;</code><br />
 <code>#include &lt;map&gt;</code><br />
-<code>#include &lt;numeric&gt;</code><br />
 <code>#include &lt;memory&gt;</code><br />
 <code>#include &lt;chrono&gt;</code><br />
 <code>#include &lt;Eigen/Dense&gt;</code><br />
@@ -164,6 +163,7 @@ $(function(){initNavTree('_sandals_8hh.html',''); initResizable(true); });
 <code>#include &quot;<a class="el" href="_implicit_8hxx_source.html">Sandals/System/Implicit.hxx</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="_explicit_8hxx_source.html">Sandals/System/Explicit.hxx</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="_semi_explicit_8hxx_source.html">Sandals/System/SemiExplicit.hxx</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="_linear_8hxx_source.html">Sandals/System/Linear.hxx</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="_tableau_8hxx_source.html">Sandals/Tableau.hxx</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="_solution_8hxx_source.html">Sandals/Solution.hxx</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="_runge_kutta_8hxx_source.html">Sandals/RungeKutta.hxx</a>&quot;</code><br />
@@ -195,7 +195,7 @@ $(function(){initNavTree('_sandals_8hh.html',''); initResizable(true); });
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for Sandals.hh:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="_sandals_8hh__incl.svg" width="8447" height="126"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="_sandals_8hh__incl.svg" width="8559" height="126"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 </div>
 <p><a href="_sandals_8hh_source.html">Go to the source code of this file.</a></p>
@@ -223,8 +223,8 @@ Macros</h2></td></tr>
 Typedefs</h2></td></tr>
 <tr class="memitem:a14d9a2b6eb039e206089c5dab9f6b977" id="r_a14d9a2b6eb039e206089c5dab9f6b977"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Sandals::Real</a> = double</td></tr>
 <tr class="separator:a14d9a2b6eb039e206089c5dab9f6b977"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3b675b688cd98c7c58ea7d4425e61777" id="r_a3b675b688cd98c7c58ea7d4425e61777"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_sandals.html#a3b675b688cd98c7c58ea7d4425e61777">Sandals::Size</a> = int</td></tr>
-<tr class="separator:a3b675b688cd98c7c58ea7d4425e61777"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af773bcdd0fadfe5e661fed82612adfcc" id="r_af773bcdd0fadfe5e661fed82612adfcc"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Sandals::Integer</a> = int</td></tr>
+<tr class="separator:af773bcdd0fadfe5e661fed82612adfcc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa5480ee9cb0ab686fd191654ed80e2f4" id="r_aa5480ee9cb0ab686fd191654ed80e2f4"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_sandals.html#aa5480ee9cb0ab686fd191654ed80e2f4">Sandals::Vector0</a> = Eigen::Vector&lt;<a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a>, 0&gt;</td></tr>
 <tr class="separator:aa5480ee9cb0ab686fd191654ed80e2f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa59064e66f0d7365f4d721de136e6adb" id="r_aa59064e66f0d7365f4d721de136e6adb"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_sandals.html#aa59064e66f0d7365f4d721de136e6adb">Sandals::Matrix0</a> = Eigen::Matrix&lt;<a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a>, 0, 0&gt;</td></tr>
@@ -272,6 +272,8 @@ Typedefs</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:a8b91d93e8c32645ca543076eeac78109" id="r_a8b91d93e8c32645ca543076eeac78109"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_sandals.html#a8b91d93e8c32645ca543076eeac78109">Sandals::Info</a> ()</td></tr>
+<tr class="separator:a8b91d93e8c32645ca543076eeac78109"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af7e92dbe412047eb67132168b372a27f" id="r_af7e92dbe412047eb67132168b372a27f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_sandals.html#af7e92dbe412047eb67132168b372a27f">Sandals::Info</a> (std::ostream &amp;os)</td></tr>
 <tr class="separator:af7e92dbe412047eb67132168b372a27f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">

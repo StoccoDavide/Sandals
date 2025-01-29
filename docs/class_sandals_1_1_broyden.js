@@ -3,7 +3,7 @@ var class_sandals_1_1_broyden =
     [ "Function", "class_sandals_1_1_broyden.html#aaf9ea1397fa4e79b42589c802a69c4cc", null ],
     [ "Jacobian", "class_sandals_1_1_broyden.html#a5ac796caa61224c58d2c32c0398a40cf", null ],
     [ "Matrix", "class_sandals_1_1_broyden.html#a699e201202aa12c2c6b3ed0acddf41af", null ],
-    [ "Type", "class_sandals_1_1_broyden.html#aa0d6b99762777156ee8bdf8d33647dc1", null ],
+    [ "Type", "class_sandals_1_1_broyden.html#ab4ba0dffb1a502ddf87bd7a6d989d1a6", null ],
     [ "Vector", "class_sandals_1_1_broyden.html#a530d3a29f4c4689e44f367a723553b0f", null ],
     [ "Broyden", "class_sandals_1_1_broyden.html#af8cc4048861199086435613fd00fe434", null ],
     [ "enable_bad_mode", "class_sandals_1_1_broyden.html#a1759727f8826a662f31ece59731ca4f3", null ],

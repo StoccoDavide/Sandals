@@ -53,7 +53,7 @@ namespace Sandals {
   public:
 
     /**
-    * Default class constructor for the semi-explicit ODE/DAE system.
+    * Class constructor for the semi-explicit ODE/DAE system.
     */
     SemiExplicit() : Explicit<N, M>(Type::SEMIEXPLICIT, "(missing name)") {}
 

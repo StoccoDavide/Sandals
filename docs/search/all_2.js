@@ -10,8 +10,8 @@ var searchData=
   ['clock_7',['Clock',['../class_sandals_1_1_tic_toc.html#ae92ee63e94888cab822085c7257420a2',1,'Sandals::TicToc']]],
   ['cmake_8',['CMake',['../index.html#autotoc_md20',1,'']]],
   ['cmd_9',['CMD',['../_runge_kutta_8hxx.html#a0a5ceb9ceb914e08d345410b561cb37a',1,'CMD:&#160;RungeKutta.hxx'],['../_runge_kutta_8hxx.html#a0a5ceb9ceb914e08d345410b561cb37a',1,'CMD:&#160;RungeKutta.hxx'],['../_runge_kutta_8hxx.html#a0a5ceb9ceb914e08d345410b561cb37a',1,'CMD:&#160;RungeKutta.hxx'],['../_runge_kutta_8hxx.html#a0a5ceb9ceb914e08d345410b561cb37a',1,'CMD:&#160;RungeKutta.hxx'],['../_runge_kutta_8hxx.html#a0a5ceb9ceb914e08d345410b561cb37a',1,'CMD:&#160;RungeKutta.hxx'],['../_runge_kutta_8hxx.html#a0a5ceb9ceb914e08d345410b561cb37a',1,'CMD:&#160;RungeKutta.hxx'],['../_tableau_8hxx.html#a0a5ceb9ceb914e08d345410b561cb37a',1,'CMD:&#160;Tableau.hxx'],['../_tableau_8hxx.html#a0a5ceb9ceb914e08d345410b561cb37a',1,'CMD:&#160;Tableau.hxx']]],
-  ['compute_5forder_10',['compute_order',['../struct_sandals_1_1_tableau.html#a461100293de56e8ad87ec2cc7b5eee69',1,'Sandals::Tableau']]],
-  ['conservative_5fresize_11',['conservative_resize',['../struct_sandals_1_1_solution.html#ac22b536769cd0dd36c30c9e2f115cebc',1,'Sandals::Solution']]],
+  ['compute_5forder_10',['compute_order',['../struct_sandals_1_1_tableau.html#abc17b2fdb1557343133e13860da4c911',1,'Sandals::Tableau']]],
+  ['conservative_5fresize_11',['conservative_resize',['../struct_sandals_1_1_solution.html#a6b42804901cb273dccae0f18d4322483',1,'Sandals::Solution']]],
   ['constrained_20minimization_20problem_12',['Constrained minimization problem',['../class_sandals_1_1_runge_kutta.html#autotoc_md15',1,'']]],
   ['converged_13',['converged',['../class_sandals_1_1_nonlinear_solver.html#a059b4cc0f4be78bddaeeafd22af2791d',1,'Sandals::NonlinearSolver']]]
 ];

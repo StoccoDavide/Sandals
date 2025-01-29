@@ -31,6 +31,7 @@ var NAVTREE =
     ] ],
     [ "Authors", "index.html#autotoc_md21", null ],
     [ "License", "index.html#autotoc_md22", null ],
+    [ "Acknowledgements", "index.html#autotoc_md23", null ],
     [ "Namespaces", "namespaces.html", [
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
       [ "Namespace Members", "namespacemembers.html", [
@@ -64,10 +65,11 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "_broyden_8hxx.html",
-"class_sandals_1_1_gauss_legendre4_tableau.html",
-"class_sandals_1_1_nonlinear_solver.html#af168971b86d783772bc2d70852543d2e",
-"class_sandals_1_1_runge_kutta.html#ab9982a107add8a389c807eee17b32434",
-"functions_func_l.html"
+"class_sandals_1_1_gauss_legendre4.html#a71c986cacd78b311878d924a02d160f3",
+"class_sandals_1_1_nonlinear_solver.html#aa8302590030f2da5094597b907fd408e",
+"class_sandals_1_1_runge_kutta.html#a8f75e38fa8ffae173afe9488d2d43397",
+"class_sandals_1_1_tic_toc.html#a4b26d82901b23b76659bc97f7c2e3afa",
+"struct_sandals_1_1_tableau.html#a3d815ceb63c0a5240d4a0f060c74c2e6"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronization';

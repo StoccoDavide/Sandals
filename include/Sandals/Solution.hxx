@@ -36,15 +36,15 @@ namespace Sandals {
   * \begin{array}{l}
   *   \mathbf{t} &=& \left[ t_1, t_2, \ldots, t_k \right]^\top \text{,} \\
   *   \mathbf{X} &=& \begin{bmatrix} \mathbf{x}_1 \\ \mathbf{x}_2 \\ \vdots \\ \mathbf{x}_k \end{bmatrix}
-  *              = \begin{bmatrix} x_{11} & x_{12} & \cdots & x_{1k} \\
-  *                                x_{21} & x_{22} & \cdots & x_{2k} \\
-  *                                \vdots & \vdots & \ddots & \vdots \\
-  *                                x_{n1} & x_{n2} & \cdots & x_{nk} \end{bmatrix} \text{,} \\
+  *   =  \begin{bmatrix} x_{11} & x_{12} & \cdots & x_{1k} \\
+  *                      x_{21} & x_{22} & \cdots & x_{2k} \\
+  *                      \vdots & \vdots & \ddots & \vdots \\
+  *                      x_{n1} & x_{n2} & \cdots & x_{nk} \end{bmatrix} \text{,} \\
   *   \mathbf{H} &=& \begin{bmatrix} \mathbf{h}_1 \\ \mathbf{h}_2 \\ \vdots \\ \mathbf{h}_k \end{bmatrix}
-  *              = \begin{bmatrix} h_{11} & h_{12} & \cdots & h_{1k} \\
-  *                                h_{21} & h_{22} & \cdots & h_{2k} \\
-  *                                \vdots & \vdots & \ddots & \vdots \\
-  *                                h_{m1} & h_{m2} & \cdots & h_{mk} \end{bmatrix} \text{.}
+  *   =  \begin{bmatrix} h_{11} & h_{12} & \cdots & h_{1k} \\
+  *                      h_{21} & h_{22} & \cdots & h_{2k} \\
+  *                      \vdots & \vdots & \ddots & \vdots \\
+  *                      h_{m1} & h_{m2} & \cdots & h_{mk} \end{bmatrix} \text{.}
   * \end{array}
   * \f]
   *

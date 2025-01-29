@@ -22,6 +22,7 @@ var annotated_dup =
       [ "Implicit", "class_sandals_1_1_implicit.html", "class_sandals_1_1_implicit" ],
       [ "ImplicitEuler", "class_sandals_1_1_implicit_euler.html", "class_sandals_1_1_implicit_euler" ],
       [ "ImplicitEulerTableau", "class_sandals_1_1_implicit_euler_tableau.html", "class_sandals_1_1_implicit_euler_tableau" ],
+      [ "Linear", "class_sandals_1_1_linear.html", "class_sandals_1_1_linear" ],
       [ "LobattoIIIA2", "class_sandals_1_1_lobatto_i_i_i_a2.html", "class_sandals_1_1_lobatto_i_i_i_a2" ],
       [ "LobattoIIIA2Tableau", "class_sandals_1_1_lobatto_i_i_i_a2_tableau.html", "class_sandals_1_1_lobatto_i_i_i_a2_tableau" ],
       [ "MTE22", "class_sandals_1_1_m_t_e22.html", "class_sandals_1_1_m_t_e22" ],

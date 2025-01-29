@@ -15,6 +15,7 @@ local m_system_type   := "Empty";
 local m_vars          := [];
 local m_F             := [];
 local m_f             := [];
+local m_E             := [];
 local m_A             := [];
 local m_b             := [];
 local m_h             := [];
@@ -31,6 +32,7 @@ export ResetSystem::static := proc(
   _self:-m_vars        := [];
   _self:-m_F           := [];
   _self:-m_f           := [];
+  _self:-m_E           := [];
   _self:-m_A           := [];
   _self:-m_b           := [];
   _self:-m_h           := [];
@@ -50,6 +52,7 @@ export CopySystem::static := proc(
   _self:-m_vars        := proto:-m_vars;
   _self:-m_F           := proto:-m_F;
   _self:-m_f           := proto:-m_f;
+  _self:-m_E           := proto:-m_E;
   _self:-m_A           := proto:-m_A;
   _self:-m_b           := proto:-m_b;
   _self:-m_h           := proto:-m_h;
@@ -78,7 +81,7 @@ export GetVars::static := proc(
   if (_self:-m_system_type = "Empty") then
     error("system not yet available, please load the system first.");
   elif (_self:-m_system_type = "Implicit") or (_self:-m_system_type = "Explicit") or
-    (_self:-m_system_type = "SemiExplicit") then
+    (_self:-m_system_type = "SemiExplicit") or (_self:-m_system_type = "Linear") then
     return _self:-m_vars;
   else
     error("unknown system type ""%1"".", _self:-m_system_type);
@@ -114,7 +117,8 @@ export GetF::static := proc(
     error("system not yet available, please load the system first.");
   elif (_self:-m_system_type = "Explicit") then
     return _self:-m_f;
-  elif (_self:-m_system_type = "Implicit") or (_self:-m_system_type = "SemiExplicit") then
+  elif (_self:-m_system_type = "Implicit") or (_self:-m_system_type = "SemiExplicit") or
+    (_self:-m_system_type = "Linear") then
     return _self:-m_F;
   else
     error("unknown system type ""%1"".", _self:-m_system_type);
@@ -123,16 +127,36 @@ end proc: # GetF
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export GetA::static := proc(
+export GetE::static := proc(
   _self::Sandals,
   $)::Matrix;
 
-  description "Get the mass matrix of the semi-explicit system.";
+  description "Get the matrix E of the linear system.";
 
   if (_self:-m_system_type = "Empty") then
     error("system not yet available, please load the system first.");
   elif (_self:-m_system_type = "Implicit") or (_self:-m_system_type = "Explicit") or
     (_self:-m_system_type = "SemiExplicit") then
+    error("system type ""%1"" does not have matrix E.", _self:-m_system_type);
+  elif (_self:-m_system_type = "Linear") then
+    return _self:-m_E;
+  else
+    error("unknown system type ""%1"".", _self:-m_system_type);
+  end if;
+end proc: # GetE
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+export GetA::static := proc(
+  _self::Sandals,
+  $)::Matrix;
+
+  description "Get the mass matrix of the semi-explicit system or the matrix A of the linear system.";
+
+  if (_self:-m_system_type = "Empty") then
+    error("system not yet available, please load the system first.");
+  elif (_self:-m_system_type = "Implicit") or (_self:-m_system_type = "Explicit") or
+    (_self:-m_system_type = "SemiExplicit") or (_self:-m_system_type = "Linear") then
     return _self:-m_A;
   else
     error("unknown system type ""%1"".", _self:-m_system_type);
@@ -145,12 +169,13 @@ export GetB::static := proc(
   _self::Sandals,
   $)::Vector;
 
-  description "Get the right-hand side vector of the semi-explicit system.";
+  description "Get the right-hand side vector of the semi-explicit system or the vector b of the "
+    "linear system.";
 
   if (_self:-m_system_type = "Empty") then
     error("system not yet available, please load the system first.");
   elif (_self:-m_system_type = "Implicit") or (_self:-m_system_type = "Explicit") or
-    (_self:-m_system_type = "SemiExplicit") then
+    (_self:-m_system_type = "SemiExplicit") or (_self:-m_system_type = "Linear") then
     return _self:-m_b;
   else
     error("unknown system type ""%1"".", _self:-m_system_type);
@@ -168,7 +193,7 @@ export GetH::static := proc(
   if (_self:-m_system_type = "Empty") then
     error("system not yet available, please load the system first.");
   elif (_self:-m_system_type = "Implicit") or (_self:-m_system_type = "Explicit") or
-    (_self:-m_system_type = "SemiExplicit") then
+    (_self:-m_system_type = "SemiExplicit") or (_self:-m_system_type = "Linear") then
     return _self:-m_h;
   else
     error("unknown system type ""%1"".", _self:-m_system_type);
@@ -180,12 +205,13 @@ end proc: # GetH
 export GetDifferentalEquations::static := proc(
   _self::Sandals,
   {
-  invert::boolean := false
+  invert_mass_matrix::boolean := false
   }, $)::list;
 
   description "Get the differential equations of the system as an implicit system F(x,x',t) = 0, "
-    "an explicit system x' = f(x,t), or a semi-explicit system A(x,t)x' = b(x,t). If <invert> is "
-    "activated, than the system x' = A(x,t)^{-1}b(x,t) is returned.";
+    "an explicit system x' = f(x,t), a semi-explicit system A(x,t)x' = b(x,t), or a linear system "
+    "E(x,t)x' = A(x,t)x + b(x,t). If <invert_mass_matrix> is activated, than the system x' = "
+    "A(x,t)^{-1}b(x,t) or x' = E(x,t)^{-1}(A(x,t)x + b(x,t)) is returned.";
 
   local vars, out;
 
@@ -197,10 +223,14 @@ export GetDifferentalEquations::static := proc(
     out := _self:-m_F;
   elif (_self:-m_system_type = "Explicit") then
     out := diff(vars, t) - _self:-m_f;
-  elif (_self:-m_system_type = "SemiExplicit") and not invert then
+  elif (_self:-m_system_type = "SemiExplicit") and not invert_mass_matrix then
     out := _self:-m_A.diff(vars, t) - _self:-m_b;
-  elif (_self:-m_system_type = "SemiExplicit") and invert then
+  elif (_self:-m_system_type = "SemiExplicit") and invert_mass_matrix then
     out := diff(vars, t) - LinearAlgebra:-LinearSolve(_self:-m_A, _self:-m_b);
+  elif (_self:-m_system_type = "Linear") and not invert_mass_matrix then
+    out := _self:-m_E.diff(vars, t) - _self:-m_A.vars - _self:-m_b;
+  elif (_self:-m_system_type = "Linear") and invert_mass_matrix then
+    out := diff(vars, t) - LinearAlgebra:-LinearSolve(_self:-m_E, _self:-m_A.vars + _self:-m_b);
   else
     error("unknown system type ""%1"".", _self:-m_system_type);
   end if;
@@ -239,15 +269,17 @@ end proc: # GetInvariants
 export GetEquations::static := proc(
   _self::Sandals,
   {
-  invert::boolean := false
+  invert_mass_matrix::boolean := false
   }, $)::list;
 
   description "Get the differential equations of the system as an implicit system F(x,x',t) = 0, "
-    "an explicit system x' = f(x,t), or a semi-explicit system A(x,t)x' = b(x,t), plus the invariants "
-    "h(x,t) = 0. If <invert> is activated, than the system x' = A(x,t)^{-1}b(x,t) is returned.";
+    "an explicit system x' = f(x,t), a semi-explicit system A(x,t)x' = b(x,t), or a linear system "
+    "E(x,t)x' = A(x,t)x + b(x,t) plus the invariants h(x,t) = 0. If <invert_mass_matrix> is activated, "
+    "than the system is transformed into an explicit form x' = A(x,t)^{-1}b(x,t) or x' = E(x,t)^{-1}"
+    "(A(x,t)x + b(x,t)).";
 
   return [
-    op(_self:-GetDifferentalEquations(_self, parse("invert") = invert)),
+    op(_self:-GetDifferentalEquations(_self, parse("invert_mass_matrix") = invert_mass_matrix)),
     op(_self:-GetInvariants(_self))
   ];
 end proc: # GetEquations
@@ -285,9 +317,14 @@ export LoadSystem::static := proc(
   if (type = "Implicit") then
     return _self:-LoadImplicitSystem(_self, vars, eqns, invs);
   elif (type = "Explicit") then
-    return _self:-LoadExplicitSystem(_self, vars, eqns, invs, parse("invert") = true);
+    return _self:-LoadExplicitSystem(_self, vars, eqns, invs, parse("invert_mass_matrix") = true,
+      parse("linear_system") = false);
   elif (type = "SemiExplicit") then
-    return _self:-LoadExplicitSystem(_self, vars, eqns, invs, parse("invert") = false);
+    return _self:-LoadExplicitSystem(_self, vars, eqns, invs, parse("invert_mass_matrix") = false,
+      parse("linear_system") = false);
+  elif (type = "Linear") then
+    return _self:-LoadExplicitSystem(_self, vars, eqns, invs, parse("invert_mass_matrix") = false,
+      parse("linear_system") = true);
   else
     error("unknown system type ""%1"".", type);
   end if;
@@ -365,13 +402,15 @@ export LoadExplicitSystem::static := proc(
   eqns::{list({`=`, algebraic}), Vector({`=`, algebraic})},
   invs::{list({`=`, algebraic}), Vector({`=`, algebraic})} := [],
   {
-  invert::boolean := true
+  linear_system::boolean := true,
+  invert_mass_matrix::boolean := false
   }, $)
 
   description "Load the equations from an explicit system x' = f(x,t) or semi-explicit system "
     "M(x,t)x' = b(x,t) with equations <eqns>, states <vars>, equations <eqns>, and optional "
-    "invariants <invs>. If <invert> is activated, than the system is transformed into an explicit "
-    "form x' = A(x,t)^{-1}b(x,t).";
+    "invariants <invs>. If <linear_system> is activated, than the system is transformed into a linear "
+    "form E(x,t)x' = A(x,t)x + b(x,t). If <invert_mass_matrix> is activated, than the system is "
+    "transformed into an explicit form x' = A(x,t)^{-1}b(x,t) or x' = E(x,t)^{-1}(A(x,t)x + b(x,t)).";
 
   local vars_tmp, eqns_tmp, invs_tmp;
 
@@ -403,26 +442,45 @@ export LoadExplicitSystem::static := proc(
   # Check if the system can be transformed into an explicit form
   if (LinearAlgebra:-RowDimension(_self:-m_A) <> LinearAlgebra:-ColumnDimension(_self:-m_A)) then
     _self:-ResetSystem(_self);
-    error("the system cannot be transformed into an explicit form, the "
-      "matrix M is not square.");
+    error("the system cannot be transformed into an explicit form, the matrix M is not square.");
     return NULL;
   end if;
 
   if (LinearAlgebra:-Rank(_self:-m_A) <> LinearAlgebra:-ColumnDimension(_self:-m_A)) then
     _self:-ResetSystem(_self);
-    error("the system cannot be transformed into an explicit form, the "
-      "matrix M is not full rank.");
+    error("the system cannot be transformed into an explicit form, the matrix M is not full rank.");
     return NULL;
   end if;
 
+  # Check if the system can be transformed into a linear form
+  if linear_system then
+    if has(type~(_self:-m_b, linear(vars_tmp)), false) then
+    _self:-ResetSystem(_self);
+    error("the system cannot be transformed into a linear form, the vector b is not linear in the "
+      "state variables.");
+    return NULL;
+    end if;
+  end if;
+
   # Store the system data
-  if invert then
-    _self:-m_f := LinearAlgebra:-LinearSolve(_self:-m_A, _self:-m_b);
-    _self:-m_system_type := "Explicit";
-    _self:-m_A := [];
-    _self:-m_b := [];
+  if linear_system then
+    _self:-m_system_type := "Linear";
+    _self:-m_E := _self:-m_A;
+    _self:-m_A, _self:-m_b := LinearAlgebra:-GenerateMatrix(convert(_self:-m_b, list), vars_tmp);
+    if invert_mass_matrix then
+      _self:-m_b := LinearAlgebra:-LinearSolve(_self:-m_E, _self:-m_A.vars_tmp + _self:-m_b);
+      _self:-m_E := LinearAlgebra:-IdentityMatrix(nops(vars_tmp));
+      _self:-m_A, _self:-m_b := LinearAlgebra:-GenerateMatrix(convert(_self:-m_b, list), vars_tmp);
+    end if;
   else
-    _self:-m_system_type := "SemiExplicit";
+    if invert_mass_matrix then
+      _self:-m_f := LinearAlgebra:-LinearSolve(_self:-m_A, _self:-m_b);
+      _self:-m_system_type := "Explicit";
+      _self:-m_A := [];
+      _self:-m_b := [];
+    else
+      _self:-m_system_type := "SemiExplicit";
+    end if;
   end if;
 
   # Check if the differential order of h is null
@@ -442,6 +500,13 @@ export LoadExplicitSystem::static := proc(
     _self:-m_f := timelimit(_self:-m_time_limit, simplify(_self:-m_f));
   catch "time expired":
     WARNING("time expired, simplify(f) interrupted.");
+  end try;
+
+  # Simplify the matrix E
+  try
+    _self:-m_E := timelimit(_self:-m_time_limit, simplify(_self:-m_E));
+  catch "time expired":
+    WARNING("time expired, simplify(E) interrupted.");
   end try;
 
   # Simplify the matrix A
@@ -487,6 +552,8 @@ export ToImplicit::static := proc(
     eqns := diff(vars, t) - _self:-m_f;
   elif (_self:-m_system_type = "SemiExplicit") then
     eqns := _self:-m_A.diff(vars, t) - _self:-m_b;
+  elif (_self:-m_system_type = "Linear") then
+    eqns := _self:-m_E.diff(vars, t) - _self:-m_A.vars - _self:-m_b;
   else
     error("unknown system type ""%1"".", _self:-m_system_type);
   end if;
@@ -514,10 +581,13 @@ export ToExplicit::static := proc(
     # Nothing to do
   elif (_self:-m_system_type = "SemiExplicit") then
     eqns := _self:-m_A.diff(vars, t) - _self:-m_b
+  elif (_self:-m_system_type = "Linear") then
+    eqns := _self:-m_E.diff(vars, t) - _self:-m_A.vars - _self:-m_b;
   else
     error("unknown system type ""%1"".", _self:-m_system_type);
   end if;
-  _self:-LoadExplicitSystem(_self, vars, eqns, _self:-m_h, parse("invert") = true);
+  _self:-LoadExplicitSystem(_self, vars, eqns, _self:-m_h, parse("invert_mass_matrix") = true,
+    parse("linear_system") = false);
 
   return NULL;
 end proc: # ToExplicit
@@ -541,12 +611,45 @@ export ToSemiExplicit::static := proc(
     eqns := diff(vars, t) - _self:-m_f;
   elif (_self:-m_system_type = "SemiExplicit") then
     # Nothing to do
+  elif (_self:-m_system_type = "Linear") then
+    eqns := _self:-m_E.diff(vars, t) - _self:-m_A.vars - _self:-m_b;
   else
     error("unknown system type ""%1"".", _self:-m_system_type);
   end if;
-  _self:-LoadExplicitSystem(_self, vars, eqns, _self:-m_h, parse("invert") = false);
+  _self:-LoadExplicitSystem(_self, vars, eqns, _self:-m_h, parse("invert_mass_matrix") = false,
+    parse("linear_system") = false);
 
   return NULL;
 end proc: # ToSemiExplicit
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+export ToLinear::static := proc(
+  _self::Sandals,
+  $)
+
+  description "Convert the system to a linear form E(x,t)x' = A(x,t)x + b(x,t).";
+
+  local vars, eqns;
+
+  vars := convert(_self:-m_vars, Vector);
+  if (_self:-m_system_type = "Empty") then
+    error("system not yet available, please load the system first.");
+  elif (_self:-m_system_type = "Implicit") then
+    eqns := _self:-m_F;
+  elif (_self:-m_system_type = "Explicit") then
+    eqns := diff(vars, t) - _self:-m_f;
+  elif (_self:-m_system_type = "SemiExplicit") then
+    eqns := _self:-m_A.diff(vars, t) - _self:-m_b;
+  elif (_self:-m_system_type = "Linear") then
+    # Nothing to do
+  else
+    error("unknown system type ""%1"".", _self:-m_system_type);
+  end if;
+  _self:-LoadExplicitSystem(_self, vars, eqns, _self:-m_h, parse("invert_mass_matrix") = false,
+    parse("linear_system") = true);
+
+  return NULL;
+end proc: # ToLinear
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

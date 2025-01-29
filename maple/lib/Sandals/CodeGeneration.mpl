@@ -381,57 +381,163 @@ end proc: # GetDomain
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export SetUserFunction::static := proc(
+export AddUserFunction::static := proc(
   _self::Sandals,
-  user_function::list({symbol, function}),
+  user_function::{symbol, function(symbol), symbol = algebraic, function(symbol) = algebraic,
+    list({symbol, function(symbol), symbol = algebraic, function(symbol) = algebraic})},
   $)
 
   description "Set the user function to <user_function>.";
 
-  if (has(user_function, _self:-m_vars)) or (has(user_function, t)) then
-    error("feature not supported yet, the user functions cannot contain variables.");
+  local decl, impl;
+
+  if has(user_function, _self:-m_vars) then
+    error("feature not supported yet, the user function cannot contain variables.");
   end if;
 
-  _self:-m_user_function := user_function;
+  if type(user_function, list) then
+    _self:-m_user_function := [op(_self:-m_user_function), op(user_function)];
+  else
+    _self:-m_user_function := [op(_self:-m_user_function), user_function];
+  end if;
   return NULL;
-end proc: # SetUserFunction
+end proc: # AddUserFunction
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export GetUserFunction::static := proc(
   _self::Sandals,
-  $)::list({symbol, function});
+  i::nonnegint := 0,
+  $)::list({symbol, function(symbol), symbol = algebraic, function(symbol) = algebraic});
 
-  description "Return the user function.";
+  description "Return the user function at index <i>. If <i> is not provided, return all user "
+    "functions.";
 
-  return _self:-m_user_function;
+  if (i > 0) then
+    return [_self:-m_user_function[i]];
+  else
+    return _self:-m_user_function;
+  end if;
 end proc: # GetUserFunction
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export GetUserFunctionNames::static := proc(
+export GetUserFunctionDecl::static := proc(
   _self::Sandals,
-  $)::list(symbol);
+  i::nonnegint := 0,
+  $)::list({symbol, function});
 
-  description "Return the user function names.";
+  description "Return the user function declarations at index <i>. If <i> is not provided, return "
+    "all user function declarations.";
 
-  return map(x -> `if`(type(x, function), op(0, x), x), _self:-m_user_function);
-end proc: # GetUserFunctionNames
+  local j, out;
+
+  out := _self:-GetUserFunction(_self, i);
+  for j from 1 to nops(out) do
+    if type(out[j], {symbol, function}) then
+      out[j] := out[j];
+    elif type(out[j], {symbol = algebraic, function = algebraic}) then
+      out[j] := lhs(out[j]);
+    else
+      error("invalid user function declaration detected.");
+    end if;
+  end do;
+  return out;
+end proc: # GetUserFunctionDecl
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export SetCompSequence::static := proc(
+export GetUserFunctionVars::static := proc(
   _self::Sandals,
-  comp_sequence::list({symbol, function} = algebraic),
+  i::nonnegint := 0,
+  $)::list(list(symbol));
+
+  description "Return the user function variables at index <i>. If <i> is not provided, return all "
+    "user function variables.";
+
+  local j, out;
+
+  out := _self:-GetUserFunctionDecl(_self, i);
+  for j from 1 to nops(out) do
+    if type(out[j], symbol) then
+      out[j] := [];
+    elif type(out[j], function) then
+      out[j] := [op(1..-1, out[j])];
+    end if;
+  end do;
+  return out;
+end proc: # GetUserFunctionVars
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+export GetUserFunctionImpl::static := proc(
+  _self::Sandals,
+  i::nonnegint := 0,
+  $)::list(algebraic);
+
+  description "Return the user function implementations at index <i>. If <i> is not provided, return "
+    "all user function implementations.";
+
+  local j, out;
+
+  out := _self:-GetUserFunction(_self, i);
+  for j from 1 to nops(out) do
+    if type(out[j], {symbol, function}) then
+      out[j] := undefined;
+    elif type(out[j], {symbol = algebraic, function = algebraic}) then
+      out[j] := rhs(out[j]);
+    else
+      error("invalid user function implementation detected.");
+    end if;
+  end do;
+  return out;
+end proc: # GetUserFunctionImpl
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+export GetUserFunctionName::static := proc(
+  _self::Sandals,
+  i::nonnegint := 0,
+  $)::list(symbol);
+
+  description "Return the user function names at index <i>. If <i> is not provided, return all user "
+    "function names.";
+
+  local j, out;
+
+  out := _self:-GetUserFunctionDecl(_self, i);
+  for j from 1 to nops(out) do
+    if type(out[j], symbol) then
+      # Do nothing
+    elif type(out[j], function) then
+      out[j] := op(0, out[j]);
+    elif type(out[j], symbol = algebraic) then
+      out[j] := op(0, out[j]);
+    elif type(out[j], function = algebraic) then
+      out[j] := op(0, out[j]);
+    end if;
+  end do;
+  return out;
+end proc: # GetUserFunctionName
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+export AddCompSequence::static := proc(
+  _self::Sandals,
+  comp_sequence::{{symbol, function} = algebraic, list({symbol, function} = algebraic)},
   $)
 
   description "Set the computation sequence to <comp_sequence>.";
 
-  if (has(comp_sequence, _self:-m_vars)) or (has(comp_sequence, t)) then
+  if (has(comp_sequence, _self:-m_vars)) then
     error("feature not supported yet, the computation sequence cannot contain variables.");
   end if;
 
-  _self:-m_comp_sequence := comp_sequence;
+  if type(comp_sequence, list) then
+    _self:-m_comp_sequence := [op(_self:-m_comp_sequence), op(comp_sequence)];
+  else
+    _self:-m_comp_sequence := [op(_self:-m_comp_sequence), comp_sequence];
+  end if;
   return NULL;
 end proc: # SetCompSequence
 
@@ -439,11 +545,17 @@ end proc: # SetCompSequence
 
 export GetCompSequence::static := proc(
   _self::Sandals,
+  i::nonnegint := 0,
   $)::list({symbol, function} = algebraic);
 
-  description "Return the computation sequence.";
+  description "Return the computation sequence at index <i>. If <i> is not provided, return all "
+    "computation sequences.";
 
-  return _self:-m_comp_sequence;
+  if (i > 0) then
+    return [_self:-m_comp_sequence[i]];
+  else
+    return _self:-m_comp_sequence;
+  end if;
 end proc: # GetCompSequence
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -530,7 +642,7 @@ export Translate::static := proc(
 
   # Define language functions
   fun := [
-    op(convert~(_self:-GetUserFunctionNames(_self), string)),
+    op(convert~(_self:-GetUserFunctionName(_self), string)),
     "floor", "ceil", "round", "trunc", "erf"
   ];
 
@@ -738,6 +850,79 @@ export GenerateFunctionBody::static := proc(
     _self:-m_indent, "// Return results\n", outputs, "}\n"
   );
 end proc: # GenerateFunctionBody
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+export TranslateRealFunction::static := proc(
+  _self::Sandals,
+  name::string,
+  vars::list(list(symbol)),
+  fun::algebraic,
+  vars_type::list(string),
+  vars_info::list(list(string)),
+  {
+  info::string := "No info",
+  spec::string := ""
+  }, $)::string;
+
+  description "Translate the function <fun> with variables <vars> into a C++ function named <name> "
+    "and return it as a string. Variable types and return type are specified with <vars_type> and "
+    "<out_type>. The optional arguments are function description <info>, and function specifier "
+    "<spec>.";
+
+  local data_bool, vars_bool, i, j, data, header, inputs, elements, outputs, dims, lst, comp_sequence;
+
+  # The declaration of the function is empty, return the function prototype
+  if (fun = undefined) then
+    vars_bool := [seq(true, i = 1..nops(vars))];
+    header := _self:-GenerateFunctionHeader(
+      _self, name, vars, vars_type, vars_bool, "Real", parse("info") = info, parse("spec") = spec
+    );
+    return cat(StringTools:-Delete(header, -3..-1), ";\n");
+  end if;
+
+  # Create boolean flags for the variables
+  data_bool := [seq(has(fun, lhs(_self:-m_data[i])), i = 1..nops(_self:-m_data))];
+  vars_bool := [seq([seq(has(fun, vars[i][j]), j = 1..nops(vars[i]))], i = 1..nops(vars))];
+
+  # Extract the function data
+  data := _self:-ExtractData(_self, data_bool);
+
+  # Extract the function inputs
+  inputs := _self:-ExtractInputs(_self, vars, vars_bool, vars_info);
+
+  # Extract the function elements
+  dims := [1];
+  lst, outputs := _self:-ExtractElements(_self, name, [fun], dims);
+  outputs := cat(_self:-m_indent, "return ", convert(lhs(lst[-1]), string), ";\n");
+
+  # Generate the method header
+  vars_bool := [seq(has(vars_bool[i], true), i = 1..nops(vars))];
+  header := _self:-GenerateFunctionHeader(
+    _self, name, vars, vars_type, vars_bool, "Real", parse("info") = info, parse("spec") = spec
+  );
+
+  # Generate the evaluation sequence
+  comp_sequence := remove[flatten](x -> not has(domain_tmp, lhs(x)), _self:-m_comp_sequence);
+  if (nops(comp_sequence) > 0) then
+    comp_sequence := _self:-Indent(_self, _self:-Translate(_self, comp_sequence));
+  else
+    comp_sequence := cat(_self:-m_indent, "// Nothing to evaluate\n");
+  end if;
+
+  # Generate the elements
+  if (nops(lst) > 0) then
+    elements := _self:-Indent(_self, _self:-Translate(_self, lst));
+  else
+    elements := cat(_self:-m_indent, "// Nothing to evaluate\n");
+  end if;
+
+  # Generate the generated code
+  return _self:-GenerateFunctionBody(
+    _self, name, dims, parse("header") = header, parse("data") = data, parse("inputs") = inputs,
+    parse("comp_sequence") = comp_sequence, parse("elements") = elements, parse("outputs") = outputs
+  );
+end proc: # TranslateRealFunction
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -1135,6 +1320,40 @@ end proc: # GenerateClassIcs
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+export GenerateClassUserFunction::static := proc(
+  _self::Sandals,
+  $)::string;
+
+  description "Generate user functions.";
+
+  local name, decl, impl, out, i, vars;
+
+  if (nops(_self:-m_user_function) = 0) then
+    return cat(_self:-m_indent, "// No user functions\n");
+  else
+    name := convert~(_self:-GetUserFunctionName(_self), string);
+    decl := _self:-GetUserFunctionDecl(_self);
+    impl := _self:-GetUserFunctionImpl(_self);
+    vars := map(j -> map(k -> [k], j), _self:-GetUserFunctionVars(_self));
+    out := "";
+    for i from 1 to nops(decl) do
+      out := cat(out, _self:-Indent(_self, _self:-TranslateRealFunction(
+        _self, name[i], vars[i], impl[i],
+        [seq("Real", i = 1..nops(vars[i]))],
+        [seq([cat("Input variable ", convert(op(vars[i][j]), string))], j = 1..nops(vars[i]))],
+        parse("spec") = "const",
+        parse("info") = cat("Evaluate the user function ", name[i], ".")
+      )));
+      if (nops(decl) > 0) and (i < nops(decl)) then
+        out := cat(out, "\n");
+      end if;
+    end do;
+    return out;
+  end if;
+end proc: # GenerateClassUserFunction
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 export GenerateClassTime::static := proc(
   _self::Sandals,
   $)
@@ -1203,7 +1422,7 @@ export TranslateImplicitSystem::static := proc(
     "= 0, with function <F>, and invariants <h>.";
 
   local x, x_dot, mk_x_dot, rm_x_deps, rm_x_dot_deps, F_tmp, JF_x, JF_x_dot, h_tmp, Jh_x, rm_deps,
-    i, data_str, num_eqns, num_invs, time_fun, ics_fun, domain_fun, vars_info_dot, vars_info;
+    i, data_str, num_eqns, num_invs, time_fun, ics_fun, domain_fun, user_fun, vars_info_dot, vars_info;
 
   # Store system states
   x     := _self:-m_vars;
@@ -1239,6 +1458,11 @@ export TranslateImplicitSystem::static := proc(
   h_tmp     := subs(op(rm_deps), h_tmp);
   Jh_x      := subs(op(rm_deps), Jh_x);
 
+  # Retrieve the user functions derivatives
+  # ind := indets(JF_x) union indets(JF_x_dot) union indets(Jh_x);
+  # ind := select(i -> has(i, D), convert(ind, D));
+  # TODO: Implement the user functions derivatives
+
   # Function utilities strings
   i := _self:-m_indent;
 
@@ -1247,6 +1471,9 @@ export TranslateImplicitSystem::static := proc(
 
   # Initial conditions function code generation
   ics_fun := _self:-GenerateClassIcs(_self);
+
+  # User functions code generation
+  user_fun := _self:-GenerateClassUserFunction(_self);
 
   # Integration time function code generation
   time_fun := _self:-GenerateClassTime(_self);
@@ -1278,8 +1505,8 @@ export TranslateImplicitSystem::static := proc(
     "// This file has been automatically generated by Sandals.\n",
     "// DISCLAIMER: If you need to edit it, do it wisely!\n",
     "\n",
-    "#ifndef SANDALS_MAPLE_", StringTools:-UpperCase(name), "_IMPLICIT_HH\n",
-    "#define SANDALS_MAPLE_", StringTools:-UpperCase(name), "_IMPLICIT_HH\n",
+    "#ifndef SANDALS_MAPLE_CODEGEN_", StringTools:-UpperCase(name), "_IMPLICIT_SYSTEM_HH\n",
+    "#define SANDALS_MAPLE_CODEGEN_", StringTools:-UpperCase(name), "_IMPLICIT_SYSTEM_HH\n",
     "\n",
     "using namespace Sandals;\n"
     "using namespace std;\n"
@@ -1341,13 +1568,15 @@ export TranslateImplicitSystem::static := proc(
     "\n",
     domain_fun,
     "\n",
+    user_fun,
+    "\n",
     time_fun,
     "\n",
     ics_fun,
     "\n",
     "}; // class ", name, "\n",
     "\n",
-    "#endif // SANDALS_MAPLE_", StringTools:-UpperCase(name), "_IMPLICIT_HH\n"
+    "#endif // SANDALS_MAPLE_CODEGEN_", StringTools:-UpperCase(name), "_IMPLICIT_SYSTEM_HH\n"
   );
 end proc: # TranslateImplicitSystem
 
@@ -1362,23 +1591,57 @@ export CheckDefinition::static := proc(
   description "Check if all the indeterminates of the function <expr>, named <name> are defined and "
     "contained in the system variables, data, computed sequence, or user functions.";
 
-  local ind;
+  local ind, user_fun, i;
 
   ind := indets(expr, {symbol, function})
     minus {t} minus convert(_self:-m_vars, set) minus convert(diff~(_self:-m_vars, t), set)
-    minus convert(lhs~(_self:-m_data), set)
-    minus convert(lhs~(_self:-m_comp_sequence), set)
-    minus convert(_self:-m_user_function, set);
+    minus convert(lhs~(_self:-m_data), set) minus convert(lhs~(_self:-m_comp_sequence), set)
+    minus convert(_self:-GetUserFunctionDecl(_self), set);
+
+  user_fun := _self:-GetUserFunctionName(_self);
+  for i in ind do
+    if (type(i, symbol) and has(i, user_fun)) or
+      (type(i, function) and has(op(0, i), user_fun)) then
+      ind := ind minus {i};
+    end if;
+  end do;
 
   if (nops(ind) > 0) then
     if _self:-m_warning_mode then
-      WARNING("the function ""%1"" contains the unknown variables %2.", name, ind);
+      WARNING("the function ""%1"" contains unknown %2.", name, ind);
     end if;
     return false;
-  else
-    return true;
   end if;
+  return true;
 end proc: # CheckDefinition
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+export CheckUserFunction::static := proc(
+  _self::Sandals,
+  $)::boolean;
+
+  description "Check if all the indeterminates of the user functions are defined and contained in "
+    "the input variables, or data.";
+
+  local data, comp, ind, decl, impl, vars, i;
+
+  data := convert(lhs~(_self:-m_data), set);
+  comp := convert(lhs~(_self:-m_comp_sequence), set);
+  decl := _self:-GetUserFunctionDecl(_self);
+  impl := _self:-GetUserFunctionImpl(_self);
+  vars := convert~(_self:-GetUserFunctionVars(_self), set);
+  for i from 1 to nops(_self:-m_user_function) do
+    ind := indets(impl[i], {symbol, function}) minus {undefined} minus vars[i] minus data minus comp;
+    if (nops(ind) > 0) then
+      if _self:-m_warning_mode then
+        WARNING("the user function ""%1"" contains the unknown variables %2.", decl[i], ind);
+      end if;
+      return false;
+    end if;
+  end do;
+  return true;
+end proc: # CheckUserFunction
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -1406,6 +1669,8 @@ export GenerateCode::static := proc(
       _self:-ToExplicit(_self);
     elif (type = "SemiExplicit") then
       _self:-ToSemiExplicit(_self);
+    elif (type = "Linear") then
+      _self:-ToLinear(_self);
     else
       error("unknown Sandals class type ""%1"".", type);
     end if;
@@ -1420,6 +1685,7 @@ export GenerateCode::static := proc(
   _self:-CheckDefinition(_self, "A", _self:-m_A);
   _self:-CheckDefinition(_self, "b", _self:-m_b);
   _self:-CheckDefinition(_self, "h", _self:-m_h);
+  _self:-CheckUserFunction(_self);
 
   # Check if the path exists
   if not FileTools:-Exists(_self:-m_path) then
@@ -1436,6 +1702,8 @@ export GenerateCode::static := proc(
     class_str := _self:-TranslateExplicitSystem(_self, _self:-m_name, _self:-m_f, _self:-m_h);
   elif (_self:-m_system_type = "SemiExplicit") then
     class_str := _self:-TranslateSemiExplicitSystem(_self, _self:-m_name, _self:-m_A, _self:-m_b, _self:-m_h);
+  elif (_self:-m_system_type = "Linear") then
+    class_str := _self:-TranslateLinearSystem(_self, _self:-m_name, _self:-m_E, _self:-m_A, _self:-m_b, _self:-m_h);
   else
     error("unknown Sandals class type ""%1"".", _self:-m_system_type);
   end if;
@@ -1467,7 +1735,7 @@ export TranslateExplicitSystem::static := proc(
     "withstates variables <x>, right-hand side <f>, and invariants <h>.";
 
   local x, f_tmp, Jf_x, h_tmp, Jh_x, rm_deps, i, data_str, num_eqns, num_invs, time_fun, ics_fun,
-    domain_fun, vars_info;
+    domain_fun, user_fun, vars_info;
 
   # Store system states
   x := _self:-m_vars;
@@ -1490,6 +1758,9 @@ export TranslateExplicitSystem::static := proc(
 
   # Initial conditions function code generation
   ics_fun := _self:-GenerateClassIcs(_self);
+
+  # User functions code generation
+  user_fun := _self:-GenerateClassUserFunction(_self);
 
   # Integration time function code generation
   time_fun := _self:-GenerateClassTime(_self);
@@ -1520,8 +1791,8 @@ export TranslateExplicitSystem::static := proc(
     "// This file has been automatically generated by Sandals.\n",
     "// DISCLAIMER: If you need to edit it, do it wisely!\n",
     "\n",
-    "#ifndef SANDALS_MAPLE_", StringTools:-UpperCase(name), "_EXPLICIT_HH\n",
-    "#define SANDALS_MAPLE_", StringTools:-UpperCase(name), "_EXPLICIT_HH\n",
+    "#ifndef SANDALS_MAPLE_CODEGEN_", StringTools:-UpperCase(name), "_EXPLICIT_SYSTEM_HH\n",
+    "#define SANDALS_MAPLE_CODEGEN_", StringTools:-UpperCase(name), "_EXPLICIT_SYSTEM_HH\n",
     "\n",
     "using namespace Sandals;\n"
     "using namespace std;\n"
@@ -1575,13 +1846,15 @@ export TranslateExplicitSystem::static := proc(
     "\n",
     domain_fun,
     "\n",
+    user_fun,
+    "\n",
     time_fun,
     "\n",
     ics_fun,
     "\n",
     "}; // class ", name, "\n",
     "\n",
-    "#endif // SANDALS_MAPLE_", StringTools:-UpperCase(name), "_EXPLICIT_HH\n"
+    "#endif // SANDALS_MAPLE_CODEGEN_", StringTools:-UpperCase(name), "_EXPLICIT_SYSTEM_HH\n"
   );
 end proc: # TranslateExplicitSystem
 
@@ -1607,7 +1880,7 @@ export TranslateSemiExplicitSystem::static := proc(
     "<h>.";
 
   local x, A_tmp, TA_x, b_tmp, Jb_x, h_tmp, Jh_x, rm_deps, i, data_str, num_eqns, num_invs, time_fun,
-    ics_fun, domain_fun, vars_info;
+    ics_fun, domain_fun, user_fun, vars_info;
 
   # Store system states
   x := _self:-m_vars;
@@ -1640,6 +1913,9 @@ export TranslateSemiExplicitSystem::static := proc(
   # Initial conditions function code generation
   ics_fun := _self:-GenerateClassIcs(_self);
 
+  # User functions code generation
+  user_fun := _self:-GenerateClassUserFunction(_self);
+
   # Integration time function code generation
   time_fun := _self:-GenerateClassTime(_self);
 
@@ -1669,8 +1945,8 @@ export TranslateSemiExplicitSystem::static := proc(
     "// This file has been automatically generated by Sandals.\n",
     "// DISCLAIMER: If you need to edit it, do it wisely!\n",
     "\n",
-    "#ifndef SANDALS_MAPLE_", StringTools:-UpperCase(name), "_SEMIEXPLICIT_HH\n",
-    "#define SANDALS_MAPLE_", StringTools:-UpperCase(name), "_SEMIEXPLICIT_HH\n",
+    "#ifndef SANDALS_MAPLE_CODEGEN_", StringTools:-UpperCase(name), "_SEMIEXPLICIT_SYSTEM_HH\n",
+    "#define SANDALS_MAPLE_CODEGEN_", StringTools:-UpperCase(name), "_SEMIEXPLICIT_SYSTEM_HH\n",
     "\n",
     "using namespace Sandals;\n"
     "using namespace std;\n"
@@ -1741,14 +2017,175 @@ export TranslateSemiExplicitSystem::static := proc(
     "\n",
     domain_fun,
     "\n",
+    user_fun,
+    "\n",
     time_fun,
     "\n",
     ics_fun,
     "\n",
     "}; // class ", name, "\n",
     "\n",
-    "#endif // SANDALS_MAPLE_", StringTools:-UpperCase(name), "_SEMIEXPLICIT_HH\n"
+    "#endif // SANDALS_MAPLE_CODEGEN_", StringTools:-UpperCase(name), "_SEMIEXPLICIT_SYSTEM_HH\n"
   );
 end proc: # TranslateSemiExplicitSystem
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+#   _     _
+#  | |   (_)_ __   ___  __ _ _ __
+#  | |   | | '_ \ / _ \/ _` | '__|
+#  | |___| | | | |  __/ (_| | |
+#  |_____|_|_| |_|\___|\__,_|_|
+#
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+export TranslateLinearSystem::static := proc(
+  _self::Sandals,
+  name::string,
+  E::Matrix(algebraic),
+  A::Matrix(algebraic),
+  b::Vector(algebraic),
+  h::Vector(algebraic),
+  $)::string;
+
+  description "Generate a linear system for the first-order differential equations E(x,t)x' = "
+    "A(x,t)x + b(x,t), with states variables <x>, mass matrix <E>, right-hand side matrix <A>, "
+    "right-hand side vector <b>, and invariants <h>.";
+
+
+  local x, E_tmp, A_tmp, b_tmp, h_tmp, Jh_x, rm_deps, i, data_str, num_eqns, num_invs, time_fun,
+    ics_fun, domain_fun, user_fun, vars_info;
+
+  # Store system states
+  x := _self:-m_vars;
+
+  # Prepare veriables for substitution (x(t) -> x)
+  rm_deps := convert(x =~ op~(0, x), list);
+
+  # Store system invariants and calculate Jacobian
+  Jh_x := Sandals:-DoJacobian(h, x);
+
+  # Generate expressions with proper variables dependencices
+  x     := convert(subs(op(rm_deps), x), list);
+  E_tmp := subs(op(rm_deps), E);
+  A_tmp := subs(op(rm_deps), A);
+  b_tmp := subs(op(rm_deps), b);
+  h_tmp := subs(op(rm_deps), h);
+  Jh_x  := subs(op(rm_deps), Jh_x);
+
+  # Function utilities strings
+  i := _self:-m_indent;
+
+  # Generate internal class data
+  data_str := _self:-GenerateClassData(_self);
+
+  # Initial conditions function code generation
+  ics_fun := _self:-GenerateClassIcs(_self);
+
+  # User functions code generation
+  user_fun := _self:-GenerateClassUserFunction(_self);
+
+  # Integration time function code generation
+  time_fun := _self:-GenerateClassTime(_self);
+
+  # Domain function code generation
+  domain_fun := _self:-GenerateClassDomain(_self);
+
+  # Compute template arguments
+  num_eqns := LinearAlgebra:-Dimension(b);
+  num_invs := LinearAlgebra:-Dimension(h);
+
+  # Variables information
+  vars_info := [_self:-m_vars_info, ["Independent variable (or time)"]];
+
+  # Return output string
+  return cat(
+    "/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\\\n"
+    " * Copyright (c) 2025, Davide Stocco and Enrico Bertolazzi.                                      *\n"
+    " *                                                                                               *\n"
+    " * The Sandals project is distributed under the BSD 2-Clause License.                            *\n"
+    " *                                                                                               *\n"
+    " * Davide Stocco                                                               Enrico Bertolazzi *\n"
+    " * University of Trento                                                     University of Trento *\n"
+    " * e-mail: davide.stocco@unitn.it                             e-mail: enrico.bertolazzi@unitn.it *\n"
+    "\\* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */\n"
+    "\n",
+    "// C++ generated code for linear system: ", name, "\n",
+    "// This file has been automatically generated by Sandals.\n",
+    "// DISCLAIMER: If you need to edit it, do it wisely!\n",
+    "\n",
+    "#ifndef SANDALS_MAPLE_CODEGEN_", StringTools:-UpperCase(name), "_LINEAR_SYSTEM_HH\n",
+    "#define SANDALS_MAPLE_CODEGEN_", StringTools:-UpperCase(name), "_LINEAR_SYSTEM_HH\n",
+    "\n",
+    "using namespace Sandals;\n"
+    "using namespace std;\n"
+    "\n",
+    "// ", _self:-m_info, "\n",
+    "class ", name, " : public Linear<", num_eqns, ", ", num_invs, ">\n",
+    "{\n",
+    i, "// Class data\n",
+    data_str,
+    "\n",
+    "public:\n",
+    i, "using VectorF  = typename Linear<", num_eqns, ", ", num_invs, ">::VectorF;\n",
+    i, "using MatrixE  = typename Linear<", num_eqns, ", ", num_invs, ">::MatrixE;\n",
+    i, "using MatrixA  = typename Linear<", num_eqns, ", ", num_invs, ">::MatrixA;\n",
+    i, "using VectorB  = typename Linear<", num_eqns, ", ", num_invs, ">::VectorB;\n",
+    i, "using VectorH  = typename Linear<", num_eqns, ", ", num_invs, ">::VectorH;\n",
+    i, "using MatrixJH = typename Linear<", num_eqns, ", ", num_invs, ">::MatrixJH;\n",
+    "\n",
+    _self:-Indent(_self, _self:-GenerateClassConstructor(
+      _self, name, "Linear",
+      parse("num_eqns") = num_eqns,
+      parse("num_invs") = num_invs,
+      parse("info")     = "Class constructor."
+    )),
+    "\n",
+    _self:-Indent(_self, _self:-TranslateMatrixFunction(
+      _self, "E", [[t]], A_tmp,
+      ["Real"], [vars_info[-1]], "MatrixE",
+      parse("spec") = "const override",
+      parse("info") = "Evaluate the mass matrix E."
+    )),
+    "\n",
+    _self:-Indent(_self, _self:-TranslateMatrixFunction(
+      _self, "A", [[t]], A_tmp,
+      ["Real"], [vars_info[-1]], "MatrixA",
+      parse("spec") = "const override",
+      parse("info") = "Evaluate the right-hand side matrix A."
+    )),
+    "\n",
+    _self:-Indent(_self, _self:-TranslateVectorFunction(
+      _self, "b", [[t]], b_tmp,
+      ["Real"], [vars_info[-1]], "VectorB",
+      parse("spec") = "const override",
+      parse("info") = "Evaluate the right-hand side vector b."
+    )),
+    "\n",
+    _self:-Indent(_self, _self:-TranslateVectorFunction(
+      _self, "h", [x, [t]], h_tmp,
+      ["VectorF const &", "Real"], vars_info, "VectorH",
+      parse("spec") = "const override",
+      parse("info") = "Calculate the vector h of the invariants."
+    )),
+    "\n",
+    _self:-Indent(_self, _self:-TranslateMatrixFunction(
+      _self, "Jh_x", [x, [t]], Jh_x,
+      ["VectorF const &", "Real"], vars_info, "MatrixJH",
+      parse("spec") = "const override",
+      parse("info") = "Calculate the Jacobian of h with respect to x."
+    )),
+    "\n",
+    domain_fun,
+    "\n",
+    user_fun,
+    "\n",
+    time_fun,
+    "\n",
+    ics_fun,
+    "\n",
+    "}; // class ", name, "\n",
+    "\n",
+    "#endif // SANDALS_MAPLE_CODEGEN_", StringTools:-UpperCase(name), "_LINEAR_SYSTEM_HH\n"
+  );
+end proc: # TranslateLinearSystem
+

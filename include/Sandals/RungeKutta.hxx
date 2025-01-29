@@ -215,16 +215,22 @@ namespace Sandals {
     VectorS c() const {return c;}
 
     /**
-    * Get the ODE/DAE system shared pointer.
-    * \return The ODE/DAE system shared pointer.
+    * Get the ODE/DAE system pointer.
+    * \return The ODE/DAE system pointer.
     */
-    System ode() {return this->m_system;}
+    System system() {return this->m_system;}
 
     /**
-    * Set the ODE/DAE system shared pointer.
-    * \param[in] t_system The ODE/DAE system shared pointer.
+    * Set the ODE/DAE system pointer.
+    * \param[in] t_system The ODE/DAE system pointer.
     */
-    void ode(System t_system) {this->m_system = t_system;}
+    void system(System t_system) {this->m_system = t_system;}
+
+    /**
+    * Check if the ODE/DAE system pointer is set.
+    * \return True if the ODE/DAE system pointer is set, false otherwise.
+    */
+    bool has_system() {return this->m_system != nullptr;}
 
     /**
     * Get the adaptive step absolute tolerance \f$ \epsilon_{\text{abs}} \f$.
@@ -487,9 +493,10 @@ namespace Sandals {
 
     /**
     * Print the Runge-Kutta method information to the output stream.
-    * \param os The output stream.
+    * \param[in,out] os The output stream.
     */
-    void info(std::ostream &os) const {
+    std::string info() const {
+      std::ostringstream os;
       os
         << "Runge-Kutta method:\t" << this->name() << std::endl
         << "\t- order:\t" << this->order() << std::endl
@@ -503,7 +510,19 @@ namespace Sandals {
       os
         << std::endl
         << "\t- embedded:\t" << this->is_embedded() << std::endl;
+      if (this->has_system()) {
+        os << "\t- system:\t" << this->m_system->name() << std::endl;
+      } else {
+        os << "\t- system:\t" << "none" << std::endl;
+      }
+      return os.str();
     }
+
+    /**
+    * Print the Runge-Kutta method information on a stream.
+    * \param[in,out] os Output stream.
+    */
+    void info(std::ostream &os) {os << this->info();}
 
     /*\
      |   _____ ____  _  __
@@ -781,7 +800,7 @@ namespace Sandals {
 
         // Compute the Jacobians with respect to x and x_dot
         x_dot_node = K_mat.col(i) / h;
-        if (!this->m_reverse){
+        if (!this->m_reverse) {
           JF_x       = this->m_system->JF_x(x_node, x_dot_node, t_node);
           JF_x_dot   = this->m_system->JF_x_dot(x_node, x_dot_node, t_node);
         } else {

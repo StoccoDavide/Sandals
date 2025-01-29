@@ -1,19 +1,19 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
 <area shape="rect" id="Node000000" href="$struct_sandals_1_1_tableau.html" title=" " alt="" coords="5,179,158,204"/>
 <area shape="rect" id="Node000001" href="$class_sandals_1_1_gauss_legendre4_tableau.html" title="Butcher Tableau for the Gauss&#45;Legendre order 4 method." alt="" coords="206,5,425,31"/>
-<area shape="poly" id="edge37_Node000000_Node000001" title=" " alt="" coords="95,163,138,101,169,67,204,40,227,29,229,34,207,44,172,71,142,104,99,166"/>
+<area shape="poly" id="edge38_Node000000_Node000001" title=" " alt="" coords="95,163,138,101,169,67,204,40,227,29,229,34,207,44,172,71,142,104,99,166"/>
 <area shape="rect" id="Node000002" href="$class_sandals_1_1_heun2_tableau.html" title="Butcher tableau for the Heun&#39;s (or 2&#45;stage strong&#45;stability preserving Runge&#45;Kutta) order 2 method." alt="" coords="236,55,395,80"/>
-<area shape="poly" id="edge38_Node000000_Node000002" title=" " alt="" coords="104,165,148,126,175,106,205,89,234,78,236,83,207,94,178,110,151,130,107,169"/>
+<area shape="poly" id="edge39_Node000000_Node000002" title=" " alt="" coords="104,165,148,126,175,106,205,89,234,78,236,83,207,94,178,110,151,130,107,169"/>
 <area shape="rect" id="Node000003" href="$class_sandals_1_1_lobatto_i_i_i_a2_tableau.html" title="Butcher tableau for the Lobatto IIIA order 2 method." alt="" coords="219,104,412,130"/>
-<area shape="poly" id="edge39_Node000000_Node000003" title=" " alt="" coords="124,170,205,138,244,128,245,133,206,143,126,175"/>
+<area shape="poly" id="edge40_Node000000_Node000003" title=" " alt="" coords="124,170,205,138,244,128,245,133,206,143,126,175"/>
 <area shape="rect" id="Node000004" href="$class_sandals_1_1_m_t_e22_tableau.html" title="Butcher tableau for the minimal truncation error (or Ralston&#39;s) order 2 method." alt="" coords="234,153,397,179"/>
-<area shape="poly" id="edge40_Node000000_Node000004" title=" " alt="" coords="173,179,233,172,234,178,173,184"/>
+<area shape="poly" id="edge41_Node000000_Node000004" title=" " alt="" coords="173,179,233,172,234,178,173,184"/>
 <area shape="rect" id="Node000005" href="$class_sandals_1_1_radau_i_i_a3_tableau.html" title="Butcher tableau for the Radau IIA order 3 method." alt="" coords="224,203,407,228"/>
-<area shape="poly" id="edge41_Node000000_Node000005" title=" " alt="" coords="173,198,223,203,223,209,173,203"/>
+<area shape="poly" id="edge42_Node000000_Node000005" title=" " alt="" coords="173,198,223,203,223,209,173,203"/>
 <area shape="rect" id="Node000006" href="$class_sandals_1_1_ralston2_tableau.html" title="Butcher tableau for the Ralston&#39;s (or minimal truncation error) order 2 method." alt="" coords="229,252,402,278"/>
-<area shape="poly" id="edge42_Node000000_Node000006" title=" " alt="" coords="127,208,206,238,246,249,245,254,205,243,125,213"/>
+<area shape="poly" id="edge43_Node000000_Node000006" title=" " alt="" coords="127,208,206,238,246,249,245,254,205,243,125,213"/>
 <area shape="rect" id="Node000007" href="$class_sandals_1_1_s_s_p_r_k22_tableau.html" title="Butcher tableau for the 2&#45;stage strong&#45;stability preserving Runge&#45;Kutta (or Heun) order 2 method." alt="" coords="225,301,406,327"/>
-<area shape="poly" id="edge43_Node000000_Node000007" title=" " alt="" coords="108,213,151,252,207,288,235,298,233,303,204,293,148,256,104,217"/>
+<area shape="poly" id="edge44_Node000000_Node000007" title=" " alt="" coords="108,213,151,252,207,288,235,298,233,303,204,293,148,256,104,217"/>
 <area shape="rect" id="Node000008" href="$class_sandals_1_1_s_s_p_r_k22star_tableau.html" title="Butcher tableau for the optimal 2&#45;stage strong&#45;stability preserving Runge&#45;Kutta order 2 method." alt="" coords="214,351,417,376"/>
-<area shape="poly" id="edge44_Node000000_Node000008" title=" " alt="" coords="99,216,142,278,172,310,207,337,229,348,227,352,204,342,169,314,138,282,95,219"/>
+<area shape="poly" id="edge45_Node000000_Node000008" title=" " alt="" coords="99,216,142,278,172,310,207,337,229,348,227,352,204,342,169,314,138,282,95,219"/>
 </map>

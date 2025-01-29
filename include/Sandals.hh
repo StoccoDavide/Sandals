@@ -202,10 +202,11 @@ namespace Sandals
   static Matrix9 const IDENTITY_MAT9 = Matrix9::Identity();          /**< Identity \f$ 9 \times 9 \f$ matrix static constant object. */
 
   /**
-  * Print Sandals library information.
-  * \param[in] os Output stream.
+  * Print Sandals library information on a string.
+  * \return A string with the Sandals library information.
   */
-  void Info(std::ostream &os) {
+  std::string Info() {
+    std::ostringstream os;
     os
       << "* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *" << std::endl
       << "* Copyright (c) 2025, Davide Stocco and Enrico Bertolazzi.                                      *" << std::endl
@@ -216,7 +217,14 @@ namespace Sandals
       << "* University of Trento                                                     University of Trento *" << std::endl
       << "* e-mail: davide.stocco@unitn.it                             e-mail: enrico.bertolazzi@unitn.it *" << std::endl
       << "* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *" << std::endl;
+    return os.str();
   }
+
+  /**
+  * Print Sandals library information on a stream.
+  * \param[in] os Output stream.
+  */
+  void Info(std::ostream &os) {os << Info();}
 
 } // namespace Sandals
 
@@ -232,6 +240,7 @@ namespace Sandals
 #include "Sandals/System/Implicit.hxx"
 #include "Sandals/System/Explicit.hxx"
 #include "Sandals/System/SemiExplicit.hxx"
+#include "Sandals/System/Linear.hxx"
 
 // Runge-Kutta integrator
 #include "Sandals/Tableau.hxx"

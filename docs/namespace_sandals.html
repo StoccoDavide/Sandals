@@ -216,6 +216,9 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_implicit_euler_tableau.html">ImplicitEulerTableau</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Butcher tableau for the <a class="el" href="class_sandals_1_1_implicit.html" title="Class container for the system of implicit ODEs/DAEs.">Implicit</a> Euler method.  <a href="class_sandals_1_1_implicit_euler_tableau.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_linear.html">Linear</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Class container for the system of linear ODEs/DAEs.  <a href="class_sandals_1_1_linear.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_lobatto_i_i_i_a2.html">LobattoIIIA2</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Class container for the Lobatto IIIA order 2 method.  <a href="class_sandals_1_1_lobatto_i_i_i_a2.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -338,8 +341,8 @@ Classes</h2></td></tr>
 Typedefs</h2></td></tr>
 <tr class="memitem:a14d9a2b6eb039e206089c5dab9f6b977" id="r_a14d9a2b6eb039e206089c5dab9f6b977"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> = double</td></tr>
 <tr class="separator:a14d9a2b6eb039e206089c5dab9f6b977"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3b675b688cd98c7c58ea7d4425e61777" id="r_a3b675b688cd98c7c58ea7d4425e61777"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3b675b688cd98c7c58ea7d4425e61777">Size</a> = int</td></tr>
-<tr class="separator:a3b675b688cd98c7c58ea7d4425e61777"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af773bcdd0fadfe5e661fed82612adfcc" id="r_af773bcdd0fadfe5e661fed82612adfcc"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> = int</td></tr>
+<tr class="separator:af773bcdd0fadfe5e661fed82612adfcc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa5480ee9cb0ab686fd191654ed80e2f4" id="r_aa5480ee9cb0ab686fd191654ed80e2f4"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa5480ee9cb0ab686fd191654ed80e2f4">Vector0</a> = Eigen::Vector&lt;<a class="el" href="#a14d9a2b6eb039e206089c5dab9f6b977">Real</a>, 0&gt;</td></tr>
 <tr class="separator:aa5480ee9cb0ab686fd191654ed80e2f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa59064e66f0d7365f4d721de136e6adb" id="r_aa59064e66f0d7365f4d721de136e6adb"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa59064e66f0d7365f4d721de136e6adb">Matrix0</a> = Eigen::Matrix&lt;<a class="el" href="#a14d9a2b6eb039e206089c5dab9f6b977">Real</a>, 0, 0&gt;</td></tr>
@@ -387,6 +390,8 @@ Typedefs</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:a8b91d93e8c32645ca543076eeac78109" id="r_a8b91d93e8c32645ca543076eeac78109"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8b91d93e8c32645ca543076eeac78109">Info</a> ()</td></tr>
+<tr class="separator:a8b91d93e8c32645ca543076eeac78109"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af7e92dbe412047eb67132168b372a27f" id="r_af7e92dbe412047eb67132168b372a27f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af7e92dbe412047eb67132168b372a27f">Info</a> (std::ostream &amp;os)</td></tr>
 <tr class="separator:af7e92dbe412047eb67132168b372a27f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -548,6 +553,21 @@ Variables</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The namespace contains all the classes and functions of the <a class="el" href="namespace_sandals.html" title="The namespace for the Sandals library.">Sandals</a> library. </p>
 </div><h2 class="groupheader">Typedef Documentation</h2>
+<a id="af773bcdd0fadfe5e661fed82612adfcc" name="af773bcdd0fadfe5e661fed82612adfcc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af773bcdd0fadfe5e661fed82612adfcc">&#9670;&#160;</a></span>Integer</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="#af773bcdd0fadfe5e661fed82612adfcc">Sandals::Integer</a> = int</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p><a class="el" href="#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> number type. </p>
+
+</div>
+</div>
 <a id="aa59064e66f0d7365f4d721de136e6adb" name="aa59064e66f0d7365f4d721de136e6adb"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa59064e66f0d7365f4d721de136e6adb">&#9670;&#160;</a></span>Matrix0</h2>
 
@@ -728,21 +748,6 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="a3b675b688cd98c7c58ea7d4425e61777" name="a3b675b688cd98c7c58ea7d4425e61777"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3b675b688cd98c7c58ea7d4425e61777">&#9670;&#160;</a></span>Size</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">using <a class="el" href="#a3b675b688cd98c7c58ea7d4425e61777">Sandals::Size</a> = int</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p><a class="el" href="#a3b675b688cd98c7c58ea7d4425e61777">Size</a> number type. </p>
-
-</div>
-</div>
 <a id="aa5480ee9cb0ab686fd191654ed80e2f4" name="aa5480ee9cb0ab686fd191654ed80e2f4"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa5480ee9cb0ab686fd191654ed80e2f4">&#9670;&#160;</a></span>Vector0</h2>
 
@@ -909,8 +914,26 @@ Variables</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
+<a id="a8b91d93e8c32645ca543076eeac78109" name="a8b91d93e8c32645ca543076eeac78109"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8b91d93e8c32645ca543076eeac78109">&#9670;&#160;</a></span>Info() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string Sandals::Info </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Print <a class="el" href="namespace_sandals.html" title="The namespace for the Sandals library.">Sandals</a> library information on a string. </p><dl class="section return"><dt>Returns</dt><dd>A string with the <a class="el" href="namespace_sandals.html" title="The namespace for the Sandals library.">Sandals</a> library information. </dd></dl>
+
+</div>
+</div>
 <a id="af7e92dbe412047eb67132168b372a27f" name="af7e92dbe412047eb67132168b372a27f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af7e92dbe412047eb67132168b372a27f">&#9670;&#160;</a></span>Info()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#af7e92dbe412047eb67132168b372a27f">&#9670;&#160;</a></span>Info() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -923,7 +946,7 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Print <a class="el" href="namespace_sandals.html" title="The namespace for the Sandals library.">Sandals</a> library information. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Print <a class="el" href="namespace_sandals.html" title="The namespace for the Sandals library.">Sandals</a> library information on a stream. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">os</td><td>Output stream. </td></tr>
   </table>

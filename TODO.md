@@ -15,6 +15,7 @@
 - [x] Computation sequence before functions evaluation
 - [x] Custom user-defined functions
 - [ ] Support user-defined functions and computation sequence dependency on states
+- [ ] Check if the user-defined functions inputs have the correct inputs number
 
 ## Benchmarks
 
