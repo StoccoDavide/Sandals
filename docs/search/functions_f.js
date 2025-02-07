@@ -11,13 +11,10 @@ var searchData=
   ['ralston4_8',['Ralston4',['../class_sandals_1_1_ralston4.html#a6f54c36d738e712400b75913d583b4f6',1,'Sandals::Ralston4::Ralston4()'],['../class_sandals_1_1_ralston4.html#aa2fbaf3c78f6843935b6e29c53996363',1,'Sandals::Ralston4::Ralston4(System t_system)']]],
   ['ralston4tableau_9',['Ralston4Tableau',['../class_sandals_1_1_ralston4_tableau.html#a54c203cf3f67740797cb0b3121e81446',1,'Sandals::Ralston4Tableau']]],
   ['relative_5ftolerance_10',['relative_tolerance',['../class_sandals_1_1_runge_kutta.html#a08ec39bd9c17d250be8498dde6802dcc',1,'Sandals::RungeKutta::relative_tolerance()'],['../class_sandals_1_1_runge_kutta.html#a2e276a3911d020bf5685ab9cd86804b0',1,'Sandals::RungeKutta::relative_tolerance(Real t_relative_tolerance)']]],
-  ['relaxations_11',['relaxations',['../class_sandals_1_1_nonlinear_solver.html#aebace7ef74f8414b6feeaa3fd6cdcaac',1,'Sandals::NonlinearSolver']]],
-  ['reset_12',['reset',['../class_sandals_1_1_nonlinear_solver.html#a577e5bdd342f3edea14c41c37262b3c5',1,'Sandals::NonlinearSolver']]],
-  ['residuals_13',['residuals',['../class_sandals_1_1_nonlinear_solver.html#aa76843782eac01f8fb1fd83cb9a9d3aa',1,'Sandals::NonlinearSolver']]],
-  ['resize_14',['resize',['../struct_sandals_1_1_solution.html#a6a9f414f27428625639da0ec198bb5e4',1,'Sandals::Solution']]],
-  ['reverse_15',['reverse',['../class_sandals_1_1_runge_kutta.html#ab8cbc1f848e8836b496f7c7603f41360',1,'Sandals::RungeKutta']]],
-  ['reverse_5fmode_16',['reverse_mode',['../class_sandals_1_1_runge_kutta.html#a61ef11dcd3caa03fe8891d32b8b3183c',1,'Sandals::RungeKutta']]],
-  ['rk4_17',['RK4',['../class_sandals_1_1_r_k4.html#abe36eea81d60a264fd06bb5b09c1a883',1,'Sandals::RK4::RK4()'],['../class_sandals_1_1_r_k4.html#a027693254b1c48544b88da41926b6f62',1,'Sandals::RK4::RK4(System t_system)']]],
-  ['rk4tableau_18',['RK4Tableau',['../class_sandals_1_1_r_k4_tableau.html#adad9e5e98eac4fe5ed9bb1c77ecebaa7',1,'Sandals::RK4Tableau']]],
-  ['rungekutta_19',['RungeKutta',['../class_sandals_1_1_runge_kutta.html#a78216a3218bc9959921d1a7ed31bd6fd',1,'Sandals::RungeKutta::RungeKutta(const RungeKutta &amp;)=delete'],['../class_sandals_1_1_runge_kutta.html#a43e2f5376368bbabf25852ead4af71a4',1,'Sandals::RungeKutta::RungeKutta(Tableau&lt; S &gt; const &amp;t_tableau)'],['../class_sandals_1_1_runge_kutta.html#a8f75e38fa8ffae173afe9488d2d43397',1,'Sandals::RungeKutta::RungeKutta(Tableau&lt; S &gt; const &amp;t_tableau, System t_system)']]]
+  ['resize_11',['resize',['../struct_sandals_1_1_solution.html#a6a9f414f27428625639da0ec198bb5e4',1,'Sandals::Solution']]],
+  ['reverse_12',['reverse',['../class_sandals_1_1_runge_kutta.html#ab8cbc1f848e8836b496f7c7603f41360',1,'Sandals::RungeKutta']]],
+  ['reverse_5fmode_13',['reverse_mode',['../class_sandals_1_1_runge_kutta.html#a61ef11dcd3caa03fe8891d32b8b3183c',1,'Sandals::RungeKutta']]],
+  ['rk4_14',['RK4',['../class_sandals_1_1_r_k4.html#abe36eea81d60a264fd06bb5b09c1a883',1,'Sandals::RK4::RK4()'],['../class_sandals_1_1_r_k4.html#a027693254b1c48544b88da41926b6f62',1,'Sandals::RK4::RK4(System t_system)']]],
+  ['rk4tableau_15',['RK4Tableau',['../class_sandals_1_1_r_k4_tableau.html#adad9e5e98eac4fe5ed9bb1c77ecebaa7',1,'Sandals::RK4Tableau']]],
+  ['rungekutta_16',['RungeKutta',['../class_sandals_1_1_runge_kutta.html#a78216a3218bc9959921d1a7ed31bd6fd',1,'Sandals::RungeKutta::RungeKutta(const RungeKutta &amp;)=delete'],['../class_sandals_1_1_runge_kutta.html#a43e2f5376368bbabf25852ead4af71a4',1,'Sandals::RungeKutta::RungeKutta(Tableau&lt; S &gt; const &amp;t_tableau)'],['../class_sandals_1_1_runge_kutta.html#a8f75e38fa8ffae173afe9488d2d43397',1,'Sandals::RungeKutta::RungeKutta(Tableau&lt; S &gt; const &amp;t_tableau, System t_system)']]]
 ];

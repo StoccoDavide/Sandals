@@ -383,8 +383,8 @@ end proc: # GetDomain
 
 export AddUserFunction::static := proc(
   _self::Sandals,
-  user_function::{symbol, function(symbol), symbol = algebraic, function(symbol) = algebraic,
-    list({symbol, function(symbol), symbol = algebraic, function(symbol) = algebraic})},
+  user_function::{symbol, function(symbol), {symbol, function(symbol)} = algebraic,
+    list({symbol, function(symbol), {symbol, function(symbol)} = algebraic})},
   $)
 
   description "Set the user function to <user_function>.";
@@ -408,7 +408,7 @@ end proc: # AddUserFunction
 export GetUserFunction::static := proc(
   _self::Sandals,
   i::nonnegint := 0,
-  $)::list({symbol, function(symbol), symbol = algebraic, function(symbol) = algebraic});
+  $)::list({symbol, function(symbol), {symbol, function(symbol)} = algebraic});
 
   description "Return the user function at index <i>. If <i> is not provided, return all user "
     "functions.";
@@ -436,7 +436,7 @@ export GetUserFunctionDecl::static := proc(
   for j from 1 to nops(out) do
     if type(out[j], {symbol, function}) then
       out[j] := out[j];
-    elif type(out[j], {symbol = algebraic, function = algebraic}) then
+    elif type(out[j], {{symbol, function} = algebraic}) then
       out[j] := lhs(out[j]);
     else
       error("invalid user function declaration detected.");
@@ -484,7 +484,7 @@ export GetUserFunctionImpl::static := proc(
   for j from 1 to nops(out) do
     if type(out[j], {symbol, function}) then
       out[j] := undefined;
-    elif type(out[j], {symbol = algebraic, function = algebraic}) then
+    elif type(out[j], {{symbol, function} = algebraic}) then
       out[j] := rhs(out[j]);
     else
       error("invalid user function implementation detected.");
@@ -546,7 +546,7 @@ end proc: # SetCompSequence
 export GetCompSequence::static := proc(
   _self::Sandals,
   i::nonnegint := 0,
-  $)::list({symbol, function} = algebraic);
+  $)::list(symbol = algebraic);
 
   description "Return the computation sequence at index <i>. If <i> is not provided, return all "
     "computation sequences.";

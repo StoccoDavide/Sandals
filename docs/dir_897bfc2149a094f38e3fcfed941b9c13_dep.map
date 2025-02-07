@@ -1,7 +1,6 @@
 <map id="include/Sandals" name="include/Sandals">
-<area shape="rect" id="node2" href="dir_2ab04983017e4b83bdbc56614dc69f80.html" title="NonlinearSolver" alt="" coords="130,63,243,89"/>
-<area shape="rect" id="node3" href="dir_e3f01be4207495917c59f0193678e431.html" title="System" alt="" coords="267,63,333,89"/>
-<area shape="rect" id="node4" href="dir_f1663200bca5f59da59ecd01e284f6ac.html" title="Tableau" alt="" coords="358,63,424,89"/>
-<area shape="rect" id="clust2" href="dir_897bfc2149a094f38e3fcfed941b9c13.html" alt="" coords="27,52,435,99"/>
-<area shape="rect" id="clust1" href="dir_d44c64559bbebec7f509842c48db8b23.html" title="include" alt="" coords="16,16,445,110"/>
+<area shape="rect" id="node2" href="dir_e3f01be4207495917c59f0193678e431.html" title="System" alt="" coords="131,63,197,89"/>
+<area shape="rect" id="node3" href="dir_f1663200bca5f59da59ecd01e284f6ac.html" title="Tableau" alt="" coords="222,63,288,89"/>
+<area shape="rect" id="clust2" href="dir_897bfc2149a094f38e3fcfed941b9c13.html" alt="" coords="27,52,299,99"/>
+<area shape="rect" id="clust1" href="dir_d44c64559bbebec7f509842c48db8b23.html" title="include" alt="" coords="16,16,309,110"/>
 </map>

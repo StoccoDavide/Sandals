@@ -36,16 +36,19 @@ using namespace matplot;
 #endif
 
 int main() {
-  RK4<2, 1>::Time time = Eigen::VectorXd::LinSpaced(1000, 0.0, 100.0);
+  Fehlberg45<2, 1>::Time time = Eigen::VectorXd::LinSpaced(1000, 0.0, 100.0);
 
   OscillatorImplicit system_implicit;
-  RK4<2, 1> integrator_implicit(std::make_shared<OscillatorImplicit>(system_implicit));
+  Fehlberg45<2, 1> integrator_implicit(std::make_shared<OscillatorImplicit>(system_implicit));
   integrator_implicit.enable_projection();
-  integrator_implicit.enable_reverse_mode();
+  integrator_implicit.disable_reverse_mode();
   Solution<2, 1> solution_implicit;
   Solution<2, 1> solution_implicit_adaptive;
   integrator_implicit.solve(time, system_implicit.ics(), solution_implicit);
   integrator_implicit.adaptive_solve(time, system_implicit.ics(), solution_implicit_adaptive);
+
+  std::cout << "solution_implicit.std_t().size() = " << solution_implicit.std_t().size() << std::endl;
+  std::cout << "solution_implicit_adaptive.std_t().size() = " << solution_implicit_adaptive.std_t().size() << std::endl;
 
   #ifdef SANDALS_ENABLE_PLOTTING
   auto fig_1a = figure();
@@ -69,15 +72,17 @@ int main() {
   );
   #endif
 
-
   OscillatorExplicit system_explicit;
-  RK4<2,1> integrator_explicit(std::make_shared<OscillatorExplicit>(system_explicit));
+  Fehlberg45<2,1> integrator_explicit(std::make_shared<OscillatorExplicit>(system_explicit));
   integrator_explicit.enable_projection();
-  integrator_explicit.enable_reverse_mode();
+  integrator_explicit.disable_reverse_mode();
   Solution<2,1> solution_explicit;
   Solution<2,1> solution_explicit_adaptive;
   integrator_explicit.solve(time, system_explicit.ics(), solution_explicit);
   integrator_explicit.adaptive_solve(time, system_explicit.ics(), solution_explicit_adaptive);
+
+  std::cout << "solution_explicit.std_t().size() = " << solution_explicit.std_t().size() << std::endl;
+  std::cout << "solution_explicit_adaptive.std_t().size() = " << solution_explicit_adaptive.std_t().size() << std::endl;
 
   #ifdef SANDALS_ENABLE_PLOTTING
   auto fig_2a = figure();
@@ -102,9 +107,9 @@ int main() {
   #endif
 
   OscillatorSemiExplicit system_semiexplicit;
-  RK4<2, 1> integrator_semiexplicit(std::make_shared<OscillatorSemiExplicit>(system_semiexplicit));
+  Fehlberg45<2, 1> integrator_semiexplicit(std::make_shared<OscillatorSemiExplicit>(system_semiexplicit));
   integrator_semiexplicit.enable_projection();
-  integrator_semiexplicit.enable_reverse_mode();
+  integrator_semiexplicit.disable_reverse_mode();
   Solution<2, 1> solution_semiexplicit;
   Solution<2, 1> solution_semiexplicit_adaptive;
   integrator_semiexplicit.solve(time, system_semiexplicit.ics(), solution_semiexplicit);

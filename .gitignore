@@ -48,6 +48,8 @@
 *.mla
 *.bak
 
-# Temporary directories
-bin/
-tmp/
+# Fetched content
+third_party/
+
+# Sandbox folder
+sandbox/

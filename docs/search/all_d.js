@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['name_0',['name',['../struct_sandals_1_1_tableau.html#ad164e88a41097ed0fba4878437e46df2',1,'Sandals::Tableau::name'],['../class_sandals_1_1_broyden.html#a3f8c6a2ca490eb5842b3a924b0a44249',1,'Sandals::Broyden::name()'],['../class_sandals_1_1_newton.html#a7a88e9fb6eb64c02a9d9e4b97d110adb',1,'Sandals::Newton::name()'],['../class_sandals_1_1_nonlinear_solver.html#a03da778dcb032ff6b021b424f702cc9c',1,'Sandals::NonlinearSolver::name()'],['../class_sandals_1_1_runge_kutta.html#a8e7e8aadd147b7828198fbdc89a872be',1,'Sandals::RungeKutta::name()'],['../class_sandals_1_1_implicit.html#a6a25afdb5a8d0157ad5c2587477f5687',1,'Sandals::Implicit::name()'],['../class_sandals_1_1_implicit.html#a69cf264a6c33f3c45877845917915133',1,'Sandals::Implicit::name() const']]],
+  ['name_0',['name',['../struct_sandals_1_1_tableau.html#ad164e88a41097ed0fba4878437e46df2',1,'Sandals::Tableau::name'],['../class_sandals_1_1_runge_kutta.html#a8e7e8aadd147b7828198fbdc89a872be',1,'Sandals::RungeKutta::name()'],['../class_sandals_1_1_implicit.html#a6a25afdb5a8d0157ad5c2587477f5687',1,'Sandals::Implicit::name()'],['../class_sandals_1_1_implicit.html#a69cf264a6c33f3c45877845917915133',1,'Sandals::Implicit::name() const']]],
   ['nan_5fmat1_1',['NAN_MAT1',['../namespace_sandals.html#a5c7c8f13bc4d15e0e6f7b0b3e930671b',1,'Sandals']]],
   ['nan_5fmat2_2',['NAN_MAT2',['../namespace_sandals.html#a43378aa3a2656cfe782f6e1f1c05f0f2',1,'Sandals']]],
   ['nan_5fmat3_3',['NAN_MAT3',['../namespace_sandals.html#a43650a4efbc580198afee0de2b9809f1',1,'Sandals']]],
@@ -19,12 +19,6 @@ var searchData=
   ['nan_5fvec7_16',['NAN_VEC7',['../namespace_sandals.html#a6bfe6361c9ff22bf774ef335a37a1367',1,'Sandals']]],
   ['nan_5fvec8_17',['NAN_VEC8',['../namespace_sandals.html#a6cc0287e5dce1732945803afa385eeef',1,'Sandals']]],
   ['nan_5fvec9_18',['NAN_VEC9',['../namespace_sandals.html#ae371652e60c5674a409576d09fc1ae67',1,'Sandals']]],
-  ['newton_19',['Newton',['../class_sandals_1_1_newton.html',1,'Sandals::Newton&lt; N &gt;'],['../class_sandals_1_1_newton.html#a9bc8311c525f2ea3d73df097da153f03',1,'Sandals::Newton::Newton()']]],
-  ['newton_20s_20method_20',['Newton&apos;s method',['../class_sandals_1_1_newton.html#autotoc_md1',1,'']]],
-  ['newton_2ehxx_21',['Newton.hxx',['../_newton_8hxx.html',1,'']]],
-  ['newton_3c_20n_20_2as_20_3e_22',['Newton&lt; N *S &gt;',['../class_sandals_1_1_newton.html',1,'Sandals']]],
-  ['nonlinear_20solvers_23',['Nonlinear solvers',['../class_sandals_1_1_nonlinear_solver.html#autotoc_md2',1,'']]],
-  ['nonlinearsolver_24',['NonlinearSolver',['../class_sandals_1_1_nonlinear_solver.html',1,'Sandals::NonlinearSolver&lt; N &gt;'],['../class_sandals_1_1_nonlinear_solver.html#ae1332c9d67af66a33a1c5eb9e31b82e6',1,'Sandals::NonlinearSolver::NonlinearSolver()']]],
-  ['nonlinearsolver_2ehxx_25',['NonlinearSolver.hxx',['../_nonlinear_solver_8hxx.html',1,'']]],
-  ['nonlinearsolver_3c_20n_20_2as_20_3e_26',['NonlinearSolver&lt; N *S &gt;',['../class_sandals_1_1_nonlinear_solver.html',1,'Sandals']]]
+  ['newtonk_19',['NewtonK',['../class_sandals_1_1_runge_kutta.html#af1964b4b4d6f0450569ef681dd62d8a4',1,'Sandals::RungeKutta']]],
+  ['newtonx_20',['NewtonX',['../class_sandals_1_1_runge_kutta.html#af79c4b4a25162ae227e241da2518cb84',1,'Sandals::RungeKutta']]]
 ];

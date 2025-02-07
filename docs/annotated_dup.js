@@ -1,7 +1,6 @@
 var annotated_dup =
 [
     [ "Sandals", "namespace_sandals.html", [
-      [ "Broyden", "class_sandals_1_1_broyden.html", "class_sandals_1_1_broyden" ],
       [ "Chebyshev51", "class_sandals_1_1_chebyshev51.html", "class_sandals_1_1_chebyshev51" ],
       [ "Chebyshev51Tableau", "class_sandals_1_1_chebyshev51_tableau.html", "class_sandals_1_1_chebyshev51_tableau" ],
       [ "Explicit", "class_sandals_1_1_explicit.html", "class_sandals_1_1_explicit" ],
@@ -27,8 +26,6 @@ var annotated_dup =
       [ "LobattoIIIA2Tableau", "class_sandals_1_1_lobatto_i_i_i_a2_tableau.html", "class_sandals_1_1_lobatto_i_i_i_a2_tableau" ],
       [ "MTE22", "class_sandals_1_1_m_t_e22.html", "class_sandals_1_1_m_t_e22" ],
       [ "MTE22Tableau", "class_sandals_1_1_m_t_e22_tableau.html", "class_sandals_1_1_m_t_e22_tableau" ],
-      [ "Newton", "class_sandals_1_1_newton.html", "class_sandals_1_1_newton" ],
-      [ "NonlinearSolver", "class_sandals_1_1_nonlinear_solver.html", "class_sandals_1_1_nonlinear_solver" ],
       [ "RadauIIA3", "class_sandals_1_1_radau_i_i_a3.html", "class_sandals_1_1_radau_i_i_a3" ],
       [ "RadauIIA3Tableau", "class_sandals_1_1_radau_i_i_a3_tableau.html", "class_sandals_1_1_radau_i_i_a3_tableau" ],
       [ "RadauIIA5", "class_sandals_1_1_radau_i_i_a5.html", "class_sandals_1_1_radau_i_i_a5" ],

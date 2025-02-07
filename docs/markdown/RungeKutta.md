@@ -7,7 +7,7 @@ In this section, we introduce Runge-Kutta methods for solving ordinary different
 ODEs and DAEs can be expressed in several forms. While these forms may be mathematically equivalent and convertible into one another, their numerical properties differ, making some more practical for specific computations. Below are the most common representations:
 
 - *Explicit* form: \f$\mathbf{x}^\prime = \mathbf{f}(\mathbf{x}, t)\f$.
-- *Implicit* form: \f$\mathbf{F}(t\mathbf{x}, \mathbf{x}^\prime, t) = \mathbf{0}\f$.
+- *Implicit* form: \f$\mathbf{F}(\mathbf{x}, \mathbf{x}^\prime, t) = \mathbf{0}\f$.
 - *SemiExplicit* form: \f$\mathbf{A}(\mathbf{x}, t)\mathbf{x}^\prime = \mathbf{b}(\mathbf{x}, t)\f$.
 - *Linear* form: \f$\mathbf{E}(t)\mathbf{x}^\prime = \mathbf{A}(t)\mathbf{x} + \mathbf{b}(t)\f$.
 
@@ -22,7 +22,7 @@ Explicit Runge-Kutta (ERK) methods are among the simplest numerical techniques f
 For an explicit system of the form \f$\mathbf{x}^\prime = \mathbf{f}(\mathbf{x}, t)\f$, the ERK method is expressed as
 \f[
   \begin{array}{l}
-    \mathbf{K}_i = \mathbf{f} \left(\mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{s} a_{ij} \mathbf{K}_j, t_k + h_k c_i\right) \\
+    \mathbf{K}_i = h_k \mathbf{f} \left(\mathbf{x}_k + \displaystyle\sum_{j=1}^{s} a_{ij} \mathbf{K}_j, t_k + h_k c_i\right) \\
     \mathbf{x}_{k+1} = \mathbf{x}_k + h_k \displaystyle\sum_{i=1}^s b_i \mathbf{K}_i
   \end{array} \text{.}
 \f]
@@ -30,16 +30,16 @@ where \f$s\f$ is the number of stages, \f$h_k\f$ is the step size, \f$\mathbf{x}
 
 For explicit methods, the Runge-Kutta coefficient matrix \f$\mathbf{A}\f$ is strictly lower triangular. Thus, the stages can be computed sequentially as
 \f[
-  \mathbf{K}_i = \mathbf{f} \left(\mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{i-1} a_{ij} \mathbf{K}_j, t_k + h_k c_i\right) \text{,}
+  \mathbf{K}_i = h_k \mathbf{f} \left(\mathbf{x}_k + \displaystyle\sum_{j=1}^{i-1} a_{ij} \mathbf{K}_j, t_k + h_k c_i\right) \text{,}
 \f]
 and by unrolling the stages, we obtain
 \f[
   \begin{array}{l}
     \begin{cases}
-      \mathbf{K}_1 = \mathbf{f} \left(\mathbf{x}_k, t_k\right) \\
-      \mathbf{K}_2 = \mathbf{f} \left(\mathbf{x}_k + h_k a_{21} \mathbf{K}_1, t_k + h_k c_2\right) \\
+      \mathbf{K}_1 = h_k mathbf{f} \left(\mathbf{x}_k, t_k\right) \\
+      \mathbf{K}_2 = h_k \mathbf{f} \left(\mathbf{x}_k + a_{21} \mathbf{K}_1, t_k + h_k c_2\right) \\
       \vdots \\[-0.5em]
-      \mathbf{K}_s = \mathbf{f} \left(\mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{s-1} a_{sj} \mathbf{K}_j, t_k + h_k c_s\right)
+      \mathbf{K}_s = h_k \mathbf{f} \left(\mathbf{x}_k + \displaystyle\sum_{j=1}^{s-1} a_{sj} \mathbf{K}_j, t_k + h_k c_s\right)
     \end{cases} \\
     \mathbf{x}_{k+1} = \mathbf{x}_k + h_k \displaystyle\sum_{i=1}^s b_i \mathbf{K}_i
   \end{array} \text{.}
@@ -50,7 +50,7 @@ and by unrolling the stages, we obtain
 For an implicit dynamical system of the form  \f$\mathbf{F}(\mathbf{x}, \mathbf{x}^\prime, t) = \mathbf{0}\f$, the ERK method becomes
 \f[
   \begin{array}{l}
-    \mathbf{F}_i \left(\mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{i-1} a_{ij} \mathbf{K}_j, \mathbf{K}_i, t_k + h_k c_i\right) = \mathbf{0} \\
+    \mathbf{F}_i \left(\mathbf{x}_k + \displaystyle\sum_{j=1}^{i-1} a_{ij} \mathbf{K}_j, \displaystyle\frac{\mathbf{K}_i}{h_k}, t_k + h_k c_i\right) = \mathbf{0} \\
       \mathbf{x}_{k+1} = \mathbf{x}_k + \displaystyle\sum_{i=1}^s b_i \mathbf{K}_i
   \end{array} \text{.}
 \f]
@@ -59,9 +59,9 @@ Here, the \f$s\f$-stage system of equations \f$\mathbf{F}_i\f$ forms a lower tri
   \begin{array}{l}
     \begin{cases}
       \mathbf{F}_1 \left(\mathbf{x}_k, \mathbf{K}_1, t_k + h_k c_1\right) = \mathbf{0} \\
-      \mathbf{F}_2 \left(\mathbf{x}_k + h_k a_{21} \mathbf{K}_1, \mathbf{K}_2, t_k + h_k c_2\right) = \mathbf{0} \\
+      \mathbf{F}_2 \left(\mathbf{x}_k + a_{21} \mathbf{K}_1, \displaystyle\frac{\mathbf{K}_2}{h_k}, t_k + h_k c_2\right) = \mathbf{0} \\
       \vdots \\[-0.5em]
-      \mathbf{F}_s \left(\mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{s-1} a_{sj} \mathbf{K}_j, \mathbf{K}_s, t_k + h_k c_s\right) = \mathbf{0}
+      \mathbf{F}_s \left(\mathbf{x}_k + \displaystyle\sum_{j=1}^{s-1} a_{sj} \mathbf{K}_j, \displaystyle\frac{\mathbf{K}_s}{h_k}, t_k + h_k c_s\right) = \mathbf{0}
     \end{cases} \\
     \mathbf{x}_{k+1} = \mathbf{x}_k + h_k \displaystyle\sum_{i=1}^s b_i \mathbf{K}_i
   \end{array} \text{.}
@@ -77,7 +77,7 @@ Implicit Runge-Kutta (IRK) methods are more general than ERK methods, as they ca
 For an explicit dynamical system of the form \f$\mathbf{x}^\prime = \mathbf{f}(\mathbf{x}, t)\f$, the IRK method is expressed as
 \f[
   \begin{array}{l}
-    \mathbf{K}_i = \mathbf{f} \left(\mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{s} a_{ij} \mathbf{K}_j, t_k + h_k c_i\right) \\
+    \mathbf{K}_i = h_k \mathbf{f} \left(\mathbf{x}_k + \displaystyle\sum_{j=1}^{s} a_{ij} \mathbf{K}_j, t_k + h_k c_i\right) \\
     \mathbf{x}_{k+1} = \mathbf{x}_k + h_k \displaystyle\sum_{i=1}^s b_i \mathbf{K}_i
   \end{array} \text{,}
 \f]
@@ -85,10 +85,10 @@ Unrolling the stages gives
 \f[
   \begin{array}{l}
     \begin{cases}
-      \mathbf{K}_1 = \mathbf{f} \left(\mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{s} a_{1j} \mathbf{K}_j, t_k + h_k c_1\right) \\
-      \mathbf{K}_2 = \mathbf{f} \left(\mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{s} a_{2j} \mathbf{K}_j, t_k + h_k c_2\right) \\[-0.5em]
+      \mathbf{K}_1 = h_k \mathbf{f} \left(\mathbf{x}_k + \displaystyle\sum_{j=1}^{s} a_{1j} \mathbf{K}_j, t_k + h_k c_1\right) \\
+      \mathbf{K}_2 = h_k \mathbf{f} \left(\mathbf{x}_k + \displaystyle\sum_{j=1}^{s} a_{2j} \mathbf{K}_j, t_k + h_k c_2\right) \\[-0.5em]
       \vdots \\[-0.5em]
-      \mathbf{K}_s = \mathbf{f} \left(\mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{s} a_{sj} \mathbf{K}_j, t_k + h_k c_s\right)
+      \mathbf{K}_s = h_k \mathbf{f} \left(\mathbf{x}_k + \displaystyle\sum_{j=1}^{s} a_{sj} \mathbf{K}_j, t_k + h_k c_s\right)
     \end{cases} \\
     \mathbf{x}_{k+1} = \mathbf{x}_k + h_k \displaystyle\sum_{i=1}^s b_i \mathbf{K}_i
   \end{array} \text{.}
@@ -99,7 +99,7 @@ Unrolling the stages gives
 For an implicit dynamic system of the form \f$\mathbf{F}(\mathbf{x}, \mathbf{x}^\prime, t) = \mathbf{0}\f$, the IRK method is expressed as
 \f[
   \begin{array}{l}
-    \mathbf{F}_i \left(\mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{s} a_{ij} \mathbf{K}_j, \mathbf{K}_i, t_k + h_k c_i\right) = \mathbf{0} \\
+    \mathbf{F}_i \left(\mathbf{x}_k + \displaystyle\sum_{j=1}^{s} a_{ij} \mathbf{K}_j, \displaystyle\frac{\mathbf{K}_i}{h_k}, t_k + h_k c_i\right) = \mathbf{0} \\
     \mathbf{x}_{k+1} = \mathbf{x}_k + h_k \displaystyle\sum_{i=1}^s b_i \mathbf{K}_i
   \end{array} \text{.}
 \f]
@@ -107,10 +107,10 @@ Unrolling the stages, we have
 \f[
   \begin{array}{l}
     \begin{cases}
-      \mathbf{F}_1 \left(\mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{s} a_{1j} \mathbf{K}_j, \mathbf{K}_1, t_k + h_k c_1\right) = \mathbf{0} \\
-      \mathbf{F}_2 \left(\mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{s} a_{2j} \mathbf{K}_j, \mathbf{K}_2, t_k + h_k c_2\right) = \mathbf{0} \\[-0.5em]
+      \mathbf{F}_1 \left(\mathbf{x}_k + \displaystyle\sum_{j=1}^{s} a_{1j} \mathbf{K}_j, \displaystyle\frac{\mathbf{K}_1}{h_k}, t_k + h_k c_1\right) = \mathbf{0} \\
+      \mathbf{F}_2 \left(\mathbf{x}_k + \displaystyle\sum_{j=1}^{s} a_{2j} \mathbf{K}_j, \displaystyle\frac{\mathbf{K}_2}{h_k}, t_k + h_k c_2\right) = \mathbf{0} \\[-0.5em]
       \vdots \\[-0.5em]
-      \mathbf{F}_s \left(\mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{s} a_{sj} \mathbf{K}_j, \mathbf{K}_s, t_k + h_k c_s\right) = \mathbf{0}
+      \mathbf{F}_s \left(\mathbf{x}_k + \displaystyle\sum_{j=1}^{s} a_{sj} \mathbf{K}_j, \displaystyle\frac{\mathbf{K}_s}{h_k}, t_k + h_k c_s\right) = \mathbf{0}
     \end{cases} \\
     \mathbf{x}_{k+1} = \mathbf{x}_k + h_k \displaystyle\sum_{i=1}^s b_i \mathbf{K}_i
   \end{array} \text{.}
@@ -127,7 +127,7 @@ Diagonally implicit Runge-Kutta (DIRK) methods are a specialized subset of IRK m
 For an explicit dynamic system of the form \f$\mathbf{x}^\prime = \mathbf{f}(\mathbf{x}, t)\f$, the DIRK method is expressed as
 \f[
   \begin{array}{l}
-    \mathbf{K}_i = \mathbf{f} \left(\mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{i} a_{ij} \mathbf{K}_j, t_k + h_k c_i\right) \\
+    \mathbf{K}_i = h_k \mathbf{f} \left(\mathbf{x}_k + \displaystyle\sum_{j=1}^{i} a_{ij} \mathbf{K}_j, t_k + h_k c_i\right) \\
     \mathbf{x}_{k+1} = \mathbf{x}_k + h_k \displaystyle\sum_{i=1}^s b_i \mathbf{K}_i
   \end{array} \text{.}
 \f]
@@ -135,10 +135,10 @@ When the stages are unrolled, the equations become
 \f[
   \begin{array}{l}
     \begin{cases}
-      \mathbf{K}_1 = \mathbf{f} \left(\mathbf{x}_k + h_k a_{11} \mathbf{K}_1, t_k + h_k c_1\right) \\
-      \mathbf{K}_2 = \mathbf{f} \left(\mathbf{x}_k + h_k a_{21} \mathbf{K}_1 + h_k a_{22} \mathbf{K}_2, t_k + h_k c_2\right) \\
+      \mathbf{K}_1 = h_k \mathbf{f} \left(\mathbf{x}_k + a_{11} \mathbf{K}_1, t_k + h_k c_1\right) \\
+      \mathbf{K}_2 = h_k \mathbf{f} \left(\mathbf{x}_k + a_{21} \mathbf{K}_1 + h_k a_{22} \mathbf{K}_2, t_k + h_k c_2\right) \\
       \vdots \\[-0.5em]
-      \mathbf{K}_s = \mathbf{f} \left(\mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{s} a_{sj} \mathbf{K}_j, t_k + h_k c_s\right)
+      \mathbf{K}_s = h_k \mathbf{f} \left(\mathbf{x}_k + \displaystyle\sum_{j=1}^{s} a_{sj} \mathbf{K}_j, t_k + h_k c_s\right)
     \end{cases} \\
     \mathbf{x}_{k+1} = \mathbf{x}_k + h_k \displaystyle\sum_{i=1}^s b_i \mathbf{K}_i
   \end{array} \text{.}
@@ -150,7 +150,7 @@ For an implicit dynamic system of the form \f$\mathbf{F}(\mathbf{x}, \mathbf{x}^
 \f[
   \begin{array}{l}
     \mathbf{F}_i \left(
-      \mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{i} a_{ij} \mathbf{K}_j, \mathbf{K}_i, t_k + h_k c_i
+      \mathbf{x}_k + \displaystyle\sum_{j=1}^{i} a_{ij} \mathbf{K}_j, \displaystyle\frac{\mathbf{K}_i}{h_k}, t_k + h_k c_i
     \right) = \mathbf{0} \\
     \mathbf{x}_{k+1} = \mathbf{x}_k + h_k \displaystyle\sum_{i=1}^s b_i \mathbf{K}_i
   \end{array} \text{.}
@@ -159,10 +159,10 @@ If the stages are unrolled, we have
 \f[
   \begin{array}{l}
     \begin{cases}
-      \mathbf{F}_1 \left(\mathbf{x}_k + h_k a_{11} \mathbf{K}_1, \mathbf{K}_1, t_k + h_k c_1\right) = \mathbf{0} \\
-      \mathbf{F}_2 \left(\mathbf{x}_k + h_k a_{21} \mathbf{K}_1 + h_k a_{22} \mathbf{K}_2, \mathbf{K}_2, t_k + h_k c_2\right) = \mathbf{0} \\
+      \mathbf{F}_1 \left(\mathbf{x}_k + a_{11} \mathbf{K}_1, \displaystyle\frac{\mathbf{K}_1}{h_k}, t_k + h_k c_1\right) = \mathbf{0} \\
+      \mathbf{F}_2 \left(\mathbf{x}_k + a_{21} \mathbf{K}_1 + a_{22} \mathbf{K}_2, \displaystyle\frac{\mathbf{K}_3}{h_k}, t_k + h_k c_2\right) = \mathbf{0} \\
       \vdots \\[-0.5em]
-      \mathbf{F}_s \left(\mathbf{x}_k + h_k \displaystyle\sum_{j=1}^{s} a_{sj} \mathbf{K}_j, \mathbf{K}_s, t_k + h_k c_s\right) = \mathbf{0}
+      \mathbf{F}_s \left(\mathbf{x}_k + \displaystyle\sum_{j=1}^{s} a_{sj} \mathbf{K}_j, \displaystyle\frac{\mathbf{K}_s}{h_k}, t_k + h_k c_s\right) = \mathbf{0}
     \end{cases} \\
     \mathbf{x}_{k+1} = \mathbf{x}_k + h_k \displaystyle\sum_{i=1}^s b_i \mathbf{K}_i
   \end{array} \text{.}

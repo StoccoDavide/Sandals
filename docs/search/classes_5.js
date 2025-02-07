@@ -1,7 +1,6 @@
 var searchData=
 [
-  ['heun2_0',['Heun2',['../class_sandals_1_1_heun2.html',1,'Sandals']]],
-  ['heun2tableau_1',['Heun2Tableau',['../class_sandals_1_1_heun2_tableau.html',1,'Sandals']]],
-  ['heun3_2',['Heun3',['../class_sandals_1_1_heun3.html',1,'Sandals']]],
-  ['heun3tableau_3',['Heun3Tableau',['../class_sandals_1_1_heun3_tableau.html',1,'Sandals']]]
+  ['implicit_0',['Implicit',['../class_sandals_1_1_implicit.html',1,'Sandals']]],
+  ['impliciteuler_1',['ImplicitEuler',['../class_sandals_1_1_implicit_euler.html',1,'Sandals']]],
+  ['impliciteulertableau_2',['ImplicitEulerTableau',['../class_sandals_1_1_implicit_euler_tableau.html',1,'Sandals']]]
 ];

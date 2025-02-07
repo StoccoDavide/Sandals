@@ -17,6 +17,5 @@ var searchData=
   ['is_5fexplicit_14',['is_explicit',['../class_sandals_1_1_implicit.html#ab153cc1bf5946845e32ee237420e98a6',1,'Sandals::Implicit']]],
   ['is_5fimplicit_15',['is_implicit',['../class_sandals_1_1_implicit.html#a5223f90739dfa0634560e360d97b0783',1,'Sandals::Implicit']]],
   ['is_5firk_16',['is_irk',['../class_sandals_1_1_runge_kutta.html#a6b5bd17b347dea1ee4bcd09484f24d15',1,'Sandals::RungeKutta']]],
-  ['is_5fsemiexplicit_17',['is_semiexplicit',['../class_sandals_1_1_implicit.html#aba5f905eefb2332868af26e3a4be2d2d',1,'Sandals::Implicit']]],
-  ['iterations_18',['iterations',['../class_sandals_1_1_nonlinear_solver.html#a677a34cc0ef80640b86770df91a3b2a2',1,'Sandals::NonlinearSolver']]]
+  ['is_5fsemiexplicit_17',['is_semiexplicit',['../class_sandals_1_1_implicit.html#aba5f905eefb2332868af26e3a4be2d2d',1,'Sandals::Implicit']]]
 ];

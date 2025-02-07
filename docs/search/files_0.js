@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['broyden_2ehxx_0',['Broyden.hxx',['../_broyden_8hxx.html',1,'']]]
+  ['chebyshev51_2ehxx_0',['Chebyshev51.hxx',['../_chebyshev51_8hxx.html',1,'']]]
 ];

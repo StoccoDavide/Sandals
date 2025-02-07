@@ -11,16 +11,6 @@
 include(SandalsGTest)
 include(SandalsMatplot)
 
-file(GLOB_RECURSE BROYDEN_TESTS "${CMAKE_CURRENT_SOURCE_DIR}/Broyden/test_*.cc")
-add_executable(test_broyden ${BROYDEN_TESTS})
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/DynamicSystems)
-target_link_libraries(test_broyden PRIVATE Sandals GTest::gtest)
-
-file(GLOB_RECURSE NEWTON_TESTS "${CMAKE_CURRENT_SOURCE_DIR}/Newton/test_*.cc")
-add_executable(test_newton ${NEWTON_TESTS})
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/DynamicSystems)
-target_link_libraries(test_newton PRIVATE Sandals GTest::gtest)
-
 file(GLOB_RECURSE SYSTEM_TESTS "${CMAKE_CURRENT_SOURCE_DIR}/System/test_*.cc")
 add_executable(test_system ${SYSTEM_TESTS})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/DynamicSystems)

@@ -40,16 +40,16 @@ namespace Sandals {
     using VectorK = Eigen::Vector<Real, N*S>;          /**< Templetized vector type. */
     using MatrixK = Eigen::Matrix<Real, N, S>;         /**< Templetized matrix type. */
     using MatrixJ = Eigen::Matrix<Real, N*S, N*S>;     /**< Templetized matrix type. */
-    using SolverK = NonlinearSolver<N*S>;              /**< Templetized nonlinear solver type for IRK methods. */
-    using SolverN = NonlinearSolver<N>;                /**< Templetized nonlinear solver type for ERK and DIRK methods. */
+    using VectorP = Eigen::Matrix<Real, N+M, 1>;       /**< Templetized vector type. */
+    using MatrixP = Eigen::Matrix<Real, N+M, N+M>;     /**< Templetized matrix type. */
+    using NewtonX = Optimist::RootFinder::Newton<N>;   /**< Templetized Newton solver for ERK and DIRK methods. */
+    using NewtonK = Optimist::RootFinder::Newton<N*S>; /**< Templetized Newton solver for IRK methods. */
     using VectorS = typename Tableau<S>::Vector;       /**< Templetized vector type. */
     using MatrixS = typename Tableau<S>::Matrix;       /**< Templetized matrix type. */
     using VectorN = typename Implicit<N, M>::VectorF;  /**< Templetized vector type. */
     using MatrixN = typename Implicit<N, M>::MatrixJF; /**< Templetized matrix type. */
     using VectorM = typename Implicit<N, M>::VectorH;  /**< Templetized vector type. */
     using MatrixM = typename Implicit<N, M>::MatrixJH; /**< Templetized matrix type. */
-    using VectorP = Eigen::Matrix<Real, N+M, 1>;       /**< Templetized vector type. */
-    using MatrixP = Eigen::Matrix<Real, N+M, N+M>;     /**< Templetized matrix type. */
 
   public:
     using System   = typename Implicit<N, M>::Pointer;    /**< Shared pointer to an implicit ODE/DAE system. */
@@ -57,29 +57,25 @@ namespace Sandals {
     using Time     = Eigen::Vector<Real, Eigen::Dynamic>; /**< Templetized vector type for the independent variable (or time). */
 
   private:
-    SolverN     *m_solverN;                          /**< Nonlinear solver for ERK and DIRK methods. */
-    Newton<N>    m_newtonN;                          /**< Newton solver for ERK and DIRK methods. */
-    Broyden<N>   m_broydenN;                         /**< Broyden solver for ERK and DIRK methods. */
-    SolverK     *m_solverK;                          /**< Nonlinear solver for IRK methods. */
-    Newton<N*S>  m_newtonK;                          /**< Newton solver for IRK methods. */
-    Broyden<N*S> m_broydenK;                         /**< Broyden solver for IRK methods. */
-    Tableau<S>   m_tableau;                          /**< Butcher tableau of the Runge-Kutta method. */
-    System       m_system;                           /**< ODE/DAE system object pointer. */
-    Real         m_absolute_tolerance{EPSILON_HIGH}; /**< Absolute tolerance for adaptive step \f$ \epsilon_{\text{abs}} \f$. */
-    Real         m_relative_tolerance{EPSILON_HIGH}; /**< Relative tolerance for adaptive step \f$ \epsilon_{\text{rel}} \f$. */
-    Real         m_safety_factor{0.9};               /**< Safety factor for adaptive step \f$ f \f$. */
-    Real         m_min_safety_factor{0.2};           /**< Minimum safety factor for adaptive step \f$ f_{\max} \f$. */
-    Real         m_max_safety_factor{1.5};           /**< Maximum safety factor for adaptive step \f$ f_{\min} \f$. */
-    Real         m_min_step{EPSILON_HIGH};           /**< Minimum step for advancing \f$ h_{\min} \f$. */
-    Integer      m_max_substeps{5};                  /**< Maximum number of substeps. */
-    bool         m_adaptive{true};                   /**< Aadaptive step mode boolean. */
-    bool         m_verbose{false};                   /**< Verbose mode boolean. */
-    bool         m_reverse{false};                   /**< Time reverse mode boolean. */
+    NewtonX    m_newtonX;                          /**< Newton solver for ERK and DIRK methods. */
+    NewtonK    m_newtonK;                          /**< Newton solver for IRK methods. */
+    Tableau<S> m_tableau;                          /**< Butcher tableau of the Runge-Kutta method. */
+    System     m_system;                           /**< ODE/DAE system object pointer. */
+    Real       m_absolute_tolerance{EPSILON_HIGH}; /**< Absolute tolerance for adaptive step \f$ \epsilon_{\text{abs}} \f$. */
+    Real       m_relative_tolerance{EPSILON_HIGH}; /**< Relative tolerance for adaptive step \f$ \epsilon_{\text{rel}} \f$. */
+    Real       m_safety_factor{0.9};               /**< Safety factor for adaptive step \f$ f \f$. */
+    Real       m_min_safety_factor{0.1};           /**< Minimum safety factor for adaptive step \f$ f_{\max} \f$. */
+    Real       m_max_safety_factor{10.0};          /**< Maximum safety factor for adaptive step \f$ f_{\min} \f$. */
+    Real       m_min_step{EPSILON_HIGH};           /**< Minimum step for advancing \f$ h_{\min} \f$. */
+    Integer    m_max_substeps{5};                  /**< Maximum number of substeps. */
+    bool       m_adaptive{true};                   /**< Aadaptive step mode boolean. */
+    bool       m_verbose{false};                   /**< Verbose mode boolean. */
+    bool       m_reverse{false};                   /**< Time reverse mode boolean. */
 
-    Eigen::FullPivLU<MatrixP> m_lu;                         /**< LU decomposition for the projection matrix. */
-    Real              m_projection_tolerance{EPSILON_HIGH}; /**< Projection tolerance \f$ \epsilon_{\text{proj}} \f$. */
-    Integer           m_max_projection_iterations{5};       /**< Maximum number of projection steps. */
-    bool              m_projection{true};                   /**< Aadaptive step mode boolean. */
+    Eigen::FullPivLU<MatrixP> m_lu;               /**< LU decomposition for the projection matrix. */
+    Real    m_projection_tolerance{EPSILON_HIGH}; /**< Projection tolerance \f$ \epsilon_{\text{proj}} \f$. */
+    Integer m_max_projection_iterations{5};       /**< Maximum number of projection steps. */
+    bool    m_projection{true};                   /**< Aadaptive step mode boolean. */
 
   public:
 
@@ -99,8 +95,7 @@ namespace Sandals {
     */
     RungeKutta(Tableau<S> const &t_tableau)
       : m_tableau(t_tableau) {
-      this->m_solverN = &this->m_newtonN;
-      this->m_solverK = &this->m_newtonK;
+      this->verbose_mode(this->m_verbose);
     }
 
     /**
@@ -110,24 +105,7 @@ namespace Sandals {
     */
     RungeKutta(Tableau<S> const &t_tableau, System t_system)
       : m_tableau(t_tableau), m_system(t_system) {
-      this->m_solverN = &this->m_newtonN;
-      this->m_solverK = &this->m_newtonK;
-    }
-
-    /**
-    * Enable the Newton nonlinear solver for implicit methods.
-    */
-    void enable_newton() {
-      this->m_solverN = &this->m_newtonN;
-      this->m_solverK = &this->m_newtonK;
-    }
-
-    /**
-    * Enable the Broyden nonlinear solver for implicit methods.
-    */
-    void enable_broyden() {
-      this->m_solverN = &this->m_broydenN;
-      this->m_solverK = &this->m_broydenK;
+      this->verbose_mode(this->m_verbose);
     }
 
     /**
@@ -348,17 +326,21 @@ namespace Sandals {
     * Set the verbose mode.
     * \param[in] t_verbose The verbose mode.
     */
-    void verbose_mode(bool t_verbose) {this->m_verbose = t_verbose;}
+    void verbose_mode(bool t_verbose) {
+      this->m_verbose = t_verbose;
+      this->m_newtonX.verbose_mode(t_verbose);
+      this->m_newtonK.verbose_mode(t_verbose);
+    }
 
     /**
     * Enable the verbose mode.
     */
-    void enable_verbose_mode() {this->m_verbose = true;}
+    void enable_verbose_mode() {this->verbose_mode(true);}
 
     /**
     * Disable the verbose mode.
     */
-    void disable_verbose_mode() {this->m_verbose = false;}
+    void disable_verbose_mode() {this->verbose_mode(false);}
 
     /**
     * Get the time reverse mode.
@@ -431,69 +413,52 @@ namespace Sandals {
     void disable_projection() {this->m_projection = false;}
 
     /**
-    * Compute step for the next advancing step according to the error control method. The
-    * error control method used is the local truncation error method, which is based on the
-    * following formula
+    * Estimate the optimal step size for the next advancing step according to the error control method.
+    * The error control method used is based on the local truncation error, which is computed as
     *
     * \f[
-    * e = \sqrt{\frac{1}{n} \displaystyle\sum_{i=1}{n}\left(\frac
-    *   {\mathbf{x} - \hat{\mathbf{x}}}
-    *   {s c_i}
-    * \right)^2}
+    * \varepsilon_{\text{t}} = \max\left(\left| \mathbf{x} - \hat{\mathbf{x}} \right|\right)
     * \f]
     *
-    * where \f$ \mathbf{x} \f$ is the approximation of the states at computed
-    * with higher order method of \f$ p \f$, and \f$ \hat{\mathbf{x}} \f$ is the
-    * approximation of the states at computed with lower order method of \f$
-    * \hat{p} \f$. To compute the suggested step for the next advancing step
-    * \f$ h_{k+1} \f$, The error is compared to \f$ 1 \f$ in order to find
-    * an optimal step size. From the error behaviour \f$ e \approx Ch^{q+1} \f$
-    * and from \f$ 1 \approx Ch_{opt}^{q+1} \f$ (where \f$ q = \min(p,\hat{p}) \f$)
-    * the optimal step size is obtained as
+    * where \f$ \mathbf{x} \f$ is the approximation of the states computed with the higher order method,
+    * and \f$ \hat{\mathbf{x}} \f$ is the approximation of the states computed with the lower order method.
+    * The desired error is computed as
     *
     * \f[
-    * h_{opt} = h \left( \frac{1}{e} \right)^{\frac{1}{q+1}}
+    * \varepsilon_{\text{d}} = \epsilon_{\text{abs}} + \epsilon_{\text{rel}}
+    *   \max\left(\left| \mathbf{x} \right|, \left| \hat{\mathbf{x}} \right|\right)
     * \f]
     *
-    * We multiply the previous quation by a safety factor \f$ f \f$, usually
-    * \f$ f = 0.8 \f$, \f$ 0.9 \f$, \f$ (0.25)^{1/(q+1)} \f$, or \f$ (0.38)^{1/(q+1)} \f$,
-    * so that the error will be acceptable the next time with high probability.
-    * Further, \f$ h \f$ is not allowed to increase nor to decrease too fast.
-    * So we put:
+    * where \f$ \epsilon_{\text{abs}} \f$ is the absolute tolerance and \f$ \epsilon_{\text{rel}} \f$
+    * is the relative tolerance. The optimal step size is then estimated as
     *
     * \f[
-    * h_{new} = h \min\left(f_{\max}, \max\left(f_{\min}, f \left(\frac{1}{e}\right)^{\frac{1}{q+1}}
-    * \right) \right)
+    * h_{\text{opt}} = h_k \min\left( f_{\max}, \max\left( f_{\min}, f \left(
+    *   \displaystyle\frac{\varepsilon_{\text{d}}}{\varepsilon_{\text{t}}} \right)^{\frac{1}{q+1}}
+    * \right)\right)
     * \f]
     *
-    * for the new step size. Then, if \f$ e \leq 1 \f$, the computed step is
-    * accepted and the solution is advanced to \f$ \mathbf{x} \f$ and a new step
-    * is tried with \f$ h_{new} \f$ as step size. Else, the step is rejected
-    * and the computations are repeated with the new step size \f$ h_{new} \f$.
-    * Typially, \f$ f \f$ is set in the interval \f$ [0.8, 0.9] \f$,
-    * \f$ f_{\max} \f$ is set in the interval \f$ [1.5, 5] \f$, and \f$ f_{min} \f$
-    * is set in the interval \f$ [0.1, 0.2] \f$.
+    * where \f$ f \f$ is the safety factor, \f$ f_{\max} \f$ is the maximum safety factor,
+    * \f$ f_{\min} \f$ is the minimum safety factor, and \f$ q \f$ is the order of the embedded method.
     *
-    * \note The error control method is only available if the  adaptive step mode is enabled. The
-    * implementation of the error control method \em should be overridden in the derived class to
-    * provide a more accurate and efficient error control based on the specific Runge-Kutta method.
     * \param[in] x States approximation \f$ \mathbf{x}_{k+1} \f$.
-    * \param[in] x_e States approximation \f$ \hat{\mathbf{x}}_{k+1} \f$ computed with the embedded
-    * weights vector \f$ \hat{\mathbf{b}} \f$.
+    * \param[in] x_e Embedded method's states approximation \f$ \hat{\mathbf{x}}_{k+1} \f$.
     * \param[in] h_k Actual advancing step \f$ h_k \f$.
     * \return The suggested step for the next integration step \f$ h_{k+1}^\star \f$.
     */
     Real estimate_step(VectorN const &x, VectorN const &x_e, Real h_k) const
     {
+      Real desired_error{this->m_absolute_tolerance + this->m_relative_tolerance *
+        std::max(x.array().abs().maxCoeff(), x_e.array().abs().maxCoeff())};
+      Real truncation_error{(x - x_e).array().abs().maxCoeff()};
       return h_k * std::min(this->m_max_safety_factor, std::max(this->m_min_safety_factor,
-        this->m_safety_factor * ((x - x_e) / (this->m_absolute_tolerance + this->m_relative_tolerance
-        * std::max(x.array().abs().maxCoeff(), x_e.array().abs().maxCoeff())
-        )).array().abs().maxCoeff()));
+        this->m_safety_factor * std::pow(desired_error/truncation_error,
+        1.0/std::max(this->m_tableau.order, this->m_tableau.order_e))));
     }
 
     /**
     * Print the Runge-Kutta method information to the output stream.
-    * \param[in,out] os The output stream.
+    * \return The Runge-Kutta method information as a string.
     */
     std::string info() const {
       std::ostringstream os;
@@ -586,8 +551,8 @@ namespace Sandals {
     * \f]
     *
     * where \f$ \tilde{\mathbf{K}} = h \mathbf{K} \f$.
-    * \note If \f$ h \gets 0 \f$, then the first guess to solve the nonlinear system
-    * is given by \f$ \tilde{\mathbf{K}} = \mathbf{0} \f$.
+    * \note If \f$ h \to 0 \f$, then the first guess to solve the nonlinear system is given by \f$
+    * \tilde{\mathbf{K}} = \mathbf{0} \f$.
     * \param[in] s Stage index \f$ s \f$.
     * \param[in] x States \f$ \mathbf{x} \f$.
     * \param[in] t Independent variable (or time) \f$ t \f$.
@@ -631,8 +596,6 @@ namespace Sandals {
     * \f]
     *
     * for \f$ j = 1, 2, \ldots, s \f$.
-    * \note If \f$ h \rightarrow 0 \f$, then the first guess to solve the nonlinear system
-    * is given by \f$ \tilde{\mathbf{K}} = \mathbf{0} \f$.
     * \param[in] s Stage index \f$ s \f$.
     * \param[in] x States \f$ \mathbf{x} \f$.
     * \param[in] t Independent variable (or time) \f$ t \f$.
@@ -665,7 +628,7 @@ namespace Sandals {
     * \param[out] h_new The suggested step \f$ h_{k+1}^\star \f$ for the next advancing step.
     * \return True if the step is successfully computed, false otherwise.
     */
-    bool erk_implicit_step(VectorN const &x_old, Real t_old, Real h_old, VectorN &x_new, Real &h_new) const
+    bool erk_implicit_step(VectorN const &x_old, Real t_old, Real h_old, VectorN &x_new, Real &h_new)
     {
       MatrixK K;
       VectorN K_sol;
@@ -673,7 +636,7 @@ namespace Sandals {
 
       // Check if the solver converged
       for (Integer s{0}; s < S; ++s) {
-        if (this->m_solverN->solve(
+        if (this->m_newtonX.solve(
             [this, s, &K, &x_old, t_old, h_old](VectorN const &K_fun, VectorN &fun)
               {K.col(s) = K_fun; this->erk_implicit_function(s, x_old, t_old, h_old, K, fun);},
             [this, s, &K, &x_old, t_old, h_old](VectorN const &K_jac, MatrixN &jac)
@@ -721,8 +684,8 @@ namespace Sandals {
     * \f]
     *
     * where \f$ \tilde{\mathbf{K}} = h \mathbf{K} \f$.
-    * \note If \f$ h \gets 0 \f$, then the first guess to solve the nonlinear system
-    * is given by \f$ \tilde{\mathbf{K}} = \mathbf{0} \f$.
+    * \note If \f$ h \to 0 \f$, then the first guess to solve the nonlinear system is given by \f$
+    * \tilde{\mathbf{K}} = \mathbf{0} \f$.
     * \param[in] x States \f$ \mathbf{x} \f$.
     * \param[in] t Independent variable (or time) \f$ t \f$.
     * \param[in] h Advancing step \f$ h \f$.
@@ -773,8 +736,8 @@ namespace Sandals {
     *
     * \f]
     * for \f$ i = 1, 2, \ldots, s \f$ and \f$ j = 1, 2, \ldots, s \f$.
-    * \note If \f$ h \rightarrow 0 \f$, then the first guess to solve the nonlinear system
-    * is given by \f$ \tilde{\mathbf{K}} = \mathbf{0} \f$.
+     * \note If \f$ h \to 0 \f$, then the first guess to solve the nonlinear system is given by \f$
+    * \tilde{\mathbf{K}} = \mathbf{0} \f$.
     * \param[in] x States \f$ \mathbf{x} \f$.
     * \param[in] t Independent variable (or time) \f$ t \f$.
     * \param[in] h Advancing step \f$ h \f$.
@@ -840,7 +803,7 @@ namespace Sandals {
       VectorK K_ini(VectorK::Zero());
 
       // Check if the solver converged
-      if (!this->m_solverK->solve(
+      if (!this->m_newtonK.solve(
           [this, &x_old, t_old, h_old](VectorK const &K_fun, VectorK &fun)
             {this->irk_function(x_old, t_old, h_old, K_fun, fun);},
           [this, &x_old, t_old, h_old](VectorK const &K_jac, MatrixJ &jac)
@@ -879,8 +842,8 @@ namespace Sandals {
     * \f]
     *
     * where \f$ \tilde{\mathbf{K}} = h \mathbf{K} \f$.
-    * \note If \f$ h \gets 0 \f$, then the first guess to solve the nonlinear system
-    * is given by \f$ \tilde{\mathbf{K}} = \mathbf{0} \f$.
+    * \note If \f$ h \to 0 \f$, then the first guess to solve the nonlinear system is given by \f$
+    * \tilde{\mathbf{K}} = \mathbf{0} \f$.
     * \param[in] n Equation index \f$ n \f$.
     * \param[in] x States \f$ \mathbf{x} \f$.
     * \param[in] t Independent variable (or time) \f$ t \f$.
@@ -924,8 +887,8 @@ namespace Sandals {
     * \f]
     *
     * for \f$ j = 1, 2, \ldots, s \f$.
-    * \note If \f$ h \rightarrow 0 \f$, then the first guess to solve the nonlinear system
-    * is given by \f$ \tilde{\mathbf{K}} = \mathbf{0} \f$.
+    * \note If \f$ h \to 0 \f$, then the first guess to solve the nonlinear system is given by \f$
+    * \tilde{\mathbf{K}} = \mathbf{0} \f$.
     * \param[in] n Equation index \f$ n \f$.
     * \param[in] x States \f$ \mathbf{x} \f$.
     * \param[in] t Independent variable (or time) \f$ t \f$.
@@ -962,7 +925,7 @@ namespace Sandals {
     * \param[out] h_new The suggested step \f$ h_{k+1}^\star \f$ for the next advancing step.
     * \return True if the step is successfully computed, false otherwise.
     */
-    bool dirk_step(VectorN const &x_old, Real t_old, Real h_old, VectorN &x_new, Real &h_new) const
+    bool dirk_step(VectorN const &x_old, Real t_old, Real h_old, VectorN &x_new, Real &h_new)
     {
       MatrixK K;
       VectorN K_sol;
@@ -970,7 +933,7 @@ namespace Sandals {
 
       // Check if the solver converged at each step
       for (Integer n{0}; n < S; ++n) {
-        if (this->m_solverN->solve(
+        if (this->m_newtonX.solve(
             [this, n, &K, &x_old, t_old, h_old](VectorN const &K_fun, VectorN &fun)
               {K.col(n) = K_fun; this->dirk_function(n, x_old, t_old, h_old, K, fun);},
             [this, n, &K, &x_old, t_old, h_old](VectorN const &K_jac, MatrixN &jac)
@@ -1209,7 +1172,7 @@ namespace Sandals {
       Real h_step{t_mesh(1) - t_mesh(0)}, h_new_step, scale{100.0};
       Real h_min{std::max(this->m_min_step, h_step/scale)}, h_max{scale*h_step};
       if (this->m_tableau.is_embedded) {
-        Integer safety_length{static_cast<Integer>(std::ceil(std::abs(t_mesh(last) - t_mesh(0))/h_min))};
+        Integer safety_length{static_cast<Integer>(std::ceil(std::abs(t_mesh(last) - t_mesh(0))/(2.0*h_min)))};
         sol.resize(safety_length);
       } else {
         sol.resize(t_mesh.size());
@@ -1233,7 +1196,7 @@ namespace Sandals {
           h_step = std::max(std::min(h_new_step, h_max), h_min);
         }
 
-        SANDALS_ASSERT(step < t_mesh.size(), CMD "safety length exceeded.");
+        SANDALS_ASSERT(step < sol.size(), CMD "safety length exceeded.");
 
         // Store solution
         sol.t(step+1)     = sol.t(step) + h_step;

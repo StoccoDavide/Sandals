@@ -22,7 +22,7 @@ BUILD_DEBUG      = false
 BUILD_TESTS      = true
 BUILD_EXAMPLES   = false
 BUILD_BENCHMARKS = false
-ENABLE_PLOTTING  = true
+ENABLE_PLOTTING  = false
 
 case RUBY_PLATFORM
 when /mingw|mswin/
@@ -163,8 +163,8 @@ end
 
 task :clean_gen do
   FileUtils.rm_rf 'lib'
-  FileUtils.rm_rf 'lib3rd'
   FileUtils.rm_rf 'build'
+  FileUtils.rm_rf 'third_party'
 end
 
 desc "Clean for OsX"

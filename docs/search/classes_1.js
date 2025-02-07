@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['chebyshev51_0',['Chebyshev51',['../class_sandals_1_1_chebyshev51.html',1,'Sandals']]],
-  ['chebyshev51tableau_1',['Chebyshev51Tableau',['../class_sandals_1_1_chebyshev51_tableau.html',1,'Sandals']]]
+  ['explicit_0',['Explicit',['../class_sandals_1_1_explicit.html',1,'Sandals']]],
+  ['explicit_3c_20n_2c_200_20_3e_1',['Explicit&lt; N, 0 &gt;',['../class_sandals_1_1_explicit.html',1,'Sandals']]],
+  ['expliciteuler_2',['ExplicitEuler',['../class_sandals_1_1_explicit_euler.html',1,'Sandals']]],
+  ['expliciteulertableau_3',['ExplicitEulerTableau',['../class_sandals_1_1_explicit_euler_tableau.html',1,'Sandals']]]
 ];

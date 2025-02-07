@@ -33,6 +33,7 @@ if(FETCH_CONTENT_METHOD)
   fetchcontent_declare(
     Sandals
     GIT_REPOSITORY https://github.com/StoccoDavide/Sandals.git
+    GIT_SHALLOW    TRUE
     GIT_TAG        main
   )
 

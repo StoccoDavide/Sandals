@@ -1,21 +1,4 @@
 var searchData=
 [
-  ['zeros_5fmat1_0',['ZEROS_MAT1',['../namespace_sandals.html#a288022ec8850f285dd4f1287cedd7b3c',1,'Sandals']]],
-  ['zeros_5fmat2_1',['ZEROS_MAT2',['../namespace_sandals.html#a7a7c47235c99d24e609919ca72930ace',1,'Sandals']]],
-  ['zeros_5fmat3_2',['ZEROS_MAT3',['../namespace_sandals.html#a58e05278e88ec46d5477a68eccdc2ce8',1,'Sandals']]],
-  ['zeros_5fmat4_3',['ZEROS_MAT4',['../namespace_sandals.html#a252856bdb33a3a7dc0881eac3ed97407',1,'Sandals']]],
-  ['zeros_5fmat5_4',['ZEROS_MAT5',['../namespace_sandals.html#ae4c89684f7fc7e6b84c0a87066d8cca2',1,'Sandals']]],
-  ['zeros_5fmat6_5',['ZEROS_MAT6',['../namespace_sandals.html#a21df53b4244cefb71576b68653722dfa',1,'Sandals']]],
-  ['zeros_5fmat7_6',['ZEROS_MAT7',['../namespace_sandals.html#a6e2b2adcf76a61649e0b5f960823dbef',1,'Sandals']]],
-  ['zeros_5fmat8_7',['ZEROS_MAT8',['../namespace_sandals.html#a1cdd9032133971b2c57faf4d31cf75c6',1,'Sandals']]],
-  ['zeros_5fmat9_8',['ZEROS_MAT9',['../namespace_sandals.html#a23d71ebcb3cb51776457695a94d3f737',1,'Sandals']]],
-  ['zeros_5fvec1_9',['ZEROS_VEC1',['../namespace_sandals.html#a2adeb8e23d6b70ef81611fbad7f12db1',1,'Sandals']]],
-  ['zeros_5fvec2_10',['ZEROS_VEC2',['../namespace_sandals.html#a9f5f5b48a8d2fae6dd220a20e5405245',1,'Sandals']]],
-  ['zeros_5fvec3_11',['ZEROS_VEC3',['../namespace_sandals.html#aa6d6824374132137f271225e92d0dbc4',1,'Sandals']]],
-  ['zeros_5fvec4_12',['ZEROS_VEC4',['../namespace_sandals.html#aa056ed58d30e348d004cfe3db0e0a714',1,'Sandals']]],
-  ['zeros_5fvec5_13',['ZEROS_VEC5',['../namespace_sandals.html#a5aa1581f0ef85236a3133d9255cdc4c0',1,'Sandals']]],
-  ['zeros_5fvec6_14',['ZEROS_VEC6',['../namespace_sandals.html#a35f2e9403c111db205e8c8c3e482d537',1,'Sandals']]],
-  ['zeros_5fvec7_15',['ZEROS_VEC7',['../namespace_sandals.html#a387ec2812c3f206fb341bcb43fdaf755',1,'Sandals']]],
-  ['zeros_5fvec8_16',['ZEROS_VEC8',['../namespace_sandals.html#ac65e70f6f4e6cf23b53c050da4cf5583',1,'Sandals']]],
-  ['zeros_5fvec9_17',['ZEROS_VEC9',['../namespace_sandals.html#a5b9f573ee10f33400bf017153ce76e99',1,'Sandals']]]
+  ['_7eimplicit_0',['~Implicit',['../class_sandals_1_1_implicit.html#a991edef11036604ae06d341cfceba047',1,'Sandals::Implicit']]]
 ];

@@ -10,6 +10,8 @@ Are you looking for the online documentation? Visit [this link](https://stoccoda
 
 `Sandals` is a header-only library that depends only on [`Eigen`](https://eigen.tuxfamily.org/index.php?title=Main_Page) (version >= 3.4.0), so the quick and dirty way of installing it is by simply copying the `include` directory to your project and make sure to have [`Eigen`](https://eigen.tuxfamily.org/index.php?title=Main_Page) available however you see fit. Alternatively, you can do things properly and use `CMake` (version >= 3.14).
 
+You also need to install [`Optimist`](https://stoccodavide.github.io/Optimist/) to use root-finding algorithms. But don't worry, it is already fetched by `CMake` if you use it.
+
 Optionally, you can also install [`Matplot++`](https://alandefreitas.github.io/matplotplusplus/) (version >= 1.2.0) to plot the results of your simulations.
 
 ### CMake

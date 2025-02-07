@@ -25,6 +25,9 @@
 // Eigen library
 #include <Eigen/Dense>
 
+// Optimist library
+#include <Optimist.hh>
+
 // Print Sandals errors
 #ifndef SANDALS_ERROR
 #define SANDALS_ERROR(MSG)              \
@@ -62,7 +65,6 @@
 #endif
 
 /**
-* \namespace Sandals
 * \brief The namespace for the Sandals library.
 *
 * The namespace contains all the classes and functions of the Sandals library.
@@ -231,12 +233,7 @@ namespace Sandals
 // Time measurement
 #include "Sandals/TicToc.hxx"
 
-// Nonlinear systems of equations solvers
-#include "Sandals/NonlinearSolver/NonlinearSolver.hxx"
-#include "Sandals/NonlinearSolver/Newton.hxx"
-#include "Sandals/NonlinearSolver/Broyden.hxx"
-
-// ODE/DAE system of equations
+// ODEs/DAEs system
 #include "Sandals/System/Implicit.hxx"
 #include "Sandals/System/Explicit.hxx"
 #include "Sandals/System/SemiExplicit.hxx"

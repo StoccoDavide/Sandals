@@ -1,5 +1,19 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$class_sandals_1_1_runge_kutta.html" title=" " alt="" coords="5,5,151,46"/>
-<area shape="rect" id="Node000001" href="$class_sandals_1_1_s_s_p_r_k104.html" title="Class container for the 10&#45;stage strong&#45;stability preserving Runge&#45;Kutta order 4 method." alt="" coords="199,5,350,46"/>
-<area shape="poly" id="edge12_Node000000_Node000001" title=" " alt="" coords="166,23,198,23,198,28,166,28"/>
+<area shape="rect" id="Node000000" href="$class_sandals_1_1_runge_kutta.html" title=" " alt="" coords="5,207,151,247"/>
+<area shape="rect" id="Node000001" href="$class_sandals_1_1_gauss_legendre4.html" title="Class container for the Gauss&#45;Legendre order 4 method." alt="" coords="206,5,380,46"/>
+<area shape="poly" id="edge9_Node000000_Node000001" title=" " alt="" coords="93,191,134,123,163,87,197,56,216,44,218,49,200,60,167,90,138,126,98,194"/>
+<area shape="rect" id="Node000002" href="$class_sandals_1_1_heun2.html" title="Class container for the Heun&#39;s (or 2&#45;stage strong&#45;stability preserving Runge&#45;Kutta) order 2 method." alt="" coords="210,70,377,96"/>
+<area shape="poly" id="edge10_Node000000_Node000002" title=" " alt="" coords="102,192,144,148,169,125,197,106,224,94,227,99,200,111,173,129,147,151,106,196"/>
+<area shape="rect" id="Node000003" href="$class_sandals_1_1_lobatto_i_i_i_a2.html" title="Class container for the Lobatto IIIA order 2 method." alt="" coords="220,120,367,161"/>
+<area shape="poly" id="edge11_Node000000_Node000003" title=" " alt="" coords="135,197,198,170,227,159,229,164,200,175,137,202"/>
+<area shape="rect" id="Node000004" href="$class_sandals_1_1_m_t_e22.html" title="Class container for the minimal truncation error (or Ralston&#39;s) order 2 method." alt="" coords="208,185,379,210"/>
+<area shape="poly" id="edge12_Node000000_Node000004" title=" " alt="" coords="166,212,207,207,208,212,167,218"/>
+<area shape="rect" id="Node000005" href="$class_sandals_1_1_radau_i_i_a3.html" title="Class container for the Radau IIA order 3 method." alt="" coords="224,235,362,275"/>
+<area shape="poly" id="edge13_Node000000_Node000005" title=" " alt="" coords="167,236,224,243,223,249,166,241"/>
+<area shape="rect" id="Node000006" href="$class_sandals_1_1_ralston2.html" title="Class container for the Ralston&#39;s (or minimal truncation error) order 2 method." alt="" coords="225,300,362,341"/>
+<area shape="poly" id="edge14_Node000000_Node000006" title=" " alt="" coords="132,252,200,285,231,297,229,302,198,289,130,257"/>
+<area shape="rect" id="Node000007" href="$class_sandals_1_1_s_s_p_r_k22.html" title="Class container for the 2&#45;stage strong&#45;stability preserving Runge&#45;Kutta (or Heun) order 2 method." alt="" coords="199,365,388,390"/>
+<area shape="poly" id="edge15_Node000000_Node000007" title=" " alt="" coords="104,258,146,306,172,330,200,350,226,362,224,367,197,355,168,334,142,310,100,262"/>
+<area shape="rect" id="Node000008" href="$class_sandals_1_1_s_s_p_r_k22star.html" title="Class container for the optimal 2&#45;stage strong&#45;stability preserving Runge&#45;Kutta order 2 method." alt="" coords="214,415,372,455"/>
+<area shape="poly" id="edge16_Node000000_Node000008" title=" " alt="" coords="97,260,137,331,166,369,200,401,218,412,215,416,197,405,162,372,133,334,92,263"/>
 </map>

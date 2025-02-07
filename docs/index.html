@@ -144,13 +144,14 @@ $(function(){initNavTree('index.html',''); initResizable(true); });
 <div class="contents">
 <div class="textblock"><p><a class="anchor" id="md_docs_2markdown_2_mainpage"></a></p>
 <p><code><a class="el" href="namespace_sandals.html" title="The namespace for the Sandals library.">Sandals</a></code> is a library for the numerical integration of Ordinary Differential Equations (ODEs) and Differential Algebraic Equations (DAEs) written in C++17.</p>
-<h1><a class="anchor" id="autotoc_md18"></a>
+<h1><a class="anchor" id="autotoc_md15"></a>
 Installation</h1>
-<h2><a class="anchor" id="autotoc_md19"></a>
+<h2><a class="anchor" id="autotoc_md16"></a>
 Quick and dirty</h2>
 <p><code><a class="el" href="namespace_sandals.html" title="The namespace for the Sandals library.">Sandals</a></code> is a header-only library that depends only on <a href="https://eigen.tuxfamily.org/index.php?title=Main_Page"><code>Eigen</code></a> (version &gt;= 3.4.0), so the quick and dirty way of installing it is by simply copying the <code>include</code> directory to your project and make sure to have <a href="https://eigen.tuxfamily.org/index.php?title=Main_Page"><code>Eigen</code></a> available however you see fit. Alternatively, you can do things properly and use <code>CMake</code> (version &gt;= 3.14).</p>
+<p>You also need to install <a href="https://stoccodavide.github.io/Optimist/"><code>Optimist</code></a> to use root-finding algorithms. But don't worry, it is already fetched by <code>CMake</code> if you use it.</p>
 <p>Optionally, you can also install <a href="https://alandefreitas.github.io/matplotplusplus/"><code>Matplot++</code></a> (version &gt;= 1.2.0) to plot the results of your simulations.</p>
-<h2><a class="anchor" id="autotoc_md20"></a>
+<h2><a class="anchor" id="autotoc_md17"></a>
 CMake</h2>
 <p>If you are using CMake, you can add the library as a subdirectory in your project.</p>
 <div class="fragment"><div class="line">add_subdirectory(path/to/Sandals)</div>
@@ -201,7 +202,7 @@ CMake</h2>
 <div class="line">endif()</div>
 <div class="line"> </div>
 <div class="line">target_link_libraries(your_target PRIVATE Sandals::Sandals)</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md21"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md18"></a>
 Authors</h1>
 <ul>
 <li>Davide Stocco <br  />
@@ -219,7 +220,7 @@ Authors</h1>
 <div class="line">▐▌  █  ▀▄▀▗▞▀▜▌         █   █ ▗▞▀▜▌    ▐▛▀▚▖▝▚▄▄▖█     ▀▀▀█</div>
 <div class="line">▐▙▄▄▀     ▝▚▄▟▌               ▝▚▄▟▌    ▐▙▄▞▘          ▄   █</div>
 <div class="line">                                                       ▀▀▀</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md22"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md19"></a>
 License</h1>
 <p>The <code><a class="el" href="namespace_sandals.html" title="The namespace for the Sandals library.">Sandals</a></code> project is distributed under the BSD 2-Clause License - see the <a href="https://StoccoDavide.github.io/Sandals/LICENSE">LICENSE</a> file for details.</p>
 <p>Here's what the license entails:</p>
@@ -231,7 +232,7 @@ License</h1>
 <li>This software is provided without warranty.</li>
 <li>The software author or license can not be held liable for any damages inflicted by the software.</li>
 </ol>
-<h1><a class="anchor" id="autotoc_md23"></a>
+<h1><a class="anchor" id="autotoc_md20"></a>
 Acknowledgements</h1>
 <p>The name <code><a class="el" href="namespace_sandals.html" title="The namespace for the Sandals library.">Sandals</a></code> has been suggested by <a href="https://github.com/Mattiapzz">Mattia Piazza</a> as a poor imitation of the Lawrence Livermore National Laboratory's (LLNL) <a href="https://computing.llnl.gov/projects/sundials"><code>Sundials</code></a> (SUite of Nonlinear and DIfferential/ALgebraic Equation Solvers). </p>
 </div></div><!-- PageDoc -->

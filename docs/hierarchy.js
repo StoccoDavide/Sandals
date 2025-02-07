@@ -7,12 +7,6 @@ var hierarchy =
       ] ],
       [ "Sandals::Explicit< N, M >", "class_sandals_1_1_explicit.html", null ]
     ] ],
-    [ "Sandals::NonlinearSolver< N >", "class_sandals_1_1_nonlinear_solver.html", [
-      [ "Sandals::Broyden< N *S >", "class_sandals_1_1_broyden.html", null ],
-      [ "Sandals::Newton< N *S >", "class_sandals_1_1_newton.html", null ],
-      [ "Sandals::Broyden< N >", "class_sandals_1_1_broyden.html", null ],
-      [ "Sandals::Newton< N >", "class_sandals_1_1_newton.html", null ]
-    ] ],
     [ "Sandals::RungeKutta< S, N, M >", "class_sandals_1_1_runge_kutta.html", null ],
     [ "Sandals::RungeKutta< 1, N, 0 >", "class_sandals_1_1_runge_kutta.html", [
       [ "Sandals::ExplicitEuler< N, M >", "class_sandals_1_1_explicit_euler.html", null ],

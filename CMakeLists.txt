@@ -41,15 +41,17 @@ endif()
 
 # Dependencies
 include(SandalsEigen3)
+include(SandalsOptimist)
 
 # Library definition
 add_library(Sandals INTERFACE)
 add_library(Sandals::Sandals ALIAS Sandals)
 
-target_link_libraries(Sandals INTERFACE Eigen3::Eigen)
+target_link_libraries(Sandals INTERFACE Eigen3::Eigen Sandals::Sandals)
 
 target_include_directories(Sandals INTERFACE
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<BUILD_INTERFACE:${SANDALS_THIRD_PARTY_DIR}/optimist-src/include>
   $<INSTALL_INTERFACE:include>
 )
 

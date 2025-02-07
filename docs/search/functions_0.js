@@ -5,6 +5,5 @@ var searchData=
   ['adaptive_2',['adaptive',['../class_sandals_1_1_runge_kutta.html#ac7c5c50506a79776b647826f667170c0',1,'Sandals::RungeKutta']]],
   ['adaptive_5fmode_3',['adaptive_mode',['../class_sandals_1_1_runge_kutta.html#a7bac2789bca572458f9167ef81f19e41',1,'Sandals::RungeKutta']]],
   ['adaptive_5fsolve_4',['adaptive_solve',['../class_sandals_1_1_runge_kutta.html#ae83e6688e3a05605ee13365fcb3d4939',1,'Sandals::RungeKutta']]],
-  ['advance_5',['advance',['../class_sandals_1_1_runge_kutta.html#ae007044419daa96fb4b4d18760079566',1,'Sandals::RungeKutta']]],
-  ['alpha_6',['alpha',['../class_sandals_1_1_nonlinear_solver.html#ad7d4af47ef5cd00be23a1fd1ce348cd8',1,'Sandals::NonlinearSolver::alpha() const'],['../class_sandals_1_1_nonlinear_solver.html#adf8e2bb7fe66aa8778e0e4349d8ed241',1,'Sandals::NonlinearSolver::alpha(Real t_alpha)']]]
+  ['advance_5',['advance',['../class_sandals_1_1_runge_kutta.html#ae007044419daa96fb4b4d18760079566',1,'Sandals::RungeKutta']]]
 ];
