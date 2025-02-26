@@ -1,7 +1,7 @@
-set(EIGEN_REQUIRED_VERSION 3.4)
+set(EIGEN_REQUIRED_VERSION 3.4.0)
 cmake_policy(SET CMP0135 NEW)
 
-list(APPEND CMAKE_PATH_PREFIX "${SANDALS_THIRD_PARTY_DIR}")
+list(APPEND CMAKE_PREFIX_PATH "${SANDALS_THIRD_PARTY_DIR}")
 find_package(
   Eigen3
   ${EIGEN_REQUIRED_VERSION}
@@ -12,8 +12,8 @@ find_package(
 if(NOT TARGET Eigen3::Eigen)
   message(STATUS "Sandals: Did not find Eigen3 ${EIGEN_REQUIRED_VERSION} installed, downloading to "
     "${SANDALS_THIRD_PARTY_DIR}")
-  include(FetchContent)
 
+    include(FetchContent)
   set(FETCHCONTENT_BASE_DIR "${SANDALS_THIRD_PARTY_DIR}")
   fetchcontent_declare(
     Eigen3

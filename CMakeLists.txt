@@ -36,7 +36,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 
 if(NOT CMAKE_INSTALL_PREFIX)
   set(CMAKE_INSTALL_PREFIX "${CMAKE_CURRENT_SOURCE_DIR}/lib")
-  message(STATUS  "Sandals: CMAKE_INSTALL_PREFIX not specified, defaulting to ${CMAKE_CURRENT_SOURCE_DIR}")
+  message(STATUS "Sandals: CMAKE_INSTALL_PREFIX not specified, defaulting to ${CMAKE_CURRENT_SOURCE_DIR}")
 endif()
 
 # Dependencies
@@ -47,11 +47,10 @@ include(SandalsOptimist)
 add_library(Sandals INTERFACE)
 add_library(Sandals::Sandals ALIAS Sandals)
 
-target_link_libraries(Sandals INTERFACE Eigen3::Eigen Sandals::Sandals)
+target_link_libraries(Sandals INTERFACE Eigen3::Eigen Optimist::Optimist)
 
 target_include_directories(Sandals INTERFACE
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-  $<BUILD_INTERFACE:${SANDALS_THIRD_PARTY_DIR}/optimist-src/include>
   $<INSTALL_INTERFACE:include>
 )
 
@@ -61,10 +60,7 @@ target_include_directories(Sandals INTERFACE
 if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
   if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Debug")
-    message(STATUS
-      "Sandals: "
-      "CMAKE_BUILD_TYPE not specified, defaulting to ${CMAKE_BUILD_TYPE}"
-    )
+    message(STATUS "Sandals: CMAKE_BUILD_TYPE not specified, defaulting to ${CMAKE_BUILD_TYPE}")
   endif()
 
   option(BUILD_TESTS "Build tests" OFF)

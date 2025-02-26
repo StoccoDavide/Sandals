@@ -37,18 +37,18 @@ namespace Sandals {
   template <Integer S, Integer N, Integer M>
   class RungeKutta
   {
-    using VectorK = Eigen::Vector<Real, N*S>;          /**< Templetized vector type. */
-    using MatrixK = Eigen::Matrix<Real, N, S>;         /**< Templetized matrix type. */
-    using MatrixJ = Eigen::Matrix<Real, N*S, N*S>;     /**< Templetized matrix type. */
-    using VectorP = Eigen::Matrix<Real, N+M, 1>;       /**< Templetized vector type. */
-    using MatrixP = Eigen::Matrix<Real, N+M, N+M>;     /**< Templetized matrix type. */
-    using NewtonX = Optimist::RootFinder::Newton<N>;   /**< Templetized Newton solver for ERK and DIRK methods. */
-    using NewtonK = Optimist::RootFinder::Newton<N*S>; /**< Templetized Newton solver for IRK methods. */
-    using VectorS = typename Tableau<S>::Vector;       /**< Templetized vector type. */
-    using MatrixS = typename Tableau<S>::Matrix;       /**< Templetized matrix type. */
-    using VectorN = typename Implicit<N, M>::VectorF;  /**< Templetized vector type. */
+    using VectorK = Eigen::Vector<Real, N*S>; /**< Templetized vector type. */
+    using MatrixK = Eigen::Matrix<Real, N, S>; /**< Templetized matrix type. */
+    using MatrixJ = Eigen::Matrix<Real, N*S, N*S>; /**< Templetized matrix type. */
+    using VectorP = Eigen::Matrix<Real, N+M, 1>; /**< Templetized vector type. */
+    using MatrixP = Eigen::Matrix<Real, N+M, N+M>; /**< Templetized matrix type. */
+    using NewtonX = Optimist::RootFinder::Newton<Real, N>;   /**< Templetized Newton solver for ERK and DIRK methods. */
+    using NewtonK = Optimist::RootFinder::Newton<Real, N*S>; /**< Templetized Newton solver for IRK methods. */
+    using VectorS = typename Tableau<S>::Vector; /**< Templetized vector type. */
+    using MatrixS = typename Tableau<S>::Matrix; /**< Templetized matrix type. */
+    using VectorN = typename Implicit<N, M>::VectorF; /**< Templetized vector type. */
     using MatrixN = typename Implicit<N, M>::MatrixJF; /**< Templetized matrix type. */
-    using VectorM = typename Implicit<N, M>::VectorH;  /**< Templetized vector type. */
+    using VectorM = typename Implicit<N, M>::VectorH; /**< Templetized vector type. */
     using MatrixM = typename Implicit<N, M>::MatrixJH; /**< Templetized matrix type. */
 
   public:
