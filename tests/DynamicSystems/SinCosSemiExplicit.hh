@@ -11,6 +11,9 @@
 #ifndef TESTS_SINCOS_SEMIEXPLICIT_HH
 #define TESTS_SINCOS_SEMIEXPLICIT_HH
 
+#include "Sandals.hh"
+#include "Sandals/System/SemiExplicit.hh"
+
 using namespace Sandals;
 using namespace Eigen;
 

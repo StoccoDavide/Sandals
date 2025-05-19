@@ -13,6 +13,9 @@
 #ifndef TESTS_SIMPLE_PENDULUM_IMPLICIT_HH
 #define TESTS_SIMPLE_PENDULUM_IMPLICIT_HH
 
+#include "Sandals.hh"
+#include "Sandals/System/Implicit.hh"
+
 using namespace Sandals;
 
 class SimplePendulumImplicit : public Implicit<2, 0>

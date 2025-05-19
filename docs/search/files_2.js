@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['fehlberg45_2ehxx_0',['Fehlberg45.hxx',['../_fehlberg45_8hxx.html',1,'']]]
+  ['fehlberg45_2ehh_0',['Fehlberg45.hh',['../_fehlberg45_8hh.html',1,'']]]
 ];

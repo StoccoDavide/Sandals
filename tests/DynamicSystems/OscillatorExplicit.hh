@@ -13,6 +13,9 @@
 #ifndef TESTS_OSCILLATOR_EXPLICIT_HH
 #define TESTS_OSCILLATOR_EXPLICIT_HH
 
+#include "Sandals.hh"
+#include "Sandals/System/Explicit.hh"
+
 using namespace Sandals;
 
 class OscillatorExplicit : public Explicit<2, 1>

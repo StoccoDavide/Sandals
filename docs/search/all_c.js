@@ -62,6 +62,6 @@ var searchData=
   ['min_5fstep_59',['min_step',['../class_sandals_1_1_runge_kutta.html#a00a09a51e7534a2c60d97525fad60ba7',1,'Sandals::RungeKutta::min_step()'],['../class_sandals_1_1_runge_kutta.html#a959893d2e7ab329f1275ac6a0822870a',1,'Sandals::RungeKutta::min_step(Real t_min_step)']]],
   ['minimization_20problem_60',['Constrained minimization problem',['../class_sandals_1_1_runge_kutta.html#autotoc_md12',1,'']]],
   ['mte22_61',['MTE22',['../class_sandals_1_1_m_t_e22.html',1,'Sandals::MTE22&lt; Real, N, M &gt;'],['../class_sandals_1_1_m_t_e22.html#a571f9c3ffcac326e6ef5cc28ae361296',1,'Sandals::MTE22::MTE22()'],['../class_sandals_1_1_m_t_e22.html#ac02ca044a55e065149b63a05434126cb',1,'Sandals::MTE22::MTE22(System t_system)']]],
-  ['mte22_2ehxx_62',['MTE22.hxx',['../_m_t_e22_8hxx.html',1,'']]],
+  ['mte22_2ehh_62',['MTE22.hh',['../_m_t_e22_8hh.html',1,'']]],
   ['mte22tableau_63',['MTE22Tableau',['../class_sandals_1_1_m_t_e22_tableau.html',1,'Sandals::MTE22Tableau&lt; Real &gt;'],['../class_sandals_1_1_m_t_e22_tableau.html#ae59ff3f33486a6837aace2be296bc60c',1,'Sandals::MTE22Tableau::MTE22Tableau()']]]
 ];

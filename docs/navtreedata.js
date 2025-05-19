@@ -62,7 +62,7 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"_chebyshev51_8hxx.html",
+"_chebyshev51_8hh.html",
 "class_sandals_1_1_fehlberg45_tableau.html",
 "class_sandals_1_1_linear_wrapper.html#a1282c5825b9db7e3891924ba13073c99",
 "class_sandals_1_1_runge_kutta.html#a4a0a30c3155cf19e758fa4daf90bd621",

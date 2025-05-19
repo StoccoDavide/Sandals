@@ -11,6 +11,9 @@
 #ifndef TESTS_THREE_BODY_SEMIEXPLICIT_HH
 #define TESTS_THREE_BODY_SEMIEXPLICIT_HH
 
+#include "Sandals.hh"
+#include "Sandals/System/SemiExplicit.hh"
+
 using namespace Sandals;
 
 

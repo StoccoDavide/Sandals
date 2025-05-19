@@ -11,6 +11,9 @@
 #ifndef TESTS_OSCILLATOR_SEMIEXPLICIT_HH
 #define TESTS_OSCILLATOR_SEMIEXPLICIT_HH
 
+#include "Sandals.hh"
+#include "Sandals/System/SemiExplicit.hh"
+
 using namespace Sandals;
 
 class OscillatorSemiExplicit : public SemiExplicit<2, 1>

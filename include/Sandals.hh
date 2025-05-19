@@ -98,45 +98,4 @@ namespace Sandals
 
 } // namespace Sandals
 
-// Time measurement
-#include "Sandals/TicToc.hxx"
-
-// ODEs/DAEs system
-#include "Sandals/System/Implicit.hxx"
-#include "Sandals/System/Explicit.hxx"
-#include "Sandals/System/SemiExplicit.hxx"
-#include "Sandals/System/Linear.hxx"
-
-// Runge-Kutta integrator
-#include "Sandals/Tableau.hxx"
-#include "Sandals/Solution.hxx"
-#include "Sandals/RungeKutta.hxx"
-
-// Butcher tableau for Runge-Kutta methods
-#include "Sandals/Tableau/Chebyshev51.hxx"
-#include "Sandals/Tableau/ExplicitEuler.hxx"
-#include "Sandals/Tableau/Fehlberg45.hxx"
-#include "Sandals/Tableau/GaussLegendre2.hxx"
-#include "Sandals/Tableau/GaussLegendre4.hxx"
-#include "Sandals/Tableau/GaussLegendre6.hxx"
-#include "Sandals/Tableau/Heun2.hxx"
-#include "Sandals/Tableau/Heun3.hxx"
-#include "Sandals/Tableau/LobattoIIIA2.hxx"
-#include "Sandals/Tableau/ImplicitEuler.hxx"
-#include "Sandals/Tableau/MTE22.hxx"
-#include "Sandals/Tableau/RadauIIA3.hxx"
-#include "Sandals/Tableau/RadauIIA5.hxx"
-#include "Sandals/Tableau/Ralston2.hxx"
-#include "Sandals/Tableau/Ralston3.hxx"
-#include "Sandals/Tableau/Ralston4.hxx"
-#include "Sandals/Tableau/RK4.hxx"
-#include "Sandals/Tableau/SSPIRK33.hxx"
-#include "Sandals/Tableau/SSPRK22.hxx"
-#include "Sandals/Tableau/SSPRK22star.hxx"
-#include "Sandals/Tableau/SSPRK33.hxx"
-#include "Sandals/Tableau/SSPRK42.hxx"
-#include "Sandals/Tableau/SSPRK43.hxx"
-#include "Sandals/Tableau/SSPRK93.hxx"
-#include "Sandals/Tableau/SSPRK104.hxx"
-
 #endif // INCLUDE_SANDALS_HH

@@ -13,6 +13,9 @@
 #ifndef TESTS_SINCOS_EXPLICIT_HH
 #define TESTS_SINCOS_EXPLICIT_HH
 
+#include "Sandals.hh"
+#include "Sandals/System/Explicit.hh"
+
 using namespace Sandals;
 using namespace Eigen;
 

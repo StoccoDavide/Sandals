@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['implicit_2ehxx_0',['Implicit.hxx',['../_implicit_8hxx.html',1,'']]],
-  ['impliciteuler_2ehxx_1',['ImplicitEuler.hxx',['../_implicit_euler_8hxx.html',1,'']]]
+  ['implicit_2ehh_0',['Implicit.hh',['../_implicit_8hh.html',1,'']]],
+  ['impliciteuler_2ehh_1',['ImplicitEuler.hh',['../_implicit_euler_8hh.html',1,'']]]
 ];

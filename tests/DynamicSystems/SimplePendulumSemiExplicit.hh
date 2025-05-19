@@ -13,6 +13,9 @@
 #ifndef TESTS_SIMPLE_PENDULUM_SEMIEXPLICIT_HH
 #define TESTS_SIMPLE_PENDULUM_SEMIEXPLICIT_HH
 
+#include "Sandals.hh"
+#include "Sandals/System/SemiExplicit.hh"
+
 using namespace Sandals;
 
 class SimplePendulumSemiExplicit : public SemiExplicit<double, 2, 0>

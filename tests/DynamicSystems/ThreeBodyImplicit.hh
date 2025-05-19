@@ -13,6 +13,9 @@
 #ifndef TESTS_THREE_BODY_IMPLICIT_HH
 #define TESTS_THREE_BODY_IMPLICIT_HH
 
+#include "Sandals.hh"
+#include "Sandals/System/Implicit.hh"
+
 using namespace Sandals;
 
 

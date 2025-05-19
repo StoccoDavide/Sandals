@@ -968,7 +968,7 @@ WARN_LOGFILE           =
 INPUT                  = include \
                          include/Sandals \
                          include/Sandals/System \
-                         include/Sandals/Tableau \
+                         include/Sandals/RungeKutta \
                          docs/markdown/Mainpage.md
 
 # This tag can be used to specify the character encoding of the source files

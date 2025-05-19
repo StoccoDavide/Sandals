@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['tableau_2ehxx_0',['Tableau.hxx',['../_tableau_8hxx.html',1,'']]],
-  ['tictoc_2ehxx_1',['TicToc.hxx',['../_tic_toc_8hxx.html',1,'']]]
+  ['tableau_2ehh_0',['Tableau.hh',['../_tableau_8hh.html',1,'']]],
+  ['tictoc_2ehh_1',['TicToc.hh',['../_tic_toc_8hh.html',1,'']]]
 ];

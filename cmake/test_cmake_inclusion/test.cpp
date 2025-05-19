@@ -1,8 +1,8 @@
 #include "Sandals.hh"
-#include <iostream>
+#include "Sandals/RungeKutta/RK4.hh"
 
 int main()
 {
-  Sandals::Info(std::cout);
+  Sandals::RK4();
   return 0;
 }

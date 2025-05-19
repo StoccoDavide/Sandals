@@ -1,7 +1,7 @@
 var dir_e3f01be4207495917c59f0193678e431 =
 [
-    [ "Explicit.hxx", "_explicit_8hxx.html", "_explicit_8hxx" ],
-    [ "Implicit.hxx", "_implicit_8hxx.html", "_implicit_8hxx" ],
-    [ "Linear.hxx", "_linear_8hxx.html", "_linear_8hxx" ],
-    [ "SemiExplicit.hxx", "_semi_explicit_8hxx.html", "_semi_explicit_8hxx" ]
+    [ "Explicit.hh", "_explicit_8hh.html", "_explicit_8hh" ],
+    [ "Implicit.hh", "_implicit_8hh.html", "_implicit_8hh" ],
+    [ "Linear.hh", "_linear_8hh.html", "_linear_8hh" ],
+    [ "SemiExplicit.hh", "_semi_explicit_8hh.html", "_semi_explicit_8hh" ]
 ];

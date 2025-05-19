@@ -8,8 +8,35 @@
  * e-mail: davide.stocco@unitn.it                             e-mail: enrico.bertolazzi@unitn.it *
 \* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-#include "Sandals.hh"
 #include <gtest/gtest.h>
+
+#include "Sandals.hh"
+
+#include "Sandals/RungeKutta/Chebyshev51.hh"
+#include "Sandals/RungeKutta/ExplicitEuler.hh"
+#include "Sandals/RungeKutta/Fehlberg45.hh"
+#include "Sandals/RungeKutta/GaussLegendre2.hh"
+#include "Sandals/RungeKutta/GaussLegendre4.hh"
+#include "Sandals/RungeKutta/GaussLegendre6.hh"
+#include "Sandals/RungeKutta/Heun2.hh"
+#include "Sandals/RungeKutta/Heun3.hh"
+#include "Sandals/RungeKutta/LobattoIIIA2.hh"
+#include "Sandals/RungeKutta/ImplicitEuler.hh"
+#include "Sandals/RungeKutta/MTE22.hh"
+#include "Sandals/RungeKutta/RadauIIA3.hh"
+#include "Sandals/RungeKutta/RadauIIA5.hh"
+#include "Sandals/RungeKutta/Ralston2.hh"
+#include "Sandals/RungeKutta/Ralston3.hh"
+#include "Sandals/RungeKutta/Ralston4.hh"
+#include "Sandals/RungeKutta/RK4.hh"
+#include "Sandals/RungeKutta/SSPIRK33.hh"
+#include "Sandals/RungeKutta/SSPRK22.hh"
+#include "Sandals/RungeKutta/SSPRK22star.hh"
+#include "Sandals/RungeKutta/SSPRK33.hh"
+#include "Sandals/RungeKutta/SSPRK42.hh"
+#include "Sandals/RungeKutta/SSPRK43.hh"
+#include "Sandals/RungeKutta/SSPRK93.hh"
+#include "Sandals/RungeKutta/SSPRK104.hh"
 
 using namespace Sandals;
 

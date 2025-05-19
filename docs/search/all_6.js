@@ -1,12 +1,12 @@
 var searchData=
 [
   ['gausslegendre2_0',['GaussLegendre2',['../class_sandals_1_1_gauss_legendre2.html',1,'Sandals::GaussLegendre2&lt; Real, N, M &gt;'],['../class_sandals_1_1_gauss_legendre2.html#aee2933ed2240b1d7bad21b86ac66ca6c',1,'Sandals::GaussLegendre2::GaussLegendre2()'],['../class_sandals_1_1_gauss_legendre2.html#afbdf12d3f5bb131e76cf2756d4cc9b6a',1,'Sandals::GaussLegendre2::GaussLegendre2(System t_system)']]],
-  ['gausslegendre2_2ehxx_1',['GaussLegendre2.hxx',['../_gauss_legendre2_8hxx.html',1,'']]],
+  ['gausslegendre2_2ehh_1',['GaussLegendre2.hh',['../_gauss_legendre2_8hh.html',1,'']]],
   ['gausslegendre2tableau_2',['GaussLegendre2Tableau',['../class_sandals_1_1_gauss_legendre2_tableau.html',1,'Sandals::GaussLegendre2Tableau&lt; Real &gt;'],['../class_sandals_1_1_gauss_legendre2_tableau.html#a400a84741d2e2776ef6680140ae7d1ac',1,'Sandals::GaussLegendre2Tableau::GaussLegendre2Tableau()']]],
   ['gausslegendre4_3',['GaussLegendre4',['../class_sandals_1_1_gauss_legendre4.html',1,'Sandals::GaussLegendre4&lt; Real, N, M &gt;'],['../class_sandals_1_1_gauss_legendre4.html#a4e4b66b015824a7ac38204658efe0a3e',1,'Sandals::GaussLegendre4::GaussLegendre4()'],['../class_sandals_1_1_gauss_legendre4.html#aa2341255209e08a6b3a187e0ad327193',1,'Sandals::GaussLegendre4::GaussLegendre4(System t_system)']]],
-  ['gausslegendre4_2ehxx_4',['GaussLegendre4.hxx',['../_gauss_legendre4_8hxx.html',1,'']]],
+  ['gausslegendre4_2ehh_4',['GaussLegendre4.hh',['../_gauss_legendre4_8hh.html',1,'']]],
   ['gausslegendre4tableau_5',['GaussLegendre4Tableau',['../class_sandals_1_1_gauss_legendre4_tableau.html',1,'Sandals::GaussLegendre4Tableau&lt; Real &gt;'],['../class_sandals_1_1_gauss_legendre4_tableau.html#a6dd27a8332a6206242b793ea2c8f5d33',1,'Sandals::GaussLegendre4Tableau::GaussLegendre4Tableau()']]],
   ['gausslegendre6_6',['GaussLegendre6',['../class_sandals_1_1_gauss_legendre6.html',1,'Sandals::GaussLegendre6&lt; Real, N, M &gt;'],['../class_sandals_1_1_gauss_legendre6.html#a630998b6ad58ef0cd29ae9c0f7bfd814',1,'Sandals::GaussLegendre6::GaussLegendre6()'],['../class_sandals_1_1_gauss_legendre6.html#a7088e1785bf94579cb2a072640607676',1,'Sandals::GaussLegendre6::GaussLegendre6(System t_system)']]],
-  ['gausslegendre6_2ehxx_7',['GaussLegendre6.hxx',['../_gauss_legendre6_8hxx.html',1,'']]],
+  ['gausslegendre6_2ehh_7',['GaussLegendre6.hh',['../_gauss_legendre6_8hh.html',1,'']]],
   ['gausslegendre6tableau_8',['GaussLegendre6Tableau',['../class_sandals_1_1_gauss_legendre6_tableau.html',1,'Sandals::GaussLegendre6Tableau&lt; Real &gt;'],['../class_sandals_1_1_gauss_legendre6_tableau.html#affa94d4a22134f0355f19a7d20d7722d',1,'Sandals::GaussLegendre6Tableau::GaussLegendre6Tableau()']]]
 ];

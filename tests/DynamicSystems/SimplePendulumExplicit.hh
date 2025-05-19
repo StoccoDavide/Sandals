@@ -13,6 +13,9 @@
 #ifndef TESTS_SIMPLE_PENDULUM_EXPLICIT_HH
 #define TESTS_SIMPLE_PENDULUM_EXPLICIT_HH
 
+#include "Sandals.hh"
+#include "Sandals/System/Explicit.hh"
+
 using namespace Sandals;
 
 class SimplePendulumExplicit : public Explicit<2, 0>

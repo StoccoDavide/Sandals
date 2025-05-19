@@ -1,0 +1,427 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.13.2"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<!-- BEGIN opengraph metadata -->
+<meta property="og:title" content="Doxygen Awesome" />
+<meta property="og:image" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta property="og:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<meta property="og:url" content="https://jothepro.github.io/doxygen-awesome-css/" />
+<!-- END opengraph metadata -->
+<!-- BEGIN twitter metadata -->
+<meta name="twitter:image:src" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta name="twitter:title" content="Doxygen Awesome" />
+<meta name="twitter:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<!-- END twitter metadata -->
+<title>Sandals: include/Sandals/System/Explicit.hh Source File</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link rel="icon" type="image/svg+xml" href="logo.png"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+<script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+<script type="text/javascript" src="doxygen-awesome-paragraph-link.js"></script>
+<script type="text/javascript" src="doxygen-awesome-interactive-toc.js"></script>
+<script type="text/javascript" src="doxygen-awesome-tabs.js"></script>
+<script type="text/javascript" src="toggle-alternative-theme.js"></script>
+<script type="text/javascript">
+    DoxygenAwesomeFragmentCopyButton.init()
+    DoxygenAwesomeDarkModeToggle.init()
+    DoxygenAwesomeParagraphLink.init()
+    DoxygenAwesomeInteractiveToc.init()
+    DoxygenAwesomeTabs.init()
+</script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX","output/HTML-CSS"],
+});
+</script>
+<script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="custom.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+<link href="custom-alternative.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- https://tholman.com/github-corners/ -->
+<a href="https://github.com/StoccoDavide/Sandals" class="github-corner" title="View source on GitHub" target="_blank" rel="noopener noreferrer">
+    <svg viewBox="0 0 250 250" width="40" height="40" style="position: absolute; top: 0; border: 0; right: 0; z-index: 99;" aria-hidden="true">
+    <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="logo.svg"/></td>
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">Sandals
+   &#160;<span id="projectnumber">v0.0.0</span>
+   </div>
+   <div id="projectbrief">A C++ library for ODEs/DAEs integration</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.13.2 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() { codefold.init(0); });
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Search',true);
+  $(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function(){initNavTree('_explicit_8hh_source.html',''); initResizable(true); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">Explicit.hh</div></div>
+</div><!--header-->
+<div class="contents">
+<a href="_explicit_8hh.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment"> * Copyright (c) 2025, Davide Stocco and Enrico Bertolazzi.                                      *</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment"> *                                                                                               *</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="comment"> * The Sandals project is distributed under the BSD 2-Clause License.                            *</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment"> *                                                                                               *</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="comment"> * Davide Stocco                                                               Enrico Bertolazzi *</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="comment"> * University of Trento                                                     University of Trento *</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="comment"> * e-mail: davide.stocco@unitn.it                             e-mail: enrico.bertolazzi@unitn.it *</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="comment">\* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span> </div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#pragma once</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> </div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#ifndef SANDALS_EXPLICIT_SYSTEM_HH</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno"><a class="line" href="_explicit_8hh.html#aa1f45ce6a63616c0c1b38f4267446867">   14</a></span><span class="preprocessor">#define SANDALS_EXPLICIT_SYSTEM_HH</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="preprocessor">#include &lt;<a class="code" href="_sandals_8hh.html">Sandals.hh</a>&gt;</span></div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="preprocessor">#include &lt;<a class="code" href="_implicit_8hh.html">Sandals/System/Implicit.hh</a>&gt;</span></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespace_sandals.html">Sandals</a> {</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span> </div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>  <span class="comment">/*\</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="comment">   |   _____            _ _      _ _</span></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="comment">   |  | ____|_  ___ __ | (_) ___(_) |_</span></div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="comment">   |  |  _| \ \/ / &#39;_ \| | |/ __| | __|</span></div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="comment">   |  | |___ &gt;  &lt;| |_) | | | (__| | |_</span></div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="comment">   |  |_____/_/\_\ .__/|_|_|\___|_|\__|</span></div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="comment">   |             |_|</span></div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="comment">  \*/</span></div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span></div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>  <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Real, Integer N, Integer M = 0&gt;</div>
+<div class="foldopen" id="foldopen00041" data-start="{" data-end="};">
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno"><a class="line" href="class_sandals_1_1_explicit.html">   41</a></span>  <span class="keyword">class </span><a class="code hl_function" href="class_sandals_1_1_explicit.html#a28058e79774767c4e0882bfa81dfd72a">Explicit</a> : <span class="keyword">public</span> <a class="code hl_function" href="class_sandals_1_1_implicit.html#a262bcc55f6bfa6848eb29a6863a32d82">Implicit</a>&lt;Real, N, M&gt;</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>  {</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>  <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    <a class="code hl_define" href="_sandals_8hh.html#a1b0da1a604a69e02fa8fe808f714cc2b">SANDALS_BASIC_CONSTANTS</a>(Real) </div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span> </div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno"><a class="line" href="class_sandals_1_1_explicit.html#a1e3f3ba127e9177db2a56811efc38c05">   46</a></span>    using <a class="code hl_typedef" href="class_sandals_1_1_explicit.html#a1e3f3ba127e9177db2a56811efc38c05">Pointer</a> = std::shared_ptr&lt;<a class="code hl_function" href="class_sandals_1_1_explicit.html#a28058e79774767c4e0882bfa81dfd72a">Explicit</a>&lt;Real, N, M&gt;&gt;; </div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno"><a class="line" href="class_sandals_1_1_explicit.html#afdda0ad23f2ca6d2c87a564ea31bc02f">   47</a></span>    using <a class="code hl_typedef" href="class_sandals_1_1_explicit.html#afdda0ad23f2ca6d2c87a564ea31bc02f">VectorF</a> = typename <a class="code hl_function" href="class_sandals_1_1_implicit.html#a262bcc55f6bfa6848eb29a6863a32d82">Implicit</a>&lt;Real, N, M&gt;::<a class="code hl_typedef" href="class_sandals_1_1_explicit.html#afdda0ad23f2ca6d2c87a564ea31bc02f">VectorF</a>; </div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno"><a class="line" href="class_sandals_1_1_explicit.html#ae8d2fba7756319303c025da59c0f0ee5">   48</a></span>    using <a class="code hl_typedef" href="class_sandals_1_1_explicit.html#ae8d2fba7756319303c025da59c0f0ee5">MatrixJF</a> = typename <a class="code hl_function" href="class_sandals_1_1_implicit.html#a262bcc55f6bfa6848eb29a6863a32d82">Implicit</a>&lt;Real, N, M&gt;::<a class="code hl_typedef" href="class_sandals_1_1_explicit.html#ae8d2fba7756319303c025da59c0f0ee5">MatrixJF</a>; </div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno"><a class="line" href="class_sandals_1_1_explicit.html#ab498b358a77a9c3ae19ec5a3aa14966f">   49</a></span>    using <a class="code hl_typedef" href="class_sandals_1_1_explicit.html#ab498b358a77a9c3ae19ec5a3aa14966f">Type</a> = typename <a class="code hl_function" href="class_sandals_1_1_implicit.html#a262bcc55f6bfa6848eb29a6863a32d82">Implicit</a>&lt;Real, N, M&gt;::<a class="code hl_typedef" href="class_sandals_1_1_explicit.html#ab498b358a77a9c3ae19ec5a3aa14966f">Type</a>; </div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span> </div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>  protected:</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno"><a class="line" href="class_sandals_1_1_explicit.html#a28058e79774767c4e0882bfa81dfd72a">   57</a></span>    <a class="code hl_function" href="class_sandals_1_1_explicit.html#a28058e79774767c4e0882bfa81dfd72a">Explicit</a>(<a class="code hl_typedef" href="class_sandals_1_1_explicit.html#ab498b358a77a9c3ae19ec5a3aa14966f">Type</a> t_type, std::<span class="keywordtype">string</span> t_name) : <a class="code hl_function" href="class_sandals_1_1_implicit.html#a262bcc55f6bfa6848eb29a6863a32d82">Implicit</a>&lt;Real, N, M&gt;(t_type, t_name) {}</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span> </div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>  <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno"><a class="line" href="class_sandals_1_1_explicit.html#ad8796bc43bd969975518199c8b9bf8d8">   63</a></span>    <a class="code hl_function" href="class_sandals_1_1_explicit.html#ad8796bc43bd969975518199c8b9bf8d8">Explicit</a>() : <a class="code hl_function" href="class_sandals_1_1_implicit.html#a262bcc55f6bfa6848eb29a6863a32d82">Implicit</a>&lt;Real, N, M&gt;(<a class="code hl_typedef" href="class_sandals_1_1_explicit.html#ab498b358a77a9c3ae19ec5a3aa14966f">Type</a>::EXPLICIT, <span class="stringliteral">&quot;(missing name)&quot;</span>) {}</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span></div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno"><a class="line" href="class_sandals_1_1_explicit.html#a209f35da13a5d006a2f8abb6b1f80fc7">   69</a></span>    <a class="code hl_function" href="class_sandals_1_1_explicit.html#a209f35da13a5d006a2f8abb6b1f80fc7">Explicit</a>(std::string t_name) : <a class="code hl_function" href="class_sandals_1_1_implicit.html#a262bcc55f6bfa6848eb29a6863a32d82">Implicit</a>&lt;Real, N, M&gt;(<a class="code hl_typedef" href="class_sandals_1_1_explicit.html#ab498b358a77a9c3ae19ec5a3aa14966f">Type</a>::EXPLICIT, t_name) {}</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span></div>
+<div class="foldopen" id="foldopen00084" data-start="{" data-end="}">
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno"><a class="line" href="class_sandals_1_1_explicit.html#af9b2558d1b7fcc110de466af8f7c4fb7">   84</a></span>    <a class="code hl_typedef" href="class_sandals_1_1_explicit.html#afdda0ad23f2ca6d2c87a564ea31bc02f">VectorF</a> <a class="code hl_function" href="class_sandals_1_1_explicit.html#af9b2558d1b7fcc110de466af8f7c4fb7">F</a>(<a class="code hl_typedef" href="class_sandals_1_1_explicit.html#afdda0ad23f2ca6d2c87a564ea31bc02f">VectorF</a> <span class="keyword">const</span> &amp;x, <a class="code hl_typedef" href="class_sandals_1_1_explicit.html#afdda0ad23f2ca6d2c87a564ea31bc02f">VectorF</a> <span class="keyword">const</span> &amp;x_dot, Real t)<span class="keyword"> const override</span></div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span><span class="keyword">    </span>{</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>      <span class="keywordflow">return</span> x_dot - this-&gt;<a class="code hl_function" href="class_sandals_1_1_explicit.html#a6edb404bb6580adc778e1b3291af0c35">f</a>(x, t);</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>    }</div>
+</div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span></div>
+<div class="foldopen" id="foldopen00105" data-start="{" data-end="}">
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno"><a class="line" href="class_sandals_1_1_explicit.html#a3c5f39a2c4e125d1576ec83931705936">  105</a></span>    <a class="code hl_typedef" href="class_sandals_1_1_explicit.html#ae8d2fba7756319303c025da59c0f0ee5">MatrixJF</a> <a class="code hl_function" href="class_sandals_1_1_explicit.html#a3c5f39a2c4e125d1576ec83931705936">JF_x</a>(<a class="code hl_typedef" href="class_sandals_1_1_explicit.html#afdda0ad23f2ca6d2c87a564ea31bc02f">VectorF</a> <span class="keyword">const</span> &amp;x, <a class="code hl_typedef" href="class_sandals_1_1_explicit.html#afdda0ad23f2ca6d2c87a564ea31bc02f">VectorF</a> <span class="keyword">const</span> &amp;<span class="comment">/*x_dot*/</span>, Real t)<span class="keyword"> const override</span></div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span><span class="keyword">    </span>{</div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>      <span class="keywordflow">return</span> -this-&gt;<a class="code hl_function" href="class_sandals_1_1_explicit.html#a5105399a3b421abe7aff711494bb8b5d">Jf_x</a>(x, t);</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>    }</div>
+</div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span></div>
+<div class="foldopen" id="foldopen00125" data-start="{" data-end="}">
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno"><a class="line" href="class_sandals_1_1_explicit.html#a4cf2a9e95ac370981f0bdee7bb54dc1f">  125</a></span>    <a class="code hl_typedef" href="class_sandals_1_1_explicit.html#ae8d2fba7756319303c025da59c0f0ee5">MatrixJF</a> <a class="code hl_function" href="class_sandals_1_1_explicit.html#a4cf2a9e95ac370981f0bdee7bb54dc1f">JF_x_dot</a>(<a class="code hl_typedef" href="class_sandals_1_1_explicit.html#afdda0ad23f2ca6d2c87a564ea31bc02f">VectorF</a> <span class="keyword">const</span> &amp;<span class="comment">/*x*/</span>, <a class="code hl_typedef" href="class_sandals_1_1_explicit.html#afdda0ad23f2ca6d2c87a564ea31bc02f">VectorF</a> <span class="keyword">const</span> &amp;<span class="comment">/*x_dot*/</span>, Real <span class="comment">/*t*/</span>)<span class="keyword"> const override</span></div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span><span class="keyword">    </span>{</div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>      <span class="keywordflow">return</span> MatrixJF::Identity();</div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>    }</div>
+</div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span></div>
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno"><a class="line" href="class_sandals_1_1_explicit.html#a6edb404bb6580adc778e1b3291af0c35">  136</a></span>    <span class="keyword">virtual</span> <a class="code hl_typedef" href="class_sandals_1_1_explicit.html#afdda0ad23f2ca6d2c87a564ea31bc02f">VectorF</a> <a class="code hl_function" href="class_sandals_1_1_explicit.html#a6edb404bb6580adc778e1b3291af0c35">f</a>(<a class="code hl_typedef" href="class_sandals_1_1_explicit.html#afdda0ad23f2ca6d2c87a564ea31bc02f">VectorF</a> <span class="keyword">const</span> &amp;x, Real t) <span class="keyword">const</span> = 0;</div>
+<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span></div>
+<div class="line"><a id="l00151" name="l00151"></a><span class="lineno"><a class="line" href="class_sandals_1_1_explicit.html#a5105399a3b421abe7aff711494bb8b5d">  151</a></span>    <span class="keyword">virtual</span> <a class="code hl_typedef" href="class_sandals_1_1_explicit.html#ae8d2fba7756319303c025da59c0f0ee5">MatrixJF</a> <a class="code hl_function" href="class_sandals_1_1_explicit.html#a5105399a3b421abe7aff711494bb8b5d">Jf_x</a>(<a class="code hl_typedef" href="class_sandals_1_1_explicit.html#afdda0ad23f2ca6d2c87a564ea31bc02f">VectorF</a> <span class="keyword">const</span> &amp;x, Real t) <span class="keyword">const</span> = 0;</div>
+<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span></div>
+<div class="foldopen" id="foldopen00160" data-start="{" data-end="}">
+<div class="line"><a id="l00160" name="l00160"></a><span class="lineno"><a class="line" href="class_sandals_1_1_explicit.html#a0e169e475f2893c05dfcc1dd7a662793">  160</a></span>    <a class="code hl_typedef" href="class_sandals_1_1_explicit.html#afdda0ad23f2ca6d2c87a564ea31bc02f">VectorF</a> <a class="code hl_function" href="class_sandals_1_1_explicit.html#a0e169e475f2893c05dfcc1dd7a662793">f_reverse</a>(<a class="code hl_typedef" href="class_sandals_1_1_explicit.html#afdda0ad23f2ca6d2c87a564ea31bc02f">VectorF</a> <span class="keyword">const</span> &amp;x, Real t)<span class="keyword"> const</span></div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span><span class="keyword">    </span>{</div>
+<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>      <span class="keywordflow">return</span> -this-&gt;<a class="code hl_function" href="class_sandals_1_1_explicit.html#a6edb404bb6580adc778e1b3291af0c35">f</a>(x, -t);</div>
+<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>    }</div>
+</div>
+<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span></div>
+<div class="foldopen" id="foldopen00172" data-start="{" data-end="}">
+<div class="line"><a id="l00172" name="l00172"></a><span class="lineno"><a class="line" href="class_sandals_1_1_explicit.html#a88d49e69c0bc96523e15e58161796abf">  172</a></span>    <a class="code hl_typedef" href="class_sandals_1_1_explicit.html#ae8d2fba7756319303c025da59c0f0ee5">MatrixJF</a> <a class="code hl_function" href="class_sandals_1_1_explicit.html#a88d49e69c0bc96523e15e58161796abf">Jf_x_reverse</a>(<a class="code hl_typedef" href="class_sandals_1_1_explicit.html#afdda0ad23f2ca6d2c87a564ea31bc02f">VectorF</a> <span class="keyword">const</span> &amp;x, Real t)<span class="keyword"> const</span></div>
+<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span><span class="keyword">    </span>{</div>
+<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>      <span class="keywordflow">return</span> -this-&gt;<a class="code hl_function" href="class_sandals_1_1_explicit.html#a5105399a3b421abe7aff711494bb8b5d">Jf_x</a>(x, -t);</div>
+<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span>    }</div>
+</div>
+<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span></div>
+<div class="foldopen" id="foldopen00185" data-start="{" data-end="}">
+<div class="line"><a id="l00185" name="l00185"></a><span class="lineno"><a class="line" href="class_sandals_1_1_explicit.html#ae91e141baef6ec6417b3a1211d9fe96e">  185</a></span>    <a class="code hl_typedef" href="class_sandals_1_1_explicit.html#afdda0ad23f2ca6d2c87a564ea31bc02f">VectorF</a> <a class="code hl_function" href="class_sandals_1_1_explicit.html#ae91e141baef6ec6417b3a1211d9fe96e">F_reverse</a>(<a class="code hl_typedef" href="class_sandals_1_1_explicit.html#afdda0ad23f2ca6d2c87a564ea31bc02f">VectorF</a> <span class="keyword">const</span> &amp;x, <a class="code hl_typedef" href="class_sandals_1_1_explicit.html#afdda0ad23f2ca6d2c87a564ea31bc02f">VectorF</a> <span class="keyword">const</span> &amp;x_dot, Real t)<span class="keyword"> const</span></div>
+<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span><span class="keyword">    </span>{</div>
+<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span>      <span class="keywordflow">return</span> -x_dot - this-&gt;<a class="code hl_function" href="class_sandals_1_1_explicit.html#a6edb404bb6580adc778e1b3291af0c35">f</a>(x, -t);</div>
+<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span>    }</div>
+</div>
+<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span></div>
+<div class="foldopen" id="foldopen00200" data-start="{" data-end="}">
+<div class="line"><a id="l00200" name="l00200"></a><span class="lineno"><a class="line" href="class_sandals_1_1_explicit.html#a108f6d19f47111b2d80d2d0e9d3905ab">  200</a></span>    <a class="code hl_typedef" href="class_sandals_1_1_explicit.html#ae8d2fba7756319303c025da59c0f0ee5">MatrixJF</a> <a class="code hl_function" href="class_sandals_1_1_explicit.html#a108f6d19f47111b2d80d2d0e9d3905ab">JF_x_reverse</a>(<a class="code hl_typedef" href="class_sandals_1_1_explicit.html#afdda0ad23f2ca6d2c87a564ea31bc02f">VectorF</a> <span class="keyword">const</span> &amp;x, <a class="code hl_typedef" href="class_sandals_1_1_explicit.html#afdda0ad23f2ca6d2c87a564ea31bc02f">VectorF</a> <span class="keyword">const</span> &amp;<span class="comment">/*x_dot*/</span>, Real t)<span class="keyword"> const</span></div>
+<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span><span class="keyword">    </span>{</div>
+<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span>      <span class="keywordflow">return</span> -this-&gt;<a class="code hl_function" href="class_sandals_1_1_explicit.html#a5105399a3b421abe7aff711494bb8b5d">Jf_x</a>(x, -t);</div>
+<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span>    }</div>
+</div>
+<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span></div>
+<div class="foldopen" id="foldopen00215" data-start="{" data-end="}">
+<div class="line"><a id="l00215" name="l00215"></a><span class="lineno"><a class="line" href="class_sandals_1_1_explicit.html#a325e09554677df81a268e4df03c70c12">  215</a></span>    <a class="code hl_typedef" href="class_sandals_1_1_explicit.html#ae8d2fba7756319303c025da59c0f0ee5">MatrixJF</a> <a class="code hl_function" href="class_sandals_1_1_explicit.html#a325e09554677df81a268e4df03c70c12">JF_x_dot_reverse</a>(<a class="code hl_typedef" href="class_sandals_1_1_explicit.html#afdda0ad23f2ca6d2c87a564ea31bc02f">VectorF</a> <span class="keyword">const</span> &amp;<span class="comment">/*x*/</span>, <a class="code hl_typedef" href="class_sandals_1_1_explicit.html#afdda0ad23f2ca6d2c87a564ea31bc02f">VectorF</a> <span class="keyword">const</span> &amp;<span class="comment">/*x_dot*/</span>, Real <span class="comment">/*t*/</span>)<span class="keyword"> const</span></div>
+<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span><span class="keyword">    </span>{</div>
+<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span>      <span class="keywordflow">return</span> -MatrixJF::Identity();</div>
+<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span>    }</div>
+</div>
+<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span> </div>
+<div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span>  }; <span class="comment">// class Explicit</span></div>
+</div>
+<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span> </div>
+<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span>  <span class="comment">/*\</span></div>
+<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span><span class="comment">   |   _____            _ _      _ _ __        __</span></div>
+<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span><span class="comment">   |  | ____|_  ___ __ | (_) ___(_) |\ \      / / __ __ _ _ __  _ __   ___ _ __</span></div>
+<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span><span class="comment">   |  |  _| \ \/ / &#39;_ \| | |/ __| | __\ \ /\ / / &#39;__/ _` | &#39;_ \| &#39;_ \ / _ \ &#39;__|</span></div>
+<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span><span class="comment">   |  | |___ &gt;  &lt;| |_) | | | (__| | |_ \ V  V /| | | (_| | |_) | |_) |  __/ |</span></div>
+<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span><span class="comment">   |  |_____/_/\_\ .__/|_|_|\___|_|\__| \_/\_/ |_|  \__,_| .__/| .__/ \___|_|</span></div>
+<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span><span class="comment">   |             |_|                                     |_|   |_|</span></div>
+<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span><span class="comment">  \*/</span></div>
+<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span></div>
+<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span>  <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Real, Integer N, Integer M = 0&gt;</div>
+<div class="foldopen" id="foldopen00242" data-start="{" data-end="};">
+<div class="line"><a id="l00242" name="l00242"></a><span class="lineno"><a class="line" href="class_sandals_1_1_explicit_wrapper.html">  242</a></span>  <span class="keyword">class </span><a class="code hl_function" href="class_sandals_1_1_explicit_wrapper.html#ade4317fa686eda59204431c1221ff244">ExplicitWrapper</a> : <span class="keyword">public</span> <a class="code hl_function" href="class_sandals_1_1_explicit.html#a28058e79774767c4e0882bfa81dfd72a">Explicit</a>&lt;Real, N, M&gt;</div>
+<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span>  {</div>
+<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span>  <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span>    <a class="code hl_define" href="_sandals_8hh.html#a1b0da1a604a69e02fa8fe808f714cc2b">SANDALS_BASIC_CONSTANTS</a>(Real) </div>
+<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span> </div>
+<div class="line"><a id="l00247" name="l00247"></a><span class="lineno"><a class="line" href="class_sandals_1_1_explicit_wrapper.html#a497860927cef68e96ecc1a2dedec0999">  247</a></span>    using <a class="code hl_typedef" href="class_sandals_1_1_explicit_wrapper.html#a497860927cef68e96ecc1a2dedec0999">Pointer</a> = std::shared_ptr&lt;<a class="code hl_function" href="class_sandals_1_1_explicit_wrapper.html#ade4317fa686eda59204431c1221ff244">ExplicitWrapper</a>&lt;Real, N, M&gt;&gt;; </div>
+<div class="line"><a id="l00248" name="l00248"></a><span class="lineno"><a class="line" href="class_sandals_1_1_explicit_wrapper.html#a9f60a2bfc68df04c83634c92425d7385">  248</a></span>    using <a class="code hl_typedef" href="class_sandals_1_1_explicit_wrapper.html#a9f60a2bfc68df04c83634c92425d7385">VectorF</a> = typename <a class="code hl_function" href="class_sandals_1_1_explicit.html#a28058e79774767c4e0882bfa81dfd72a">Explicit</a>&lt;Real, N, M&gt;::<a class="code hl_typedef" href="class_sandals_1_1_explicit_wrapper.html#a9f60a2bfc68df04c83634c92425d7385">VectorF</a>; </div>
+<div class="line"><a id="l00249" name="l00249"></a><span class="lineno"><a class="line" href="class_sandals_1_1_explicit_wrapper.html#a1a3acf5600c4471ef66d375fff9fa26e">  249</a></span>    using <a class="code hl_typedef" href="class_sandals_1_1_explicit_wrapper.html#a1a3acf5600c4471ef66d375fff9fa26e">MatrixJF</a> = typename <a class="code hl_function" href="class_sandals_1_1_explicit.html#a28058e79774767c4e0882bfa81dfd72a">Explicit</a>&lt;Real, N, M&gt;::<a class="code hl_typedef" href="class_sandals_1_1_explicit_wrapper.html#a1a3acf5600c4471ef66d375fff9fa26e">MatrixJF</a>; </div>
+<div class="line"><a id="l00250" name="l00250"></a><span class="lineno"><a class="line" href="class_sandals_1_1_explicit_wrapper.html#a6a0257ee922684319a9ddccd3ab72b36">  250</a></span>    using <a class="code hl_typedef" href="class_sandals_1_1_explicit_wrapper.html#a6a0257ee922684319a9ddccd3ab72b36">VectorH</a> = typename <a class="code hl_function" href="class_sandals_1_1_explicit.html#a28058e79774767c4e0882bfa81dfd72a">Explicit</a>&lt;Real, N, M&gt;::<a class="code hl_typedef" href="class_sandals_1_1_explicit_wrapper.html#a6a0257ee922684319a9ddccd3ab72b36">VectorH</a>; </div>
+<div class="line"><a id="l00251" name="l00251"></a><span class="lineno"><a class="line" href="class_sandals_1_1_explicit_wrapper.html#a5b5855abfc2df4271aa09605193f5d7d">  251</a></span>    using <a class="code hl_typedef" href="class_sandals_1_1_explicit_wrapper.html#a5b5855abfc2df4271aa09605193f5d7d">MatrixJH</a> = typename <a class="code hl_function" href="class_sandals_1_1_explicit.html#a28058e79774767c4e0882bfa81dfd72a">Explicit</a>&lt;Real, N, M&gt;::<a class="code hl_typedef" href="class_sandals_1_1_explicit_wrapper.html#a5b5855abfc2df4271aa09605193f5d7d">MatrixJH</a>; </div>
+<div class="line"><a id="l00252" name="l00252"></a><span class="lineno"><a class="line" href="class_sandals_1_1_explicit_wrapper.html#a2f2f932bd31c63b2a3ab2044cc446cfc">  252</a></span>    using <a class="code hl_typedef" href="class_sandals_1_1_explicit_wrapper.html#a2f2f932bd31c63b2a3ab2044cc446cfc">FunctionF</a> = std::function&lt;<a class="code hl_typedef" href="class_sandals_1_1_explicit_wrapper.html#a9f60a2bfc68df04c83634c92425d7385">VectorF</a>(<a class="code hl_typedef" href="class_sandals_1_1_explicit_wrapper.html#a9f60a2bfc68df04c83634c92425d7385">VectorF</a> const &amp;, <a class="code hl_typedef" href="class_sandals_1_1_explicit_wrapper.html#a9f60a2bfc68df04c83634c92425d7385">VectorF</a> const &amp;, Real)&gt;; </div>
+<div class="line"><a id="l00253" name="l00253"></a><span class="lineno"><a class="line" href="class_sandals_1_1_explicit_wrapper.html#a6d3b8ccacd838180eaff9e4ea8b8d1f3">  253</a></span>    using <a class="code hl_typedef" href="class_sandals_1_1_explicit_wrapper.html#a6d3b8ccacd838180eaff9e4ea8b8d1f3">FunctionJF</a> = std::function&lt;<a class="code hl_typedef" href="class_sandals_1_1_explicit_wrapper.html#a1a3acf5600c4471ef66d375fff9fa26e">MatrixJF</a>(<a class="code hl_typedef" href="class_sandals_1_1_explicit_wrapper.html#a9f60a2bfc68df04c83634c92425d7385">VectorF</a> const &amp;, <a class="code hl_typedef" href="class_sandals_1_1_explicit_wrapper.html#a9f60a2bfc68df04c83634c92425d7385">VectorF</a> const &amp;, Real)&gt;; </div>
+<div class="line"><a id="l00254" name="l00254"></a><span class="lineno"><a class="line" href="class_sandals_1_1_explicit_wrapper.html#abbbceebbfa07e142306f7fb1b42d63ee">  254</a></span>    using <a class="code hl_typedef" href="class_sandals_1_1_explicit_wrapper.html#abbbceebbfa07e142306f7fb1b42d63ee">FunctionH</a> = std::function&lt;<a class="code hl_typedef" href="class_sandals_1_1_explicit_wrapper.html#a6a0257ee922684319a9ddccd3ab72b36">VectorH</a>(<a class="code hl_typedef" href="class_sandals_1_1_explicit_wrapper.html#a9f60a2bfc68df04c83634c92425d7385">VectorF</a> const &amp;, Real)&gt;; </div>
+<div class="line"><a id="l00255" name="l00255"></a><span class="lineno"><a class="line" href="class_sandals_1_1_explicit_wrapper.html#a216aaadfe705a786d8641d94183c0465">  255</a></span>    using <a class="code hl_typedef" href="class_sandals_1_1_explicit_wrapper.html#a216aaadfe705a786d8641d94183c0465">FunctionJH</a> = std::function&lt;<a class="code hl_typedef" href="class_sandals_1_1_explicit_wrapper.html#a5b5855abfc2df4271aa09605193f5d7d">MatrixJH</a>(<a class="code hl_typedef" href="class_sandals_1_1_explicit_wrapper.html#a9f60a2bfc68df04c83634c92425d7385">VectorF</a> const &amp;, Real)&gt;; </div>
+<div class="line"><a id="l00256" name="l00256"></a><span class="lineno"><a class="line" href="class_sandals_1_1_explicit_wrapper.html#af3b90ecf4c7b8bdc25eb12870222fda6">  256</a></span>    using <a class="code hl_typedef" href="class_sandals_1_1_explicit_wrapper.html#af3b90ecf4c7b8bdc25eb12870222fda6">FunctionID</a> = std::function&lt;<span class="keywordtype">bool</span>(<a class="code hl_typedef" href="class_sandals_1_1_explicit_wrapper.html#a9f60a2bfc68df04c83634c92425d7385">VectorF</a> const &amp;, Real)&gt;; </div>
+<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span> </div>
+<div class="line"><a id="l00258" name="l00258"></a><span class="lineno"><a class="line" href="class_sandals_1_1_explicit_wrapper.html#a060994b2e4ad56067e6a6d4fe2ddaf05">  258</a></span>    inline const static <a class="code hl_typedef" href="class_sandals_1_1_explicit_wrapper.html#abbbceebbfa07e142306f7fb1b42d63ee">FunctionH</a> <a class="code hl_variable" href="class_sandals_1_1_explicit_wrapper.html#a060994b2e4ad56067e6a6d4fe2ddaf05">DefaultH</a> = [](<a class="code hl_typedef" href="class_sandals_1_1_explicit_wrapper.html#a9f60a2bfc68df04c83634c92425d7385">VectorF</a> const &amp;, Real) {<span class="keywordflow">return</span> VectorH::Zero();}; </div>
+<div class="line"><a id="l00259" name="l00259"></a><span class="lineno"><a class="line" href="class_sandals_1_1_explicit_wrapper.html#ad100b0ed7e3ba0a55a7a19366176b2ea">  259</a></span>    <span class="keyword">inline</span> <span class="keyword">const</span> <span class="keyword">static</span> <a class="code hl_typedef" href="class_sandals_1_1_explicit_wrapper.html#a216aaadfe705a786d8641d94183c0465">FunctionJH</a> <a class="code hl_variable" href="class_sandals_1_1_explicit_wrapper.html#ad100b0ed7e3ba0a55a7a19366176b2ea">DefaultJH</a> = [](<a class="code hl_typedef" href="class_sandals_1_1_explicit_wrapper.html#a9f60a2bfc68df04c83634c92425d7385">VectorF</a> <span class="keyword">const</span> &amp;, Real) {<span class="keywordflow">return</span> MatrixJH::Zero();}; </div>
+<div class="line"><a id="l00260" name="l00260"></a><span class="lineno"><a class="line" href="class_sandals_1_1_explicit_wrapper.html#a391ab6441c6c633e37135c3602437ab9">  260</a></span>    <span class="keyword">inline</span> <span class="keyword">const</span> <span class="keyword">static</span> <a class="code hl_typedef" href="class_sandals_1_1_explicit_wrapper.html#af3b90ecf4c7b8bdc25eb12870222fda6">FunctionID</a> <a class="code hl_variable" href="class_sandals_1_1_explicit_wrapper.html#a391ab6441c6c633e37135c3602437ab9">DefaultID</a> = [](<a class="code hl_typedef" href="class_sandals_1_1_explicit_wrapper.html#a9f60a2bfc68df04c83634c92425d7385">VectorF</a> <span class="keyword">const</span> &amp;, Real) {<span class="keywordflow">return</span> <span class="keyword">true</span>;}; </div>
+<div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span> </div>
+<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span>  <span class="keyword">private</span>:</div>
+<div class="line"><a id="l00263" name="l00263"></a><span class="lineno"><a class="line" href="class_sandals_1_1_explicit_wrapper.html#aa9aa243b2ddbeca227e107941aa9c6d5">  263</a></span>    <a class="code hl_typedef" href="class_sandals_1_1_explicit_wrapper.html#a2f2f932bd31c63b2a3ab2044cc446cfc">FunctionF</a> <a class="code hl_variable" href="class_sandals_1_1_explicit_wrapper.html#aa9aa243b2ddbeca227e107941aa9c6d5">m_f</a>{<span class="keyword">nullptr</span>}; </div>
+<div class="line"><a id="l00264" name="l00264"></a><span class="lineno"><a class="line" href="class_sandals_1_1_explicit_wrapper.html#a9e03efea475813d6fd55a775f4dbfeed">  264</a></span>    <a class="code hl_typedef" href="class_sandals_1_1_explicit_wrapper.html#a6d3b8ccacd838180eaff9e4ea8b8d1f3">FunctionJF</a> <a class="code hl_variable" href="class_sandals_1_1_explicit_wrapper.html#a9e03efea475813d6fd55a775f4dbfeed">m_Jf_x</a>{<span class="keyword">nullptr</span>}; </div>
+<div class="line"><a id="l00265" name="l00265"></a><span class="lineno"><a class="line" href="class_sandals_1_1_explicit_wrapper.html#aade9442ae0096cf12a4c2248315412e6">  265</a></span>    <a class="code hl_typedef" href="class_sandals_1_1_explicit_wrapper.html#abbbceebbfa07e142306f7fb1b42d63ee">FunctionH</a> <a class="code hl_variable" href="class_sandals_1_1_explicit_wrapper.html#aade9442ae0096cf12a4c2248315412e6">m_h</a>{<span class="keyword">nullptr</span>}; </div>
+<div class="line"><a id="l00266" name="l00266"></a><span class="lineno"><a class="line" href="class_sandals_1_1_explicit_wrapper.html#ac20517af6839275be3499e2f8aa7dad9">  266</a></span>    <a class="code hl_typedef" href="class_sandals_1_1_explicit_wrapper.html#a216aaadfe705a786d8641d94183c0465">FunctionJH</a> <a class="code hl_variable" href="class_sandals_1_1_explicit_wrapper.html#ac20517af6839275be3499e2f8aa7dad9">m_Jh_x</a>{<span class="keyword">nullptr</span>}; </div>
+<div class="line"><a id="l00267" name="l00267"></a><span class="lineno"><a class="line" href="class_sandals_1_1_explicit_wrapper.html#a9c93144013fb7f36f1bdcc2522c8912d">  267</a></span>    <a class="code hl_typedef" href="class_sandals_1_1_explicit_wrapper.html#af3b90ecf4c7b8bdc25eb12870222fda6">FunctionID</a> <a class="code hl_variable" href="class_sandals_1_1_explicit_wrapper.html#a9c93144013fb7f36f1bdcc2522c8912d">m_in_domain</a>{<span class="keyword">nullptr</span>}; </div>
+<div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span> </div>
+<div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span>  <span class="keyword">public</span>:</div>
+<div class="foldopen" id="foldopen00278" data-start="{" data-end="}">
+<div class="line"><a id="l00278" name="l00278"></a><span class="lineno"><a class="line" href="class_sandals_1_1_explicit_wrapper.html#ade4317fa686eda59204431c1221ff244">  278</a></span>    <a class="code hl_function" href="class_sandals_1_1_explicit_wrapper.html#ade4317fa686eda59204431c1221ff244">ExplicitWrapper</a>(<a class="code hl_typedef" href="class_sandals_1_1_explicit_wrapper.html#a2f2f932bd31c63b2a3ab2044cc446cfc">FunctionF</a> t_f, <a class="code hl_typedef" href="class_sandals_1_1_explicit_wrapper.html#a6d3b8ccacd838180eaff9e4ea8b8d1f3">FunctionJF</a> t_Jf_x, <a class="code hl_typedef" href="class_sandals_1_1_explicit_wrapper.html#abbbceebbfa07e142306f7fb1b42d63ee">FunctionH</a> t_h = <a class="code hl_variable" href="class_sandals_1_1_explicit_wrapper.html#a060994b2e4ad56067e6a6d4fe2ddaf05">DefaultH</a>, <a class="code hl_typedef" href="class_sandals_1_1_explicit_wrapper.html#a216aaadfe705a786d8641d94183c0465">FunctionJH</a> t_Jh_x = <a class="code hl_variable" href="class_sandals_1_1_explicit_wrapper.html#ad100b0ed7e3ba0a55a7a19366176b2ea">DefaultJH</a>,</div>
+<div class="line"><a id="l00279" name="l00279"></a><span class="lineno">  279</span>      <a class="code hl_typedef" href="class_sandals_1_1_explicit_wrapper.html#af3b90ecf4c7b8bdc25eb12870222fda6">FunctionID</a> t_in_domain = <a class="code hl_variable" href="class_sandals_1_1_explicit_wrapper.html#a391ab6441c6c633e37135c3602437ab9">DefaultID</a>) : <a class="code hl_class" href="class_sandals_1_1_implicit.html">Implicit</a>&lt;Real, N, M&gt;(), <a class="code hl_variable" href="class_sandals_1_1_explicit_wrapper.html#aa9aa243b2ddbeca227e107941aa9c6d5">m_f</a>(t_f), <a class="code hl_variable" href="class_sandals_1_1_explicit_wrapper.html#a9e03efea475813d6fd55a775f4dbfeed">m_Jf_x</a>(t_Jf_x), <a class="code hl_variable" href="class_sandals_1_1_explicit_wrapper.html#aade9442ae0096cf12a4c2248315412e6">m_h</a>(t_h),</div>
+<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span>      <a class="code hl_variable" href="class_sandals_1_1_explicit_wrapper.html#ac20517af6839275be3499e2f8aa7dad9">m_Jh_x</a>(t_Jh_x), <a class="code hl_variable" href="class_sandals_1_1_explicit_wrapper.html#a9c93144013fb7f36f1bdcc2522c8912d">m_in_domain</a>(t_in_domain)</div>
+<div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span>    {}</div>
+</div>
+<div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span></div>
+<div class="foldopen" id="foldopen00292" data-start="{" data-end="}">
+<div class="line"><a id="l00292" name="l00292"></a><span class="lineno"><a class="line" href="class_sandals_1_1_explicit_wrapper.html#a49a4d72322f27d807b4518a1a9610f00">  292</a></span>    <a class="code hl_function" href="class_sandals_1_1_explicit_wrapper.html#a49a4d72322f27d807b4518a1a9610f00">ExplicitWrapper</a>(std::string t_name, <a class="code hl_typedef" href="class_sandals_1_1_explicit_wrapper.html#a2f2f932bd31c63b2a3ab2044cc446cfc">FunctionF</a> t_f, <a class="code hl_typedef" href="class_sandals_1_1_explicit_wrapper.html#a6d3b8ccacd838180eaff9e4ea8b8d1f3">FunctionJF</a> t_Jf_x, <a class="code hl_typedef" href="class_sandals_1_1_explicit_wrapper.html#abbbceebbfa07e142306f7fb1b42d63ee">FunctionH</a> t_h = <a class="code hl_variable" href="class_sandals_1_1_explicit_wrapper.html#a060994b2e4ad56067e6a6d4fe2ddaf05">DefaultH</a>,</div>
+<div class="line"><a id="l00293" name="l00293"></a><span class="lineno">  293</span>      <a class="code hl_typedef" href="class_sandals_1_1_explicit_wrapper.html#a216aaadfe705a786d8641d94183c0465">FunctionJH</a> t_Jh_x = <a class="code hl_variable" href="class_sandals_1_1_explicit_wrapper.html#ad100b0ed7e3ba0a55a7a19366176b2ea">DefaultJH</a>, <a class="code hl_typedef" href="class_sandals_1_1_explicit_wrapper.html#af3b90ecf4c7b8bdc25eb12870222fda6">FunctionID</a> t_in_domain = <a class="code hl_variable" href="class_sandals_1_1_explicit_wrapper.html#a391ab6441c6c633e37135c3602437ab9">DefaultID</a>) : <a class="code hl_class" href="class_sandals_1_1_implicit.html">Implicit</a>&lt;Real, N, M&gt;(t_name),</div>
+<div class="line"><a id="l00294" name="l00294"></a><span class="lineno">  294</span>      <a class="code hl_variable" href="class_sandals_1_1_explicit_wrapper.html#aa9aa243b2ddbeca227e107941aa9c6d5">m_f</a>(t_f), <a class="code hl_variable" href="class_sandals_1_1_explicit_wrapper.html#a9e03efea475813d6fd55a775f4dbfeed">m_Jf_x</a>(t_Jf_x), <a class="code hl_variable" href="class_sandals_1_1_explicit_wrapper.html#aade9442ae0096cf12a4c2248315412e6">m_h</a>(t_h), <a class="code hl_variable" href="class_sandals_1_1_explicit_wrapper.html#ac20517af6839275be3499e2f8aa7dad9">m_Jh_x</a>(t_Jh_x), <a class="code hl_variable" href="class_sandals_1_1_explicit_wrapper.html#a9c93144013fb7f36f1bdcc2522c8912d">m_in_domain</a>(t_in_domain)</div>
+<div class="line"><a id="l00295" name="l00295"></a><span class="lineno">  295</span>    {}</div>
+</div>
+<div class="line"><a id="l00296" name="l00296"></a><span class="lineno">  296</span></div>
+<div class="line"><a id="l00300" name="l00300"></a><span class="lineno"><a class="line" href="class_sandals_1_1_explicit_wrapper.html#aea242842f5ce6ed0d9b197ff5e7da7cb">  300</a></span>    <a class="code hl_function" href="class_sandals_1_1_explicit_wrapper.html#aea242842f5ce6ed0d9b197ff5e7da7cb">~ExplicitWrapper</a>() {}</div>
+<div class="line"><a id="l00301" name="l00301"></a><span class="lineno">  301</span></div>
+<div class="line"><a id="l00306" name="l00306"></a><span class="lineno"><a class="line" href="class_sandals_1_1_explicit_wrapper.html#a6832a0277654f721ad309f0e6e7f79e1">  306</a></span>    <a class="code hl_typedef" href="class_sandals_1_1_explicit_wrapper.html#a2f2f932bd31c63b2a3ab2044cc446cfc">FunctionF</a> &amp; <a class="code hl_function" href="class_sandals_1_1_explicit_wrapper.html#a6832a0277654f721ad309f0e6e7f79e1">f</a>() {<span class="keywordflow">return</span> this-&gt;<a class="code hl_variable" href="class_sandals_1_1_explicit_wrapper.html#aa9aa243b2ddbeca227e107941aa9c6d5">m_f</a>;}</div>
+<div class="line"><a id="l00307" name="l00307"></a><span class="lineno">  307</span></div>
+<div class="line"><a id="l00312" name="l00312"></a><span class="lineno"><a class="line" href="class_sandals_1_1_explicit_wrapper.html#a60c3c1fe379b6120b5f54713fe838e3f">  312</a></span>    <a class="code hl_typedef" href="class_sandals_1_1_explicit_wrapper.html#a6d3b8ccacd838180eaff9e4ea8b8d1f3">FunctionJF</a> &amp; <a class="code hl_function" href="class_sandals_1_1_explicit_wrapper.html#a60c3c1fe379b6120b5f54713fe838e3f">Jf_x</a>() {<span class="keywordflow">return</span> this-&gt;<a class="code hl_variable" href="class_sandals_1_1_explicit_wrapper.html#a9e03efea475813d6fd55a775f4dbfeed">m_Jf_x</a>;}</div>
+<div class="line"><a id="l00313" name="l00313"></a><span class="lineno">  313</span></div>
+<div class="line"><a id="l00318" name="l00318"></a><span class="lineno"><a class="line" href="class_sandals_1_1_explicit_wrapper.html#a3ffcf83af074e1553e1bf270ab17daf1">  318</a></span>    <a class="code hl_typedef" href="class_sandals_1_1_explicit_wrapper.html#abbbceebbfa07e142306f7fb1b42d63ee">FunctionH</a> &amp; <a class="code hl_function" href="class_sandals_1_1_explicit_wrapper.html#a3ffcf83af074e1553e1bf270ab17daf1">h</a>() {<span class="keywordflow">return</span> this-&gt;<a class="code hl_variable" href="class_sandals_1_1_explicit_wrapper.html#aade9442ae0096cf12a4c2248315412e6">m_h</a>;}</div>
+<div class="line"><a id="l00319" name="l00319"></a><span class="lineno">  319</span></div>
+<div class="line"><a id="l00324" name="l00324"></a><span class="lineno"><a class="line" href="class_sandals_1_1_explicit_wrapper.html#aad72686a75a930295670e3fc37dfe407">  324</a></span>    <a class="code hl_typedef" href="class_sandals_1_1_explicit_wrapper.html#a216aaadfe705a786d8641d94183c0465">FunctionJH</a> &amp; <a class="code hl_function" href="class_sandals_1_1_explicit_wrapper.html#aad72686a75a930295670e3fc37dfe407">Jh_x</a>() {<span class="keywordflow">return</span> this-&gt;<a class="code hl_variable" href="class_sandals_1_1_explicit_wrapper.html#ac20517af6839275be3499e2f8aa7dad9">m_Jh_x</a>;}</div>
+<div class="line"><a id="l00325" name="l00325"></a><span class="lineno">  325</span></div>
+<div class="line"><a id="l00330" name="l00330"></a><span class="lineno"><a class="line" href="class_sandals_1_1_explicit_wrapper.html#ae33addacb753635d3c55623b5afb10c1">  330</a></span>    <a class="code hl_typedef" href="class_sandals_1_1_explicit_wrapper.html#af3b90ecf4c7b8bdc25eb12870222fda6">FunctionID</a> &amp; <a class="code hl_function" href="class_sandals_1_1_explicit_wrapper.html#ae33addacb753635d3c55623b5afb10c1">in_domain</a>() {<span class="keywordflow">return</span> this-&gt;<a class="code hl_variable" href="class_sandals_1_1_explicit_wrapper.html#a9c93144013fb7f36f1bdcc2522c8912d">m_in_domain</a>;}</div>
+<div class="line"><a id="l00331" name="l00331"></a><span class="lineno">  331</span></div>
+<div class="foldopen" id="foldopen00338" data-start="{" data-end="}">
+<div class="line"><a id="l00338" name="l00338"></a><span class="lineno"><a class="line" href="class_sandals_1_1_explicit_wrapper.html#ac5af918b8e38d297a1e2d7676b9a4da7">  338</a></span>    <a class="code hl_typedef" href="class_sandals_1_1_explicit_wrapper.html#a9f60a2bfc68df04c83634c92425d7385">VectorF</a> <a class="code hl_function" href="class_sandals_1_1_explicit_wrapper.html#ac5af918b8e38d297a1e2d7676b9a4da7">f</a>(<a class="code hl_typedef" href="class_sandals_1_1_explicit_wrapper.html#a9f60a2bfc68df04c83634c92425d7385">VectorF</a> <span class="keyword">const</span> &amp;x, Real t)<span class="keyword"> const override</span></div>
+<div class="line"><a id="l00339" name="l00339"></a><span class="lineno">  339</span><span class="keyword">    </span>{</div>
+<div class="line"><a id="l00340" name="l00340"></a><span class="lineno">  340</span>      <span class="keywordflow">return</span> this-&gt;<a class="code hl_variable" href="class_sandals_1_1_explicit_wrapper.html#aa9aa243b2ddbeca227e107941aa9c6d5">m_f</a>(x, t);</div>
+<div class="line"><a id="l00341" name="l00341"></a><span class="lineno">  341</span>    }</div>
+</div>
+<div class="line"><a id="l00342" name="l00342"></a><span class="lineno">  342</span></div>
+<div class="foldopen" id="foldopen00356" data-start="{" data-end="}">
+<div class="line"><a id="l00356" name="l00356"></a><span class="lineno"><a class="line" href="class_sandals_1_1_explicit_wrapper.html#a9caa8b96aed37a8011bbf6d9c266a92c">  356</a></span>    <a class="code hl_typedef" href="class_sandals_1_1_explicit_wrapper.html#a1a3acf5600c4471ef66d375fff9fa26e">MatrixJF</a> <a class="code hl_function" href="class_sandals_1_1_explicit_wrapper.html#a9caa8b96aed37a8011bbf6d9c266a92c">Jf_x</a>(<a class="code hl_typedef" href="class_sandals_1_1_explicit_wrapper.html#a9f60a2bfc68df04c83634c92425d7385">VectorF</a> <span class="keyword">const</span> &amp;x, Real t)<span class="keyword"> const override</span></div>
+<div class="line"><a id="l00357" name="l00357"></a><span class="lineno">  357</span><span class="keyword">    </span>{</div>
+<div class="line"><a id="l00358" name="l00358"></a><span class="lineno">  358</span>      <span class="keywordflow">return</span> this-&gt;<a class="code hl_variable" href="class_sandals_1_1_explicit_wrapper.html#a9e03efea475813d6fd55a775f4dbfeed">m_Jf_x</a>(x, t);</div>
+<div class="line"><a id="l00359" name="l00359"></a><span class="lineno">  359</span>    }</div>
+</div>
+<div class="line"><a id="l00360" name="l00360"></a><span class="lineno">  360</span></div>
+<div class="foldopen" id="foldopen00367" data-start="{" data-end="}">
+<div class="line"><a id="l00367" name="l00367"></a><span class="lineno"><a class="line" href="class_sandals_1_1_explicit_wrapper.html#af63a9e06e1f8850bcce14a360321ac09">  367</a></span>    <a class="code hl_typedef" href="class_sandals_1_1_explicit_wrapper.html#a6a0257ee922684319a9ddccd3ab72b36">VectorH</a> <a class="code hl_function" href="class_sandals_1_1_explicit_wrapper.html#af63a9e06e1f8850bcce14a360321ac09">h</a>(<a class="code hl_typedef" href="class_sandals_1_1_explicit_wrapper.html#a9f60a2bfc68df04c83634c92425d7385">VectorF</a> <span class="keyword">const</span> &amp;x, Real t)<span class="keyword"> const override</span></div>
+<div class="line"><a id="l00368" name="l00368"></a><span class="lineno">  368</span><span class="keyword">    </span>{</div>
+<div class="line"><a id="l00369" name="l00369"></a><span class="lineno">  369</span>      <span class="keywordflow">return</span> this-&gt;<a class="code hl_variable" href="class_sandals_1_1_explicit_wrapper.html#aade9442ae0096cf12a4c2248315412e6">m_h</a>(x, t);</div>
+<div class="line"><a id="l00370" name="l00370"></a><span class="lineno">  370</span>    }</div>
+</div>
+<div class="line"><a id="l00371" name="l00371"></a><span class="lineno">  371</span></div>
+<div class="foldopen" id="foldopen00385" data-start="{" data-end="}">
+<div class="line"><a id="l00385" name="l00385"></a><span class="lineno"><a class="line" href="class_sandals_1_1_explicit_wrapper.html#addf6cbd9308208e992dbbc22e1cefe8d">  385</a></span>    <a class="code hl_typedef" href="class_sandals_1_1_explicit_wrapper.html#a5b5855abfc2df4271aa09605193f5d7d">MatrixJH</a> <a class="code hl_function" href="class_sandals_1_1_explicit_wrapper.html#addf6cbd9308208e992dbbc22e1cefe8d">Jh_x</a>(<a class="code hl_typedef" href="class_sandals_1_1_explicit_wrapper.html#a9f60a2bfc68df04c83634c92425d7385">VectorF</a> <span class="keyword">const</span> &amp;x, Real t)<span class="keyword"> const override</span></div>
+<div class="line"><a id="l00386" name="l00386"></a><span class="lineno">  386</span><span class="keyword">    </span>{</div>
+<div class="line"><a id="l00387" name="l00387"></a><span class="lineno">  387</span>      <span class="keywordflow">return</span> this-&gt;<a class="code hl_variable" href="class_sandals_1_1_explicit_wrapper.html#ac20517af6839275be3499e2f8aa7dad9">m_Jh_x</a>(x, t);</div>
+<div class="line"><a id="l00388" name="l00388"></a><span class="lineno">  388</span>    }</div>
+</div>
+<div class="line"><a id="l00389" name="l00389"></a><span class="lineno">  389</span></div>
+<div class="foldopen" id="foldopen00397" data-start="{" data-end="}">
+<div class="line"><a id="l00397" name="l00397"></a><span class="lineno"><a class="line" href="class_sandals_1_1_explicit_wrapper.html#a28cb3ac895229b2550c8da95a1603e8b">  397</a></span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="class_sandals_1_1_explicit_wrapper.html#a28cb3ac895229b2550c8da95a1603e8b">in_domain</a>(<a class="code hl_typedef" href="class_sandals_1_1_explicit_wrapper.html#a9f60a2bfc68df04c83634c92425d7385">VectorF</a> <span class="keyword">const</span> &amp;x, Real t)<span class="keyword"> const override</span></div>
+<div class="line"><a id="l00398" name="l00398"></a><span class="lineno">  398</span><span class="keyword">    </span>{</div>
+<div class="line"><a id="l00399" name="l00399"></a><span class="lineno">  399</span>      <span class="keywordflow">return</span> this-&gt;<a class="code hl_variable" href="class_sandals_1_1_explicit_wrapper.html#a9c93144013fb7f36f1bdcc2522c8912d">m_in_domain</a>(x, t);</div>
+<div class="line"><a id="l00400" name="l00400"></a><span class="lineno">  400</span>    }</div>
+</div>
+<div class="line"><a id="l00401" name="l00401"></a><span class="lineno">  401</span> </div>
+<div class="line"><a id="l00402" name="l00402"></a><span class="lineno">  402</span>  }; <span class="comment">// class ExplicitWrapper</span></div>
+</div>
+<div class="line"><a id="l00403" name="l00403"></a><span class="lineno">  403</span> </div>
+<div class="line"><a id="l00404" name="l00404"></a><span class="lineno">  404</span>} <span class="comment">// namespace Sandals</span></div>
+<div class="line"><a id="l00405" name="l00405"></a><span class="lineno">  405</span> </div>
+<div class="line"><a id="l00406" name="l00406"></a><span class="lineno">  406</span><span class="preprocessor">#endif </span><span class="comment">// SANDALS_EXPLICIT_SYSTEM_HH</span></div>
+<div class="ttc" id="a_implicit_8hh_html"><div class="ttname"><a href="_implicit_8hh.html">Implicit.hh</a></div></div>
+<div class="ttc" id="a_sandals_8hh_html"><div class="ttname"><a href="_sandals_8hh.html">Sandals.hh</a></div></div>
+<div class="ttc" id="a_sandals_8hh_html_a1b0da1a604a69e02fa8fe808f714cc2b"><div class="ttname"><a href="_sandals_8hh.html#a1b0da1a604a69e02fa8fe808f714cc2b">SANDALS_BASIC_CONSTANTS</a></div><div class="ttdeci">#define SANDALS_BASIC_CONSTANTS(Real)</div><div class="ttdef"><b>Definition</b> Sandals.hh:70</div></div>
+<div class="ttc" id="aclass_sandals_1_1_explicit_html_a0e169e475f2893c05dfcc1dd7a662793"><div class="ttname"><a href="class_sandals_1_1_explicit.html#a0e169e475f2893c05dfcc1dd7a662793">Sandals::Explicit::f_reverse</a></div><div class="ttdeci">VectorF f_reverse(VectorF const &amp;x, Real t) const</div><div class="ttdef"><b>Definition</b> Explicit.hh:160</div></div>
+<div class="ttc" id="aclass_sandals_1_1_explicit_html_a108f6d19f47111b2d80d2d0e9d3905ab"><div class="ttname"><a href="class_sandals_1_1_explicit.html#a108f6d19f47111b2d80d2d0e9d3905ab">Sandals::Explicit::JF_x_reverse</a></div><div class="ttdeci">MatrixJF JF_x_reverse(VectorF const &amp;x, VectorF const &amp;, Real t) const</div><div class="ttdef"><b>Definition</b> Explicit.hh:200</div></div>
+<div class="ttc" id="aclass_sandals_1_1_explicit_html_a1e3f3ba127e9177db2a56811efc38c05"><div class="ttname"><a href="class_sandals_1_1_explicit.html#a1e3f3ba127e9177db2a56811efc38c05">Sandals::Explicit::Pointer</a></div><div class="ttdeci">std::shared_ptr&lt; Explicit&lt; Real, N, M &gt; &gt; Pointer</div><div class="ttdef"><b>Definition</b> Explicit.hh:46</div></div>
+<div class="ttc" id="aclass_sandals_1_1_explicit_html_a209f35da13a5d006a2f8abb6b1f80fc7"><div class="ttname"><a href="class_sandals_1_1_explicit.html#a209f35da13a5d006a2f8abb6b1f80fc7">Sandals::Explicit::Explicit</a></div><div class="ttdeci">Explicit(std::string t_name)</div><div class="ttdef"><b>Definition</b> Explicit.hh:69</div></div>
+<div class="ttc" id="aclass_sandals_1_1_explicit_html_a28058e79774767c4e0882bfa81dfd72a"><div class="ttname"><a href="class_sandals_1_1_explicit.html#a28058e79774767c4e0882bfa81dfd72a">Sandals::Explicit::Explicit</a></div><div class="ttdeci">Explicit(Type t_type, std::string t_name)</div><div class="ttdef"><b>Definition</b> Explicit.hh:57</div></div>
+<div class="ttc" id="aclass_sandals_1_1_explicit_html_a325e09554677df81a268e4df03c70c12"><div class="ttname"><a href="class_sandals_1_1_explicit.html#a325e09554677df81a268e4df03c70c12">Sandals::Explicit::JF_x_dot_reverse</a></div><div class="ttdeci">MatrixJF JF_x_dot_reverse(VectorF const &amp;, VectorF const &amp;, Real) const</div><div class="ttdef"><b>Definition</b> Explicit.hh:215</div></div>
+<div class="ttc" id="aclass_sandals_1_1_explicit_html_a3c5f39a2c4e125d1576ec83931705936"><div class="ttname"><a href="class_sandals_1_1_explicit.html#a3c5f39a2c4e125d1576ec83931705936">Sandals::Explicit::JF_x</a></div><div class="ttdeci">MatrixJF JF_x(VectorF const &amp;x, VectorF const &amp;, Real t) const override</div><div class="ttdef"><b>Definition</b> Explicit.hh:105</div></div>
+<div class="ttc" id="aclass_sandals_1_1_explicit_html_a4cf2a9e95ac370981f0bdee7bb54dc1f"><div class="ttname"><a href="class_sandals_1_1_explicit.html#a4cf2a9e95ac370981f0bdee7bb54dc1f">Sandals::Explicit::JF_x_dot</a></div><div class="ttdeci">MatrixJF JF_x_dot(VectorF const &amp;, VectorF const &amp;, Real) const override</div><div class="ttdef"><b>Definition</b> Explicit.hh:125</div></div>
+<div class="ttc" id="aclass_sandals_1_1_explicit_html_a5105399a3b421abe7aff711494bb8b5d"><div class="ttname"><a href="class_sandals_1_1_explicit.html#a5105399a3b421abe7aff711494bb8b5d">Sandals::Explicit::Jf_x</a></div><div class="ttdeci">virtual MatrixJF Jf_x(VectorF const &amp;x, Real t) const =0</div></div>
+<div class="ttc" id="aclass_sandals_1_1_explicit_html_a6edb404bb6580adc778e1b3291af0c35"><div class="ttname"><a href="class_sandals_1_1_explicit.html#a6edb404bb6580adc778e1b3291af0c35">Sandals::Explicit::f</a></div><div class="ttdeci">virtual VectorF f(VectorF const &amp;x, Real t) const =0</div></div>
+<div class="ttc" id="aclass_sandals_1_1_explicit_html_a88d49e69c0bc96523e15e58161796abf"><div class="ttname"><a href="class_sandals_1_1_explicit.html#a88d49e69c0bc96523e15e58161796abf">Sandals::Explicit::Jf_x_reverse</a></div><div class="ttdeci">MatrixJF Jf_x_reverse(VectorF const &amp;x, Real t) const</div><div class="ttdef"><b>Definition</b> Explicit.hh:172</div></div>
+<div class="ttc" id="aclass_sandals_1_1_explicit_html_ab498b358a77a9c3ae19ec5a3aa14966f"><div class="ttname"><a href="class_sandals_1_1_explicit.html#ab498b358a77a9c3ae19ec5a3aa14966f">Sandals::Explicit::Type</a></div><div class="ttdeci">typename Implicit&lt; Real, N, M &gt;::Type Type</div><div class="ttdef"><b>Definition</b> Explicit.hh:49</div></div>
+<div class="ttc" id="aclass_sandals_1_1_explicit_html_ad8796bc43bd969975518199c8b9bf8d8"><div class="ttname"><a href="class_sandals_1_1_explicit.html#ad8796bc43bd969975518199c8b9bf8d8">Sandals::Explicit::Explicit</a></div><div class="ttdeci">Explicit()</div><div class="ttdef"><b>Definition</b> Explicit.hh:63</div></div>
+<div class="ttc" id="aclass_sandals_1_1_explicit_html_ae8d2fba7756319303c025da59c0f0ee5"><div class="ttname"><a href="class_sandals_1_1_explicit.html#ae8d2fba7756319303c025da59c0f0ee5">Sandals::Explicit::MatrixJF</a></div><div class="ttdeci">typename Implicit&lt; Real, N, M &gt;::MatrixJF MatrixJF</div><div class="ttdef"><b>Definition</b> Explicit.hh:48</div></div>
+<div class="ttc" id="aclass_sandals_1_1_explicit_html_ae91e141baef6ec6417b3a1211d9fe96e"><div class="ttname"><a href="class_sandals_1_1_explicit.html#ae91e141baef6ec6417b3a1211d9fe96e">Sandals::Explicit::F_reverse</a></div><div class="ttdeci">VectorF F_reverse(VectorF const &amp;x, VectorF const &amp;x_dot, Real t) const</div><div class="ttdef"><b>Definition</b> Explicit.hh:185</div></div>
+<div class="ttc" id="aclass_sandals_1_1_explicit_html_af9b2558d1b7fcc110de466af8f7c4fb7"><div class="ttname"><a href="class_sandals_1_1_explicit.html#af9b2558d1b7fcc110de466af8f7c4fb7">Sandals::Explicit::F</a></div><div class="ttdeci">VectorF F(VectorF const &amp;x, VectorF const &amp;x_dot, Real t) const override</div><div class="ttdef"><b>Definition</b> Explicit.hh:84</div></div>
+<div class="ttc" id="aclass_sandals_1_1_explicit_html_afdda0ad23f2ca6d2c87a564ea31bc02f"><div class="ttname"><a href="class_sandals_1_1_explicit.html#afdda0ad23f2ca6d2c87a564ea31bc02f">Sandals::Explicit::VectorF</a></div><div class="ttdeci">typename Implicit&lt; Real, N, M &gt;::VectorF VectorF</div><div class="ttdef"><b>Definition</b> Explicit.hh:47</div></div>
+<div class="ttc" id="aclass_sandals_1_1_explicit_wrapper_html_a060994b2e4ad56067e6a6d4fe2ddaf05"><div class="ttname"><a href="class_sandals_1_1_explicit_wrapper.html#a060994b2e4ad56067e6a6d4fe2ddaf05">Sandals::ExplicitWrapper::DefaultH</a></div><div class="ttdeci">static const FunctionH DefaultH</div><div class="ttdef"><b>Definition</b> Explicit.hh:258</div></div>
+<div class="ttc" id="aclass_sandals_1_1_explicit_wrapper_html_a1a3acf5600c4471ef66d375fff9fa26e"><div class="ttname"><a href="class_sandals_1_1_explicit_wrapper.html#a1a3acf5600c4471ef66d375fff9fa26e">Sandals::ExplicitWrapper::MatrixJF</a></div><div class="ttdeci">typename Explicit&lt; Real, N, M &gt;::MatrixJF MatrixJF</div><div class="ttdef"><b>Definition</b> Explicit.hh:249</div></div>
+<div class="ttc" id="aclass_sandals_1_1_explicit_wrapper_html_a216aaadfe705a786d8641d94183c0465"><div class="ttname"><a href="class_sandals_1_1_explicit_wrapper.html#a216aaadfe705a786d8641d94183c0465">Sandals::ExplicitWrapper::FunctionJH</a></div><div class="ttdeci">std::function&lt; MatrixJH(VectorF const &amp;, Real)&gt; FunctionJH</div><div class="ttdef"><b>Definition</b> Explicit.hh:255</div></div>
+<div class="ttc" id="aclass_sandals_1_1_explicit_wrapper_html_a28cb3ac895229b2550c8da95a1603e8b"><div class="ttname"><a href="class_sandals_1_1_explicit_wrapper.html#a28cb3ac895229b2550c8da95a1603e8b">Sandals::ExplicitWrapper::in_domain</a></div><div class="ttdeci">bool in_domain(VectorF const &amp;x, Real t) const override</div><div class="ttdef"><b>Definition</b> Explicit.hh:397</div></div>
+<div class="ttc" id="aclass_sandals_1_1_explicit_wrapper_html_a2f2f932bd31c63b2a3ab2044cc446cfc"><div class="ttname"><a href="class_sandals_1_1_explicit_wrapper.html#a2f2f932bd31c63b2a3ab2044cc446cfc">Sandals::ExplicitWrapper::FunctionF</a></div><div class="ttdeci">std::function&lt; VectorF(VectorF const &amp;, VectorF const &amp;, Real)&gt; FunctionF</div><div class="ttdef"><b>Definition</b> Explicit.hh:252</div></div>
+<div class="ttc" id="aclass_sandals_1_1_explicit_wrapper_html_a391ab6441c6c633e37135c3602437ab9"><div class="ttname"><a href="class_sandals_1_1_explicit_wrapper.html#a391ab6441c6c633e37135c3602437ab9">Sandals::ExplicitWrapper::DefaultID</a></div><div class="ttdeci">static const FunctionID DefaultID</div><div class="ttdef"><b>Definition</b> Explicit.hh:260</div></div>
+<div class="ttc" id="aclass_sandals_1_1_explicit_wrapper_html_a3ffcf83af074e1553e1bf270ab17daf1"><div class="ttname"><a href="class_sandals_1_1_explicit_wrapper.html#a3ffcf83af074e1553e1bf270ab17daf1">Sandals::ExplicitWrapper::h</a></div><div class="ttdeci">FunctionH &amp; h()</div><div class="ttdef"><b>Definition</b> Explicit.hh:318</div></div>
+<div class="ttc" id="aclass_sandals_1_1_explicit_wrapper_html_a497860927cef68e96ecc1a2dedec0999"><div class="ttname"><a href="class_sandals_1_1_explicit_wrapper.html#a497860927cef68e96ecc1a2dedec0999">Sandals::ExplicitWrapper::Pointer</a></div><div class="ttdeci">std::shared_ptr&lt; ExplicitWrapper&lt; Real, N, M &gt; &gt; Pointer</div><div class="ttdef"><b>Definition</b> Explicit.hh:247</div></div>
+<div class="ttc" id="aclass_sandals_1_1_explicit_wrapper_html_a49a4d72322f27d807b4518a1a9610f00"><div class="ttname"><a href="class_sandals_1_1_explicit_wrapper.html#a49a4d72322f27d807b4518a1a9610f00">Sandals::ExplicitWrapper::ExplicitWrapper</a></div><div class="ttdeci">ExplicitWrapper(std::string t_name, FunctionF t_f, FunctionJF t_Jf_x, FunctionH t_h=DefaultH, FunctionJH t_Jh_x=DefaultJH, FunctionID t_in_domain=DefaultID)</div><div class="ttdef"><b>Definition</b> Explicit.hh:292</div></div>
+<div class="ttc" id="aclass_sandals_1_1_explicit_wrapper_html_a5b5855abfc2df4271aa09605193f5d7d"><div class="ttname"><a href="class_sandals_1_1_explicit_wrapper.html#a5b5855abfc2df4271aa09605193f5d7d">Sandals::ExplicitWrapper::MatrixJH</a></div><div class="ttdeci">typename Explicit&lt; Real, N, M &gt;::MatrixJH MatrixJH</div><div class="ttdef"><b>Definition</b> Explicit.hh:251</div></div>
+<div class="ttc" id="aclass_sandals_1_1_explicit_wrapper_html_a60c3c1fe379b6120b5f54713fe838e3f"><div class="ttname"><a href="class_sandals_1_1_explicit_wrapper.html#a60c3c1fe379b6120b5f54713fe838e3f">Sandals::ExplicitWrapper::Jf_x</a></div><div class="ttdeci">FunctionJF &amp; Jf_x()</div><div class="ttdef"><b>Definition</b> Explicit.hh:312</div></div>
+<div class="ttc" id="aclass_sandals_1_1_explicit_wrapper_html_a6832a0277654f721ad309f0e6e7f79e1"><div class="ttname"><a href="class_sandals_1_1_explicit_wrapper.html#a6832a0277654f721ad309f0e6e7f79e1">Sandals::ExplicitWrapper::f</a></div><div class="ttdeci">FunctionF &amp; f()</div><div class="ttdef"><b>Definition</b> Explicit.hh:306</div></div>
+<div class="ttc" id="aclass_sandals_1_1_explicit_wrapper_html_a6a0257ee922684319a9ddccd3ab72b36"><div class="ttname"><a href="class_sandals_1_1_explicit_wrapper.html#a6a0257ee922684319a9ddccd3ab72b36">Sandals::ExplicitWrapper::VectorH</a></div><div class="ttdeci">typename Explicit&lt; Real, N, M &gt;::VectorH VectorH</div><div class="ttdef"><b>Definition</b> Explicit.hh:250</div></div>
+<div class="ttc" id="aclass_sandals_1_1_explicit_wrapper_html_a6d3b8ccacd838180eaff9e4ea8b8d1f3"><div class="ttname"><a href="class_sandals_1_1_explicit_wrapper.html#a6d3b8ccacd838180eaff9e4ea8b8d1f3">Sandals::ExplicitWrapper::FunctionJF</a></div><div class="ttdeci">std::function&lt; MatrixJF(VectorF const &amp;, VectorF const &amp;, Real)&gt; FunctionJF</div><div class="ttdef"><b>Definition</b> Explicit.hh:253</div></div>
+<div class="ttc" id="aclass_sandals_1_1_explicit_wrapper_html_a9c93144013fb7f36f1bdcc2522c8912d"><div class="ttname"><a href="class_sandals_1_1_explicit_wrapper.html#a9c93144013fb7f36f1bdcc2522c8912d">Sandals::ExplicitWrapper::m_in_domain</a></div><div class="ttdeci">FunctionID m_in_domain</div><div class="ttdef"><b>Definition</b> Explicit.hh:267</div></div>
+<div class="ttc" id="aclass_sandals_1_1_explicit_wrapper_html_a9caa8b96aed37a8011bbf6d9c266a92c"><div class="ttname"><a href="class_sandals_1_1_explicit_wrapper.html#a9caa8b96aed37a8011bbf6d9c266a92c">Sandals::ExplicitWrapper::Jf_x</a></div><div class="ttdeci">MatrixJF Jf_x(VectorF const &amp;x, Real t) const override</div><div class="ttdef"><b>Definition</b> Explicit.hh:356</div></div>
+<div class="ttc" id="aclass_sandals_1_1_explicit_wrapper_html_a9e03efea475813d6fd55a775f4dbfeed"><div class="ttname"><a href="class_sandals_1_1_explicit_wrapper.html#a9e03efea475813d6fd55a775f4dbfeed">Sandals::ExplicitWrapper::m_Jf_x</a></div><div class="ttdeci">FunctionJF m_Jf_x</div><div class="ttdef"><b>Definition</b> Explicit.hh:264</div></div>
+<div class="ttc" id="aclass_sandals_1_1_explicit_wrapper_html_a9f60a2bfc68df04c83634c92425d7385"><div class="ttname"><a href="class_sandals_1_1_explicit_wrapper.html#a9f60a2bfc68df04c83634c92425d7385">Sandals::ExplicitWrapper::VectorF</a></div><div class="ttdeci">typename Explicit&lt; Real, N, M &gt;::VectorF VectorF</div><div class="ttdef"><b>Definition</b> Explicit.hh:248</div></div>
+<div class="ttc" id="aclass_sandals_1_1_explicit_wrapper_html_aa9aa243b2ddbeca227e107941aa9c6d5"><div class="ttname"><a href="class_sandals_1_1_explicit_wrapper.html#aa9aa243b2ddbeca227e107941aa9c6d5">Sandals::ExplicitWrapper::m_f</a></div><div class="ttdeci">FunctionF m_f</div><div class="ttdef"><b>Definition</b> Explicit.hh:263</div></div>
+<div class="ttc" id="aclass_sandals_1_1_explicit_wrapper_html_aad72686a75a930295670e3fc37dfe407"><div class="ttname"><a href="class_sandals_1_1_explicit_wrapper.html#aad72686a75a930295670e3fc37dfe407">Sandals::ExplicitWrapper::Jh_x</a></div><div class="ttdeci">FunctionJH &amp; Jh_x()</div><div class="ttdef"><b>Definition</b> Explicit.hh:324</div></div>
+<div class="ttc" id="aclass_sandals_1_1_explicit_wrapper_html_aade9442ae0096cf12a4c2248315412e6"><div class="ttname"><a href="class_sandals_1_1_explicit_wrapper.html#aade9442ae0096cf12a4c2248315412e6">Sandals::ExplicitWrapper::m_h</a></div><div class="ttdeci">FunctionH m_h</div><div class="ttdef"><b>Definition</b> Explicit.hh:265</div></div>
+<div class="ttc" id="aclass_sandals_1_1_explicit_wrapper_html_abbbceebbfa07e142306f7fb1b42d63ee"><div class="ttname"><a href="class_sandals_1_1_explicit_wrapper.html#abbbceebbfa07e142306f7fb1b42d63ee">Sandals::ExplicitWrapper::FunctionH</a></div><div class="ttdeci">std::function&lt; VectorH(VectorF const &amp;, Real)&gt; FunctionH</div><div class="ttdef"><b>Definition</b> Explicit.hh:254</div></div>
+<div class="ttc" id="aclass_sandals_1_1_explicit_wrapper_html_ac20517af6839275be3499e2f8aa7dad9"><div class="ttname"><a href="class_sandals_1_1_explicit_wrapper.html#ac20517af6839275be3499e2f8aa7dad9">Sandals::ExplicitWrapper::m_Jh_x</a></div><div class="ttdeci">FunctionJH m_Jh_x</div><div class="ttdef"><b>Definition</b> Explicit.hh:266</div></div>
+<div class="ttc" id="aclass_sandals_1_1_explicit_wrapper_html_ac5af918b8e38d297a1e2d7676b9a4da7"><div class="ttname"><a href="class_sandals_1_1_explicit_wrapper.html#ac5af918b8e38d297a1e2d7676b9a4da7">Sandals::ExplicitWrapper::f</a></div><div class="ttdeci">VectorF f(VectorF const &amp;x, Real t) const override</div><div class="ttdef"><b>Definition</b> Explicit.hh:338</div></div>
+<div class="ttc" id="aclass_sandals_1_1_explicit_wrapper_html_ad100b0ed7e3ba0a55a7a19366176b2ea"><div class="ttname"><a href="class_sandals_1_1_explicit_wrapper.html#ad100b0ed7e3ba0a55a7a19366176b2ea">Sandals::ExplicitWrapper::DefaultJH</a></div><div class="ttdeci">static const FunctionJH DefaultJH</div><div class="ttdef"><b>Definition</b> Explicit.hh:259</div></div>
+<div class="ttc" id="aclass_sandals_1_1_explicit_wrapper_html_addf6cbd9308208e992dbbc22e1cefe8d"><div class="ttname"><a href="class_sandals_1_1_explicit_wrapper.html#addf6cbd9308208e992dbbc22e1cefe8d">Sandals::ExplicitWrapper::Jh_x</a></div><div class="ttdeci">MatrixJH Jh_x(VectorF const &amp;x, Real t) const override</div><div class="ttdef"><b>Definition</b> Explicit.hh:385</div></div>
+<div class="ttc" id="aclass_sandals_1_1_explicit_wrapper_html_ade4317fa686eda59204431c1221ff244"><div class="ttname"><a href="class_sandals_1_1_explicit_wrapper.html#ade4317fa686eda59204431c1221ff244">Sandals::ExplicitWrapper::ExplicitWrapper</a></div><div class="ttdeci">ExplicitWrapper(FunctionF t_f, FunctionJF t_Jf_x, FunctionH t_h=DefaultH, FunctionJH t_Jh_x=DefaultJH, FunctionID t_in_domain=DefaultID)</div><div class="ttdef"><b>Definition</b> Explicit.hh:278</div></div>
+<div class="ttc" id="aclass_sandals_1_1_explicit_wrapper_html_ae33addacb753635d3c55623b5afb10c1"><div class="ttname"><a href="class_sandals_1_1_explicit_wrapper.html#ae33addacb753635d3c55623b5afb10c1">Sandals::ExplicitWrapper::in_domain</a></div><div class="ttdeci">FunctionID &amp; in_domain()</div><div class="ttdef"><b>Definition</b> Explicit.hh:330</div></div>
+<div class="ttc" id="aclass_sandals_1_1_explicit_wrapper_html_aea242842f5ce6ed0d9b197ff5e7da7cb"><div class="ttname"><a href="class_sandals_1_1_explicit_wrapper.html#aea242842f5ce6ed0d9b197ff5e7da7cb">Sandals::ExplicitWrapper::~ExplicitWrapper</a></div><div class="ttdeci">~ExplicitWrapper()</div><div class="ttdef"><b>Definition</b> Explicit.hh:300</div></div>
+<div class="ttc" id="aclass_sandals_1_1_explicit_wrapper_html_af3b90ecf4c7b8bdc25eb12870222fda6"><div class="ttname"><a href="class_sandals_1_1_explicit_wrapper.html#af3b90ecf4c7b8bdc25eb12870222fda6">Sandals::ExplicitWrapper::FunctionID</a></div><div class="ttdeci">std::function&lt; bool(VectorF const &amp;, Real)&gt; FunctionID</div><div class="ttdef"><b>Definition</b> Explicit.hh:256</div></div>
+<div class="ttc" id="aclass_sandals_1_1_explicit_wrapper_html_af63a9e06e1f8850bcce14a360321ac09"><div class="ttname"><a href="class_sandals_1_1_explicit_wrapper.html#af63a9e06e1f8850bcce14a360321ac09">Sandals::ExplicitWrapper::h</a></div><div class="ttdeci">VectorH h(VectorF const &amp;x, Real t) const override</div><div class="ttdef"><b>Definition</b> Explicit.hh:367</div></div>
+<div class="ttc" id="aclass_sandals_1_1_implicit_html"><div class="ttname"><a href="class_sandals_1_1_implicit.html">Sandals::Implicit</a></div><div class="ttdoc">Class container for the system of implicit ODEs/DAEs.</div><div class="ttdef"><b>Definition</b> Implicit.hh:42</div></div>
+<div class="ttc" id="aclass_sandals_1_1_implicit_html_a262bcc55f6bfa6848eb29a6863a32d82"><div class="ttname"><a href="class_sandals_1_1_implicit.html#a262bcc55f6bfa6848eb29a6863a32d82">Sandals::Implicit&lt; Real, N, 0 &gt;::Implicit</a></div><div class="ttdeci">Implicit(Type t_type, std::string t_name)</div><div class="ttdef"><b>Definition</b> Implicit.hh:63</div></div>
+<div class="ttc" id="anamespace_sandals_html"><div class="ttname"><a href="namespace_sandals.html">Sandals</a></div><div class="ttdoc">The namespace for the Sandals library.</div><div class="ttdef"><b>Definition</b> Sandals.hh:89</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_897bfc2149a094f38e3fcfed941b9c13.html">Sandals</a></li><li class="navelem"><a class="el" href="dir_e3f01be4207495917c59f0193678e431.html">System</a></li><li class="navelem"><a class="el" href="_explicit_8hh.html">Explicit.hh</a></li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.13.2 </li>
+  </ul>
+</div>
+</body>
+</html>

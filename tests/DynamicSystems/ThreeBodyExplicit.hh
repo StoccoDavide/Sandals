@@ -13,6 +13,9 @@
 #ifndef TESTS_THREE_BODY_EXPLICIT_HH
 #define TESTS_THREE_BODY_EXPLICIT_HH
 
+#include "Sandals.hh"
+#include "Sandals/System/Explicit.hh"
+
 using namespace Sandals;
 
 /* Implementation of the Three Body Problem.
