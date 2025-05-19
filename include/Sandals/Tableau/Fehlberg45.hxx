@@ -33,18 +33,20 @@ namespace Sandals
   *           &    25/216 &          0 & 1408/2565  & 2197/4104   &  -1/5  &    0 \\
   * \end{array} \text{.}
   * \f]
+  * \tparam Real The scalar number type.
   */
-  class Fehlberg45Tableau : public Tableau<6>
+  template <typename Real>
+  class Fehlberg45Tableau : public Tableau<Real, 6>
   {
   public:
-    using Tableau<6>::Type;
-    using Tableau<6>::Vector;
-    using Tableau<6>::Matrix;
+    using typename Tableau<Real, 6>::Type;
+    using typename Tableau<Real, 6>::Vector;
+    using typename Tableau<Real, 6>::Matrix;
 
     /**
     * Class constructor for the Runge-Kutta-Fehlberg 4(5) method.
     */
-    Fehlberg45Tableau() {
+    Fehlberg45Tableau<Real>() {
       this->name        = "Fehlberg45";
       this->type        = Type::ERK;
       this->order       = 4;
@@ -66,25 +68,26 @@ namespace Sandals
   * \brief Class container for the Runge-Kutta-Fehlberg 4(5) method.
   *
   * Class container for the Runge-Kutta-Fehlberg 4(5) method.
+  * \tparam Real The scalar number type.
   * \tparam N The dimension of the ODE/DAE system.
   * \tparam M The dimension of the invariants manifold.
   */
-  template <Integer N, Integer M = 0>
-  class Fehlberg45 : public RungeKutta<6, N, M>
+  template <typename Real, Integer N, Integer M = 0>
+  class Fehlberg45 : public RungeKutta<Real, 6, N, M>
   {
   public:
-    using System = typename Implicit<N, M>::Pointer; /**< System type. */
+    using System = typename Implicit<Real, N, M>::Pointer; /**< System type. */
 
     /**
     * Class constructor for a Runge-Kutta-Fehlberg 4(5) solver given a Tableau reference.
     */
-    Fehlberg45() : RungeKutta<6, N, M>(Fehlberg45Tableau()) {}
+    Fehlberg45() : RungeKutta<Real, 6, N, M>(Fehlberg45Tableau<Real>()) {}
 
     /**
     * Class constructor for a Runge-Kutta-Fehlberg 4(5) solver given a Tableau reference.
     * \param[in] t_system The system reference.
     */
-    Fehlberg45(System t_system) : RungeKutta<6, N, M>(Fehlberg45Tableau(), t_system) {}
+    Fehlberg45(System t_system) : RungeKutta<Real, 6, N, M>(Fehlberg45Tableau<Real>(), t_system) {}
 
   }; // class Fehlberg45
 

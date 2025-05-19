@@ -28,18 +28,20 @@ namespace Sandals
   *       &  3/4 &   1/4
   * \end{array} \text{.}
   * \f]
+  * \tparam Real The scalar number type.
   */
-  class RadauIIA3Tableau : public Tableau<2>
+  template <typename Real>
+  class RadauIIA3Tableau : public Tableau<Real, 2>
   {
   public:
-    using Tableau<2>::Type;
-    using Tableau<2>::Vector;
-    using Tableau<2>::Matrix;
+    using typename Tableau<Real, 2>::Type;
+    using typename Tableau<Real, 2>::Vector;
+    using typename Tableau<Real, 2>::Matrix;
 
     /**
     * Class constructor for the Radau IIA order 3 method.
     */
-    RadauIIA3Tableau() {
+    RadauIIA3Tableau<Real>() {
       this->name  = "RadauIIA3";
       this->type  = Type::IRK;
       this->order = 3;
@@ -54,25 +56,26 @@ namespace Sandals
   * \brief Class container for the Radau IIA order 3 method.
   *
   * Class container for the Radau IIA order 3 method.
+  * \tparam Real The scalar number type.
   * \tparam N The dimension of the ODE/DAE system.
   * \tparam M The dimension of the invariants manifold.
   */
-  template <Integer N, Integer M = 0>
-  class RadauIIA3 : public RungeKutta<2, N, M>
+  template <typename Real, Integer N, Integer M = 0>
+  class RadauIIA3 : public RungeKutta<Real, 2, N, M>
   {
   public:
-    using System = typename Implicit<N, M>::Pointer; /**< System type. */
+    using System = typename Implicit<Real, N, M>::Pointer; /**< System type. */
 
     /**
     * Class constructor for a Radau IIA order 3 solver given a Tableau reference.
     */
-    RadauIIA3() : RungeKutta<2, N, M>(RadauIIA3Tableau()) {}
+    RadauIIA3() : RungeKutta<Real, 2, N, M>(RadauIIA3Tableau<Real>()) {}
 
     /**
     * Class constructor for a Radau IIA order 3 solver given a Tableau reference.
     * \param[in] t_system The system reference.
     */
-    RadauIIA3(System t_system) : RungeKutta<2, N, M>(RadauIIA3Tableau(), t_system) {}
+    RadauIIA3(System t_system) : RungeKutta<Real, 2, N, M>(RadauIIA3Tableau<Real>(), t_system) {}
 
   }; // class RadauIIA3
 

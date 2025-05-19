@@ -35,18 +35,20 @@ namespace Sandals
   *               & \frac{1}{6} & \frac{1}{15} & \frac{1}{15} & \frac{1}{15} & \frac{1}{15} & \frac{1}{15} & \frac{1}{6} & \frac{1}{6} & \frac{1}{6}
   * \end{array} \text{.}
   * \f]
+  * \tparam Real The scalar number type.
   */
-  class SSPRK93Tableau : public Tableau<9>
+  template <typename Real>
+  class SSPRK93Tableau : public Tableau<Real, 9>
   {
   public:
-    using Tableau<9>::Type;
-    using Tableau<9>::Vector;
-    using Tableau<9>::Matrix;
+    using typename Tableau<Real, 9>::Type;
+    using typename Tableau<Real, 9>::Vector;
+    using typename Tableau<Real, 9>::Matrix;
 
     /**
     * Class constructor for the 9-stage strong-stability preserving Runge-Kutta order 3 method.
     */
-    SSPRK93Tableau() {
+    SSPRK93Tableau<Real>() {
       this->name  = "SSPRK93";
       this->type  = Type::ERK;
       this->order = 3;
@@ -68,27 +70,28 @@ namespace Sandals
   * \brief Class container for the 9-stage strong-stability preserving Runge-Kutta order 3 method.
   *
   * Class container for the 9-stage strong-stability preserving Runge-Kutta order 3 method.
+  * \tparam Real The scalar number type.
   * \tparam N The dimension of the ODE/DAE system.
   * \tparam M The dimension of the invariants manifold.
   */
-  template <Integer N, Integer M = 0>
-  class SSPRK93 : public RungeKutta<9, N, M>
+  template <typename Real, Integer N, Integer M = 0>
+  class SSPRK93 : public RungeKutta<Real, 9, N, M>
   {
   public:
-    using System = typename Implicit<N, M>::Pointer; /**< System type. */
+    using System = typename Implicit<Real, N, M>::Pointer; /**< System type. */
 
     /**
     * Class constructor for a 9-stage strong-stability preserving Runge-Kutta order 3 solver given
     * a Tableau reference.
     */
-    SSPRK93() : RungeKutta<9, N, M>(SSPRK93Tableau()) {}
+    SSPRK93() : RungeKutta<Real, 9, N, M>(SSPRK93Tableau<Real>()) {}
 
     /**
     * Class constructor for a 9-stage strong-stability preserving Runge-Kutta order 3 solver given
     * a Tableau reference.
     * \param[in] t_system The system reference.
     */
-    SSPRK93(System t_system) : RungeKutta<9, N, M>(SSPRK93Tableau(), t_system) {}
+    SSPRK93(System t_system) : RungeKutta<Real, 9, N, M>(SSPRK93Tableau<Real>(), t_system) {}
 
   }; // class SSPRK93
 

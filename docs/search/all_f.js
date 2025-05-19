@@ -1,13 +1,10 @@
 var searchData=
 [
-  ['pi_0',['PI',['../namespace_sandals.html#a602e87a0684913990c122176dbc02a43',1,'Sandals']]],
-  ['pidiv2_1',['PIDIV2',['../namespace_sandals.html#ace30bc49100694680e696dc169747db9',1,'Sandals']]],
-  ['pimul2_2',['PIMUL2',['../namespace_sandals.html#aef801a9341c96d05d3b794cd8a216d13',1,'Sandals']]],
-  ['pointer_3',['Pointer',['../class_sandals_1_1_explicit.html#ac022e502620116d1e9ad5fb92d31f1cb',1,'Sandals::Explicit::Pointer'],['../class_sandals_1_1_implicit.html#aed4cdcf289d11408f5b0503fcf171049',1,'Sandals::Implicit::Pointer'],['../class_sandals_1_1_linear.html#aa8499d5ec9d24bce341479ad1d797ff7',1,'Sandals::Linear::Pointer'],['../class_sandals_1_1_semi_explicit.html#ad7b8c25db2467146fe18f6c6b5deb2ac',1,'Sandals::SemiExplicit::Pointer']]],
-  ['problem_4',['Constrained minimization problem',['../class_sandals_1_1_runge_kutta.html#autotoc_md12',1,'']]],
-  ['project_5',['project',['../class_sandals_1_1_runge_kutta.html#ad3cf3ad60d5f35ed5b8c70f4d6d8aea3',1,'Sandals::RungeKutta']]],
-  ['project_5fics_6',['project_ics',['../class_sandals_1_1_runge_kutta.html#ab30abe7754b183c10f84853ebd85ea08',1,'Sandals::RungeKutta']]],
-  ['projection_7',['projection',['../class_sandals_1_1_runge_kutta.html#ac9f120ec274cb7168a2b8740110f3a97',1,'Sandals::RungeKutta::projection()'],['../class_sandals_1_1_runge_kutta.html#a58740f8e35a9491ab83c58b8cca3f515',1,'Sandals::RungeKutta::projection(bool t_projection)']]],
-  ['projection_20on_20the_20invariants_20manifold_8',['Projection on the invariants manifold',['../class_sandals_1_1_runge_kutta.html#autotoc_md11',1,'']]],
-  ['projection_5ftolerance_9',['projection_tolerance',['../class_sandals_1_1_runge_kutta.html#a2030d15246c774dc0c32a31c6c9baaa4',1,'Sandals::RungeKutta::projection_tolerance()'],['../class_sandals_1_1_runge_kutta.html#a52f0bdd2b41dd67da89e91358978208b',1,'Sandals::RungeKutta::projection_tolerance(Real t_projection_tolerance)']]]
+  ['pointer_0',['Pointer',['../class_sandals_1_1_explicit.html#a1e3f3ba127e9177db2a56811efc38c05',1,'Sandals::Explicit::Pointer'],['../class_sandals_1_1_explicit_wrapper.html#a497860927cef68e96ecc1a2dedec0999',1,'Sandals::ExplicitWrapper::Pointer'],['../class_sandals_1_1_implicit.html#ab8c4bd5c8761169ebd176967c69671d3',1,'Sandals::Implicit::Pointer'],['../class_sandals_1_1_implicit_wrapper.html#ac0e73a3e881b2afb98b35609669da9ad',1,'Sandals::ImplicitWrapper::Pointer'],['../class_sandals_1_1_linear.html#ad00b64c37ffe23632361b73d3d9ad3d7',1,'Sandals::Linear::Pointer'],['../class_sandals_1_1_linear_wrapper.html#ad8af17ecbf34419270a729c670fea669',1,'Sandals::LinearWrapper::Pointer'],['../class_sandals_1_1_semi_explicit.html#a710a8bebd76a68b1d458b403d477623c',1,'Sandals::SemiExplicit::Pointer'],['../class_sandals_1_1_semi_explicit_wrapper.html#a37b2e752c9a54e8fa7611cbc71fb5693',1,'Sandals::SemiExplicitWrapper::Pointer']]],
+  ['problem_1',['Constrained minimization problem',['../class_sandals_1_1_runge_kutta.html#autotoc_md12',1,'']]],
+  ['project_2',['project',['../class_sandals_1_1_runge_kutta.html#a7bbafb46f0dbac72c9c3d010cf7a9a29',1,'Sandals::RungeKutta']]],
+  ['project_5fics_3',['project_ics',['../class_sandals_1_1_runge_kutta.html#a0aee2d035b967c48dcb687dba2b2f39e',1,'Sandals::RungeKutta']]],
+  ['projection_4',['projection',['../class_sandals_1_1_runge_kutta.html#a00ee9af9c8bb2bc2a665ffbb6490ae69',1,'Sandals::RungeKutta::projection()'],['../class_sandals_1_1_runge_kutta.html#a0c16a91f1afd63cfbf83e0eeda021842',1,'Sandals::RungeKutta::projection(bool t_projection)']]],
+  ['projection_20on_20the_20invariants_20manifold_5',['Projection on the invariants manifold',['../class_sandals_1_1_runge_kutta.html#autotoc_md11',1,'']]],
+  ['projection_5ftolerance_6',['projection_tolerance',['../class_sandals_1_1_runge_kutta.html#a7aef8bc09a1a59028992abc1b7812578',1,'Sandals::RungeKutta::projection_tolerance()'],['../class_sandals_1_1_runge_kutta.html#aafa5e5f7a4e9e0db8916d768840e18e2',1,'Sandals::RungeKutta::projection_tolerance(Real t_projection_tolerance)']]]
 ];

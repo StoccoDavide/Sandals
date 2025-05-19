@@ -1,5 +1,15 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$struct_sandals_1_1_tableau.html" title=" " alt="" coords="5,5,158,31"/>
-<area shape="rect" id="Node000001" href="$class_sandals_1_1_chebyshev51_tableau.html" title="Butcher tableau for the 5&#45;stage Runge&#45;Kutta&#45;Chebyshev order 1 method." alt="" coords="206,5,407,31"/>
-<area shape="poly" id="edge52_Node000000_Node000001" title=" " alt="" coords="173,16,205,16,205,21,173,21"/>
+<area shape="rect" id="Node000000" href="$struct_sandals_1_1_tableau.html" title=" " alt="" coords="5,177,193,202"/>
+<area shape="rect" id="Node000001" href="$class_sandals_1_1_gauss_legendre6_tableau.html" title="Butcher tableau for the Gauss&#45;Legendre order 6 method." alt="" coords="241,5,460,46"/>
+<area shape="poly" id="edge49_Node000000_Node000001" title=" " alt="" coords="119,163,170,110,203,81,239,57,266,44,268,49,242,61,206,85,174,113,123,167"/>
+<area shape="rect" id="Node000002" href="$class_sandals_1_1_heun3_tableau.html" title="Butcher tableau for the Heun&#39;s order 3 method." alt="" coords="271,71,430,111"/>
+<area shape="poly" id="edge50_Node000000_Node000002" title=" " alt="" coords="139,167,240,122,275,109,277,114,242,127,141,172"/>
+<area shape="rect" id="Node000003" href="$class_sandals_1_1_radau_i_i_a5_tableau.html" title="Butcher tableau for the Radau IIA order 3 method." alt="" coords="259,136,442,177"/>
+<area shape="poly" id="edge51_Node000000_Node000003" title=" " alt="" coords="208,173,258,166,259,171,209,178"/>
+<area shape="rect" id="Node000004" href="$class_sandals_1_1_ralston3_tableau.html" title="Butcher tableau for the Ralston&#39;s order 3 method." alt="" coords="264,201,437,242"/>
+<area shape="poly" id="edge52_Node000000_Node000004" title=" " alt="" coords="209,201,263,208,263,213,208,206"/>
+<area shape="rect" id="Node000005" href="$class_sandals_1_1_s_s_p_i_r_k33_tableau.html" title="Butcher tableau for the 3&#45;stage diagonally&#45;implicit strong&#45;stability preserving Runge&#45;Kuttax order 3 ..." alt="" coords="258,267,443,307"/>
+<area shape="poly" id="edge53_Node000000_Node000005" title=" " alt="" coords="141,207,242,251,277,264,275,269,240,256,139,212"/>
+<area shape="rect" id="Node000006" href="$class_sandals_1_1_s_s_p_r_k33_tableau.html" title="Butcher tableau for the 3&#45;stage strong&#45;stability preserving Runge&#45;Kutta order 3 method." alt="" coords="260,332,441,373"/>
+<area shape="poly" id="edge54_Node000000_Node000006" title=" " alt="" coords="123,213,174,265,207,293,242,317,268,329,266,334,239,321,203,297,170,269,119,217"/>
 </map>

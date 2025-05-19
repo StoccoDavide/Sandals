@@ -29,18 +29,20 @@ namespace Sandals
   *       & 1/6 & 1/6 & 2/3
   * \end{array} \text{.}
   * \f]
+  * \tparam Real The scalar number type.
   */
-  class SSPRK33Tableau : public Tableau<3>
+  template <typename Real>
+  class SSPRK33Tableau : public Tableau<Real, 3>
   {
   public:
-    using Tableau<3>::Type;
-    using Tableau<3>::Vector;
-    using Tableau<3>::Matrix;
+    using typename Tableau<Real, 3>::Type;
+    using typename Tableau<Real, 3>::Vector;
+    using typename Tableau<Real, 3>::Matrix;
 
     /**
     * Class constructor for the 3-stage strong-stability preserving Runge-Kutta order 3 method.
     */
-    SSPRK33Tableau() {
+    SSPRK33Tableau<Real>() {
       this->name  = "SSPRK33";
       this->type  = Type::ERK;
       this->order = 3;
@@ -56,27 +58,28 @@ namespace Sandals
   * \brief Class container for the 3-stage strong-stability preserving Runge-Kutta order 3 method.
   *
   * Class container for the 3-stage strong-stability preserving Runge-Kutta order 3 method.
+  * \tparam Real The scalar number type.
   * \tparam N The dimension of the ODE/DAE system.
   * \tparam M The dimension of the invariants manifold.
   */
-  template <Integer N, Integer M = 0>
-  class SSPRK33 : public RungeKutta<3, N, M>
+  template <typename Real, Integer N, Integer M = 0>
+  class SSPRK33 : public RungeKutta<Real, 3, N, M>
   {
   public:
-    using System = typename Implicit<N, M>::Pointer; /**< System type. */
+    using System = typename Implicit<Real, N, M>::Pointer; /**< System type. */
 
     /**
     * Class constructor for a 3-stage strong-stability preserving Runge-Kutta order 3 solver given
     * a Tableau reference.
     */
-    SSPRK33() : RungeKutta<3, N, M>(SSPRK33Tableau()) {}
+    SSPRK33() : RungeKutta<Real, 3, N, M>(SSPRK33Tableau<Real>()) {}
 
     /**
     * Class constructor for a 3-stage strong-stability preserving Runge-Kutta order 3 solver given
     * a Tableau reference.
     * \param[in] t_system The system reference.
     */
-    SSPRK33(System t_system) : RungeKutta<3, N, M>(SSPRK33Tableau(), t_system) {}
+    SSPRK33(System t_system) : RungeKutta<Real, 3, N, M>(SSPRK33Tableau<Real>(), t_system) {}
 
   }; // class SSPRK33
 

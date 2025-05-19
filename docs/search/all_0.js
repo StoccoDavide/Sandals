@@ -1,12 +1,12 @@
 var searchData=
 [
-  ['a_0',['A',['../struct_sandals_1_1_tableau.html#abbd2a2dc79f4d3192bf1b09703a9b610',1,'Sandals::Tableau::A'],['../class_sandals_1_1_runge_kutta.html#afe33bda1d96ba8610dfc4575a04cca15',1,'Sandals::RungeKutta::A()'],['../class_sandals_1_1_linear.html#a719d5e76c0c69bfc0448c42146375173',1,'Sandals::Linear::A()'],['../class_sandals_1_1_semi_explicit.html#a307e2686557ee22f85f93ba6285c8bc0',1,'Sandals::SemiExplicit::A()']]],
-  ['absolute_5ftolerance_1',['absolute_tolerance',['../class_sandals_1_1_runge_kutta.html#a27a9f6692a44e123808f8c8b2c2d9059',1,'Sandals::RungeKutta::absolute_tolerance()'],['../class_sandals_1_1_runge_kutta.html#a53e68c06cce6d036185ba836aec50759',1,'Sandals::RungeKutta::absolute_tolerance(Real t_absolute_tolerance)']]],
+  ['a_0',['A',['../struct_sandals_1_1_tableau.html#a90927822c29822474927dac4b7560994',1,'Sandals::Tableau::A'],['../class_sandals_1_1_runge_kutta.html#af1c07f8e63e9492b0057ad061d3e5283',1,'Sandals::RungeKutta::A()'],['../class_sandals_1_1_linear.html#ae5ca07933f9cde71fe26456ec447bf0b',1,'Sandals::Linear::A()'],['../class_sandals_1_1_linear_wrapper.html#ae5bb8f26251799bc183cbc0acd76fc30',1,'Sandals::LinearWrapper::A()'],['../class_sandals_1_1_linear_wrapper.html#af8ac50a011486a6951856edcbe81ed97',1,'Sandals::LinearWrapper::A(Real t) const override'],['../class_sandals_1_1_semi_explicit.html#ac1cbd63339f9f7a78c4d5adf6af25089',1,'Sandals::SemiExplicit::A()'],['../class_sandals_1_1_semi_explicit_wrapper.html#afbeba670dacd2339d96a7359f6dd2a8b',1,'Sandals::SemiExplicitWrapper::A()'],['../class_sandals_1_1_semi_explicit_wrapper.html#a489d6db4c92e4362d6e6cd90f466d63f',1,'Sandals::SemiExplicitWrapper::A(VectorF const &amp;x, Real t) const override']]],
+  ['absolute_5ftolerance_1',['absolute_tolerance',['../class_sandals_1_1_runge_kutta.html#af52cd8fa983cd52e07a60640aee8380c',1,'Sandals::RungeKutta::absolute_tolerance()'],['../class_sandals_1_1_runge_kutta.html#a587e4d3fc5b8c5a26084219b764f8b0b',1,'Sandals::RungeKutta::absolute_tolerance(Real t_absolute_tolerance)']]],
   ['acknowledgements_2',['Acknowledgements',['../index.html#autotoc_md20',1,'']]],
-  ['adaptive_3',['adaptive',['../class_sandals_1_1_runge_kutta.html#ac7c5c50506a79776b647826f667170c0',1,'Sandals::RungeKutta']]],
-  ['adaptive_5fmode_4',['adaptive_mode',['../class_sandals_1_1_runge_kutta.html#a7bac2789bca572458f9167ef81f19e41',1,'Sandals::RungeKutta']]],
-  ['adaptive_5fsolve_5',['adaptive_solve',['../class_sandals_1_1_runge_kutta.html#ae83e6688e3a05605ee13365fcb3d4939',1,'Sandals::RungeKutta']]],
-  ['advance_6',['advance',['../class_sandals_1_1_runge_kutta.html#ae007044419daa96fb4b4d18760079566',1,'Sandals::RungeKutta']]],
+  ['adaptive_3',['adaptive',['../class_sandals_1_1_runge_kutta.html#a45a7798b0c54b0e75098cdebf5835115',1,'Sandals::RungeKutta']]],
+  ['adaptive_5fmode_4',['adaptive_mode',['../class_sandals_1_1_runge_kutta.html#a0149c7f343424f3c20e27f15f85ae81e',1,'Sandals::RungeKutta']]],
+  ['adaptive_5fsolve_5',['adaptive_solve',['../class_sandals_1_1_runge_kutta.html#ad5a65a5123b1779b8d16dafbb34ef609',1,'Sandals::RungeKutta']]],
+  ['advance_6',['advance',['../class_sandals_1_1_runge_kutta.html#ab5268c95c2c10a8322794f063bb3d222',1,'Sandals::RungeKutta']]],
   ['and_20butcher_20tableaus_7',['Runge-Kutta methods and Butcher tableaus',['../class_sandals_1_1_runge_kutta.html#autotoc_md0',1,'']]],
   ['and_20dirty_8',['Quick and dirty',['../index.html#autotoc_md16',1,'']]],
   ['authors_9',['Authors',['../index.html#autotoc_md18',1,'']]]

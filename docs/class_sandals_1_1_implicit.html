@@ -16,7 +16,7 @@
 <meta name="twitter:title" content="Doxygen Awesome" />
 <meta name="twitter:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
 <!-- END twitter metadata -->
-<title>Sandals: Sandals::Implicit&lt; N, M &gt; Class Template Reference</title>
+<title>Sandals: Sandals::Implicit&lt; Real, N, M &gt; Class Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link rel="icon" type="image/svg+xml" href="logo.png"/>
 <script type="text/javascript" src="jquery.js"></script>
@@ -145,7 +145,7 @@ $(function(){initNavTree('class_sandals_1_1_implicit.html',''); initResizable(tr
 <a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="class_sandals_1_1_implicit-members.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">Sandals::Implicit&lt; N, M &gt; Class Template Reference<span class="mlabels"><span class="mlabel abstract">abstract</span></span></div></div>
+  <div class="headertitle"><div class="title">Sandals::Implicit&lt; Real, N, M &gt; Class Template Reference<span class="mlabels"><span class="mlabel abstract">abstract</span></span></div></div>
 </div><!--header-->
 <div class="contents">
 
@@ -153,100 +153,99 @@ $(function(){initNavTree('class_sandals_1_1_implicit.html',''); initResizable(tr
  <a href="#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="_implicit_8hxx_source.html">Implicit.hxx</a>&gt;</code></p>
-
-<p>Inherited by <a class="el" href="class_sandals_1_1_explicit.html">Sandals::Explicit&lt; N, 0 &gt;</a>, and <a class="el" href="class_sandals_1_1_explicit.html">Sandals::Explicit&lt; N, M &gt;</a>.</p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:ad2190974846e817bb7ba121a386913f7" id="r_ad2190974846e817bb7ba121a386913f7"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad2190974846e817bb7ba121a386913f7">Type</a> = enum class <a class="el" href="#ad2190974846e817bb7ba121a386913f7">Type</a> : <a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> {IMPLICIT=0, EXPLICIT=1, SEMIEXPLICIT=1}</td></tr>
-<tr class="separator:ad2190974846e817bb7ba121a386913f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aed4cdcf289d11408f5b0503fcf171049" id="r_aed4cdcf289d11408f5b0503fcf171049"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aed4cdcf289d11408f5b0503fcf171049">Pointer</a> = std::shared_ptr&lt;<a class="el" href="class_sandals_1_1_implicit.html">Implicit</a>&lt;N, M&gt;&gt;</td></tr>
-<tr class="separator:aed4cdcf289d11408f5b0503fcf171049"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a62a744b82f5a0172711c1882f81ab5c0" id="r_a62a744b82f5a0172711c1882f81ab5c0"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a62a744b82f5a0172711c1882f81ab5c0">VectorF</a> = Eigen::Vector&lt;<a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a>, N&gt;</td></tr>
-<tr class="separator:a62a744b82f5a0172711c1882f81ab5c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a84a0e42a2e0949854c62036495c4f6a7" id="r_a84a0e42a2e0949854c62036495c4f6a7"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a84a0e42a2e0949854c62036495c4f6a7">MatrixJF</a> = Eigen::Matrix&lt;<a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a>, N, N&gt;</td></tr>
-<tr class="separator:a84a0e42a2e0949854c62036495c4f6a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa23e308dcf4be601f2ce0a3869572fdd" id="r_aa23e308dcf4be601f2ce0a3869572fdd"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa23e308dcf4be601f2ce0a3869572fdd">VectorH</a> = Eigen::Vector&lt;<a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a>, M&gt;</td></tr>
-<tr class="separator:aa23e308dcf4be601f2ce0a3869572fdd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aab938cb2398b1726eb64e33c14e686a2" id="r_aab938cb2398b1726eb64e33c14e686a2"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aab938cb2398b1726eb64e33c14e686a2">MatrixJH</a> = Eigen::Matrix&lt;<a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a>, M, N&gt;</td></tr>
-<tr class="separator:aab938cb2398b1726eb64e33c14e686a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a37ea48741ddf4f101c9c4f507e9a42bc" id="r_a37ea48741ddf4f101c9c4f507e9a42bc"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a37ea48741ddf4f101c9c4f507e9a42bc">Type</a> = enum class <a class="el" href="#a37ea48741ddf4f101c9c4f507e9a42bc">Type</a> : <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> {IMPLICIT=0, EXPLICIT=1, SEMIEXPLICIT=1}</td></tr>
+<tr class="separator:a37ea48741ddf4f101c9c4f507e9a42bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab8c4bd5c8761169ebd176967c69671d3" id="r_ab8c4bd5c8761169ebd176967c69671d3"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab8c4bd5c8761169ebd176967c69671d3">Pointer</a> = std::shared_ptr&lt;<a class="el" href="class_sandals_1_1_implicit.html">Implicit</a>&lt;Real, N, M&gt;&gt;</td></tr>
+<tr class="separator:ab8c4bd5c8761169ebd176967c69671d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a572c1717ee411d8bcd366eb50b4faf" id="r_a2a572c1717ee411d8bcd366eb50b4faf"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2a572c1717ee411d8bcd366eb50b4faf">VectorF</a> = Eigen::Vector&lt;Real, N&gt;</td></tr>
+<tr class="separator:a2a572c1717ee411d8bcd366eb50b4faf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f6ed8a93dd0a78c31cc1cba5c2b085d" id="r_a0f6ed8a93dd0a78c31cc1cba5c2b085d"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0f6ed8a93dd0a78c31cc1cba5c2b085d">MatrixJF</a> = Eigen::Matrix&lt;Real, N, N&gt;</td></tr>
+<tr class="separator:a0f6ed8a93dd0a78c31cc1cba5c2b085d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3d0eff3748a32b15083a9b488feac033" id="r_a3d0eff3748a32b15083a9b488feac033"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3d0eff3748a32b15083a9b488feac033">VectorH</a> = Eigen::Vector&lt;Real, M&gt;</td></tr>
+<tr class="separator:a3d0eff3748a32b15083a9b488feac033"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abf948b5adb5a0bafe8bfe0c4d0fbe33a" id="r_abf948b5adb5a0bafe8bfe0c4d0fbe33a"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abf948b5adb5a0bafe8bfe0c4d0fbe33a">MatrixJH</a> = Eigen::Matrix&lt;Real, M, N&gt;</td></tr>
+<tr class="separator:abf948b5adb5a0bafe8bfe0c4d0fbe33a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ac8148e5b06a57abcf3eea14eb3e66017" id="r_ac8148e5b06a57abcf3eea14eb3e66017"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac8148e5b06a57abcf3eea14eb3e66017">Implicit</a> ()</td></tr>
-<tr class="separator:ac8148e5b06a57abcf3eea14eb3e66017"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abc0e197c480d9cfbb84149081abf16b6" id="r_abc0e197c480d9cfbb84149081abf16b6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abc0e197c480d9cfbb84149081abf16b6">Implicit</a> (std::string t_name)</td></tr>
-<tr class="separator:abc0e197c480d9cfbb84149081abf16b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a991edef11036604ae06d341cfceba047" id="r_a991edef11036604ae06d341cfceba047"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a991edef11036604ae06d341cfceba047">~Implicit</a> ()</td></tr>
-<tr class="separator:a991edef11036604ae06d341cfceba047"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa120573f73b165697fcfd72149221881" id="r_aa120573f73b165697fcfd72149221881"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#ad2190974846e817bb7ba121a386913f7">Type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa120573f73b165697fcfd72149221881">type</a> () const</td></tr>
-<tr class="separator:aa120573f73b165697fcfd72149221881"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5223f90739dfa0634560e360d97b0783" id="r_a5223f90739dfa0634560e360d97b0783"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5223f90739dfa0634560e360d97b0783">is_implicit</a> () const</td></tr>
-<tr class="separator:a5223f90739dfa0634560e360d97b0783"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab153cc1bf5946845e32ee237420e98a6" id="r_ab153cc1bf5946845e32ee237420e98a6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab153cc1bf5946845e32ee237420e98a6">is_explicit</a> () const</td></tr>
-<tr class="separator:ab153cc1bf5946845e32ee237420e98a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aba5f905eefb2332868af26e3a4be2d2d" id="r_aba5f905eefb2332868af26e3a4be2d2d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aba5f905eefb2332868af26e3a4be2d2d">is_semiexplicit</a> () const</td></tr>
-<tr class="separator:aba5f905eefb2332868af26e3a4be2d2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6a25afdb5a8d0157ad5c2587477f5687" id="r_a6a25afdb5a8d0157ad5c2587477f5687"><td class="memItemLeft" align="right" valign="top">std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6a25afdb5a8d0157ad5c2587477f5687">name</a> ()</td></tr>
-<tr class="separator:a6a25afdb5a8d0157ad5c2587477f5687"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a69cf264a6c33f3c45877845917915133" id="r_a69cf264a6c33f3c45877845917915133"><td class="memItemLeft" align="right" valign="top">std::string const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a69cf264a6c33f3c45877845917915133">name</a> () const</td></tr>
-<tr class="separator:a69cf264a6c33f3c45877845917915133"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1b72ea5e85cc5791b3ee329c2561acb5" id="r_a1b72ea5e85cc5791b3ee329c2561acb5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1b72ea5e85cc5791b3ee329c2561acb5">equations_number</a> () const</td></tr>
-<tr class="separator:a1b72ea5e85cc5791b3ee329c2561acb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2cfb6c585b85f7813e9aacb35ee998f3" id="r_a2cfb6c585b85f7813e9aacb35ee998f3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2cfb6c585b85f7813e9aacb35ee998f3">invariants_number</a> () const</td></tr>
-<tr class="separator:a2cfb6c585b85f7813e9aacb35ee998f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9f52fbbff5a3f95af8cd7488b8942ffd" id="r_a9f52fbbff5a3f95af8cd7488b8942ffd"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="#a62a744b82f5a0172711c1882f81ab5c0">VectorF</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9f52fbbff5a3f95af8cd7488b8942ffd">F</a> (<a class="el" href="#a62a744b82f5a0172711c1882f81ab5c0">VectorF</a> const &amp;x, <a class="el" href="#a62a744b82f5a0172711c1882f81ab5c0">VectorF</a> const &amp;x_dot, <a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> t) const =0</td></tr>
-<tr class="separator:a9f52fbbff5a3f95af8cd7488b8942ffd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abf11a9d109f85756c974bacd1f8e4dc8" id="r_abf11a9d109f85756c974bacd1f8e4dc8"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="#a84a0e42a2e0949854c62036495c4f6a7">MatrixJF</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abf11a9d109f85756c974bacd1f8e4dc8">JF_x</a> (<a class="el" href="#a62a744b82f5a0172711c1882f81ab5c0">VectorF</a> const &amp;x, <a class="el" href="#a62a744b82f5a0172711c1882f81ab5c0">VectorF</a> const &amp;x_dot, <a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> t) const =0</td></tr>
-<tr class="separator:abf11a9d109f85756c974bacd1f8e4dc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a65702671d0f99f622dafafa8658a2784" id="r_a65702671d0f99f622dafafa8658a2784"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="#a84a0e42a2e0949854c62036495c4f6a7">MatrixJF</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a65702671d0f99f622dafafa8658a2784">JF_x_dot</a> (<a class="el" href="#a62a744b82f5a0172711c1882f81ab5c0">VectorF</a> const &amp;x, <a class="el" href="#a62a744b82f5a0172711c1882f81ab5c0">VectorF</a> const &amp;x_dot, <a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> t) const =0</td></tr>
-<tr class="separator:a65702671d0f99f622dafafa8658a2784"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5a9d074b50f2741be0d4a9caf586518e" id="r_a5a9d074b50f2741be0d4a9caf586518e"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="#aa23e308dcf4be601f2ce0a3869572fdd">VectorH</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5a9d074b50f2741be0d4a9caf586518e">h</a> (<a class="el" href="#a62a744b82f5a0172711c1882f81ab5c0">VectorF</a> const &amp;x, <a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> t) const =0</td></tr>
-<tr class="separator:a5a9d074b50f2741be0d4a9caf586518e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6c4db491ce95741b0e2834fecbcf0673" id="r_a6c4db491ce95741b0e2834fecbcf0673"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="#aab938cb2398b1726eb64e33c14e686a2">MatrixJH</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6c4db491ce95741b0e2834fecbcf0673">Jh_x</a> (<a class="el" href="#a62a744b82f5a0172711c1882f81ab5c0">VectorF</a> const &amp;x, <a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> t) const =0</td></tr>
-<tr class="separator:a6c4db491ce95741b0e2834fecbcf0673"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1a1b670ee411ad2435083a763c5c9d15" id="r_a1a1b670ee411ad2435083a763c5c9d15"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1a1b670ee411ad2435083a763c5c9d15">in_domain</a> (<a class="el" href="#a62a744b82f5a0172711c1882f81ab5c0">VectorF</a> const &amp;x, <a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> t) const =0</td></tr>
-<tr class="separator:a1a1b670ee411ad2435083a763c5c9d15"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8fd03770094a85733f5ed9fd0dffebc6" id="r_a8fd03770094a85733f5ed9fd0dffebc6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a62a744b82f5a0172711c1882f81ab5c0">VectorF</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8fd03770094a85733f5ed9fd0dffebc6">F_reverse</a> (<a class="el" href="#a62a744b82f5a0172711c1882f81ab5c0">VectorF</a> const &amp;x, <a class="el" href="#a62a744b82f5a0172711c1882f81ab5c0">VectorF</a> const &amp;x_dot, <a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> t) const</td></tr>
-<tr class="separator:a8fd03770094a85733f5ed9fd0dffebc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aed515bcbf7916727a40c8cef7506523a" id="r_aed515bcbf7916727a40c8cef7506523a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a84a0e42a2e0949854c62036495c4f6a7">MatrixJF</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aed515bcbf7916727a40c8cef7506523a">JF_x_reverse</a> (<a class="el" href="#a62a744b82f5a0172711c1882f81ab5c0">VectorF</a> const &amp;x, <a class="el" href="#a62a744b82f5a0172711c1882f81ab5c0">VectorF</a> const &amp;x_dot, <a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> t) const</td></tr>
-<tr class="separator:aed515bcbf7916727a40c8cef7506523a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4035a83b75976cf57e9c479b3ada8b36" id="r_a4035a83b75976cf57e9c479b3ada8b36"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a84a0e42a2e0949854c62036495c4f6a7">MatrixJF</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4035a83b75976cf57e9c479b3ada8b36">JF_x_dot_reverse</a> (<a class="el" href="#a62a744b82f5a0172711c1882f81ab5c0">VectorF</a> const &amp;x, <a class="el" href="#a62a744b82f5a0172711c1882f81ab5c0">VectorF</a> const &amp;x_dot, <a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a> t) const</td></tr>
-<tr class="separator:a4035a83b75976cf57e9c479b3ada8b36"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a40c13cc4422ed6387cd6201cb92176ea" id="r_a40c13cc4422ed6387cd6201cb92176ea"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a40c13cc4422ed6387cd6201cb92176ea">Implicit</a> ()</td></tr>
+<tr class="separator:a40c13cc4422ed6387cd6201cb92176ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aed208470991d6c50598e0681fdad52a6" id="r_aed208470991d6c50598e0681fdad52a6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aed208470991d6c50598e0681fdad52a6">Implicit</a> (std::string t_name)</td></tr>
+<tr class="separator:aed208470991d6c50598e0681fdad52a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a01165f8af34bde8154118027f51499a6" id="r_a01165f8af34bde8154118027f51499a6"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a01165f8af34bde8154118027f51499a6">~Implicit</a> ()</td></tr>
+<tr class="separator:a01165f8af34bde8154118027f51499a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9388aa3457ad41eb61fc1fd74ff6c3d3" id="r_a9388aa3457ad41eb61fc1fd74ff6c3d3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a37ea48741ddf4f101c9c4f507e9a42bc">Type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9388aa3457ad41eb61fc1fd74ff6c3d3">type</a> () const</td></tr>
+<tr class="separator:a9388aa3457ad41eb61fc1fd74ff6c3d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a38d6033591b582e4f5cf9ce8b5f2ce87" id="r_a38d6033591b582e4f5cf9ce8b5f2ce87"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a38d6033591b582e4f5cf9ce8b5f2ce87">is_implicit</a> () const</td></tr>
+<tr class="separator:a38d6033591b582e4f5cf9ce8b5f2ce87"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a62d23a3876db59390272ae7500bb5cbe" id="r_a62d23a3876db59390272ae7500bb5cbe"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a62d23a3876db59390272ae7500bb5cbe">is_explicit</a> () const</td></tr>
+<tr class="separator:a62d23a3876db59390272ae7500bb5cbe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a041f6ccaa38141afa0efe77494cd7c00" id="r_a041f6ccaa38141afa0efe77494cd7c00"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a041f6ccaa38141afa0efe77494cd7c00">is_semiexplicit</a> () const</td></tr>
+<tr class="separator:a041f6ccaa38141afa0efe77494cd7c00"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5232c52bbb412d6e5c812501c6701836" id="r_a5232c52bbb412d6e5c812501c6701836"><td class="memItemLeft" align="right" valign="top">std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5232c52bbb412d6e5c812501c6701836">name</a> ()</td></tr>
+<tr class="separator:a5232c52bbb412d6e5c812501c6701836"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0124e2da7f3fd20ae2b3b6c598642601" id="r_a0124e2da7f3fd20ae2b3b6c598642601"><td class="memItemLeft" align="right" valign="top">std::string const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0124e2da7f3fd20ae2b3b6c598642601">name</a> () const</td></tr>
+<tr class="separator:a0124e2da7f3fd20ae2b3b6c598642601"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a86c98b1098360f6d8e336319af4b54b4" id="r_a86c98b1098360f6d8e336319af4b54b4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a86c98b1098360f6d8e336319af4b54b4">equations_number</a> () const</td></tr>
+<tr class="separator:a86c98b1098360f6d8e336319af4b54b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad59a225a57fc8ece8971c6a9b7663a4" id="r_aad59a225a57fc8ece8971c6a9b7663a4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aad59a225a57fc8ece8971c6a9b7663a4">invariants_number</a> () const</td></tr>
+<tr class="separator:aad59a225a57fc8ece8971c6a9b7663a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a71e3ab7d011242b5fc44c8ab533f7f7b" id="r_a71e3ab7d011242b5fc44c8ab533f7f7b"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="#a2a572c1717ee411d8bcd366eb50b4faf">VectorF</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a71e3ab7d011242b5fc44c8ab533f7f7b">F</a> (<a class="el" href="#a2a572c1717ee411d8bcd366eb50b4faf">VectorF</a> const &amp;x, <a class="el" href="#a2a572c1717ee411d8bcd366eb50b4faf">VectorF</a> const &amp;x_dot, Real t) const =0</td></tr>
+<tr class="separator:a71e3ab7d011242b5fc44c8ab533f7f7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1b4f77a48573d65ab516fc637903eb94" id="r_a1b4f77a48573d65ab516fc637903eb94"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="#a0f6ed8a93dd0a78c31cc1cba5c2b085d">MatrixJF</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1b4f77a48573d65ab516fc637903eb94">JF_x</a> (<a class="el" href="#a2a572c1717ee411d8bcd366eb50b4faf">VectorF</a> const &amp;x, <a class="el" href="#a2a572c1717ee411d8bcd366eb50b4faf">VectorF</a> const &amp;x_dot, Real t) const =0</td></tr>
+<tr class="separator:a1b4f77a48573d65ab516fc637903eb94"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae335d566bd68090fdbe097fd260bce3e" id="r_ae335d566bd68090fdbe097fd260bce3e"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="#a0f6ed8a93dd0a78c31cc1cba5c2b085d">MatrixJF</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae335d566bd68090fdbe097fd260bce3e">JF_x_dot</a> (<a class="el" href="#a2a572c1717ee411d8bcd366eb50b4faf">VectorF</a> const &amp;x, <a class="el" href="#a2a572c1717ee411d8bcd366eb50b4faf">VectorF</a> const &amp;x_dot, Real t) const =0</td></tr>
+<tr class="separator:ae335d566bd68090fdbe097fd260bce3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad0a2b556ea25496d4bc0723b8197227d" id="r_ad0a2b556ea25496d4bc0723b8197227d"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="#a3d0eff3748a32b15083a9b488feac033">VectorH</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad0a2b556ea25496d4bc0723b8197227d">h</a> (<a class="el" href="#a2a572c1717ee411d8bcd366eb50b4faf">VectorF</a> const &amp;x, Real t) const =0</td></tr>
+<tr class="separator:ad0a2b556ea25496d4bc0723b8197227d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1fa95e9ff4fbe85e082911d3b21b7b55" id="r_a1fa95e9ff4fbe85e082911d3b21b7b55"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="#abf948b5adb5a0bafe8bfe0c4d0fbe33a">MatrixJH</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1fa95e9ff4fbe85e082911d3b21b7b55">Jh_x</a> (<a class="el" href="#a2a572c1717ee411d8bcd366eb50b4faf">VectorF</a> const &amp;x, Real t) const =0</td></tr>
+<tr class="separator:a1fa95e9ff4fbe85e082911d3b21b7b55"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4ee618cece24e28456e628445f68b703" id="r_a4ee618cece24e28456e628445f68b703"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4ee618cece24e28456e628445f68b703">in_domain</a> (<a class="el" href="#a2a572c1717ee411d8bcd366eb50b4faf">VectorF</a> const &amp;x, Real t) const =0</td></tr>
+<tr class="separator:a4ee618cece24e28456e628445f68b703"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac69d56ac6d1c1658328f6f2d04c130ca" id="r_ac69d56ac6d1c1658328f6f2d04c130ca"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a2a572c1717ee411d8bcd366eb50b4faf">VectorF</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac69d56ac6d1c1658328f6f2d04c130ca">F_reverse</a> (<a class="el" href="#a2a572c1717ee411d8bcd366eb50b4faf">VectorF</a> const &amp;x, <a class="el" href="#a2a572c1717ee411d8bcd366eb50b4faf">VectorF</a> const &amp;x_dot, Real t) const</td></tr>
+<tr class="separator:ac69d56ac6d1c1658328f6f2d04c130ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac86e61b80f2a7b0a91bab601f07a3644" id="r_ac86e61b80f2a7b0a91bab601f07a3644"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a0f6ed8a93dd0a78c31cc1cba5c2b085d">MatrixJF</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac86e61b80f2a7b0a91bab601f07a3644">JF_x_reverse</a> (<a class="el" href="#a2a572c1717ee411d8bcd366eb50b4faf">VectorF</a> const &amp;x, <a class="el" href="#a2a572c1717ee411d8bcd366eb50b4faf">VectorF</a> const &amp;x_dot, Real t) const</td></tr>
+<tr class="separator:ac86e61b80f2a7b0a91bab601f07a3644"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a952aa0b38f6f10da0207605038b75429" id="r_a952aa0b38f6f10da0207605038b75429"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a0f6ed8a93dd0a78c31cc1cba5c2b085d">MatrixJF</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a952aa0b38f6f10da0207605038b75429">JF_x_dot_reverse</a> (<a class="el" href="#a2a572c1717ee411d8bcd366eb50b4faf">VectorF</a> const &amp;x, <a class="el" href="#a2a572c1717ee411d8bcd366eb50b4faf">VectorF</a> const &amp;x_dot, Real t) const</td></tr>
+<tr class="separator:a952aa0b38f6f10da0207605038b75429"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-methods" name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr class="memitem:af95c9c6c9a2269f7b252d1a38df71f41" id="r_af95c9c6c9a2269f7b252d1a38df71f41"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af95c9c6c9a2269f7b252d1a38df71f41">Implicit</a> (<a class="el" href="#ad2190974846e817bb7ba121a386913f7">Type</a> t_type, std::string t_name)</td></tr>
-<tr class="separator:af95c9c6c9a2269f7b252d1a38df71f41"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a262bcc55f6bfa6848eb29a6863a32d82" id="r_a262bcc55f6bfa6848eb29a6863a32d82"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a262bcc55f6bfa6848eb29a6863a32d82">Implicit</a> (<a class="el" href="#a37ea48741ddf4f101c9c4f507e9a42bc">Type</a> t_type, std::string t_name)</td></tr>
+<tr class="separator:a262bcc55f6bfa6848eb29a6863a32d82"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:ac6a7e07f13fb922a154b09d29dbc47d6" id="r_ac6a7e07f13fb922a154b09d29dbc47d6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#ad2190974846e817bb7ba121a386913f7">Type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac6a7e07f13fb922a154b09d29dbc47d6">m_type</a> {Type::IMPLICIT}</td></tr>
-<tr class="separator:ac6a7e07f13fb922a154b09d29dbc47d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a07c1286395309f54b51d1443dd3eace9" id="r_a07c1286395309f54b51d1443dd3eace9"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a07c1286395309f54b51d1443dd3eace9">m_name</a></td></tr>
-<tr class="separator:a07c1286395309f54b51d1443dd3eace9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a66f633b610966c5a7e31245b12ca113a" id="r_a66f633b610966c5a7e31245b12ca113a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a37ea48741ddf4f101c9c4f507e9a42bc">Type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a66f633b610966c5a7e31245b12ca113a">m_type</a> {Type::IMPLICIT}</td></tr>
+<tr class="separator:a66f633b610966c5a7e31245b12ca113a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8e332a788cbdaaa42d0970b1f4b52463" id="r_a8e332a788cbdaaa42d0970b1f4b52463"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8e332a788cbdaaa42d0970b1f4b52463">m_name</a></td></tr>
+<tr class="separator:a8e332a788cbdaaa42d0970b1f4b52463"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><div class="compoundTemplParams">template&lt;<a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> N, <a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> M&gt;<br />
-class Sandals::Implicit&lt; N, M &gt;</div><p>Class container for the system of inplicit ordinary differential equations (ODEs) or differential algebraic equations (DAEs) of the type  \( \mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, t) =
+<div class="textblock"><div class="compoundTemplParams">template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt;<br />
+class Sandals::Implicit&lt; Real, N, M &gt;</div><p>Class container for the system of implicit ordinary differential equations (ODEs) or differential algebraic equations (DAEs) of the type  \( \mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, t) =
 \mathbf{0} \), with invariants manifold \( \mathbf{h}(\mathbf{x}, t) = \mathbf{0} \). </p><dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
+    <tr><td class="paramname">Real</td><td>The scalar number type. </td></tr>
     <tr><td class="paramname">N</td><td>The dimension of the implicit ODE system. </td></tr>
     <tr><td class="paramname">M</td><td>The dimension of the invariants manifold. </td></tr>
   </table>
   </dd>
 </dl>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
-<a id="a84a0e42a2e0949854c62036495c4f6a7" name="a84a0e42a2e0949854c62036495c4f6a7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a84a0e42a2e0949854c62036495c4f6a7">&#9670;&#160;</a></span>MatrixJF</h2>
+<a id="a0f6ed8a93dd0a78c31cc1cba5c2b085d" name="a0f6ed8a93dd0a78c31cc1cba5c2b085d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0f6ed8a93dd0a78c31cc1cba5c2b085d">&#9670;&#160;</a></span>MatrixJF</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> N, <a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> M&gt; </div>
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; N, M &gt;::MatrixJF = Eigen::Matrix&lt;<a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a>, N, N&gt;</td>
+          <td class="memname">using <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; Real, N, M &gt;::MatrixJF = Eigen::Matrix&lt;Real, N, N&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -254,16 +253,16 @@ template&lt;<a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82
 
 </div>
 </div>
-<a id="aab938cb2398b1726eb64e33c14e686a2" name="aab938cb2398b1726eb64e33c14e686a2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aab938cb2398b1726eb64e33c14e686a2">&#9670;&#160;</a></span>MatrixJH</h2>
+<a id="abf948b5adb5a0bafe8bfe0c4d0fbe33a" name="abf948b5adb5a0bafe8bfe0c4d0fbe33a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abf948b5adb5a0bafe8bfe0c4d0fbe33a">&#9670;&#160;</a></span>MatrixJH</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> N, <a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> M&gt; </div>
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; N, M &gt;::MatrixJH = Eigen::Matrix&lt;<a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a>, M, N&gt;</td>
+          <td class="memname">using <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; Real, N, M &gt;::MatrixJH = Eigen::Matrix&lt;Real, M, N&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -271,16 +270,16 @@ template&lt;<a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82
 
 </div>
 </div>
-<a id="aed4cdcf289d11408f5b0503fcf171049" name="aed4cdcf289d11408f5b0503fcf171049"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aed4cdcf289d11408f5b0503fcf171049">&#9670;&#160;</a></span>Pointer</h2>
+<a id="ab8c4bd5c8761169ebd176967c69671d3" name="ab8c4bd5c8761169ebd176967c69671d3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab8c4bd5c8761169ebd176967c69671d3">&#9670;&#160;</a></span>Pointer</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> N, <a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> M&gt; </div>
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; N, M &gt;::Pointer = std::shared_ptr&lt;<a class="el" href="class_sandals_1_1_implicit.html">Implicit</a>&lt;N, M&gt;&gt;</td>
+          <td class="memname">using <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; Real, N, M &gt;::Pointer = std::shared_ptr&lt;<a class="el" href="class_sandals_1_1_implicit.html">Implicit</a>&lt;Real, N, M&gt;&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -288,33 +287,33 @@ template&lt;<a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82
 
 </div>
 </div>
-<a id="ad2190974846e817bb7ba121a386913f7" name="ad2190974846e817bb7ba121a386913f7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad2190974846e817bb7ba121a386913f7">&#9670;&#160;</a></span>Type</h2>
+<a id="a37ea48741ddf4f101c9c4f507e9a42bc" name="a37ea48741ddf4f101c9c4f507e9a42bc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a37ea48741ddf4f101c9c4f507e9a42bc">&#9670;&#160;</a></span>Type</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> N, <a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> M&gt; </div>
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; N, M &gt;::Type = enum class <a class="el" href="#ad2190974846e817bb7ba121a386913f7">Type</a> : <a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> {IMPLICIT=0, EXPLICIT=1, SEMIEXPLICIT=1}</td>
+          <td class="memname">using <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; Real, N, M &gt;::Type = enum class <a class="el" href="#a37ea48741ddf4f101c9c4f507e9a42bc">Type</a> : <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> {IMPLICIT=0, EXPLICIT=1, SEMIEXPLICIT=1}</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>System type enumeration. </p>
+<p>&lt; Basic constants. System type enumeration. </p>
 
 </div>
 </div>
-<a id="a62a744b82f5a0172711c1882f81ab5c0" name="a62a744b82f5a0172711c1882f81ab5c0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a62a744b82f5a0172711c1882f81ab5c0">&#9670;&#160;</a></span>VectorF</h2>
+<a id="a2a572c1717ee411d8bcd366eb50b4faf" name="a2a572c1717ee411d8bcd366eb50b4faf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2a572c1717ee411d8bcd366eb50b4faf">&#9670;&#160;</a></span>VectorF</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> N, <a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> M&gt; </div>
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; N, M &gt;::VectorF = Eigen::Vector&lt;<a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a>, N&gt;</td>
+          <td class="memname">using <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; Real, N, M &gt;::VectorF = Eigen::Vector&lt;Real, N&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -322,16 +321,16 @@ template&lt;<a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82
 
 </div>
 </div>
-<a id="aa23e308dcf4be601f2ce0a3869572fdd" name="aa23e308dcf4be601f2ce0a3869572fdd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa23e308dcf4be601f2ce0a3869572fdd">&#9670;&#160;</a></span>VectorH</h2>
+<a id="a3d0eff3748a32b15083a9b488feac033" name="a3d0eff3748a32b15083a9b488feac033"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3d0eff3748a32b15083a9b488feac033">&#9670;&#160;</a></span>VectorH</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> N, <a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> M&gt; </div>
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; N, M &gt;::VectorH = Eigen::Vector&lt;<a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a>, M&gt;</td>
+          <td class="memname">using <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; Real, N, M &gt;::VectorH = Eigen::Vector&lt;Real, M&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -340,21 +339,21 @@ template&lt;<a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82
 </div>
 </div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="af95c9c6c9a2269f7b252d1a38df71f41" name="af95c9c6c9a2269f7b252d1a38df71f41"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af95c9c6c9a2269f7b252d1a38df71f41">&#9670;&#160;</a></span>Implicit() <span class="overload">[1/3]</span></h2>
+<a id="a262bcc55f6bfa6848eb29a6863a32d82" name="a262bcc55f6bfa6848eb29a6863a32d82"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a262bcc55f6bfa6848eb29a6863a32d82">&#9670;&#160;</a></span>Implicit() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> N, <a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> M&gt; </div>
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; N, M &gt;::Implicit </td>
+          <td class="memname"><a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; Real, N, M &gt;::Implicit </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="#ad2190974846e817bb7ba121a386913f7">Type</a></td>          <td class="paramname"><span class="paramname"><em>t_type</em></span>, </td>
+          <td class="paramtype"><a class="el" href="#a37ea48741ddf4f101c9c4f507e9a42bc">Type</a></td>          <td class="paramname"><span class="paramname"><em>t_type</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -378,19 +377,19 @@ template&lt;<a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82
 
 </div>
 </div>
-<a id="ac8148e5b06a57abcf3eea14eb3e66017" name="ac8148e5b06a57abcf3eea14eb3e66017"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac8148e5b06a57abcf3eea14eb3e66017">&#9670;&#160;</a></span>Implicit() <span class="overload">[2/3]</span></h2>
+<a id="a40c13cc4422ed6387cd6201cb92176ea" name="a40c13cc4422ed6387cd6201cb92176ea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a40c13cc4422ed6387cd6201cb92176ea">&#9670;&#160;</a></span>Implicit() <span class="overload">[2/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> N, <a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> M&gt; </div>
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; N, M &gt;::Implicit </td>
+          <td class="memname"><a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; Real, N, M &gt;::Implicit </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
@@ -406,19 +405,19 @@ template&lt;<a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82
 
 </div>
 </div>
-<a id="abc0e197c480d9cfbb84149081abf16b6" name="abc0e197c480d9cfbb84149081abf16b6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abc0e197c480d9cfbb84149081abf16b6">&#9670;&#160;</a></span>Implicit() <span class="overload">[3/3]</span></h2>
+<a id="aed208470991d6c50598e0681fdad52a6" name="aed208470991d6c50598e0681fdad52a6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aed208470991d6c50598e0681fdad52a6">&#9670;&#160;</a></span>Implicit() <span class="overload">[3/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> N, <a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> M&gt; </div>
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; N, M &gt;::Implicit </td>
+          <td class="memname"><a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; Real, N, M &gt;::Implicit </td>
           <td>(</td>
           <td class="paramtype">std::string</td>          <td class="paramname"><span class="paramname"><em>t_name</em></span></td><td>)</td>
           <td></td>
@@ -439,19 +438,19 @@ template&lt;<a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82
 
 </div>
 </div>
-<a id="a991edef11036604ae06d341cfceba047" name="a991edef11036604ae06d341cfceba047"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a991edef11036604ae06d341cfceba047">&#9670;&#160;</a></span>~Implicit()</h2>
+<a id="a01165f8af34bde8154118027f51499a6" name="a01165f8af34bde8154118027f51499a6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a01165f8af34bde8154118027f51499a6">&#9670;&#160;</a></span>~Implicit()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> N, <a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> M&gt; </div>
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; N, M &gt;::~<a class="el" href="class_sandals_1_1_implicit.html">Implicit</a> </td>
+          <td class="memname">virtual <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; Real, N, M &gt;::~<a class="el" href="class_sandals_1_1_implicit.html">Implicit</a> </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
@@ -468,19 +467,19 @@ template&lt;<a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a1b72ea5e85cc5791b3ee329c2561acb5" name="a1b72ea5e85cc5791b3ee329c2561acb5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1b72ea5e85cc5791b3ee329c2561acb5">&#9670;&#160;</a></span>equations_number()</h2>
+<a id="a86c98b1098360f6d8e336319af4b54b4" name="a86c98b1098360f6d8e336319af4b54b4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a86c98b1098360f6d8e336319af4b54b4">&#9670;&#160;</a></span>equations_number()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> N, <a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> M&gt; </div>
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; N, M &gt;::equations_number </td>
+          <td class="memname"><a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; Real, N, M &gt;::equations_number </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td> const</td>
@@ -496,31 +495,31 @@ template&lt;<a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82
 
 </div>
 </div>
-<a id="a9f52fbbff5a3f95af8cd7488b8942ffd" name="a9f52fbbff5a3f95af8cd7488b8942ffd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9f52fbbff5a3f95af8cd7488b8942ffd">&#9670;&#160;</a></span>F()</h2>
+<a id="a71e3ab7d011242b5fc44c8ab533f7f7b" name="a71e3ab7d011242b5fc44c8ab533f7f7b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a71e3ab7d011242b5fc44c8ab533f7f7b">&#9670;&#160;</a></span>F()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> N, <a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> M&gt; </div>
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual <a class="el" href="#a62a744b82f5a0172711c1882f81ab5c0">VectorF</a> <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; N, M &gt;::F </td>
+          <td class="memname">virtual <a class="el" href="#a2a572c1717ee411d8bcd366eb50b4faf">VectorF</a> <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; Real, N, M &gt;::F </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="#a62a744b82f5a0172711c1882f81ab5c0">VectorF</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>x</em></span>, </td>
+          <td class="paramtype"><a class="el" href="#a2a572c1717ee411d8bcd366eb50b4faf">VectorF</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>x</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="#a62a744b82f5a0172711c1882f81ab5c0">VectorF</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>x_dot</em></span>, </td>
+          <td class="paramtype"><a class="el" href="#a2a572c1717ee411d8bcd366eb50b4faf">VectorF</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>x_dot</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a></td>          <td class="paramname"><span class="paramname"><em>t</em></span>&#160;) const</td>
+          <td class="paramtype">Real</td>          <td class="paramname"><span class="paramname"><em>t</em></span>&#160;) const</td>
         </tr>
       </table>
   </td>
@@ -539,35 +538,35 @@ template&lt;<a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The system function \( \mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, t) \). </dd></dl>
 
-<p>Implemented in <a class="el" href="class_sandals_1_1_explicit.html#a96a07b3c9b4c1daefd0de0608d50a5df">Sandals::Explicit&lt; N, M &gt;</a>, <a class="el" href="class_sandals_1_1_explicit.html#a96a07b3c9b4c1daefd0de0608d50a5df">Sandals::Explicit&lt; N, 0 &gt;</a>, <a class="el" href="class_sandals_1_1_linear.html#a4fbf264570c40a566e611ff83aa79380">Sandals::Linear&lt; N, M &gt;</a>, and <a class="el" href="class_sandals_1_1_semi_explicit.html#a1c2c3514ce7a209aff7f5319383ce0d3">Sandals::SemiExplicit&lt; N, M &gt;</a>.</p>
+<p>Implemented in <a class="el" href="class_sandals_1_1_explicit.html#af9b2558d1b7fcc110de466af8f7c4fb7">Sandals::Explicit&lt; Real, N, M &gt;</a>, <a class="el" href="class_sandals_1_1_explicit.html#af9b2558d1b7fcc110de466af8f7c4fb7">Sandals::Explicit&lt; Real, N, 0 &gt;</a>, <a class="el" href="class_sandals_1_1_explicit.html#af9b2558d1b7fcc110de466af8f7c4fb7">Sandals::Explicit&lt; Real, N, M &gt;</a>, <a class="el" href="class_sandals_1_1_implicit_wrapper.html#ae6a733b6917e665c0477783c72ed901b">Sandals::ImplicitWrapper&lt; Real, N, M &gt;</a>, <a class="el" href="class_sandals_1_1_linear.html#ab47e947b616b5c8372181527621e5ebb">Sandals::Linear&lt; Real, N, M &gt;</a>, <a class="el" href="class_sandals_1_1_linear.html#ab47e947b616b5c8372181527621e5ebb">Sandals::Linear&lt; Real, N, 0 &gt;</a>, <a class="el" href="class_sandals_1_1_semi_explicit.html#ae28983292bf680f7b29461e6012b9e59">Sandals::SemiExplicit&lt; Real, N, M &gt;</a>, and <a class="el" href="class_sandals_1_1_semi_explicit.html#ae28983292bf680f7b29461e6012b9e59">Sandals::SemiExplicit&lt; Real, N, 0 &gt;</a>.</p>
 
 </div>
 </div>
-<a id="a8fd03770094a85733f5ed9fd0dffebc6" name="a8fd03770094a85733f5ed9fd0dffebc6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8fd03770094a85733f5ed9fd0dffebc6">&#9670;&#160;</a></span>F_reverse()</h2>
+<a id="ac69d56ac6d1c1658328f6f2d04c130ca" name="ac69d56ac6d1c1658328f6f2d04c130ca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac69d56ac6d1c1658328f6f2d04c130ca">&#9670;&#160;</a></span>F_reverse()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> N, <a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> M&gt; </div>
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="#a62a744b82f5a0172711c1882f81ab5c0">VectorF</a> <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; N, M &gt;::F_reverse </td>
+          <td class="memname"><a class="el" href="#a2a572c1717ee411d8bcd366eb50b4faf">VectorF</a> <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; Real, N, M &gt;::F_reverse </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="#a62a744b82f5a0172711c1882f81ab5c0">VectorF</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>x</em></span>, </td>
+          <td class="paramtype"><a class="el" href="#a2a572c1717ee411d8bcd366eb50b4faf">VectorF</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>x</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="#a62a744b82f5a0172711c1882f81ab5c0">VectorF</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>x_dot</em></span>, </td>
+          <td class="paramtype"><a class="el" href="#a2a572c1717ee411d8bcd366eb50b4faf">VectorF</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>x_dot</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a></td>          <td class="paramname"><span class="paramname"><em>t</em></span>&#160;) const</td>
+          <td class="paramtype">Real</td>          <td class="paramname"><span class="paramname"><em>t</em></span>&#160;) const</td>
         </tr>
       </table>
   </td>
@@ -589,26 +588,26 @@ template&lt;<a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82
 
 </div>
 </div>
-<a id="a5a9d074b50f2741be0d4a9caf586518e" name="a5a9d074b50f2741be0d4a9caf586518e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5a9d074b50f2741be0d4a9caf586518e">&#9670;&#160;</a></span>h()</h2>
+<a id="ad0a2b556ea25496d4bc0723b8197227d" name="ad0a2b556ea25496d4bc0723b8197227d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad0a2b556ea25496d4bc0723b8197227d">&#9670;&#160;</a></span>h()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> N, <a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> M&gt; </div>
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual <a class="el" href="#aa23e308dcf4be601f2ce0a3869572fdd">VectorH</a> <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; N, M &gt;::h </td>
+          <td class="memname">virtual <a class="el" href="#a3d0eff3748a32b15083a9b488feac033">VectorH</a> <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; Real, N, M &gt;::h </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="#a62a744b82f5a0172711c1882f81ab5c0">VectorF</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>x</em></span>, </td>
+          <td class="paramtype"><a class="el" href="#a2a572c1717ee411d8bcd366eb50b4faf">VectorF</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>x</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a></td>          <td class="paramname"><span class="paramname"><em>t</em></span>&#160;) const</td>
+          <td class="paramtype">Real</td>          <td class="paramname"><span class="paramname"><em>t</em></span>&#160;) const</td>
         </tr>
       </table>
   </td>
@@ -626,28 +625,30 @@ template&lt;<a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The system invariants \( \mathbf{h}(\mathbf{x}, t) \). </dd></dl>
 
+<p>Implemented in <a class="el" href="class_sandals_1_1_explicit_wrapper.html#af63a9e06e1f8850bcce14a360321ac09">Sandals::ExplicitWrapper&lt; Real, N, M &gt;</a>, <a class="el" href="class_sandals_1_1_implicit_wrapper.html#afce446790b69db8837081e8e5da4fc33">Sandals::ImplicitWrapper&lt; Real, N, M &gt;</a>, <a class="el" href="class_sandals_1_1_linear_wrapper.html#af2263d07bf187d0963f162c78aabe8d6">Sandals::LinearWrapper&lt; Real, N, M &gt;</a>, and <a class="el" href="class_sandals_1_1_semi_explicit_wrapper.html#a3efbd20a2488254160dec3281f598fed">Sandals::SemiExplicitWrapper&lt; Real, N, M &gt;</a>.</p>
+
 </div>
 </div>
-<a id="a1a1b670ee411ad2435083a763c5c9d15" name="a1a1b670ee411ad2435083a763c5c9d15"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1a1b670ee411ad2435083a763c5c9d15">&#9670;&#160;</a></span>in_domain()</h2>
+<a id="a4ee618cece24e28456e628445f68b703" name="a4ee618cece24e28456e628445f68b703"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4ee618cece24e28456e628445f68b703">&#9670;&#160;</a></span>in_domain()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> N, <a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> M&gt; </div>
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual bool <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; N, M &gt;::in_domain </td>
+          <td class="memname">virtual bool <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; Real, N, M &gt;::in_domain </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="#a62a744b82f5a0172711c1882f81ab5c0">VectorF</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>x</em></span>, </td>
+          <td class="paramtype"><a class="el" href="#a2a572c1717ee411d8bcd366eb50b4faf">VectorF</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>x</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a></td>          <td class="paramname"><span class="paramname"><em>t</em></span>&#160;) const</td>
+          <td class="paramtype">Real</td>          <td class="paramname"><span class="paramname"><em>t</em></span>&#160;) const</td>
         </tr>
       </table>
   </td>
@@ -665,21 +666,23 @@ template&lt;<a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if \( \mathbf{F}(\mathbf{x}, t) \) is in the domain of the ODE/DAE system. </dd></dl>
 
+<p>Implemented in <a class="el" href="class_sandals_1_1_explicit_wrapper.html#a28cb3ac895229b2550c8da95a1603e8b">Sandals::ExplicitWrapper&lt; Real, N, M &gt;</a>, <a class="el" href="class_sandals_1_1_implicit_wrapper.html#a8cd7f12d586d460d14baab065cab0a4e">Sandals::ImplicitWrapper&lt; Real, N, M &gt;</a>, <a class="el" href="class_sandals_1_1_linear_wrapper.html#a1934251b71187880cb9d69fdb674bd2f">Sandals::LinearWrapper&lt; Real, N, M &gt;</a>, and <a class="el" href="class_sandals_1_1_semi_explicit_wrapper.html#a5671de6204f4b539f7fd6d1367f7bd27">Sandals::SemiExplicitWrapper&lt; Real, N, M &gt;</a>.</p>
+
 </div>
 </div>
-<a id="a2cfb6c585b85f7813e9aacb35ee998f3" name="a2cfb6c585b85f7813e9aacb35ee998f3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2cfb6c585b85f7813e9aacb35ee998f3">&#9670;&#160;</a></span>invariants_number()</h2>
+<a id="aad59a225a57fc8ece8971c6a9b7663a4" name="aad59a225a57fc8ece8971c6a9b7663a4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aad59a225a57fc8ece8971c6a9b7663a4">&#9670;&#160;</a></span>invariants_number()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> N, <a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> M&gt; </div>
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; N, M &gt;::invariants_number </td>
+          <td class="memname"><a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; Real, N, M &gt;::invariants_number </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td> const</td>
@@ -695,19 +698,19 @@ template&lt;<a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82
 
 </div>
 </div>
-<a id="ab153cc1bf5946845e32ee237420e98a6" name="ab153cc1bf5946845e32ee237420e98a6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab153cc1bf5946845e32ee237420e98a6">&#9670;&#160;</a></span>is_explicit()</h2>
+<a id="a62d23a3876db59390272ae7500bb5cbe" name="a62d23a3876db59390272ae7500bb5cbe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a62d23a3876db59390272ae7500bb5cbe">&#9670;&#160;</a></span>is_explicit()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> N, <a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> M&gt; </div>
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; N, M &gt;::is_explicit </td>
+          <td class="memname">bool <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; Real, N, M &gt;::is_explicit </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td> const</td>
@@ -723,19 +726,19 @@ template&lt;<a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82
 
 </div>
 </div>
-<a id="a5223f90739dfa0634560e360d97b0783" name="a5223f90739dfa0634560e360d97b0783"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5223f90739dfa0634560e360d97b0783">&#9670;&#160;</a></span>is_implicit()</h2>
+<a id="a38d6033591b582e4f5cf9ce8b5f2ce87" name="a38d6033591b582e4f5cf9ce8b5f2ce87"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a38d6033591b582e4f5cf9ce8b5f2ce87">&#9670;&#160;</a></span>is_implicit()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> N, <a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> M&gt; </div>
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; N, M &gt;::is_implicit </td>
+          <td class="memname">bool <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; Real, N, M &gt;::is_implicit </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td> const</td>
@@ -751,19 +754,19 @@ template&lt;<a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82
 
 </div>
 </div>
-<a id="aba5f905eefb2332868af26e3a4be2d2d" name="aba5f905eefb2332868af26e3a4be2d2d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aba5f905eefb2332868af26e3a4be2d2d">&#9670;&#160;</a></span>is_semiexplicit()</h2>
+<a id="a041f6ccaa38141afa0efe77494cd7c00" name="a041f6ccaa38141afa0efe77494cd7c00"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a041f6ccaa38141afa0efe77494cd7c00">&#9670;&#160;</a></span>is_semiexplicit()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> N, <a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> M&gt; </div>
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; N, M &gt;::is_semiexplicit </td>
+          <td class="memname">bool <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; Real, N, M &gt;::is_semiexplicit </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td> const</td>
@@ -779,31 +782,31 @@ template&lt;<a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82
 
 </div>
 </div>
-<a id="abf11a9d109f85756c974bacd1f8e4dc8" name="abf11a9d109f85756c974bacd1f8e4dc8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abf11a9d109f85756c974bacd1f8e4dc8">&#9670;&#160;</a></span>JF_x()</h2>
+<a id="a1b4f77a48573d65ab516fc637903eb94" name="a1b4f77a48573d65ab516fc637903eb94"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1b4f77a48573d65ab516fc637903eb94">&#9670;&#160;</a></span>JF_x()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> N, <a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> M&gt; </div>
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual <a class="el" href="#a84a0e42a2e0949854c62036495c4f6a7">MatrixJF</a> <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; N, M &gt;::JF_x </td>
+          <td class="memname">virtual <a class="el" href="#a0f6ed8a93dd0a78c31cc1cba5c2b085d">MatrixJF</a> <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; Real, N, M &gt;::JF_x </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="#a62a744b82f5a0172711c1882f81ab5c0">VectorF</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>x</em></span>, </td>
+          <td class="paramtype"><a class="el" href="#a2a572c1717ee411d8bcd366eb50b4faf">VectorF</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>x</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="#a62a744b82f5a0172711c1882f81ab5c0">VectorF</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>x_dot</em></span>, </td>
+          <td class="paramtype"><a class="el" href="#a2a572c1717ee411d8bcd366eb50b4faf">VectorF</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>x_dot</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a></td>          <td class="paramname"><span class="paramname"><em>t</em></span>&#160;) const</td>
+          <td class="paramtype">Real</td>          <td class="paramname"><span class="paramname"><em>t</em></span>&#160;) const</td>
         </tr>
       </table>
   </td>
@@ -829,35 +832,35 @@ template&lt;<a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The Jacobian \( \mathbf{JF}_{\mathbf{x}}(\mathbf{x}, \mathbf{x}^{\prime}, t) \). </dd></dl>
 
-<p>Implemented in <a class="el" href="class_sandals_1_1_explicit.html#a0433a12d66cbfa3560a448e53b206c24">Sandals::Explicit&lt; N, M &gt;</a>, <a class="el" href="class_sandals_1_1_explicit.html#a0433a12d66cbfa3560a448e53b206c24">Sandals::Explicit&lt; N, 0 &gt;</a>, <a class="el" href="class_sandals_1_1_linear.html#a48740f62e6dc0527addd4c8269d5ea5e">Sandals::Linear&lt; N, M &gt;</a>, and <a class="el" href="class_sandals_1_1_semi_explicit.html#abcb4e7823660f426fd1649d06b5addc6">Sandals::SemiExplicit&lt; N, M &gt;</a>.</p>
+<p>Implemented in <a class="el" href="class_sandals_1_1_explicit.html#a3c5f39a2c4e125d1576ec83931705936">Sandals::Explicit&lt; Real, N, M &gt;</a>, <a class="el" href="class_sandals_1_1_explicit.html#a3c5f39a2c4e125d1576ec83931705936">Sandals::Explicit&lt; Real, N, 0 &gt;</a>, <a class="el" href="class_sandals_1_1_explicit.html#a3c5f39a2c4e125d1576ec83931705936">Sandals::Explicit&lt; Real, N, M &gt;</a>, <a class="el" href="class_sandals_1_1_implicit_wrapper.html#ad10a5170ac9b7cc12c90178f3dd5f0d7">Sandals::ImplicitWrapper&lt; Real, N, M &gt;</a>, <a class="el" href="class_sandals_1_1_linear.html#ae88c2f0e7ab16c3e0ad4eaeb6ec7d4fd">Sandals::Linear&lt; Real, N, M &gt;</a>, <a class="el" href="class_sandals_1_1_linear.html#ae88c2f0e7ab16c3e0ad4eaeb6ec7d4fd">Sandals::Linear&lt; Real, N, 0 &gt;</a>, <a class="el" href="class_sandals_1_1_semi_explicit.html#a8253b6068803d94f1b216115db9bdad3">Sandals::SemiExplicit&lt; Real, N, M &gt;</a>, and <a class="el" href="class_sandals_1_1_semi_explicit.html#a8253b6068803d94f1b216115db9bdad3">Sandals::SemiExplicit&lt; Real, N, 0 &gt;</a>.</p>
 
 </div>
 </div>
-<a id="a65702671d0f99f622dafafa8658a2784" name="a65702671d0f99f622dafafa8658a2784"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a65702671d0f99f622dafafa8658a2784">&#9670;&#160;</a></span>JF_x_dot()</h2>
+<a id="ae335d566bd68090fdbe097fd260bce3e" name="ae335d566bd68090fdbe097fd260bce3e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae335d566bd68090fdbe097fd260bce3e">&#9670;&#160;</a></span>JF_x_dot()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> N, <a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> M&gt; </div>
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual <a class="el" href="#a84a0e42a2e0949854c62036495c4f6a7">MatrixJF</a> <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; N, M &gt;::JF_x_dot </td>
+          <td class="memname">virtual <a class="el" href="#a0f6ed8a93dd0a78c31cc1cba5c2b085d">MatrixJF</a> <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; Real, N, M &gt;::JF_x_dot </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="#a62a744b82f5a0172711c1882f81ab5c0">VectorF</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>x</em></span>, </td>
+          <td class="paramtype"><a class="el" href="#a2a572c1717ee411d8bcd366eb50b4faf">VectorF</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>x</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="#a62a744b82f5a0172711c1882f81ab5c0">VectorF</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>x_dot</em></span>, </td>
+          <td class="paramtype"><a class="el" href="#a2a572c1717ee411d8bcd366eb50b4faf">VectorF</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>x_dot</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a></td>          <td class="paramname"><span class="paramname"><em>t</em></span>&#160;) const</td>
+          <td class="paramtype">Real</td>          <td class="paramname"><span class="paramname"><em>t</em></span>&#160;) const</td>
         </tr>
       </table>
   </td>
@@ -884,35 +887,35 @@ template&lt;<a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The Jacobian \( \mathbf{JF}_{\mathbf{x}^{\prime}}(\mathbf{x}, \mathbf{x}^{\prime}, t) \). </dd></dl>
 
-<p>Implemented in <a class="el" href="class_sandals_1_1_explicit.html#ac9c05abe7920aae84157a53153721bb1">Sandals::Explicit&lt; N, M &gt;</a>, <a class="el" href="class_sandals_1_1_explicit.html#ac9c05abe7920aae84157a53153721bb1">Sandals::Explicit&lt; N, 0 &gt;</a>, <a class="el" href="class_sandals_1_1_linear.html#a4f7a3c55d626fc43c534f813a1db95bc">Sandals::Linear&lt; N, M &gt;</a>, and <a class="el" href="class_sandals_1_1_semi_explicit.html#a930e215ecfb25c75a261a28887d40a2f">Sandals::SemiExplicit&lt; N, M &gt;</a>.</p>
+<p>Implemented in <a class="el" href="class_sandals_1_1_explicit.html#a4cf2a9e95ac370981f0bdee7bb54dc1f">Sandals::Explicit&lt; Real, N, M &gt;</a>, <a class="el" href="class_sandals_1_1_explicit.html#a4cf2a9e95ac370981f0bdee7bb54dc1f">Sandals::Explicit&lt; Real, N, 0 &gt;</a>, <a class="el" href="class_sandals_1_1_explicit.html#a4cf2a9e95ac370981f0bdee7bb54dc1f">Sandals::Explicit&lt; Real, N, M &gt;</a>, <a class="el" href="class_sandals_1_1_implicit_wrapper.html#afddda6d2469aa6b2178786a0416489e5">Sandals::ImplicitWrapper&lt; Real, N, M &gt;</a>, <a class="el" href="class_sandals_1_1_linear.html#a56772504deefc7922090fc93e2f8e8da">Sandals::Linear&lt; Real, N, M &gt;</a>, <a class="el" href="class_sandals_1_1_linear.html#a56772504deefc7922090fc93e2f8e8da">Sandals::Linear&lt; Real, N, 0 &gt;</a>, <a class="el" href="class_sandals_1_1_semi_explicit.html#ac0346f12377378b941a4cadbadffca6b">Sandals::SemiExplicit&lt; Real, N, M &gt;</a>, and <a class="el" href="class_sandals_1_1_semi_explicit.html#ac0346f12377378b941a4cadbadffca6b">Sandals::SemiExplicit&lt; Real, N, 0 &gt;</a>.</p>
 
 </div>
 </div>
-<a id="a4035a83b75976cf57e9c479b3ada8b36" name="a4035a83b75976cf57e9c479b3ada8b36"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4035a83b75976cf57e9c479b3ada8b36">&#9670;&#160;</a></span>JF_x_dot_reverse()</h2>
+<a id="a952aa0b38f6f10da0207605038b75429" name="a952aa0b38f6f10da0207605038b75429"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a952aa0b38f6f10da0207605038b75429">&#9670;&#160;</a></span>JF_x_dot_reverse()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> N, <a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> M&gt; </div>
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="#a84a0e42a2e0949854c62036495c4f6a7">MatrixJF</a> <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; N, M &gt;::JF_x_dot_reverse </td>
+          <td class="memname"><a class="el" href="#a0f6ed8a93dd0a78c31cc1cba5c2b085d">MatrixJF</a> <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; Real, N, M &gt;::JF_x_dot_reverse </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="#a62a744b82f5a0172711c1882f81ab5c0">VectorF</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>x</em></span>, </td>
+          <td class="paramtype"><a class="el" href="#a2a572c1717ee411d8bcd366eb50b4faf">VectorF</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>x</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="#a62a744b82f5a0172711c1882f81ab5c0">VectorF</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>x_dot</em></span>, </td>
+          <td class="paramtype"><a class="el" href="#a2a572c1717ee411d8bcd366eb50b4faf">VectorF</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>x_dot</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a></td>          <td class="paramname"><span class="paramname"><em>t</em></span>&#160;) const</td>
+          <td class="paramtype">Real</td>          <td class="paramname"><span class="paramname"><em>t</em></span>&#160;) const</td>
         </tr>
       </table>
   </td>
@@ -936,31 +939,31 @@ template&lt;<a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82
 
 </div>
 </div>
-<a id="aed515bcbf7916727a40c8cef7506523a" name="aed515bcbf7916727a40c8cef7506523a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aed515bcbf7916727a40c8cef7506523a">&#9670;&#160;</a></span>JF_x_reverse()</h2>
+<a id="ac86e61b80f2a7b0a91bab601f07a3644" name="ac86e61b80f2a7b0a91bab601f07a3644"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac86e61b80f2a7b0a91bab601f07a3644">&#9670;&#160;</a></span>JF_x_reverse()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> N, <a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> M&gt; </div>
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="#a84a0e42a2e0949854c62036495c4f6a7">MatrixJF</a> <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; N, M &gt;::JF_x_reverse </td>
+          <td class="memname"><a class="el" href="#a0f6ed8a93dd0a78c31cc1cba5c2b085d">MatrixJF</a> <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; Real, N, M &gt;::JF_x_reverse </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="#a62a744b82f5a0172711c1882f81ab5c0">VectorF</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>x</em></span>, </td>
+          <td class="paramtype"><a class="el" href="#a2a572c1717ee411d8bcd366eb50b4faf">VectorF</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>x</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="#a62a744b82f5a0172711c1882f81ab5c0">VectorF</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>x_dot</em></span>, </td>
+          <td class="paramtype"><a class="el" href="#a2a572c1717ee411d8bcd366eb50b4faf">VectorF</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>x_dot</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a></td>          <td class="paramname"><span class="paramname"><em>t</em></span>&#160;) const</td>
+          <td class="paramtype">Real</td>          <td class="paramname"><span class="paramname"><em>t</em></span>&#160;) const</td>
         </tr>
       </table>
   </td>
@@ -984,26 +987,26 @@ template&lt;<a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82
 
 </div>
 </div>
-<a id="a6c4db491ce95741b0e2834fecbcf0673" name="a6c4db491ce95741b0e2834fecbcf0673"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6c4db491ce95741b0e2834fecbcf0673">&#9670;&#160;</a></span>Jh_x()</h2>
+<a id="a1fa95e9ff4fbe85e082911d3b21b7b55" name="a1fa95e9ff4fbe85e082911d3b21b7b55"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1fa95e9ff4fbe85e082911d3b21b7b55">&#9670;&#160;</a></span>Jh_x()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> N, <a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> M&gt; </div>
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual <a class="el" href="#aab938cb2398b1726eb64e33c14e686a2">MatrixJH</a> <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; N, M &gt;::Jh_x </td>
+          <td class="memname">virtual <a class="el" href="#abf948b5adb5a0bafe8bfe0c4d0fbe33a">MatrixJH</a> <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; Real, N, M &gt;::Jh_x </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="#a62a744b82f5a0172711c1882f81ab5c0">VectorF</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>x</em></span>, </td>
+          <td class="paramtype"><a class="el" href="#a2a572c1717ee411d8bcd366eb50b4faf">VectorF</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>x</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespace_sandals.html#a14d9a2b6eb039e206089c5dab9f6b977">Real</a></td>          <td class="paramname"><span class="paramname"><em>t</em></span>&#160;) const</td>
+          <td class="paramtype">Real</td>          <td class="paramname"><span class="paramname"><em>t</em></span>&#160;) const</td>
         </tr>
       </table>
   </td>
@@ -1025,23 +1028,25 @@ t)}{\partial\mathbf{x}} \text{.}
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The Jacobian \( \mathbf{Jh}_{\mathbf{x}}(\mathbf{x}, \mathbf{x}^{\prime}, t) \). </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The Jacobian \( \mathbf{Jh}_{\mathbf{x}}(\mathbf{x}, t) \). </dd></dl>
+
+<p>Implemented in <a class="el" href="class_sandals_1_1_explicit_wrapper.html#addf6cbd9308208e992dbbc22e1cefe8d">Sandals::ExplicitWrapper&lt; Real, N, M &gt;</a>, <a class="el" href="class_sandals_1_1_implicit_wrapper.html#a5db02f55a09cea4fbc759816e4b3457f">Sandals::ImplicitWrapper&lt; Real, N, M &gt;</a>, <a class="el" href="class_sandals_1_1_linear_wrapper.html#abe8984ddd875c91e4833e884e48a4ae4">Sandals::LinearWrapper&lt; Real, N, M &gt;</a>, and <a class="el" href="class_sandals_1_1_semi_explicit_wrapper.html#a0eacdb1b75485d11a01d4ac74598fc5a">Sandals::SemiExplicitWrapper&lt; Real, N, M &gt;</a>.</p>
 
 </div>
 </div>
-<a id="a6a25afdb5a8d0157ad5c2587477f5687" name="a6a25afdb5a8d0157ad5c2587477f5687"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6a25afdb5a8d0157ad5c2587477f5687">&#9670;&#160;</a></span>name() <span class="overload">[1/2]</span></h2>
+<a id="a5232c52bbb412d6e5c812501c6701836" name="a5232c52bbb412d6e5c812501c6701836"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5232c52bbb412d6e5c812501c6701836">&#9670;&#160;</a></span>name() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> N, <a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> M&gt; </div>
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::string &amp; <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; N, M &gt;::name </td>
+          <td class="memname">std::string &amp; <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; Real, N, M &gt;::name </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
@@ -1057,19 +1062,19 @@ template&lt;<a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82
 
 </div>
 </div>
-<a id="a69cf264a6c33f3c45877845917915133" name="a69cf264a6c33f3c45877845917915133"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a69cf264a6c33f3c45877845917915133">&#9670;&#160;</a></span>name() <span class="overload">[2/2]</span></h2>
+<a id="a0124e2da7f3fd20ae2b3b6c598642601" name="a0124e2da7f3fd20ae2b3b6c598642601"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0124e2da7f3fd20ae2b3b6c598642601">&#9670;&#160;</a></span>name() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> N, <a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> M&gt; </div>
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::string const  &amp; <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; N, M &gt;::name </td>
+          <td class="memname">std::string const  &amp; <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; Real, N, M &gt;::name </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td> const</td>
@@ -1085,19 +1090,19 @@ template&lt;<a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82
 
 </div>
 </div>
-<a id="aa120573f73b165697fcfd72149221881" name="aa120573f73b165697fcfd72149221881"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa120573f73b165697fcfd72149221881">&#9670;&#160;</a></span>type()</h2>
+<a id="a9388aa3457ad41eb61fc1fd74ff6c3d3" name="a9388aa3457ad41eb61fc1fd74ff6c3d3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9388aa3457ad41eb61fc1fd74ff6c3d3">&#9670;&#160;</a></span>type()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> N, <a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> M&gt; </div>
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="#ad2190974846e817bb7ba121a386913f7">Type</a> <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; N, M &gt;::type </td>
+          <td class="memname"><a class="el" href="#a37ea48741ddf4f101c9c4f507e9a42bc">Type</a> <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; Real, N, M &gt;::type </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td> const</td>
@@ -1114,19 +1119,19 @@ template&lt;<a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="a07c1286395309f54b51d1443dd3eace9" name="a07c1286395309f54b51d1443dd3eace9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a07c1286395309f54b51d1443dd3eace9">&#9670;&#160;</a></span>m_name</h2>
+<a id="a8e332a788cbdaaa42d0970b1f4b52463" name="a8e332a788cbdaaa42d0970b1f4b52463"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8e332a788cbdaaa42d0970b1f4b52463">&#9670;&#160;</a></span>m_name</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> N, <a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> M&gt; </div>
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::string <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; N, M &gt;::m_name</td>
+          <td class="memname">std::string <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; Real, N, M &gt;::m_name</td>
         </tr>
       </table>
   </td>
@@ -1139,19 +1144,19 @@ template&lt;<a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82
 
 </div>
 </div>
-<a id="ac6a7e07f13fb922a154b09d29dbc47d6" name="ac6a7e07f13fb922a154b09d29dbc47d6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac6a7e07f13fb922a154b09d29dbc47d6">&#9670;&#160;</a></span>m_type</h2>
+<a id="a66f633b610966c5a7e31245b12ca113a" name="a66f633b610966c5a7e31245b12ca113a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a66f633b610966c5a7e31245b12ca113a">&#9670;&#160;</a></span>m_type</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> N, <a class="el" href="namespace_sandals.html#af773bcdd0fadfe5e661fed82612adfcc">Integer</a> M&gt; </div>
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="#ad2190974846e817bb7ba121a386913f7">Type</a> <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; N, M &gt;::m_type {Type::IMPLICIT}</td>
+          <td class="memname"><a class="el" href="#a37ea48741ddf4f101c9c4f507e9a42bc">Type</a> <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; Real, N, M &gt;::m_type {Type::IMPLICIT}</td>
         </tr>
       </table>
   </td>

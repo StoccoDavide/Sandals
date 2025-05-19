@@ -1,17 +1,18 @@
 var struct_sandals_1_1_tableau =
 [
-    [ "Matrix", "struct_sandals_1_1_tableau.html#a44cc45c25ef9d0b1d8d6e5e50d9ea0d4", null ],
-    [ "Type", "struct_sandals_1_1_tableau.html#a3d815ceb63c0a5240d4a0f060c74c2e6", null ],
-    [ "Vector", "struct_sandals_1_1_tableau.html#a79fae830cbfc87f94fe55bf63f44acca", null ],
-    [ "check", "struct_sandals_1_1_tableau.html#aeaac243b711e2e27fcd398376d2b6f66", null ],
-    [ "compute_order", "struct_sandals_1_1_tableau.html#abc17b2fdb1557343133e13860da4c911", null ],
-    [ "A", "struct_sandals_1_1_tableau.html#abbd2a2dc79f4d3192bf1b09703a9b610", null ],
-    [ "b", "struct_sandals_1_1_tableau.html#ae3599b0ea4ce3192cf878ede5ed5495c", null ],
-    [ "b_e", "struct_sandals_1_1_tableau.html#a663221e1bc37597ab58c38860b328b84", null ],
-    [ "c", "struct_sandals_1_1_tableau.html#af18be157b6ba6167a417e14ab9fe2e25", null ],
-    [ "is_embedded", "struct_sandals_1_1_tableau.html#a08434f6abf25945e74187861744fde4d", null ],
-    [ "name", "struct_sandals_1_1_tableau.html#ad164e88a41097ed0fba4878437e46df2", null ],
-    [ "order", "struct_sandals_1_1_tableau.html#a54cb3c7b86657df0f9acc4644184e88d", null ],
-    [ "order_e", "struct_sandals_1_1_tableau.html#accb2b483e8986526ba4f469042babb3b", null ],
-    [ "type", "struct_sandals_1_1_tableau.html#a6ddd8970bbb5e2d2487a2adad4e0f56b", null ]
+    [ "Matrix", "struct_sandals_1_1_tableau.html#a8e304262118948930059d1ae1ee2723f", null ],
+    [ "Type", "struct_sandals_1_1_tableau.html#a4dd3201e85e1611e6db734de976407b3", null ],
+    [ "Vector", "struct_sandals_1_1_tableau.html#ab2055b5523106a4e2f4a3e85e09f24f2", null ],
+    [ "check", "struct_sandals_1_1_tableau.html#ab3237880e41e9866269de887d8793c6d", null ],
+    [ "compute_order", "struct_sandals_1_1_tableau.html#a8b0ec68e58cc81d063eeda123f31d0b6", null ],
+    [ "A", "struct_sandals_1_1_tableau.html#a90927822c29822474927dac4b7560994", null ],
+    [ "b", "struct_sandals_1_1_tableau.html#adb6fc94d81cfc022af566b3cce1306a7", null ],
+    [ "b_e", "struct_sandals_1_1_tableau.html#a7a1b861a82318fe9f3ee1e6a0bfdd8bc", null ],
+    [ "c", "struct_sandals_1_1_tableau.html#ace7357aa2bd98b2c543574612646da53", null ],
+    [ "is_embedded", "struct_sandals_1_1_tableau.html#aebff8834ee2b097d092fe146b1dc3e32", null ],
+    [ "name", "struct_sandals_1_1_tableau.html#a78e5e2029e172c92a9e8c1548ee44b8d", null ],
+    [ "order", "struct_sandals_1_1_tableau.html#a4f24b6c49885b3a6b61c0c9e997d565d", null ],
+    [ "order_e", "struct_sandals_1_1_tableau.html#a7fa50fd310e975803ebb988430a4f78e", null ],
+    [ "SQRT_EPSILON", "struct_sandals_1_1_tableau.html#a8554a22770e2873b458eef3c30962ab2", null ],
+    [ "type", "struct_sandals_1_1_tableau.html#a394955ed74bca8867bb0ee1b1de4717f", null ]
 ];

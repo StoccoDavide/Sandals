@@ -1,11 +1,19 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$struct_sandals_1_1_tableau.html" title=" " alt="" coords="5,80,158,106"/>
-<area shape="rect" id="Node000001" href="$class_sandals_1_1_r_k4_tableau.html" title="Butcher tableau for the Runge&#45;Kutta order 4 method." alt="" coords="223,5,370,31"/>
-<area shape="poly" id="edge48_Node000000_Node000001" title=" " alt="" coords="125,71,205,40,240,29,241,34,207,45,127,76"/>
-<area shape="rect" id="Node000002" href="$class_sandals_1_1_ralston4_tableau.html" title="Butcher tableau for the Ralston&#39;s order 4 method." alt="" coords="210,55,383,80"/>
-<area shape="poly" id="edge49_Node000000_Node000002" title=" " alt="" coords="173,79,209,75,210,80,174,85"/>
-<area shape="rect" id="Node000003" href="$class_sandals_1_1_s_s_p_r_k42_tableau.html" title="Butcher tableau for the 4&#45;stage strong&#45;stability preserving Runge&#45;Kutta order 2 method." alt="" coords="206,104,387,130"/>
-<area shape="poly" id="edge50_Node000000_Node000003" title=" " alt="" coords="173,100,206,104,205,109,173,106"/>
-<area shape="rect" id="Node000004" href="$class_sandals_1_1_s_s_p_r_k43_tableau.html" title="Butcher tableau for the 4&#45;stage strong&#45;stability preserving Runge&#45;Kutta order 3 method." alt="" coords="206,153,387,179"/>
-<area shape="poly" id="edge51_Node000000_Node000004" title=" " alt="" coords="128,110,207,140,242,150,240,155,205,145,126,114"/>
+<area shape="rect" id="Node000000" href="$struct_sandals_1_1_tableau.html" title=" " alt="" coords="5,242,193,268"/>
+<area shape="rect" id="Node000001" href="$class_sandals_1_1_gauss_legendre4_tableau.html" title="Butcher Tableau for the Gauss&#45;Legendre order 4 method." alt="" coords="241,5,460,46"/>
+<area shape="poly" id="edge41_Node000000_Node000001" title=" " alt="" coords="110,227,130,189,159,143,195,97,239,57,261,44,264,49,242,61,199,100,163,146,135,192,115,229"/>
+<area shape="rect" id="Node000002" href="$class_sandals_1_1_heun2_tableau.html" title="Butcher tableau for the Heun&#39;s (or 2&#45;stage strong&#45;stability preserving Runge&#45;Kutta) order 2 method." alt="" coords="271,71,430,111"/>
+<area shape="poly" id="edge42_Node000000_Node000002" title=" " alt="" coords="119,228,170,175,203,147,239,122,269,108,271,113,242,127,206,151,174,179,123,232"/>
+<area shape="rect" id="Node000003" href="$class_sandals_1_1_lobatto_i_i_i_a2_tableau.html" title="Butcher tableau for the Lobatto IIIA order 2 method." alt="" coords="254,136,446,177"/>
+<area shape="poly" id="edge43_Node000000_Node000003" title=" " alt="" coords="139,232,240,187,275,175,277,180,242,192,141,237"/>
+<area shape="rect" id="Node000004" href="$class_sandals_1_1_m_t_e22_tableau.html" title="Butcher tableau for the minimal truncation error (or Ralston&#39;s) order 2 method." alt="" coords="269,201,432,242"/>
+<area shape="poly" id="edge44_Node000000_Node000004" title=" " alt="" coords="208,238,268,230,268,235,209,243"/>
+<area shape="rect" id="Node000005" href="$class_sandals_1_1_radau_i_i_a3_tableau.html" title="Butcher tableau for the Radau IIA order 3 method." alt="" coords="259,267,442,307"/>
+<area shape="poly" id="edge45_Node000000_Node000005" title=" " alt="" coords="209,266,259,273,258,278,208,272"/>
+<area shape="rect" id="Node000006" href="$class_sandals_1_1_ralston2_tableau.html" title="Butcher tableau for the Ralston&#39;s (or minimal truncation error) order 2 method." alt="" coords="264,332,437,373"/>
+<area shape="poly" id="edge46_Node000000_Node000006" title=" " alt="" coords="141,272,242,317,277,329,275,334,240,321,139,277"/>
+<area shape="rect" id="Node000007" href="$class_sandals_1_1_s_s_p_r_k22_tableau.html" title="Butcher tableau for the 2&#45;stage strong&#45;stability preserving Runge&#45;Kutta (or Heun) order 2 method." alt="" coords="260,397,441,438"/>
+<area shape="poly" id="edge47_Node000000_Node000007" title=" " alt="" coords="123,278,174,331,207,358,242,382,268,394,266,399,239,387,203,362,170,335,119,282"/>
+<area shape="rect" id="Node000008" href="$class_sandals_1_1_s_s_p_r_k22star_tableau.html" title="Butcher tableau for the optimal 2&#45;stage strong&#45;stability preserving Runge&#45;Kutta order 2 method." alt="" coords="249,463,452,503"/>
+<area shape="poly" id="edge48_Node000000_Node000008" title=" " alt="" coords="115,280,135,318,163,363,199,409,242,448,264,460,261,464,239,452,195,412,159,366,130,321,110,283"/>
 </map>

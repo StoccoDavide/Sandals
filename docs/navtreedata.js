@@ -36,8 +36,6 @@ var NAVTREE =
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
       [ "Namespace Members", "namespacemembers.html", [
         [ "All", "namespacemembers.html", null ],
-        [ "Functions", "namespacemembers_func.html", null ],
-        [ "Variables", "namespacemembers_vars.html", null ],
         [ "Typedefs", "namespacemembers_type.html", null ]
       ] ]
     ] ],
@@ -65,10 +63,11 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "_chebyshev51_8hxx.html",
-"class_sandals_1_1_implicit.html#a07c1286395309f54b51d1443dd3eace9",
-"class_sandals_1_1_runge_kutta.html#a36147fe22d4ce630c5e9d8e51b1257af",
-"class_sandals_1_1_s_s_p_r_k43.html#ac7b4962b05af736929b932e5a572fb42",
-"namespace_sandals.html#aea96f41af7497fba62847edf9183eb8e"
+"class_sandals_1_1_fehlberg45_tableau.html",
+"class_sandals_1_1_linear_wrapper.html#a1282c5825b9db7e3891924ba13073c99",
+"class_sandals_1_1_runge_kutta.html#a4a0a30c3155cf19e758fa4daf90bd621",
+"class_sandals_1_1_s_s_p_r_k93.html#a96640d5cba33d7a9ce9ce864b62c441a",
+"struct_sandals_1_1_solution.html#a2f1d1dbe74461a6e2dbf93ac13a827ca"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronization';

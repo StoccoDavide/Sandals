@@ -36,18 +36,20 @@ namespace Sandals
   *               & \frac{1}{10} & \frac{1}{10} & \frac{1}{10} & \frac{1}{10} & \frac{1}{10} & \frac{1}{10} & \frac{1}{10} & \frac{1}{10} & \frac{1}{10} & \frac{1}{10}
   * \end{array} \text{.}
   * \f]
+  * \tparam Real The scalar number type.
   */
-  class SSPRK104Tableau : public Tableau<10>
+  template <typename Real>
+  class SSPRK104Tableau : public Tableau<Real, 10>
   {
   public:
-    using Tableau<10>::Type;
-    using Tableau<10>::Vector;
-    using Tableau<10>::Matrix;
+    using typename Tableau<Real, 10>::Type;
+    using typename Tableau<Real, 10>::Vector;
+    using typename Tableau<Real, 10>::Matrix;
 
     /**
     * Class constructor for the 10-stage strong-stability preserving Runge-Kutta order 4 method.
     */
-    SSPRK104Tableau() {
+    SSPRK104Tableau<Real>() {
       this->name  = "SSPRK104";
       this->type  = Type::ERK;
       this->order = 4;
@@ -70,27 +72,28 @@ namespace Sandals
   * \brief Class container for the 10-stage strong-stability preserving Runge-Kutta order 4 method.
   *
   * Class container for the 10-stage strong-stability preserving Runge-Kutta order 4 method.
+  * \tparam Real The scalar number type.
   * \tparam N The dimension of the ODE/DAE system.
   * \tparam M The dimension of the invariants manifold.
   */
-  template <Integer N, Integer M = 0>
-  class SSPRK104 : public RungeKutta<10, N, M>
+  template <typename Real, Integer N, Integer M = 0>
+  class SSPRK104 : public RungeKutta<Real, 10, N, M>
   {
   public:
-    using System = typename Implicit<N, M>::Pointer; /**< System type. */
+    using System = typename Implicit<Real, N, M>::Pointer; /**< System type. */
 
     /**
     * Class constructor for a 10-stage strong-stability preserving Runge-Kutta order 4 solver given
     * a Tableau reference.
     */
-    SSPRK104() : RungeKutta<10, N, M>(SSPRK104Tableau()) {}
+    SSPRK104() : RungeKutta<Real, 10, N, M>(SSPRK104Tableau<Real>()) {}
 
     /**
     * Class constructor for a 10-stage strong-stability preserving Runge-Kutta order 4 solver given
     * a Tableau reference.
     * \param[in] t_system The system reference.
     */
-    SSPRK104(System t_system) : RungeKutta<10, N, M>(SSPRK104Tableau(), t_system) {}
+    SSPRK104(System t_system) : RungeKutta<Real, 10, N, M>(SSPRK104Tableau<Real>(), t_system) {}
 
   }; // class SSPRK104
 

@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['b_0',['b',['../class_sandals_1_1_runge_kutta.html#abc96cd77b81dc4d6df5a0c2d1163a20d',1,'Sandals::RungeKutta::b()'],['../class_sandals_1_1_linear.html#af0825203ce37d6073c485a82b15c2538',1,'Sandals::Linear::b()'],['../class_sandals_1_1_semi_explicit.html#ab26a8b89f66b0690663b74c3a8e4d93c',1,'Sandals::SemiExplicit::b()']]],
-  ['b_5fembedded_1',['b_embedded',['../class_sandals_1_1_runge_kutta.html#a4243388c4b59ca70aaddeec11fe1d4c2',1,'Sandals::RungeKutta']]]
+  ['b_0',['b',['../class_sandals_1_1_runge_kutta.html#a53b3ea9f4425939d709e5a045805b1ba',1,'Sandals::RungeKutta::b()'],['../class_sandals_1_1_linear.html#a464a3e806883a251627507bb60ccebae',1,'Sandals::Linear::b()'],['../class_sandals_1_1_linear_wrapper.html#a757b133f7be5b274229eb865af700601',1,'Sandals::LinearWrapper::b()'],['../class_sandals_1_1_linear_wrapper.html#add27346f1a3929a0f3cf9d07150821a2',1,'Sandals::LinearWrapper::b(Real t) const override'],['../class_sandals_1_1_semi_explicit.html#a4eed458de4d038c5eed4df0459eb01f2',1,'Sandals::SemiExplicit::b()'],['../class_sandals_1_1_semi_explicit_wrapper.html#a6689d33827852a2dda9d69a8fa98b5d1',1,'Sandals::SemiExplicitWrapper::b()'],['../class_sandals_1_1_semi_explicit_wrapper.html#a432cf5746838747519934509e7ba20b5',1,'Sandals::SemiExplicitWrapper::b(VectorF const &amp;x, Real t) const override']]],
+  ['b_5fembedded_1',['b_embedded',['../class_sandals_1_1_runge_kutta.html#a22979b4a9c5a8aa0eee984505fb39e87',1,'Sandals::RungeKutta']]]
 ];

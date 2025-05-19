@@ -1,16 +1,15 @@
 var searchData=
 [
-  ['c_0',['c',['../struct_sandals_1_1_tableau.html#af18be157b6ba6167a417e14ab9fe2e25',1,'Sandals::Tableau::c'],['../class_sandals_1_1_runge_kutta.html#a7ac9acace58fa18eff8d2dfba2a031be',1,'Sandals::RungeKutta::c()']]],
-  ['cbrt_5fepsilon_1',['CBRT_EPSILON',['../namespace_sandals.html#a6c7fe5e25be09bb51de7e7d5b11e10e7',1,'Sandals']]],
-  ['chebyshev51_2',['Chebyshev51',['../class_sandals_1_1_chebyshev51.html',1,'Sandals::Chebyshev51&lt; N, M &gt;'],['../class_sandals_1_1_chebyshev51.html#a18850b83898894e7889b2e21184c0727',1,'Sandals::Chebyshev51::Chebyshev51()'],['../class_sandals_1_1_chebyshev51.html#a7c895fa4ac3e5d6cd4685999301a2839',1,'Sandals::Chebyshev51::Chebyshev51(System t_system)']]],
-  ['chebyshev51_2ehxx_3',['Chebyshev51.hxx',['../_chebyshev51_8hxx.html',1,'']]],
-  ['chebyshev51tableau_4',['Chebyshev51Tableau',['../class_sandals_1_1_chebyshev51_tableau.html',1,'Sandals::Chebyshev51Tableau'],['../class_sandals_1_1_chebyshev51_tableau.html#a50d8e3921b8fa4f0a9bc4edd18e711f6',1,'Sandals::Chebyshev51Tableau::Chebyshev51Tableau()']]],
-  ['check_5',['check',['../struct_sandals_1_1_tableau.html#aeaac243b711e2e27fcd398376d2b6f66',1,'Sandals::Tableau']]],
-  ['clear_6',['clear',['../struct_sandals_1_1_solution.html#a120b6a1f244f6411fd0ea89c0cded43b',1,'Sandals::Solution']]],
-  ['clock_7',['Clock',['../class_sandals_1_1_tic_toc.html#ae92ee63e94888cab822085c7257420a2',1,'Sandals::TicToc']]],
-  ['cmake_8',['CMake',['../index.html#autotoc_md17',1,'']]],
-  ['cmd_9',['CMD',['../_runge_kutta_8hxx.html#a0a5ceb9ceb914e08d345410b561cb37a',1,'CMD:&#160;RungeKutta.hxx'],['../_runge_kutta_8hxx.html#a0a5ceb9ceb914e08d345410b561cb37a',1,'CMD:&#160;RungeKutta.hxx'],['../_runge_kutta_8hxx.html#a0a5ceb9ceb914e08d345410b561cb37a',1,'CMD:&#160;RungeKutta.hxx'],['../_runge_kutta_8hxx.html#a0a5ceb9ceb914e08d345410b561cb37a',1,'CMD:&#160;RungeKutta.hxx'],['../_runge_kutta_8hxx.html#a0a5ceb9ceb914e08d345410b561cb37a',1,'CMD:&#160;RungeKutta.hxx'],['../_runge_kutta_8hxx.html#a0a5ceb9ceb914e08d345410b561cb37a',1,'CMD:&#160;RungeKutta.hxx'],['../_tableau_8hxx.html#a0a5ceb9ceb914e08d345410b561cb37a',1,'CMD:&#160;Tableau.hxx'],['../_tableau_8hxx.html#a0a5ceb9ceb914e08d345410b561cb37a',1,'CMD:&#160;Tableau.hxx']]],
-  ['compute_5forder_10',['compute_order',['../struct_sandals_1_1_tableau.html#abc17b2fdb1557343133e13860da4c911',1,'Sandals::Tableau']]],
-  ['conservative_5fresize_11',['conservative_resize',['../struct_sandals_1_1_solution.html#a6b42804901cb273dccae0f18d4322483',1,'Sandals::Solution']]],
-  ['constrained_20minimization_20problem_12',['Constrained minimization problem',['../class_sandals_1_1_runge_kutta.html#autotoc_md12',1,'']]]
+  ['c_0',['c',['../struct_sandals_1_1_tableau.html#ace7357aa2bd98b2c543574612646da53',1,'Sandals::Tableau::c'],['../class_sandals_1_1_runge_kutta.html#a63a7ec16bd770bc90e218dbf76923e9b',1,'Sandals::RungeKutta::c()']]],
+  ['chebyshev51_1',['Chebyshev51',['../class_sandals_1_1_chebyshev51.html',1,'Sandals::Chebyshev51&lt; Real, N, M &gt;'],['../class_sandals_1_1_chebyshev51.html#a7f310a7a29f3bee049311b0d42776f12',1,'Sandals::Chebyshev51::Chebyshev51()'],['../class_sandals_1_1_chebyshev51.html#acd66415f881aedbb0b2e9dac222008d2',1,'Sandals::Chebyshev51::Chebyshev51(System t_system)']]],
+  ['chebyshev51_2ehxx_2',['Chebyshev51.hxx',['../_chebyshev51_8hxx.html',1,'']]],
+  ['chebyshev51tableau_3',['Chebyshev51Tableau',['../class_sandals_1_1_chebyshev51_tableau.html',1,'Sandals::Chebyshev51Tableau&lt; Real &gt;'],['../class_sandals_1_1_chebyshev51_tableau.html#a6b1cf9c2c3cef088292ce4e216bc2890',1,'Sandals::Chebyshev51Tableau::Chebyshev51Tableau()']]],
+  ['check_4',['check',['../struct_sandals_1_1_tableau.html#ab3237880e41e9866269de887d8793c6d',1,'Sandals::Tableau']]],
+  ['clear_5',['clear',['../struct_sandals_1_1_solution.html#abaa797a9df9cb4ed165662ea528c7d40',1,'Sandals::Solution']]],
+  ['clock_6',['Clock',['../class_sandals_1_1_tic_toc.html#a9438b39fbcab41087dd959be9ba03387',1,'Sandals::TicToc']]],
+  ['cmake_7',['CMake',['../index.html#autotoc_md17',1,'']]],
+  ['cmd_8',['CMD',['../_runge_kutta_8hxx.html#a0a5ceb9ceb914e08d345410b561cb37a',1,'CMD:&#160;RungeKutta.hxx'],['../_runge_kutta_8hxx.html#a0a5ceb9ceb914e08d345410b561cb37a',1,'CMD:&#160;RungeKutta.hxx'],['../_runge_kutta_8hxx.html#a0a5ceb9ceb914e08d345410b561cb37a',1,'CMD:&#160;RungeKutta.hxx'],['../_runge_kutta_8hxx.html#a0a5ceb9ceb914e08d345410b561cb37a',1,'CMD:&#160;RungeKutta.hxx'],['../_runge_kutta_8hxx.html#a0a5ceb9ceb914e08d345410b561cb37a',1,'CMD:&#160;RungeKutta.hxx'],['../_runge_kutta_8hxx.html#a0a5ceb9ceb914e08d345410b561cb37a',1,'CMD:&#160;RungeKutta.hxx'],['../_tableau_8hxx.html#a0a5ceb9ceb914e08d345410b561cb37a',1,'CMD:&#160;Tableau.hxx'],['../_tableau_8hxx.html#a0a5ceb9ceb914e08d345410b561cb37a',1,'CMD:&#160;Tableau.hxx']]],
+  ['compute_5forder_9',['compute_order',['../struct_sandals_1_1_tableau.html#a8b0ec68e58cc81d063eeda123f31d0b6',1,'Sandals::Tableau']]],
+  ['conservative_5fresize_10',['conservative_resize',['../struct_sandals_1_1_solution.html#ae52dc49f77df6f3424fdfe4bf4c79898',1,'Sandals::Solution']]],
+  ['constrained_20minimization_20problem_11',['Constrained minimization problem',['../class_sandals_1_1_runge_kutta.html#autotoc_md12',1,'']]]
 ];

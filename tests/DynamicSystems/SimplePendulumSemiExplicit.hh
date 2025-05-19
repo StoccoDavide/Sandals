@@ -15,22 +15,22 @@
 
 using namespace Sandals;
 
-class SimplePendulumSemiExplicit : public SemiExplicit<2, 0>
+class SimplePendulumSemiExplicit : public SemiExplicit<double, 2, 0>
 {
   Real    m_l{1.0};        // Length of the pendulum (m)
   Real    m_g{9.81};       // Gravity acceleration (m/s^2)
   VectorF m_ics{1.0, 0.0}; // Initial conditions
 
 public:
-  using VectorF  = typename SemiExplicit<2, 0>::VectorF;
-  using MatrixA  = typename SemiExplicit<2, 0>::MatrixA;
-  using TensorTA = typename SemiExplicit<2, 0>::TensorTA;
-  using VectorB  = typename SemiExplicit<2, 0>::VectorB;
-  using MatrixJB = typename SemiExplicit<2, 0>::MatrixJB;
-  using VectorH  = typename SemiExplicit<2, 0>::VectorH;
-  using MatrixJH = typename SemiExplicit<2, 0>::MatrixJH;
+  using VectorF  = typename SemiExplicit<double, 2, 0>::VectorF;
+  using MatrixA  = typename SemiExplicit<double, 2, 0>::MatrixA;
+  using TensorTA = typename SemiExplicit<double, 2, 0>::TensorTA;
+  using VectorB  = typename SemiExplicit<double, 2, 0>::VectorB;
+  using MatrixJB = typename SemiExplicit<double, 2, 0>::MatrixJB;
+  using VectorH  = typename SemiExplicit<double, 2, 0>::VectorH;
+  using MatrixJH = typename SemiExplicit<double, 2, 0>::MatrixJH;
 
-  SimplePendulumSemiExplicit() : SemiExplicit<2, 0>("SimplePendulumSemiExplicit") {}
+  SimplePendulumSemiExplicit() : SemiExplicit<double, 2, 0>("SimplePendulumSemiExplicit") {}
 
   ~SimplePendulumSemiExplicit() {}
 

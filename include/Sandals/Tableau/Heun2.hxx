@@ -28,18 +28,20 @@ namespace Sandals
   *     & 1/2 & 1/2
   * \end{array} \text{.}
   * \f]
+  * \tparam Real The scalar number type.
   */
-  class Heun2Tableau : public Tableau<2>
+  template <typename Real>
+  class Heun2Tableau : public Tableau<Real, 2>
   {
   public:
-    using Tableau<2>::Type;
-    using Tableau<2>::Vector;
-    using Tableau<2>::Matrix;
+    using typename Tableau<Real, 2>::Type;
+    using typename Tableau<Real, 2>::Vector;
+    using typename Tableau<Real, 2>::Matrix;
 
     /**
     * Class constructor for the Heun's (or 2-stage strong-stability preserving Runge-Kutta) order 2 method.
     */
-    Heun2Tableau() {
+    Heun2Tableau<Real>() {
       this->name  = "Heun2";
       this->type  = Type::ERK;
       this->order = 2;
@@ -54,27 +56,28 @@ namespace Sandals
   * \brief Class container for the Heun's (or 2-stage strong-stability preserving Runge-Kutta) order 2 method.
   *
   * Class container for the Heun's (or 2-stage strong-stability preserving Runge-Kutta) order 2 method.
+  * \tparam Real The scalar number type.
   * \tparam N The dimension of the ODE/DAE system.
   * \tparam M The dimension of the invariants manifold.
   */
-  template <Integer N, Integer M = 0>
-  class Heun2 : public RungeKutta<2, N, M>
+  template <typename Real, Integer N, Integer M = 0>
+  class Heun2 : public RungeKutta<Real, 2, N, M>
   {
   public:
-    using System = typename Implicit<N, M>::Pointer; /**< System type. */
+    using System = typename Implicit<Real, N, M>::Pointer; /**< System type. */
 
     /**
     * Class constructor for a Heun's (or 2-stage strong-stability preserving Runge-Kutta) order 2
     * solver given a Tableau reference.
     */
-    Heun2() : RungeKutta<2, N, M>(Heun2Tableau()) {}
+    Heun2() : RungeKutta<Real, 2, N, M>(Heun2Tableau<Real>()) {}
 
     /**
     * Class constructor for a Heun's (or 2-stage strong-stability preserving Runge-Kutta) order 2
     * solver given a Tableau reference.
     * \param[in] t_system The system reference.
     */
-    Heun2(System t_system) : RungeKutta<2, N, M>(Heun2Tableau(), t_system) {}
+    Heun2(System t_system) : RungeKutta<Real, 2, N, M>(Heun2Tableau<Real>(), t_system) {}
 
   }; // class Heun2
 

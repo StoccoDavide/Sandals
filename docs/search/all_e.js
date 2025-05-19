@@ -1,25 +1,7 @@
 var searchData=
 [
   ['on_20the_20invariants_20manifold_0',['Projection on the invariants manifold',['../class_sandals_1_1_runge_kutta.html#autotoc_md11',1,'']]],
-  ['ones_5fmat1_1',['ONES_MAT1',['../namespace_sandals.html#a93187449487f74d9a80b08dc8506571f',1,'Sandals']]],
-  ['ones_5fmat2_2',['ONES_MAT2',['../namespace_sandals.html#ac627c9845e9a9d1b20b2829b8359e417',1,'Sandals']]],
-  ['ones_5fmat3_3',['ONES_MAT3',['../namespace_sandals.html#ab5a80b0474febb237ceb25b11ee6b474',1,'Sandals']]],
-  ['ones_5fmat4_4',['ONES_MAT4',['../namespace_sandals.html#ab25b77925c847d2daa6cce8ae8f39906',1,'Sandals']]],
-  ['ones_5fmat5_5',['ONES_MAT5',['../namespace_sandals.html#a285faf29cc977e1bcfbf079c216350f3',1,'Sandals']]],
-  ['ones_5fmat6_6',['ONES_MAT6',['../namespace_sandals.html#ac07a25220aceba3e73ba7f6432eed885',1,'Sandals']]],
-  ['ones_5fmat7_7',['ONES_MAT7',['../namespace_sandals.html#a69e8b9d40dca68b1a21381402438fed7',1,'Sandals']]],
-  ['ones_5fmat8_8',['ONES_MAT8',['../namespace_sandals.html#a28ef4580405df5d0cb6f1e4be4e75202',1,'Sandals']]],
-  ['ones_5fmat9_9',['ONES_MAT9',['../namespace_sandals.html#a57a5e796d56abab6328b720d5638b718',1,'Sandals']]],
-  ['ones_5fvec1_10',['ONES_VEC1',['../namespace_sandals.html#a885b0514744b17be16f1ddedf5562b29',1,'Sandals']]],
-  ['ones_5fvec2_11',['ONES_VEC2',['../namespace_sandals.html#a69a22cc54c3b62d9f9eb4a510540ecec',1,'Sandals']]],
-  ['ones_5fvec3_12',['ONES_VEC3',['../namespace_sandals.html#aeb67d34d1c49cf7b1271b1cb3d2cd420',1,'Sandals']]],
-  ['ones_5fvec4_13',['ONES_VEC4',['../namespace_sandals.html#a52da4ff8178a16553a9c2c756ace54e2',1,'Sandals']]],
-  ['ones_5fvec5_14',['ONES_VEC5',['../namespace_sandals.html#ac094f3b08b402d488926a3dcd77da880',1,'Sandals']]],
-  ['ones_5fvec6_15',['ONES_VEC6',['../namespace_sandals.html#a9a7a2391cd1fd0cfb20247f2ed133802',1,'Sandals']]],
-  ['ones_5fvec7_16',['ONES_VEC7',['../namespace_sandals.html#a4e3f61a89d1bdd03ec9eb8c37e7c8d83',1,'Sandals']]],
-  ['ones_5fvec8_17',['ONES_VEC8',['../namespace_sandals.html#a5ebfb178df62b492ea9872d5a0994ced',1,'Sandals']]],
-  ['ones_5fvec9_18',['ONES_VEC9',['../namespace_sandals.html#a24a303ecf36532a8f13802780c5c526c',1,'Sandals']]],
-  ['operator_3d_19',['operator=',['../class_sandals_1_1_runge_kutta.html#a74be194fb1df4d1919e9c4b6b521b9c5',1,'Sandals::RungeKutta::operator=()'],['../class_sandals_1_1_tic_toc.html#a56af3846c3db14635e405a7c872f0b7d',1,'Sandals::TicToc::operator=()']]],
-  ['order_20',['order',['../struct_sandals_1_1_tableau.html#a54cb3c7b86657df0f9acc4644184e88d',1,'Sandals::Tableau::order'],['../class_sandals_1_1_runge_kutta.html#a6289cce5933a2db929838b1e9eba9bcc',1,'Sandals::RungeKutta::order()']]],
-  ['order_5fe_21',['order_e',['../struct_sandals_1_1_tableau.html#accb2b483e8986526ba4f469042babb3b',1,'Sandals::Tableau']]]
+  ['operator_3d_1',['operator=',['../class_sandals_1_1_runge_kutta.html#a18bcb8de5b2e4a71b5ed33561043e5b9',1,'Sandals::RungeKutta::operator=()'],['../class_sandals_1_1_tic_toc.html#a63dc8a90775af963f9fb79055e92fb12',1,'Sandals::TicToc::operator=()']]],
+  ['order_2',['order',['../struct_sandals_1_1_tableau.html#a4f24b6c49885b3a6b61c0c9e997d565d',1,'Sandals::Tableau::order'],['../class_sandals_1_1_runge_kutta.html#a49b16e24fa0c4a848768363fd33e83d9',1,'Sandals::RungeKutta::order()']]],
+  ['order_5fe_3',['order_e',['../struct_sandals_1_1_tableau.html#a7fa50fd310e975803ebb988430a4f78e',1,'Sandals::Tableau']]]
 ];

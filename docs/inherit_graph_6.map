@@ -1,5 +1,15 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$class_sandals_1_1_runge_kutta.html" title=" " alt="" coords="5,5,151,46"/>
-<area shape="rect" id="Node000001" href="$class_sandals_1_1_chebyshev51.html" title="Class container for the 5&#45;stage Runge&#45;Kutta&#45;Chebyshev order 1 method." alt="" coords="199,5,355,46"/>
-<area shape="poly" id="edge27_Node000000_Node000001" title=" " alt="" coords="167,23,198,23,198,28,167,28"/>
+<area shape="rect" id="Node000000" href="$class_sandals_1_1_runge_kutta.html" title=" " alt="" coords="5,169,151,210"/>
+<area shape="rect" id="Node000001" href="$class_sandals_1_1_gauss_legendre6.html" title="Class container for the Gauss&#45;Legendre order 6 method." alt="" coords="201,5,376,46"/>
+<area shape="poly" id="edge24_Node000000_Node000001" title=" " alt="" coords="100,155,142,105,168,79,197,57,220,44,222,49,200,61,172,83,146,109,104,158"/>
+<area shape="rect" id="Node000002" href="$class_sandals_1_1_heun3.html" title="Class container for the Heun&#39;s order 3 method." alt="" coords="210,71,367,111"/>
+<area shape="poly" id="edge25_Node000000_Node000002" title=" " alt="" coords="126,159,198,122,227,109,229,114,200,127,128,164"/>
+<area shape="rect" id="Node000003" href="$class_sandals_1_1_radau_i_i_a5.html" title="Class container for the Radau IIA order 5 method." alt="" coords="219,136,358,177"/>
+<area shape="poly" id="edge26_Node000000_Node000003" title=" " alt="" coords="165,173,218,165,219,170,166,178"/>
+<area shape="rect" id="Node000004" href="$class_sandals_1_1_ralston3.html" title="Class container for the Ralston&#39;s order 3 method." alt="" coords="220,201,356,242"/>
+<area shape="poly" id="edge27_Node000000_Node000004" title=" " alt="" coords="166,200,220,209,219,214,165,206"/>
+<area shape="rect" id="Node000005" href="$class_sandals_1_1_s_s_p_i_r_k33.html" title="Class container for the 3&#45;stage diagonally&#45;implicit strong&#45;stability preserving Runge&#45;Kutta order 3 m..." alt="" coords="214,267,362,307"/>
+<area shape="poly" id="edge28_Node000000_Node000005" title=" " alt="" coords="130,216,200,251,229,264,227,268,198,256,127,220"/>
+<area shape="rect" id="Node000006" href="$class_sandals_1_1_s_s_p_r_k33.html" title="Class container for the 3&#45;stage strong&#45;stability preserving Runge&#45;Kutta order 3 method." alt="" coords="199,332,378,373"/>
+<area shape="poly" id="edge29_Node000000_Node000006" title=" " alt="" coords="105,221,146,270,172,295,200,317,222,329,220,334,197,321,169,299,142,274,101,224"/>
 </map>

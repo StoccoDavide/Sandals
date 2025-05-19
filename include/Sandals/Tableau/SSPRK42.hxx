@@ -30,18 +30,20 @@ namespace Sandals
   *               & \frac{1}{4} & \frac{1}{4} & \frac{1}{4} & \frac{1}{4}
   * \end{array} \text{.}
   * \f]
+  * \tparam Real The scalar number type.
   */
-  class SSPRK42Tableau : public Tableau<4>
+  template <typename Real>
+  class SSPRK42Tableau : public Tableau<Real, 4>
   {
   public:
-    using Tableau<4>::Type;
-    using Tableau<4>::Vector;
-    using Tableau<4>::Matrix;
+    using typename Tableau<Real, 4>::Type;
+    using typename Tableau<Real, 4>::Vector;
+    using typename Tableau<Real, 4>::Matrix;
 
     /**
     * Class constructor for the 4-stage strong-stability preserving Runge-Kutta order 2 method.
     */
-    SSPRK42Tableau() {
+    SSPRK42Tableau<Real>() {
       this->name  = "SSPRK42";
       this->type  = Type::ERK;
       this->order = 2;
@@ -58,27 +60,28 @@ namespace Sandals
   * \brief Class container for the 4-stage strong-stability preserving Runge-Kutta order 2 method.
   *
   * Class container for the 4-stage strong-stability preserving Runge-Kutta order 2 method.
+  * \tparam Real The scalar number type.
   * \tparam N The dimension of the ODE/DAE system.
   * \tparam M The dimension of the invariants manifold.
   */
-  template <Integer N, Integer M = 0>
-  class SSPRK42 : public RungeKutta<4, N, M>
+  template <typename Real, Integer N, Integer M = 0>
+  class SSPRK42 : public RungeKutta<Real, 4, N, M>
   {
   public:
-    using System = typename Implicit<N, M>::Pointer; /**< System type. */
+    using System = typename Implicit<Real, N, M>::Pointer; /**< System type. */
 
     /**
     * Class constructor for a 4-stage strong-stability preserving Runge-Kutta order 2 solver given
     * a Tableau reference.
     */
-    SSPRK42() : RungeKutta<4, N, M>(SSPRK42Tableau()) {}
+    SSPRK42() : RungeKutta<Real, 4, N, M>(SSPRK42Tableau<Real>()) {}
 
     /**
     * Class constructor for a 4-stage strong-stability preserving Runge-Kutta order 2 solver given
     * a Tableau reference.
     * \param[in] t_system The system reference.
     */
-    SSPRK42(System t_system) : RungeKutta<4, N, M>(SSPRK42Tableau(), t_system) {}
+    SSPRK42(System t_system) : RungeKutta<Real, 4, N, M>(SSPRK42Tableau<Real>(), t_system) {}
 
   }; // class SSPRK42
 

@@ -49,10 +49,11 @@ namespace Sandals {
   * \f]
   *
   * Such a solution can be retrieved as standard library vectors or Eigen library vectors.
+  * \tparam Real The scalar number type.
   * \tparam N The dimension of the ODE/DAE system.
   * \tparam M The dimension of the invariants manifold.
   */
-  template <Integer N, Integer M = 0>
+  template <typename Real, Integer N, Integer M = 0>
   struct Solution
   {
     using Vector  = Eigen::Vector<Real, Eigen::Dynamic>;    /**< Templetized vector type. */

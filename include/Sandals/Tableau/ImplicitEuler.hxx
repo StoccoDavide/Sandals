@@ -27,18 +27,20 @@ namespace Sandals
   *     & 1
   * \end{array} \text{.}
   * \f]
+  * \tparam Real The scalar number type.
   */
-  class ImplicitEulerTableau : public Tableau<1>
+  template <typename Real>
+  class ImplicitEulerTableau : public Tableau<Real, 1>
   {
   public:
-    using Tableau<1>::Type;
-    using Tableau<1>::Vector;
-    using Tableau<1>::Matrix;
+    using typename Tableau<Real, 1>::Type;
+    using typename Tableau<Real, 1>::Vector;
+    using typename Tableau<Real, 1>::Matrix;
 
     /**
     * Class constructor for the Implicit Euler method.
     */
-    ImplicitEulerTableau() {
+    ImplicitEulerTableau<Real>() {
       this->name  = "ImplicitEuler";
       this->type  = Type::IRK;
       this->order = 1;
@@ -52,25 +54,26 @@ namespace Sandals
   * \brief Class container for the Implicit Euler method.
   *
   * Class container for the Implicit Euler method.
+  * \tparam Real The scalar number type.
   * \tparam N The dimension of the ODE/DAE system.
   * \tparam M The dimension of the invariants manifold.
   */
-  template <Integer N, Integer M = 0>
-  class ImplicitEuler : public RungeKutta<1, N, M>
+  template <typename Real, Integer N, Integer M = 0>
+  class ImplicitEuler : public RungeKutta<Real, 1, N, M>
   {
   public:
-    using System = typename Implicit<N, M>::Pointer; /**< System type. */
+    using System = typename Implicit<Real, N, M>::Pointer; /**< System type. */
 
     /**
     * Class constructor for a Implicit Euler solver given a Tableau reference.
     */
-    ImplicitEuler() : RungeKutta<1, N, M>(ImplicitEulerTableau()) {}
+    ImplicitEuler() : RungeKutta<Real, 1, N, M>(ImplicitEulerTableau<Real>()) {}
 
     /**
     * Class constructor for a Implicit Euler solver given a Tableau reference.
     * \param[in] t_system The system reference.
     */
-    ImplicitEuler(System t_system) : RungeKutta<1, N, M>(ImplicitEulerTableau(), t_system) {}
+    ImplicitEuler(System t_system) : RungeKutta<Real, 1, N, M>(ImplicitEulerTableau<Real>(), t_system) {}
 
   }; // class ImplicitEuler
 

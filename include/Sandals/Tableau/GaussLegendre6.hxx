@@ -39,17 +39,18 @@ namespace Sandals
   * with \f$ t_1 = \sqrt{15}/10 \f$, \f$ t_2 = \sqrt{15}/15 \f$, \f$ t_3 = \sqrt{15}/24 \f$, \f$
   * t_4 = \sqrt{15}/30 \f$, \f$ w = 5/36 \f$, and \f$ z = 2/9 \f$.
   */
-  class GaussLegendre6Tableau : public Tableau<3>
+  template <typename Real>
+  class GaussLegendre6Tableau : public Tableau<Real, 3>
   {
   public:
-    using Tableau<3>::Type;
-    using Tableau<3>::Vector;
-    using Tableau<3>::Matrix;
+    using typename Tableau<Real, 3>::Type;
+    using typename Tableau<Real, 3>::Vector;
+    using typename Tableau<Real, 3>::Matrix;
 
     /**
     * Class constructor for the Gauss-Legendre order 6 method.
     */
-    GaussLegendre6Tableau() {
+    GaussLegendre6Tableau<Real>() {
       this->name  = "GaussLegendre6";
       this->type  = Type::IRK;
       this->order = 6;
@@ -71,25 +72,26 @@ namespace Sandals
   * \brief Class container for the Gauss-Legendre order 6 method.
   *
   * Class container for the Gauss-Legendre order 6 method.
+  * \tparam Real The scalar number type.
   * \tparam N The dimension of the ODE/DAE system.
   * \tparam M The dimension of the invariants manifold.
   */
-  template <Integer N, Integer M = 0>
-  class GaussLegendre6 : public RungeKutta<3, N, M>
+  template <typename Real, Integer N, Integer M = 0>
+  class GaussLegendre6 : public RungeKutta<Real, 3, N, M>
   {
   public:
-    using System = typename Implicit<N, M>::Pointer; /**< System type. */
+    using System = typename Implicit<Real, N, M>::Pointer; /**< System type. */
 
     /**
     * Class constructor for a Runge-Kutta solver given a Tableau reference.
     */
-    GaussLegendre6() : RungeKutta<3, N, M>(GaussLegendre6Tableau()) {}
+    GaussLegendre6() : RungeKutta<Real, 3, N, M>(GaussLegendre6Tableau<Real>()) {}
 
     /**
     * Class constructor for a Runge-Kutta solver given a Tableau reference.
     * \param[in] t_system The system reference.
     */
-    GaussLegendre6(System t_system) : RungeKutta<3, N, M>(GaussLegendre6Tableau(), t_system) {}
+    GaussLegendre6(System t_system) : RungeKutta<Real, 3, N, M>(GaussLegendre6Tableau<Real>(), t_system) {}
 
   }; // class GaussLegendre6
 

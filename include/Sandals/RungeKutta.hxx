@@ -30,36 +30,42 @@ namespace Sandals {
   *
   * \includedoc docs/markdown/RungeKutta.md
   *
+  * \tparam Real The scalar number type.
   * \tparam S The number of stages of the Runge-Kutta method.
   * \tparam N The dimension of the ODE/DAE system.
   * \tparam M The dimension of the invariants manifold.
   */
-  template <Integer S, Integer N, Integer M>
+  template <typename Real, Integer S, Integer N, Integer M>
   class RungeKutta
   {
+    using VectorX = Eigen::Vector<Real, Eigen::Dynamic>; /**< \f$ N \times 1 \f$ vector of Real number type (column vector). */
+    using MatrixX = Eigen::Matrix<Real, Eigen::Dynamic, Eigen::Dynamic>; /**< \f$ N \times N \f$ matrix of Real number type. */
     using VectorK = Eigen::Vector<Real, N*S>; /**< Templetized vector type. */
     using MatrixK = Eigen::Matrix<Real, N, S>; /**< Templetized matrix type. */
     using MatrixJ = Eigen::Matrix<Real, N*S, N*S>; /**< Templetized matrix type. */
     using VectorP = Eigen::Matrix<Real, N+M, 1>; /**< Templetized vector type. */
     using MatrixP = Eigen::Matrix<Real, N+M, N+M>; /**< Templetized matrix type. */
-    using NewtonX = Optimist::RootFinder::Newton<Real, N>;   /**< Templetized Newton solver for ERK and DIRK methods. */
+    using NewtonX = Optimist::RootFinder::Newton<Real, N>; /**< Templetized Newton solver for ERK and DIRK methods. */
     using NewtonK = Optimist::RootFinder::Newton<Real, N*S>; /**< Templetized Newton solver for IRK methods. */
-    using VectorS = typename Tableau<S>::Vector; /**< Templetized vector type. */
-    using MatrixS = typename Tableau<S>::Matrix; /**< Templetized matrix type. */
-    using VectorN = typename Implicit<N, M>::VectorF; /**< Templetized vector type. */
-    using MatrixN = typename Implicit<N, M>::MatrixJF; /**< Templetized matrix type. */
-    using VectorM = typename Implicit<N, M>::VectorH; /**< Templetized vector type. */
-    using MatrixM = typename Implicit<N, M>::MatrixJH; /**< Templetized matrix type. */
+    using VectorS = typename Tableau<Real, S>::Vector; /**< Templetized vector type. */
+    using MatrixS = typename Tableau<Real, S>::Matrix; /**< Templetized matrix type. */
+    using VectorN = typename Implicit<Real, N, M>::VectorF; /**< Templetized vector type. */
+    using MatrixN = typename Implicit<Real, N, M>::MatrixJF; /**< Templetized matrix type. */
+    using VectorM = typename Implicit<Real, N, M>::VectorH; /**< Templetized vector type. */
+    using MatrixM = typename Implicit<Real, N, M>::MatrixJH; /**< Templetized matrix type. */
 
   public:
-    using System   = typename Implicit<N, M>::Pointer;    /**< Shared pointer to an implicit ODE/DAE system. */
-    using Type     = typename Tableau<S>::Type;           /**< Runge-Kutta type enumeration. */
-    using Time     = Eigen::Vector<Real, Eigen::Dynamic>; /**< Templetized vector type for the independent variable (or time). */
+    SANDALS_BASIC_CONSTANTS(Real) /**< Basic constants. */
+    const Real SQRT_EPSILON{std::sqrt(EPSILON)}; /**< Square root of machine epsilon epsilon static constant value. */ \
+
+    using System = typename Implicit<Real, N, M>::Pointer; /**< Shared pointer to an implicit ODE/DAE system. */
+    using Type = typename Tableau<Real, S>::Type; /**< Runge-Kutta type enumeration. */
+    using Time = Eigen::Vector<Real, Eigen::Dynamic>; /**< Templetized vector type for the independent variable (or time). */
 
   private:
     NewtonX    m_newtonX;                          /**< Newton solver for ERK and DIRK methods. */
     NewtonK    m_newtonK;                          /**< Newton solver for IRK methods. */
-    Tableau<S> m_tableau;                          /**< Butcher tableau of the Runge-Kutta method. */
+    Tableau<Real, S> m_tableau;                    /**< Butcher tableau of the Runge-Kutta method. */
     System     m_system;                           /**< ODE/DAE system object pointer. */
     Real       m_absolute_tolerance{EPSILON_HIGH}; /**< Absolute tolerance for adaptive step \f$ \epsilon_{\text{abs}} \f$. */
     Real       m_relative_tolerance{EPSILON_HIGH}; /**< Relative tolerance for adaptive step \f$ \epsilon_{\text{rel}} \f$. */
@@ -78,7 +84,6 @@ namespace Sandals {
     bool    m_projection{true};                   /**< Aadaptive step mode boolean. */
 
   public:
-
     /**
     * Copy constructor for the timer.
     */
@@ -93,7 +98,7 @@ namespace Sandals {
     * Class constructor for the Runge-Kutta method.
     * \param[in] t_tableau The Tableau reference.
     */
-    RungeKutta(Tableau<S> const &t_tableau)
+    RungeKutta(Tableau<Real, S> const &t_tableau)
       : m_tableau(t_tableau) {
       this->verbose_mode(this->m_verbose);
     }
@@ -103,10 +108,12 @@ namespace Sandals {
     * \param[in] t_tableau The Tableau reference.
     * \param[in] t_system The ODE/DAE system shared pointer.
     */
-    RungeKutta(Tableau<S> const &t_tableau, System t_system)
+    RungeKutta(Tableau<Real, S> const &t_tableau, System t_system)
       : m_tableau(t_tableau), m_system(t_system) {
       this->verbose_mode(this->m_verbose);
     }
+
+
 
     /**
     * Get the enumeration type of the Runge-Kutta method.
@@ -136,13 +143,13 @@ namespace Sandals {
     * Get the Butcher Tableau reference.
     * \return The Tableau reference.
     */
-    Tableau<S> & tableau() {return this->m_tableau;}
+    Tableau<Real, S> & tableau() {return this->m_tableau;}
 
     /**
     * Get the Butcher Tableau const reference.
     * \return The Tableau const reference.
     */
-    Tableau<S> const & tableau() const {return this->m_tableau;}
+    Tableau<Real, S> const & tableau() const {return this->m_tableau;}
 
     /**
     * Get the stages \f$ s \f$ number of the Runge-Kutta method.
@@ -203,6 +210,174 @@ namespace Sandals {
     * \param[in] t_system The ODE/DAE system pointer.
     */
     void system(System t_system) {this->m_system = t_system;}
+
+    /**
+    * Set the implicit ODE/DAE system with lambda functions.
+    * \param[in] F The ODE/DAE system function.
+    * \param[in] JF_x The Jacobian of the ODE/DAE system function with respect to the states.
+    * \param[in] JF_x_dot The Jacobian of the ODE/DAE system function with respect to the states derivative.
+    * \param[in] h The system's invariants.
+    * \param[in] Jh_x The Jacobian of the system's invariants with respect to the states.
+    * \param[in] in_domain The in-domain function.
+    */
+    void implcit_system(
+      typename ImplicitWrapper<Real, N, M>::FunctionF F,
+      typename ImplicitWrapper<Real, N, M>::FunctionJF JF_x,
+      typename ImplicitWrapper<Real, N, M>::FunctionJF JF_x_dot,
+      typename ImplicitWrapper<Real, N, M>::FunctionH h = ImplicitWrapper<Real, N, M>::DefaultH,
+      typename ImplicitWrapper<Real, N, M>::FunctionJH Jh_x = ImplicitWrapper<Real, N, M>::DefaultJH,
+      typename ImplicitWrapper<Real, N, M>::FunctionID in_domain = ImplicitWrapper<Real, N, M>::DefaultID
+    ) {
+      this->m_system = std::make_shared<ImplicitWrapper<Real, N, M>>(F, JF_x, JF_x_dot, h, Jh_x, in_domain);
+    }
+
+    /**
+    * Set the implicit ODE/DAE system with lambda functions.
+    * \param[in] name The name of the implicit ODE/DAE system.
+    * \param[in] F The ODE/DAE system function.
+    * \param[in] JF_x The Jacobian of the ODE/DAE system function with respect to the states.
+    * \param[in] JF_x_dot The Jacobian of the ODE/DAE system function with respect to the states derivative.
+    * \param[in] h The system's invariants.
+    * \param[in] Jh_x The Jacobian of the system's invariants with respect to the states.
+    * \param[in] in_domain The in-domain function.
+    */
+    void implcit_system(
+      std::string name,
+      typename ImplicitWrapper<Real, N, M>::FunctionF F,
+      typename ImplicitWrapper<Real, N, M>::FunctionJF JF_x,
+      typename ImplicitWrapper<Real, N, M>::FunctionJF JF_x_dot,
+      typename ImplicitWrapper<Real, N, M>::FunctionH h = ImplicitWrapper<Real, N, M>::DefaultH,
+      typename ImplicitWrapper<Real, N, M>::FunctionJH Jh_x = ImplicitWrapper<Real, N, M>::DefaultJH,
+      typename ImplicitWrapper<Real, N, M>::FunctionID in_domain = ImplicitWrapper<Real, N, M>::DefaultID
+    ) {
+      this->m_system = std::make_shared<ImplicitWrapper<Real, N, M>>(name, F, JF_x, JF_x_dot, h, Jh_x, in_domain);
+    }
+
+    /**
+    * Set the explicit ODE/DAE system with lambda functions.
+    * \param[in] f The explicit ODE system function.
+    * \param[in] Jf_x The Jacobian of the explicit ODE system function with respect to the states.
+    * \param[in] h The system's invariants.
+    * \param[in] Jh_x The Jacobian of the system's invariants with respect to the states.
+    * \param[in] in_domain The in-domain function.
+    */
+    void explicit_system(
+      typename ExplicitWrapper<Real, N, M>::FunctionF f,
+      typename ExplicitWrapper<Real, N, M>::FunctionJF Jf_x,
+      typename ExplicitWrapper<Real, N, M>::FunctionH h = ExplicitWrapper<Real, N, M>::DefaultH,
+      typename ExplicitWrapper<Real, N, M>::FunctionJH Jh_x = ExplicitWrapper<Real, N, M>::DefaultJH,
+      typename ExplicitWrapper<Real, N, M>::FunctionID in_domain = ExplicitWrapper<Real, N, M>::DefaultID
+    ) {
+      this->m_system = std::make_shared<ExplicitWrapper<Real, N, M>>(f, Jf_x, h, Jh_x, in_domain);
+    }
+
+    /**
+    * Set the explicit ODE/DAE system with lambda functions.
+    * \param[in] name The name of the explicit ODE/DAE system.
+    * \param[in] f The explicit ODE system function.
+    * \param[in] Jf_x The Jacobian of the explicit ODE system function with respect to the states.
+    * \param[in] h The system's invariants.
+    * \param[in] Jh_x The Jacobian of the system's invariants with respect to the states.
+    * \param[in] in_domain The in-domain function.
+    */
+    void explicit_system(
+      std::string name,
+      typename ExplicitWrapper<Real, N, M>::FunctionF f,
+      typename ExplicitWrapper<Real, N, M>::FunctionJF Jf_x,
+      typename ExplicitWrapper<Real, N, M>::FunctionH h = ExplicitWrapper<Real, N, M>::DefaultH,
+      typename ExplicitWrapper<Real, N, M>::FunctionJH Jh_x = ExplicitWrapper<Real, N, M>::DefaultJH,
+      typename ExplicitWrapper<Real, N, M>::FunctionID in_domain = ExplicitWrapper<Real, N, M>::DefaultID
+    ) {
+      this->m_system = std::make_shared<ExplicitWrapper<Real, N, M>>(name, f, Jf_x, h, Jh_x, in_domain);
+    }
+
+    /**
+    * Set the linear ODE/DAE system with lambda functions.
+    * \param[in] E The mass matrix function.
+    * \param[in] A The system matrix function.
+    * \param[in] b The system vector function.
+    * \param[in] h The invariants function.
+    * \param[in] Jh_x The Jacobian of the invariants function.
+    * \param[in] in_domain The in-domain function.
+    */
+    void linear_system(
+      typename LinearWrapper<Real, N, M>::FunctionE E,
+      typename LinearWrapper<Real, N, M>::FunctionA A,
+      typename LinearWrapper<Real, N, M>::FunctionB b,
+      typename LinearWrapper<Real, N, M>::FunctionH h = LinearWrapper<Real, N, M>::DefaultH,
+      typename LinearWrapper<Real, N, M>::FunctionJH Jh_x = LinearWrapper<Real, N, M>::DefaultJH,
+      typename LinearWrapper<Real, N, M>::FunctionID in_domain = LinearWrapper<Real, N, M>::DefaultID
+    ) {
+      this->m_system = std::make_shared<LinearWrapper<Real, N, M>>(E, A, b, h, Jh_x, in_domain);
+    }
+
+    /**
+    * Set the linear ODE/DAE system with lambda functions.
+    * \param[in] name The name of the linear ODE/DAE system.
+    * \param[in] E The mass matrix function.
+    * \param[in] A The system matrix function.
+    * \param[in] b The system vector function.
+    * \param[in] h The invariants function.
+    * \param[in] Jh_x The Jacobian of the invariants function.
+    * \param[in] in_domain The in-domain function.
+    */
+    void linear_system(
+      std::string name,
+      typename LinearWrapper<Real, N, M>::FunctionE E,
+      typename LinearWrapper<Real, N, M>::FunctionA A,
+      typename LinearWrapper<Real, N, M>::FunctionB b,
+      typename LinearWrapper<Real, N, M>::FunctionH h = LinearWrapper<Real, N, M>::DefaultH,
+      typename LinearWrapper<Real, N, M>::FunctionJH Jh_x = LinearWrapper<Real, N, M>::DefaultJH,
+      typename LinearWrapper<Real, N, M>::FunctionID in_domain = LinearWrapper<Real, N, M>::DefaultID
+    ) {
+      this->m_system = std::make_shared<LinearWrapper<Real, N, M>>(name, E, A, b, h, Jh_x, in_domain);
+    }
+
+    /**
+    * Set the semi-explicit ODE/DAE system with lambda functions.
+    * \param[in] A The function for the mass matrix.
+    * \param[in] TA_x The function for the mass matrix.
+    * \param[in] b The function for the right-hand-side.
+    * \param[in] Jb_x The function for the right-hand-side Jacobian.
+    * \param[in] h The invariants function.
+    * \param[in] Jh_x The Jacobian of the invariants function.
+    * \param[in] in_domain The in-domain function.
+    */
+    void semi_explicit_system(
+      typename SemiExplicitWrapper<Real, N, M>::FunctionA A,
+      typename SemiExplicitWrapper<Real, N, M>::FunctionTA TA_x,
+      typename SemiExplicitWrapper<Real, N, M>::FunctionB b,
+      typename SemiExplicitWrapper<Real, N, M>::FunctionJB Jb_x,
+      typename SemiExplicitWrapper<Real, N, M>::FunctionH h = SemiExplicitWrapper<Real, N, M>::DefaultH,
+      typename SemiExplicitWrapper<Real, N, M>::FunctionJH Jh_x = SemiExplicitWrapper<Real, N, M>::DefaultJH,
+      typename SemiExplicitWrapper<Real, N, M>::FunctionID in_domain = SemiExplicitWrapper<Real, N, M>::DefaultID
+    ) {
+      this->m_system = std::make_shared<SemiExplicitWrapper<Real, N, M>>(A, TA_x, b, Jb_x, h, Jh_x, in_domain);
+    }
+
+    /**
+    * Set the semi-explicit ODE/DAE system with lambda functions.
+    * \param[in] name The name of the semi-explicit ODE/DAE system.
+    * \param[in] A The function for the mass matrix.
+    * \param[in] TA_x The function for the mass matrix.
+    * \param[in] b The function for the right-hand-side.
+    * \param[in] Jb_x The function for the right-hand-side Jacobian.
+    * \param[in] h The invariants function.
+    * \param[in] Jh_x The Jacobian of the invariants function.
+    * \param[in] in_domain The in-domain function.
+    */
+    void semi_explicit_system(
+      std::string name,
+      typename SemiExplicitWrapper<Real, N, M>::FunctionA A,
+      typename SemiExplicitWrapper<Real, N, M>::FunctionTA TA_x,
+      typename SemiExplicitWrapper<Real, N, M>::FunctionB b,
+      typename SemiExplicitWrapper<Real, N, M>::FunctionJB Jb_x,
+      typename SemiExplicitWrapper<Real, N, M>::FunctionH h = SemiExplicitWrapper<Real, N, M>::DefaultH,
+      typename SemiExplicitWrapper<Real, N, M>::FunctionJH Jh_x = SemiExplicitWrapper<Real, N, M>::DefaultJH,
+      typename SemiExplicitWrapper<Real, N, M>::FunctionID in_domain = SemiExplicitWrapper<Real, N, M>::DefaultID
+    ) {
+      this->m_system = std::make_shared<SemiExplicitWrapper<Real, N, M>>(name, A, TA_x, b, Jb_x, h, Jh_x, in_domain);
+    }
 
     /**
     * Check if the ODE/DAE system pointer is set.
@@ -381,14 +556,14 @@ namespace Sandals {
     * Get the maximum number of projection iterations.
     * \return The maximum number of projection iterations.
     */
-    Integer & max_projection_iterations() {return this->m_max_projection_iterationsations;}
+    Integer & max_projection_iterations() {return this->m_max_projection_iterations;}
 
     /**
     * Set the maximum number of projection iterations.
     * \param[in] t_max_projection_iterations The maximum number of projection iterations.
     */
     void max_projection_iterations(Integer t_max_projection_iterations)
-      {this->m_max_projection_iterationsations = t_max_projection_iterations;}
+      {this->m_max_projection_iterations = t_max_projection_iterations;}
 
     /**
     * Get projection mode.
@@ -522,9 +697,9 @@ namespace Sandals {
       for (Integer i{0}; i < S; ++i) {
         x_node = x_old + K(all, seqN(0, i)) * this->m_tableau.A(i, seqN(0, i)).transpose();
         if (!this->m_reverse) {
-          K.col(i) = h_old * static_cast<Explicit<N, M> const *>(this->m_system.get())->f(x_node, t_old + h_old*this->m_tableau.c(i));
+          K.col(i) = h_old * static_cast<Explicit<Real, N, M> const *>(this->m_system.get())->f(x_node, t_old + h_old*this->m_tableau.c(i));
         } else {
-          K.col(i) = h_old * static_cast<Explicit<N, M> const *>(this->m_system.get())->f_reverse(x_node, t_old + h_old*this->m_tableau.c(i));
+          K.col(i) = h_old * static_cast<Explicit<Real, N, M> const *>(this->m_system.get())->f_reverse(x_node, t_old + h_old*this->m_tableau.c(i));
         }
       }
       if (!K.allFinite()) {return false;}
@@ -1090,7 +1265,7 @@ namespace Sandals {
     * \param[out] sol The solution of the system over the mesh of independent variable.
     * \return True if the system is successfully solved, false otherwise.
     */
-    bool solve(VectorX const &t_mesh, VectorN const &ics, Solution<N, M> &sol)
+    bool solve(VectorX const &t_mesh, VectorN const &ics, Solution<Real, N, M> &sol)
     {
       using Eigen::last;
 
@@ -1152,7 +1327,7 @@ namespace Sandals {
     * \param[out] sol The solution of the system over the mesh of independent variable.
     * \return True if the system is successfully solved, false otherwise.
     */
-    bool adaptive_solve(VectorX const &t_mesh, VectorN const &ics, Solution<N, M> &sol)
+    bool adaptive_solve(VectorX const &t_mesh, VectorN const &ics, Solution<Real, N, M> &sol)
     {
       using Eigen::all;
       using Eigen::last;
@@ -1390,7 +1565,7 @@ namespace Sandals {
       }
 
       // Solve the system for each time scale
-      Solution<N, M> sol_num;
+      Solution<Real, N, M> sol_num;
       MatrixX sol_ana;
       VectorX h_vec(t_mesh.size()), e_vec(t_mesh.size());
       for (Integer i{0}; i < static_cast<Integer>(t_mesh.size()); ++i) {

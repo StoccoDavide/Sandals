@@ -1,0 +1,1215 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.13.2"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<!-- BEGIN opengraph metadata -->
+<meta property="og:title" content="Doxygen Awesome" />
+<meta property="og:image" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta property="og:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<meta property="og:url" content="https://jothepro.github.io/doxygen-awesome-css/" />
+<!-- END opengraph metadata -->
+<!-- BEGIN twitter metadata -->
+<meta name="twitter:image:src" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta name="twitter:title" content="Doxygen Awesome" />
+<meta name="twitter:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<!-- END twitter metadata -->
+<title>Sandals: Sandals::ExplicitWrapper&lt; Real, N, M &gt; Class Template Reference</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link rel="icon" type="image/svg+xml" href="logo.png"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+<script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+<script type="text/javascript" src="doxygen-awesome-paragraph-link.js"></script>
+<script type="text/javascript" src="doxygen-awesome-interactive-toc.js"></script>
+<script type="text/javascript" src="doxygen-awesome-tabs.js"></script>
+<script type="text/javascript" src="toggle-alternative-theme.js"></script>
+<script type="text/javascript">
+    DoxygenAwesomeFragmentCopyButton.init()
+    DoxygenAwesomeDarkModeToggle.init()
+    DoxygenAwesomeParagraphLink.init()
+    DoxygenAwesomeInteractiveToc.init()
+    DoxygenAwesomeTabs.init()
+</script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX","output/HTML-CSS"],
+});
+</script>
+<script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="custom.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+<link href="custom-alternative.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- https://tholman.com/github-corners/ -->
+<a href="https://github.com/StoccoDavide/Sandals" class="github-corner" title="View source on GitHub" target="_blank" rel="noopener noreferrer">
+    <svg viewBox="0 0 250 250" width="40" height="40" style="position: absolute; top: 0; border: 0; right: 0; z-index: 99;" aria-hidden="true">
+    <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="logo.svg"/></td>
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">Sandals
+   &#160;<span id="projectnumber">v0.0.0</span>
+   </div>
+   <div id="projectbrief">A C++ library for ODEs/DAEs integration</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.13.2 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() { codefold.init(0); });
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Search',true);
+  $(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function(){initNavTree('class_sandals_1_1_explicit_wrapper.html',''); initResizable(true); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
+<a href="class_sandals_1_1_explicit_wrapper-members.html">List of all members</a>  </div>
+  <div class="headertitle"><div class="title">Sandals::ExplicitWrapper&lt; Real, N, M &gt; Class Template Reference</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p>Class container for the system of explicit ODEs/DAEs wrapper.  
+ <a href="#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_explicit_8hxx_source.html">Explicit.hxx</a>&gt;</code></p>
+
+<p>Inherits <a class="el" href="class_sandals_1_1_explicit.html">Sandals::Explicit&lt; Real, N, 0 &gt;</a>.</p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a497860927cef68e96ecc1a2dedec0999" id="r_a497860927cef68e96ecc1a2dedec0999"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a497860927cef68e96ecc1a2dedec0999">Pointer</a> = std::shared_ptr&lt;<a class="el" href="class_sandals_1_1_explicit_wrapper.html">ExplicitWrapper</a>&lt;Real, N, M&gt;&gt;</td></tr>
+<tr class="separator:a497860927cef68e96ecc1a2dedec0999"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f60a2bfc68df04c83634c92425d7385" id="r_a9f60a2bfc68df04c83634c92425d7385"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9f60a2bfc68df04c83634c92425d7385">VectorF</a> = typename <a class="el" href="class_sandals_1_1_explicit.html">Explicit</a>&lt;Real, N, M&gt;::VectorF</td></tr>
+<tr class="separator:a9f60a2bfc68df04c83634c92425d7385"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a3acf5600c4471ef66d375fff9fa26e" id="r_a1a3acf5600c4471ef66d375fff9fa26e"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1a3acf5600c4471ef66d375fff9fa26e">MatrixJF</a> = typename <a class="el" href="class_sandals_1_1_explicit.html">Explicit</a>&lt;Real, N, M&gt;::MatrixJF</td></tr>
+<tr class="separator:a1a3acf5600c4471ef66d375fff9fa26e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6a0257ee922684319a9ddccd3ab72b36" id="r_a6a0257ee922684319a9ddccd3ab72b36"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6a0257ee922684319a9ddccd3ab72b36">VectorH</a> = typename <a class="el" href="class_sandals_1_1_explicit.html">Explicit</a>&lt;Real, N, M&gt;::VectorH</td></tr>
+<tr class="separator:a6a0257ee922684319a9ddccd3ab72b36"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5b5855abfc2df4271aa09605193f5d7d" id="r_a5b5855abfc2df4271aa09605193f5d7d"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5b5855abfc2df4271aa09605193f5d7d">MatrixJH</a> = typename <a class="el" href="class_sandals_1_1_explicit.html">Explicit</a>&lt;Real, N, M&gt;::MatrixJH</td></tr>
+<tr class="separator:a5b5855abfc2df4271aa09605193f5d7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2f2f932bd31c63b2a3ab2044cc446cfc" id="r_a2f2f932bd31c63b2a3ab2044cc446cfc"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2f2f932bd31c63b2a3ab2044cc446cfc">FunctionF</a> = std::function&lt;<a class="el" href="#a9f60a2bfc68df04c83634c92425d7385">VectorF</a>(<a class="el" href="#a9f60a2bfc68df04c83634c92425d7385">VectorF</a> const &amp;, <a class="el" href="#a9f60a2bfc68df04c83634c92425d7385">VectorF</a> const &amp;, Real)&gt;</td></tr>
+<tr class="separator:a2f2f932bd31c63b2a3ab2044cc446cfc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d3b8ccacd838180eaff9e4ea8b8d1f3" id="r_a6d3b8ccacd838180eaff9e4ea8b8d1f3"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6d3b8ccacd838180eaff9e4ea8b8d1f3">FunctionJF</a> = std::function&lt;<a class="el" href="#a1a3acf5600c4471ef66d375fff9fa26e">MatrixJF</a>(<a class="el" href="#a9f60a2bfc68df04c83634c92425d7385">VectorF</a> const &amp;, <a class="el" href="#a9f60a2bfc68df04c83634c92425d7385">VectorF</a> const &amp;, Real)&gt;</td></tr>
+<tr class="separator:a6d3b8ccacd838180eaff9e4ea8b8d1f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abbbceebbfa07e142306f7fb1b42d63ee" id="r_abbbceebbfa07e142306f7fb1b42d63ee"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abbbceebbfa07e142306f7fb1b42d63ee">FunctionH</a> = std::function&lt;<a class="el" href="#a6a0257ee922684319a9ddccd3ab72b36">VectorH</a>(<a class="el" href="#a9f60a2bfc68df04c83634c92425d7385">VectorF</a> const &amp;, Real)&gt;</td></tr>
+<tr class="separator:abbbceebbfa07e142306f7fb1b42d63ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a216aaadfe705a786d8641d94183c0465" id="r_a216aaadfe705a786d8641d94183c0465"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a216aaadfe705a786d8641d94183c0465">FunctionJH</a> = std::function&lt;<a class="el" href="#a5b5855abfc2df4271aa09605193f5d7d">MatrixJH</a>(<a class="el" href="#a9f60a2bfc68df04c83634c92425d7385">VectorF</a> const &amp;, Real)&gt;</td></tr>
+<tr class="separator:a216aaadfe705a786d8641d94183c0465"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3b90ecf4c7b8bdc25eb12870222fda6" id="r_af3b90ecf4c7b8bdc25eb12870222fda6"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af3b90ecf4c7b8bdc25eb12870222fda6">FunctionID</a> = std::function&lt;bool(<a class="el" href="#a9f60a2bfc68df04c83634c92425d7385">VectorF</a> const &amp;, Real)&gt;</td></tr>
+<tr class="separator:af3b90ecf4c7b8bdc25eb12870222fda6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_types_class_sandals_1_1_explicit"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pub_types_class_sandals_1_1_explicit')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="class_sandals_1_1_explicit.html">Sandals::Explicit&lt; Real, N, 0 &gt;</a></td></tr>
+<tr class="memitem:a1e3f3ba127e9177db2a56811efc38c05 inherit pub_types_class_sandals_1_1_explicit" id="r_a1e3f3ba127e9177db2a56811efc38c05"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_explicit.html#a1e3f3ba127e9177db2a56811efc38c05">Pointer</a></td></tr>
+<tr class="separator:a1e3f3ba127e9177db2a56811efc38c05 inherit pub_types_class_sandals_1_1_explicit"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afdda0ad23f2ca6d2c87a564ea31bc02f inherit pub_types_class_sandals_1_1_explicit" id="r_afdda0ad23f2ca6d2c87a564ea31bc02f"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_explicit.html#afdda0ad23f2ca6d2c87a564ea31bc02f">VectorF</a></td></tr>
+<tr class="separator:afdda0ad23f2ca6d2c87a564ea31bc02f inherit pub_types_class_sandals_1_1_explicit"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae8d2fba7756319303c025da59c0f0ee5 inherit pub_types_class_sandals_1_1_explicit" id="r_ae8d2fba7756319303c025da59c0f0ee5"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_explicit.html#ae8d2fba7756319303c025da59c0f0ee5">MatrixJF</a></td></tr>
+<tr class="separator:ae8d2fba7756319303c025da59c0f0ee5 inherit pub_types_class_sandals_1_1_explicit"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab498b358a77a9c3ae19ec5a3aa14966f inherit pub_types_class_sandals_1_1_explicit" id="r_ab498b358a77a9c3ae19ec5a3aa14966f"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_explicit.html#ab498b358a77a9c3ae19ec5a3aa14966f">Type</a></td></tr>
+<tr class="separator:ab498b358a77a9c3ae19ec5a3aa14966f inherit pub_types_class_sandals_1_1_explicit"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_types_class_sandals_1_1_implicit"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pub_types_class_sandals_1_1_implicit')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit&lt; Real, N, M &gt;</a></td></tr>
+<tr class="memitem:a37ea48741ddf4f101c9c4f507e9a42bc inherit pub_types_class_sandals_1_1_implicit" id="r_a37ea48741ddf4f101c9c4f507e9a42bc"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_implicit.html#a37ea48741ddf4f101c9c4f507e9a42bc">Type</a></td></tr>
+<tr class="separator:a37ea48741ddf4f101c9c4f507e9a42bc inherit pub_types_class_sandals_1_1_implicit"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab8c4bd5c8761169ebd176967c69671d3 inherit pub_types_class_sandals_1_1_implicit" id="r_ab8c4bd5c8761169ebd176967c69671d3"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_implicit.html#ab8c4bd5c8761169ebd176967c69671d3">Pointer</a></td></tr>
+<tr class="separator:ab8c4bd5c8761169ebd176967c69671d3 inherit pub_types_class_sandals_1_1_implicit"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a572c1717ee411d8bcd366eb50b4faf inherit pub_types_class_sandals_1_1_implicit" id="r_a2a572c1717ee411d8bcd366eb50b4faf"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_implicit.html#a2a572c1717ee411d8bcd366eb50b4faf">VectorF</a></td></tr>
+<tr class="separator:a2a572c1717ee411d8bcd366eb50b4faf inherit pub_types_class_sandals_1_1_implicit"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f6ed8a93dd0a78c31cc1cba5c2b085d inherit pub_types_class_sandals_1_1_implicit" id="r_a0f6ed8a93dd0a78c31cc1cba5c2b085d"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_implicit.html#a0f6ed8a93dd0a78c31cc1cba5c2b085d">MatrixJF</a></td></tr>
+<tr class="separator:a0f6ed8a93dd0a78c31cc1cba5c2b085d inherit pub_types_class_sandals_1_1_implicit"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3d0eff3748a32b15083a9b488feac033 inherit pub_types_class_sandals_1_1_implicit" id="r_a3d0eff3748a32b15083a9b488feac033"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_implicit.html#a3d0eff3748a32b15083a9b488feac033">VectorH</a></td></tr>
+<tr class="separator:a3d0eff3748a32b15083a9b488feac033 inherit pub_types_class_sandals_1_1_implicit"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abf948b5adb5a0bafe8bfe0c4d0fbe33a inherit pub_types_class_sandals_1_1_implicit" id="r_abf948b5adb5a0bafe8bfe0c4d0fbe33a"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_implicit.html#abf948b5adb5a0bafe8bfe0c4d0fbe33a">MatrixJH</a></td></tr>
+<tr class="separator:abf948b5adb5a0bafe8bfe0c4d0fbe33a inherit pub_types_class_sandals_1_1_implicit"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:ade4317fa686eda59204431c1221ff244" id="r_ade4317fa686eda59204431c1221ff244"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ade4317fa686eda59204431c1221ff244">ExplicitWrapper</a> (<a class="el" href="#a2f2f932bd31c63b2a3ab2044cc446cfc">FunctionF</a> t_f, <a class="el" href="#a6d3b8ccacd838180eaff9e4ea8b8d1f3">FunctionJF</a> t_Jf_x, <a class="el" href="#abbbceebbfa07e142306f7fb1b42d63ee">FunctionH</a> t_h=<a class="el" href="#a060994b2e4ad56067e6a6d4fe2ddaf05">DefaultH</a>, <a class="el" href="#a216aaadfe705a786d8641d94183c0465">FunctionJH</a> t_Jh_x=<a class="el" href="#ad100b0ed7e3ba0a55a7a19366176b2ea">DefaultJH</a>, <a class="el" href="#af3b90ecf4c7b8bdc25eb12870222fda6">FunctionID</a> t_in_domain=<a class="el" href="#a391ab6441c6c633e37135c3602437ab9">DefaultID</a>)</td></tr>
+<tr class="separator:ade4317fa686eda59204431c1221ff244"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a49a4d72322f27d807b4518a1a9610f00" id="r_a49a4d72322f27d807b4518a1a9610f00"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a49a4d72322f27d807b4518a1a9610f00">ExplicitWrapper</a> (std::string t_name, <a class="el" href="#a2f2f932bd31c63b2a3ab2044cc446cfc">FunctionF</a> t_f, <a class="el" href="#a6d3b8ccacd838180eaff9e4ea8b8d1f3">FunctionJF</a> t_Jf_x, <a class="el" href="#abbbceebbfa07e142306f7fb1b42d63ee">FunctionH</a> t_h=<a class="el" href="#a060994b2e4ad56067e6a6d4fe2ddaf05">DefaultH</a>, <a class="el" href="#a216aaadfe705a786d8641d94183c0465">FunctionJH</a> t_Jh_x=<a class="el" href="#ad100b0ed7e3ba0a55a7a19366176b2ea">DefaultJH</a>, <a class="el" href="#af3b90ecf4c7b8bdc25eb12870222fda6">FunctionID</a> t_in_domain=<a class="el" href="#a391ab6441c6c633e37135c3602437ab9">DefaultID</a>)</td></tr>
+<tr class="separator:a49a4d72322f27d807b4518a1a9610f00"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea242842f5ce6ed0d9b197ff5e7da7cb" id="r_aea242842f5ce6ed0d9b197ff5e7da7cb"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aea242842f5ce6ed0d9b197ff5e7da7cb">~ExplicitWrapper</a> ()</td></tr>
+<tr class="separator:aea242842f5ce6ed0d9b197ff5e7da7cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6832a0277654f721ad309f0e6e7f79e1" id="r_a6832a0277654f721ad309f0e6e7f79e1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a2f2f932bd31c63b2a3ab2044cc446cfc">FunctionF</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6832a0277654f721ad309f0e6e7f79e1">f</a> ()</td></tr>
+<tr class="separator:a6832a0277654f721ad309f0e6e7f79e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a60c3c1fe379b6120b5f54713fe838e3f" id="r_a60c3c1fe379b6120b5f54713fe838e3f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a6d3b8ccacd838180eaff9e4ea8b8d1f3">FunctionJF</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a60c3c1fe379b6120b5f54713fe838e3f">Jf_x</a> ()</td></tr>
+<tr class="separator:a60c3c1fe379b6120b5f54713fe838e3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3ffcf83af074e1553e1bf270ab17daf1" id="r_a3ffcf83af074e1553e1bf270ab17daf1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#abbbceebbfa07e142306f7fb1b42d63ee">FunctionH</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3ffcf83af074e1553e1bf270ab17daf1">h</a> ()</td></tr>
+<tr class="separator:a3ffcf83af074e1553e1bf270ab17daf1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad72686a75a930295670e3fc37dfe407" id="r_aad72686a75a930295670e3fc37dfe407"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a216aaadfe705a786d8641d94183c0465">FunctionJH</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aad72686a75a930295670e3fc37dfe407">Jh_x</a> ()</td></tr>
+<tr class="separator:aad72686a75a930295670e3fc37dfe407"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae33addacb753635d3c55623b5afb10c1" id="r_ae33addacb753635d3c55623b5afb10c1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#af3b90ecf4c7b8bdc25eb12870222fda6">FunctionID</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae33addacb753635d3c55623b5afb10c1">in_domain</a> ()</td></tr>
+<tr class="separator:ae33addacb753635d3c55623b5afb10c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac5af918b8e38d297a1e2d7676b9a4da7" id="r_ac5af918b8e38d297a1e2d7676b9a4da7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a9f60a2bfc68df04c83634c92425d7385">VectorF</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac5af918b8e38d297a1e2d7676b9a4da7">f</a> (<a class="el" href="#a9f60a2bfc68df04c83634c92425d7385">VectorF</a> const &amp;x, Real t) const override</td></tr>
+<tr class="separator:ac5af918b8e38d297a1e2d7676b9a4da7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9caa8b96aed37a8011bbf6d9c266a92c" id="r_a9caa8b96aed37a8011bbf6d9c266a92c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a1a3acf5600c4471ef66d375fff9fa26e">MatrixJF</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9caa8b96aed37a8011bbf6d9c266a92c">Jf_x</a> (<a class="el" href="#a9f60a2bfc68df04c83634c92425d7385">VectorF</a> const &amp;x, Real t) const override</td></tr>
+<tr class="separator:a9caa8b96aed37a8011bbf6d9c266a92c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af63a9e06e1f8850bcce14a360321ac09" id="r_af63a9e06e1f8850bcce14a360321ac09"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a6a0257ee922684319a9ddccd3ab72b36">VectorH</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af63a9e06e1f8850bcce14a360321ac09">h</a> (<a class="el" href="#a9f60a2bfc68df04c83634c92425d7385">VectorF</a> const &amp;x, Real t) const override</td></tr>
+<tr class="separator:af63a9e06e1f8850bcce14a360321ac09"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:addf6cbd9308208e992dbbc22e1cefe8d" id="r_addf6cbd9308208e992dbbc22e1cefe8d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a5b5855abfc2df4271aa09605193f5d7d">MatrixJH</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#addf6cbd9308208e992dbbc22e1cefe8d">Jh_x</a> (<a class="el" href="#a9f60a2bfc68df04c83634c92425d7385">VectorF</a> const &amp;x, Real t) const override</td></tr>
+<tr class="separator:addf6cbd9308208e992dbbc22e1cefe8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a28cb3ac895229b2550c8da95a1603e8b" id="r_a28cb3ac895229b2550c8da95a1603e8b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a28cb3ac895229b2550c8da95a1603e8b">in_domain</a> (<a class="el" href="#a9f60a2bfc68df04c83634c92425d7385">VectorF</a> const &amp;x, Real t) const override</td></tr>
+<tr class="separator:a28cb3ac895229b2550c8da95a1603e8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_class_sandals_1_1_explicit"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pub_methods_class_sandals_1_1_explicit')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="class_sandals_1_1_explicit.html">Sandals::Explicit&lt; Real, N, 0 &gt;</a></td></tr>
+<tr class="memitem:ad8796bc43bd969975518199c8b9bf8d8 inherit pub_methods_class_sandals_1_1_explicit" id="r_ad8796bc43bd969975518199c8b9bf8d8"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_explicit.html#ad8796bc43bd969975518199c8b9bf8d8">Explicit</a> ()</td></tr>
+<tr class="separator:ad8796bc43bd969975518199c8b9bf8d8 inherit pub_methods_class_sandals_1_1_explicit"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a209f35da13a5d006a2f8abb6b1f80fc7 inherit pub_methods_class_sandals_1_1_explicit" id="r_a209f35da13a5d006a2f8abb6b1f80fc7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_explicit.html#a209f35da13a5d006a2f8abb6b1f80fc7">Explicit</a> (std::string t_name)</td></tr>
+<tr class="separator:a209f35da13a5d006a2f8abb6b1f80fc7 inherit pub_methods_class_sandals_1_1_explicit"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af9b2558d1b7fcc110de466af8f7c4fb7 inherit pub_methods_class_sandals_1_1_explicit" id="r_af9b2558d1b7fcc110de466af8f7c4fb7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_sandals_1_1_explicit.html#afdda0ad23f2ca6d2c87a564ea31bc02f">VectorF</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_explicit.html#af9b2558d1b7fcc110de466af8f7c4fb7">F</a> (<a class="el" href="class_sandals_1_1_explicit.html#afdda0ad23f2ca6d2c87a564ea31bc02f">VectorF</a> const &amp;x, <a class="el" href="class_sandals_1_1_explicit.html#afdda0ad23f2ca6d2c87a564ea31bc02f">VectorF</a> const &amp;x_dot, Real t) const override</td></tr>
+<tr class="separator:af9b2558d1b7fcc110de466af8f7c4fb7 inherit pub_methods_class_sandals_1_1_explicit"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c5f39a2c4e125d1576ec83931705936 inherit pub_methods_class_sandals_1_1_explicit" id="r_a3c5f39a2c4e125d1576ec83931705936"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_sandals_1_1_explicit.html#ae8d2fba7756319303c025da59c0f0ee5">MatrixJF</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_explicit.html#a3c5f39a2c4e125d1576ec83931705936">JF_x</a> (<a class="el" href="class_sandals_1_1_explicit.html#afdda0ad23f2ca6d2c87a564ea31bc02f">VectorF</a> const &amp;x, <a class="el" href="class_sandals_1_1_explicit.html#afdda0ad23f2ca6d2c87a564ea31bc02f">VectorF</a> const &amp;, Real t) const override</td></tr>
+<tr class="separator:a3c5f39a2c4e125d1576ec83931705936 inherit pub_methods_class_sandals_1_1_explicit"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4cf2a9e95ac370981f0bdee7bb54dc1f inherit pub_methods_class_sandals_1_1_explicit" id="r_a4cf2a9e95ac370981f0bdee7bb54dc1f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_sandals_1_1_explicit.html#ae8d2fba7756319303c025da59c0f0ee5">MatrixJF</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_explicit.html#a4cf2a9e95ac370981f0bdee7bb54dc1f">JF_x_dot</a> (<a class="el" href="class_sandals_1_1_explicit.html#afdda0ad23f2ca6d2c87a564ea31bc02f">VectorF</a> const &amp;, <a class="el" href="class_sandals_1_1_explicit.html#afdda0ad23f2ca6d2c87a564ea31bc02f">VectorF</a> const &amp;, Real) const override</td></tr>
+<tr class="separator:a4cf2a9e95ac370981f0bdee7bb54dc1f inherit pub_methods_class_sandals_1_1_explicit"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0e169e475f2893c05dfcc1dd7a662793 inherit pub_methods_class_sandals_1_1_explicit" id="r_a0e169e475f2893c05dfcc1dd7a662793"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_sandals_1_1_explicit.html#afdda0ad23f2ca6d2c87a564ea31bc02f">VectorF</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_explicit.html#a0e169e475f2893c05dfcc1dd7a662793">f_reverse</a> (<a class="el" href="class_sandals_1_1_explicit.html#afdda0ad23f2ca6d2c87a564ea31bc02f">VectorF</a> const &amp;x, Real t) const</td></tr>
+<tr class="separator:a0e169e475f2893c05dfcc1dd7a662793 inherit pub_methods_class_sandals_1_1_explicit"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a88d49e69c0bc96523e15e58161796abf inherit pub_methods_class_sandals_1_1_explicit" id="r_a88d49e69c0bc96523e15e58161796abf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_sandals_1_1_explicit.html#ae8d2fba7756319303c025da59c0f0ee5">MatrixJF</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_explicit.html#a88d49e69c0bc96523e15e58161796abf">Jf_x_reverse</a> (<a class="el" href="class_sandals_1_1_explicit.html#afdda0ad23f2ca6d2c87a564ea31bc02f">VectorF</a> const &amp;x, Real t) const</td></tr>
+<tr class="separator:a88d49e69c0bc96523e15e58161796abf inherit pub_methods_class_sandals_1_1_explicit"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae91e141baef6ec6417b3a1211d9fe96e inherit pub_methods_class_sandals_1_1_explicit" id="r_ae91e141baef6ec6417b3a1211d9fe96e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_sandals_1_1_explicit.html#afdda0ad23f2ca6d2c87a564ea31bc02f">VectorF</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_explicit.html#ae91e141baef6ec6417b3a1211d9fe96e">F_reverse</a> (<a class="el" href="class_sandals_1_1_explicit.html#afdda0ad23f2ca6d2c87a564ea31bc02f">VectorF</a> const &amp;x, <a class="el" href="class_sandals_1_1_explicit.html#afdda0ad23f2ca6d2c87a564ea31bc02f">VectorF</a> const &amp;x_dot, Real t) const</td></tr>
+<tr class="separator:ae91e141baef6ec6417b3a1211d9fe96e inherit pub_methods_class_sandals_1_1_explicit"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a108f6d19f47111b2d80d2d0e9d3905ab inherit pub_methods_class_sandals_1_1_explicit" id="r_a108f6d19f47111b2d80d2d0e9d3905ab"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_sandals_1_1_explicit.html#ae8d2fba7756319303c025da59c0f0ee5">MatrixJF</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_explicit.html#a108f6d19f47111b2d80d2d0e9d3905ab">JF_x_reverse</a> (<a class="el" href="class_sandals_1_1_explicit.html#afdda0ad23f2ca6d2c87a564ea31bc02f">VectorF</a> const &amp;x, <a class="el" href="class_sandals_1_1_explicit.html#afdda0ad23f2ca6d2c87a564ea31bc02f">VectorF</a> const &amp;, Real t) const</td></tr>
+<tr class="separator:a108f6d19f47111b2d80d2d0e9d3905ab inherit pub_methods_class_sandals_1_1_explicit"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a325e09554677df81a268e4df03c70c12 inherit pub_methods_class_sandals_1_1_explicit" id="r_a325e09554677df81a268e4df03c70c12"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_sandals_1_1_explicit.html#ae8d2fba7756319303c025da59c0f0ee5">MatrixJF</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_explicit.html#a325e09554677df81a268e4df03c70c12">JF_x_dot_reverse</a> (<a class="el" href="class_sandals_1_1_explicit.html#afdda0ad23f2ca6d2c87a564ea31bc02f">VectorF</a> const &amp;, <a class="el" href="class_sandals_1_1_explicit.html#afdda0ad23f2ca6d2c87a564ea31bc02f">VectorF</a> const &amp;, Real) const</td></tr>
+<tr class="separator:a325e09554677df81a268e4df03c70c12 inherit pub_methods_class_sandals_1_1_explicit"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_class_sandals_1_1_implicit"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pub_methods_class_sandals_1_1_implicit')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit&lt; Real, N, M &gt;</a></td></tr>
+<tr class="memitem:a40c13cc4422ed6387cd6201cb92176ea inherit pub_methods_class_sandals_1_1_implicit" id="r_a40c13cc4422ed6387cd6201cb92176ea"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_implicit.html#a40c13cc4422ed6387cd6201cb92176ea">Implicit</a> ()</td></tr>
+<tr class="separator:a40c13cc4422ed6387cd6201cb92176ea inherit pub_methods_class_sandals_1_1_implicit"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aed208470991d6c50598e0681fdad52a6 inherit pub_methods_class_sandals_1_1_implicit" id="r_aed208470991d6c50598e0681fdad52a6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_implicit.html#aed208470991d6c50598e0681fdad52a6">Implicit</a> (std::string t_name)</td></tr>
+<tr class="separator:aed208470991d6c50598e0681fdad52a6 inherit pub_methods_class_sandals_1_1_implicit"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a01165f8af34bde8154118027f51499a6 inherit pub_methods_class_sandals_1_1_implicit" id="r_a01165f8af34bde8154118027f51499a6"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_implicit.html#a01165f8af34bde8154118027f51499a6">~Implicit</a> ()</td></tr>
+<tr class="separator:a01165f8af34bde8154118027f51499a6 inherit pub_methods_class_sandals_1_1_implicit"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9388aa3457ad41eb61fc1fd74ff6c3d3 inherit pub_methods_class_sandals_1_1_implicit" id="r_a9388aa3457ad41eb61fc1fd74ff6c3d3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_sandals_1_1_implicit.html#a37ea48741ddf4f101c9c4f507e9a42bc">Type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_implicit.html#a9388aa3457ad41eb61fc1fd74ff6c3d3">type</a> () const</td></tr>
+<tr class="separator:a9388aa3457ad41eb61fc1fd74ff6c3d3 inherit pub_methods_class_sandals_1_1_implicit"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a38d6033591b582e4f5cf9ce8b5f2ce87 inherit pub_methods_class_sandals_1_1_implicit" id="r_a38d6033591b582e4f5cf9ce8b5f2ce87"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_implicit.html#a38d6033591b582e4f5cf9ce8b5f2ce87">is_implicit</a> () const</td></tr>
+<tr class="separator:a38d6033591b582e4f5cf9ce8b5f2ce87 inherit pub_methods_class_sandals_1_1_implicit"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a62d23a3876db59390272ae7500bb5cbe inherit pub_methods_class_sandals_1_1_implicit" id="r_a62d23a3876db59390272ae7500bb5cbe"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_implicit.html#a62d23a3876db59390272ae7500bb5cbe">is_explicit</a> () const</td></tr>
+<tr class="separator:a62d23a3876db59390272ae7500bb5cbe inherit pub_methods_class_sandals_1_1_implicit"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a041f6ccaa38141afa0efe77494cd7c00 inherit pub_methods_class_sandals_1_1_implicit" id="r_a041f6ccaa38141afa0efe77494cd7c00"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_implicit.html#a041f6ccaa38141afa0efe77494cd7c00">is_semiexplicit</a> () const</td></tr>
+<tr class="separator:a041f6ccaa38141afa0efe77494cd7c00 inherit pub_methods_class_sandals_1_1_implicit"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5232c52bbb412d6e5c812501c6701836 inherit pub_methods_class_sandals_1_1_implicit" id="r_a5232c52bbb412d6e5c812501c6701836"><td class="memItemLeft" align="right" valign="top">std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_implicit.html#a5232c52bbb412d6e5c812501c6701836">name</a> ()</td></tr>
+<tr class="separator:a5232c52bbb412d6e5c812501c6701836 inherit pub_methods_class_sandals_1_1_implicit"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0124e2da7f3fd20ae2b3b6c598642601 inherit pub_methods_class_sandals_1_1_implicit" id="r_a0124e2da7f3fd20ae2b3b6c598642601"><td class="memItemLeft" align="right" valign="top">std::string const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_implicit.html#a0124e2da7f3fd20ae2b3b6c598642601">name</a> () const</td></tr>
+<tr class="separator:a0124e2da7f3fd20ae2b3b6c598642601 inherit pub_methods_class_sandals_1_1_implicit"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a86c98b1098360f6d8e336319af4b54b4 inherit pub_methods_class_sandals_1_1_implicit" id="r_a86c98b1098360f6d8e336319af4b54b4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_implicit.html#a86c98b1098360f6d8e336319af4b54b4">equations_number</a> () const</td></tr>
+<tr class="separator:a86c98b1098360f6d8e336319af4b54b4 inherit pub_methods_class_sandals_1_1_implicit"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad59a225a57fc8ece8971c6a9b7663a4 inherit pub_methods_class_sandals_1_1_implicit" id="r_aad59a225a57fc8ece8971c6a9b7663a4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_implicit.html#aad59a225a57fc8ece8971c6a9b7663a4">invariants_number</a> () const</td></tr>
+<tr class="separator:aad59a225a57fc8ece8971c6a9b7663a4 inherit pub_methods_class_sandals_1_1_implicit"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac69d56ac6d1c1658328f6f2d04c130ca inherit pub_methods_class_sandals_1_1_implicit" id="r_ac69d56ac6d1c1658328f6f2d04c130ca"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_sandals_1_1_implicit.html#a2a572c1717ee411d8bcd366eb50b4faf">VectorF</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_implicit.html#ac69d56ac6d1c1658328f6f2d04c130ca">F_reverse</a> (<a class="el" href="class_sandals_1_1_implicit.html#a2a572c1717ee411d8bcd366eb50b4faf">VectorF</a> const &amp;x, <a class="el" href="class_sandals_1_1_implicit.html#a2a572c1717ee411d8bcd366eb50b4faf">VectorF</a> const &amp;x_dot, Real t) const</td></tr>
+<tr class="separator:ac69d56ac6d1c1658328f6f2d04c130ca inherit pub_methods_class_sandals_1_1_implicit"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac86e61b80f2a7b0a91bab601f07a3644 inherit pub_methods_class_sandals_1_1_implicit" id="r_ac86e61b80f2a7b0a91bab601f07a3644"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_sandals_1_1_implicit.html#a0f6ed8a93dd0a78c31cc1cba5c2b085d">MatrixJF</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_implicit.html#ac86e61b80f2a7b0a91bab601f07a3644">JF_x_reverse</a> (<a class="el" href="class_sandals_1_1_implicit.html#a2a572c1717ee411d8bcd366eb50b4faf">VectorF</a> const &amp;x, <a class="el" href="class_sandals_1_1_implicit.html#a2a572c1717ee411d8bcd366eb50b4faf">VectorF</a> const &amp;x_dot, Real t) const</td></tr>
+<tr class="separator:ac86e61b80f2a7b0a91bab601f07a3644 inherit pub_methods_class_sandals_1_1_implicit"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a952aa0b38f6f10da0207605038b75429 inherit pub_methods_class_sandals_1_1_implicit" id="r_a952aa0b38f6f10da0207605038b75429"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_sandals_1_1_implicit.html#a0f6ed8a93dd0a78c31cc1cba5c2b085d">MatrixJF</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_implicit.html#a952aa0b38f6f10da0207605038b75429">JF_x_dot_reverse</a> (<a class="el" href="class_sandals_1_1_implicit.html#a2a572c1717ee411d8bcd366eb50b4faf">VectorF</a> const &amp;x, <a class="el" href="class_sandals_1_1_implicit.html#a2a572c1717ee411d8bcd366eb50b4faf">VectorF</a> const &amp;x_dot, Real t) const</td></tr>
+<tr class="separator:a952aa0b38f6f10da0207605038b75429 inherit pub_methods_class_sandals_1_1_implicit"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
+Static Public Attributes</h2></td></tr>
+<tr class="memitem:a060994b2e4ad56067e6a6d4fe2ddaf05" id="r_a060994b2e4ad56067e6a6d4fe2ddaf05"><td class="memItemLeft" align="right" valign="top">static const <a class="el" href="#abbbceebbfa07e142306f7fb1b42d63ee">FunctionH</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a060994b2e4ad56067e6a6d4fe2ddaf05">DefaultH</a> = [](<a class="el" href="#a9f60a2bfc68df04c83634c92425d7385">VectorF</a> const &amp;, Real) {return VectorH::Zero();}</td></tr>
+<tr class="separator:a060994b2e4ad56067e6a6d4fe2ddaf05"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad100b0ed7e3ba0a55a7a19366176b2ea" id="r_ad100b0ed7e3ba0a55a7a19366176b2ea"><td class="memItemLeft" align="right" valign="top">static const <a class="el" href="#a216aaadfe705a786d8641d94183c0465">FunctionJH</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad100b0ed7e3ba0a55a7a19366176b2ea">DefaultJH</a> = [](<a class="el" href="#a9f60a2bfc68df04c83634c92425d7385">VectorF</a> const &amp;, Real) {return MatrixJH::Zero();}</td></tr>
+<tr class="separator:ad100b0ed7e3ba0a55a7a19366176b2ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a391ab6441c6c633e37135c3602437ab9" id="r_a391ab6441c6c633e37135c3602437ab9"><td class="memItemLeft" align="right" valign="top">static const <a class="el" href="#af3b90ecf4c7b8bdc25eb12870222fda6">FunctionID</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a391ab6441c6c633e37135c3602437ab9">DefaultID</a> = [](<a class="el" href="#a9f60a2bfc68df04c83634c92425d7385">VectorF</a> const &amp;, Real) {return true;}</td></tr>
+<tr class="separator:a391ab6441c6c633e37135c3602437ab9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:aa9aa243b2ddbeca227e107941aa9c6d5" id="r_aa9aa243b2ddbeca227e107941aa9c6d5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a2f2f932bd31c63b2a3ab2044cc446cfc">FunctionF</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa9aa243b2ddbeca227e107941aa9c6d5">m_f</a> {nullptr}</td></tr>
+<tr class="separator:aa9aa243b2ddbeca227e107941aa9c6d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9e03efea475813d6fd55a775f4dbfeed" id="r_a9e03efea475813d6fd55a775f4dbfeed"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a6d3b8ccacd838180eaff9e4ea8b8d1f3">FunctionJF</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9e03efea475813d6fd55a775f4dbfeed">m_Jf_x</a> {nullptr}</td></tr>
+<tr class="separator:a9e03efea475813d6fd55a775f4dbfeed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aade9442ae0096cf12a4c2248315412e6" id="r_aade9442ae0096cf12a4c2248315412e6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#abbbceebbfa07e142306f7fb1b42d63ee">FunctionH</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aade9442ae0096cf12a4c2248315412e6">m_h</a> {nullptr}</td></tr>
+<tr class="separator:aade9442ae0096cf12a4c2248315412e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac20517af6839275be3499e2f8aa7dad9" id="r_ac20517af6839275be3499e2f8aa7dad9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a216aaadfe705a786d8641d94183c0465">FunctionJH</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac20517af6839275be3499e2f8aa7dad9">m_Jh_x</a> {nullptr}</td></tr>
+<tr class="separator:ac20517af6839275be3499e2f8aa7dad9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9c93144013fb7f36f1bdcc2522c8912d" id="r_a9c93144013fb7f36f1bdcc2522c8912d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#af3b90ecf4c7b8bdc25eb12870222fda6">FunctionID</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9c93144013fb7f36f1bdcc2522c8912d">m_in_domain</a> {nullptr}</td></tr>
+<tr class="separator:a9c93144013fb7f36f1bdcc2522c8912d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
+Additional Inherited Members</h2></td></tr>
+<tr class="inherit_header pro_methods_class_sandals_1_1_explicit"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pro_methods_class_sandals_1_1_explicit')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="class_sandals_1_1_explicit.html">Sandals::Explicit&lt; Real, N, 0 &gt;</a></td></tr>
+<tr class="memitem:a28058e79774767c4e0882bfa81dfd72a inherit pro_methods_class_sandals_1_1_explicit" id="r_a28058e79774767c4e0882bfa81dfd72a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_explicit.html#a28058e79774767c4e0882bfa81dfd72a">Explicit</a> (<a class="el" href="class_sandals_1_1_explicit.html#ab498b358a77a9c3ae19ec5a3aa14966f">Type</a> t_type, std::string t_name)</td></tr>
+<tr class="separator:a28058e79774767c4e0882bfa81dfd72a inherit pro_methods_class_sandals_1_1_explicit"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_methods_class_sandals_1_1_implicit"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pro_methods_class_sandals_1_1_implicit')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit&lt; Real, N, M &gt;</a></td></tr>
+<tr class="memitem:a262bcc55f6bfa6848eb29a6863a32d82 inherit pro_methods_class_sandals_1_1_implicit" id="r_a262bcc55f6bfa6848eb29a6863a32d82"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_implicit.html#a262bcc55f6bfa6848eb29a6863a32d82">Implicit</a> (<a class="el" href="class_sandals_1_1_implicit.html#a37ea48741ddf4f101c9c4f507e9a42bc">Type</a> t_type, std::string t_name)</td></tr>
+<tr class="separator:a262bcc55f6bfa6848eb29a6863a32d82 inherit pro_methods_class_sandals_1_1_implicit"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><div class="compoundTemplParams">template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt;<br />
+class Sandals::ExplicitWrapper&lt; Real, N, M &gt;</div><p>Class container for the system of explicit ordinary differential equations (ODEs) or differential algebraic equations (DAEs) of the type  \( \mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, t) =
+\mathbf{0} \), with invariants manifold \( \mathbf{h}(\mathbf{x}, t) = \mathbf{0} \). </p><dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">Real</td><td>The scalar number type. </td></tr>
+    <tr><td class="paramname">N</td><td>The dimension of the explicit ODE system. </td></tr>
+    <tr><td class="paramname">M</td><td>The dimension of the invariants manifold. </td></tr>
+  </table>
+  </dd>
+</dl>
+</div><h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="a2f2f932bd31c63b2a3ab2044cc446cfc" name="a2f2f932bd31c63b2a3ab2044cc446cfc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2f2f932bd31c63b2a3ab2044cc446cfc">&#9670;&#160;</a></span>FunctionF</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="class_sandals_1_1_explicit_wrapper.html">Sandals::ExplicitWrapper</a>&lt; Real, N, M &gt;::FunctionF = std::function&lt;<a class="el" href="#a9f60a2bfc68df04c83634c92425d7385">VectorF</a>(<a class="el" href="#a9f60a2bfc68df04c83634c92425d7385">VectorF</a> const &amp;, <a class="el" href="#a9f60a2bfc68df04c83634c92425d7385">VectorF</a> const &amp;, Real)&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p><a class="el" href="class_sandals_1_1_explicit.html" title="Class container for the system of explicit ODEs.">Explicit</a> ODE system function type. </p>
+
+</div>
+</div>
+<a id="abbbceebbfa07e142306f7fb1b42d63ee" name="abbbceebbfa07e142306f7fb1b42d63ee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abbbceebbfa07e142306f7fb1b42d63ee">&#9670;&#160;</a></span>FunctionH</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="class_sandals_1_1_explicit_wrapper.html">Sandals::ExplicitWrapper</a>&lt; Real, N, M &gt;::FunctionH = std::function&lt;<a class="el" href="#a6a0257ee922684319a9ddccd3ab72b36">VectorH</a>(<a class="el" href="#a9f60a2bfc68df04c83634c92425d7385">VectorF</a> const &amp;, Real)&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Invariants function type. </p>
+
+</div>
+</div>
+<a id="af3b90ecf4c7b8bdc25eb12870222fda6" name="af3b90ecf4c7b8bdc25eb12870222fda6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af3b90ecf4c7b8bdc25eb12870222fda6">&#9670;&#160;</a></span>FunctionID</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="class_sandals_1_1_explicit_wrapper.html">Sandals::ExplicitWrapper</a>&lt; Real, N, M &gt;::FunctionID = std::function&lt;bool(<a class="el" href="#a9f60a2bfc68df04c83634c92425d7385">VectorF</a> const &amp;, Real)&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>In-domain function type. </p>
+
+</div>
+</div>
+<a id="a6d3b8ccacd838180eaff9e4ea8b8d1f3" name="a6d3b8ccacd838180eaff9e4ea8b8d1f3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6d3b8ccacd838180eaff9e4ea8b8d1f3">&#9670;&#160;</a></span>FunctionJF</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="class_sandals_1_1_explicit_wrapper.html">Sandals::ExplicitWrapper</a>&lt; Real, N, M &gt;::FunctionJF = std::function&lt;<a class="el" href="#a1a3acf5600c4471ef66d375fff9fa26e">MatrixJF</a>(<a class="el" href="#a9f60a2bfc68df04c83634c92425d7385">VectorF</a> const &amp;, <a class="el" href="#a9f60a2bfc68df04c83634c92425d7385">VectorF</a> const &amp;, Real)&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Jacobian of the ODE system function function type. </p>
+
+</div>
+</div>
+<a id="a216aaadfe705a786d8641d94183c0465" name="a216aaadfe705a786d8641d94183c0465"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a216aaadfe705a786d8641d94183c0465">&#9670;&#160;</a></span>FunctionJH</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="class_sandals_1_1_explicit_wrapper.html">Sandals::ExplicitWrapper</a>&lt; Real, N, M &gt;::FunctionJH = std::function&lt;<a class="el" href="#a5b5855abfc2df4271aa09605193f5d7d">MatrixJH</a>(<a class="el" href="#a9f60a2bfc68df04c83634c92425d7385">VectorF</a> const &amp;, Real)&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Jacobian of the invariants function type. </p>
+
+</div>
+</div>
+<a id="a1a3acf5600c4471ef66d375fff9fa26e" name="a1a3acf5600c4471ef66d375fff9fa26e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1a3acf5600c4471ef66d375fff9fa26e">&#9670;&#160;</a></span>MatrixJF</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="class_sandals_1_1_explicit_wrapper.html">Sandals::ExplicitWrapper</a>&lt; Real, N, M &gt;::MatrixJF = typename <a class="el" href="class_sandals_1_1_explicit.html">Explicit</a>&lt;Real, N, M&gt;::MatrixJF</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Templetized matrix type. </p>
+
+</div>
+</div>
+<a id="a5b5855abfc2df4271aa09605193f5d7d" name="a5b5855abfc2df4271aa09605193f5d7d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5b5855abfc2df4271aa09605193f5d7d">&#9670;&#160;</a></span>MatrixJH</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="class_sandals_1_1_explicit_wrapper.html">Sandals::ExplicitWrapper</a>&lt; Real, N, M &gt;::MatrixJH = typename <a class="el" href="class_sandals_1_1_explicit.html">Explicit</a>&lt;Real, N, M&gt;::MatrixJH</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Templetized matrix type. </p>
+
+</div>
+</div>
+<a id="a497860927cef68e96ecc1a2dedec0999" name="a497860927cef68e96ecc1a2dedec0999"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a497860927cef68e96ecc1a2dedec0999">&#9670;&#160;</a></span>Pointer</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="class_sandals_1_1_explicit_wrapper.html">Sandals::ExplicitWrapper</a>&lt; Real, N, M &gt;::Pointer = std::shared_ptr&lt;<a class="el" href="class_sandals_1_1_explicit_wrapper.html">ExplicitWrapper</a>&lt;Real, N, M&gt;&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>&lt; Basic constants. Shared pointer to an explicit ODE system. </p>
+
+</div>
+</div>
+<a id="a9f60a2bfc68df04c83634c92425d7385" name="a9f60a2bfc68df04c83634c92425d7385"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9f60a2bfc68df04c83634c92425d7385">&#9670;&#160;</a></span>VectorF</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="class_sandals_1_1_explicit_wrapper.html">Sandals::ExplicitWrapper</a>&lt; Real, N, M &gt;::VectorF = typename <a class="el" href="class_sandals_1_1_explicit.html">Explicit</a>&lt;Real, N, M&gt;::VectorF</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Templetized vector type. </p>
+
+</div>
+</div>
+<a id="a6a0257ee922684319a9ddccd3ab72b36" name="a6a0257ee922684319a9ddccd3ab72b36"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6a0257ee922684319a9ddccd3ab72b36">&#9670;&#160;</a></span>VectorH</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="class_sandals_1_1_explicit_wrapper.html">Sandals::ExplicitWrapper</a>&lt; Real, N, M &gt;::VectorH = typename <a class="el" href="class_sandals_1_1_explicit.html">Explicit</a>&lt;Real, N, M&gt;::VectorH</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Templetized vector type. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="ade4317fa686eda59204431c1221ff244" name="ade4317fa686eda59204431c1221ff244"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ade4317fa686eda59204431c1221ff244">&#9670;&#160;</a></span>ExplicitWrapper() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_sandals_1_1_explicit_wrapper.html">Sandals::ExplicitWrapper</a>&lt; Real, N, M &gt;::ExplicitWrapper </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#a2f2f932bd31c63b2a3ab2044cc446cfc">FunctionF</a></td>          <td class="paramname"><span class="paramname"><em>t_f</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="#a6d3b8ccacd838180eaff9e4ea8b8d1f3">FunctionJF</a></td>          <td class="paramname"><span class="paramname"><em>t_Jf_x</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="#abbbceebbfa07e142306f7fb1b42d63ee">FunctionH</a></td>          <td class="paramname"><span class="paramname"><em>t_h</em></span><span class="paramdefsep"> = </span><span class="paramdefval"><a class="el" href="#a060994b2e4ad56067e6a6d4fe2ddaf05">DefaultH</a></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="#a216aaadfe705a786d8641d94183c0465">FunctionJH</a></td>          <td class="paramname"><span class="paramname"><em>t_Jh_x</em></span><span class="paramdefsep"> = </span><span class="paramdefval"><a class="el" href="#ad100b0ed7e3ba0a55a7a19366176b2ea">DefaultJH</a></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="#af3b90ecf4c7b8bdc25eb12870222fda6">FunctionID</a></td>          <td class="paramname"><span class="paramname"><em>t_in_domain</em></span><span class="paramdefsep"> = </span><span class="paramdefval"><a class="el" href="#a391ab6441c6c633e37135c3602437ab9">DefaultID</a></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Class constructor for the explicit ODE/DAE system wrapper. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">t_f</td><td>The explicit ODE system function. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">t_Jf_x</td><td>The Jacobian of the explicit ODE system function with respect to the states. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">t_h</td><td>The system's invariants. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">t_Jh_x</td><td>The Jacobian of the system's invariants with respect to the states. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">t_in_domain</td><td>The in-domain function. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a49a4d72322f27d807b4518a1a9610f00" name="a49a4d72322f27d807b4518a1a9610f00"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a49a4d72322f27d807b4518a1a9610f00">&#9670;&#160;</a></span>ExplicitWrapper() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_sandals_1_1_explicit_wrapper.html">Sandals::ExplicitWrapper</a>&lt; Real, N, M &gt;::ExplicitWrapper </td>
+          <td>(</td>
+          <td class="paramtype">std::string</td>          <td class="paramname"><span class="paramname"><em>t_name</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="#a2f2f932bd31c63b2a3ab2044cc446cfc">FunctionF</a></td>          <td class="paramname"><span class="paramname"><em>t_f</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="#a6d3b8ccacd838180eaff9e4ea8b8d1f3">FunctionJF</a></td>          <td class="paramname"><span class="paramname"><em>t_Jf_x</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="#abbbceebbfa07e142306f7fb1b42d63ee">FunctionH</a></td>          <td class="paramname"><span class="paramname"><em>t_h</em></span><span class="paramdefsep"> = </span><span class="paramdefval"><a class="el" href="#a060994b2e4ad56067e6a6d4fe2ddaf05">DefaultH</a></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="#a216aaadfe705a786d8641d94183c0465">FunctionJH</a></td>          <td class="paramname"><span class="paramname"><em>t_Jh_x</em></span><span class="paramdefsep"> = </span><span class="paramdefval"><a class="el" href="#ad100b0ed7e3ba0a55a7a19366176b2ea">DefaultJH</a></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="#af3b90ecf4c7b8bdc25eb12870222fda6">FunctionID</a></td>          <td class="paramname"><span class="paramname"><em>t_in_domain</em></span><span class="paramdefsep"> = </span><span class="paramdefval"><a class="el" href="#a391ab6441c6c633e37135c3602437ab9">DefaultID</a></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Class constructor for the implicit ODE/DAE system wrapper. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">t_name</td><td>The name of the implicit ODE/DAE system. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">t_f</td><td>The implicit ODE system function. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">t_Jf_x</td><td>The Jacobian of the implicit ODE system function with respect to the states. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">t_h</td><td>The system's invariants. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">t_Jh_x</td><td>The Jacobian of the system's invariants with respect to the states. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">t_in_domain</td><td>The in-domain function. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aea242842f5ce6ed0d9b197ff5e7da7cb" name="aea242842f5ce6ed0d9b197ff5e7da7cb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aea242842f5ce6ed0d9b197ff5e7da7cb">&#9670;&#160;</a></span>~ExplicitWrapper()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_sandals_1_1_explicit_wrapper.html">Sandals::ExplicitWrapper</a>&lt; Real, N, M &gt;::~<a class="el" href="class_sandals_1_1_explicit_wrapper.html">ExplicitWrapper</a> </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Class destructor for the explicit ODE/DAE system wrapper. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a6832a0277654f721ad309f0e6e7f79e1" name="a6832a0277654f721ad309f0e6e7f79e1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6832a0277654f721ad309f0e6e7f79e1">&#9670;&#160;</a></span>f() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a2f2f932bd31c63b2a3ab2044cc446cfc">FunctionF</a> &amp; <a class="el" href="class_sandals_1_1_explicit_wrapper.html">Sandals::ExplicitWrapper</a>&lt; Real, N, M &gt;::f </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Get the explicit ODE system function. </p><dl class="section return"><dt>Returns</dt><dd>The explicit ODE system function. </dd></dl>
+
+</div>
+</div>
+<a id="ac5af918b8e38d297a1e2d7676b9a4da7" name="ac5af918b8e38d297a1e2d7676b9a4da7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac5af918b8e38d297a1e2d7676b9a4da7">&#9670;&#160;</a></span>f() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a9f60a2bfc68df04c83634c92425d7385">VectorF</a> <a class="el" href="class_sandals_1_1_explicit_wrapper.html">Sandals::ExplicitWrapper</a>&lt; Real, N, M &gt;::f </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#a9f60a2bfc68df04c83634c92425d7385">VectorF</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>x</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Real</td>          <td class="paramname"><span class="paramname"><em>t</em></span>&#160;) const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel override">override</span><span class="mlabel virtual">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Evaluate the ODE/DAE system \( \mathbf{f}(\mathbf{x}, t) \). </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>States \( \mathbf{x} \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">t</td><td>Independent variable (or time) \( t \). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The system function \( \mathbf{f}(\mathbf{x}, t) \). </dd></dl>
+
+<p>Implements <a class="el" href="class_sandals_1_1_explicit.html#a6edb404bb6580adc778e1b3291af0c35">Sandals::Explicit&lt; Real, N, 0 &gt;</a>.</p>
+
+</div>
+</div>
+<a id="a3ffcf83af074e1553e1bf270ab17daf1" name="a3ffcf83af074e1553e1bf270ab17daf1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3ffcf83af074e1553e1bf270ab17daf1">&#9670;&#160;</a></span>h() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#abbbceebbfa07e142306f7fb1b42d63ee">FunctionH</a> &amp; <a class="el" href="class_sandals_1_1_explicit_wrapper.html">Sandals::ExplicitWrapper</a>&lt; Real, N, M &gt;::h </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Get the system's invariants. </p><dl class="section return"><dt>Returns</dt><dd>The system's invariants. </dd></dl>
+
+</div>
+</div>
+<a id="af63a9e06e1f8850bcce14a360321ac09" name="af63a9e06e1f8850bcce14a360321ac09"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af63a9e06e1f8850bcce14a360321ac09">&#9670;&#160;</a></span>h() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a6a0257ee922684319a9ddccd3ab72b36">VectorH</a> <a class="el" href="class_sandals_1_1_explicit_wrapper.html">Sandals::ExplicitWrapper</a>&lt; Real, N, M &gt;::h </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#a9f60a2bfc68df04c83634c92425d7385">VectorF</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>x</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Real</td>          <td class="paramname"><span class="paramname"><em>t</em></span>&#160;) const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel override">override</span><span class="mlabel virtual">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Evaluate the ODE/DAE system invariants \( \mathbf{h}(\mathbf{x}, t) \). </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>States \( \mathbf{x} \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">t</td><td>Independent variable (or time) \( t \). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The system invariants \( \mathbf{h}(\mathbf{x}, t) \). </dd></dl>
+
+<p>Implements <a class="el" href="class_sandals_1_1_implicit.html#ad0a2b556ea25496d4bc0723b8197227d">Sandals::Implicit&lt; Real, N, M &gt;</a>.</p>
+
+</div>
+</div>
+<a id="ae33addacb753635d3c55623b5afb10c1" name="ae33addacb753635d3c55623b5afb10c1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae33addacb753635d3c55623b5afb10c1">&#9670;&#160;</a></span>in_domain() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#af3b90ecf4c7b8bdc25eb12870222fda6">FunctionID</a> &amp; <a class="el" href="class_sandals_1_1_explicit_wrapper.html">Sandals::ExplicitWrapper</a>&lt; Real, N, M &gt;::in_domain </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Get the in-domain function. </p><dl class="section return"><dt>Returns</dt><dd>The in-domain function. </dd></dl>
+
+</div>
+</div>
+<a id="a28cb3ac895229b2550c8da95a1603e8b" name="a28cb3ac895229b2550c8da95a1603e8b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a28cb3ac895229b2550c8da95a1603e8b">&#9670;&#160;</a></span>in_domain() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="class_sandals_1_1_explicit_wrapper.html">Sandals::ExplicitWrapper</a>&lt; Real, N, M &gt;::in_domain </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#a9f60a2bfc68df04c83634c92425d7385">VectorF</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>x</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Real</td>          <td class="paramname"><span class="paramname"><em>t</em></span>&#160;) const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel override">override</span><span class="mlabel virtual">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Return true if the values \( \mathbf{f}(\mathbf{x}, t) \) is in the domain of the ODE/DAE system. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>States \( \mathbf{x} \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">t</td><td>Independent variable (or time) \( t \). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if \( \mathbf{f}(\mathbf{x}, t) \) is in the domain of the ODE/DAE system. </dd></dl>
+
+<p>Implements <a class="el" href="class_sandals_1_1_implicit.html#a4ee618cece24e28456e628445f68b703">Sandals::Implicit&lt; Real, N, M &gt;</a>.</p>
+
+</div>
+</div>
+<a id="a60c3c1fe379b6120b5f54713fe838e3f" name="a60c3c1fe379b6120b5f54713fe838e3f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a60c3c1fe379b6120b5f54713fe838e3f">&#9670;&#160;</a></span>Jf_x() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a6d3b8ccacd838180eaff9e4ea8b8d1f3">FunctionJF</a> &amp; <a class="el" href="class_sandals_1_1_explicit_wrapper.html">Sandals::ExplicitWrapper</a>&lt; Real, N, M &gt;::Jf_x </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Get the Jacobian of the explicit ODE system function with respect to the states. </p><dl class="section return"><dt>Returns</dt><dd>The Jacobian of the explicit ODE system function with respect to the states. </dd></dl>
+
+</div>
+</div>
+<a id="a9caa8b96aed37a8011bbf6d9c266a92c" name="a9caa8b96aed37a8011bbf6d9c266a92c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9caa8b96aed37a8011bbf6d9c266a92c">&#9670;&#160;</a></span>Jf_x() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a1a3acf5600c4471ef66d375fff9fa26e">MatrixJF</a> <a class="el" href="class_sandals_1_1_explicit_wrapper.html">Sandals::ExplicitWrapper</a>&lt; Real, N, M &gt;::Jf_x </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#a9f60a2bfc68df04c83634c92425d7385">VectorF</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>x</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Real</td>          <td class="paramname"><span class="paramname"><em>t</em></span>&#160;) const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel override">override</span><span class="mlabel virtual">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Evaluate the Jacobian of the implicit ODE system function \( \mathbf{f}(\mathbf{x}, t) \) with respect to the states \( \mathbf{x} \)</p>
+<p class="formulaDsp">
+\[\mathbf{Jf}_{\mathbf{x}}(\mathbf{x}, t) =
+\displaystyle\frac{\partial\mathbf{f}(\mathbf{x}, t)}{\partial\mathbf{x}} \text{.}
+\]
+</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>States \( \mathbf{x} \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">t</td><td>Independent variable (or time) \( t \). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The Jacobian \( \mathbf{Jf}_{\mathbf{x}}(\mathbf{x}, t) \). </dd></dl>
+
+<p>Implements <a class="el" href="class_sandals_1_1_explicit.html#a5105399a3b421abe7aff711494bb8b5d">Sandals::Explicit&lt; Real, N, 0 &gt;</a>.</p>
+
+</div>
+</div>
+<a id="aad72686a75a930295670e3fc37dfe407" name="aad72686a75a930295670e3fc37dfe407"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aad72686a75a930295670e3fc37dfe407">&#9670;&#160;</a></span>Jh_x() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a216aaadfe705a786d8641d94183c0465">FunctionJH</a> &amp; <a class="el" href="class_sandals_1_1_explicit_wrapper.html">Sandals::ExplicitWrapper</a>&lt; Real, N, M &gt;::Jh_x </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Get the Jacobian of the system's invariants with respect to the states. </p><dl class="section return"><dt>Returns</dt><dd>The Jacobian of the system's invariants with respect to the states. </dd></dl>
+
+</div>
+</div>
+<a id="addf6cbd9308208e992dbbc22e1cefe8d" name="addf6cbd9308208e992dbbc22e1cefe8d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#addf6cbd9308208e992dbbc22e1cefe8d">&#9670;&#160;</a></span>Jh_x() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a5b5855abfc2df4271aa09605193f5d7d">MatrixJH</a> <a class="el" href="class_sandals_1_1_explicit_wrapper.html">Sandals::ExplicitWrapper</a>&lt; Real, N, M &gt;::Jh_x </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#a9f60a2bfc68df04c83634c92425d7385">VectorF</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>x</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Real</td>          <td class="paramname"><span class="paramname"><em>t</em></span>&#160;) const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel override">override</span><span class="mlabel virtual">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Evaluate the Jacobian of the ODE/DAE system invariants \( \mathbf{h}(\mathbf{x}, t) \) with respect to the states \( \mathbf{x} \)</p>
+<p class="formulaDsp">
+\[\mathbf{Jh}_{\mathbf{x}}(\mathbf{x} t) = \displaystyle\frac{\partial\mathbf{h}(\mathbf{x},
+t)}{\partial\mathbf{x}} \text{.}
+\]
+</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>States \( \mathbf{x} \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">t</td><td>Independent variable (or time) \( t \). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The Jacobian \( \mathbf{Jh}_{\mathbf{x}}(\mathbf{x}, t) \). </dd></dl>
+
+<p>Implements <a class="el" href="class_sandals_1_1_implicit.html#a1fa95e9ff4fbe85e082911d3b21b7b55">Sandals::Implicit&lt; Real, N, M &gt;</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a060994b2e4ad56067e6a6d4fe2ddaf05" name="a060994b2e4ad56067e6a6d4fe2ddaf05"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a060994b2e4ad56067e6a6d4fe2ddaf05">&#9670;&#160;</a></span>DefaultH</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="#abbbceebbfa07e142306f7fb1b42d63ee">FunctionH</a> <a class="el" href="class_sandals_1_1_explicit_wrapper.html">Sandals::ExplicitWrapper</a>&lt; Real, N, M &gt;::DefaultH = [](<a class="el" href="#a9f60a2bfc68df04c83634c92425d7385">VectorF</a> const &amp;, Real) {return VectorH::Zero();}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Default mass matrix function. </p>
+
+</div>
+</div>
+<a id="a391ab6441c6c633e37135c3602437ab9" name="a391ab6441c6c633e37135c3602437ab9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a391ab6441c6c633e37135c3602437ab9">&#9670;&#160;</a></span>DefaultID</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="#af3b90ecf4c7b8bdc25eb12870222fda6">FunctionID</a> <a class="el" href="class_sandals_1_1_explicit_wrapper.html">Sandals::ExplicitWrapper</a>&lt; Real, N, M &gt;::DefaultID = [](<a class="el" href="#a9f60a2bfc68df04c83634c92425d7385">VectorF</a> const &amp;, Real) {return true;}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Default in-domain function. </p>
+
+</div>
+</div>
+<a id="ad100b0ed7e3ba0a55a7a19366176b2ea" name="ad100b0ed7e3ba0a55a7a19366176b2ea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad100b0ed7e3ba0a55a7a19366176b2ea">&#9670;&#160;</a></span>DefaultJH</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="#a216aaadfe705a786d8641d94183c0465">FunctionJH</a> <a class="el" href="class_sandals_1_1_explicit_wrapper.html">Sandals::ExplicitWrapper</a>&lt; Real, N, M &gt;::DefaultJH = [](<a class="el" href="#a9f60a2bfc68df04c83634c92425d7385">VectorF</a> const &amp;, Real) {return MatrixJH::Zero();}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Default system matrix function. </p>
+
+</div>
+</div>
+<a id="aa9aa243b2ddbeca227e107941aa9c6d5" name="aa9aa243b2ddbeca227e107941aa9c6d5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa9aa243b2ddbeca227e107941aa9c6d5">&#9670;&#160;</a></span>m_f</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a2f2f932bd31c63b2a3ab2044cc446cfc">FunctionF</a> <a class="el" href="class_sandals_1_1_explicit_wrapper.html">Sandals::ExplicitWrapper</a>&lt; Real, N, M &gt;::m_f {nullptr}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p><a class="el" href="class_sandals_1_1_explicit.html" title="Class container for the system of explicit ODEs.">Explicit</a> ODE system function. </p>
+
+</div>
+</div>
+<a id="aade9442ae0096cf12a4c2248315412e6" name="aade9442ae0096cf12a4c2248315412e6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aade9442ae0096cf12a4c2248315412e6">&#9670;&#160;</a></span>m_h</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#abbbceebbfa07e142306f7fb1b42d63ee">FunctionH</a> <a class="el" href="class_sandals_1_1_explicit_wrapper.html">Sandals::ExplicitWrapper</a>&lt; Real, N, M &gt;::m_h {nullptr}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>System invariants. </p>
+
+</div>
+</div>
+<a id="a9c93144013fb7f36f1bdcc2522c8912d" name="a9c93144013fb7f36f1bdcc2522c8912d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9c93144013fb7f36f1bdcc2522c8912d">&#9670;&#160;</a></span>m_in_domain</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#af3b90ecf4c7b8bdc25eb12870222fda6">FunctionID</a> <a class="el" href="class_sandals_1_1_explicit_wrapper.html">Sandals::ExplicitWrapper</a>&lt; Real, N, M &gt;::m_in_domain {nullptr}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>In-domain function. </p>
+
+</div>
+</div>
+<a id="a9e03efea475813d6fd55a775f4dbfeed" name="a9e03efea475813d6fd55a775f4dbfeed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9e03efea475813d6fd55a775f4dbfeed">&#9670;&#160;</a></span>m_Jf_x</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a6d3b8ccacd838180eaff9e4ea8b8d1f3">FunctionJF</a> <a class="el" href="class_sandals_1_1_explicit_wrapper.html">Sandals::ExplicitWrapper</a>&lt; Real, N, M &gt;::m_Jf_x {nullptr}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Jacobian of the explicit ODE system function with respect to the states. </p>
+
+</div>
+</div>
+<a id="ac20517af6839275be3499e2f8aa7dad9" name="ac20517af6839275be3499e2f8aa7dad9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac20517af6839275be3499e2f8aa7dad9">&#9670;&#160;</a></span>m_Jh_x</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a216aaadfe705a786d8641d94183c0465">FunctionJH</a> <a class="el" href="class_sandals_1_1_explicit_wrapper.html">Sandals::ExplicitWrapper</a>&lt; Real, N, M &gt;::m_Jh_x {nullptr}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Jacobian of the system's invariants with respect to the states. </p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
+<li>include/Sandals/System/<a class="el" href="_explicit_8hxx_source.html">Explicit.hxx</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="namespace_sandals.html">Sandals</a></li><li class="navelem"><a class="el" href="class_sandals_1_1_explicit_wrapper.html">ExplicitWrapper</a></li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.13.2 </li>
+  </ul>
+</div>
+</body>
+</html>

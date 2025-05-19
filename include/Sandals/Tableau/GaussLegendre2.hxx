@@ -33,18 +33,20 @@ namespace Sandals
   *       & 1
   * \end{array} \text{.}
   * \f]
+  * \tparam Real The scalar number type.
   */
-  class GaussLegendre2Tableau : public Tableau<1>
+  template <typename Real>
+  class GaussLegendre2Tableau : public Tableau<Real, 1>
   {
   public:
-    using Tableau<1>::Type;
-    using Tableau<1>::Vector;
-    using Tableau<1>::Matrix;
+    using typename Tableau<Real, 1>::Type;
+    using typename Tableau<Real, 1>::Vector;
+    using typename Tableau<Real, 1>::Matrix;
 
     /**
     * Class constructor for the Gauss-Legendre order 2 method.
     */
-    GaussLegendre2Tableau() {
+    GaussLegendre2Tableau<Real>() {
       this->name  = "GaussLegendre2";
       this->type  = Type::IRK;
       this->order = 2;
@@ -58,25 +60,26 @@ namespace Sandals
   * \brief Class container for the Gauss-Legendre order 2 method.
   *
   * Class container for the Gauss-Legendre order 2 method.
+  * \tparam Real The scalar number type.
   * \tparam N The dimension of the ODE/DAE system.
   * \tparam M The dimension of the invariants manifold.
   */
-  template <Integer N, Integer M = 0>
-  class GaussLegendre2 : public RungeKutta<1, N, M>
+  template <typename Real, Integer N, Integer M = 0>
+  class GaussLegendre2 : public RungeKutta<Real, 1, N, M>
   {
   public:
-    using System = typename Implicit<N, M>::Pointer; /**< System type. */
+    using System = typename Implicit<Real, N, M>::Pointer; /**< System type. */
 
     /**
     * Class constructor for a Gauss-Legendre order 2 solver given a Tableau reference.
     */
-    GaussLegendre2() : RungeKutta<1, N, M>(GaussLegendre2Tableau()) {}
+    GaussLegendre2() : RungeKutta<Real, 1, N, M>(GaussLegendre2Tableau<Real>()) {}
 
     /**
     * Class constructor for a Gauss-Legendre order 2 solver given a Tableau reference.
     * \param[in] t_system The system reference.
     */
-    GaussLegendre2(System t_system) : RungeKutta<1, N, M>(GaussLegendre2Tableau(), t_system) {}
+    GaussLegendre2(System t_system) : RungeKutta<Real, 1, N, M>(GaussLegendre2Tableau<Real>(), t_system) {}
 
   }; // class GaussLegendre2
 

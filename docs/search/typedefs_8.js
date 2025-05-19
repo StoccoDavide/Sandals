@@ -1,23 +1,13 @@
 var searchData=
 [
-  ['vector_0',['Vector',['../struct_sandals_1_1_solution.html#a53b5d76fe47167457e6b1cf6cdf61fb2',1,'Sandals::Solution::Vector'],['../struct_sandals_1_1_tableau.html#a79fae830cbfc87f94fe55bf63f44acca',1,'Sandals::Tableau::Vector']]],
-  ['vector0_1',['Vector0',['../namespace_sandals.html#aa5480ee9cb0ab686fd191654ed80e2f4',1,'Sandals']]],
-  ['vector1_2',['Vector1',['../namespace_sandals.html#ac944f47a6c731fead972aed909323462',1,'Sandals']]],
-  ['vector2_3',['Vector2',['../namespace_sandals.html#ab368752a66add914b967bf189e86d52e',1,'Sandals']]],
-  ['vector3_4',['Vector3',['../namespace_sandals.html#a675a2e72a56fbacf72053c369c7b3ac2',1,'Sandals']]],
-  ['vector4_5',['Vector4',['../namespace_sandals.html#a3c882532fe454a5fe79deeea17612526',1,'Sandals']]],
-  ['vector5_6',['Vector5',['../namespace_sandals.html#a655da3660e23b5ce5b403e56bf652e5d',1,'Sandals']]],
-  ['vector6_7',['Vector6',['../namespace_sandals.html#a03d06250c46caa0ae9f676b61f3ec95c',1,'Sandals']]],
-  ['vector7_8',['Vector7',['../namespace_sandals.html#adf78d7891044f80c8958a9bf469a5412',1,'Sandals']]],
-  ['vector8_9',['Vector8',['../namespace_sandals.html#a39355d44dafd596a8434b8ed4a59af9a',1,'Sandals']]],
-  ['vector9_10',['Vector9',['../namespace_sandals.html#a91fc5f246e5e906c5370c844354f71a8',1,'Sandals']]],
-  ['vectorb_11',['VectorB',['../class_sandals_1_1_linear.html#a98f48792ee8a6ba06ce5eed3cee9bf97',1,'Sandals::Linear::VectorB'],['../class_sandals_1_1_semi_explicit.html#a24438597ff13d217632d3f90fa9a3da7',1,'Sandals::SemiExplicit::VectorB']]],
-  ['vectorf_12',['VectorF',['../class_sandals_1_1_explicit.html#ae51aa15d9bafa2aab57177faf50887cd',1,'Sandals::Explicit::VectorF'],['../class_sandals_1_1_implicit.html#a62a744b82f5a0172711c1882f81ab5c0',1,'Sandals::Implicit::VectorF'],['../class_sandals_1_1_linear.html#a875ef3a64218396811d40d62aaf416c3',1,'Sandals::Linear::VectorF'],['../class_sandals_1_1_semi_explicit.html#ada144b210103c6939ad490e31401f703',1,'Sandals::SemiExplicit::VectorF']]],
-  ['vectorh_13',['VectorH',['../class_sandals_1_1_implicit.html#aa23e308dcf4be601f2ce0a3869572fdd',1,'Sandals::Implicit']]],
-  ['vectork_14',['VectorK',['../class_sandals_1_1_runge_kutta.html#a99c0d30c763dcc611b28f043e367e7d6',1,'Sandals::RungeKutta']]],
-  ['vectorm_15',['VectorM',['../class_sandals_1_1_runge_kutta.html#a9d47c84ffec28b208ff5969ab7113bc1',1,'Sandals::RungeKutta']]],
-  ['vectorn_16',['VectorN',['../class_sandals_1_1_runge_kutta.html#aaf57c000d14d242f80c702643c85dd2a',1,'Sandals::RungeKutta']]],
-  ['vectorp_17',['VectorP',['../class_sandals_1_1_runge_kutta.html#a627d73d0dfb4ff40324303b8f3976e46',1,'Sandals::RungeKutta']]],
-  ['vectors_18',['VectorS',['../class_sandals_1_1_runge_kutta.html#ab9982a107add8a389c807eee17b32434',1,'Sandals::RungeKutta']]],
-  ['vectorx_19',['VectorX',['../namespace_sandals.html#a080688e002c472e6b23d2028ffe840ea',1,'Sandals']]]
+  ['vector_0',['Vector',['../struct_sandals_1_1_solution.html#aeda556287c2b0c04f07f4e42ed3dabc8',1,'Sandals::Solution::Vector'],['../struct_sandals_1_1_tableau.html#ab2055b5523106a4e2f4a3e85e09f24f2',1,'Sandals::Tableau::Vector']]],
+  ['vectorb_1',['VectorB',['../class_sandals_1_1_linear.html#abdbf39abab3b6649d367e1c7bc97b682',1,'Sandals::Linear::VectorB'],['../class_sandals_1_1_linear_wrapper.html#af9815de50ee2531ca8d5ef1de3d95fbd',1,'Sandals::LinearWrapper::VectorB'],['../class_sandals_1_1_semi_explicit.html#ac7eae290d59883f177c542b5a283122b',1,'Sandals::SemiExplicit::VectorB'],['../class_sandals_1_1_semi_explicit_wrapper.html#a23233745300fbcc364d183e0fd4591fc',1,'Sandals::SemiExplicitWrapper::VectorB']]],
+  ['vectorf_2',['VectorF',['../class_sandals_1_1_explicit.html#afdda0ad23f2ca6d2c87a564ea31bc02f',1,'Sandals::Explicit::VectorF'],['../class_sandals_1_1_explicit_wrapper.html#a9f60a2bfc68df04c83634c92425d7385',1,'Sandals::ExplicitWrapper::VectorF'],['../class_sandals_1_1_implicit.html#a2a572c1717ee411d8bcd366eb50b4faf',1,'Sandals::Implicit::VectorF'],['../class_sandals_1_1_implicit_wrapper.html#a644e3567307ddf43cb6fba6efca7a4f5',1,'Sandals::ImplicitWrapper::VectorF'],['../class_sandals_1_1_linear.html#a4e457702ad75de2f13094cac8653f808',1,'Sandals::Linear::VectorF'],['../class_sandals_1_1_linear_wrapper.html#aadb36303b97bff00b90c3c7e3067a497',1,'Sandals::LinearWrapper::VectorF'],['../class_sandals_1_1_semi_explicit.html#a607fcb893ac75ee4455048c15841df18',1,'Sandals::SemiExplicit::VectorF'],['../class_sandals_1_1_semi_explicit_wrapper.html#aa45fa64fedbe814528eff9ad46ebbbbb',1,'Sandals::SemiExplicitWrapper::VectorF']]],
+  ['vectorh_3',['VectorH',['../class_sandals_1_1_explicit_wrapper.html#a6a0257ee922684319a9ddccd3ab72b36',1,'Sandals::ExplicitWrapper::VectorH'],['../class_sandals_1_1_implicit.html#a3d0eff3748a32b15083a9b488feac033',1,'Sandals::Implicit::VectorH'],['../class_sandals_1_1_implicit_wrapper.html#a52dce167947c1da497dddd948e6f4c3a',1,'Sandals::ImplicitWrapper::VectorH'],['../class_sandals_1_1_linear_wrapper.html#a23781c92a11f63d8d139049a2f6f92f8',1,'Sandals::LinearWrapper::VectorH'],['../class_sandals_1_1_semi_explicit_wrapper.html#a7aff84381076cab15a636c01e54d36ff',1,'Sandals::SemiExplicitWrapper::VectorH']]],
+  ['vectork_4',['VectorK',['../class_sandals_1_1_runge_kutta.html#ac60fd87d95a05af449403fe026c6e357',1,'Sandals::RungeKutta']]],
+  ['vectorm_5',['VectorM',['../class_sandals_1_1_runge_kutta.html#af1314be8f9f902f1aecb3ea1771bd576',1,'Sandals::RungeKutta']]],
+  ['vectorn_6',['VectorN',['../class_sandals_1_1_runge_kutta.html#a38adc5949f0384409ba3831c38a78fce',1,'Sandals::RungeKutta']]],
+  ['vectorp_7',['VectorP',['../class_sandals_1_1_runge_kutta.html#a1b4ed942f44296b89ffcec0edbc152b2',1,'Sandals::RungeKutta']]],
+  ['vectors_8',['VectorS',['../class_sandals_1_1_runge_kutta.html#a0de3c7401358746b3c56207b684f7691',1,'Sandals::RungeKutta']]],
+  ['vectorx_9',['VectorX',['../class_sandals_1_1_runge_kutta.html#a6e7c649dd4dda6179ac007d1782383c9',1,'Sandals::RungeKutta']]]
 ];

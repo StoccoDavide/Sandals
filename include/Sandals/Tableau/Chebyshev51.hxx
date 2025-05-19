@@ -30,18 +30,20 @@ namespace Sandals
   * \hline & \frac{1}{5} & \frac{8}{25} & \frac{6}{25} & \frac{4}{25} & \frac{2}{25}
   * \end{array} \text{.}
   * \f]
+  * \tparam Real The scalar number type.
   */
-  class Chebyshev51Tableau : public Tableau<5>
+  template <typename Real>
+  class Chebyshev51Tableau : public Tableau<Real, 5>
   {
   public:
-    using Tableau<5>::Type;
-    using Tableau<5>::Vector;
-    using Tableau<5>::Matrix;
+    using typename Tableau<Real, 5>::Type;
+    using typename Tableau<Real, 5>::Vector;
+    using typename Tableau<Real, 5>::Matrix;
 
     /**
     * Class constructor for the 5-stage Runge-Kutta-Chebyshev order 1 method.
     */
-    Chebyshev51Tableau() {
+    Chebyshev51Tableau<Real>() {
       this->name  = "Chebyshev51";
       this->type  = Type::ERK;
       this->order = 1;
@@ -59,25 +61,26 @@ namespace Sandals
   * \brief Class container for the 5-stage Runge-Kutta-Chebyshev order 1 method.
   *
   * Class container for the 5-stage Runge-Kutta-Chebyshev order 1 method.
+  * \tparam Real The scalar number type.
   * \tparam N The dimension of the ODE/DAE system.
   * \tparam M The dimension of the invariants manifold.
   */
-  template <Integer N, Integer M = 0>
-  class Chebyshev51 : public RungeKutta<5, N, M>
+  template <typename Real, Integer N, Integer M = 0>
+  class Chebyshev51 : public RungeKutta<Real, 5, N, M>
   {
   public:
-    using System = typename Implicit<N, M>::Pointer; /**< System type. */
+    using System = typename Implicit<Real, N, M>::Pointer; /**< System type. */
 
     /**
     * Class constructor for a 5-stage Runge-Kutta-Chebyshev order 1 solver given a Tableau reference.
     */
-    Chebyshev51() : RungeKutta<5, N, M>(Chebyshev51Tableau()) {}
+    Chebyshev51() : RungeKutta<Real, 5, N, M>(Chebyshev51Tableau<Real>()) {}
 
     /**
     * Class constructor for a 5-stage Runge-Kutta-Chebyshev order 1 solver given a Tableau reference.
     * \param[in] t_system The system reference.
     */
-    Chebyshev51(System t_system) : RungeKutta<5, N, M>(Chebyshev51Tableau(), t_system) {}
+    Chebyshev51(System t_system) : RungeKutta<Real, 5, N, M>(Chebyshev51Tableau<Real>(), t_system) {}
 
   }; // class Chebyshev51
 

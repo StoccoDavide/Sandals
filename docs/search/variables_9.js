@@ -1,23 +1,4 @@
 var searchData=
 [
-  ['ones_5fmat1_0',['ONES_MAT1',['../namespace_sandals.html#a93187449487f74d9a80b08dc8506571f',1,'Sandals']]],
-  ['ones_5fmat2_1',['ONES_MAT2',['../namespace_sandals.html#ac627c9845e9a9d1b20b2829b8359e417',1,'Sandals']]],
-  ['ones_5fmat3_2',['ONES_MAT3',['../namespace_sandals.html#ab5a80b0474febb237ceb25b11ee6b474',1,'Sandals']]],
-  ['ones_5fmat4_3',['ONES_MAT4',['../namespace_sandals.html#ab25b77925c847d2daa6cce8ae8f39906',1,'Sandals']]],
-  ['ones_5fmat5_4',['ONES_MAT5',['../namespace_sandals.html#a285faf29cc977e1bcfbf079c216350f3',1,'Sandals']]],
-  ['ones_5fmat6_5',['ONES_MAT6',['../namespace_sandals.html#ac07a25220aceba3e73ba7f6432eed885',1,'Sandals']]],
-  ['ones_5fmat7_6',['ONES_MAT7',['../namespace_sandals.html#a69e8b9d40dca68b1a21381402438fed7',1,'Sandals']]],
-  ['ones_5fmat8_7',['ONES_MAT8',['../namespace_sandals.html#a28ef4580405df5d0cb6f1e4be4e75202',1,'Sandals']]],
-  ['ones_5fmat9_8',['ONES_MAT9',['../namespace_sandals.html#a57a5e796d56abab6328b720d5638b718',1,'Sandals']]],
-  ['ones_5fvec1_9',['ONES_VEC1',['../namespace_sandals.html#a885b0514744b17be16f1ddedf5562b29',1,'Sandals']]],
-  ['ones_5fvec2_10',['ONES_VEC2',['../namespace_sandals.html#a69a22cc54c3b62d9f9eb4a510540ecec',1,'Sandals']]],
-  ['ones_5fvec3_11',['ONES_VEC3',['../namespace_sandals.html#aeb67d34d1c49cf7b1271b1cb3d2cd420',1,'Sandals']]],
-  ['ones_5fvec4_12',['ONES_VEC4',['../namespace_sandals.html#a52da4ff8178a16553a9c2c756ace54e2',1,'Sandals']]],
-  ['ones_5fvec5_13',['ONES_VEC5',['../namespace_sandals.html#ac094f3b08b402d488926a3dcd77da880',1,'Sandals']]],
-  ['ones_5fvec6_14',['ONES_VEC6',['../namespace_sandals.html#a9a7a2391cd1fd0cfb20247f2ed133802',1,'Sandals']]],
-  ['ones_5fvec7_15',['ONES_VEC7',['../namespace_sandals.html#a4e3f61a89d1bdd03ec9eb8c37e7c8d83',1,'Sandals']]],
-  ['ones_5fvec8_16',['ONES_VEC8',['../namespace_sandals.html#a5ebfb178df62b492ea9872d5a0994ced',1,'Sandals']]],
-  ['ones_5fvec9_17',['ONES_VEC9',['../namespace_sandals.html#a24a303ecf36532a8f13802780c5c526c',1,'Sandals']]],
-  ['order_18',['order',['../struct_sandals_1_1_tableau.html#a54cb3c7b86657df0f9acc4644184e88d',1,'Sandals::Tableau']]],
-  ['order_5fe_19',['order_e',['../struct_sandals_1_1_tableau.html#accb2b483e8986526ba4f469042babb3b',1,'Sandals::Tableau']]]
+  ['sqrt_5fepsilon_0',['SQRT_EPSILON',['../class_sandals_1_1_runge_kutta.html#a8f3fbbfb40701c98c1371ec84a7a5012',1,'Sandals::RungeKutta::SQRT_EPSILON'],['../class_sandals_1_1_linear.html#ada10f98d196c1be34de3a2bc86c51a91',1,'Sandals::Linear::SQRT_EPSILON'],['../struct_sandals_1_1_tableau.html#a8554a22770e2873b458eef3c30962ab2',1,'Sandals::Tableau::SQRT_EPSILON']]]
 ];

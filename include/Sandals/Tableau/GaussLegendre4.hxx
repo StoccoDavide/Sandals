@@ -36,18 +36,20 @@ namespace Sandals
   * \f]
   *
   * with \f$ t = \frac{\sqrt{3}}{6}\f$.
+  * \tparam Real The scalar number type.
   */
-  class GaussLegendre4Tableau : public Tableau<2>
+  template <typename Real>
+  class GaussLegendre4Tableau : public Tableau<Real, 2>
   {
   public:
-    using Tableau<2>::Type;
-    using Tableau<2>::Vector;
-    using Tableau<2>::Matrix;
+    using typename Tableau<Real, 2>::Type;
+    using typename Tableau<Real, 2>::Vector;
+    using typename Tableau<Real, 2>::Matrix;
 
     /**
     * Class constructor for the Gauss-Legendre order 4 method.
     */
-    GaussLegendre4Tableau() {
+    GaussLegendre4Tableau<Real>() {
       this->name  = "GaussLegendre4";
       this->type  = Type::IRK;
       this->order = 4;
@@ -63,25 +65,26 @@ namespace Sandals
   * \brief Class container for the Gauss-Legendre order 4 method.
   *
   * Class container for the Gauss-Legendre order 4 method.
+  * \tparam Real The scalar number type.
   * \tparam N The dimension of the ODE/DAE system.
   * \tparam M The dimension of the invariants manifold.
   */
-  template <Integer N, Integer M = 0>
-  class GaussLegendre4 : public RungeKutta<2, N, M>
+  template <typename Real, Integer N, Integer M = 0>
+  class GaussLegendre4 : public RungeKutta<Real, 2, N, M>
   {
   public:
-    using System = typename Implicit<N, M>::Pointer; /**< System type. */
+    using System = typename Implicit<Real, N, M>::Pointer; /**< System type. */
 
     /**
     * Class constructor for a Runge-Kutta solver given a Tableau reference.
     */
-    GaussLegendre4() : RungeKutta<2, N, M>(GaussLegendre4Tableau()) {}
+    GaussLegendre4() : RungeKutta<Real, 2, N, M>(GaussLegendre4Tableau<Real>()) {}
 
     /**
     * Class constructor for a Runge-Kutta solver given a Tableau reference.
     * \param[in] t_system The system reference.
     */
-    GaussLegendre4(System t_system) : RungeKutta<2, N, M>(GaussLegendre4Tableau(), t_system) {}
+    GaussLegendre4(System t_system) : RungeKutta<Real, 2, N, M>(GaussLegendre4Tableau<Real>(), t_system) {}
 
   }; // class GaussLegendre4
 

@@ -27,18 +27,20 @@ namespace Sandals
   *     & 1
   * \end{array} \text{.}
   * \f]
+  * \tparam Real The scalar number type.
   */
-  class ExplicitEulerTableau : public Tableau<1>
+  template <typename Real>
+  class ExplicitEulerTableau : public Tableau<Real, 1>
   {
   public:
-    using Tableau<1>::Type;
-    using Tableau<1>::Vector;
-    using Tableau<1>::Matrix;
+    using typename Tableau<Real, 1>::Type;
+    using typename Tableau<Real, 1>::Vector;
+    using typename Tableau<Real, 1>::Matrix;
 
     /**
     * Class constructor for the Explicit Euler method.
     */
-    ExplicitEulerTableau() {
+    ExplicitEulerTableau<Real>() {
       this->name  = "ExplicitEuler";
       this->type  = Type::ERK;
       this->order = 1;
@@ -52,25 +54,26 @@ namespace Sandals
   * \brief Class container for the Explicit Euler method.
   *
   * Class container for the Explicit Euler method.
+  * \tparam Real The scalar number type.
   * \tparam N The dimension of the ODE/DAE system.
   * \tparam M The dimension of the invariants manifold.
   */
-  template <Integer N, Integer M = 0>
-  class ExplicitEuler : public RungeKutta<1, N, M>
+  template <typename Real, Integer N, Integer M = 0>
+  class ExplicitEuler : public RungeKutta<Real, 1, N, M>
   {
   public:
-    using System = typename Implicit<N, M>::Pointer; /**< System type. */
+    using System = typename Implicit<Real, N, M>::Pointer; /**< System type. */
 
     /**
     * Class constructor for a Explicit Euler solver given a Tableau reference.
     */
-    ExplicitEuler() : RungeKutta<1, N, M>(ExplicitEulerTableau()) {}
+    ExplicitEuler() : RungeKutta<Real, 1, N, M>(ExplicitEulerTableau<Real>()) {}
 
     /**
     * Class constructor for a Explicit Euler solver given a Tableau reference.
     * \param[in] t_system The system reference.
     */
-    ExplicitEuler(System t_system) : RungeKutta<1, N, M>(ExplicitEulerTableau(), t_system) {}
+    ExplicitEuler(System t_system) : RungeKutta<Real, 1, N, M>(ExplicitEulerTableau<Real>(), t_system) {}
 
   }; // class ExplicitEuler
 

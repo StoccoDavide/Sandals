@@ -30,18 +30,20 @@ namespace Sandals
   *       & 1/6 & 1/3 & 1/3 & 1/6
   * \end{array} \text{.}
   * \f]
+  * \tparam Real The scalar number type.
   */
-  class RK4Tableau : public Tableau<4>
+  template <typename Real>
+  class RK4Tableau : public Tableau<Real, 4>
   {
   public:
-    using Tableau<4>::Type;
-    using Tableau<4>::Vector;
-    using Tableau<4>::Matrix;
+    using typename Tableau<Real, 4>::Type;
+    using typename Tableau<Real, 4>::Vector;
+    using typename Tableau<Real, 4>::Matrix;
 
     /**
     * Class constructor for the RK4 method.
     */
-    RK4Tableau() {
+    RK4Tableau<Real>() {
       this->name  = "RK4";
       this->type  = Type::ERK;
       this->order = 4;
@@ -58,25 +60,26 @@ namespace Sandals
   * \brief Class container for the Runge-Kutta order 4 method.
   *
   * Class container for the Runge-Kutta order 4 method.
+  * \tparam Real The scalar number type.
   * \tparam N The dimension of the ODE/DAE system.
   * \tparam M The dimension of the invariants manifold.
   */
-  template <Integer N, Integer M = 0>
-  class RK4 : public RungeKutta<4, N, M>
+  template <typename Real, Integer N, Integer M = 0>
+  class RK4 : public RungeKutta<Real, 4, N, M>
   {
   public:
-    using System = typename Implicit<N, M>::Pointer; /**< System type. */
+    using System = typename Implicit<Real, N, M>::Pointer; /**< System type. */
 
     /**
     * Class constructor for a Runge-Kutta order 4 solver given a Tableau reference.
     */
-    RK4() : RungeKutta<4, N, M>(RK4Tableau()) {}
+    RK4() : RungeKutta<Real, 4, N, M>(RK4Tableau<Real>()) {}
 
     /**
     * Class constructor for a Runge-Kutta order 4 solver given a Tableau reference.
     * \param[in] t_system The system reference.
     */
-    RK4(System t_system) : RungeKutta<4, N, M>(RK4Tableau(), t_system) {}
+    RK4(System t_system) : RungeKutta<Real, 4, N, M>(RK4Tableau<Real>(), t_system) {}
 
   }; // class RK4
 

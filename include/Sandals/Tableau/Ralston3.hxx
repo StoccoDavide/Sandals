@@ -29,18 +29,20 @@ namespace Sandals
   *       & 2/9 & 1/3 & 4/9
   * \end{array} \text{.}
   * \f]
+  * \tparam Real The scalar number type.
   */
-  class Ralston3Tableau : public Tableau<3>
+  template <typename Real>
+  class Ralston3Tableau : public Tableau<Real, 3>
   {
   public:
-    using Tableau<3>::Type;
-    using Tableau<3>::Vector;
-    using Tableau<3>::Matrix;
+    using typename Tableau<Real, 3>::Type;
+    using typename Tableau<Real, 3>::Vector;
+    using typename Tableau<Real, 3>::Matrix;
 
     /**
     * Class constructor for the Ralston's order 3 method.
     */
-    Ralston3Tableau() {
+    Ralston3Tableau<Real>() {
       this->name  = "Ralston3";
       this->type  = Type::ERK;
       this->order = 3;
@@ -56,25 +58,26 @@ namespace Sandals
   * \brief Class container for the Ralston's order 3 method.
   *
   * Class container for the Ralston's order 3 method.
+  * \tparam Real The scalar number type.
   * \tparam N The dimension of the ODE/DAE system.
   * \tparam M The dimension of the invariants manifold.
   */
-  template <Integer N, Integer M = 0>
-  class Ralston3 : public RungeKutta<3, N, M>
+  template <typename Real, Integer N, Integer M = 0>
+  class Ralston3 : public RungeKutta<Real, 3, N, M>
   {
   public:
-    using System = typename Implicit<N, M>::Pointer; /**< System type. */
+    using System = typename Implicit<Real, N, M>::Pointer; /**< System type. */
 
     /**
     * Class constructor for a Ralston's order 3 solver given a Tableau reference.
     */
-    Ralston3() : RungeKutta<3, N, M>(Ralston3Tableau()) {}
+    Ralston3() : RungeKutta<Real, 3, N, M>(Ralston3Tableau<Real>()) {}
 
     /**
     * Class constructor for a Ralston's order 3 solver given a Tableau reference.
     * \param[in] t_system The system reference.
     */
-    Ralston3(System t_system) : RungeKutta<3, N, M>(Ralston3Tableau(), t_system) {}
+    Ralston3(System t_system) : RungeKutta<Real, 3, N, M>(Ralston3Tableau<Real>(), t_system) {}
 
   }; // class Ralston3
 

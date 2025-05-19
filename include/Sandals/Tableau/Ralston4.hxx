@@ -41,18 +41,20 @@ namespace Sandals
   *     \frac{10}{41}-\frac{4}{123}\sqrt{5}
   * \end{array} \text{.}
   * \f]
+  * \tparam Real The scalar number type.
   */
-  class Ralston4Tableau : public Tableau<4>
+  template <typename Real>
+  class Ralston4Tableau : public Tableau<Real, 4>
   {
   public:
-    using Tableau<4>::Type;
-    using Tableau<4>::Vector;
-    using Tableau<4>::Matrix;
+    using typename Tableau<Real, 4>::Type;
+    using typename Tableau<Real, 4>::Vector;
+    using typename Tableau<Real, 4>::Matrix;
 
     /**
     * Class constructor for the Ralston's order 4 method.
     */
-    Ralston4Tableau() {
+    Ralston4Tableau<Real>() {
       this->name  = "Ralston4";
       this->type  = Type::ERK;
       this->order = 4;
@@ -82,25 +84,26 @@ namespace Sandals
   * \brief Class container for the Ralston's order 4 method.
   *
   * Class container for the Ralston's order 4 method.
+  * \tparam Real The scalar number type.
   * \tparam N The dimension of the ODE/DAE system.
   * \tparam M The dimension of the invariants manifold.
   */
-  template <Integer N, Integer M = 0>
-  class Ralston4 : public RungeKutta<4, N, M>
+  template <typename Real, Integer N, Integer M = 0>
+  class Ralston4 : public RungeKutta<Real, 4, N, M>
   {
   public:
-    using System = typename Implicit<N, M>::Pointer; /**< System type. */
+    using System = typename Implicit<Real, N, M>::Pointer; /**< System type. */
 
     /**
     * Class constructor for a Ralston's order 4 solver given a Tableau reference.
     */
-    Ralston4() : RungeKutta<4, N, M>(Ralston4Tableau()) {}
+    Ralston4() : RungeKutta<Real, 4, N, M>(Ralston4Tableau<Real>()) {}
 
     /**
     * Class constructor for a Ralston's order 4 solver given a Tableau reference.
     * \param[in] t_system The system reference.
     */
-    Ralston4(System t_system) : RungeKutta<4, N, M>(Ralston4Tableau(), t_system) {}
+    Ralston4(System t_system) : RungeKutta<Real, 4, N, M>(Ralston4Tableau<Real>(), t_system) {}
 
   }; // class Ralston4
 

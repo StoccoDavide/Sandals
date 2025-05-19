@@ -1,9 +1,9 @@
 var searchData=
 [
-  ['h_0',['h',['../class_sandals_1_1_implicit.html#a5a9d074b50f2741be0d4a9caf586518e',1,'Sandals::Implicit']]],
-  ['has_5fsystem_1',['has_system',['../class_sandals_1_1_runge_kutta.html#ade9af59403a71b65b90b032449ffc4f7',1,'Sandals::RungeKutta']]],
-  ['heun2_2',['Heun2',['../class_sandals_1_1_heun2.html#a0acee7459931ae3d6e4c22a61ce30959',1,'Sandals::Heun2::Heun2()'],['../class_sandals_1_1_heun2.html#a1813ca0b904f61f89c643ae4faeeeedb',1,'Sandals::Heun2::Heun2(System t_system)']]],
-  ['heun2tableau_3',['Heun2Tableau',['../class_sandals_1_1_heun2_tableau.html#ab4f240077c2b90517761291722669bad',1,'Sandals::Heun2Tableau']]],
-  ['heun3_4',['Heun3',['../class_sandals_1_1_heun3.html#ab7b089acac2cddbb27911ee3e8e707d4',1,'Sandals::Heun3::Heun3()'],['../class_sandals_1_1_heun3.html#a0028928f7d4b93a0f40da3eb685bff53',1,'Sandals::Heun3::Heun3(System t_system)']]],
-  ['heun3tableau_5',['Heun3Tableau',['../class_sandals_1_1_heun3_tableau.html#a308b16af3c7fa102a686cd61e45d5184',1,'Sandals::Heun3Tableau']]]
+  ['h_0',['h',['../class_sandals_1_1_explicit_wrapper.html#a3ffcf83af074e1553e1bf270ab17daf1',1,'Sandals::ExplicitWrapper::h()'],['../class_sandals_1_1_explicit_wrapper.html#af63a9e06e1f8850bcce14a360321ac09',1,'Sandals::ExplicitWrapper::h(VectorF const &amp;x, Real t) const override'],['../class_sandals_1_1_implicit.html#ad0a2b556ea25496d4bc0723b8197227d',1,'Sandals::Implicit::h()'],['../class_sandals_1_1_implicit_wrapper.html#afa95c9ad5cca6929ac85e5ff9de98786',1,'Sandals::ImplicitWrapper::h()'],['../class_sandals_1_1_implicit_wrapper.html#afce446790b69db8837081e8e5da4fc33',1,'Sandals::ImplicitWrapper::h(VectorF const &amp;x, Real t) const override'],['../class_sandals_1_1_linear_wrapper.html#a228cf4fd6ae8da77f90da1e704dcfccb',1,'Sandals::LinearWrapper::h()'],['../class_sandals_1_1_linear_wrapper.html#af2263d07bf187d0963f162c78aabe8d6',1,'Sandals::LinearWrapper::h(VectorF const &amp;x, Real t) const override'],['../class_sandals_1_1_semi_explicit_wrapper.html#afe33d2108dcccd5bd080bef1b4c24a0c',1,'Sandals::SemiExplicitWrapper::h()'],['../class_sandals_1_1_semi_explicit_wrapper.html#a3efbd20a2488254160dec3281f598fed',1,'Sandals::SemiExplicitWrapper::h(VectorF const &amp;x, Real t) const override']]],
+  ['has_5fsystem_1',['has_system',['../class_sandals_1_1_runge_kutta.html#aeeb0fc9247f07101161c08fddcdd7f43',1,'Sandals::RungeKutta']]],
+  ['heun2_2',['Heun2',['../class_sandals_1_1_heun2.html#a9a9b2de34c03853ec0c951aace7add92',1,'Sandals::Heun2::Heun2()'],['../class_sandals_1_1_heun2.html#a1e2a7c51eea7c40d8c7addf7597cf778',1,'Sandals::Heun2::Heun2(System t_system)']]],
+  ['heun2tableau_3',['Heun2Tableau',['../class_sandals_1_1_heun2_tableau.html#a989e3593532653c2acb23ea522801114',1,'Sandals::Heun2Tableau']]],
+  ['heun3_4',['Heun3',['../class_sandals_1_1_heun3.html#afa1b742364ad7fac2e8ca27ce7fa2c67',1,'Sandals::Heun3::Heun3()'],['../class_sandals_1_1_heun3.html#a6b22d45757ff67a5bcddd132fdfff9ad',1,'Sandals::Heun3::Heun3(System t_system)']]],
+  ['heun3tableau_5',['Heun3Tableau',['../class_sandals_1_1_heun3_tableau.html#ae57768d6da523e962a2a942d2c99cfba',1,'Sandals::Heun3Tableau']]]
 ];

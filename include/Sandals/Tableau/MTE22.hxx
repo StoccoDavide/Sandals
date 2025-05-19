@@ -28,18 +28,20 @@ namespace Sandals
   *       & 1/4 & 3/4
   * \end{array} \text{.}
   * \f]
+  * \tparam Real The scalar number type.
   */
-  class MTE22Tableau : public Tableau<2>
+  template <typename Real>
+  class MTE22Tableau : public Tableau<Real, 2>
   {
   public:
-    using Tableau<2>::Type;
-    using Tableau<2>::Vector;
-    using Tableau<2>::Matrix;
+    using typename Tableau<Real, 2>::Type;
+    using typename Tableau<Real, 2>::Vector;
+    using typename Tableau<Real, 2>::Matrix;
 
     /**
     * Class constructor for the minimal truncation error (or Ralston's) order 2 method.
     */
-    MTE22Tableau() {
+    MTE22Tableau<Real>() {
       this->name  = "MTE22";
       this->type  = Type::ERK;
       this->order = 2;
@@ -54,25 +56,26 @@ namespace Sandals
   * \brief Class container for the minimal truncation error (or Ralston's) order 2 method.
   *
   * Class container for the minimal truncation error (or Ralston's) order 2 method.
+  * \tparam Real The scalar number type.
   * \tparam N The dimension of the ODE/DAE system.
   * \tparam M The dimension of the invariants manifold.
   */
-  template <Integer N, Integer M = 0>
-  class MTE22 : public RungeKutta<2, N, M>
+  template <typename Real, Integer N, Integer M = 0>
+  class MTE22 : public RungeKutta<Real, 2, N, M>
   {
   public:
-    using System = typename Implicit<N, M>::Pointer; /**< System type. */
+    using System = typename Implicit<Real, N, M>::Pointer; /**< System type. */
 
     /**
     * Class constructor for a minimal truncation error order 2 solver given a Tableau reference.
     */
-    MTE22() : RungeKutta<2, N, M>(MTE22Tableau()) {}
+    MTE22() : RungeKutta<Real, 2, N, M>(MTE22Tableau<Real>()) {}
 
     /**
     * Class constructor for a minimal truncation error order 2 solver given a Tableau reference.
     * \param[in] t_system The system reference.
     */
-    MTE22(System t_system) : RungeKutta<2, N, M>(MTE22Tableau(), t_system) {}
+    MTE22(System t_system) : RungeKutta<Real, 2, N, M>(MTE22Tableau<Real>(), t_system) {}
 
   }; // class MTE22
 

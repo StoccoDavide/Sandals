@@ -30,6 +30,7 @@ namespace Sandals {
   * Class container for a timer that uses the C++ standard library chrono to measure the elapsed time
   * between two points in the code.
   */
+  template <typename Real>
   class TicToc {
 
     using Clock = std::chrono::high_resolution_clock; /**< Clock type. */
@@ -40,7 +41,6 @@ namespace Sandals {
     Time              m_elapsed_time; /**< Elapsed time. */
 
   public:
-
     /**
     * Copy constructor for the timer.
     */
