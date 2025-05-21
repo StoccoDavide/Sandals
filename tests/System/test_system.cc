@@ -69,8 +69,7 @@ int main(int argc, char **argv) {
   TApplication app("plot", &argc, argv);
 #else
   // Use argc and argv to prevent compiler warnings
-  (void)argc;
-  (void)argv;
+  (void)argc; (void)argv;
 #endif
 
   Fehlberg45<Real, 2,  1>::Time time = Eigen::VectorXd::LinSpaced(1000, 0.0, 100.0);
