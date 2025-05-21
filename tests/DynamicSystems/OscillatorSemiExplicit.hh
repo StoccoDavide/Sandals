@@ -16,22 +16,27 @@
 
 using namespace Sandals;
 
-class OscillatorSemiExplicit : public SemiExplicit<2, 1>
+template<typename Real = double>
+class OscillatorSemiExplicit : public SemiExplicit<Real, 2, 1>
 {
+public:
+  using VectorF  = typename SemiExplicit<Real, 2, 1>::VectorF;
+  using MatrixA  = typename SemiExplicit<Real, 2, 1>::MatrixA;
+  using TensorTA = typename SemiExplicit<Real, 2, 1>::TensorTA;
+  using VectorB  = typename SemiExplicit<Real, 2, 1>::VectorB;
+  using MatrixJB = typename SemiExplicit<Real, 2, 1>::MatrixJB;
+  using VectorH  = typename SemiExplicit<Real, 2, 1>::VectorH;
+  using MatrixJH = typename SemiExplicit<Real, 2, 1>::MatrixJH;
+  using VectorX  = Eigen::Matrix<Real, 2, 1>;
+  using MatrixX  = Eigen::Matrix<Real, 2, Eigen::Dynamic>;
+
+private:
   Real    m_m{1.0};        // Mass (kg)
   Real    m_k{1.0};        // Spring constant (N/m)
   VectorF m_ics{1.0, 0.0}; // Initial conditions
 
 public:
-  using VectorF  = typename SemiExplicit<2, 1>::VectorF;
-  using MatrixA  = typename SemiExplicit<2, 1>::MatrixA;
-  using TensorTA = typename SemiExplicit<2, 1>::TensorTA;
-  using VectorB  = typename SemiExplicit<2, 1>::VectorB;
-  using MatrixJB = typename SemiExplicit<2, 1>::MatrixJB;
-  using VectorH  = typename SemiExplicit<2, 1>::VectorH;
-  using MatrixJH = typename SemiExplicit<2, 1>::MatrixJH;
-
-  OscillatorSemiExplicit() : SemiExplicit<2, 1>("OscillatorSemiExplicit") {}
+  OscillatorSemiExplicit() : SemiExplicit<Real, 2, 1>("OscillatorSemiExplicit") {}
 
   ~OscillatorSemiExplicit() {}
 

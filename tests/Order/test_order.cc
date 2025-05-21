@@ -42,19 +42,20 @@
 #include "SinCosExplicit.hh"
 
 using namespace Sandals;
+using Real = double;
 
-static const double tolerance{0.05};
-static std::shared_ptr<SinCosImplicit> im_sys;
-static std::shared_ptr<SinCosExplicit> ex_sys;
+static const Real tolerance{0.05};
+static std::shared_ptr<SinCosImplicit<Real>> im_sys;
+static std::shared_ptr<SinCosExplicit<Real>> ex_sys;
 static Eigen::Vector2d ics;
 static std::vector<Eigen::VectorXd> t;
 static std::function<Eigen::MatrixXd(Eigen::VectorXd)> sol;
-static const double SQRT_EPSILON{std::sqrt(std::numeric_limits<double>::epsilon())};
+static const Real SQRT_EPSILON{std::sqrt(std::numeric_limits<Real>::epsilon())};
 
 class GlobalTestEnvironment : public testing::Environment {
 public:
   void SetUp() override {
-    double t_ini{0.0}, t_end{10.0};
+    Real t_ini{0.0}, t_end{10.0};
     t.resize(12);
     t[0]  = Eigen::VectorXd::LinSpaced(3000, t_ini, t_end);
     t[1]  = Eigen::VectorXd::LinSpaced(2750, t_ini, t_end);
@@ -68,8 +69,8 @@ public:
     t[9]  = Eigen::VectorXd::LinSpaced(750,  t_ini, t_end);
     t[10] = Eigen::VectorXd::LinSpaced(500,  t_ini, t_end);
     t[11] = Eigen::VectorXd::LinSpaced(250,  t_ini, t_end);
-    im_sys = std::make_shared<SinCosImplicit>();
-    ex_sys = std::make_shared<SinCosExplicit>();
+    im_sys = std::make_shared<SinCosImplicit<Real>>();
+    ex_sys = std::make_shared<SinCosExplicit<Real>>();
     SANDALS_ASSERT((ex_sys->ics() - im_sys->ics()).norm() < SQRT_EPSILON, "Initial conditions are not equal.");
     ics = im_sys->ics();
     sol = [](Eigen::VectorXd t) -> Eigen::MatrixXd {return im_sys->analytical_solution(t);};
@@ -78,55 +79,55 @@ public:
   void TearDown() override {}
 };
 
-TEST(OrderImplicit, Chebyshev51)    {Chebyshev51<double, 2> rk(im_sys);    EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
-TEST(OrderImplicit, ExplicitEuler)  {ExplicitEuler<double, 2> rk(im_sys);  EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
-TEST(OrderImplicit, Fehlberg45)     {Fehlberg45<double, 2> rk(im_sys);     EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
-TEST(OrderImplicit, GaussLegendre2) {GaussLegendre2<double, 2> rk(im_sys); EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
-TEST(OrderImplicit, GaussLegendre4) {GaussLegendre4<double, 2> rk(im_sys); EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
-TEST(OrderImplicit, GaussLegendre6) {GaussLegendre6<double, 2> rk(im_sys); EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
-TEST(OrderImplicit, Heun2)          {Heun2<double, 2> rk(im_sys);          EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
-TEST(OrderImplicit, Heun3)          {Heun3<double, 2> rk(im_sys);          EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
-TEST(OrderImplicit, LobattoIIIA2)   {LobattoIIIA2<double, 2> rk(im_sys);   EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
-TEST(OrderImplicit, ImplicitEuler)  {ImplicitEuler<double, 2> rk(im_sys);  EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
-TEST(OrderImplicit, RadauIIA3)      {RadauIIA3<double, 2> rk(im_sys);      EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
-TEST(OrderImplicit, RadauIIA5)      {RadauIIA5<double, 2> rk(im_sys);      EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
-TEST(OrderImplicit, Ralston2)       {Ralston2<double, 2> rk(im_sys);       EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
-TEST(OrderImplicit, Ralston3)       {Ralston3<double, 2> rk(im_sys);       EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
-TEST(OrderImplicit, Ralston4)       {Ralston4<double, 2> rk(im_sys);       EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
-TEST(OrderImplicit, RK4)            {RK4<double, 2> rk(im_sys);            EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
-TEST(OrderImplicit, SSPIRK33)       {SSPIRK33<double, 2> rk(im_sys);       EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
-TEST(OrderImplicit, SSPRK22)        {SSPRK22<double, 2> rk(im_sys);        EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
-TEST(OrderImplicit, SSPRK22star)    {SSPRK22star<double, 2> rk(im_sys);    EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
-TEST(OrderImplicit, SSPRK33)        {SSPRK33<double, 2> rk(im_sys);        EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
-TEST(OrderImplicit, SSPRK42)        {SSPRK42<double, 2> rk(im_sys);        EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
-TEST(OrderImplicit, SSPRK43)        {SSPRK43<double, 2> rk(im_sys);        EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
-TEST(OrderImplicit, SSPRK93)        {SSPRK93<double, 2> rk(im_sys);        EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
-TEST(OrderImplicit, SSPRK104)       {SSPRK104<double, 2> rk(im_sys);       EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
+TEST(OrderImplicit, Chebyshev51)    {Chebyshev51<Real, 2> rk(im_sys);    EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
+TEST(OrderImplicit, ExplicitEuler)  {ExplicitEuler<Real, 2> rk(im_sys);  EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
+TEST(OrderImplicit, Fehlberg45)     {Fehlberg45<Real, 2> rk(im_sys);     EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
+TEST(OrderImplicit, GaussLegendre2) {GaussLegendre2<Real, 2> rk(im_sys); EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
+TEST(OrderImplicit, GaussLegendre4) {GaussLegendre4<Real, 2> rk(im_sys); EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
+TEST(OrderImplicit, GaussLegendre6) {GaussLegendre6<Real, 2> rk(im_sys); EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
+TEST(OrderImplicit, Heun2)          {Heun2<Real, 2> rk(im_sys);          EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
+TEST(OrderImplicit, Heun3)          {Heun3<Real, 2> rk(im_sys);          EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
+TEST(OrderImplicit, LobattoIIIA2)   {LobattoIIIA2<Real, 2> rk(im_sys);   EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
+TEST(OrderImplicit, ImplicitEuler)  {ImplicitEuler<Real, 2> rk(im_sys);  EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
+TEST(OrderImplicit, RadauIIA3)      {RadauIIA3<Real, 2> rk(im_sys);      EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
+TEST(OrderImplicit, RadauIIA5)      {RadauIIA5<Real, 2> rk(im_sys);      EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
+TEST(OrderImplicit, Ralston2)       {Ralston2<Real, 2> rk(im_sys);       EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
+TEST(OrderImplicit, Ralston3)       {Ralston3<Real, 2> rk(im_sys);       EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
+TEST(OrderImplicit, Ralston4)       {Ralston4<Real, 2> rk(im_sys);       EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
+TEST(OrderImplicit, RK4)            {RK4<Real, 2> rk(im_sys);            EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
+TEST(OrderImplicit, SSPIRK33)       {SSPIRK33<Real, 2> rk(im_sys);       EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
+TEST(OrderImplicit, SSPRK22)        {SSPRK22<Real, 2> rk(im_sys);        EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
+TEST(OrderImplicit, SSPRK22star)    {SSPRK22star<Real, 2> rk(im_sys);    EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
+TEST(OrderImplicit, SSPRK33)        {SSPRK33<Real, 2> rk(im_sys);        EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
+TEST(OrderImplicit, SSPRK42)        {SSPRK42<Real, 2> rk(im_sys);        EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
+TEST(OrderImplicit, SSPRK43)        {SSPRK43<Real, 2> rk(im_sys);        EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
+TEST(OrderImplicit, SSPRK93)        {SSPRK93<Real, 2> rk(im_sys);        EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
+TEST(OrderImplicit, SSPRK104)       {SSPRK104<Real, 2> rk(im_sys);       EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
 
-TEST(OrderExplicit, Chebyshev51)    {Chebyshev51<double, 2> rk(ex_sys);    EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
-TEST(OrderExplicit, ExplicitEuler)  {ExplicitEuler<double, 2> rk(ex_sys);  EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
-TEST(OrderExplicit, Fehlberg45)     {Fehlberg45<double, 2> rk(ex_sys);     EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
-TEST(OrderExplicit, GaussLegendre2) {GaussLegendre2<double, 2> rk(ex_sys); EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
-TEST(OrderExplicit, GaussLegendre4) {GaussLegendre4<double, 2> rk(ex_sys); EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
-TEST(OrderExplicit, GaussLegendre6) {GaussLegendre6<double, 2> rk(ex_sys); EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
-TEST(OrderExplicit, Heun2)          {Heun2<double, 2> rk(ex_sys);          EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
-TEST(OrderExplicit, Heun3)          {Heun3<double, 2> rk(ex_sys);          EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
-TEST(OrderExplicit, LobattoIIIA2)   {LobattoIIIA2<double, 2> rk(ex_sys);   EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
-TEST(OrderExplicit, ImplicitEuler)  {ImplicitEuler<double, 2> rk(ex_sys);  EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
-TEST(OrderExplicit, RadauIIA3)      {RadauIIA3<double, 2> rk(ex_sys);      EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
-TEST(OrderExplicit, RadauIIA5)      {RadauIIA5<double, 2> rk(ex_sys);      EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
-TEST(OrderExplicit, Ralston2)       {Ralston2<double, 2> rk(ex_sys);       EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
-TEST(OrderExplicit, Ralston3)       {Ralston3<double, 2> rk(ex_sys);       EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
-TEST(OrderExplicit, Ralston4)       {Ralston4<double, 2> rk(ex_sys);       EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
-TEST(OrderExplicit, RK4)            {RK4<double, 2> rk(ex_sys);            EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
-TEST(OrderExplicit, SSPIRK33)       {SSPIRK33<double, 2> rk(ex_sys);       EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
-TEST(OrderExplicit, SSPRK22)        {SSPRK22<double, 2> rk(ex_sys);        EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
-TEST(OrderExplicit, SSPRK22star)    {SSPRK22star<double, 2> rk(ex_sys);    EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
-TEST(OrderExplicit, SSPRK33)        {SSPRK33<double, 2> rk(ex_sys);        EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
-TEST(OrderExplicit, SSPRK42)        {SSPRK42<double, 2> rk(ex_sys);        EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
-TEST(OrderExplicit, SSPRK43)        {SSPRK43<double, 2> rk(ex_sys);        EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
-TEST(OrderExplicit, SSPRK93)        {SSPRK93<double, 2> rk(ex_sys);        EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
-TEST(OrderExplicit, SSPRK104)       {SSPRK104<double, 2> rk(ex_sys);       EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
+TEST(OrderExplicit, Chebyshev51)    {Chebyshev51<Real, 2> rk(ex_sys);    EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
+TEST(OrderExplicit, ExplicitEuler)  {ExplicitEuler<Real, 2> rk(ex_sys);  EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
+TEST(OrderExplicit, Fehlberg45)     {Fehlberg45<Real, 2> rk(ex_sys);     EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
+TEST(OrderExplicit, GaussLegendre2) {GaussLegendre2<Real, 2> rk(ex_sys); EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
+TEST(OrderExplicit, GaussLegendre4) {GaussLegendre4<Real, 2> rk(ex_sys); EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
+TEST(OrderExplicit, GaussLegendre6) {GaussLegendre6<Real, 2> rk(ex_sys); EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
+TEST(OrderExplicit, Heun2)          {Heun2<Real, 2> rk(ex_sys);          EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
+TEST(OrderExplicit, Heun3)          {Heun3<Real, 2> rk(ex_sys);          EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
+TEST(OrderExplicit, LobattoIIIA2)   {LobattoIIIA2<Real, 2> rk(ex_sys);   EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
+TEST(OrderExplicit, ImplicitEuler)  {ImplicitEuler<Real, 2> rk(ex_sys);  EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
+TEST(OrderExplicit, RadauIIA3)      {RadauIIA3<Real, 2> rk(ex_sys);      EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
+TEST(OrderExplicit, RadauIIA5)      {RadauIIA5<Real, 2> rk(ex_sys);      EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
+TEST(OrderExplicit, Ralston2)       {Ralston2<Real, 2> rk(ex_sys);       EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
+TEST(OrderExplicit, Ralston3)       {Ralston3<Real, 2> rk(ex_sys);       EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
+TEST(OrderExplicit, Ralston4)       {Ralston4<Real, 2> rk(ex_sys);       EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
+TEST(OrderExplicit, RK4)            {RK4<Real, 2> rk(ex_sys);            EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
+TEST(OrderExplicit, SSPIRK33)       {SSPIRK33<Real, 2> rk(ex_sys);       EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
+TEST(OrderExplicit, SSPRK22)        {SSPRK22<Real, 2> rk(ex_sys);        EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
+TEST(OrderExplicit, SSPRK22star)    {SSPRK22star<Real, 2> rk(ex_sys);    EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
+TEST(OrderExplicit, SSPRK33)        {SSPRK33<Real, 2> rk(ex_sys);        EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
+TEST(OrderExplicit, SSPRK42)        {SSPRK42<Real, 2> rk(ex_sys);        EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
+TEST(OrderExplicit, SSPRK43)        {SSPRK43<Real, 2> rk(ex_sys);        EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
+TEST(OrderExplicit, SSPRK93)        {SSPRK93<Real, 2> rk(ex_sys);        EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
+TEST(OrderExplicit, SSPRK104)       {SSPRK104<Real, 2> rk(ex_sys);       EXPECT_GE(rk.estimate_order(t, ics, sol), rk.order()-tolerance);}
 
 // Run all the tests.
 int main(int argc, char **argv) {

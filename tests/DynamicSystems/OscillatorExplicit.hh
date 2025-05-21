@@ -18,19 +18,24 @@
 
 using namespace Sandals;
 
-class OscillatorExplicit : public Explicit<2, 1>
+template<typename Real = double>
+class OscillatorExplicit : public Explicit<Real, 2, 1>
 {
+public:
+  using VectorF  = typename Explicit<Real, 2, 1>::VectorF;
+  using MatrixJF = typename Explicit<Real, 2, 1>::MatrixJF;
+  using VectorH  = typename Explicit<Real, 2, 1>::VectorH;
+  using MatrixJH = typename Explicit<Real, 2, 1>::MatrixJH;
+  using VectorX  = Eigen::Matrix<Real, 2, 1>;
+  using MatrixX  = Eigen::Matrix<Real, Eigen::Dynamic, 2>;
+
+private:
   Real    m_m{1.0};        // Mass (kg)
   Real    m_k{1.0};        // Spring constant (N/m)
   VectorF m_ics{1.0, 0.0}; // Initial conditions
 
 public:
-  using VectorF  = typename Explicit<2, 1>::VectorF;
-  using MatrixJF = typename Explicit<2, 1>::MatrixJF;
-  using VectorH  = typename Explicit<2, 1>::VectorH;
-  using MatrixJH = typename Explicit<2, 1>::MatrixJH;
-
-  OscillatorExplicit() : Explicit<2, 1>("OscillatorExplicit") {}
+  OscillatorExplicit() : Explicit<Real, 2, 1>("OscillatorExplicit") {}
 
   ~OscillatorExplicit() {}
 

@@ -18,12 +18,9 @@
 
 using namespace Sandals;
 
-class SimplePendulumSemiExplicit : public SemiExplicit<double, 2, 0>
+template<typename Real = double>
+class SimplePendulumSemiExplicit : public SemiExplicit<Real, 2, 0>
 {
-  Real    m_l{1.0};        // Length of the pendulum (m)
-  Real    m_g{9.81};       // Gravity acceleration (m/s^2)
-  VectorF m_ics{1.0, 0.0}; // Initial conditions
-
 public:
   using VectorF  = typename SemiExplicit<double, 2, 0>::VectorF;
   using MatrixA  = typename SemiExplicit<double, 2, 0>::MatrixA;
@@ -32,7 +29,15 @@ public:
   using MatrixJB = typename SemiExplicit<double, 2, 0>::MatrixJB;
   using VectorH  = typename SemiExplicit<double, 2, 0>::VectorH;
   using MatrixJH = typename SemiExplicit<double, 2, 0>::MatrixJH;
+  using VectorX  = Eigen::Matrix<Real, 2, 1>;
+  using MatrixX  = Eigen::Matrix<Real, 2, Eigen::Dynamic>;
 
+private:
+  Real    m_l{1.0};        // Length of the pendulum (m)
+  Real    m_g{9.81};       // Gravity acceleration (m/s^2)
+  VectorF m_ics{1.0, 0.0}; // Initial conditions
+
+public:
   SimplePendulumSemiExplicit() : SemiExplicit<double, 2, 0>("SimplePendulumSemiExplicit") {}
 
   ~SimplePendulumSemiExplicit() {}

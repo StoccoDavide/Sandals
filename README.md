@@ -12,7 +12,7 @@ Are you looking for the online documentation? Visit [this link](https://stoccoda
 
 You also need to install [`Optimist`](https://stoccodavide.github.io/Optimist/) to use root-finding algorithms. But don't worry, it is already fetched by `CMake` if you use it.
 
-Optionally, you can also install [`Matplot++`](https://alandefreitas.github.io/matplotplusplus/) (version >= 1.2.0) to plot the results of your simulations.
+Optionally, you can also install CERN's [`ROOT`](https://root.cern.ch) (version >= 6.34.08) to plot the results of your simulations.
 
 ### CMake
 

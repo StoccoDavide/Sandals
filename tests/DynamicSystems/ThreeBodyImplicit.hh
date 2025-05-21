@@ -87,8 +87,15 @@ set of initial conditions for creatinting a stable orbit (infinity shaped like) 
 \end{cases}
 \f]
 */
-class ThreeBodyImplicit : public Implicit<12, 0>
+template<typename Real = double>
+class ThreeBodyImplicit : public Implicit<Real, 12, 0>
 {
+public:
+  using VectorF  = typename Implicit<Real, 12, 0>::VectorF;
+  using MatrixJF = typename Implicit<Real, 12, 0>::MatrixJF;
+  using VectorH  = typename Implicit<Real, 12, 0>::VectorH;
+  using MatrixJH = typename Implicit<Real, 12, 0>::MatrixJH;
+
 private:
   Real m_g{1.0};   // Gravitational constant
   Real m_m_1{1.0}; // Body 1 mass
@@ -96,12 +103,7 @@ private:
   Real m_m_3{1.0}; // Body 3 mass
 
 public:
-  using VectorF  = typename Implicit<12, 0>::VectorF;
-  using MatrixJF = typename Implicit<12, 0>::MatrixJF;
-  using VectorH  = typename Implicit<12, 0>::VectorH;
-  using MatrixJH = typename Implicit<12, 0>::MatrixJH;
-
-  ThreeBodyImplicit() : Implicit<12, 0>("ThreeBodyImplicit") {}
+  ThreeBodyImplicit() : Implicit<Real, 12, 0>("ThreeBodyImplicit") {}
 
   ~ThreeBodyImplicit() {}
 

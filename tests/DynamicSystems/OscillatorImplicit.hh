@@ -18,19 +18,24 @@
 
 using namespace Sandals;
 
-class OscillatorImplicit : public Implicit<2, 1>
+template<typename Real = double>
+class OscillatorImplicit : public Implicit<Real, 2, 1>
 {
+public:
+  using VectorF  = typename Implicit<Real, 2, 1>::VectorF;
+  using MatrixJF = typename Implicit<Real, 2, 1>::MatrixJF;
+  using VectorH  = typename Implicit<Real, 2, 1>::VectorH;
+  using MatrixJH = typename Implicit<Real, 2, 1>::MatrixJH;
+  using VectorX  = Eigen::Matrix<Real, 2, 1>;
+  using MatrixX  = Eigen::Matrix<Real, 2, Eigen::Dynamic>;
+
+private:
   Real    m_m{1.0};        // Mass (kg)
   Real    m_k{1.0};        // Spring constant (N/m)
   VectorF m_ics{1.0, 0.0}; // Initial conditions
 
 public:
-  using VectorF  = typename Implicit<2, 1>::VectorF;
-  using MatrixJF = typename Implicit<2, 1>::MatrixJF;
-  using VectorH  = typename Implicit<2, 1>::VectorH;
-  using MatrixJH = typename Implicit<2, 1>::MatrixJH;
-
-  OscillatorImplicit() : Implicit<2, 1>("OscillatorImplicit") {}
+  OscillatorImplicit() : Implicit<Real, 2, 1>("OscillatorImplicit") {}
 
   ~OscillatorImplicit() {}
 

@@ -18,19 +18,24 @@
 
 using namespace Sandals;
 
-class SimplePendulumExplicit : public Explicit<2, 0>
+template<typename Real = double>
+class SimplePendulumExplicit : public Explicit<Real, 2, 0>
 {
+public:
+  using VectorF  = typename Explicit<Real, 2, 0>::VectorF;
+  using MatrixJF = typename Explicit<Real, 2, 0>::MatrixJF;
+  using VectorH  = typename Explicit<Real, 2, 0>::VectorH;
+  using MatrixJH = typename Explicit<Real, 2, 0>::MatrixJH;
+  using VectorX  = Eigen::Matrix<Real, 2, 1>;
+  using MatrixX  = Eigen::Matrix<Real, 2, Eigen::Dynamic>;
+
+private:
   Real    m_l{1.0};        // length of the pendulum (m)
   Real    m_g{9.81};       // gravity acceleration (m/s^2)
   VectorF m_ics{1.0, 0.0}; // initial conditions
 
 public:
-  using VectorF  = typename Explicit<2, 0>::VectorF;
-  using MatrixJF = typename Explicit<2, 0>::MatrixJF;
-  using VectorH  = typename Explicit<2, 0>::VectorH;
-  using MatrixJH = typename Explicit<2, 0>::MatrixJH;
-
-  SimplePendulumExplicit() : Explicit<2, 0>("SimplePendulumExplicit") {}
+  SimplePendulumExplicit() : Explicit<Real, 2, 0>("SimplePendulumExplicit") {}
 
   ~SimplePendulumExplicit() {}
 
@@ -41,9 +46,9 @@ public:
     return f;
   }
 
-  Matrix2 Jf_x(VectorF const &x, Real /*t*/) const override
+  MatrixJF Jf_x(VectorF const &x, Real /*t*/) const override
   {
-    Matrix2 Jf_x;
+    MatrixJF Jf_x;
     Jf_x << 0.0, 1.0, -this->m_g / this->m_l * std::cos(x(0)), 0.0;
     return Jf_x;
   }

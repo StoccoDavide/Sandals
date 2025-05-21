@@ -85,8 +85,18 @@ set of initial conditions for creatinting a stable orbit (infinity shaped like) 
 \end{cases}
 \f]
 */
-class ThreeBodySemiExplicit : public SemiExplicit<12, 0>
+template <typename Real = double>
+class ThreeBodySemiExplicit : public SemiExplicit<Real, 12, 0>
 {
+public:
+  using VectorF  = typename SemiExplicit<Real, 12, 0>::VectorF;
+  using MatrixA  = typename SemiExplicit<Real, 12, 0>::MatrixA;
+  using TensorTA = typename SemiExplicit<Real, 12, 0>::TensorTA;
+  using VectorB  = typename SemiExplicit<Real, 12, 0>::VectorB;
+  using MatrixJB = typename SemiExplicit<Real, 12, 0>::MatrixJB;
+  using VectorH  = typename SemiExplicit<Real, 12, 0>::VectorH;
+  using MatrixJH = typename SemiExplicit<Real, 12, 0>::MatrixJH;
+
 private:
   Real m_g{1.0};   // Gravitational constant
   Real m_m_1{1.0}; // Body 1 mass
@@ -94,15 +104,7 @@ private:
   Real m_m_3{1.0}; // Body 3 mass
 
 public:
-  using VectorF  = typename SemiExplicit<12, 0>::VectorF;
-  using MatrixA  = typename SemiExplicit<12, 0>::MatrixA;
-  using TensorTA = typename SemiExplicit<12, 0>::TensorTA;
-  using VectorB  = typename SemiExplicit<12, 0>::VectorB;
-  using MatrixJB = typename SemiExplicit<12, 0>::MatrixJB;
-  using VectorH  = typename SemiExplicit<12, 0>::VectorH;
-  using MatrixJH = typename SemiExplicit<12, 0>::MatrixJH;
-
-  ThreeBodySemiExplicit() : SemiExplicit<12, 0>("ThreeBodySemiExplicit") {}
+  ThreeBodySemiExplicit() : SemiExplicit<Real, 12, 0>("ThreeBodySemiExplicit") {}
 
   ~ThreeBodySemiExplicit() {}
 

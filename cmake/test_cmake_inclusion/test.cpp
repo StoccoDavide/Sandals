@@ -3,6 +3,6 @@
 
 int main()
 {
-  Sandals::RK4();
+  Sandals::RK4<double, 1, 2>();
   return 0;
 }

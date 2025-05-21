@@ -40,30 +40,32 @@
 
 using namespace Sandals;
 
-TEST(Tableau, Chebyshev51)    {Chebyshev51Tableau tbl;    EXPECT_TRUE(tbl.check());}
-TEST(Tableau, ExplicitEuler)  {ExplicitEulerTableau tbl;  EXPECT_TRUE(tbl.check());}
-TEST(Tableau, Fehlberg45)     {Fehlberg45Tableau tbl;     EXPECT_TRUE(tbl.check());}
-TEST(Tableau, GaussLegendre2) {GaussLegendre2Tableau tbl; EXPECT_TRUE(tbl.check());}
-TEST(Tableau, GaussLegendre4) {GaussLegendre4Tableau tbl; EXPECT_TRUE(tbl.check());}
-TEST(Tableau, GaussLegendre6) {GaussLegendre6Tableau tbl; EXPECT_TRUE(tbl.check());}
-TEST(Tableau, Heun2)          {Heun2Tableau tbl;          EXPECT_TRUE(tbl.check());}
-TEST(Tableau, Heun3)          {Heun3Tableau tbl;          EXPECT_TRUE(tbl.check());}
-TEST(Tableau, LobattoIIIA2)   {LobattoIIIA2Tableau tbl;   EXPECT_TRUE(tbl.check());}
-TEST(Tableau, ImplicitEuler)  {ImplicitEulerTableau tbl;  EXPECT_TRUE(tbl.check());}
-TEST(Tableau, RadauIIA3)      {RadauIIA3Tableau tbl;      EXPECT_TRUE(tbl.check());}
-TEST(Tableau, RadauIIA5)      {RadauIIA5Tableau tbl;      EXPECT_TRUE(tbl.check());}
-TEST(Tableau, Ralston2)       {Ralston2Tableau tbl;       EXPECT_TRUE(tbl.check());}
-TEST(Tableau, Ralston3)       {Ralston3Tableau tbl;       EXPECT_TRUE(tbl.check());}
-TEST(Tableau, Ralston4)       {Ralston4Tableau tbl;       EXPECT_TRUE(tbl.check());}
-TEST(Tableau, RK4)            {RK4Tableau tbl;            EXPECT_TRUE(tbl.check());}
-TEST(Tableau, SSPIRK33)       {SSPIRK33Tableau tbl;       EXPECT_TRUE(tbl.check());}
-TEST(Tableau, SSPRK22)        {SSPRK22Tableau tbl;        EXPECT_TRUE(tbl.check());}
-TEST(Tableau, SSPRK22star)    {SSPRK22starTableau tbl;    EXPECT_TRUE(tbl.check());}
-TEST(Tableau, SSPRK33)        {SSPRK33Tableau tbl;        EXPECT_TRUE(tbl.check());}
-TEST(Tableau, SSPRK42)        {SSPRK42Tableau tbl;        EXPECT_TRUE(tbl.check());}
-TEST(Tableau, SSPRK43)        {SSPRK43Tableau tbl;        EXPECT_TRUE(tbl.check());}
-TEST(Tableau, SSPRK93)        {SSPRK93Tableau tbl;        EXPECT_TRUE(tbl.check());}
-TEST(Tableau, SSPRK104)       {SSPRK104Tableau tbl;       EXPECT_TRUE(tbl.check());}
+using Real = double;
+
+TEST(Tableau, Chebyshev51)    {Chebyshev51Tableau<Real> tbl;    EXPECT_TRUE(tbl.check());}
+TEST(Tableau, ExplicitEuler)  {ExplicitEulerTableau<Real> tbl;  EXPECT_TRUE(tbl.check());}
+TEST(Tableau, Fehlberg45)     {Fehlberg45Tableau<Real> tbl;     EXPECT_TRUE(tbl.check());}
+TEST(Tableau, GaussLegendre2) {GaussLegendre2Tableau<Real> tbl; EXPECT_TRUE(tbl.check());}
+TEST(Tableau, GaussLegendre4) {GaussLegendre4Tableau<Real> tbl; EXPECT_TRUE(tbl.check());}
+TEST(Tableau, GaussLegendre6) {GaussLegendre6Tableau<Real> tbl; EXPECT_TRUE(tbl.check());}
+TEST(Tableau, Heun2)          {Heun2Tableau<Real> tbl;          EXPECT_TRUE(tbl.check());}
+TEST(Tableau, Heun3)          {Heun3Tableau<Real> tbl;          EXPECT_TRUE(tbl.check());}
+TEST(Tableau, LobattoIIIA2)   {LobattoIIIA2Tableau<Real> tbl;   EXPECT_TRUE(tbl.check());}
+TEST(Tableau, ImplicitEuler)  {ImplicitEulerTableau<Real> tbl;  EXPECT_TRUE(tbl.check());}
+TEST(Tableau, RadauIIA3)      {RadauIIA3Tableau<Real> tbl;      EXPECT_TRUE(tbl.check());}
+TEST(Tableau, RadauIIA5)      {RadauIIA5Tableau<Real> tbl;      EXPECT_TRUE(tbl.check());}
+TEST(Tableau, Ralston2)       {Ralston2Tableau<Real> tbl;       EXPECT_TRUE(tbl.check());}
+TEST(Tableau, Ralston3)       {Ralston3Tableau<Real> tbl;       EXPECT_TRUE(tbl.check());}
+TEST(Tableau, Ralston4)       {Ralston4Tableau<Real> tbl;       EXPECT_TRUE(tbl.check());}
+TEST(Tableau, RK4)            {RK4Tableau<Real> tbl;            EXPECT_TRUE(tbl.check());}
+TEST(Tableau, SSPIRK33)       {SSPIRK33Tableau<Real> tbl;       EXPECT_TRUE(tbl.check());}
+TEST(Tableau, SSPRK22)        {SSPRK22Tableau<Real> tbl;        EXPECT_TRUE(tbl.check());}
+TEST(Tableau, SSPRK22star)    {SSPRK22starTableau<Real> tbl;    EXPECT_TRUE(tbl.check());}
+TEST(Tableau, SSPRK33)        {SSPRK33Tableau<Real> tbl;        EXPECT_TRUE(tbl.check());}
+TEST(Tableau, SSPRK42)        {SSPRK42Tableau<Real> tbl;        EXPECT_TRUE(tbl.check());}
+TEST(Tableau, SSPRK43)        {SSPRK43Tableau<Real> tbl;        EXPECT_TRUE(tbl.check());}
+TEST(Tableau, SSPRK93)        {SSPRK93Tableau<Real> tbl;        EXPECT_TRUE(tbl.check());}
+TEST(Tableau, SSPRK104)       {SSPRK104Tableau<Real> tbl;       EXPECT_TRUE(tbl.check());}
 
 // Run all the tests.
 int main(int argc, char **argv) {

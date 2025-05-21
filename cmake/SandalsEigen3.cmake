@@ -13,7 +13,7 @@ if(NOT TARGET Eigen3::Eigen)
   message(STATUS "Sandals: Did not find Eigen3 ${EIGEN_REQUIRED_VERSION} installed, downloading to "
     "${SANDALS_THIRD_PARTY_DIR}")
 
-    include(FetchContent)
+  include(FetchContent)
   set(FETCHCONTENT_BASE_DIR "${SANDALS_THIRD_PARTY_DIR}")
   fetchcontent_declare(
     Eigen3

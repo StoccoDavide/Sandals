@@ -17,33 +17,32 @@
 using namespace Sandals;
 using namespace Eigen;
 
-class SinCosSemiExplicit : public SemiExplicit<double, 2, 0>
+template<typename Real = double>
+class SinCosSemiExplicit : public SemiExplicit<Real, 2, 0>
 {
-private:
-  VectorF m_ics{0.0, 1.0}; // Initial conditions
-
 public:
-  using VectorF  = typename SemiExplicit<double, 2, 0>::VectorF;
-  using MatrixA  = typename SemiExplicit<double, 2, 0>::MatrixA;
-  using TensorTA = typename SemiExplicit<double, 2, 0>::TensorTA;
-  using VectorB  = typename SemiExplicit<double, 2, 0>::VectorB;
-  using MatrixJB = typename SemiExplicit<double, 2, 0>::MatrixJB;
-  using VectorH  = typename SemiExplicit<double, 2, 0>::VectorH;
-  using MatrixJH = typename SemiExplicit<double, 2, 0>::MatrixJH;
+  using VectorF  = typename SemiExplicit<Real, 2, 0>::VectorF;
+  using MatrixA  = typename SemiExplicit<Real, 2, 0>::MatrixA;
+  using TensorTA = typename SemiExplicit<Real, 2, 0>::TensorTA;
+  using VectorB  = typename SemiExplicit<Real, 2, 0>::VectorB;
+  using MatrixJB = typename SemiExplicit<Real, 2, 0>::MatrixJB;
+  using VectorH  = typename SemiExplicit<Real, 2, 0>::VectorH;
+  using MatrixJH = typename SemiExplicit<Real, 2, 0>::MatrixJH;
+  using VectorX  = Eigen::Vector<Real, Eigen::Dynamic>;
+  using MatrixX  = Eigen::Matrix<Real, 2, Eigen::Dynamic>;
 
-
-  SinCosSemiExplicit() : SemiExplicit<double, 2, 0>("SinCosSemiExplicit") {}
+  SinCosSemiExplicit() : SemiExplicit<Real, 2, 0>("SinCosSemiExplicit") {}
 
   ~SinCosSemiExplicit() {}
 
-  MatrixA A(VectorF const &/*x*/, double /*t*/) const override
+  MatrixA A(VectorF const &/*x*/, Real /*t*/) const override
   {
     MatrixA A;
     A.setIdentity();
     return A;
   }
 
-  TensorTA TA_x(VectorF const &/*x*/, double /*t*/) const override
+  TensorTA TA_x(VectorF const &/*x*/, Real /*t*/) const override
   {
     TensorTA TA_x(2);
     TA_x[0].setZero();
@@ -51,32 +50,32 @@ public:
     return TA_x;
   }
 
-  VectorB b(VectorF const &/*x*/, double t) const override
+  VectorB b(VectorF const &/*x*/, Real t) const override
   {
     VectorB b;
     b << std::cos(t), std::sin(t);
     return b;
   }
 
-  MatrixJB Jb_x(VectorF const &/*x*/, double /*t*/) const override
+  MatrixJB Jb_x(VectorF const &/*x*/, Real /*t*/) const override
   {return MatrixJB::Zero();}
 
-  VectorH h(VectorF const &/*x*/, double /*t*/) const override {return VectorH::Zero();}
+  VectorH h(VectorF const &/*x*/, Real /*t*/) const override {return VectorH::Zero();}
 
-  MatrixJH Jh_x(VectorF const &/*x*/, double /*t*/) const override {return MatrixJH::Zero();}
+  MatrixJH Jh_x(VectorF const &/*x*/, Real /*t*/) const override {return MatrixJH::Zero();}
 
-  bool in_domain(VectorF const &/*x*/, double /*t*/) const override {return true;}
+  bool in_domain(VectorF const &/*x*/, Real /*t*/) const override {return true;}
 
-  VectorF const &ics() const {return this->m_ics;}
+  VectorF const &ics() const {return VectorF::Zero();}
 
-  VectorF analytical_solution(double t) const {
+  VectorF analytical_solution(Real t) const {
     VectorF x;
-    x << std::sin(t), double(1.0)-std::cos(t);
+    x << std::sin(t), Real(1.0)-std::cos(t);
     return x;
   }
 
-  MatrixXd analytical_solution(VectorXd const &t) const {
-    MatrixXd x(2, t.size());
+  MatrixX analytical_solution(VectorX const &t) const {
+    MatrixX x(2, t.size());
     for (int i = 0; i < t.size(); ++i) {x.col(i) = this->analytical_solution(t(i));}
     return x;
   }

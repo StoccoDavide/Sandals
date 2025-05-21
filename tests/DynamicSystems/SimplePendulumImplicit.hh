@@ -18,19 +18,24 @@
 
 using namespace Sandals;
 
-class SimplePendulumImplicit : public Implicit<2, 0>
+template<typename Real = double>
+class SimplePendulumImplicit : public Implicit<Real, 2, 0>
 {
+public:
+  using VectorF  = typename Implicit<Real, 2, 0>::VectorF;
+  using MatrixJF = typename Implicit<Real, 2, 0>::MatrixJF;
+  using VectorH  = typename Implicit<Real, 2, 0>::VectorH;
+  using MatrixJH = typename Implicit<Real, 2, 0>::MatrixJH;
+  using VectorX  = Eigen::Matrix<Real, 2, 1>;
+  using MatrixX  = Eigen::Matrix<Real, 2, Eigen::Dynamic>;
+
+private:
   Real    m_l{1.0};        // Length of the pendulum (m)
   Real    m_g{9.81};       // Gravity acceleration (m/s^2)
   VectorF m_ics{1.0, 0.0}; // Initial conditions
 
 public:
-  using VectorF  = typename Implicit<2, 0>::VectorF;
-  using MatrixJF = typename Implicit<2, 0>::MatrixJF;
-  using VectorH  = typename Implicit<2, 0>::VectorH;
-  using MatrixJH = typename Implicit<2, 0>::MatrixJH;
-
-  SimplePendulumImplicit() : Implicit<2, 0>("SimplePendulumImplicit") {}
+  SimplePendulumImplicit() : Implicit<Real, 2, 0>("SimplePendulumImplicit") {}
 
   ~SimplePendulumImplicit() {}
 

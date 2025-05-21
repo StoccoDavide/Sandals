@@ -12,14 +12,14 @@ find_package(
 if(NOT TARGET Optimist::Optimist)
   message(STATUS "Sandals: Did not find Optimist ${OPTIMIST_REQUIRED_VERSION} installed, downloading to "
     "${SANDALS_THIRD_PARTY_DIR}")
-  include(FetchContent)
 
+  include(FetchContent)
   set(FETCHCONTENT_BASE_DIR "${SANDALS_THIRD_PARTY_DIR}")
   fetchcontent_declare(
     Optimist
     # URL "https://github.com/StoccoDavide/Optimist/archive/refs/tags/${OPTIMIST_REQUIRED_VERSION}.tar.gz"
     GIT_REPOSITORY "https://github.com/StoccoDavide/Optimist"
-    GIT_TAG        main
+    GIT_TAG main
   )
 
   fetchcontent_makeavailable(Optimist)

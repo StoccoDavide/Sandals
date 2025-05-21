@@ -66,7 +66,7 @@ if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
   option(BUILD_TESTS "Build tests" OFF)
   option(BUILD_BENCHMARKS "Build benchmarks" OFF)
   option(BUILD_EXAMPLES "Build examples" OFF)
-  option(SANDALS_ENABLE_PLOTTING "Enable plotting with Matplot++" OFF)
+  option(SANDALS_ENABLE_PLOTTING "Enable plotting" OFF)
 
   file(GLOB_RECURSE HEADER_FILES_HH "${CMAKE_CURRENT_SOURCE_DIR}/include/*.hh")
   foreach(HEADER_FILE IN LISTS HEADER_FILES_HH)

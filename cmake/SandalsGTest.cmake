@@ -12,8 +12,8 @@ find_package(
 if(NOT TARGET GTest::gtest)
   message(STATUS "Sandals: Did not find GTest ${GTEST_REQUIRED_VERSION} installed, downloading to "
     "${SANDALS_THIRD_PARTY_DIR}")
-  include(FetchContent)
 
+  include(FetchContent)
   set(FETCHCONTENT_BASE_DIR "${SANDALS_THIRD_PARTY_DIR}")
   fetchcontent_declare(
     GTest

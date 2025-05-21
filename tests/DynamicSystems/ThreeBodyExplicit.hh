@@ -86,7 +86,8 @@ set of initial conditions for creatinting a stable orbit (infinity shaped like) 
 \end{cases}
 \f]
 */
-class ThreeBodyExplicit : public Explicit<12, 0>
+template<typename Real = double>
+class ThreeBodyExplicit : public Explicit<Real, 12, 0>
 {
 private:
   Real m_g{1.0};   // Gravitational constant
@@ -95,12 +96,12 @@ private:
   Real m_m_3{1.0}; // Body 3 mass
 
 public:
-  using VectorF  = typename Explicit<12, 0>::VectorF;
-  using MatrixJF = typename Explicit<12, 0>::MatrixJF;
-  using VectorH  = typename Explicit<12, 0>::VectorH;
-  using MatrixJH = typename Explicit<12, 0>::MatrixJH;
+  using VectorF  = typename Explicit<Real, 12, 0>::VectorF;
+  using MatrixJF = typename Explicit<Real, 12, 0>::MatrixJF;
+  using VectorH  = typename Explicit<Real, 12, 0>::VectorH;
+  using MatrixJH = typename Explicit<Real, 12, 0>::MatrixJH;
 
-  ThreeBodyExplicit() : Explicit<12, 0>("ThreeBodyExplicit") {}
+  ThreeBodyExplicit() : Explicit<Real, 12, 0>("ThreeBodyExplicit") {}
 
   ~ThreeBodyExplicit() {}
 
