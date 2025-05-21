@@ -22,7 +22,7 @@ BUILD_DEBUG      = false
 BUILD_TESTS      = true
 BUILD_EXAMPLES   = false
 BUILD_BENCHMARKS = false
-ENABLE_PLOTTING  = true
+ENABLE_PLOTTING  = false
 
 case RUBY_PLATFORM
 when /mingw|mswin/
