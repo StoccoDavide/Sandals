@@ -1,7 +1,7 @@
 var struct_sandals_1_1_tableau =
 [
     [ "Matrix", "struct_sandals_1_1_tableau.html#a8e304262118948930059d1ae1ee2723f", null ],
-    [ "Type", "struct_sandals_1_1_tableau.html#a4dd3201e85e1611e6db734de976407b3", null ],
+    [ "Type", "struct_sandals_1_1_tableau.html#a25274afda51645b683a99335059084b5", null ],
     [ "Vector", "struct_sandals_1_1_tableau.html#ab2055b5523106a4e2f4a3e85e09f24f2", null ],
     [ "check", "struct_sandals_1_1_tableau.html#ab3237880e41e9866269de887d8793c6d", null ],
     [ "compute_order", "struct_sandals_1_1_tableau.html#a8b0ec68e58cc81d063eeda123f31d0b6", null ],

@@ -43,7 +43,7 @@ namespace Sandals
   public:
     SANDALS_BASIC_CONSTANTS(Real) /**< Basic constants. */
 
-    using Type = enum class Type : Integer {IMPLICIT=0, EXPLICIT=1, SEMIEXPLICIT=1}; /**< System type enumeration. */
+    using Type = enum class Type : Integer {IMPLICIT = 0, EXPLICIT = 1, SEMIEXPLICIT = 1}; /**< System type enumeration. */
     using Pointer = std::shared_ptr<Implicit<Real, N, M>>; /**< Shared pointer to an implicit ODE system. */
     using VectorF = Eigen::Vector<Real, N>; /**< Templetized vector type. */
     using MatrixJF = Eigen::Matrix<Real, N, N>; /**< Templetized matrix type. */

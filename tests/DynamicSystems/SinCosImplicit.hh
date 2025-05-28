@@ -63,11 +63,7 @@ public:
 
   MatrixX analytical_solution(VectorX const &t) const {
     MatrixX x(2, t.size());
-    VectorF x_i;
-    for (int i = 0; i < t.size(); ++i) {
-      x_i = this->analytical_solution(t(i));
-      x(0, i) = x_i(0); x(1, i) = x_i(1);
-    }
+    for (int i = 0; i < t.size(); ++i) {x.col(i) = this->analytical_solution(t(i));}
     return x;
   }
 };

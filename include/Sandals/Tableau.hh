@@ -39,7 +39,7 @@ namespace Sandals {
     SANDALS_BASIC_CONSTANTS(Real) /**< Basic constants. */
     const Real SQRT_EPSILON{std::sqrt(EPSILON)}; /**< Square root of machine epsilon epsilon static constant value. */ \
 
-    using Type = enum class type : Integer {ERK=0, IRK=1, DIRK=2}; /**< Runge-Kutta type enumeration. */
+    using Type = enum class type : Integer {ERK = 0, IRK = 1, DIRK = 2}; /**< Runge-Kutta type enumeration. */
     using Vector = Eigen::Vector<Real, S>;    /**< Templetized vector type. */
     using Matrix = Eigen::Matrix<Real, S, S>; /**< Templetized matrix type. */
 
