@@ -4,6 +4,19 @@ include(CMakeFindDependencyMacro)
 
 # List dependencies
 find_dependency(Eigen3 REQUIRED)
+find_dependency(Optimist REQUIRED)
 
 # Provide the target
 include("${CMAKE_CURRENT_LIST_DIR}/SandalsTargets.cmake")
+
+# Provide the Optimist target
+if(NOT TARGET Optimist::Optimist)
+  add_library(Optimist::Optimist INTERFACE IMPORTED)
+  set_target_properties(Optimist::Optimist PROPERTIES
+    INTERFACE_INCLUDE_DIRECTORIES "${Optimist_INCLUDE_DIRS}"
+    INTERFACE_LINK_LIBRARIES "${Optimist_LIBRARIES}"
+  )
+  message(STATUS "Created imported target Optimist::Optimist")
+else()
+  message(STATUS "Found existing target Optimist::Optimist")
+endif()
