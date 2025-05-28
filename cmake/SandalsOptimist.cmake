@@ -19,7 +19,8 @@ if(NOT TARGET Optimist::Optimist)
     Optimist
     # URL "https://github.com/StoccoDavide/Optimist/archive/refs/tags/${OPTIMIST_REQUIRED_VERSION}.tar.gz"
     GIT_REPOSITORY "https://github.com/StoccoDavide/Optimist"
-    GIT_TAG main
+    GIT_SHALLOW    TRUE
+    GIT_TAG        main
   )
 
   fetchcontent_makeavailable(Optimist)
