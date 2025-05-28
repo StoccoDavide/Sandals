@@ -127,7 +127,7 @@ write_basic_package_version_file(
 )
 
 configure_package_config_file(
-  ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Config.cmake.in
+  ${CMAKE_CURRENT_SOURCE_DIR}/cmake/SandalsConfig.cmake.in
   ${CMAKE_CURRENT_BINARY_DIR}/SandalsConfig.cmake
   INSTALL_DESTINATION lib/cmake/Sandals
 )
