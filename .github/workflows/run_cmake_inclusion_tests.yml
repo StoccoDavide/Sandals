@@ -46,6 +46,10 @@ jobs:
           cmake --build .
           ./test
 
+      - name: Install Sandals and its dependencies
+        run: |
+          cmake --install
+
       - name: Test find_package method
         run: |
           cd /tmp/test_project
