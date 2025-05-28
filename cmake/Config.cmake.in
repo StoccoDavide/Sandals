@@ -8,4 +8,3 @@ find_dependency(Optimist REQUIRED)
 
 # Provide the target
 include("${CMAKE_CURRENT_LIST_DIR}/SandalsTargets.cmake")
-include("${Optimist_DIR}/OptimistTargets.cmake")
