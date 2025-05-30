@@ -123,8 +123,6 @@ namespace Sandals {
       this->verbose_mode(this->m_verbose);
     }
 
-
-
     /**
     * Get the enumeration type of the Runge-Kutta method.
     * \return The enumeration type of the Runge-Kutta method.
@@ -230,7 +228,7 @@ namespace Sandals {
     * \param[in] Jh_x The Jacobian of the system's invariants with respect to the states.
     * \param[in] in_domain The in-domain function.
     */
-    void implcit_system(
+    void implicit_system(
       typename ImplicitWrapper<Real, N, M>::FunctionF F,
       typename ImplicitWrapper<Real, N, M>::FunctionJF JF_x,
       typename ImplicitWrapper<Real, N, M>::FunctionJF JF_x_dot,
@@ -252,7 +250,7 @@ namespace Sandals {
     * \param[in] Jh_x The Jacobian of the system's invariants with respect to the states.
     * \param[in] in_domain The in-domain function.
     */
-    void implcit_system(
+    void implicit_system(
       std::string name,
       typename ImplicitWrapper<Real, N, M>::FunctionF F,
       typename ImplicitWrapper<Real, N, M>::FunctionJF JF_x,

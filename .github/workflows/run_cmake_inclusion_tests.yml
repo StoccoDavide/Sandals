@@ -39,7 +39,7 @@ jobs:
       - name: Test FetchContent method
         run: |
           cd /tmp/test_project
-          rm -rf third_party
+        #  rm -rf third_party
           rm -rf build/*
           cd build
           cmake -DFETCH_CONTENT_METHOD=ON ..

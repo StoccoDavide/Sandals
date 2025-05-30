@@ -65,7 +65,7 @@ var NAVTREEINDEX =
 "_chebyshev51_8hh.html",
 "class_sandals_1_1_fehlberg45_tableau.html",
 "class_sandals_1_1_linear_wrapper.html#a1282c5825b9db7e3891924ba13073c99",
-"class_sandals_1_1_runge_kutta.html#a4a0a30c3155cf19e758fa4daf90bd621",
+"class_sandals_1_1_runge_kutta.html#a4ce96fb5d3623b6926905e56f8af1c57",
 "class_sandals_1_1_s_s_p_r_k93.html#a96640d5cba33d7a9ce9ce864b62c441a",
 "struct_sandals_1_1_solution.html#a2f1d1dbe74461a6e2dbf93ac13a827ca"
 ];

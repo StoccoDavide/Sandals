@@ -249,8 +249,8 @@ namespace Sandals {
     using MatrixJF = typename Explicit<Real, N, M>::MatrixJF; /**< Templetized matrix type. */
     using VectorH = typename Explicit<Real, N, M>::VectorH; /**< Templetized vector type. */
     using MatrixJH = typename Explicit<Real, N, M>::MatrixJH; /**< Templetized matrix type. */
-    using FunctionF = std::function<VectorF(VectorF const &, VectorF const &, Real)>; /**< Explicit ODE system function type. */
-    using FunctionJF = std::function<MatrixJF(VectorF const &, VectorF const &, Real)>; /**< Jacobian of the ODE system function function type. */
+    using FunctionF = std::function<VectorF(VectorF const &, Real)>; /**< Explicit ODE system function type. */
+    using FunctionJF = std::function<MatrixJF(VectorF const &, Real)>; /**< Jacobian of the ODE system function function type. */
     using FunctionH = std::function<VectorH(VectorF const &, Real)>; /**< Invariants function type. */
     using FunctionJH = std::function<MatrixJH(VectorF const &, Real)>; /**< Jacobian of the invariants function type. */
     using FunctionID = std::function<bool(VectorF const &, Real)>; /**< In-domain function type. */
