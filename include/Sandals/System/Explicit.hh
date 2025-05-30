@@ -276,7 +276,7 @@ namespace Sandals {
     * \param[in] t_in_domain The in-domain function.
     */
     ExplicitWrapper(FunctionF t_f, FunctionJF t_Jf_x, FunctionH t_h = DefaultH, FunctionJH t_Jh_x = DefaultJH,
-      FunctionID t_in_domain = DefaultID) : Implicit<Real, N, M>(), m_f(t_f), m_Jf_x(t_Jf_x), m_h(t_h),
+      FunctionID t_in_domain = DefaultID) : Explicit<Real, N, M>(), m_f(t_f), m_Jf_x(t_Jf_x), m_h(t_h),
       m_Jh_x(t_Jh_x), m_in_domain(t_in_domain)
     {}
 
@@ -290,7 +290,7 @@ namespace Sandals {
     * \param[in] t_in_domain The in-domain function.
     */
     ExplicitWrapper(std::string t_name, FunctionF t_f, FunctionJF t_Jf_x, FunctionH t_h = DefaultH,
-      FunctionJH t_Jh_x = DefaultJH, FunctionID t_in_domain = DefaultID) : Implicit<Real, N, M>(t_name),
+      FunctionJH t_Jh_x = DefaultJH, FunctionID t_in_domain = DefaultID) : Explicit<Real, N, M>(t_name),
       m_f(t_f), m_Jf_x(t_Jf_x), m_h(t_h), m_Jh_x(t_Jh_x), m_in_domain(t_in_domain)
     {}
 

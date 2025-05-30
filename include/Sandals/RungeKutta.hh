@@ -236,8 +236,7 @@ namespace Sandals {
       typename ImplicitWrapper<Real, N, M>::FunctionJH Jh_x = ImplicitWrapper<Real, N, M>::DefaultJH,
       typename ImplicitWrapper<Real, N, M>::FunctionID in_domain = ImplicitWrapper<Real, N, M>::DefaultID
     ) {
-      this->m_system = std::make_shared<ImplicitWrapper<Real, N, M>>(
-        F, JF_x, JF_x_dot, h, Jh_x, in_domain);
+      this->m_system = std::make_shared<ImplicitWrapper<Real, N, M>>(F, JF_x, JF_x_dot, h, Jh_x, in_domain);
     }
 
     /**
@@ -259,8 +258,7 @@ namespace Sandals {
       typename ImplicitWrapper<Real, N, M>::FunctionJH Jh_x = ImplicitWrapper<Real, N, M>::DefaultJH,
       typename ImplicitWrapper<Real, N, M>::FunctionID in_domain = ImplicitWrapper<Real, N, M>::DefaultID
     ) {
-      this->m_system = std::make_shared<ImplicitWrapper<Real, N, M>>(
-        name, F, JF_x, JF_x_dot, h, Jh_x, in_domain);
+      this->m_system = std::make_shared<ImplicitWrapper<Real, N, M>>(name, F, JF_x, JF_x_dot, h, Jh_x, in_domain);
     }
 
     /**
@@ -278,8 +276,7 @@ namespace Sandals {
       typename ExplicitWrapper<Real, N, M>::FunctionJH Jh_x = ExplicitWrapper<Real, N, M>::DefaultJH,
       typename ExplicitWrapper<Real, N, M>::FunctionID in_domain = ExplicitWrapper<Real, N, M>::DefaultID
     ) {
-      this->m_system = std::make_shared<ExplicitWrapper<Real, N, M>>(
-        f, Jf_x, h, Jh_x, in_domain);
+      this->m_system = std::make_shared<ExplicitWrapper<Real, N, M>>(f, Jf_x, h, Jh_x, in_domain);
     }
 
     /**
@@ -299,8 +296,7 @@ namespace Sandals {
       typename ExplicitWrapper<Real, N, M>::FunctionJH Jh_x = ExplicitWrapper<Real, N, M>::DefaultJH,
       typename ExplicitWrapper<Real, N, M>::FunctionID in_domain = ExplicitWrapper<Real, N, M>::DefaultID
     ) {
-      this->m_system = std::make_shared<ExplicitWrapper<Real, N, M>>(
-        name, f, Jf_x, h, Jh_x, in_domain);
+      this->m_system = std::make_shared<ExplicitWrapper<Real, N, M>>(name, f, Jf_x, h, Jh_x, in_domain);
     }
 
     /**
@@ -320,8 +316,7 @@ namespace Sandals {
       typename LinearWrapper<Real, N, M>::FunctionJH Jh_x = LinearWrapper<Real, N, M>::DefaultJH,
       typename LinearWrapper<Real, N, M>::FunctionID in_domain = LinearWrapper<Real, N, M>::DefaultID
     ) {
-      this->m_system = std::make_shared<LinearWrapper<Real, N, M>>(
-        E, A, b, h, Jh_x, in_domain);
+      this->m_system = std::make_shared<LinearWrapper<Real, N, M>>(E, A, b, h, Jh_x, in_domain);
     }
 
     /**
@@ -343,8 +338,7 @@ namespace Sandals {
       typename LinearWrapper<Real, N, M>::FunctionJH Jh_x = LinearWrapper<Real, N, M>::DefaultJH,
       typename LinearWrapper<Real, N, M>::FunctionID in_domain = LinearWrapper<Real, N, M>::DefaultID
     ) {
-      this->m_system = std::make_shared<LinearWrapper<Real, N, M>>(
-        name, E, A, b, h, Jh_x, in_domain);
+      this->m_system = std::make_shared<LinearWrapper<Real, N, M>>(name, E, A, b, h, Jh_x, in_domain);
     }
 
     /**
@@ -366,8 +360,7 @@ namespace Sandals {
       typename SemiExplicitWrapper<Real, N, M>::FunctionJH Jh_x = SemiExplicitWrapper<Real, N, M>::DefaultJH,
       typename SemiExplicitWrapper<Real, N, M>::FunctionID in_domain = SemiExplicitWrapper<Real, N, M>::DefaultID
     ) {
-      this->m_system = std::make_shared<SemiExplicitWrapper<Real, N, M>>(
-        A, TA_x, b, Jb_x, h, Jh_x, in_domain);
+      this->m_system = std::make_shared<SemiExplicitWrapper<Real, N, M>>(A, TA_x, b, Jb_x, h, Jh_x, in_domain);
     }
 
     /**
@@ -391,8 +384,7 @@ namespace Sandals {
       typename SemiExplicitWrapper<Real, N, M>::FunctionJH Jh_x = SemiExplicitWrapper<Real, N, M>::DefaultJH,
       typename SemiExplicitWrapper<Real, N, M>::FunctionID in_domain = SemiExplicitWrapper<Real, N, M>::DefaultID
     ) {
-      this->m_system = std::make_shared<SemiExplicitWrapper<Real, N, M>>(
-        name, A, TA_x, b, Jb_x, h, Jh_x, in_domain);
+      this->m_system = std::make_shared<SemiExplicitWrapper<Real, N, M>>(name, A, TA_x, b, Jb_x, h, Jh_x, in_domain);
     }
 
     /**
