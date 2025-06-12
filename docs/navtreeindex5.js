@@ -1,5 +1,13 @@
 var NAVTREEINDEX5 =
 {
+"struct_sandals_1_1_solution.html#a1d95cee78a906a2db6ba78fb0bac4973":[4,0,0,43,8],
+"struct_sandals_1_1_solution.html#a1d95cee78a906a2db6ba78fb0bac4973":[5,0,0,43,8],
+"struct_sandals_1_1_solution.html#a2652cdc6cd87035e4979a8ca2203e678":[4,0,0,43,12],
+"struct_sandals_1_1_solution.html#a2652cdc6cd87035e4979a8ca2203e678":[5,0,0,43,12],
+"struct_sandals_1_1_solution.html#a2819f24fa37c42a1e611a54692be65d0":[4,0,0,43,0],
+"struct_sandals_1_1_solution.html#a2819f24fa37c42a1e611a54692be65d0":[5,0,0,43,0],
+"struct_sandals_1_1_solution.html#a29c2678b5d2e9d70f28281d5a4146c94":[4,0,0,43,18],
+"struct_sandals_1_1_solution.html#a29c2678b5d2e9d70f28281d5a4146c94":[5,0,0,43,18],
 "struct_sandals_1_1_solution.html#a2f1d1dbe74461a6e2dbf93ac13a827ca":[4,0,0,43,9],
 "struct_sandals_1_1_solution.html#a2f1d1dbe74461a6e2dbf93ac13a827ca":[5,0,0,43,9],
 "struct_sandals_1_1_solution.html#a41ca4b48fb3b22d789239e25e29c23d7":[4,0,0,43,15],

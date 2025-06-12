@@ -63,6 +63,7 @@ namespace Sandals {
     using MatrixN = typename Implicit<Real, N, M>::MatrixJF; /**< Templetized matrix type. */
     using VectorM = typename Implicit<Real, N, M>::VectorH; /**< Templetized vector type. */
     using MatrixM = typename Implicit<Real, N, M>::MatrixJH; /**< Templetized matrix type. */
+    using FunctionSC = std::function<void(VectorX const &, Real)>; /**< Step callback function type. */
 
   public:
     SANDALS_BASIC_CONSTANTS(Real) /**< Basic constants. */
@@ -84,14 +85,15 @@ namespace Sandals {
     Real       m_max_safety_factor{10.0};          /**< Maximum safety factor for adaptive step \f$ f_{\min} \f$. */
     Real       m_min_step{EPSILON_HIGH};           /**< Minimum step for advancing \f$ h_{\min} \f$. */
     Integer    m_max_substeps{5};                  /**< Maximum number of substeps. */
-    bool       m_adaptive{true};                   /**< Aadaptive step mode boolean. */
+    bool       m_adaptive{true};                   /**< Adaptive step mode boolean. */
     bool       m_verbose{false};                   /**< Verbose mode boolean. */
     bool       m_reverse{false};                   /**< Time reverse mode boolean. */
+    FunctionSC m_step_callback{nullptr};           /**< Step callback function. */
 
     Eigen::FullPivLU<MatrixP> m_lu;               /**< LU decomposition for the projection matrix. */
     Real    m_projection_tolerance{EPSILON_HIGH}; /**< Projection tolerance \f$ \epsilon_{\text{proj}} \f$. */
     Integer m_max_projection_iterations{5};       /**< Maximum number of projection steps. */
-    bool    m_projection{true};                   /**< Aadaptive step mode boolean. */
+    bool    m_projection{true};                   /**< Adaptive step mode boolean. */
 
   public:
     /**
@@ -546,6 +548,18 @@ namespace Sandals {
     * Disable the time reverse mode.
     */
     void disable_reverse_mode() {this->m_reverse = false;}
+
+    /**
+    * Get the step callback function.
+    * \return The step callback function.
+    */
+    FunctionSC step_callback() {return this->m_step_callback;}
+
+    /**
+    * Set the step callback function.
+    * \param[in] t_step_callback The step callback function.
+    */
+    void step_callback(FunctionSC t_step_callback) {this->m_step_callback = t_step_callback;}
 
     /**
     * Get the projection tolerance.
@@ -1253,13 +1267,16 @@ namespace Sandals {
         VectorN x_projected;
         if (this->project(x_new, t_old + h_new, x_projected)) {
           x_new = x_projected;
-          return true;
         } else {
           return false;
         }
-      } else {
-        return true;
       }
+
+      // Callback after the step is completed
+      if (this->m_step_callback) {
+        this->m_step_callback(x_new, t_old + h_new);
+      }
+      return true;
 
       #undef CMD
     }
@@ -1272,6 +1289,8 @@ namespace Sandals {
     * \param[in] ics Initial conditions \f$ \mathbf{x}(t = 0) \f$.
     * \param[out] sol The solution of the system over the mesh of independent variable.
     * \return True if the system is successfully solved, false otherwise.
+    * \warning Do not use the solution for internal backtracking, as the step callback may directly
+    * modify the solution.
     */
     bool solve(VectorX const &t_mesh, VectorN const &ics, Solution<Real, N, M> &sol)
     {
@@ -1334,6 +1353,8 @@ namespace Sandals {
     * \param[in] ics Initial conditions \f$ \mathbf{x}(t = 0) \f$.
     * \param[out] sol The solution of the system over the mesh of independent variable.
     * \return True if the system is successfully solved, false otherwise.
+    * \warning Do not use the solution for internal backtracking, as the step callback may directly
+    * modify the solution.
     */
     bool adaptive_solve(VectorX const &t_mesh, VectorN const &ics, Solution<Real, N, M> &sol)
     {

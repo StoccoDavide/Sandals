@@ -28,5 +28,6 @@ var searchData=
   ['std_5ft_25',['std_t',['../struct_sandals_1_1_solution.html#a29c2678b5d2e9d70f28281d5a4146c94',1,'Sandals::Solution']]],
   ['std_5fx_26',['std_x',['../struct_sandals_1_1_solution.html#af99d2156a84d1388bc860b5d455330a3',1,'Sandals::Solution::std_x(Integer i) const'],['../struct_sandals_1_1_solution.html#a4d18b7fdb9342550ae9df7e272e67e6a',1,'Sandals::Solution::std_x() const'],['../struct_sandals_1_1_solution.html#ab65f61f3ed6ee74d3a498480423af19f',1,'Sandals::Solution::std_x(std::vector&lt; std::string &gt; names) const']]],
   ['step_27',['step',['../class_sandals_1_1_runge_kutta.html#a26ff34997922d904bc6e43be266042e7',1,'Sandals::RungeKutta']]],
-  ['system_28',['system',['../class_sandals_1_1_runge_kutta.html#a1db088c1892855607d1b6e61ce5b163d',1,'Sandals::RungeKutta::system()'],['../class_sandals_1_1_runge_kutta.html#ab84869075568d96dff9d44a746b9d7e4',1,'Sandals::RungeKutta::system(System t_system)']]]
+  ['step_5fcallback_28',['step_callback',['../class_sandals_1_1_runge_kutta.html#a27cb75e2dfd499f4a68e63a6473f67e9',1,'Sandals::RungeKutta::step_callback()'],['../class_sandals_1_1_runge_kutta.html#a90eb5e6927f3ea888a560d2218009c3e',1,'Sandals::RungeKutta::step_callback(FunctionSC t_step_callback)']]],
+  ['system_29',['system',['../class_sandals_1_1_runge_kutta.html#a1db088c1892855607d1b6e61ce5b163d',1,'Sandals::RungeKutta::system()'],['../class_sandals_1_1_runge_kutta.html#ab84869075568d96dff9d44a746b9d7e4',1,'Sandals::RungeKutta::system(System t_system)']]]
 ];
