@@ -81,7 +81,7 @@ namespace Sandals {
     * \param[in] t Independent variable (or time) \f$ t \f$.
     * \return The system function \f$ \mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, t) \f$.
     */
-    VectorF F(VectorF const &x, VectorF const &x_dot, Real t) const override
+    VectorF F(VectorF const & x, VectorF const & x_dot, Real const t) const override
     {
       return x_dot - this->f(x, t);
     }
@@ -102,7 +102,7 @@ namespace Sandals {
     * \param[in] t Independent variable (or time) \f$ t \f$.
     * \return The Jacobian \f$ \mathbf{JF}_{\mathbf{x}}(\mathbf{x}, \mathbf{x}^{\prime}, t) \f$.
     */
-    MatrixJF JF_x(VectorF const &x, VectorF const &/*x_dot*/, Real t) const override
+    MatrixJF JF_x(VectorF const & x, VectorF const &/*x_dot*/, Real const t) const override
     {
       return -this->Jf_x(x, t);
     }
@@ -133,7 +133,7 @@ namespace Sandals {
     * \param[in] t Independent variable (or time) \f$ t \f$.
     * \return The system function \f$ \mathbf{f}(\mathbf{x}, t) \f$.
     */
-    virtual VectorF f(VectorF const &x, Real t) const = 0;
+    virtual VectorF f(VectorF const & x, Real const t) const = 0;
 
     /**
     * Evaluate the Jacobian of the explicit ODE system function \f$ \mathbf{f}(\mathbf{x}, t) \f$
@@ -148,7 +148,7 @@ namespace Sandals {
     * \param[in] t Independent variable (or time) \f$ t \f$.
     * \return The Jacobian \f$ \mathbf{Jf}_{\mathbf{x}}(\mathbf{x}, t) \f$.
     */
-    virtual MatrixJF Jf_x(VectorF const &x, Real t) const = 0;
+    virtual MatrixJF Jf_x(VectorF const & x, Real const t) const = 0;
 
     /**
     * Time reversal of the explicit ODE system function \f$ \mathbf{f}(\mathbf{x}, t) = -\mathbf{f}(
@@ -157,7 +157,7 @@ namespace Sandals {
     * \param[in] t Independent variable (or time) \f$ t \f$.
     * \return The time-reversed system function \f$ \mathbf{f}(\mathbf{x}, -t) \f$.
     */
-    VectorF f_reverse(VectorF const &x, Real t) const
+    VectorF f_reverse(VectorF const & x, Real const t) const
     {
       return -this->f(x, -t);
     }
@@ -169,7 +169,7 @@ namespace Sandals {
     * \param[in] t Independent variable (or time) \f$ t \f$.
     * \return The time-reversed Jacobian \f$ \mathbf{Jf}_{\mathbf{x}}(\mathbf{x}, -t) \f$.
     */
-    MatrixJF Jf_x_reverse(VectorF const &x, Real t) const
+    MatrixJF Jf_x_reverse(VectorF const & x, Real const t) const
     {
       return -this->Jf_x(x, -t);
     }
@@ -182,7 +182,7 @@ namespace Sandals {
     * \param[in] t Independent variable (or time) \f$ t \f$.
     * \return The time-reversed system function \f$ \mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, -t) \f$.
     */
-    VectorF F_reverse(VectorF const &x, VectorF const &x_dot, Real t) const
+    VectorF F_reverse(VectorF const & x, VectorF const & x_dot, Real const t) const
     {
       return -x_dot - this->f(x, -t);
     }
@@ -197,7 +197,7 @@ namespace Sandals {
     * \return The time-reversed Jacobian \f$ \mathbf{JF}_{\mathbf{x}}(\mathbf{x}, -\mathbf{x}^{\prime},
     * -t) \f$.
     */
-    MatrixJF JF_x_reverse(VectorF const &x, VectorF const &/*x_dot*/, Real t) const
+    MatrixJF JF_x_reverse(VectorF const & x, VectorF const &/*x_dot*/, Real const t) const
     {
       return -this->Jf_x(x, -t);
     }
@@ -249,15 +249,15 @@ namespace Sandals {
     using MatrixJF = typename Explicit<Real, N, M>::MatrixJF; /**< Templetized matrix type. */
     using VectorH = typename Explicit<Real, N, M>::VectorH; /**< Templetized vector type. */
     using MatrixJH = typename Explicit<Real, N, M>::MatrixJH; /**< Templetized matrix type. */
-    using FunctionF = std::function<VectorF(VectorF const &, Real)>; /**< Explicit ODE system function type. */
-    using FunctionJF = std::function<MatrixJF(VectorF const &, Real)>; /**< Jacobian of the ODE system function function type. */
-    using FunctionH = std::function<VectorH(VectorF const &, Real)>; /**< Invariants function type. */
-    using FunctionJH = std::function<MatrixJH(VectorF const &, Real)>; /**< Jacobian of the invariants function type. */
-    using FunctionID = std::function<bool(VectorF const &, Real)>; /**< In-domain function type. */
+    using FunctionF = std::function<VectorF(VectorF const &, Real const)>; /**< Explicit ODE system function type. */
+    using FunctionJF = std::function<MatrixJF(VectorF const &, Real const)>; /**< Jacobian of the ODE system function function type. */
+    using FunctionH = std::function<VectorH(VectorF const &, Real const)>; /**< Invariants function type. */
+    using FunctionJH = std::function<MatrixJH(VectorF const &, Real const)>; /**< Jacobian of the invariants function type. */
+    using FunctionID = std::function<bool(VectorF const &, Real const)>; /**< In-domain function type. */
 
-    inline const static FunctionH DefaultH = [](VectorF const &, Real) {return VectorH::Zero();}; /**< Default mass matrix function. */
-    inline const static FunctionJH DefaultJH = [](VectorF const &, Real) {return MatrixJH::Zero();}; /**< Default system matrix function. */
-    inline const static FunctionID DefaultID = [](VectorF const &, Real) {return true;}; /**< Default in-domain function. */
+    inline const static FunctionH DefaultH = [](VectorF const &, Real const) {return VectorH::Zero();}; /**< Default mass matrix function. */
+    inline const static FunctionJH DefaultJH = [](VectorF const &, Real const) {return MatrixJH::Zero();}; /**< Default system matrix function. */
+    inline const static FunctionID DefaultID = [](VectorF const &, Real const) {return true;}; /**< Default in-domain function. */
 
   private:
     FunctionF m_f{nullptr}; /**< Explicit ODE system function. */
@@ -335,7 +335,7 @@ namespace Sandals {
     * \param[in] t Independent variable (or time) \f$ t \f$.
     * \return The system function \f$ \mathbf{f}(\mathbf{x}, t) \f$.
     */
-    VectorF f(VectorF const &x, Real t) const override
+    VectorF f(VectorF const & x, Real const t) const override
     {
       return this->m_f(x, t);
     }
@@ -353,7 +353,7 @@ namespace Sandals {
     * \param[in] t Independent variable (or time) \f$ t \f$.
     * \return The Jacobian \f$ \mathbf{Jf}_{\mathbf{x}}(\mathbf{x}, t) \f$.
     */
-    MatrixJF Jf_x(VectorF const &x, Real t) const override
+    MatrixJF Jf_x(VectorF const & x, Real const t) const override
     {
       return this->m_Jf_x(x, t);
     }
@@ -364,7 +364,7 @@ namespace Sandals {
     * \param[in] t Independent variable (or time) \f$ t \f$.
     * \return The system invariants \f$ \mathbf{h}(\mathbf{x}, t) \f$.
     */
-    VectorH h(VectorF const &x, Real t) const override
+    VectorH h(VectorF const & x, Real const t) const override
     {
       return this->m_h(x, t);
     }
@@ -382,7 +382,7 @@ namespace Sandals {
     * \param[in] t Independent variable (or time) \f$ t \f$.
     * \return The Jacobian \f$ \mathbf{Jh}_{\mathbf{x}}(\mathbf{x}, t) \f$.
     */
-    MatrixJH Jh_x(VectorF const &x, Real t) const override
+    MatrixJH Jh_x(VectorF const & x, Real const t) const override
     {
       return this->m_Jh_x(x, t);
     }
@@ -394,7 +394,7 @@ namespace Sandals {
     * \param[in] t Independent variable (or time) \f$ t \f$.
     * \return True if \f$ \mathbf{f}(\mathbf{x}, t) \f$ is in the domain of the ODE/DAE system.
     */
-    bool in_domain(VectorF const &x, Real t) const override
+    bool in_domain(VectorF const & x, Real const t) const override
     {
       return this->m_in_domain(x, t);
     }

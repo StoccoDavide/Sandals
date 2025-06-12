@@ -114,7 +114,7 @@ namespace Sandals {
     * \param[in] verbose Verbosity flag.
     * \return The calculated order of the Runge-Kutta method.
     */
-    Integer compute_order(Matrix const &A, Vector const &b, Vector const &c, bool verbose = false) const {
+    Integer compute_order(Matrix const & A, Vector const & b, Vector const & c, bool verbose = false) const {
 
       #define CMD "Sandals::" << this->name << "::tableau_order(...): "
 

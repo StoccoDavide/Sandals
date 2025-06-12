@@ -63,7 +63,7 @@ namespace Sandals {
     using MatrixN = typename Implicit<Real, N, M>::MatrixJF; /**< Templetized matrix type. */
     using VectorM = typename Implicit<Real, N, M>::VectorH; /**< Templetized vector type. */
     using MatrixM = typename Implicit<Real, N, M>::MatrixJH; /**< Templetized matrix type. */
-    using FunctionSC = std::function<void(VectorX const &, Real)>; /**< Step callback function type. */
+    using FunctionSC = std::function<void(Integer const, VectorX const &, Real const)>; /**< Step callback function type. */
 
   public:
     SANDALS_BASIC_CONSTANTS(Real) /**< Basic constants. */
@@ -74,8 +74,10 @@ namespace Sandals {
     using Time = Eigen::Vector<Real, Eigen::Dynamic>; /**< Templetized vector type for the independent variable (or time). */
 
   private:
-    NewtonX    m_newtonX;                          /**< Newton solver for ERK and DIRK methods. */
-    NewtonK    m_newtonK;                          /**< Newton solver for IRK methods. */
+    mutable NewtonX m_newtonX;                     /**< Newton solver for ERK and DIRK methods. */
+    mutable NewtonK m_newtonK;                     /**< Newton solver for IRK methods. */
+    mutable Eigen::FullPivLU<MatrixP> m_lu;        /**< LU decomposition for the projection matrix. */
+
     Tableau<Real, S> m_tableau;                    /**< Butcher tableau of the Runge-Kutta method. */
     System     m_system;                           /**< ODE/DAE system object pointer. */
     Real       m_absolute_tolerance{EPSILON_HIGH}; /**< Absolute tolerance for adaptive step \f$ \epsilon_{\text{abs}} \f$. */
@@ -90,7 +92,6 @@ namespace Sandals {
     bool       m_reverse{false};                   /**< Time reverse mode boolean. */
     FunctionSC m_step_callback{nullptr};           /**< Step callback function. */
 
-    Eigen::FullPivLU<MatrixP> m_lu;               /**< LU decomposition for the projection matrix. */
     Real    m_projection_tolerance{EPSILON_HIGH}; /**< Projection tolerance \f$ \epsilon_{\text{proj}} \f$. */
     Integer m_max_projection_iterations{5};       /**< Maximum number of projection steps. */
     bool    m_projection{true};                   /**< Adaptive step mode boolean. */
@@ -104,13 +105,13 @@ namespace Sandals {
     /**
     * Assignment operator for the timer.
     */
-    RungeKutta & operator=(RungeKutta const &) = delete;
+    RungeKutta & operator=(RungeKutta const & ) = delete;
 
     /**
     * Class constructor for the Runge-Kutta method.
     * \param[in] t_tableau The Tableau reference.
     */
-    RungeKutta(Tableau<Real, S> const &t_tableau)
+    RungeKutta(Tableau<Real, S> const & t_tableau)
       : m_tableau(t_tableau) {
       this->verbose_mode(this->m_verbose);
     }
@@ -120,7 +121,7 @@ namespace Sandals {
     * \param[in] t_tableau The Tableau reference.
     * \param[in] t_system The ODE/DAE system shared pointer.
     */
-    RungeKutta(Tableau<Real, S> const &t_tableau, System t_system)
+    RungeKutta(Tableau<Real, S> const & t_tableau, System t_system)
       : m_tableau(t_tableau), m_system(t_system) {
       this->verbose_mode(this->m_verbose);
     }
@@ -207,7 +208,7 @@ namespace Sandals {
     * Get the Butcher tableau nodes vector \f$ \mathbf{c} \f$.
     * \return The Butcher tableau nodes vector \f$ \mathbf{c} \f$.
     */
-    VectorS c() const {return c;}
+    VectorS c() const {return this->m_tableau.c;}
 
     /**
     * Get the ODE/DAE system pointer.
@@ -405,7 +406,7 @@ namespace Sandals {
     * Get the adaptive step absolute tolerance reference \f$ \epsilon_{\text{abs}} \f$.
     * \param[in] t_absolute_tolerance The adaptive step absolute tolerance \f$ \epsilon_{\text{abs}} \f$.
     */
-    void absolute_tolerance(Real t_absolute_tolerance) {this->m_absolute_tolerance = t_absolute_tolerance;}
+    void absolute_tolerance(Real const t_absolute_tolerance) {this->m_absolute_tolerance = t_absolute_tolerance;}
 
     /**
     * Get the adaptive step relative tolerance \f$ \epsilon_{\text{rel}} \f$.
@@ -417,7 +418,7 @@ namespace Sandals {
     * Get the adaptive step relative tolerance reference \f$ \epsilon_{\text{rel}} \f$.
     * \param[in] t_relative_tolerance The adaptive step relative tolerance \f$ \epsilon_{\text{rel}} \f$.
     */
-    void relative_tolerance(Real t_relative_tolerance) {this->m_relative_tolerance = t_relative_tolerance;}
+    void relative_tolerance(Real const t_relative_tolerance) {this->m_relative_tolerance = t_relative_tolerance;}
 
     /**
     * Get the safety factor for adaptive step \f$ f \f$.
@@ -429,7 +430,7 @@ namespace Sandals {
     * Set safety factor for adaptive step \f$ f \f$.
     * \param[in] t_safety_factor The safety factor for adaptive step \f$ f \f$.
     */
-    void safety_factor(Real t_safety_factor) {this->m_safety_factor = t_safety_factor;}
+    void safety_factor(Real const t_safety_factor) {this->m_safety_factor = t_safety_factor;}
 
     /**
     * Get the minimum safety factor for adaptive step \f$ f_{\min} \f$.
@@ -441,7 +442,7 @@ namespace Sandals {
     * Set the minimum safety factor for adaptive step \f$ f_{\min} \f$.
     * \param[in] t_min_safety_factor The minimum safety factor for adaptive step \f$ f_{\min} \f$.
     */
-    void min_safety_factor(Real t_min_safety_factor) {this->m_min_safety_factor = t_min_safety_factor;}
+    void min_safety_factor(Real const t_min_safety_factor) {this->m_min_safety_factor = t_min_safety_factor;}
 
     /**
     * Get the maximum safety factor for adaptive step \f$ f_{\max} \f$.
@@ -453,7 +454,7 @@ namespace Sandals {
     * Set the maximum safety factor for adaptive step \f$ f_{\max} \f$.
     * \param[in] t_max_safety_factor The maximum safety factor for adaptive step \f$ f_{\max} \f$.
     */
-    void max_safety_factor(Real t_max_safety_factor) {this->m_max_safety_factor = t_max_safety_factor;}
+    void max_safety_factor(Real const t_max_safety_factor) {this->m_max_safety_factor = t_max_safety_factor;}
 
     /**
     * Get the minimum step for advancing \f$ h_{\min} \f$.
@@ -465,7 +466,7 @@ namespace Sandals {
     * Set the minimum step for advancing \f$ h_{\min} \f$.
     * \param[in] t_min_step The minimum step for advancing \f$ h_{\min} \f$.
     */
-    void min_step(Real t_min_step) {this->m_min_step = t_min_step;}
+    void min_step(Real const t_min_step) {this->m_min_step = t_min_step;}
 
     /**
     * Get the maximum number of substeps.
@@ -477,7 +478,7 @@ namespace Sandals {
     * Set the maximum number of substeps.
     * \param[in] t_max_substeps The maximum number of substeps.
     */
-    void max_substeps(Integer t_max_substeps) {this->m_max_substeps = t_max_substeps;}
+    void max_substeps(Integer const t_max_substeps) {this->m_max_substeps = t_max_substeps;}
 
     /**
     * Get the adaptive step mode.
@@ -559,7 +560,7 @@ namespace Sandals {
     * Set the step callback function.
     * \param[in] t_step_callback The step callback function.
     */
-    void step_callback(FunctionSC t_step_callback) {this->m_step_callback = t_step_callback;}
+    void step_callback(FunctionSC const & t_step_callback) {this->m_step_callback = t_step_callback;}
 
     /**
     * Get the projection tolerance.
@@ -571,7 +572,7 @@ namespace Sandals {
     * Set the projection tolerance.
     * \param[in] t_projection_tolerance The projection tolerance.
     */
-    void projection_tolerance(Real t_projection_tolerance)
+    void projection_tolerance(Real const t_projection_tolerance)
       {this->m_projection_tolerance = t_projection_tolerance;}
 
     /**
@@ -584,7 +585,7 @@ namespace Sandals {
     * Set the maximum number of projection iterations.
     * \param[in] t_max_projection_iterations The maximum number of projection iterations.
     */
-    void max_projection_iterations(Integer t_max_projection_iterations)
+    void max_projection_iterations(Integer const t_max_projection_iterations)
       {this->m_max_projection_iterations = t_max_projection_iterations;}
 
     /**
@@ -643,7 +644,7 @@ namespace Sandals {
     * \param[in] h_k Actual advancing step \f$ h_k \f$.
     * \return The suggested step for the next integration step \f$ h_{k+1}^\star \f$.
     */
-    Real estimate_step(VectorN const &x, VectorN const &x_e, Real h_k) const
+    Real estimate_step(VectorN const & x, VectorN const & x_e, Real const h_k) const
     {
       Real desired_error{this->m_absolute_tolerance + this->m_relative_tolerance *
         std::max(x.array().abs().maxCoeff(), x_e.array().abs().maxCoeff())};
@@ -657,7 +658,8 @@ namespace Sandals {
     * Print the Runge-Kutta method information to the output stream.
     * \return The Runge-Kutta method information as a string.
     */
-    std::string info() const {
+    std::string info() const
+    {
       std::ostringstream os;
       os
         << "Runge-Kutta method:\t" << this->name() << std::endl
@@ -708,7 +710,8 @@ namespace Sandals {
     * \param[out] h_new The suggested step \f$ h_{k+1}^\star \f$ for the next advancing step.
     * \return True if the step is successfully computed, false otherwise.
     */
-    bool erk_explicit_step(VectorN const &x_old, Real t_old, Real h_old, VectorN &x_new, Real &h_new) const
+    bool erk_explicit_step(VectorN const & x_old, Real const t_old, Real const h_old, VectorN & x_new,
+      Real & h_new) const
     {
       using Eigen::all;
       using Eigen::seqN;
@@ -757,7 +760,8 @@ namespace Sandals {
     * \param[in] K Variables \f$ \tilde{\mathbf{K}} = h \mathbf{K} \f$ of the system to be solved.
     * \param[out] fun The residual of system to be solved.
     */
-    void erk_implicit_function(Integer s, VectorN const &x, Real t, Real h, MatrixK const &K, VectorN &fun) const
+    void erk_implicit_function(Integer const s, VectorN const & x, Real const t, Real const h,
+      MatrixK const & K, VectorN & fun) const
     {
       using Eigen::all;
       using Eigen::seqN;
@@ -800,7 +804,8 @@ namespace Sandals {
     * \param[in] K Variables \f$ h \mathbf{K} \f$ of the system to be solved.
     * \param[out] jac The Jacobian of system to be solved.
     */
-    void erk_implicit_jacobian(Integer s, VectorN const &x, Real t, Real h, MatrixK const &K, MatrixN &jac) const
+    void erk_implicit_jacobian(Integer const s, VectorN const & x, Real const t, Real const h,
+      MatrixK const & K, MatrixN & jac) const
     {
       using Eigen::all;
       using Eigen::seqN;
@@ -825,7 +830,8 @@ namespace Sandals {
     * \param[out] h_new The suggested step \f$ h_{k+1}^\star \f$ for the next advancing step.
     * \return True if the step is successfully computed, false otherwise.
     */
-    bool erk_implicit_step(VectorN const &x_old, Real t_old, Real h_old, VectorN &x_new, Real &h_new)
+    bool erk_implicit_step(VectorN const & x_old, Real const t_old, Real const h_old, VectorN & x_new,
+      Real & h_new) const
     {
       MatrixK K;
       VectorN K_sol;
@@ -834,9 +840,9 @@ namespace Sandals {
       // Check if the solver converged
       for (Integer s{0}; s < S; ++s) {
         if (this->m_newtonX.solve(
-            [this, s, &K, &x_old, t_old, h_old](VectorN const &K_fun, VectorN &fun)
+            [this, s, &K, &x_old, t_old, h_old](VectorN const & K_fun, VectorN & fun)
               {K.col(s) = K_fun; this->erk_implicit_function(s, x_old, t_old, h_old, K, fun);},
-            [this, s, &K, &x_old, t_old, h_old](VectorN const &K_jac, MatrixN &jac)
+            [this, s, &K, &x_old, t_old, h_old](VectorN const & K_jac, MatrixN & jac)
               {K.col(s) = K_jac; this->erk_implicit_jacobian(s, x_old, t_old, h_old, K, jac);},
             K_ini, K_sol)) {
           K.col(s) = K_sol;
@@ -889,7 +895,7 @@ namespace Sandals {
     * \param[in] K Variables \f$ \tilde{\mathbf{K}} = h \mathbf{K} \f$ of the system to be solved.
     * \param[out] fun The residual of system to be solved.
     */
-    void irk_function(VectorN const &x, Real t, Real h, VectorK const &K, VectorK &fun) const
+    void irk_function(VectorN const & x, Real const t, Real const h, VectorK const & K, VectorK & fun) const
     {
       VectorN x_node;
       MatrixK K_mat{K.reshaped(N, S)};
@@ -941,7 +947,7 @@ namespace Sandals {
     * \param[in] K Variables \f$ h \mathbf{K} \f$ of the system to be solved.
     * \param[out] jac The Jacobian of system to be solved.
     */
-    void irk_jacobian(VectorN const &x, Real t, Real h, VectorK const &K, MatrixJ &jac) const
+    void irk_jacobian(VectorN const & x, Real const t, Real const h, VectorK const & K, MatrixJ & jac) const
     {
       using Eigen::seqN;
 
@@ -994,16 +1000,16 @@ namespace Sandals {
     * \param[out] h_new The suggested step \f$ h_{k+1}^\star \f$ for the next advancing step.
     * \return True if the step is successfully computed, false otherwise.
     */
-    bool irk_step(VectorN const &x_old, Real t_old, Real h_old, VectorN &x_new, Real &h_new)
+    bool irk_step(VectorN const & x_old, Real const t_old, Real const h_old, VectorN & x_new, Real & h_new) const
     {
       VectorK K;
       VectorK K_ini(VectorK::Zero());
 
       // Check if the solver converged
       if (!this->m_newtonK.solve(
-          [this, &x_old, t_old, h_old](VectorK const &K_fun, VectorK &fun)
+          [this, &x_old, t_old, h_old](VectorK const & K_fun, VectorK & fun)
             {this->irk_function(x_old, t_old, h_old, K_fun, fun);},
-          [this, &x_old, t_old, h_old](VectorK const &K_jac, MatrixJ &jac)
+          [this, &x_old, t_old, h_old](VectorK const & K_jac, MatrixJ & jac)
             {this->irk_jacobian(x_old, t_old, h_old, K_jac, jac);},
           K_ini, K))
         {return false;}
@@ -1048,7 +1054,8 @@ namespace Sandals {
     * \param[in] K Variables \f$ \tilde{\mathbf{K}} = h \mathbf{K} \f$ of the system to be solved.
     * \param[out] fun The residual of system to be solved.
     */
-    void dirk_function(Integer n, VectorN const &x, Real t, Real h, MatrixK const &K, VectorN &fun) const
+    void dirk_function(Integer n, VectorN const & x, Real const t, Real const h, MatrixK const & K,
+      VectorN & fun) const
     {
       using Eigen::all;
       using Eigen::seqN;
@@ -1093,7 +1100,8 @@ namespace Sandals {
     * \param[in] K Variables \f$ h \mathbf{K} \f$ of the system to be solved.
     * \param[out] jac The Jacobian of system to be solved.
     */
-    void dirk_jacobian(Integer n, VectorN const &x, Real t, Real h, MatrixK const &K, MatrixN &jac) const
+    void dirk_jacobian(Integer n, VectorN const & x, Real const t, Real const h, MatrixK const & K,
+      MatrixN & jac) const
     {
       using Eigen::all;
       using Eigen::seqN;
@@ -1122,7 +1130,7 @@ namespace Sandals {
     * \param[out] h_new The suggested step \f$ h_{k+1}^\star \f$ for the next advancing step.
     * \return True if the step is successfully computed, false otherwise.
     */
-    bool dirk_step(VectorN const &x_old, Real t_old, Real h_old, VectorN &x_new, Real &h_new)
+    bool dirk_step(VectorN const & x_old, Real const t_old, Real const h_old, VectorN & x_new, Real & h_new) const
     {
       MatrixK K;
       VectorN K_sol;
@@ -1131,9 +1139,9 @@ namespace Sandals {
       // Check if the solver converged at each step
       for (Integer n{0}; n < S; ++n) {
         if (this->m_newtonX.solve(
-            [this, n, &K, &x_old, t_old, h_old](VectorN const &K_fun, VectorN &fun)
+            [this, n, &K, &x_old, t_old, h_old](VectorN const & K_fun, VectorN &fun)
               {K.col(n) = K_fun; this->dirk_function(n, x_old, t_old, h_old, K, fun);},
-            [this, n, &K, &x_old, t_old, h_old](VectorN const &K_jac, MatrixN &jac)
+            [this, n, &K, &x_old, t_old, h_old](VectorN const & K_jac, MatrixN &jac)
               {K.col(n) = K_jac; this->dirk_jacobian(n, x_old, t_old, h_old, K, jac);},
             K_ini, K_sol)) {
             K.col(n) = K_sol;
@@ -1164,7 +1172,7 @@ namespace Sandals {
     * \param[out] h_new The suggested step \f$ h_{k+1}^\star \f$ for the next advancing step.
     * \return True if the step is successfully computed, false otherwise.
     */
-    bool step(VectorN const &x_old, Real t_old, Real h_old, VectorN &x_new, Real &h_new)
+    bool step(VectorN const & x_old, Real const t_old, Real const h_old, VectorN & x_new, Real & h_new) const
     {
       #define CMD "Sandals::RungeKutta::step(...): "
 
@@ -1197,7 +1205,7 @@ namespace Sandals {
     * \param[out] h_new The suggested step \f$ h_{k+1}^\star \f$ for the next advancing step.
     * \return True if the step is successfully computed, false otherwise.
     */
-    bool advance(VectorN const &x_old, Real t_old, Real h_old, VectorN &x_new, Real &h_new)
+    bool advance(VectorN const & x_old, Real const t_old, Real const h_old, VectorN & x_new, Real & h_new) const
     {
       #define CMD "Sandals::RungeKutta::advance(...): "
 
@@ -1271,11 +1279,6 @@ namespace Sandals {
           return false;
         }
       }
-
-      // Callback after the step is completed
-      if (this->m_step_callback) {
-        this->m_step_callback(x_new, t_old + h_new);
-      }
       return true;
 
       #undef CMD
@@ -1292,17 +1295,20 @@ namespace Sandals {
     * \warning Do not use the solution for internal backtracking, as the step callback may directly
     * modify the solution.
     */
-    bool solve(VectorX const &t_mesh, VectorN const &ics, Solution<Real, N, M> &sol)
+    bool solve(VectorX const & t_mesh, VectorN const & ics, Solution<Real, N, M> & sol) const
     {
       using Eigen::last;
 
       // Instantiate output
       sol.resize(t_mesh.size());
 
-      // Store first step
+      // Store initial conditions
       sol.t(0)     = t_mesh(0);
       sol.x.col(0) = ics;
       sol.h.col(0) = this->m_system->h(ics, t_mesh(0));
+
+      // Callback on initial conditions
+      if (this->m_step_callback) {this->m_step_callback(0, ics, t_mesh(0));}
 
       // Update the current step
       Integer step{0};
@@ -1329,6 +1335,7 @@ namespace Sandals {
 
         // Store solution if the step is a mesh point
         if (!this->m_adaptive || mesh_point_bool) {
+
           // Update temporaries
           step += 1;
           h_step = h_tmp_step;
@@ -1337,6 +1344,11 @@ namespace Sandals {
           sol.t(step)     = t_step;
           sol.x.col(step) = x_step;
           sol.h.col(step) = this->m_system->h(x_step, t_step);
+
+          // Callback after the step is completed
+          if (this->m_step_callback) {
+            this->m_step_callback(step, x_step, t_step);
+          }
 
           // Check if the current step is the last one
           if (std::abs(t_step - t_mesh(last)) < SQRT_EPSILON) {break;}
@@ -1356,7 +1368,7 @@ namespace Sandals {
     * \warning Do not use the solution for internal backtracking, as the step callback may directly
     * modify the solution.
     */
-    bool adaptive_solve(VectorX const &t_mesh, VectorN const &ics, Solution<Real, N, M> &sol)
+    bool adaptive_solve(VectorX const & t_mesh, VectorN const & ics, Solution<Real, N, M> & sol) const
     {
       using Eigen::all;
       using Eigen::last;
@@ -1382,10 +1394,13 @@ namespace Sandals {
         sol.resize(t_mesh.size());
       }
 
-      // Store first step
+      // Store initial conditions
       sol.t(0)     = t_mesh(0);
       sol.x.col(0) = ics;
       sol.h.col(0) = this->m_system->h(ics, t_mesh(0));
+
+      // Callback on initial conditions
+      if (this->m_step_callback) {this->m_step_callback(0, ics, t_mesh(0));}
 
       // Instantiate temporary variables
       Integer step{0};
@@ -1406,6 +1421,11 @@ namespace Sandals {
         sol.t(step+1)     = sol.t(step) + h_step;
         sol.x.col(step+1) = x_step;
         sol.h.col(step+1) = this->m_system->h(x_step, sol.t(step+1));
+
+        // Callback after the step is completed
+        if (this->m_step_callback) {
+          this->m_step_callback(step+1, x_step, sol.t(step+1));
+        }
 
         // Check if the current step is the last one
         if (sol.t(step+1) + h_step > t_mesh(last)) {break;}
@@ -1431,7 +1451,7 @@ namespace Sandals {
     * manifold \f$ \mathbf{h} (\mathbf{x}, t) = \mathbf{0} \f$.
     * \return True if the solution is successfully projected, false otherwise.
     */
-    bool project(VectorN const &x, Real t, VectorN &x_projected)
+    bool project(VectorN const & x, Real const t, VectorN & x_projected) const
     {
       #define CMD "Sandals::RungeKutta::project(...): "
 
@@ -1498,8 +1518,8 @@ namespace Sandals {
     * manifold \f$ \mathbf{h} (\mathbf{x}, t) = \mathbf{0} \f$.
     * \return True if the solution is successfully projected, false otherwise.
     */
-    bool project_ics(VectorN const &x, Real t, std::vector<Integer> const & projected_equations,
-      std::vector<Integer> const & projected_invariants, VectorN &x_projected) const
+    bool project_ics(VectorN const & x, Real const t, std::vector<Integer> const & projected_equations,
+      std::vector<Integer> const & projected_invariants, VectorN & x_projected) const
     {
       #define CMD "Sandals::RungeKutta::project_ics(...): "
 
@@ -1570,7 +1590,7 @@ namespace Sandals {
     * \param[in] sol The *analytical* solution function.
     * \return The estimated order of the method.
     */
-    Real estimate_order(std::vector<VectorX> const &t_mesh, VectorN const &ics, std::function<MatrixX(VectorX)> &sol)
+    Real estimate_order(std::vector<VectorX> const & t_mesh, VectorN const & ics, std::function<MatrixX(VectorX)> & sol) const
     {
       using Eigen::last;
 

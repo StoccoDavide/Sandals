@@ -64,10 +64,10 @@ var NAVTREEINDEX =
 [
 "_chebyshev51_8hh.html",
 "class_sandals_1_1_fehlberg45_tableau.html",
-"class_sandals_1_1_linear_wrapper.html#a1282c5825b9db7e3891924ba13073c99",
-"class_sandals_1_1_runge_kutta.html#a4a8d47e27e70e60d74388f3d4f688269",
+"class_sandals_1_1_linear_wrapper.html#a195ece3d4e42e9339d6e516c9ac714fa",
+"class_sandals_1_1_runge_kutta.html#a4d5bf50167b4d31529bbe6d54c24f63f",
 "class_sandals_1_1_s_s_p_r_k43_tableau.html",
-"struct_sandals_1_1_solution.html#a1d95cee78a906a2db6ba78fb0bac4973"
+"struct_sandals_1_1_solution.html#a188bd81cd55745661c1d53b3aa6ddabb"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronization';
