@@ -264,8 +264,8 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:a94fd96f0ffa122d5d873f6bdc400f0e1" id="r_a94fd96f0ffa122d5d873f6bdc400f0e1"><td class="memItemLeft" align="right" valign="top">Eigen::FullPivLU&lt; <a class="el" href="#a45188c6c7dca9698ff7f3beca21ce98c">MatrixP</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a94fd96f0ffa122d5d873f6bdc400f0e1">m_lu</a></td></tr>
 <tr class="memitem:a9a5dd7fe85648fa2ac98ea187186539e" id="r_a9a5dd7fe85648fa2ac98ea187186539e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_sandals_1_1_tableau.html">Tableau</a>&lt; Real, S &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9a5dd7fe85648fa2ac98ea187186539e">m_tableau</a></td></tr>
 <tr class="memitem:a974fe9dc2d0075bf254c23f7aae5b53c" id="r_a974fe9dc2d0075bf254c23f7aae5b53c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a29df6fe078d0e5f4f3a9aa7de8aba02d">System</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a974fe9dc2d0075bf254c23f7aae5b53c">m_system</a></td></tr>
-<tr class="memitem:a153ee4e61fc14061e4eb208c2b085ea4" id="r_a153ee4e61fc14061e4eb208c2b085ea4"><td class="memItemLeft" align="right" valign="top">Real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a153ee4e61fc14061e4eb208c2b085ea4">m_absolute_tolerance</a> {EPSILON_HIGH}</td></tr>
-<tr class="memitem:a32f5ab526c0ad401e9c56acab0c473bd" id="r_a32f5ab526c0ad401e9c56acab0c473bd"><td class="memItemLeft" align="right" valign="top">Real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a32f5ab526c0ad401e9c56acab0c473bd">m_relative_tolerance</a> {EPSILON_HIGH}</td></tr>
+<tr class="memitem:a153ee4e61fc14061e4eb208c2b085ea4" id="r_a153ee4e61fc14061e4eb208c2b085ea4"><td class="memItemLeft" align="right" valign="top">Real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a153ee4e61fc14061e4eb208c2b085ea4">m_absolute_tolerance</a> {1e-6}</td></tr>
+<tr class="memitem:a32f5ab526c0ad401e9c56acab0c473bd" id="r_a32f5ab526c0ad401e9c56acab0c473bd"><td class="memItemLeft" align="right" valign="top">Real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a32f5ab526c0ad401e9c56acab0c473bd">m_relative_tolerance</a> {1e-3}</td></tr>
 <tr class="memitem:abd3fe6ce6913f01a59d70c7bb4e659cd" id="r_abd3fe6ce6913f01a59d70c7bb4e659cd"><td class="memItemLeft" align="right" valign="top">Real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abd3fe6ce6913f01a59d70c7bb4e659cd">m_safety_factor</a> {0.9}</td></tr>
 <tr class="memitem:a16c6c7cbd6036e45daf018c7fb63a457" id="r_a16c6c7cbd6036e45daf018c7fb63a457"><td class="memItemLeft" align="right" valign="top">Real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a16c6c7cbd6036e45daf018c7fb63a457">m_min_safety_factor</a> {0.1}</td></tr>
 <tr class="memitem:aba960176d628fbc38f2f47d5ed4674e5" id="r_aba960176d628fbc38f2f47d5ed4674e5"><td class="memItemLeft" align="right" valign="top">Real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aba960176d628fbc38f2f47d5ed4674e5">m_max_safety_factor</a> {10.0}</td></tr>
@@ -4334,7 +4334,7 @@ template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Real <a class="el" href="class_sandals_1_1_runge_kutta.html">Sandals::RungeKutta</a>&lt; Real, S, N, M &gt;::m_absolute_tolerance {EPSILON_HIGH}</td>
+          <td class="memname">Real <a class="el" href="class_sandals_1_1_runge_kutta.html">Sandals::RungeKutta</a>&lt; Real, S, N, M &gt;::m_absolute_tolerance {1e-6}</td>
         </tr>
       </table>
   </td>
@@ -4634,7 +4634,7 @@ template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Real <a class="el" href="class_sandals_1_1_runge_kutta.html">Sandals::RungeKutta</a>&lt; Real, S, N, M &gt;::m_relative_tolerance {EPSILON_HIGH}</td>
+          <td class="memname">Real <a class="el" href="class_sandals_1_1_runge_kutta.html">Sandals::RungeKutta</a>&lt; Real, S, N, M &gt;::m_relative_tolerance {1e-3}</td>
         </tr>
       </table>
   </td>

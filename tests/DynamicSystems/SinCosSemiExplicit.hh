@@ -66,7 +66,7 @@ public:
 
   bool in_domain(VectorF const &/*x*/, Real /*t*/) const override {return true;}
 
-  VectorF const &ics() const {return VectorF::Zero();}
+  VectorF ics() const {return VectorF::Zero();}
 
   VectorF analytical_solution(Real t) const {
     VectorF x;

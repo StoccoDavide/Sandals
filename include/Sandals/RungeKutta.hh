@@ -80,8 +80,8 @@ namespace Sandals {
 
     Tableau<Real, S> m_tableau;                    /**< Butcher tableau of the Runge-Kutta method. */
     System     m_system;                           /**< ODE/DAE system object pointer. */
-    Real       m_absolute_tolerance{EPSILON_HIGH}; /**< Absolute tolerance for adaptive step \f$ \epsilon_{\text{abs}} \f$. */
-    Real       m_relative_tolerance{EPSILON_HIGH}; /**< Relative tolerance for adaptive step \f$ \epsilon_{\text{rel}} \f$. */
+    Real       m_absolute_tolerance{1e-6};         /**< Absolute tolerance for adaptive step \f$ \epsilon_{\text{abs}} \f$. */
+    Real       m_relative_tolerance{1e-3};         /**< Relative tolerance for adaptive step \f$ \epsilon_{\text{rel}} \f$. */
     Real       m_safety_factor{0.9};               /**< Safety factor for adaptive step \f$ f \f$. */
     Real       m_min_safety_factor{0.1};           /**< Minimum safety factor for adaptive step \f$ f_{\max} \f$. */
     Real       m_max_safety_factor{10.0};          /**< Maximum safety factor for adaptive step \f$ f_{\min} \f$. */
@@ -1312,13 +1312,13 @@ namespace Sandals {
 
       // Update the current step
       Integer step{0};
-      VectorN x_step{ics};
+      VectorN x_old_step(ics), x_new_step(ics);
       Real t_step{t_mesh(0)}, h_step{t_mesh(1) - t_mesh(0)}, h_tmp_step{h_step}, h_new_step;
       bool mesh_point_bool, saturation_bool;
 
       while (true) {
         // Integrate system
-        if (!this->advance(sol.x.col(step), t_step, h_step, x_step, h_new_step)) {return false;}
+        if (!this->advance(x_old_step, t_step, h_step, x_new_step, h_new_step)) {return false;}
 
         // Update the current step
         t_step += h_step;
@@ -1342,16 +1342,19 @@ namespace Sandals {
 
           // Update outputs
           sol.t(step)     = t_step;
-          sol.x.col(step) = x_step;
-          sol.h.col(step) = this->m_system->h(x_step, t_step);
+          sol.x.col(step) = x_new_step;
+          sol.h.col(step) = this->m_system->h(x_new_step, t_step);
 
           // Callback after the step is completed
           if (this->m_step_callback) {
-            this->m_step_callback(step, x_step, t_step);
+            this->m_step_callback(step, x_new_step, t_step);
           }
 
           // Check if the current step is the last one
           if (std::abs(t_step - t_mesh(last)) < SQRT_EPSILON) {break;}
+
+          // Update the previous step
+          x_old_step = x_new_step;
         }
       }
       return true;
@@ -1385,7 +1388,7 @@ namespace Sandals {
       }
 
       // Instantiate output
-      Real h_step{t_mesh(1) - t_mesh(0)}, h_new_step, scale{100.0};
+      Real t_step{t_mesh(0)}, h_step{t_mesh(1) - t_mesh(0)}, h_new_step, scale{100.0};
       Real h_min{std::max(this->m_min_step, h_step/scale)}, h_max{scale*h_step};
       if (this->m_tableau.is_embedded) {
         Integer safety_length{static_cast<Integer>(std::ceil(std::abs(t_mesh(last) - t_mesh(0))/(2.0*h_min)))};
@@ -1404,11 +1407,14 @@ namespace Sandals {
 
       // Instantiate temporary variables
       Integer step{0};
-      VectorN x_step{ics};
+      VectorN x_old_step(ics), x_new_step(ics);
 
       while (true) {
         // Integrate system
-        this->advance(sol.x.col(step), sol.t(step), h_step, x_step, h_new_step);
+        this->advance(x_old_step, t_step, h_step, x_new_step, h_new_step);
+
+        // Update the current step
+        t_step += h_step;
 
         // Saturate the suggested timestep
         if (this->m_adaptive && this->m_tableau.is_embedded) {
@@ -1417,25 +1423,29 @@ namespace Sandals {
 
         SANDALS_ASSERT(step < sol.size(), CMD "safety length exceeded.");
 
-        // Store solution
-        sol.t(step+1)     = sol.t(step) + h_step;
-        sol.x.col(step+1) = x_step;
-        sol.h.col(step+1) = this->m_system->h(x_step, sol.t(step+1));
+        // Update temporaries
+        step += 1;
+
+        // Update outputs
+        sol.t(step)     = t_step;
+        sol.x.col(step) = x_new_step;
+        sol.h.col(step) = this->m_system->h(x_new_step, t_step);
 
         // Callback after the step is completed
         if (this->m_step_callback) {
-          this->m_step_callback(step+1, x_step, sol.t(step+1));
+          this->m_step_callback(step, x_new_step, t_step);
         }
 
         // Check if the current step is the last one
-        if (sol.t(step+1) + h_step > t_mesh(last)) {break;}
+        if (std::abs(t_step - t_mesh(last)) < SQRT_EPSILON) {break;}
+        else if (t_step + h_step > t_mesh(last)) {h_step = t_mesh(last) - t_step;}
 
-        // Update steps counter
-        step += 1;
+        // Update the previous step
+        x_old_step = x_new_step;
       }
 
       // Resize the output
-      sol.conservative_resize(step-1);
+      sol.conservative_resize(step);
 
       return true;
 
