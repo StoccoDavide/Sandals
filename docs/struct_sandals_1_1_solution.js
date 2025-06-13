@@ -1,7 +1,7 @@
 var struct_sandals_1_1_solution =
 [
-    [ "MatrixM", "struct_sandals_1_1_solution.html#a2819f24fa37c42a1e611a54692be65d0", null ],
-    [ "MatrixN", "struct_sandals_1_1_solution.html#a828afafe49887f7ae1d80e6edfc920cd", null ],
+    [ "MatrixM", "struct_sandals_1_1_solution.html#a8d36c053aeaf543ed94ae91a6fdd5fea", null ],
+    [ "MatrixN", "struct_sandals_1_1_solution.html#a3ec068cc61fef7c6bc64b8ea57e56e5b", null ],
     [ "Vector", "struct_sandals_1_1_solution.html#aeda556287c2b0c04f07f4e42ed3dabc8", null ],
     [ "Solution", "struct_sandals_1_1_solution.html#a15706adf094bc191338b9209ffdaca85", null ],
     [ "Solution", "struct_sandals_1_1_solution.html#a9379e4f2119dbd1f6e8ecfbe49af09a1", null ],

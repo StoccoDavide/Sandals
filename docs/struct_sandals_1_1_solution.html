@@ -143,8 +143,8 @@ $(function(){initNavTree('struct_sandals_1_1_solution.html','','struct_sandals_1
 <tr class="heading"><td colspan="2"><h2 id="header-pub-types" class="groupheader"><a id="pub-types" name="pub-types"></a>
 Public Types</h2></td></tr>
 <tr class="memitem:aeda556287c2b0c04f07f4e42ed3dabc8" id="r_aeda556287c2b0c04f07f4e42ed3dabc8"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aeda556287c2b0c04f07f4e42ed3dabc8">Vector</a> = Eigen::Vector&lt;Real, Eigen::Dynamic&gt;</td></tr>
-<tr class="memitem:a828afafe49887f7ae1d80e6edfc920cd" id="r_a828afafe49887f7ae1d80e6edfc920cd"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a828afafe49887f7ae1d80e6edfc920cd">MatrixN</a> = Eigen::Matrix&lt;Real, N, Eigen::Dynamic&gt;</td></tr>
-<tr class="memitem:a2819f24fa37c42a1e611a54692be65d0" id="r_a2819f24fa37c42a1e611a54692be65d0"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2819f24fa37c42a1e611a54692be65d0">MatrixM</a> = Eigen::Matrix&lt;Real, M, Eigen::Dynamic&gt;</td></tr>
+<tr class="memitem:a3ec068cc61fef7c6bc64b8ea57e56e5b" id="r_a3ec068cc61fef7c6bc64b8ea57e56e5b"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3ec068cc61fef7c6bc64b8ea57e56e5b">MatrixN</a> = Eigen::Matrix&lt;Real, N, Eigen::Dynamic, Eigen::RowMajor&gt;</td></tr>
+<tr class="memitem:a8d36c053aeaf543ed94ae91a6fdd5fea" id="r_a8d36c053aeaf543ed94ae91a6fdd5fea"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8d36c053aeaf543ed94ae91a6fdd5fea">MatrixM</a> = Eigen::Matrix&lt;Real, M, Eigen::Dynamic, Eigen::RowMajor&gt;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -171,8 +171,8 @@ Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:ab314e00036a1feb83c115e58bc7f2322" id="r_ab314e00036a1feb83c115e58bc7f2322"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#aeda556287c2b0c04f07f4e42ed3dabc8">Vector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab314e00036a1feb83c115e58bc7f2322">t</a></td></tr>
-<tr class="memitem:a04136cc06a8f3aa0bc5bf8243054e7ca" id="r_a04136cc06a8f3aa0bc5bf8243054e7ca"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a828afafe49887f7ae1d80e6edfc920cd">MatrixN</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a04136cc06a8f3aa0bc5bf8243054e7ca">x</a></td></tr>
-<tr class="memitem:ae8642bbb35bee58f1a34f56af5299e57" id="r_ae8642bbb35bee58f1a34f56af5299e57"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a2819f24fa37c42a1e611a54692be65d0">MatrixM</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae8642bbb35bee58f1a34f56af5299e57">h</a></td></tr>
+<tr class="memitem:a04136cc06a8f3aa0bc5bf8243054e7ca" id="r_a04136cc06a8f3aa0bc5bf8243054e7ca"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a3ec068cc61fef7c6bc64b8ea57e56e5b">MatrixN</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a04136cc06a8f3aa0bc5bf8243054e7ca">x</a></td></tr>
+<tr class="memitem:ae8642bbb35bee58f1a34f56af5299e57" id="r_ae8642bbb35bee58f1a34f56af5299e57"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a8d36c053aeaf543ed94ae91a6fdd5fea">MatrixM</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae8642bbb35bee58f1a34f56af5299e57">h</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><div class="compoundTemplParams">template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt;<br />
@@ -201,9 +201,10 @@ struct Sandals::Solution&lt; Real, N, M &gt;</div><p>Class container for the num
   </table>
   </dd>
 </dl>
+<dl class="section note"><dt>Note</dt><dd>The solution is stored in a row-major format. This allows to extract contiguous vectors from the states and invariants matrices, which is useful for I/O operations. </dd></dl>
 </div><a name="doc-typedef-members" id="doc-typedef-members"></a><h2 id="header-doc-typedef-members" class="groupheader">Member Typedef Documentation</h2>
-<a id="a2819f24fa37c42a1e611a54692be65d0" name="a2819f24fa37c42a1e611a54692be65d0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2819f24fa37c42a1e611a54692be65d0">&#9670;&#160;</a></span>MatrixM</h2>
+<a id="a8d36c053aeaf543ed94ae91a6fdd5fea" name="a8d36c053aeaf543ed94ae91a6fdd5fea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8d36c053aeaf543ed94ae91a6fdd5fea">&#9670;&#160;</a></span>MatrixM</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -211,7 +212,7 @@ struct Sandals::Solution&lt; Real, N, M &gt;</div><p>Class container for the num
 template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="struct_sandals_1_1_solution.html">Sandals::Solution</a>&lt; Real, N, M &gt;::MatrixM = Eigen::Matrix&lt;Real, M, Eigen::Dynamic&gt;</td>
+          <td class="memname">using <a class="el" href="struct_sandals_1_1_solution.html">Sandals::Solution</a>&lt; Real, N, M &gt;::MatrixM = Eigen::Matrix&lt;Real, M, Eigen::Dynamic, Eigen::RowMajor&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -219,8 +220,8 @@ template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581
 
 </div>
 </div>
-<a id="a828afafe49887f7ae1d80e6edfc920cd" name="a828afafe49887f7ae1d80e6edfc920cd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a828afafe49887f7ae1d80e6edfc920cd">&#9670;&#160;</a></span>MatrixN</h2>
+<a id="a3ec068cc61fef7c6bc64b8ea57e56e5b" name="a3ec068cc61fef7c6bc64b8ea57e56e5b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3ec068cc61fef7c6bc64b8ea57e56e5b">&#9670;&#160;</a></span>MatrixN</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -228,7 +229,7 @@ template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581
 template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="struct_sandals_1_1_solution.html">Sandals::Solution</a>&lt; Real, N, M &gt;::MatrixN = Eigen::Matrix&lt;Real, N, Eigen::Dynamic&gt;</td>
+          <td class="memname">using <a class="el" href="struct_sandals_1_1_solution.html">Sandals::Solution</a>&lt; Real, N, M &gt;::MatrixN = Eigen::Matrix&lt;Real, N, Eigen::Dynamic, Eigen::RowMajor&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -848,7 +849,7 @@ template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581
 template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="#a2819f24fa37c42a1e611a54692be65d0">MatrixM</a> <a class="el" href="struct_sandals_1_1_solution.html">Sandals::Solution</a>&lt; Real, N, M &gt;::h</td>
+          <td class="memname"><a class="el" href="#a8d36c053aeaf543ed94ae91a6fdd5fea">MatrixM</a> <a class="el" href="struct_sandals_1_1_solution.html">Sandals::Solution</a>&lt; Real, N, M &gt;::h</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -882,7 +883,7 @@ template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581
 template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="#a828afafe49887f7ae1d80e6edfc920cd">MatrixN</a> <a class="el" href="struct_sandals_1_1_solution.html">Sandals::Solution</a>&lt; Real, N, M &gt;::x</td>
+          <td class="memname"><a class="el" href="#a3ec068cc61fef7c6bc64b8ea57e56e5b">MatrixN</a> <a class="el" href="struct_sandals_1_1_solution.html">Sandals::Solution</a>&lt; Real, N, M &gt;::x</td>
         </tr>
       </table>
 </div><div class="memdoc">

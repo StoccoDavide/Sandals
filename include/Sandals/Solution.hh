@@ -54,13 +54,15 @@ namespace Sandals {
   * \tparam Real The scalar number type.
   * \tparam N The dimension of the ODE/DAE system.
   * \tparam M The dimension of the invariants manifold.
+  * \note The solution is stored in a row-major format. This allows to extract contiguous
+  * vectors from the states and invariants matrices, which is useful for I/O operations.
   */
   template <typename Real, Integer N, Integer M = 0>
   struct Solution
   {
-    using Vector  = Eigen::Vector<Real, Eigen::Dynamic>;    /**< Templetized vector type. */
-    using MatrixN = Eigen::Matrix<Real, N, Eigen::Dynamic>; /**< Templetized matrix type. */
-    using MatrixM = Eigen::Matrix<Real, M, Eigen::Dynamic>; /**< Templetized matrix type. */
+    using Vector  = Eigen::Vector<Real, Eigen::Dynamic>; /**< Templetized vector type. */
+    using MatrixN = Eigen::Matrix<Real, N, Eigen::Dynamic, Eigen::RowMajor>; /**< Templetized matrix type. */
+    using MatrixM = Eigen::Matrix<Real, M, Eigen::Dynamic, Eigen::RowMajor>; /**< Templetized matrix type. */
 
     Vector  t; /**< Independent variable (or time) solution vector \f$ \mathbf{t} \f$. */
     MatrixN x; /**< States solution matrix \f$ \mathbf{X} \f$. */
