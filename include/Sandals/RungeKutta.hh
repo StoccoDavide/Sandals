@@ -1346,9 +1346,7 @@ namespace Sandals {
           sol.h.col(step) = this->m_system->h(x_new_step, t_step);
 
           // Callback after the step is completed
-          if (this->m_step_callback) {
-            this->m_step_callback(step, x_new_step, t_step);
-          }
+          if (this->m_step_callback) {this->m_step_callback(step, x_new_step, t_step);}
 
           // Check if the current step is the last one
           if (std::abs(t_step - t_mesh(last)) < SQRT_EPSILON) {break;}
@@ -1432,9 +1430,7 @@ namespace Sandals {
         sol.h.col(step) = this->m_system->h(x_new_step, t_step);
 
         // Callback after the step is completed
-        if (this->m_step_callback) {
-          this->m_step_callback(step, x_new_step, t_step);
-        }
+        if (this->m_step_callback) {this->m_step_callback(step, x_new_step, t_step);}
 
         // Check if the current step is the last one
         if (std::abs(t_step - t_mesh(last)) < SQRT_EPSILON) {break;}

@@ -23,6 +23,11 @@ if(NOT TARGET Optimist::Optimist)
     GIT_TAG        main
   )
 
+  option(OPTIMIST_BUILD_TESTS OFF)
+  option(OPTIMIST_BUILD_BENCHMARKS OFF)
+  option(OPTIMIST_BUILD_EXAMPLES OFF)
+  option(OPTIMIST_ENABLE_PLOTTING OFF)
+
   fetchcontent_makeavailable(Optimist)
 else()
   get_target_property(OPTIMIST_INCLUDE_DIRS
