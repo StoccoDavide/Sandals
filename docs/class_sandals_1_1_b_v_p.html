@@ -1,0 +1,583 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.14.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<!-- BEGIN opengraph metadata -->
+<meta property="og:title" content="Doxygen Awesome" />
+<meta property="og:image" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta property="og:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<meta property="og:url" content="https://jothepro.github.io/doxygen-awesome-css/" />
+<!-- END opengraph metadata -->
+<!-- BEGIN twitter metadata -->
+<meta name="twitter:image:src" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta name="twitter:title" content="Doxygen Awesome" />
+<meta name="twitter:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<!-- END twitter metadata -->
+<title>Sandals: Sandals::BVP&lt; Real, N, M &gt; Class Template Reference</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link rel="icon" type="image/svg+xml" href="logo.png"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+<script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+<script type="text/javascript" src="doxygen-awesome-paragraph-link.js"></script>
+<script type="text/javascript" src="doxygen-awesome-interactive-toc.js"></script>
+<script type="text/javascript" src="doxygen-awesome-tabs.js"></script>
+<script type="text/javascript" src="toggle-alternative-theme.js"></script>
+<script type="text/javascript">
+    DoxygenAwesomeFragmentCopyButton.init()
+    DoxygenAwesomeDarkModeToggle.init()
+    DoxygenAwesomeParagraphLink.init()
+    DoxygenAwesomeInteractiveToc.init()
+    DoxygenAwesomeTabs.init()
+</script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX","output/HTML-CSS"],
+});
+</script>
+<script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="custom.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+<link href="custom-alternative.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- https://tholman.com/github-corners/ -->
+<a href="https://github.com/StoccoDavide/Sandals" class="github-corner" title="View source on GitHub" target="_blank" rel="noopener noreferrer">
+    <svg viewBox="0 0 250 250" width="40" height="40" style="position: absolute; top: 0; border: 0; right: 0; z-index: 99;" aria-hidden="true">
+    <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="logo.svg"/></td>
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">Sandals
+   &#160;<span id="projectnumber">v0.0.0</span>
+   </div>
+   <div id="projectbrief">A C++ library for ODEs/DAEs integration</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.14.0 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+$(function() { codefold.init(); });
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','Search',true);
+  $(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+$(function(){initNavTree('class_sandals_1_1_b_v_p.html','','class_sandals_1_1_b_v_p-members'); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">Sandals::BVP&lt; Real, N, M &gt; Class Template Reference<span class="mlabels"><span class="mlabel abstract">abstract</span></span></div></div>
+</div><!--header-->
+<div class="contents">
+
+<p>Class container for an boundary value problem (<a class="el" href="class_sandals_1_1_b_v_p.html" title="Class container for an boundary value problem (BVP) of ODEs/DAEs.">BVP</a>) of ODEs/DAEs.  
+ <a href="#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_b_v_p_8hh_source.html">BVP.hh</a>&gt;</code></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-types" class="groupheader"><a id="pub-types" name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a6888a4e11281f289dee1e8c905b786f6" id="r_a6888a4e11281f289dee1e8c905b786f6"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6888a4e11281f289dee1e8c905b786f6">VectorF</a> = typename <a class="el" href="class_sandals_1_1_implicit.html">Implicit</a>&lt;Real, N, M&gt;::VectorF</td></tr>
+<tr class="memitem:ab57118c04275f3951939d60d4b657ea7" id="r_ab57118c04275f3951939d60d4b657ea7"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab57118c04275f3951939d60d4b657ea7">Pointer</a> = std::shared_ptr&lt;<a class="el" href="class_sandals_1_1_implicit.html">Implicit</a>&lt;Real, N, M&gt;&gt;</td></tr>
+<tr class="memitem:a0df9b13a3b8b03c4ad8b7f26fa5c8cb0" id="r_a0df9b13a3b8b03c4ad8b7f26fa5c8cb0"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0df9b13a3b8b03c4ad8b7f26fa5c8cb0">NewtonB</a> = Optimist::RootFinder::Newton&lt;Real, N&gt;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a04a19ce60376928c52e71c147b1bf688" id="r_a04a19ce60376928c52e71c147b1bf688"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a04a19ce60376928c52e71c147b1bf688">BVP</a> (std::string t_name)</td></tr>
+<tr class="memitem:aa21ca7e5b82355d4050455aafeb4f50b" id="r_aa21ca7e5b82355d4050455aafeb4f50b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_sandals_1_1_runge_kutta.html">RungeKutta</a>&lt; Real, N, M &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa21ca7e5b82355d4050455aafeb4f50b">rk</a> ()</td></tr>
+<tr class="memitem:ac990faae4a0c6c4c5c3e5f401fa3eb95" id="r_ac990faae4a0c6c4c5c3e5f401fa3eb95"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_sandals_1_1_runge_kutta.html">RungeKutta</a>&lt; Real, N, M &gt; const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac990faae4a0c6c4c5c3e5f401fa3eb95">rk</a> () const</td></tr>
+<tr class="memitem:aa3766e0e8d2b4d44c9b999ea036ac4d4" id="r_aa3766e0e8d2b4d44c9b999ea036ac4d4"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="#a6888a4e11281f289dee1e8c905b786f6">VectorF</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa3766e0e8d2b4d44c9b999ea036ac4d4">b</a> (<a class="el" href="#a6888a4e11281f289dee1e8c905b786f6">VectorF</a> const &amp;x_ini, <a class="el" href="#a6888a4e11281f289dee1e8c905b786f6">VectorF</a> const &amp;x_end) const =0</td></tr>
+<tr class="memitem:a8761339f0434fac21a1c59bc3a1359e1" id="r_a8761339f0434fac21a1c59bc3a1359e1"><td class="memItemLeft" align="right" valign="top">virtual MatrixJF&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8761339f0434fac21a1c59bc3a1359e1">Jb_x_ini</a> (<a class="el" href="#a6888a4e11281f289dee1e8c905b786f6">VectorF</a> const &amp;x_ini, <a class="el" href="#a6888a4e11281f289dee1e8c905b786f6">VectorF</a> const &amp;x_end) const =0</td></tr>
+<tr class="memitem:aefbb228346754d70c42e44682a3688d6" id="r_aefbb228346754d70c42e44682a3688d6"><td class="memItemLeft" align="right" valign="top">virtual MatrixJF&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aefbb228346754d70c42e44682a3688d6">Jb_x_end</a> (<a class="el" href="#a6888a4e11281f289dee1e8c905b786f6">VectorF</a> const &amp;x_ini, <a class="el" href="#a6888a4e11281f289dee1e8c905b786f6">VectorF</a> const &amp;x_end) const =0</td></tr>
+<tr class="memitem:ae029b3a7eeff755869c2cab7d7184611" id="r_ae029b3a7eeff755869c2cab7d7184611"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae029b3a7eeff755869c2cab7d7184611">solve_single_shooting</a> (VectorX const &amp;t_mesh, VectorN const &amp;ics, <a class="el" href="struct_sandals_1_1_solution.html">Solution</a>&lt; Real, N, M &gt; &amp;sol) const</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pri-attribs" class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a0f80007dc2d0e1700b71857b47d44547" id="r_a0f80007dc2d0e1700b71857b47d44547"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a0df9b13a3b8b03c4ad8b7f26fa5c8cb0">NewtonB</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0f80007dc2d0e1700b71857b47d44547">m_newton</a></td></tr>
+<tr class="memitem:a1e2f32e5c66ae3208e9ea3cbcb52969b" id="r_a1e2f32e5c66ae3208e9ea3cbcb52969b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_sandals_1_1_runge_kutta.html">RungeKutta</a>&lt; Real, N, M &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1e2f32e5c66ae3208e9ea3cbcb52969b">m_rk</a></td></tr>
+<tr class="memitem:a8e2efc04eeedc97b1eac4c2eddd6f79e" id="r_a8e2efc04eeedc97b1eac4c2eddd6f79e"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8e2efc04eeedc97b1eac4c2eddd6f79e">m_name</a></td></tr>
+</table>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
+<div class="textblock"><div class="compoundTemplParams">template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt;<br />
+class Sandals::BVP&lt; Real, N, M &gt;</div><p>Class container for an boundary value problem (<a class="el" href="class_sandals_1_1_b_v_p.html" title="Class container for an boundary value problem (BVP) of ODEs/DAEs.">BVP</a>) of ordinary differential equations (ODEs) or differential algebraic equations (DAEs). </p><dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">Real</td><td>The scalar number type. </td></tr>
+    <tr><td class="paramname">N</td><td>The dimension of the implicit ODE/DAE system. </td></tr>
+    <tr><td class="paramname">M</td><td>The dimension of the invariants manifold. </td></tr>
+  </table>
+  </dd>
+</dl>
+</div><a name="doc-typedef-members" id="doc-typedef-members"></a><h2 id="header-doc-typedef-members" class="groupheader">Member Typedef Documentation</h2>
+<a id="a0df9b13a3b8b03c4ad8b7f26fa5c8cb0" name="a0df9b13a3b8b03c4ad8b7f26fa5c8cb0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0df9b13a3b8b03c4ad8b7f26fa5c8cb0">&#9670;&#160;</a></span>NewtonB</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="class_sandals_1_1_b_v_p.html">Sandals::BVP</a>&lt; Real, N, M &gt;::NewtonB = Optimist::RootFinder::Newton&lt;Real, N&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Templetized Newton solver for the boundary conditions. </p>
+
+</div>
+</div>
+<a id="ab57118c04275f3951939d60d4b657ea7" name="ab57118c04275f3951939d60d4b657ea7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab57118c04275f3951939d60d4b657ea7">&#9670;&#160;</a></span>Pointer</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="class_sandals_1_1_b_v_p.html">Sandals::BVP</a>&lt; Real, N, M &gt;::Pointer = std::shared_ptr&lt;<a class="el" href="class_sandals_1_1_implicit.html">Implicit</a>&lt;Real, N, M&gt;&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Shared pointer to an implicit ODE system. </p>
+
+</div>
+</div>
+<a id="a6888a4e11281f289dee1e8c905b786f6" name="a6888a4e11281f289dee1e8c905b786f6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6888a4e11281f289dee1e8c905b786f6">&#9670;&#160;</a></span>VectorF</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="class_sandals_1_1_b_v_p.html">Sandals::BVP</a>&lt; Real, N, M &gt;::VectorF = typename <a class="el" href="class_sandals_1_1_implicit.html">Implicit</a>&lt;Real, N, M&gt;::VectorF</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Templetized vector type. </p>
+
+</div>
+</div>
+<a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a04a19ce60376928c52e71c147b1bf688" name="a04a19ce60376928c52e71c147b1bf688"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a04a19ce60376928c52e71c147b1bf688">&#9670;&#160;</a></span>BVP()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_sandals_1_1_b_v_p.html">Sandals::BVP</a>&lt; Real, N, M &gt;::BVP </td>
+          <td>(</td>
+          <td class="paramtype">std::string</td>          <td class="paramname"><span class="paramname"><em>t_name</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Class constructor for the boundary value problem (<a class="el" href="class_sandals_1_1_b_v_p.html" title="Class container for an boundary value problem (BVP) of ODEs/DAEs.">BVP</a>). </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">t_name</td><td>The name of the <a class="el" href="class_sandals_1_1_b_v_p.html" title="Class container for an boundary value problem (BVP) of ODEs/DAEs.">BVP</a> </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
+<a id="aa3766e0e8d2b4d44c9b999ea036ac4d4" name="aa3766e0e8d2b4d44c9b999ea036ac4d4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa3766e0e8d2b4d44c9b999ea036ac4d4">&#9670;&#160;</a></span>b()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="#a6888a4e11281f289dee1e8c905b786f6">VectorF</a> <a class="el" href="class_sandals_1_1_b_v_p.html">Sandals::BVP</a>&lt; Real, N, M &gt;::b </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#a6888a4e11281f289dee1e8c905b786f6">VectorF</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>x_ini</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="#a6888a4e11281f289dee1e8c905b786f6">VectorF</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>x_end</em></span>&#160;) const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel pure-virtual">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Evaluate the boundary conditions function of the problem  \( \mathbf{b}(\mathbf{x}_{\text{ini}},
+\mathbf{x}_{\text{end}}) \). </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">x_ini</td><td>Initial states \( \mathbf{x}_{\text{ini}} \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">x_end</td><td>Final states \( \mathbf{x}_{\text{end}} \). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The residual of the boundary conditions. </dd></dl>
+
+</div>
+</div>
+<a id="aefbb228346754d70c42e44682a3688d6" name="aefbb228346754d70c42e44682a3688d6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aefbb228346754d70c42e44682a3688d6">&#9670;&#160;</a></span>Jb_x_end()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual MatrixJF <a class="el" href="class_sandals_1_1_b_v_p.html">Sandals::BVP</a>&lt; Real, N, M &gt;::Jb_x_end </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#a6888a4e11281f289dee1e8c905b786f6">VectorF</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>x_ini</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="#a6888a4e11281f289dee1e8c905b786f6">VectorF</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>x_end</em></span>&#160;) const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel pure-virtual">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Evaluate the Jacobian of the boundary conditions function  \( \mathbf{b}(\mathbf{x}_{\text{ini}},
+\mathbf{x}_{\text{end}}) \) with respect to the final states \( \mathbf{x}_{\text{end}} \). </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">x_ini</td><td>Initial states \( \mathbf{x}_{\text{ini}} \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">x_end</td><td>Final states \( \mathbf{x}_{\text{end}} \). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The Jacobian  \( \mathbf{Jb}_{\mathbf{x}_{\text{end}}}(\mathbf{x}_{\text{ini}},
+\mathbf{x}_{\text{end}}) \). </dd></dl>
+
+</div>
+</div>
+<a id="a8761339f0434fac21a1c59bc3a1359e1" name="a8761339f0434fac21a1c59bc3a1359e1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8761339f0434fac21a1c59bc3a1359e1">&#9670;&#160;</a></span>Jb_x_ini()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual MatrixJF <a class="el" href="class_sandals_1_1_b_v_p.html">Sandals::BVP</a>&lt; Real, N, M &gt;::Jb_x_ini </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#a6888a4e11281f289dee1e8c905b786f6">VectorF</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>x_ini</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="#a6888a4e11281f289dee1e8c905b786f6">VectorF</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>x_end</em></span>&#160;) const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel pure-virtual">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Evaluate the Jacobian of the boundary conditions function  \( \mathbf{b}(\mathbf{x}_{\text{ini}},
+\mathbf{x}_{\text{end}}) \) with respect to the initial states \( \mathbf{x}_{\text{ini}} \). </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">x_ini</td><td>Initial states \( \mathbf{x}_{\text{ini}} \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">x_end</td><td>Final states \( \mathbf{x}_{\text{end}} \). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The Jacobian  \( \mathbf{Jb}_{\mathbf{x}_{\text{ini}}}(\mathbf{x}_{\text{ini}},
+\mathbf{x}_{\text{end}}) \). </dd></dl>
+
+</div>
+</div>
+<a id="aa21ca7e5b82355d4050455aafeb4f50b" name="aa21ca7e5b82355d4050455aafeb4f50b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa21ca7e5b82355d4050455aafeb4f50b">&#9670;&#160;</a></span>rk() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_sandals_1_1_runge_kutta.html">RungeKutta</a>&lt; Real, N, M &gt; &amp; <a class="el" href="class_sandals_1_1_b_v_p.html">Sandals::BVP</a>&lt; Real, N, M &gt;::rk </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Get the Runge-Kutta method reference. </p><dl class="section return"><dt>Returns</dt><dd>The Runge-Kutta method reference. </dd></dl>
+
+</div>
+</div>
+<a id="ac990faae4a0c6c4c5c3e5f401fa3eb95" name="ac990faae4a0c6c4c5c3e5f401fa3eb95"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac990faae4a0c6c4c5c3e5f401fa3eb95">&#9670;&#160;</a></span>rk() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_sandals_1_1_runge_kutta.html">RungeKutta</a>&lt; Real, N, M &gt; const  &amp; <a class="el" href="class_sandals_1_1_b_v_p.html">Sandals::BVP</a>&lt; Real, N, M &gt;::rk </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Get the Runge-Kutta method const reference. </p><dl class="section return"><dt>Returns</dt><dd>The Runge-Kutta method const reference. </dd></dl>
+
+</div>
+</div>
+<a id="ae029b3a7eeff755869c2cab7d7184611" name="ae029b3a7eeff755869c2cab7d7184611"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae029b3a7eeff755869c2cab7d7184611">&#9670;&#160;</a></span>solve_single_shooting()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="class_sandals_1_1_b_v_p.html">Sandals::BVP</a>&lt; Real, N, M &gt;::solve_single_shooting </td>
+          <td>(</td>
+          <td class="paramtype">VectorX const &amp;</td>          <td class="paramname"><span class="paramname"><em>t_mesh</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">VectorN const &amp;</td>          <td class="paramname"><span class="paramname"><em>ics</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct_sandals_1_1_solution.html">Solution</a>&lt; Real, N, M &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>sol</em></span>&#160;) const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Solve the boundary value problem (<a class="el" href="class_sandals_1_1_b_v_p.html" title="Class container for an boundary value problem (BVP) of ODEs/DAEs.">BVP</a>) using the Runge-Kutta method uning a single shooting method. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">t_mesh</td><td>Independent variable (or time) mesh \( \mathbf{t} \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ics</td><td>Initial conditions \( \mathbf{x}(t = 0) \). </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">sol</td><td>The solution of the system over the mesh of independent variable. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the system is successfully solved, false otherwise. </dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd>Do not use the solution for internal backtracking, as the step callback may directly modify the solution. </dd></dl>
+
+</div>
+</div>
+<a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Member Data Documentation</h2>
+<a id="a8e2efc04eeedc97b1eac4c2eddd6f79e" name="a8e2efc04eeedc97b1eac4c2eddd6f79e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8e2efc04eeedc97b1eac4c2eddd6f79e">&#9670;&#160;</a></span>m_name</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string <a class="el" href="class_sandals_1_1_b_v_p.html">Sandals::BVP</a>&lt; Real, N, M &gt;::m_name</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Name of the ODE/DAE system. </p>
+
+</div>
+</div>
+<a id="a0f80007dc2d0e1700b71857b47d44547" name="a0f80007dc2d0e1700b71857b47d44547"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0f80007dc2d0e1700b71857b47d44547">&#9670;&#160;</a></span>m_newton</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a0df9b13a3b8b03c4ad8b7f26fa5c8cb0">NewtonB</a> <a class="el" href="class_sandals_1_1_b_v_p.html">Sandals::BVP</a>&lt; Real, N, M &gt;::m_newton</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel mutable">mutable</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Newton solver for the boundary conditions. </p>
+
+</div>
+</div>
+<a id="a1e2f32e5c66ae3208e9ea3cbcb52969b" name="a1e2f32e5c66ae3208e9ea3cbcb52969b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1e2f32e5c66ae3208e9ea3cbcb52969b">&#9670;&#160;</a></span>m_rk</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_sandals_1_1_runge_kutta.html">RungeKutta</a>&lt;Real, N, M&gt; <a class="el" href="class_sandals_1_1_b_v_p.html">Sandals::BVP</a>&lt; Real, N, M &gt;::m_rk</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Runge-Kutta method for the <a class="el" href="class_sandals_1_1_b_v_p.html" title="Class container for an boundary value problem (BVP) of ODEs/DAEs.">BVP</a>. </p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
+<li>include/Sandals/<a class="el" href="_b_v_p_8hh_source.html">BVP.hh</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="namespace_sandals.html">Sandals</a></li><li class="navelem"><a href="class_sandals_1_1_b_v_p.html">BVP</a></li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.14.0 </li>
+  </ul>
+</div>
+</body>
+</html>

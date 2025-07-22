@@ -1,7 +1,9 @@
 var searchData=
 [
-  ['heun2_0',['Heun2',['../class_sandals_1_1_heun2.html',1,'Sandals']]],
-  ['heun2tableau_1',['Heun2Tableau',['../class_sandals_1_1_heun2_tableau.html',1,'Sandals']]],
-  ['heun3_2',['Heun3',['../class_sandals_1_1_heun3.html',1,'Sandals']]],
-  ['heun3tableau_3',['Heun3Tableau',['../class_sandals_1_1_heun3_tableau.html',1,'Sandals']]]
+  ['gausslegendre2_0',['GaussLegendre2',['../class_sandals_1_1_gauss_legendre2.html',1,'Sandals']]],
+  ['gausslegendre2tableau_1',['GaussLegendre2Tableau',['../class_sandals_1_1_gauss_legendre2_tableau.html',1,'Sandals']]],
+  ['gausslegendre4_2',['GaussLegendre4',['../class_sandals_1_1_gauss_legendre4.html',1,'Sandals']]],
+  ['gausslegendre4tableau_3',['GaussLegendre4Tableau',['../class_sandals_1_1_gauss_legendre4_tableau.html',1,'Sandals']]],
+  ['gausslegendre6_4',['GaussLegendre6',['../class_sandals_1_1_gauss_legendre6.html',1,'Sandals']]],
+  ['gausslegendre6tableau_5',['GaussLegendre6Tableau',['../class_sandals_1_1_gauss_legendre6_tableau.html',1,'Sandals']]]
 ];

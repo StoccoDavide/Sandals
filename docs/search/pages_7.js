@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['kutta_20methods_0',['Kutta methods',['../class_sandals_1_1_runge_kutta.html#autotoc_md8',1,'Diagonally implicit Runge-Kutta methods'],['../class_sandals_1_1_runge_kutta.html#autotoc_md2',1,'Explicit Runge-Kutta methods'],['../class_sandals_1_1_runge_kutta.html#autotoc_md5',1,'Implicit Runge-Kutta methods']]],
-  ['kutta_20methods_20and_20butcher_20tableaus_1',['Runge-Kutta methods and Butcher tableaus',['../class_sandals_1_1_runge_kutta.html#autotoc_md0',1,'']]]
+  ['for_20explicit_20dynamic_20systems_0',['for explicit dynamic systems',['../class_sandals_1_1_runge_kutta.html#autotoc_md17',1,'DIRK methods for explicit dynamic systems'],['../class_sandals_1_1_runge_kutta.html#autotoc_md3',1,'ERK methods for explicit dynamic systems'],['../class_sandals_1_1_runge_kutta.html#autotoc_md10',1,'IRK methods for explicit dynamic systems']]],
+  ['for_20implicit_20dynamic_20systems_1',['for implicit dynamic systems',['../class_sandals_1_1_runge_kutta.html#autotoc_md20',1,'DIRK methods for implicit dynamic systems'],['../class_sandals_1_1_runge_kutta.html#autotoc_md6',1,'ERK methods for implicit dynamic systems'],['../class_sandals_1_1_runge_kutta.html#autotoc_md13',1,'IRK methods for implicit dynamic systems']]]
 ];

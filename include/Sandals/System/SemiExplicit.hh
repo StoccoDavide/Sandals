@@ -42,8 +42,6 @@ namespace Sandals {
   class SemiExplicit : public Explicit<Real, N, M>
   {
   public:
-    SANDALS_BASIC_CONSTANTS(Real) /**< Basic constants. */
-
     using Pointer = std::shared_ptr<SemiExplicit<Real, N, M>>; /**< Shared pointer to a semi-explicit ODE/DAE system. */
     using VectorF = typename Explicit<Real, N, M>::VectorF; /**< Templetized vector type. */
     using MatrixJF = typename Explicit<Real, N, M>::MatrixJF; /**< Templetized matrix type. */
@@ -261,16 +259,14 @@ namespace Sandals {
   class SemiExplicitWrapper : public SemiExplicit<Real, N, M>
   {
   public:
-    SANDALS_BASIC_CONSTANTS(Real) /**< Basic constants. */
-
     using Pointer = std::shared_ptr<SemiExplicitWrapper<Real, N, M>>; /**< Shared pointer to a semi-explicit ODE/DAE system. */
-    using VectorF = typename SemiExplicit<Real, N, M>::VectorF; /**< Templetized vector type. */
-    using MatrixA = typename SemiExplicit<Real, N, M>::MatrixA; /**< Templetized matrix type. */
-    using TensorTA = typename SemiExplicit<Real, N, M>::TensorTA; /**< Templetized matrix type. */
-    using VectorB = typename SemiExplicit<Real, N, M>::VectorB; /**< Templetized vector type. */
-    using MatrixJB = typename SemiExplicit<Real, N, M>::MatrixJB; /**< Templetized vector type. */
-    using VectorH = typename SemiExplicit<Real, N, M>::VectorH; /**< Templetized invariants vector type. */
-    using MatrixJH = typename SemiExplicit<Real, N, M>::MatrixJH; /**< Templetized invariants Jacobian type. */
+    using typename SemiExplicit<Real, N, M>::VectorF; /**< Templetized vector type. */
+    using typename SemiExplicit<Real, N, M>::MatrixA; /**< Templetized matrix type. */
+    using typename SemiExplicit<Real, N, M>::TensorTA; /**< Templetized matrix type. */
+    using typename SemiExplicit<Real, N, M>::VectorB; /**< Templetized vector type. */
+    using typename SemiExplicit<Real, N, M>::MatrixJB; /**< Templetized vector type. */
+    using typename SemiExplicit<Real, N, M>::VectorH; /**< Templetized invariants vector type. */
+    using typename SemiExplicit<Real, N, M>::MatrixJH; /**< Templetized invariants Jacobian type. */
     using FunctionA = std::function<MatrixA(VectorF const &, Real const)>; /**< Function type for the mass matrix. */
     using FunctionTA = std::function<TensorTA(VectorF const &, Real const)>; /**< Function type for the mass matrix. */
     using FunctionB = std::function<VectorB(VectorF const &, Real const)>; /**< Function type for the right-hand-side. */

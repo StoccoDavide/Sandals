@@ -1,10 +1,7 @@
 var searchData=
 [
-  ['pointer_0',['Pointer',['../class_sandals_1_1_explicit.html#a1e3f3ba127e9177db2a56811efc38c05',1,'Sandals::Explicit::Pointer'],['../class_sandals_1_1_explicit_wrapper.html#a497860927cef68e96ecc1a2dedec0999',1,'Sandals::ExplicitWrapper::Pointer'],['../class_sandals_1_1_implicit.html#ab8c4bd5c8761169ebd176967c69671d3',1,'Sandals::Implicit::Pointer'],['../class_sandals_1_1_implicit_wrapper.html#ac0e73a3e881b2afb98b35609669da9ad',1,'Sandals::ImplicitWrapper::Pointer'],['../class_sandals_1_1_linear.html#ad00b64c37ffe23632361b73d3d9ad3d7',1,'Sandals::Linear::Pointer'],['../class_sandals_1_1_linear_wrapper.html#ad8af17ecbf34419270a729c670fea669',1,'Sandals::LinearWrapper::Pointer'],['../class_sandals_1_1_semi_explicit.html#a710a8bebd76a68b1d458b403d477623c',1,'Sandals::SemiExplicit::Pointer'],['../class_sandals_1_1_semi_explicit_wrapper.html#a37b2e752c9a54e8fa7611cbc71fb5693',1,'Sandals::SemiExplicitWrapper::Pointer']]],
-  ['problem_1',['Constrained minimization problem',['../class_sandals_1_1_runge_kutta.html#autotoc_md12',1,'']]],
-  ['project_2',['project',['../class_sandals_1_1_runge_kutta.html#afa92d3ea0b4f4a4676581cc2fa74b0e2',1,'Sandals::RungeKutta']]],
-  ['project_5fics_3',['project_ics',['../class_sandals_1_1_runge_kutta.html#abdbc4fac093aa675f556bc73b69df93a',1,'Sandals::RungeKutta']]],
-  ['projection_4',['projection',['../class_sandals_1_1_runge_kutta.html#a00ee9af9c8bb2bc2a665ffbb6490ae69',1,'Sandals::RungeKutta::projection()'],['../class_sandals_1_1_runge_kutta.html#a0c16a91f1afd63cfbf83e0eeda021842',1,'Sandals::RungeKutta::projection(bool t_projection)']]],
-  ['projection_20on_20the_20invariants_20manifold_5',['Projection on the invariants manifold',['../class_sandals_1_1_runge_kutta.html#autotoc_md11',1,'']]],
-  ['projection_5ftolerance_6',['projection_tolerance',['../class_sandals_1_1_runge_kutta.html#a7aef8bc09a1a59028992abc1b7812578',1,'Sandals::RungeKutta::projection_tolerance()'],['../class_sandals_1_1_runge_kutta.html#a4d5bf50167b4d31529bbe6d54c24f63f',1,'Sandals::RungeKutta::projection_tolerance(Real const t_projection_tolerance)']]]
+  ['name_0',['name',['../struct_sandals_1_1_tableau.html#a78e5e2029e172c92a9e8c1548ee44b8d',1,'Sandals::Tableau::name'],['../class_sandals_1_1_runge_kutta.html#a719fdcc801d0f0827bc471dc58e0c620',1,'Sandals::RungeKutta::name()'],['../class_sandals_1_1_implicit.html#a5232c52bbb412d6e5c812501c6701836',1,'Sandals::Implicit::name()'],['../class_sandals_1_1_implicit.html#a0124e2da7f3fd20ae2b3b6c598642601',1,'Sandals::Implicit::name() const']]],
+  ['newtonb_1',['NewtonB',['../class_sandals_1_1_b_v_p.html#a0df9b13a3b8b03c4ad8b7f26fa5c8cb0',1,'Sandals::BVP']]],
+  ['newtonk_2',['NewtonK',['../class_sandals_1_1_runge_kutta.html#af759b115312eeb7dd27de038b9a0fcbd',1,'Sandals::RungeKutta']]],
+  ['newtonx_3',['NewtonX',['../class_sandals_1_1_runge_kutta.html#aaa55ec543347d9495cc35a60c0c4bf36',1,'Sandals::RungeKutta']]]
 ];

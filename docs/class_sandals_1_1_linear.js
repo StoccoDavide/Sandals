@@ -17,6 +17,5 @@ var class_sandals_1_1_linear =
     [ "JF_x", "class_sandals_1_1_linear.html#aeb4c3abad74c424fdf49d069f228cc46", null ],
     [ "Jf_x", "class_sandals_1_1_linear.html#ae15707871b1ca0ec564de5c7d9f6e909", null ],
     [ "JF_x_dot", "class_sandals_1_1_linear.html#a6bdc1acf7b8d96310c9516b8dde690de", null ],
-    [ "m_lu", "class_sandals_1_1_linear.html#a417a63840b2e1d9b74c0fc922c00d28e", null ],
-    [ "SQRT_EPSILON", "class_sandals_1_1_linear.html#ada10f98d196c1be34de3a2bc86c51a91", null ]
+    [ "m_lu", "class_sandals_1_1_linear.html#a417a63840b2e1d9b74c0fc922c00d28e", null ]
 ];

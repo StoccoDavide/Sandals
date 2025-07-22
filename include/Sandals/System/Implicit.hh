@@ -41,8 +41,6 @@ namespace Sandals
   class Implicit
   {
   public:
-    SANDALS_BASIC_CONSTANTS(Real) /**< Basic constants. */
-
     using Type = enum class Type : Integer {IMPLICIT = 0, EXPLICIT = 1, SEMIEXPLICIT = 1}; /**< System type enumeration. */
     using Pointer = std::shared_ptr<Implicit<Real, N, M>>; /**< Shared pointer to an implicit ODE system. */
     using VectorF = Eigen::Vector<Real, N>; /**< Templetized vector type. */
@@ -269,13 +267,11 @@ namespace Sandals
   class ImplicitWrapper : public Implicit<Real, N, M>
   {
   public:
-    SANDALS_BASIC_CONSTANTS(Real) /**< Basic constants. */
-
     using Pointer = std::shared_ptr<ImplicitWrapper<Real, N, M>>; /**< Shared pointer to an implicit ODE system. */
-    using VectorF = typename Implicit<Real, N, M>::VectorF; /**< Templetized vector type. */
-    using MatrixJF = typename Implicit<Real, N, M>::MatrixJF; /**< Templetized matrix type. */
-    using VectorH = typename Implicit<Real, N, M>::VectorH; /**< Templetized vector type. */
-    using MatrixJH = typename Implicit<Real, N, M>::MatrixJH; /**< Templetized matrix type. */
+    using typename Implicit<Real, N, M>::VectorF; /**< Templetized vector type. */
+    using typename Implicit<Real, N, M>::MatrixJF; /**< Templetized matrix type. */
+    using typename Implicit<Real, N, M>::VectorH; /**< Templetized vector type. */
+    using typename Implicit<Real, N, M>::MatrixJH; /**< Templetized matrix type. */
     using FunctionF = std::function<VectorF(VectorF const &, VectorF const &, Real const)>; /**< Implicit ODE system function type. */
     using FunctionJF = std::function<MatrixJF(VectorF const &, VectorF const &, Real const)>; /**< Jacobian of the ODE system function function type. */
     using FunctionH = std::function<VectorH(VectorF const &, Real const)>; /**< Invariants function type. */

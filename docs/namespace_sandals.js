@@ -1,5 +1,6 @@
 var namespace_sandals =
 [
+    [ "BVP", "class_sandals_1_1_b_v_p.html", "class_sandals_1_1_b_v_p" ],
     [ "Chebyshev51", "class_sandals_1_1_chebyshev51.html", "class_sandals_1_1_chebyshev51" ],
     [ "Chebyshev51Tableau", "class_sandals_1_1_chebyshev51_tableau.html", "class_sandals_1_1_chebyshev51_tableau" ],
     [ "Explicit", "class_sandals_1_1_explicit.html", "class_sandals_1_1_explicit" ],
@@ -22,6 +23,7 @@ var namespace_sandals =
     [ "ImplicitEuler", "class_sandals_1_1_implicit_euler.html", "class_sandals_1_1_implicit_euler" ],
     [ "ImplicitEulerTableau", "class_sandals_1_1_implicit_euler_tableau.html", "class_sandals_1_1_implicit_euler_tableau" ],
     [ "ImplicitWrapper", "class_sandals_1_1_implicit_wrapper.html", "class_sandals_1_1_implicit_wrapper" ],
+    [ "IVP", "class_sandals_1_1_i_v_p.html", "class_sandals_1_1_i_v_p" ],
     [ "Linear", "class_sandals_1_1_linear.html", "class_sandals_1_1_linear" ],
     [ "LinearWrapper", "class_sandals_1_1_linear_wrapper.html", "class_sandals_1_1_linear_wrapper" ],
     [ "LobattoIIIA2", "class_sandals_1_1_lobatto_i_i_i_a2.html", "class_sandals_1_1_lobatto_i_i_i_a2" ],

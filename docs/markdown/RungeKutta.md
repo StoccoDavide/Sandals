@@ -36,14 +36,89 @@ and by unrolling the stages, we obtain
 \f[
   \begin{array}{l}
     \begin{cases}
-      \mathbf{K}_1 = h_k mathbf{f} \left(\mathbf{x}_k, t_k\right) \\
+      \mathbf{K}_1 = h_k \mathbf{f} \left(\mathbf{x}_k, t_k\right) \\
       \mathbf{K}_2 = h_k \mathbf{f} \left(\mathbf{x}_k + a_{21} \mathbf{K}_1, t_k + h_k c_2\right) \\
+      \mathbf{K}_3 = h_k \mathbf{f} \left(\mathbf{x}_k + a_{31} \mathbf{K}_1 + a_{32} \mathbf{K}_2, t_k + h_k c_3\right) \\[-0.5em]
       \vdots \\[-0.5em]
       \mathbf{K}_s = h_k \mathbf{f} \left(\mathbf{x}_k + \displaystyle\sum_{j=1}^{s-1} a_{sj} \mathbf{K}_j, t_k + h_k c_s\right)
     \end{cases} \\
     \mathbf{x}_{k+1} = \mathbf{x}_k + h_k \displaystyle\sum_{i=1}^s b_i \mathbf{K}_i
   \end{array} \text{.}
 \f]
+In matrix form, this can be expressed as
+\f[
+  \begin{bmatrix}
+    \mathbf{I} & \mathbf{0} & \cdots & \cdots & \mathbf{0} \\
+    a_{21} & \mathbf{I} & \ddots & \mathbf{0} & \vdots \\
+    a_{31} & a_{32} & \mathbf{I} & \ddots & \vdots \\
+    \vdots & \vdots & \ddots & \ddots & \mathbf{0} \\
+    a_{s1} & a_{s2} & \cdots & a_{s,s-1} & \mathbf{I}
+  \end{bmatrix}
+  \begin{bmatrix}
+    \mathbf{K}_1 \\
+    \mathbf{K}_2 \\
+    \mathbf{K}_3 \\
+    \vdots \\
+    \mathbf{K}_s
+  \end{bmatrix} =
+  h_k
+  \begin{bmatrix}
+    \mathbf{f} \left(\mathbf{x}_k, t_k\right) \\
+    \mathbf{f} \left(\mathbf{x}_k + a_{21} \mathbf{K}_1, t_k + h_k c_2\right) \\
+    \mathbf{f} \left(\mathbf{x}_k + a_{31} \mathbf{K}_1 + a_{32} \mathbf{K}_2, t_k + h_k c_3\right) \\
+    \vdots \\
+    \mathbf{f} \left(\mathbf{x}_k + \displaystyle\sum_{j=1}^{s-1} a_{sj} \mathbf{K}_j, t_k + h_k c_s\right)
+  \end{bmatrix} \text{.}
+\f]
+
+#### Derivatives of \f$\mathbf{K}\f$ with respect to \f$\mathbf{x}_k\f$
+
+For explicit systems, the derivatives of the intermediate variables \f$\mathbf{K}\f$ with respect to the states \f$\mathbf{x}\f$ can be computed by the differentiation of the stage equations, which yields
+\f[
+  \begin{array}{l}
+    \begin{cases}
+      \displaystyle\frac{\partial\mathbf{K}_1}{\partial\mathbf{x}_k} = h_k \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}(\mathbf{x}_k, t_k) \\
+      \displaystyle\frac{\partial\mathbf{K}_2}{\partial\mathbf{x}_k} = h_k \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\mathbf{x}_k + a_{21} \mathbf{K}_1, t_k + h_k c_2\right) \left(\mathbf{I} + a_{21} \displaystyle\frac{\partial\mathbf{K}_1}{\partial\mathbf{x}_k}\right) \\
+      \displaystyle\frac{\partial\mathbf{K}_3}{\partial\mathbf{x}_k} = h_k \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\mathbf{x}_k + a_{31} \mathbf{K}_1 + a_{32} \mathbf{K}_2, t_k + h_k c_3\right) \left(\mathbf{I} + a_{31} \displaystyle\frac{\partial\mathbf{K}_1}{\partial\mathbf{x}_k} + a_{32} \displaystyle\frac{\partial\mathbf{K}_2}{\partial\mathbf{x}_k}\right) \\[-0.5em]
+      \vdots \\[-0.5em]
+      \displaystyle\frac{\partial\mathbf{K}_s}{\partial\mathbf{x}_k} = h_k \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\mathbf{x}_k + \displaystyle\sum_{j=1}^{s-1} a_{sj} \mathbf{K}_j, t_k + h_k c_s\right) \left(\mathbf{I} + \displaystyle\sum_{j=1}^{s-1} a_{sj} \displaystyle\frac{\partial\mathbf{K}_j}{\partial\mathbf{x}_k}\right)
+    \end{cases}
+  \end{array} \text{.}
+\f]
+In matrix form, this can be expressed as
+\f[
+  \begin{bmatrix}
+    \mathbf{I} & \mathbf{0} & \cdots & \cdots & \mathbf{0} \\
+    -h_k a_{21} \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\cdot\right) & \mathbf{I} & \ddots & \mathbf{0} & \vdots \\
+    -h_k a_{31} \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\cdot\right) & -h_k a_{32} \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\cdot\right) & \mathbf{I} & \ddots & \vdots \\
+    \vdots & \vdots & \ddots & \ddots & \mathbf{0} \\
+    -h_k a_{s1} \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\cdot\right) & -h_k a_{s2} \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\cdot\right) & \cdots & -h_k a_{s,s-1} \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\cdot\right) & \mathbf{I}
+  \end{bmatrix}
+  \begin{bmatrix}
+    \displaystyle\frac{\partial\mathbf{K}_1}{\partial\mathbf{x}_k} \\
+    \displaystyle\frac{\partial\mathbf{K}_2}{\partial\mathbf{x}_k} \\
+    \displaystyle\frac{\partial\mathbf{K}_3}{\partial\mathbf{x}_k} \\
+    \vdots \\
+    \displaystyle\frac{\partial\mathbf{K}_s}{\partial\mathbf{x}_k}
+  \end{bmatrix} =
+  h_k
+  \begin{bmatrix}
+    \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}(\mathbf{x}_k, t_k) \\
+    \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\mathbf{x}_k + a_{21} \mathbf{K}_1, t_k + h_k c_2\right) \\
+    \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\mathbf{x}_k + a_{31} \mathbf{K}_1 + a_{32} \mathbf{K}_2, t_k + h_k c_3\right) \\
+    \vdots\\
+    \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\mathbf{x}_k + \displaystyle\sum_{j=1}^{s-1} a_{sj} \mathbf{K}_j, t_k + h_k c_s\right)
+  \end{bmatrix} \text{.}
+\f]
+
+#### Derivatives of \f$\mathbf{x}_{k+1}\f$ with respect to \f$\mathbf{x}_k\f$
+
+The derivatives of the next state \f$\mathbf{x}_{k+1}\f$ with respect to the states \f$\mathbf{x}\f$ can be computed as
+\f[
+  \displaystyle\frac{\partial\mathbf{x}_{k+1}}{\partial\mathbf{x}_k} =
+  \mathbf{I} + h_k \displaystyle\sum_{i=1}^s b_i \frac{\partial\mathbf{K}_i}{\partial\mathbf{x}_k} \text{.}
+\f]
+where the derivatives of the intermediate variables \f$\mathbf{K}_i\f$ with respect to the states \f$\mathbf{x}_k\f$ are computed as described above.
 
 ### ERK methods for implicit dynamic systems
 
@@ -58,8 +133,9 @@ Here, the \f$s\f$-stage system of equations \f$\mathbf{F}_i\f$ forms a lower tri
 \f[
   \begin{array}{l}
     \begin{cases}
-      \mathbf{F}_1 \left(\mathbf{x}_k, \mathbf{K}_1, t_k + h_k c_1\right) = \mathbf{0} \\
+      \mathbf{F}_1 \left(\mathbf{x}_k, \displaystyle\frac{\mathbf{K}_1}{h_k}, t_k + h_k c_1\right) = \mathbf{0} \\
       \mathbf{F}_2 \left(\mathbf{x}_k + a_{21} \mathbf{K}_1, \displaystyle\frac{\mathbf{K}_2}{h_k}, t_k + h_k c_2\right) = \mathbf{0} \\
+      \mathbf{F}_3 \left(\mathbf{x}_k + a_{31} \mathbf{K}_1 + a_{32} \mathbf{K}_2, \displaystyle\frac{\mathbf{K}_3}{h_k}, t_k + h_k c_3\right) = \mathbf{0} \\[-0.5em]
       \vdots \\[-0.5em]
       \mathbf{F}_s \left(\mathbf{x}_k + \displaystyle\sum_{j=1}^{s-1} a_{sj} \mathbf{K}_j, \displaystyle\frac{\mathbf{K}_s}{h_k}, t_k + h_k c_s\right) = \mathbf{0}
     \end{cases} \\
@@ -67,6 +143,50 @@ Here, the \f$s\f$-stage system of equations \f$\mathbf{F}_i\f$ forms a lower tri
   \end{array} \text{.}
 \f]
 Notice that the intermediate variables \f$\mathbf{K}_i\f$ are typically computed using Newton's method.
+
+#### Derivatives of \f$\mathbf{K}\f$ with respect to \f$\mathbf{x}_k\f$
+
+For implicit systems, the derivatives of the intermediate variables \f$\mathbf{K}\f$ with respect to the states \f$\mathbf{x}_k\f$ can be computed by differentiating the stage equations, which yields
+\f[
+  \begin{array}{l}
+    \begin{cases}
+      \displaystyle\frac{\partial\mathbf{F}_1}{\partial\mathbf{x}_k}\left(\mathbf{x}_k, \displaystyle\frac{\mathbf{K}_1}{h_k}, t_k + h_k c_1\right) + \frac{1}{h_k} \displaystyle\frac{\partial\mathbf{F}_1}{\partial\mathbf{K}_1}\left(\mathbf{x}_k, \displaystyle\frac{\mathbf{K}_1}{h_k}, t_k + h_k c_1\right) \displaystyle\frac{\partial\mathbf{K}_1}{\partial\mathbf{x}_k} = \mathbf{0} \\
+      \displaystyle\frac{\partial\mathbf{F}_2}{\partial\mathbf{x}_k}\left(\mathbf{x}_k + a_{21} \mathbf{K}_1, \displaystyle\frac{\mathbf{K}_2}{h_k}, t_k + h_k c_2\right) \left(\mathbf{I} + a_{21} \displaystyle\frac{\partial\mathbf{K}_1}{\partial\mathbf{x}_k}\right) + \frac{1}{h_k} \displaystyle\frac{\partial\mathbf{F}_2}{\partial\mathbf{K}_2}\left(\mathbf{x}_k + a_{21} \mathbf{K}_1, \displaystyle\frac{\mathbf{K}_2}{h_k}, t_k + h_k c_2\right) \displaystyle\frac{\partial\mathbf{K}_2}{\partial\mathbf{x}_k} = \mathbf{0} \\
+      \displaystyle\frac{\partial\mathbf{F}_3}{\partial\mathbf{x}_k}\left(\mathbf{x}_k + a_{31} \mathbf{K}_1 + a_{32} \mathbf{K}_2, \displaystyle\frac{\mathbf{K}_3}{h_k}, t_k + h_k c_3\right) \left(\mathbf{I} + a_{31} \displaystyle\frac{\partial\mathbf{K}_1}{\partial\mathbf{x}_k} + a_{32} \displaystyle\frac{\partial\mathbf{K}_2}{\partial\mathbf{x}_k}\right) + \frac{1}{h_k} \displaystyle\frac{\partial\mathbf{F}_3}{\partial\mathbf{K}_3}\left(\mathbf{x}_k + a_{31} \mathbf{K}_1 + a_{32} \mathbf{K}_2, \displaystyle\frac{\mathbf{K}_3}{h_k}, t_k + h_k c_3\right) \displaystyle\frac{\partial\mathbf{K}_3}{\partial\mathbf{x}_k} = \mathbf{0} \\[-0.5em]
+      \vdots \\[-0.5em]
+      \displaystyle\frac{\partial\mathbf{F}_s}{\partial\mathbf{x}_k}\left(\mathbf{x}_k + \displaystyle\sum_{j=1}^{s-1} a_{sj} \mathbf{K}_j, \displaystyle\frac{\mathbf{K}_s}{h_k}, t_k + h_k c_s\right) \left(\mathbf{I} + \displaystyle\sum_{j=1}^{s-1} a_{sj} \displaystyle\frac{\partial\mathbf{K}_j}{\partial\mathbf{x}_k}\right) + \frac{1}{h_k} \displaystyle\frac{\partial\mathbf{F}_s}{\partial\mathbf{K}_s}\left(\mathbf{x}_k + \displaystyle\sum_{j=1}^{s-1} a_{sj} \mathbf{K}_j, \displaystyle\frac{\mathbf{K}_s}{h_k}, t_k + h_k c_s\right) \displaystyle\frac{\partial\mathbf{K}_s}{\partial\mathbf{x}_k} = \mathbf{0}
+    \end{cases}
+  \end{array} \text{.}
+\f]
+In matrix form, this can be expressed as
+\f[
+  \begin{bmatrix}
+    \displaystyle\frac{\partial\mathbf{F}_1}{\partial\mathbf{K}_1}\left(\cdot\right) & \mathbf{0} & \cdots & \cdots & \mathbf{0} \\
+    h_k a_{21} \displaystyle\frac{\partial\mathbf{F}_2}{\partial\mathbf{x}_k}\left(\cdot\right) & \displaystyle\frac{\partial\mathbf{F}_2}{\partial\mathbf{K}_2}\left(\cdot\right) & \ddots & \mathbf{0} & \vdots \\
+    h_k a_{31} \displaystyle\frac{\partial\mathbf{F}_3}{\partial\mathbf{x}_k}\left(\cdot\right) & h_k a_{32} \displaystyle\frac{\partial\mathbf{F}_3}{\partial\mathbf{x}_k}\left(\cdot\right) & \displaystyle\frac{\partial\mathbf{F}_3}{\partial\mathbf{K}_3}\left(\cdot\right) & \ddots & \vdots \\
+    \vdots & \vdots & \ddots & \ddots & \mathbf{0} \\
+    h_k a_{s1} \displaystyle\frac{\partial\mathbf{F}_s}{\partial\mathbf{x}_k}\left(\cdot\right) & h_k a_{s2} \displaystyle\frac{\partial\mathbf{F}_s}{\partial\mathbf{x}_k}\left(\cdot\right) & \cdots & h_k a_{s,s-1} \displaystyle\frac{\partial\mathbf{F}_s}{\partial\mathbf{x}_k}\left(\cdot\right) & \displaystyle\frac{\partial\mathbf{F}_s}{\partial\mathbf{K}_s}\left(\cdot\right)
+  \end{bmatrix}
+  \begin{bmatrix}
+    \displaystyle\frac{\partial\mathbf{K}_1}{\partial\mathbf{x}_k} \\
+    \displaystyle\frac{\partial\mathbf{K}_2}{\partial\mathbf{x}_k} \\
+    \displaystyle\frac{\partial\mathbf{K}_3}{\partial\mathbf{x}_k} \\
+    \vdots \\
+    \displaystyle\frac{\partial\mathbf{K}_s}{\partial\mathbf{x}_k}
+  \end{bmatrix} =
+  -h_k
+  \begin{bmatrix}
+    \displaystyle\frac{\partial\mathbf{F}_1}{\partial\mathbf{x}_k}\left(\mathbf{x}_k, \displaystyle\frac{\mathbf{K}_1}{h_k}, t_k + h_k c_1\right) \\
+    \displaystyle\frac{\partial\mathbf{F}_2}{\partial\mathbf{x}_k}\left(\mathbf{x}_k + a_{21} \mathbf{K}_1, \displaystyle\frac{\mathbf{K}_2}{h_k}, t_k + h_k c_2\right) \\
+    \displaystyle\frac{\partial\mathbf{F}_3}{\partial\mathbf{x}_k}\left(\mathbf{x}_k + a_{31} \mathbf{K}_1 + a_{32} \mathbf{K}_2, \displaystyle\frac{\mathbf{K}_3}{h_k}, t_k + h_k c_3\right) \\
+    \vdots\\
+    \displaystyle\frac{\partial\mathbf{F}_s}{\partial\mathbf{x}_k}\left(\mathbf{x}_k + \displaystyle\sum_{j=1}^{s-1} a_{sj} \mathbf{K}_j, \displaystyle\frac{\mathbf{K}_s}{h_k}, t_k + h_k c_s\right)
+  \end{bmatrix} \text{.}
+\f]
+
+#### Derivatives of \f$\mathbf{x}_{k+1}\f$ with respect to \f$\mathbf{x}_k\f$
+
+> **NOTE:** The derivatives of the next state \f$\mathbf{x}_{k+1}\f$ with respect to the states \f$\mathbf{x}_k\f$ can be computed as previously described for explicit systems, as the structure of the ERK method remains the same.
 
 ## Implicit Runge-Kutta methods
 
@@ -86,13 +206,63 @@ Unrolling the stages gives
   \begin{array}{l}
     \begin{cases}
       \mathbf{K}_1 = h_k \mathbf{f} \left(\mathbf{x}_k + \displaystyle\sum_{j=1}^{s} a_{1j} \mathbf{K}_j, t_k + h_k c_1\right) \\
-      \mathbf{K}_2 = h_k \mathbf{f} \left(\mathbf{x}_k + \displaystyle\sum_{j=1}^{s} a_{2j} \mathbf{K}_j, t_k + h_k c_2\right) \\[-0.5em]
+      \mathbf{K}_2 = h_k \mathbf{f} \left(\mathbf{x}_k + \displaystyle\sum_{j=1}^{s} a_{2j} \mathbf{K}_j, t_k + h_k c_2\right) \\
+      \mathbf{K}_3 = h_k \mathbf{f} \left(\mathbf{x}_k + \displaystyle\sum_{j=1}^{s} a_{3j} \mathbf{K}_j, t_k + h_k c_3\right) \\[-0.5em]
       \vdots \\[-0.5em]
       \mathbf{K}_s = h_k \mathbf{f} \left(\mathbf{x}_k + \displaystyle\sum_{j=1}^{s} a_{sj} \mathbf{K}_j, t_k + h_k c_s\right)
     \end{cases} \\
     \mathbf{x}_{k+1} = \mathbf{x}_k + h_k \displaystyle\sum_{i=1}^s b_i \mathbf{K}_i
   \end{array} \text{.}
 \f]
+
+#### Derivatives of \f$\mathbf{K}\f$ with respect to \f$\mathbf{x}_k\f$
+
+For explicit systems, the derivatives of the intermediate variables \f$\mathbf{K}\f$ with respect to the states \f$\mathbf{x}_k\f$ can be computed by differentiating the stage equations, which yields
+\f[
+  \begin{array}{l}
+    \begin{cases}
+      \displaystyle\frac{\partial\mathbf{K}_1}{\partial\mathbf{x}_k} = h_k \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\mathbf{x}_k + \displaystyle\sum_{j=1}^{s} a_{1j} \mathbf{K}_j, t_k + h_k c_1\right) \left(\mathbf{I} + \displaystyle\sum_{j=1}^{s} a_{1j} \displaystyle\frac{\partial\mathbf{K}_j}{\partial\mathbf{x}_k}\right) \\
+      \displaystyle\frac{\partial\mathbf{K}_2}{\partial\mathbf{x}_k} = h_k \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\mathbf{x}_k + \displaystyle\sum_{j=1}^{s} a_{2j} \mathbf{K}_j, t_k + h_k c_2\right) \left(\mathbf{I} + \displaystyle\sum_{j=1}^{s} a_{2j} \displaystyle\frac{\partial\mathbf{K}_j}{\partial\mathbf{x}_k}\right) \\
+      \displaystyle\frac{\partial\mathbf{K}_3}{\partial\mathbf{x}_k} = h_k \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\mathbf{x}_k + \displaystyle\sum_{j=1}^{s} a_{3j} \mathbf{K}_j, t_k + h_k c_3\right) \left(\mathbf{I} + \displaystyle\sum_{j=1}^{s} a_{3j} \displaystyle\frac{\partial\mathbf{K}_j}{\partial\mathbf{x}_k}\right) \\[-0.5em]
+      \vdots \\[-0.5em]
+      \displaystyle\frac{\partial\mathbf{K}_s}{\partial\mathbf{x}_k} = h_k \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\mathbf{x}_k + \displaystyle\sum_{j=1}^{s} a_{sj} \mathbf{K}_j, t_k + h_k c_s\right) \left(\mathbf{I} + \displaystyle\sum_{j=1}^{s} a_{sj} \displaystyle\frac{\partial\mathbf{K}_j}{\partial\mathbf{x}_k}\right)
+    \end{cases}
+  \end{array} \text{.}
+\f]
+In matrix form, this can be expressed as
+\f[
+  \begin{bmatrix}
+    \mathbf{I} - h_k a_{11} \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\cdot\right) & -h_k a_{12} \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\cdot\right) & -h_k a_{13} \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\cdot\right) & \cdots & -h_k a_{1s} \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\cdot\right) \\
+    -h_k a_{21} \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\cdot\right) & \mathbf{I} - h_k a_{22} \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\cdot\right) & -h_k a_{23} \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\cdot\right) & \cdots & \vdots \\
+    -h_k a_{31} \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\cdot\right) & -h_k a_{32} \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\cdot\right) & \mathbf{I} - h_k a_{33} \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\cdot\right) & \ddots & \vdots \\
+    \vdots & \vdots & \ddots & \ddots & -h_k a_{s,s-1} \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\cdot\right) \\
+    -h_k a_{s1} \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\cdot\right) & -h_k a_{s2} \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\cdot\right) & \cdots & -h_k a_{s,s-1} \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\cdot\right) & \mathbf{I} - h_k a_{ss} \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\cdot\right)
+  \end{bmatrix}
+  \begin{bmatrix}
+    \displaystyle\frac{\partial\mathbf{K}_1}{\partial\mathbf{x}_k} \\
+    \displaystyle\frac{\partial\mathbf{K}_2}{\partial\mathbf{x}_k} \\
+    \displaystyle\frac{\partial\mathbf{K}_3}{\partial\mathbf{x}_k} \\
+    \vdots \\
+    \displaystyle\frac{\partial\mathbf{K}_s}{\partial\mathbf{x}_k}
+  \end{bmatrix} =
+  h_k
+  \begin{bmatrix}
+  \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\mathbf{x}_k + \displaystyle\sum_{j=1}^{s} a_{1j} \mathbf{K}_j, t_k + h_k c_1\right) \\
+  \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\mathbf{x}_k + \displaystyle\sum_{j=1}^{s} a_{2j} \mathbf{K}_j, t_k + h_k c_2\right) \\
+  \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\mathbf{x}_k + \displaystyle\sum_{j=1}^{s} a_{3j} \mathbf{K}_j, t_k + h_k c_3\right) \\
+  \vdots \\
+  \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\mathbf{x}_k + \displaystyle\sum_{j=1}^{s} a_{sj} \mathbf{K}_j, t_k + h_k c_s\right)
+  \end{bmatrix} \text{.}
+\f]
+
+#### Derivatives of \f$\mathbf{x}_{k+1}\f$ with respect to \f$\mathbf{x}_k\f$
+
+The derivatives of the next state \f$\mathbf{x}_{k+1}\f$ with respect to the states \f$\mathbf{x}\f$ can be computed as
+\f[
+  \displaystyle\frac{\partial\mathbf{x}_{k+1}}{\partial\mathbf{x}_k} =
+  \mathbf{I} + h_k \displaystyle\sum_{i=1}^s b_i \frac{\partial\mathbf{K}_i}{\partial\mathbf{x}_k} \text{.}
+\f]
+where the derivatives of the intermediate variables \f$\mathbf{K}_i\f$ with respect to the states \f$\mathbf{x}_k\f$ are computed as described above.
 
 ### IRK methods for implicit dynamic systems
 
@@ -108,7 +278,8 @@ Unrolling the stages, we have
   \begin{array}{l}
     \begin{cases}
       \mathbf{F}_1 \left(\mathbf{x}_k + \displaystyle\sum_{j=1}^{s} a_{1j} \mathbf{K}_j, \displaystyle\frac{\mathbf{K}_1}{h_k}, t_k + h_k c_1\right) = \mathbf{0} \\
-      \mathbf{F}_2 \left(\mathbf{x}_k + \displaystyle\sum_{j=1}^{s} a_{2j} \mathbf{K}_j, \displaystyle\frac{\mathbf{K}_2}{h_k}, t_k + h_k c_2\right) = \mathbf{0} \\[-0.5em]
+      \mathbf{F}_2 \left(\mathbf{x}_k + \displaystyle\sum_{j=1}^{s} a_{2j} \mathbf{K}_j, \displaystyle\frac{\mathbf{K}_2}{h_k}, t_k + h_k c_2\right) = \mathbf{0} \\
+      \mathbf{F}_3 \left(\mathbf{x}_k + \displaystyle\sum_{j=1}^{s} a_{3j} \mathbf{K}_j, \displaystyle\frac{\mathbf{K}_3}{h_k}, t_k + h_k c_3\right) = \mathbf{0} \\[-0.5em]
       \vdots \\[-0.5em]
       \mathbf{F}_s \left(\mathbf{x}_k + \displaystyle\sum_{j=1}^{s} a_{sj} \mathbf{K}_j, \displaystyle\frac{\mathbf{K}_s}{h_k}, t_k + h_k c_s\right) = \mathbf{0}
     \end{cases} \\
@@ -117,6 +288,50 @@ Unrolling the stages, we have
 \f]
 
 > **NOTE:** In `Sandals`, the implementation of IRK methods is unified for both explicit and implicit dynamical systems. IRK methods inherently require solving nonlinear systems, irrespective of the system's form. Creating a specialized version for explicit systems would not yield significant computational advantages, as the complexity of solving the nonlinear system remains. Consequently, only the IRK method for implicit dynamical systems is implemented.
+
+#### Derivatives of \f$\mathbf{K}\f$ with respect to \f$\mathbf{x}_k\f$
+
+For implicit systems, the derivatives of the intermediate variables \f$\mathbf{K}\f$ with respect to the states \f$\mathbf{x}_k\f$ can be computed by differentiating the stage equations, which yields
+\f[
+  \begin{array}{l}
+    \begin{cases}
+      \displaystyle\frac{\partial\mathbf{F}_1}{\partial\mathbf{x}_k}\left(\mathbf{x}_k + \displaystyle\sum_{j=1}^{s} a_{1j} \mathbf{K}_j, \displaystyle\frac{\mathbf{K}_1}{h_k}, t_k + h_k c_1\right) \left(\mathbf{I} + \displaystyle\sum_{j=1}^{s} a_{1j} \displaystyle\frac{\partial\mathbf{K}_j}{\partial\mathbf{x}_k}\right) + \frac{1}{h_k} \displaystyle\frac{\partial\mathbf{F}_1}{\partial\mathbf{K}_1}\left(\mathbf{x}_k + \displaystyle\sum_{j=1}^{s} a_{1j} \mathbf{K}_j, \displaystyle\frac{\mathbf{K}_1}{h_k}, t_k + h_k c_1\right) \displaystyle\frac{\partial\mathbf{K}_1}{\partial\mathbf{x}_k} = \mathbf{0} \\
+      \displaystyle\frac{\partial\mathbf{F}_2}{\partial\mathbf{x}_k}\left(\mathbf{x}_k + \displaystyle\sum_{j=1}^{s} a_{2j} \mathbf{K}_j, \displaystyle\frac{\mathbf{K}_2}{h_k}, t_k + h_k c_2\right) \left(\mathbf{I} + \displaystyle\sum_{j=1}^{s} a_{2j} \displaystyle\frac{\partial\mathbf{K}_j}{\partial\mathbf{x}_k}\right) + \frac{1}{h_k} \displaystyle\frac{\partial\mathbf{F}_2}{\partial\mathbf{K}_2}\left(\mathbf{x}_k + \displaystyle\sum_{j=1}^{s} a_{2j} \mathbf{K}_j, \displaystyle\frac{\mathbf{K}_2}{h_k}, t_k + h_k c_2\right) \displaystyle\frac{\partial\mathbf{K}_2}{\partial\mathbf{x}_k} = \mathbf{0} \\
+      \displaystyle\frac{\partial\mathbf{F}_3}{\partial\mathbf{x}_k}\left(\mathbf{x}_k + \displaystyle\sum_{j=1}^{s} a_{3j} \mathbf{K}_j, \displaystyle\frac{\mathbf{K}_3}{h_k}, t_k + h_k c_3\right) \left(\mathbf{I} + \displaystyle\sum_{j=1}^{s} a_{3j} \displaystyle\frac{\partial\mathbf{K}_j}{\partial\mathbf{x}_k}\right) + \frac{1}{h_k} \displaystyle\frac{\partial\mathbf{F}_3}{\partial\mathbf{K}_3}\left(\mathbf{x}_k + \displaystyle\sum_{j=1}^{s} a_{3j} \mathbf{K}_j, \displaystyle\frac{\mathbf{K}_3}{h_k}, t_k + h_k c_3\right) \displaystyle\frac{\partial\mathbf{K}_3}{\partial\mathbf{x}_k} = \mathbf{0} \\[-0.5em]
+      \vdots \\[-0.5em]
+      \displaystyle\frac{\partial\mathbf{F}_s}{\partial\mathbf{x}_k}\left(\mathbf{x}_k + \displaystyle\sum_{j=1}^{s} a_{sj} \mathbf{K}_j, \displaystyle\frac{\mathbf{K}_s}{h_k}, t_k + h_k c_s\right) \left(\mathbf{I} + \displaystyle\sum_{j=1}^{s} a_{sj} \displaystyle\frac{\partial\mathbf{K}_j}{\partial\mathbf{x}_k}\right) + \frac{1}{h_k} \displaystyle\frac{\partial\mathbf{F}_s}{\partial\mathbf{K}_s}\left(\mathbf{x}_k + \displaystyle\sum_{j=1}^{s} a_{sj} \mathbf{K}_j, \displaystyle\frac{\mathbf{K}_s}{h_k}, t_k + h_k c_s\right) \displaystyle\frac{\partial\mathbf{K}_s}{\partial\mathbf{x}_k} = \mathbf{0}
+    \end{cases}
+  \end{array} \text{.}
+\f]
+In matrix form, this can be expressed as
+\f[
+  \begin{bmatrix}
+    \displaystyle\frac{\partial\mathbf{F}_1}{\partial\mathbf{K}_1}\left(\cdot\right) & h_k a_{12} \displaystyle\frac{\partial\mathbf{F}_1}{\partial\mathbf{x}_k}\left(\cdot\right) & h_k a_{13} \displaystyle\frac{\partial\mathbf{F}_1}{\partial\mathbf{x}_k}\left(\cdot\right) & \cdots & h_k a_{1s} \displaystyle\frac{\partial\mathbf{F}_1}{\partial\mathbf{x}_k}\left(\cdot\right) \\
+    h_k a_{21} \displaystyle\frac{\partial\mathbf{F}_2}{\partial\mathbf{x}_k}\left(\cdot\right) & \displaystyle\frac{\partial\mathbf{F}_2}{\partial\mathbf{K}_2}\left(\cdot\right) & h_k a_{23} \displaystyle\frac{\partial\mathbf{F}_2}{\partial\mathbf{x}_k}\left(\cdot\right) & \cdots & \vdots \\
+    h_k a_{31} \displaystyle\frac{\partial\mathbf{F}_3}{\partial\mathbf{x}_k}\left(\cdot\right) & h_k a_{32} \displaystyle\frac{\partial\mathbf{F}_3}{\partial\mathbf{x}_k}\left(\cdot\right) & \displaystyle\frac{\partial\mathbf{F}_3}{\partial\mathbf{K}_3}\left(\cdot\right) & \ddots & \vdots \\
+    \vdots & \vdots & \ddots & \ddots & h_k a_{s,s-1} \displaystyle\frac{\partial\mathbf{F}_s}{\partial\mathbf{x}_k}\left(\cdot\right) \\
+    h_k a_{s1} \displaystyle\frac{\partial\mathbf{F}_s}{\partial\mathbf{x}_k}\left(\cdot\right) & h_k a_{s2} \displaystyle\frac{\partial\mathbf{F}_s}{\partial\mathbf{x}_k}\left(\cdot\right) & \cdots & h_k a_{s,s-1} \displaystyle\frac{\partial\mathbf{F}_s}{\partial\mathbf{x}_k}\left(\cdot\right) & \displaystyle\frac{\partial\mathbf{F}_s}{\partial\mathbf{K}_s}\left(\cdot\right)
+  \end{bmatrix}
+  \begin{bmatrix}
+    \displaystyle\frac{\partial\mathbf{K}_1}{\partial\mathbf{x}_k} \\
+    \displaystyle\frac{\partial\mathbf{K}_2}{\partial\mathbf{x}_k} \\
+    \displaystyle\frac{\partial\mathbf{K}_3}{\partial\mathbf{x}_k} \\
+    \vdots \\
+    \displaystyle\frac{\partial\mathbf{K}_s}{\partial\mathbf{x}_k}
+  \end{bmatrix} =
+  -h_k
+  \begin{bmatrix}
+    \displaystyle\frac{\partial\mathbf{F}_1}{\partial\mathbf{x}_k}\left(\mathbf{x}_k + \displaystyle\sum_{j=1}^{s} a_{1j} \mathbf{K}_j, \displaystyle\frac{\mathbf{K}_1}{h_k}, t_k + h_k c_1\right) \\
+    \displaystyle\frac{\partial\mathbf{F}_2}{\partial\mathbf{x}_k}\left(\mathbf{x}_k + \displaystyle\sum_{j=1}^{s} a_{2j} \mathbf{K}_j, \displaystyle\frac{\mathbf{K}_2}{h_k}, t_k + h_k c_2\right) \\
+    \displaystyle\frac{\partial\mathbf{F}_3}{\partial\mathbf{x}_k}\left(\mathbf{x}_k + \displaystyle\sum_{j=1}^{s} a_{3j} \mathbf{K}_j, \displaystyle\frac{\mathbf{K}_3}{h_k}, t_k + h_k c_3\right) \\
+    \vdots \\
+    \displaystyle\frac{\partial\mathbf{F}_s}{\partial\mathbf{x}_k}\left(\mathbf{x}_k + \displaystyle\sum_{j=1}^{s} a_{sj} \mathbf{K}_j, \displaystyle\frac{\mathbf{K}_s}{h_k}, t_k + h_k c_s\right)
+  \end{bmatrix} \text{.}
+\f]
+
+#### Derivatives of \f$\mathbf{x}_{k+1}\f$ with respect to \f$\mathbf{x}_k\f$
+
+> **NOTE:** The derivatives of the next state \f$\mathbf{x}_{k+1}\f$ with respect to the states \f$\mathbf{x}_k\f$ can be computed as previously described for explicit systems, as the structure of the IRK method remains the same.
 
 ## Diagonally implicit Runge-Kutta methods
 
@@ -144,6 +359,55 @@ When the stages are unrolled, the equations become
   \end{array} \text{.}
 \f]
 
+#### Derivatives of \f$\mathbf{K}\f$ with respect to \f$\mathbf{x}_k\f$
+
+For explicit systems, the derivatives of the intermediate variables \f$\mathbf{K}\f$ with respect to the states \f$\mathbf{x}_k\f$ can be computed by differentiating the stage equations, which yields
+\f[
+  \begin{array}{l}
+    \begin{cases}
+      \displaystyle\frac{\partial\mathbf{K}_1}{\partial\mathbf{x}_k} = h_k \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\mathbf{x}_k + a_{11} \mathbf{K}_1, t_k + h_k c_1\right) \left(\mathbf{I} + a_{11} \displaystyle\frac{\partial\mathbf{K}_1}{\partial\mathbf{x}_k}\right) \\
+      \displaystyle\frac{\partial\mathbf{K}_2}{\partial\mathbf{x}_k} = h_k \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\mathbf{x}_k + a_{21} \mathbf{K}_1 + a_{22} \mathbf{K}_2, t_k + h_k c_2\right) \left(\mathbf{I} + a_{21} \displaystyle\frac{\partial\mathbf{K}_1}{\partial\mathbf{x}_k} + a_{22} \displaystyle\frac{\partial\mathbf{K}_2}{\partial\mathbf{x}_k}\right) \\
+      \displaystyle\frac{\partial\mathbf{K}_3}{\partial\mathbf{x}_k} = h_k \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\mathbf{x}_k + a_{31} \mathbf{K}_1 + a_{32} \mathbf{K}_2 + a_{33} \mathbf{K}_3, t_k + h_k c_3\right) \left(\mathbf{I} + a_{31} \displaystyle\frac{\partial\mathbf{K}_1}{\partial\mathbf{x}_k} + a_{32} \displaystyle\frac{\partial\mathbf{K}_2}{\partial\mathbf{x}_k} + a_{33} \displaystyle\frac{\partial\mathbf{K}_3}{\partial\mathbf{x}_k}\right) \\[-0.5em]
+      \vdots \\[-0.5em]
+      \displaystyle\frac{\partial\mathbf{K}_s}{\partial\mathbf{x}_k} = h_k \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\mathbf{x}_k + \displaystyle\sum_{j=1}^{s} a_{sj} \mathbf{K}_j, t_k + h_k c_s\right) \left(\mathbf{I} + \displaystyle\sum_{j=1}^{s} a_{sj} \displaystyle\frac{\partial\mathbf{K}_j}{\partial\mathbf{x}_k}\right)
+    \end{cases}
+  \end{array} \text{.}
+\f]
+In matrix form, this can be expressed as
+\f[
+  \begin{bmatrix}
+    \mathbf{I} - h_k a_{11} \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\cdot\right) & \mathbf{0} & \mathbf{0} & \cdots & \mathbf{0} \\
+    -h_k a_{21} \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\cdot\right) & \mathbf{I} - h_k a_{22} \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\cdot\right) & \ddots & \mathbf{0} & \vdots \\
+    -h_k a_{31} \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\cdot\right) & -h_k a_{32} \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\cdot\right) & \mathbf{I} - h_k a_{33} \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\cdot\right) & \ddots & \vdots \\
+    \vdots & \vdots & \ddots & \ddots & \mathbf{0} \\
+    -h_k a_{s1} \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\cdot\right) & -h_k a_{s2} \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\cdot\right) & \cdots & -h_k a_{s,s-1} \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\cdot\right) & \mathbf{I} - h_k a_{ss} \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\cdot\right)
+  \end{bmatrix}
+  \begin{bmatrix}
+    \displaystyle\frac{\partial\mathbf{K}_1}{\partial\mathbf{x}_k} \\
+    \displaystyle\frac{\partial\mathbf{K}_2}{\partial\mathbf{x}_k} \\
+    \displaystyle\frac{\partial\mathbf{K}_3}{\partial\mathbf{x}_k} \\
+    \vdots \\
+    \displaystyle\frac{\partial\mathbf{K}_s}{\partial\mathbf{x}_k}
+  \end{bmatrix} =
+  h_k
+  \begin{bmatrix}
+    \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\cdot\right) \\
+    \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\cdot\right) \\
+    \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\cdot\right) \\
+    \vdots \\
+    \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\cdot\right)
+  \end{bmatrix} \text{.}
+\f]
+
+#### Derivatives of \f$\mathbf{x}_{k+1}\f$ with respect to \f$\mathbf{x}_k\f$
+
+The derivatives of the next state \f$\mathbf{x}_{k+1}\f$ with respect to the states \f$\mathbf{x}\f$ can be computed as
+\f[
+  \displaystyle\frac{\partial\mathbf{x}_{k+1}}{\partial\mathbf{x}_k} =
+  \mathbf{I} + h_k \displaystyle\sum_{i=1}^s b_i \frac{\partial\mathbf{K}_i}{\partial\mathbf{x}_k} \text{.}
+\f]
+where the derivatives of the intermediate variables \f$\mathbf{K}_i\f$ with respect to the states \f$\mathbf{x}_k\f$ are computed as described above.
+
 ### DIRK methods for implicit dynamic systems
 
 For an implicit dynamic system of the form \f$\mathbf{F}(\mathbf{x}, \mathbf{x}^\prime, t) = \mathbf{0}\f$, the DIRK method is written as
@@ -161,6 +425,7 @@ If the stages are unrolled, we have
     \begin{cases}
       \mathbf{F}_1 \left(\mathbf{x}_k + a_{11} \mathbf{K}_1, \displaystyle\frac{\mathbf{K}_1}{h_k}, t_k + h_k c_1\right) = \mathbf{0} \\
       \mathbf{F}_2 \left(\mathbf{x}_k + a_{21} \mathbf{K}_1 + a_{22} \mathbf{K}_2, \displaystyle\frac{\mathbf{K}_3}{h_k}, t_k + h_k c_2\right) = \mathbf{0} \\
+      \mathbf{F}_3 \left(\mathbf{x}_k + a_{31} \mathbf{K}_1 + a_{32} \mathbf{K}_2 + a_{33} \mathbf{K}_3, \displaystyle\frac{\mathbf{K}_3}{h_k}, t_k + h_k c_3\right) = \mathbf{0} \\[-0.5em]
       \vdots \\[-0.5em]
       \mathbf{F}_s \left(\mathbf{x}_k + \displaystyle\sum_{j=1}^{s} a_{sj} \mathbf{K}_j, \displaystyle\frac{\mathbf{K}_s}{h_k}, t_k + h_k c_s\right) = \mathbf{0}
     \end{cases} \\
@@ -169,6 +434,50 @@ If the stages are unrolled, we have
 \f]
 
 > **NOTE:** As with IRK methods, the implementation of DIRK methods for explicit and implicit dynamic systems in `Sandals` is unified. Since solving the nonlinear system is inherent to DIRK methods, a specialized version for explicit systems would not significantly reduce computational complexity. Consequently, only the DIRK method for implicit dynamic systems is implemented.
+
+#### Derivatives of \f$\mathbf{K}\f$ with respect to \f$\mathbf{x}_k\f$
+
+For implicit systems, the derivatives of the intermediate variables \f$\mathbf{K}\f$ with respect to the states \f$\mathbf{x}_k\f$ can be computed by differentiating the stage equations, which yields
+\f[
+  \begin{array}{l}
+    \begin{cases}
+      \displaystyle\frac{\partial\mathbf{F}_1}{\partial\mathbf{x}_k}\left(\mathbf{x}_k + a_{11} \mathbf{K}_1, \displaystyle\frac{\mathbf{K}_1}{h_k}, t_k + h_k c_1\right) \left(\mathbf{I} + a_{11} \displaystyle\frac{\partial\mathbf{K}_1}{\partial\mathbf{x}_k}\right) + \frac{1}{h_k} \displaystyle\frac{\partial\mathbf{F}_1}{\partial\mathbf{K}_1}\left(\mathbf{x}_k + a_{11} \mathbf{K}_1, \displaystyle\frac{\mathbf{K}_1}{h_k}, t_k + h_k c_1\right) \displaystyle\frac{\partial\mathbf{K}_1}{\partial\mathbf{x}_k} = \mathbf{0} \\
+      \displaystyle\frac{\partial\mathbf{F}_2}{\partial\mathbf{x}_k}\left(\mathbf{x}_k + a_{21} \mathbf{K}_1 + a_{22} \mathbf{K}_2, \displaystyle\frac{\mathbf{K}_2}{h_k}, t_k + h_k c_2\right) \left(\mathbf{I} + a_{21} \displaystyle\frac{\partial\mathbf{K}_1}{\partial\mathbf{x}_k} + a_{22} \displaystyle\frac{\partial\mathbf{K}_2}{\partial\mathbf{x}_k}\right) + \frac{1}{h_k} \displaystyle\frac{\partial\mathbf{F}_2}{\partial\mathbf{K}_2}\left(\mathbf{x}_k + a_{21} \mathbf{K}_1 + a_{22} \mathbf{K}_2, \displaystyle\frac{\mathbf{K}_2}{h_k}, t_k + h_k c_2\right) \displaystyle\frac{\partial\mathbf{K}_2}{\partial\mathbf{x}_k} = \mathbf{0} \\[-0.5em]
+      \displaystyle\frac{\partial\mathbf{F}_3}{\partial\mathbf{x}_k}\left(\mathbf{x}_k + a_{31} \mathbf{K}_1 + a_{32} \mathbf{K}_2 + a_{33} \mathbf{K}_3, \displaystyle\frac{\mathbf{K}_3}{h_k}, t_k + h_k c_3\right) \left(\mathbf{I} + a_{31} \displaystyle\frac{\partial\mathbf{K}_1}{\partial\mathbf{x}_k} + a_{32} \displaystyle\frac{\partial\mathbf{K}_2}{\partial\mathbf{x}_k} + a_{33} \displaystyle\frac{\partial\mathbf{K}_3}{\partial\mathbf{x}_k}\right) + \frac{1}{h_k} \displaystyle\frac{\partial\mathbf{F}_3}{\partial\mathbf{K}_3}\left(\mathbf{x}_k + a_{31} \mathbf{K}_1 + a_{32} \mathbf{K}_2 + a_{33} \mathbf{K}_3, \displaystyle\frac{\mathbf{K}_3}{h_k}, t_k + h_k c_3\right) \displaystyle\frac{\partial\mathbf{K}_3}{\partial\mathbf{x}_k} = \mathbf{0} \\[-0.5em]
+      \vdots \\[-0.5em]
+      \displaystyle\frac{\partial\mathbf{F}_s}{\partial\mathbf{x}_k}\left(\mathbf{x}_k + \displaystyle\sum_{j=1}^{s} a_{sj} \mathbf{K}_j, \displaystyle\frac{\mathbf{K}_s}{h_k}, t_k + h_k c_s\right) \left(\mathbf{I} + \displaystyle\sum_{j=1}^{s} a_{sj} \displaystyle\frac{\partial\mathbf{K}_j}{\partial\mathbf{x}_k}\right) + \frac{1}{h_k} \displaystyle\frac{\partial\mathbf{F}_s}{\partial\mathbf{K}_s}\left(\mathbf{x}_k + \displaystyle\sum_{j=1}^{s} a_{sj} \mathbf{K}_j, \displaystyle\frac{\mathbf{K}_s}{h_k}, t_k + h_k c_s\right) \displaystyle\frac{\partial\mathbf{K}_s}{\partial\mathbf{x}_k} = \mathbf{0}
+    \end{cases}
+  \end{array} \text{.}
+\f]
+In matrix form, this can be expressed as
+\f[
+  \begin{bmatrix}
+    h_k a_{11} \displaystyle\frac{\partial\mathbf{F}_1}{\partial\mathbf{x}_k}\left(\cdot\right) & \mathbf{0} & \mathbf{0} & \cdots & \mathbf{0} \\
+    -h_k a_{21} \displaystyle\frac{\partial\mathbf{F}_2}{\partial\mathbf{x}_k}\left(\cdot\right) & h_k a_{22} \displaystyle\frac{\partial\mathbf{F}_2}{\partial\mathbf{x}_k}\left(\cdot\right) & \ddots & \mathbf{0} & \vdots \\
+    -h_k a_{31} \displaystyle\frac{\partial\mathbf{F}_3}{\partial\mathbf{x}_k}\left(\cdot\right) & -h_k a_{32} \displaystyle\frac{\partial\mathbf{F}_3}{\partial\mathbf{x}_k}\left(\cdot\right) & h_k a_{33} \displaystyle\frac{\partial\mathbf{F}_3}{\partial\mathbf{x}_k}\left(\cdot\right) & \ddots & \vdots \\
+    \vdots & \vdots & \ddots & \ddots & \mathbf{0} \\
+    -h_k a_{s1} \displaystyle\frac{\partial\mathbf{F}_s}{\partial\mathbf{x}_k}\left(\cdot\right) & -h_k a_{s2} \displaystyle\frac{\partial\mathbf{F}_s}{\partial\mathbf{x}_k}\left(\cdot\right) & \cdots & -h_k a_{s,s-1} \displaystyle\frac{\partial\mathbf{F}_s}{\partial\mathbf{x}_k}\left(\cdot\right) & \displaystyle\frac{\partial\mathbf{F}_s}{\partial\mathbf{K}_s}\left(\cdot\right)
+  \end{bmatrix}
+  \begin{bmatrix}
+    \displaystyle\frac{\partial\mathbf{K}_1}{\partial\mathbf{x}_k} \\
+    \displaystyle\frac{\partial\mathbf{K}_2}{\partial\mathbf{x}_k} \\
+    \displaystyle\frac{\partial\mathbf{K}_3}{\partial\mathbf{x}_k} \\
+    \vdots \\
+    \displaystyle\frac{\partial\mathbf{K}_s}{\partial\mathbf{x}_k}
+  \end{bmatrix} =
+  -h_k
+  \begin{bmatrix}
+    \displaystyle\frac{\partial\mathbf{F}_1}{\partial\mathbf{x}_k}\left(\mathbf{x}_k + a_{11} \mathbf{K}_1, \displaystyle\frac{\mathbf{K}_1}{h_k}, t_k + h_k c_1\right) \\
+    \displaystyle\frac{\partial\mathbf{F}_2}{\partial\mathbf{x}_k}\left(\mathbf{x}_k + a_{21} \mathbf{K}_1 + a_{22} \mathbf{K}_2, \displaystyle\frac{\mathbf{K}_2}{h_k}, t_k + h_k c_2\right) \\
+    \displaystyle\frac{\partial\mathbf{F}_3}{\partial\mathbf{x}_k}\left(\mathbf{x}_k + a_{31} \mathbf{K}_1 + a_{32} \mathbf{K}_2 + a_{33} \mathbf{K}_3, \displaystyle\frac{\mathbf{K}_3}{h_k}, t_k + h_k c_3\right) \\
+    \vdots \\
+    \displaystyle\frac{\partial\mathbf{F}_s}{\partial\mathbf{x}_k}\left(\mathbf{x}_k + \displaystyle\sum_{j=1}^{s} a_{sj} \mathbf{K}_j, \displaystyle\frac{\mathbf{K}_s}{h_k}, t_k + h_k c_s\right)
+  \end{bmatrix} \text{.}
+\f]
+
+#### Derivatives of \f$\mathbf{x}_{k+1}\f$ with respect to \f$\mathbf{x}_k\f$
+
+> **NOTE:** The derivatives of the next state \f$\mathbf{x}_{k+1}\f$ with respect to the states \f$\mathbf{x}_k\f$ can be computed as previously described for explicit systems, as the structure of the IRK method remains the same.
 
 # Projection on the invariants manifold
 

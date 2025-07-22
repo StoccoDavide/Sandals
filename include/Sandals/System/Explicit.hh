@@ -41,8 +41,6 @@ namespace Sandals {
   class Explicit : public Implicit<Real, N, M>
   {
   public:
-    SANDALS_BASIC_CONSTANTS(Real) /**< Basic constants. */
-
     using Pointer = std::shared_ptr<Explicit<Real, N, M>>; /**< Shared pointer to an explicit ODE system. */
     using VectorF = typename Implicit<Real, N, M>::VectorF; /**< Templetized vector type. */
     using MatrixJF = typename Implicit<Real, N, M>::MatrixJF; /**< Templetized matrix type. */
@@ -242,13 +240,11 @@ namespace Sandals {
   class ExplicitWrapper : public Explicit<Real, N, M>
   {
   public:
-    SANDALS_BASIC_CONSTANTS(Real) /**< Basic constants. */
-
     using Pointer = std::shared_ptr<ExplicitWrapper<Real, N, M>>; /**< Shared pointer to an explicit ODE system. */
-    using VectorF = typename Explicit<Real, N, M>::VectorF; /**< Templetized vector type. */
-    using MatrixJF = typename Explicit<Real, N, M>::MatrixJF; /**< Templetized matrix type. */
-    using VectorH = typename Explicit<Real, N, M>::VectorH; /**< Templetized vector type. */
-    using MatrixJH = typename Explicit<Real, N, M>::MatrixJH; /**< Templetized matrix type. */
+    using typename Explicit<Real, N, M>::VectorF; /**< Templetized vector type. */
+    using typename Explicit<Real, N, M>::MatrixJF; /**< Templetized matrix type. */
+    using typename Explicit<Real, N, M>::VectorH; /**< Templetized vector type. */
+    using typename Explicit<Real, N, M>::MatrixJH; /**< Templetized matrix type. */
     using FunctionF = std::function<VectorF(VectorF const &, Real const)>; /**< Explicit ODE system function type. */
     using FunctionJF = std::function<MatrixJF(VectorF const &, Real const)>; /**< Jacobian of the ODE system function function type. */
     using FunctionH = std::function<VectorH(VectorF const &, Real const)>; /**< Invariants function type. */
@@ -281,10 +277,10 @@ namespace Sandals {
     {}
 
     /**
-    * Class constructor for the implicit ODE/DAE system wrapper.
-    * \param[in] t_name The name of the implicit ODE/DAE system.
-    * \param[in] t_f The implicit ODE system function.
-    * \param[in] t_Jf_x The Jacobian of the implicit ODE system function with respect to the states.
+    * Class constructor for the explicit ODE system wrapper.
+    * \param[in] t_name The name of the explicit ODE system.
+    * \param[in] t_f The explicit ODE system function.
+    * \param[in] t_Jf_x The Jacobian of the explicit ODE system function with respect to the states.
     * \param[in] t_h The system's invariants.
     * \param[in] t_Jh_x The Jacobian of the system's invariants with respect to the states.
     * \param[in] t_in_domain The in-domain function.
@@ -341,7 +337,7 @@ namespace Sandals {
     }
 
     /**
-    * Evaluate the Jacobian of the implicit ODE system function \f$ \mathbf{f}(\mathbf{x}, t) \f$
+    * Evaluate the Jacobian of the explicit ODE system function \f$ \mathbf{f}(\mathbf{x}, t) \f$
     * with respect to the states \f$ \mathbf{x} \f$
     *
     * \f[

@@ -1,3 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$class_sandals_1_1_runge_kutta.html" title="Class container for the generic implicit, explicit, and &#160;diagonally implicit &#160;Runge&#45;Kutta methods." alt="" coords="5,5,151,46"/>
+<area shape="rect" id="Node000000" href="$class_sandals_1_1_runge_kutta.html" title=" " alt="" coords="5,5,151,46"/>
+<area shape="rect" id="Node000001" href="$class_sandals_1_1_fehlberg45.html" title="Class container for the Runge&#45;Kutta&#45;Fehlberg 4(5) method." alt="" coords="199,5,339,46"/>
+<area shape="poly" id="edge35_Node000000_Node000001" title=" " alt="" coords="166,23,199,23,199,28,166,28"/>
 </map>

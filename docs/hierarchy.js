@@ -1,5 +1,6 @@
 var hierarchy =
 [
+    [ "Sandals::BVP< Real, N, M >", "class_sandals_1_1_b_v_p.html", null ],
     [ "Sandals::Implicit< Real, N, M >", "class_sandals_1_1_implicit.html", null ],
     [ "Sandals::Implicit< Real, N, 0 >", "class_sandals_1_1_implicit.html", [
       [ "Sandals::Explicit< Real, N, M >", "class_sandals_1_1_explicit.html", null ],
@@ -20,6 +21,7 @@ var hierarchy =
         ] ]
       ] ]
     ] ],
+    [ "Sandals::IVP< Real, N, M >", "class_sandals_1_1_i_v_p.html", null ],
     [ "Sandals::RungeKutta< Real, S, N, M >", "class_sandals_1_1_runge_kutta.html", null ],
     [ "Sandals::RungeKutta< Real, 1, N, 0 >", "class_sandals_1_1_runge_kutta.html", [
       [ "Sandals::ExplicitEuler< Real, N, M >", "class_sandals_1_1_explicit_euler.html", null ],

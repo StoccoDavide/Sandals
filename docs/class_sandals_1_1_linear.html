@@ -198,10 +198,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a313929355992bdf20cf44bcac830d7f9 inherit pub_methods_class_sandals_1_1_implicit" id="r_a313929355992bdf20cf44bcac830d7f9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_sandals_1_1_implicit.html#a0f6ed8a93dd0a78c31cc1cba5c2b085d">MatrixJF</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_implicit.html#a313929355992bdf20cf44bcac830d7f9">JF_x_reverse</a> (<a class="el" href="class_sandals_1_1_implicit.html#a2a572c1717ee411d8bcd366eb50b4faf">VectorF</a> const &amp;x, <a class="el" href="class_sandals_1_1_implicit.html#a2a572c1717ee411d8bcd366eb50b4faf">VectorF</a> const &amp;x_dot, Real const t) const</td></tr>
 <tr class="memitem:a346e11675870f9cc35ea4c265e2f185f inherit pub_methods_class_sandals_1_1_implicit" id="r_a346e11675870f9cc35ea4c265e2f185f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_sandals_1_1_implicit.html#a0f6ed8a93dd0a78c31cc1cba5c2b085d">MatrixJF</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_implicit.html#a346e11675870f9cc35ea4c265e2f185f">JF_x_dot_reverse</a> (<a class="el" href="class_sandals_1_1_implicit.html#a2a572c1717ee411d8bcd366eb50b4faf">VectorF</a> const &amp;x, <a class="el" href="class_sandals_1_1_implicit.html#a2a572c1717ee411d8bcd366eb50b4faf">VectorF</a> const &amp;x_dot, Real const t) const</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
-Public Attributes</h2></td></tr>
-<tr class="memitem:ada10f98d196c1be34de3a2bc86c51a91" id="r_ada10f98d196c1be34de3a2bc86c51a91"><td class="memItemLeft" align="right" valign="top">const Real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ada10f98d196c1be34de3a2bc86c51a91">SQRT_EPSILON</a> {std::sqrt(EPSILON)}</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pri-attribs" class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a417a63840b2e1d9b74c0fc922c00d28e" id="r_a417a63840b2e1d9b74c0fc922c00d28e"><td class="memItemLeft" align="right" valign="top">Eigen::FullPivLU&lt; <a class="el" href="#a9a3eb18087daed31feffc1c6f8f53f67">MatrixE</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a417a63840b2e1d9b74c0fc922c00d28e">m_lu</a></td></tr>
@@ -219,7 +215,7 @@ class Sandals::Linear&lt; Real, N, M &gt;</div><p>Class container for the system
 \mathbf{x} + \mathbf{b}(t) \), with invariants manifold \( \mathbf{h}(\mathbf{x}, t) = \mathbf{0} \). </p><dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">Real</td><td>The scalar number type. </td></tr>
-    <tr><td class="paramname">N</td><td>The dimension of the semi-explicit ODE system. </td></tr>
+    <tr><td class="paramname">N</td><td>The dimension of the linear ODE system. </td></tr>
     <tr><td class="paramname">M</td><td>The dimension of the invariants manifold. </td></tr>
   </table>
   </dd>
@@ -289,7 +285,7 @@ template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Shared pointer to a semi-explicit ODE/DAE system. </p>
+<p>Shared pointer to a linear ODE/DAE system. </p>
 
 </div>
 </div>
@@ -794,23 +790,6 @@ template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581
 </table>
 </div><div class="memdoc">
 <p>LU decomposition. </p>
-
-</div>
-</div>
-<a id="ada10f98d196c1be34de3a2bc86c51a91" name="ada10f98d196c1be34de3a2bc86c51a91"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ada10f98d196c1be34de3a2bc86c51a91">&#9670;&#160;</a></span>SQRT_EPSILON</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">const Real <a class="el" href="class_sandals_1_1_linear.html">Sandals::Linear</a>&lt; Real, N, M &gt;::SQRT_EPSILON {std::sqrt(EPSILON)}</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>&lt; Basic constants. Square root of machine epsilon epsilon static constant value. </p>
 
 </div>
 </div>

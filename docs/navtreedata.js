@@ -25,13 +25,13 @@
 var NAVTREE =
 [
   [ "Sandals", "index.html", [
-    [ "Installation", "index.html#autotoc_md15", [
-      [ "Quick and dirty", "index.html#autotoc_md16", null ],
-      [ "CMake", "index.html#autotoc_md17", null ]
+    [ "Installation", "index.html#autotoc_md27", [
+      [ "Quick and dirty", "index.html#autotoc_md28", null ],
+      [ "CMake", "index.html#autotoc_md29", null ]
     ] ],
-    [ "Authors", "index.html#autotoc_md18", null ],
-    [ "License", "index.html#autotoc_md19", null ],
-    [ "Acknowledgements", "index.html#autotoc_md20", null ],
+    [ "Authors", "index.html#autotoc_md30", null ],
+    [ "License", "index.html#autotoc_md31", null ],
+    [ "Acknowledgements", "index.html#autotoc_md32", null ],
     [ "Namespaces", "namespaces.html", [
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
       [ "Namespace Members", "namespacemembers.html", [
@@ -62,12 +62,12 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"_chebyshev51_8hh.html",
-"class_sandals_1_1_fehlberg45_tableau.html",
-"class_sandals_1_1_linear_wrapper.html#a195ece3d4e42e9339d6e516c9ac714fa",
-"class_sandals_1_1_runge_kutta.html#a4d5bf50167b4d31529bbe6d54c24f63f",
-"class_sandals_1_1_s_s_p_r_k43_tableau.html",
-"struct_sandals_1_1_solution.html#a188bd81cd55745661c1d53b3aa6ddabb"
+"_b_v_p_8hh.html",
+"class_sandals_1_1_explicit_wrapper.html#ac20517af6839275be3499e2f8aa7dad9",
+"class_sandals_1_1_linear.html#ab799eab3f8f772d13747833a693805ae",
+"class_sandals_1_1_runge_kutta.html#a2e5439cc41572563bc926b0e7339059e",
+"class_sandals_1_1_s_s_p_r_k42.html#a4eeb0901af74db800390cad228540e2c",
+"struct_sandals_1_1_solution.html#a04136cc06a8f3aa0bc5bf8243054e7ca"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronization';

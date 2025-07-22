@@ -33,17 +33,14 @@ namespace Sandals {
   * algebraic equations (DAEs) of the type \f$ \mathbf{E}(t)\mathbf{x}^{\prime} = \mathbf{A}(t)
   * \mathbf{x} + \mathbf{b}(t) \f$, with invariants manifold \f$ \mathbf{h}(\mathbf{x}, t) = \mathbf{0} \f$.
   * \tparam Real The scalar number type.
-  * \tparam N The dimension of the semi-explicit ODE system.
+  * \tparam N The dimension of the linear ODE system.
   * \tparam M The dimension of the invariants manifold.
   */
   template <typename Real, Integer N, Integer M = 0>
   class Linear : public Explicit<Real, N, M>
   {
   public:
-    SANDALS_BASIC_CONSTANTS(Real) /**< Basic constants. */
-    const Real SQRT_EPSILON{std::sqrt(EPSILON)}; /**< Square root of machine epsilon epsilon static constant value. */ \
-
-    using Pointer = std::shared_ptr<SemiExplicit<Real, N, M>>; /**< Shared pointer to a semi-explicit ODE/DAE system. */
+    using Pointer = std::shared_ptr<SemiExplicit<Real, N, M>>; /**< Shared pointer to a linear ODE/DAE system. */
     using VectorF = typename Explicit<Real, N, M>::VectorF; /**< Templetized vector type. */
     using MatrixJF = typename Explicit<Real, N, M>::MatrixJF; /**< Templetized matrix type. */
     using MatrixE = typename Explicit<Real, N, M>::MatrixJF; /**< Templetized matrix type. */
@@ -195,23 +192,21 @@ namespace Sandals {
   * algebraic equations (DAEs) of the type \f$ \mathbf{E}(t)\mathbf{x}^{\prime} = \mathbf{A}(t)
   * \mathbf{x} + \mathbf{b}(t) \f$, with invariants manifold \f$ \mathbf{h}(\mathbf{x}, t) = \mathbf{0} \f$.
   * \tparam Real The scalar number type.
-  * \tparam N The dimension of the semi-explicit ODE system.
+  * \tparam N The dimension of the linear ODE system.
   * \tparam M The dimension of the invariants manifold.
   */
   template <typename Real, Integer N, Integer M = 0>
   class LinearWrapper : public Linear<Real, N, M>
   {
   public:
-    SANDALS_BASIC_CONSTANTS(Real) /**< Basic constants. */
-
     using Pointer = std::shared_ptr<LinearWrapper<Real, N, M>>; /**< Shared pointer to a linear ODE/DAE system. */
-    using VectorF = typename Linear<Real, N, M>::VectorF; /**< Templetized vector type. */
+    using typename Linear<Real, N, M>::VectorF; /**< Templetized vector type. */
     using MatrixJF = typename Linear<Real, N, M>::MatrixJF; /**< Templetized matrix type. */
     using MatrixE = typename Linear<Real, N, M>::MatrixJF; /**< Templetized matrix type. */
     using MatrixA = typename Linear<Real, N, M>::MatrixJF; /**< Templetized matrix type. */
     using VectorB = typename Linear<Real, N, M>::VectorF; /**< Templetized vector type. */
-    using VectorH = typename Explicit<Real, N, M>::VectorH; /**< Templetized vector type. */
-    using MatrixJH = typename Explicit<Real, N, M>::MatrixJH; /**< Templetized matrix type. */
+    using typename Explicit<Real, N, M>::VectorH; /**< Templetized vector type. */
+    using typename Explicit<Real, N, M>::MatrixJH; /**< Templetized matrix type. */
     using FunctionE = std::function<MatrixE(Real const)>; /**< Mass matrix function type. */
     using FunctionA = std::function<MatrixA(Real const)>; /**< System matrix function type. */
     using FunctionB = std::function<VectorB(Real const)>; /**< System vector function type. */

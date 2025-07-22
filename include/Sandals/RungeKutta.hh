@@ -13,6 +13,8 @@
 #ifndef SANDALS_RUNGEKUTTA_HH
 #define SANDALS_RUNGEKUTTA_HH
 
+#include <optional>
+
 #include <Sandals.hh>
 
 #include <Sandals/System/Implicit.hh>
@@ -52,6 +54,7 @@ namespace Sandals {
     using MatrixX = Eigen::Matrix<Real, Eigen::Dynamic, Eigen::Dynamic>; /**< \f$ N \times N \f$ matrix of Real number type. */
     using VectorK = Eigen::Vector<Real, N*S>; /**< Templetized vector type. */
     using MatrixK = Eigen::Matrix<Real, N, S>; /**< Templetized matrix type. */
+    using MatrixJK = Eigen::Matrix<Real, N*N, S>; /**< Templetized matrix type. */
     using MatrixJ = Eigen::Matrix<Real, N*S, N*S>; /**< Templetized matrix type. */
     using VectorP = Eigen::Matrix<Real, N+M, 1>; /**< Templetized vector type. */
     using MatrixP = Eigen::Matrix<Real, N+M, N+M>; /**< Templetized matrix type. */
@@ -708,17 +711,17 @@ namespace Sandals {
     * \param[in] h_old Advancing step \f$ h_k \f$ at the \f$ k \f$-th step.
     * \param[out] x_new Computed states \f$ \mathbf{x}_{k+1} \f$ at the \f$ (k+1) \f$-th step.
     * \param[out] h_new The suggested step \f$ h_{k+1}^\star \f$ for the next advancing step.
+    * \param[out] K The \f$ \mathbf{K} \f$ variables of the Runge-Kutta method.
     * \return True if the step is successfully computed, false otherwise.
     */
     bool erk_explicit_step(VectorN const & x_old, Real const t_old, Real const h_old, VectorN & x_new,
-      Real & h_new) const
+      Real & h_new, MatrixK & K) const
     {
       using Eigen::all;
       using Eigen::seqN;
 
       // Compute the K variables in the case of an explicit method and explicit system
       VectorN x_node;
-      MatrixK K;
       for (Integer i{0}; i < S; ++i) {
         x_node = x_old + K(all, seqN(0, i)) * this->m_tableau.A(i, seqN(0, i)).transpose();
         if (!this->m_reverse) {
@@ -828,12 +831,12 @@ namespace Sandals {
     * \param[in] h_old Advancing step \f$ h_k \f$ at the \f$ k \f$-th step.
     * \param[out] x_new Computed states \f$ \mathbf{x}_{k+1} \f$ at the \f$ (k+1) \f$-th step.
     * \param[out] h_new The suggested step \f$ h_{k+1}^\star \f$ for the next advancing step.
+    * \param[out] K The \f$ \mathbf{K} \f$ variables of the Runge-Kutta method.
     * \return True if the step is successfully computed, false otherwise.
     */
     bool erk_implicit_step(VectorN const & x_old, Real const t_old, Real const h_old, VectorN & x_new,
-      Real & h_new) const
+      Real & h_new, MatrixK & K) const
     {
-      MatrixK K;
       VectorN K_sol;
       VectorN K_ini(VectorN::Zero());
 
@@ -861,6 +864,33 @@ namespace Sandals {
       }
       return true;
     }
+
+    /**
+    * Compute the Jacobian of the variables \f$ \mathbf{K} \f$ with respect to the states
+    * \f$ \mathbf{x} \f$ as
+    *
+    * \f[
+    *   \frac{\partial\mathbf{K}}{\partial\mathbf{x}} =
+    *   \begin{bmatrix}
+    *     \mathbf{I} & \mathbf{0} & \cdots & \mathbf{0} \\
+    *
+
+
+    & \mathbf{0} & \cdots & \mathbf{0} \\
+    *     \mathbf{0} & \mathbf{I} & \cdots & \mathbf{0} \\
+    *     \vdots & \vdots & \ddots & \vdots \\
+    *     \mathbf{0} & \mathbf{0} & \cdots & \mathbf{I}
+    *   \end{bmatrix} \text{,}
+    * \f]
+    *
+    * where \f$ \mathbf{I} \f$ is the identity matrix of size \f$ N \times N \f$.
+    * \param[out] jac The Jacobian of the variables \f$ \mathbf{K} \f$ with respect to the states
+    * \f$ \mathbf{x} \f$.
+    */
+   // void irk_jacobian_K(MatrixK const & K, MatrixJK & jac) const
+   // {
+//
+   // }
 
     /*\
      |   ___ ____  _  __
@@ -967,11 +997,11 @@ namespace Sandals {
         // Compute the Jacobians with respect to x and x_dot
         x_dot_node = K_mat.col(i) / h;
         if (!this->m_reverse) {
-          JF_x       = this->m_system->JF_x(x_node, x_dot_node, t_node);
-          JF_x_dot   = this->m_system->JF_x_dot(x_node, x_dot_node, t_node);
+          JF_x     = this->m_system->JF_x(x_node, x_dot_node, t_node);
+          JF_x_dot = this->m_system->JF_x_dot(x_node, x_dot_node, t_node);
         } else {
-          JF_x       = this->m_system->JF_x_reverse(x_node, x_dot_node, t_node);
-          JF_x_dot   = this->m_system->JF_x_dot_reverse(x_node, x_dot_node, t_node);
+          JF_x     = this->m_system->JF_x_reverse(x_node, x_dot_node, t_node);
+          JF_x_dot = this->m_system->JF_x_dot_reverse(x_node, x_dot_node, t_node);
         }
 
         // Combine the Jacobians with respect to x and x_dot to obtain the Jacobian with respect to K
@@ -998,11 +1028,13 @@ namespace Sandals {
     * \param[in] h_old Advancing step \f$ h_k \f$ at the \f$ k \f$-th step.
     * \param[out] x_new Computed states \f$ \mathbf{x}_{k+1} \f$ at the \f$ (k+1) \f$-th step.
     * \param[out] h_new The suggested step \f$ h_{k+1}^\star \f$ for the next advancing step.
+    * \param[out] K The \f$ \mathbf{K} \f$ variables of the Runge-Kutta method.
     * \return True if the step is successfully computed, false otherwise.
     */
-    bool irk_step(VectorN const & x_old, Real const t_old, Real const h_old, VectorN & x_new, Real & h_new) const
+    bool irk_step(VectorN const & x_old, Real const t_old, Real const h_old, VectorN & x_new,
+      Real & h_new, MatrixK & K) const
     {
-      VectorK K;
+      VectorK K_vec;
       VectorK K_ini(VectorK::Zero());
 
       // Check if the solver converged
@@ -1011,15 +1043,19 @@ namespace Sandals {
             {this->irk_function(x_old, t_old, h_old, K_fun, fun);},
           [this, &x_old, t_old, h_old](VectorK const & K_jac, MatrixJ & jac)
             {this->irk_jacobian(x_old, t_old, h_old, K_jac, jac);},
-          K_ini, K))
+          K_ini, K_vec))
         {return false;}
 
+      // Reshape the K vector to a matrix
+      K = K_vec.reshaped(N, S);
+      if (!K.allFinite()) {return false;}
+
       // Perform the step and obtain the next state
-      x_new = x_old + K.reshaped(N, S) * this->m_tableau.b;
+      x_new = x_old + K * this->m_tableau.b;
 
       // Adapt next step
       if (this->m_adaptive && this->m_tableau.is_embedded) {
-        VectorN x_emb(x_old + K.reshaped(N, S) * this->m_tableau.b_e);
+        VectorN x_emb(x_old + K * this->m_tableau.b_e);
         h_new = this->estimate_step(x_new, x_emb, h_old);
       }
       return true;
@@ -1128,20 +1164,21 @@ namespace Sandals {
     * \param[in] h_old Advancing step \f$ h_k \f$ at the \f$ k \f$-th step.
     * \param[out] x_new Computed states \f$ \mathbf{x}_{k+1} \f$ at the \f$ (k+1) \f$-th step.
     * \param[out] h_new The suggested step \f$ h_{k+1}^\star \f$ for the next advancing step.
+    * \param[out] K The \f$ \mathbf{K} \f$ variables of the Runge-Kutta method.
     * \return True if the step is successfully computed, false otherwise.
     */
-    bool dirk_step(VectorN const & x_old, Real const t_old, Real const h_old, VectorN & x_new, Real & h_new) const
+    bool dirk_step(VectorN const & x_old, Real const t_old, Real const h_old, VectorN & x_new,
+      Real & h_new, MatrixK & K) const
     {
-      MatrixK K;
       VectorN K_sol;
       VectorN K_ini(VectorN::Zero());
 
       // Check if the solver converged at each step
       for (Integer n{0}; n < S; ++n) {
         if (this->m_newtonX.solve(
-            [this, n, &K, &x_old, t_old, h_old](VectorN const & K_fun, VectorN &fun)
+            [this, n, &K, &x_old, t_old, h_old](VectorN const & K_fun, VectorN & fun)
               {K.col(n) = K_fun; this->dirk_function(n, x_old, t_old, h_old, K, fun);},
-            [this, n, &K, &x_old, t_old, h_old](VectorN const & K_jac, MatrixN &jac)
+            [this, n, &K, &x_old, t_old, h_old](VectorN const & K_jac, MatrixN & jac)
               {K.col(n) = K_jac; this->dirk_jacobian(n, x_old, t_old, h_old, K, jac);},
             K_ini, K_sol)) {
             K.col(n) = K_sol;
@@ -1170,9 +1207,11 @@ namespace Sandals {
     * \param[in] h_old Advancing step \f$ h_k \f$ at the \f$ k \f$-th step.
     * \param[out] x_new Computed states \f$ \mathbf{x}_{k+1} \f$ at the \f$ (k+1) \f$-th step.
     * \param[out] h_new The suggested step \f$ h_{k+1}^\star \f$ for the next advancing step.
+    * \param[out] K The \f$ \mathbf{K} \f$ variables of the Runge-Kutta method.
     * \return True if the step is successfully computed, false otherwise.
     */
-    bool step(VectorN const & x_old, Real const t_old, Real const h_old, VectorN & x_new, Real & h_new) const
+    bool step(VectorN const & x_old, Real const t_old, Real const h_old, VectorN & x_new, Real & h_new,
+      MatrixK & K) const
     {
       #define CMD "Sandals::RungeKutta::step(...): "
 
@@ -1180,13 +1219,13 @@ namespace Sandals {
         " solver, at t = " << t_old << ", x = " << x_old.transpose() << ", system out of domain.");
 
       if (this->is_erk() && this->m_system->is_explicit()) {
-        return this->erk_explicit_step(x_old, t_old, h_old, x_new, h_new);
+        return this->erk_explicit_step(x_old, t_old, h_old, x_new, h_new, K);
       } else if (this->is_erk() && this->m_system->is_implicit()) {
-        return this->erk_implicit_step(x_old, t_old, h_old, x_new, h_new);
+        return this->erk_implicit_step(x_old, t_old, h_old, x_new, h_new, K);
       } else if (this->is_dirk()) {
-        return this->dirk_step(x_old, t_old, h_old, x_new, h_new);
+        return this->dirk_step(x_old, t_old, h_old, x_new, h_new, K);
       } else {
-        return this->irk_step(x_old, t_old, h_old, x_new, h_new);
+        return this->irk_step(x_old, t_old, h_old, x_new, h_new, K);
       }
 
       #undef CMD
@@ -1214,7 +1253,8 @@ namespace Sandals {
         h_old << ", expected > 0.");
 
       // If the integration step failed, try again with substepping
-      if (!this->step(x_old, t_old, h_old, x_new, h_new))
+      MatrixK K;
+      if (!this->step(x_old, t_old, h_old, x_new, h_new, K))
       {
         VectorN x_tmp(x_old);
         Real t_tmp{t_old}, h_tmp{h_old / Real(2.0)};
@@ -1224,7 +1264,7 @@ namespace Sandals {
         Real h_new_tmp;
         while (k > 0) {
           // Calculate the next step with substepping logic
-          if (this->step(x_tmp, t_tmp, h_tmp, x_new, h_new_tmp)) {
+          if (this->step(x_tmp, t_tmp, h_tmp, x_new, h_new_tmp, K)) {
 
             // Accept the step
             h_tmp = h_new_tmp;
