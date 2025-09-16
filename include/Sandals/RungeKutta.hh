@@ -55,6 +55,7 @@ namespace Sandals {
     using VectorK = Eigen::Vector<Real, N*S>; /**< Templetized vector type. */
     using MatrixK = Eigen::Matrix<Real, N, S>; /**< Templetized matrix type. */
     using MatrixJK = Eigen::Matrix<Real, N*N, S>; /**< Templetized matrix type. */
+    using MatrixJX = Eigen::Matrix<Real, N, N>; /**< Templetized matrix type. */
     using MatrixJ = Eigen::Matrix<Real, N*S, N*S>; /**< Templetized matrix type. */
     using VectorP = Eigen::Matrix<Real, N+M, 1>; /**< Templetized vector type. */
     using MatrixP = Eigen::Matrix<Real, N+M, N+M>; /**< Templetized matrix type. */
@@ -744,6 +745,57 @@ namespace Sandals {
     }
 
     /**
+    * Propagate the derivative of the states \f$ \mathbf{x}_{k+1} \f$ with respect to the states
+    * \f$ \mathbf{x}_k \f$ at the previous step using an explicit Runge-Kutta method, given an
+    * explicit system of the form \f$ \mathbf{x}^\prime = \mathbf{f}(\mathbf{x}, t) \f$.
+    * \param[in] x States \f$ \mathbf{x}_k \f$ at the \f$ k \f$-th step.
+    * \param[in] t Independent variable (or time) \f$ t_k \f$ at the \f$ k \f$-th step.
+    * \param[in] h Advancing step \f$ h_k \f$ at the \f$ k \f$-th step.
+    * \param[in] K The \f$ \mathbf{K} \f$ variables of the Runge-Kutta method.
+    * \param[in,out] Jx The derivative of the \f$ \mathbf{K} \f$ variables with respect to the states
+    * \f$ \mathbf{x} \f$.
+    * \note This function assumes that the \f$ \mathbf{K} \f$ variables have been already computed.
+    * \return True if the propagation is successfully computed, false otherwise.
+    */
+    bool erk_explicit_propagate(VectorN const & x, Real const t, Real const h, MatrixK const & K,
+      MatrixJX & Jx) const
+    {
+      using Eigen::all;
+      using Eigen::seqN;
+
+      // Propagate the derivative of K with respect to x
+      VectorN x_node;
+      MatrixN Jf_x;
+      std::array<MatrixN, S> dK_dx;
+      for (Integer i{0}; i < S; ++i) {
+        // Compute the node
+        x_node = x + K(all, seqN(0, i)) * this->m_tableau.A(i, seqN(0, i)).transpose();
+
+        // Compute the Jacobian of f with respect to x at the node
+        if (!this->m_reverse) {
+          Jf_x = static_cast<Explicit<Real, N, M> const *>(this->m_system.get())->Jf_x(x_node, t + h*this->m_tableau.c(i));
+        } else {
+          Jf_x = static_cast<Explicit<Real, N, M> const *>(this->m_system.get())->Jf_x_reverse(x_node, t + h*this->m_tableau.c(i));
+        }
+
+        // Propagate the derivative of K with respect to x
+        dK_dx[i] = h * Jf_x;
+        for (Integer j{0}; j < i; ++j) {
+          dK_dx[i] += h * Jf_x * dK_dx[j] * this->m_tableau.A(i, j);
+        }
+
+        // Check for NaNs or Infs
+        if (!dK_dx[i].allFinite()) {return false;}
+      }
+
+      // Compute the derivative of x_new with respect to x
+      Jx.setIdentity();
+      for (Integer i{0}; i < S; ++i) {Jx += h * dK_dx[i] * this->m_tableau.b(i);}
+
+      return true;
+    }
+
+    /**
     * Compute the residual of system to be solved, which is given by the values of the system
     *
     * \f[
@@ -866,31 +918,62 @@ namespace Sandals {
     }
 
     /**
-    * Compute the Jacobian of the variables \f$ \mathbf{K} \f$ with respect to the states
-    * \f$ \mathbf{x} \f$ as
-    *
-    * \f[
-    *   \frac{\partial\mathbf{K}}{\partial\mathbf{x}} =
-    *   \begin{bmatrix}
-    *     \mathbf{I} & \mathbf{0} & \cdots & \mathbf{0} \\
-    *
-
-
-    & \mathbf{0} & \cdots & \mathbf{0} \\
-    *     \mathbf{0} & \mathbf{I} & \cdots & \mathbf{0} \\
-    *     \vdots & \vdots & \ddots & \vdots \\
-    *     \mathbf{0} & \mathbf{0} & \cdots & \mathbf{I}
-    *   \end{bmatrix} \text{,}
-    * \f]
-    *
-    * where \f$ \mathbf{I} \f$ is the identity matrix of size \f$ N \times N \f$.
-    * \param[out] jac The Jacobian of the variables \f$ \mathbf{K} \f$ with respect to the states
+    * Propagate the derivative of the states \f$ \mathbf{x}_{k+1} \f$ with respect to the states
+    * \f$ \mathbf{x}_k \f$ at the previous step using an explicit Runge-Kutta method, given an
+    * implicit system of the form \f$ \mathbf{F}(\mathbf{x}, \mathbf{x}^\prime, t) = 0 \f$.
+    * \param[in] x States \f$ \mathbf{x}_k \f$ at the \f$ k \f$-th step.
+    * \param[in] t Independent variable (or time) \f$ t_k \f$ at the \f$ k \f$-th step.
+    * \param[in] h Advancing step \f$ h_k \f$ at the \f$ k \f$-th step.
+    * \param[in] K The \f$ \mathbf{K} \f$ variables of the Runge-Kutta method.
+    * \param[in,out] Jx The derivative of the \f$ \mathbf{K} \f$ variables with respect to the states
     * \f$ \mathbf{x} \f$.
+    * \note This function assumes that the \f$ \mathbf{K} \f$ variables have been already computed.
+    * \return True if the propagation is successfully computed, false otherwise.
     */
-   // void irk_jacobian_K(MatrixK const & K, MatrixJK & jac) const
-   // {
-//
-   // }
+    bool erk_implicit_propagate(VectorN const & x, Real const t, Real const h, MatrixK const & K,
+      MatrixJX & Jx) const
+    {
+      using Eigen::all;
+      using Eigen::seqN;
+
+      // Propagate the derivative of K with respect to x
+      VectorN x_node, x_dot_node;
+      MatrixN JF_x, JF_x_dot, jac;
+      std::array<MatrixN, S> dK_dx;
+      for (Integer i{0}; i < S; ++i) {
+        // Compute the node
+        x_node = x + K(all, seqN(0, i)) * this->m_tableau.A(i, seqN(0, i)).transpose();
+        x_dot_node = K.col(i) / h;
+
+        // Compute the Jacobians of F with respect to x and x_dot at the node
+        if (!this->m_reverse) {
+          JF_x     = this->m_system->JF_x(x_node, x_dot_node, t + h*this->m_tableau.c(i));
+          JF_x_dot = this->m_system->JF_x_dot(x_node, x_dot_node, t + h*this->m_tableau.c(i));
+        } else {
+          JF_x     = this->m_system->JF_x_reverse(x_node, x_dot_node, t + h*this->m_tableau.c(i));
+          JF_x_dot = this->m_system->JF_x_dot_reverse(x_node, x_dot_node, t + h*this->m_tableau.c(i));
+        }
+
+        // Propagate the derivative of K with respect to x
+        jac = MatrixN::Identity();
+        for (Integer j{0}; j < i; ++j) {
+          jac += dK_dx[j] * this->m_tableau.A(i, j);
+        }
+        // Solve the linear system: JF_x_dot/h * dK_dx[i] + JF_x * jac = 0
+        // Rearranged: dK_dx[i] = -h * JF_x * jac * (JF_x_dot)^(-1)
+        // But since JF_x_dot/h is the Jacobian w.r.t. x_dot, we solve for dK_dx[i]
+        dK_dx[i] = -(JF_x * jac).lu().solve(JF_x_dot / h);
+
+        // Check for NaNs or Infs
+        if (!dK_dx[i].allFinite()) {return false;}
+      }
+
+      // Compute the derivative of x_new with respect to x
+      Jx.setIdentity();
+      for (Integer i{0}; i < S; ++i) {Jx += h * dK_dx[i] * this->m_tableau.b(i);}
+
+      return true;
+    }
 
     /*\
      |   ___ ____  _  __
@@ -1061,6 +1144,70 @@ namespace Sandals {
       return true;
     }
 
+    /**
+    * Propagate the derivative of the states \f$ \mathbf{x}_{k+1} \f$ with respect to the states
+    * \f$ \mathbf{x}_k \f$ at the previous step using an implicit Runge-Kutta method, given an
+    * implicit system of the form \f$ \mathbf{F}(\mathbf{x}, \mathbf{x}^\prime, t) = 0 \f$.
+    * \param[in] x States \f$ \mathbf{x}_k \f$ at the \f$ k \f$-th step.
+    * \param[in] t Independent variable (or time) \f$ t_k \f$ at the \f$ k \f$-th step.
+    * \param[in] h Advancing step \f$ h_k \f$ at the \f$ k \f$-th step.
+    * \param[in] K The \f$ \mathbf{K} \f$ variables of the Runge-Kutta method.
+    * \param[in,out] Jx The derivative of the \f$ \mathbf{K} \f$ variables with respect to the states
+    * \f$ \mathbf{x} \f$.
+    * \note This function assumes that the \f$ \mathbf{K} \f$ variables have been already computed.
+    * \return True if the propagation is successfully computed, false otherwise.
+    */
+    bool irk_propagate(VectorN const & x, Real const t, Real const h, MatrixK const & K,
+      MatrixJX & Jx) const
+    {
+      using Eigen::all;
+      using Eigen::seqN;
+
+      // Propagate the derivative of K with respect to x
+      VectorN x_node, x_dot_node;
+      MatrixN JF_x, JF_x_dot;
+      Eigen::Matrix<Real, N*S, N*S> A;
+      Eigen::Matrix<Real, N*S, N> b;
+      std::array<MatrixN, S> dK_dx;
+      for (Integer i{0}; i < S; ++i) {
+        // Compute the node
+        x_node = x + K * this->m_tableau.A.row(i).transpose();
+        x_dot_node = K.col(i) / h;
+
+        // Compute the Jacobians of F with respect to x and x_dot at the node
+        if (!this->m_reverse) {
+          JF_x     = this->m_system->JF_x(x_node, x_dot_node, t + h*this->m_tableau.c(i));
+          JF_x_dot = this->m_system->JF_x_dot(x_node, x_dot_node, t + h*this->m_tableau.c(i));
+        } else {
+          JF_x     = this->m_system->JF_x_reverse(x_node, x_dot_node, t + h*this->m_tableau.c(i));
+          JF_x_dot = this->m_system->JF_x_dot_reverse(x_node, x_dot_node, t + h*this->m_tableau.c(i));
+        }
+
+        // Fill the big linear system
+        A.block(i*N, i*N, N, N) = JF_x_dot;
+        for (Integer j{0}; j < S; ++j) {
+          A.block(i*N, j*N, N, N) += h * this->m_tableau.A(i, j) * JF_x;
+        }
+        b.block(i*N, 0, N, N) = -h * JF_x;
+
+        // Check for NaNs or Infs
+        if (!JF_x.allFinite() || !JF_x_dot.allFinite()) {return false;}
+      }
+
+      // Solve the big linear system
+      Eigen::Matrix<Real, N*S, N> dK_dx_mat(A.lu().solve(b));
+      for (Integer i{0}; i < S; ++i) {
+        dK_dx[i] = dK_dx_mat.block(i*N, 0, N, N);
+        if (!dK_dx[i].allFinite()) {return false;}
+      }
+
+      // Compute the derivative of x_new with respect to x
+      Jx.setIdentity();
+      for (Integer i{0}; i < S; ++i) {Jx += h * dK_dx[i] * this->m_tableau.b(i);}
+
+      return true;
+    }
+
     /*\
      |   ____ ___ ____  _  __
      |  |  _ \_ _|  _ \| |/ /
@@ -1199,6 +1346,63 @@ namespace Sandals {
     }
 
     /**
+    * Propagate the derivative of the states \f$ \mathbf{x}_{k+1} \f$ with respect to the states
+    * \f$ \mathbf{x}_k \f$ at the previous step using a diagonally implicit Runge-Kutta method, given
+    * an implicit system of the form \f$ \mathbf{F}(\mathbf{x}, \mathbf{x}^\prime, t) = 0 \f$.
+    * \param[in] x States \f$ \mathbf{x}_k \f$ at the \f$ k \f$-th step.
+    * \param[in] t Independent variable (or time) \f$ t_k \f$ at the \f$ k \f$-th step.
+    * \param[in] h Advancing step \f$ h_k \f$ at the \f$ k \f$-th step.
+    * \param[in] K The \f$ \mathbf{K} \f$ variables of the Runge-Kutta method.
+    * \param[in,out] Jx The derivative of the \f$ \mathbf{K} \f$ variables with respect to the states
+    * \f$ \mathbf{x} \f$.
+    * \note This function assumes that the \f$ \mathbf{K} \f$ variables have been already computed.
+    * \return True if the propagation is successfully computed, false otherwise.
+    */
+    bool dirk_propagate(VectorN const & x, Real const t, Real const h, MatrixK const & K,
+      MatrixJX & Jx) const
+    {
+      using Eigen::all;
+      using Eigen::seqN;
+
+      // Propagate the derivative of K with respect to x for DIRK methods
+      VectorN x_node, x_dot_node;
+      MatrixN JF_x, JF_x_dot, jac;
+      std::array<MatrixN, S> dK_dx;
+      for (Integer i{0}; i < S; ++i) {
+        // Compute the node
+        x_node = x + K(all, seqN(0, i+1)) * this->m_tableau.A(i, seqN(0, i+1)).transpose();
+        x_dot_node = K.col(i) / h;
+
+        // Compute the Jacobians of F with respect to x and x_dot at the node
+        if (!this->m_reverse) {
+          JF_x     = this->m_system->JF_x(x_node, x_dot_node, t + h*this->m_tableau.c(i));
+          JF_x_dot = this->m_system->JF_x_dot(x_node, x_dot_node, t + h*this->m_tableau.c(i));
+        } else {
+          JF_x     = this->m_system->JF_x_reverse(x_node, x_dot_node, t + h*this->m_tableau.c(i));
+          JF_x_dot = this->m_system->JF_x_dot_reverse(x_node, x_dot_node, t + h*this->m_tableau.c(i));
+        }
+
+        // Propagate the derivative of K with respect to x
+        jac = MatrixN::Identity();
+        for (Integer j{0}; j < i; ++j) {
+          jac += dK_dx[j] * this->m_tableau.A(i, j);
+        }
+        // Solve the linear system: JF_x_dot/h * dK_dx[i] + JF_x * jac = 0
+        // Rearranged: dK_dx[i] = -h * JF_x * jac * (JF_x_dot)^(-1)
+        dK_dx[i] = -(JF_x * jac).lu().solve(JF_x_dot / h);
+
+        // Check for NaNs or Infs
+        if (!dK_dx[i].allFinite()) {return false;}
+      }
+
+      // Compute the derivative of x_new with respect to x
+      Jx.setIdentity();
+      for (Integer i{0}; i < S; ++i) {Jx += h * dK_dx[i] * this->m_tableau.b(i);}
+
+      return true;
+    }
+
+    /**
     * Compute a step using a generic integration method for a system of the form \f$ \mathbf{F}(
     * \mathbf{x}, \mathbf{x}^\prime, t) = \mathbf{0} \f$. The step is automatically selected
     * based on the system properties and the integration method properties.
@@ -1232,6 +1436,37 @@ namespace Sandals {
     }
 
     /**
+    * Propagate the derivative of the states \f$ \mathbf{x}_{k+1} \f$ with respect to the states
+    * \f$ \mathbf{x}_k \f$ at the previous step using a generic integration method for a system of
+    * the form \f$ \mathbf{F}(\mathbf{x}, \mathbf{x}^\prime, t) = 0 \f$. The step is automatically
+    * selected based on the system properties and the integration method properties.
+    * \param[in] x States \f$ \mathbf{x}_k \f$ at the \f$ k \f$-th step.
+    * \param[in] t Independent variable (or time) \f$ t_k \f$ at the \f$ k \f$-th step.
+    * \param[in] h Advancing step \f$ h_k \f$ at the \f$ k \f$-th step.
+    * \param[in] K The \f$ \mathbf{K} \f$ variables of the Runge-Kutta method.
+    * \param[in,out] Jx The derivative of the \f$ \mathbf{K} \f$ variables with respect to the states
+    * \f$ \mathbf{x} \f$.
+    * \note This function assumes that the \f$ \mathbf{K} \f$ variables have been already computed.
+    * \return True if the propagation is successfully computed, false otherwise.
+    */
+    bool propagate(VectorN const & x, Real const t, Real const h, MatrixK const & K, MatrixJX & Jx) const
+    {
+      #define CMD "Sandals::RungeKutta::propagate(...): "
+
+      if (this->is_erk() && this->m_system->is_explicit()) {
+        return this->erk_explicit_propagate(x, t, h, K, Jx);
+      } else if (this->is_erk() && this->m_system->is_implicit()) {
+        return this->erk_implicit_propagate(x, t, h, K, Jx);
+      } else if (this->is_dirk()) {
+        return this->dirk_propagate(x, t, h, K, Jx);
+      } else {
+        return this->irk_propagate(x, t, h, K, Jx);
+      }
+
+      #undef CMD
+    }
+
+    /**
     * Advance using a generic integration method for a system of the form \f$ \mathbf{F}(\mathbf{x},
     * \mathbf{x}^\prime, t) = \mathbf{0} \f$. The step is automatically selected based on the
     * system properties and the integration method properties. In the advvancing step, the system
@@ -1242,9 +1477,15 @@ namespace Sandals {
     * \param[in] h_old Advancing step \f$ h_k \f$ at the \f$ k \f$-th step.
     * \param[out] x_new Computed states \f$ \mathbf{x}_{k+1} \f$ at the \f$ (k+1) \f$-th step.
     * \param[out] h_new The suggested step \f$ h_{k+1}^\star \f$ for the next advancing step.
+    * \param[out] Jx If Propagate is true, the derivative of \f$ \mathbf{x}_{k+1} \f$ with respect to
+    * \f$ \mathbf{x}_k \f$ at the previous step, else ignored.
+    * \tparam Propagate If true, propagate the derivative of the solution with respect to the
+    * states \f$ \mathbf{x} \f$.
     * \return True if the step is successfully computed, false otherwise.
     */
-    bool advance(VectorN const & x_old, Real const t_old, Real const h_old, VectorN & x_new, Real & h_new) const
+    template <bool Propagate = true>
+    bool advance(VectorN const & x_old, Real const t_old, Real const h_old, VectorN & x_new,
+      Real & h_new, MatrixJX & Jx) const
     {
       #define CMD "Sandals::RungeKutta::advance(...): "
 
@@ -1252,10 +1493,14 @@ namespace Sandals {
       SANDALS_ASSERT(h_old > Real(0.0), CMD "in " << this->m_tableau.name << " solver, h = "<<
         h_old << ", expected > 0.");
 
+      // Reset the derivative propagation matrix
+      if constexpr (Propagate) {Jx.setIdentity();}
+
       // If the integration step failed, try again with substepping
       MatrixK K;
-      if (!this->step(x_old, t_old, h_old, x_new, h_new, K))
-      {
+      if (!this->step(x_old, t_old, h_old, x_new, h_new, K)) {
+
+        // Store temporary variables
         VectorN x_tmp(x_old);
         Real t_tmp{t_old}, h_tmp{h_old / Real(2.0)};
 
@@ -1265,6 +1510,19 @@ namespace Sandals {
         while (k > 0) {
           // Calculate the next step with substepping logic
           if (this->step(x_tmp, t_tmp, h_tmp, x_new, h_new_tmp, K)) {
+
+            if constexpr (Propagate) {
+              // Propagate the derivative of K with respect to x
+              MatrixJX Jx_tmp;
+              if (!this->propagate(x_tmp, t_tmp, h_tmp, K, Jx_tmp)) {
+                SANDALS_WARNING(CMD "in " << this->m_tableau.name << " solver, at t = " << t_tmp <<
+                  ", Jacobian propagation failed, aborting.");
+                return false;
+              }
+
+              // Update the derivative propagation
+              if constexpr (Propagate) {Jx *= Jx_tmp;}
+            }
 
             // Accept the step
             h_tmp = h_new_tmp;
@@ -1308,6 +1566,16 @@ namespace Sandals {
         // Store output states substepping solutions
         x_new = x_tmp;
         h_new = h_tmp;
+
+      } else {
+        // Propagate the derivative of the solution with respect to the states x
+        if constexpr (Propagate) {
+          if (!this->propagate(x_old, t_old, h_old, K, Jx)) {
+            SANDALS_WARNING(CMD "in " << this->m_tableau.name << " solver, at t = " << t_old <<
+              ", Jacobian propagation failed, aborting.");
+            return false;
+          }
+        }
       }
 
       // Project intermediate solution on the invariants
@@ -1325,17 +1593,23 @@ namespace Sandals {
     }
 
     /**
-    * Solve the system and calculate the approximate solution over the independent variable  (or
-    * time) mesh\f$ \mathbf{t} = \left[ t_1, t_2, \ldots, t_n \right]^\top \f$. The step size is fixed
-    * and given by \f$ h = t_{k+1} - t_k \f$.
+    * Solve the integration problem and calculate the approximate solution over the independent
+    * variable (or time) mesh\f$ \mathbf{t} = \left[ t_1, t_2, \ldots, t_n \right]^\top \f$. The
+    * step size is fixed and given by \f$ h_k = t_{k+1} - t_k \f$. he derivative of the solution
+    * with respect to the states \f$ \mathbf{x} \f$ is also propagated for sensitivity analysis.
     * \param[in] t_mesh Independent variable (or time) mesh \f$ \mathbf{t} \f$.
     * \param[in] ics Initial conditions \f$ \mathbf{x}(t = 0) \f$.
     * \param[out] sol The solution of the system over the mesh of independent variable.
+    * \param[out] Jx If Propagate is true, the derivative of the solution with respect to the
+    * states \f$ \mathbf{x} \f$, else ignored.
     * \return True if the system is successfully solved, false otherwise.
+    * \tparam Propagate If true, propagate the derivative of the solution with respect to the
+    * states \f$ \mathbf{x} \f$.
     * \warning Do not use the solution for internal backtracking, as the step callback may directly
     * modify the solution.
     */
-    bool solve(VectorX const & t_mesh, VectorN const & ics, Solution<Real, N, M> & sol) const
+    template <bool Propagate = true>
+    bool solve(VectorX const & t_mesh, VectorN const & ics, Solution<Real, N, M> & sol, MatrixJX & Jx) const
     {
       using Eigen::last;
 
@@ -1346,6 +1620,9 @@ namespace Sandals {
       sol.t(0)     = t_mesh(0);
       sol.x.col(0) = ics;
       sol.h.col(0) = this->m_system->h(ics, t_mesh(0));
+
+      // Reset the derivative propagation matrix
+      if constexpr (Propagate) {Jx.setIdentity();}
 
       // Callback on initial conditions
       if (this->m_step_callback) {this->m_step_callback(0, ics, t_mesh(0));}
@@ -1358,7 +1635,8 @@ namespace Sandals {
 
       while (true) {
         // Integrate system
-        if (!this->advance(x_old_step, t_step, h_step, x_new_step, h_new_step)) {return false;}
+        if (!this->template advance<Propagate>(x_old_step, t_step, h_step, x_new_step, h_new_step, Jx))
+        {return false;}
 
         // Update the current step
         t_step += h_step;
@@ -1399,9 +1677,9 @@ namespace Sandals {
     }
 
     /**
-    * Solve the system and calculate the approximate solution over the suggested independent
-    * variable mesh \f$ \mathbf{t} = \left[ t_1, t_2, \ldots, t_n \right]^\top \f$, the step size
-    * is automatically computed based on the error control method.
+    * Solve the initial value problem and calculate the approximate solution over the independent
+    * variable (or time) mesh\f$ \mathbf{t} = \left[ t_1, t_2, \ldots, t_n \right]^\top \f$. The
+    * step size is fixed and given by \f$ h_k = t_{k+1} - t_k \f$.
     * \param[in] t_mesh Independent variable (or time) mesh \f$ \mathbf{t} \f$.
     * \param[in] ics Initial conditions \f$ \mathbf{x}(t = 0) \f$.
     * \param[out] sol The solution of the system over the mesh of independent variable.
@@ -1409,7 +1687,32 @@ namespace Sandals {
     * \warning Do not use the solution for internal backtracking, as the step callback may directly
     * modify the solution.
     */
-    bool adaptive_solve(VectorX const & t_mesh, VectorN const & ics, Solution<Real, N, M> & sol) const
+    bool solve(VectorX const & t_mesh, VectorN const & ics, Solution<Real, N, M> & sol) const
+    {
+      MatrixJX Jx; // Dummy variable
+      return this->template solve<false>(t_mesh, ics, sol, Jx);
+    }
+
+    /**
+    * Solve the integration and calculate the approximate solution over the independent
+    * variable (or time) mesh\f$ \mathbf{t} = \left[ t_1, t_2, \ldots, t_n \right]^\top \f$. The
+    * step size is automatically computed based on the error control method but initialized to
+    * the first step of the mesh, i.e., \f$ h_1 = t_2 - t_1 \f$. The derivative of the solution with
+    * respect to the states \f$ \mathbf{x} \f$ is also propagated for sensitivity analysis.
+    * \param[in] t_mesh Independent variable (or time) mesh \f$ \mathbf{t} \f$.
+    * \param[in] ics Initial conditions \f$ \mathbf{x}(t = 0) \f$.
+    * \param[out] sol The solution of the system over the mesh of independent variable.
+    * \param[out] Jx If Propagate is true, the derivative of the solution with respect to the
+    * states \f$ \mathbf{x} \f$, else ignored.
+    * \return True if the system is successfully solved, false otherwise.
+    * \tparam Propagate If true, propagate the derivative of the solution with respect to the
+    * states \f$ \mathbf{x} \f$.
+    * \warning Do not use the solution for internal backtracking, as the step callback may directly
+    * modify the solution.
+    */
+    template <bool Propagate = true>
+    bool adaptive_solve(VectorX const & t_mesh, VectorN const & ics, Solution<Real, N, M> & sol,
+      MatrixJX & Jx) const
     {
       using Eigen::all;
       using Eigen::last;
@@ -1440,6 +1743,9 @@ namespace Sandals {
       sol.x.col(0) = ics;
       sol.h.col(0) = this->m_system->h(ics, t_mesh(0));
 
+      // Reset the derivative propagation matrix
+      if constexpr (Propagate) {Jx.setIdentity();}
+
       // Callback on initial conditions
       if (this->m_step_callback) {this->m_step_callback(0, ics, t_mesh(0));}
 
@@ -1449,7 +1755,7 @@ namespace Sandals {
 
       while (true) {
         // Integrate system
-        this->advance(x_old_step, t_step, h_step, x_new_step, h_new_step);
+        this->template advance<Propagate>(x_old_step, t_step, h_step, x_new_step, h_new_step, Jx);
 
         // Update the current step
         t_step += h_step;
@@ -1486,6 +1792,24 @@ namespace Sandals {
       return true;
 
       #undef CMD
+    }
+
+    /**
+    * Solve the initial value problem and calculate the approximate solution over the independent
+    * variable (or time) mesh\f$ \mathbf{t} = \left[ t_1, t_2, \ldots, t_n \right]^\top \f$. The
+    * step size is automatically computed based on the error control method but initialized to
+    * the first step of the mesh, i.e., \f$ h_1 = t_2 - t_1 \f$.
+    * \param[in] t_mesh Independent variable (or time) mesh \f$ \mathbf{t} \f$.
+    * \param[in] ics Initial conditions \f$ \mathbf{x}(t = 0) \f$.
+    * \param[out] sol The solution of the system over the mesh of independent variable.
+    * \return True if the system is successfully solved, false otherwise.
+    * \warning Do not use the solution for internal backtracking, as the step callback may directly
+    * modify the solution.
+    */
+    bool adaptive_solve(VectorX const & t_mesh, VectorN const & ics, Solution<Real, N, M> & sol) const
+    {
+      MatrixJX Jx; // Dummy variable
+      return this->template adaptive_solve<false>(t_mesh, ics, sol, Jx);
     }
 
     /**
