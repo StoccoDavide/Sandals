@@ -101,9 +101,7 @@ public:
 
   VectorF analytical_solution(Real const t) const {
     VectorF x;
-    constexpr Real c0{0.0};
-    constexpr Real c1{-1.0};
-    x << 0.5*t*t + c1*t + c0, t + c1;
+    x << 0.5*t*t - t, t - 1.0;
     return x;
   }
 

@@ -62,19 +62,24 @@ int main(int argc, char **argv) {
   (void)argv;
 #endif
 
-  Eigen::VectorXd time = Eigen::VectorXd::LinSpaced(10, 0.0, 1.0);
+  static constexpr long num_points{10};
+
+  Eigen::VectorXd time = Eigen::VectorXd::LinSpaced(num_points, 0.0, 1.0);
+  Eigen::Vector<Real, 2> ics;
+  ics << 10.0, -10.0;
 
   BasicExplicitProblem problem_explicit(std::make_shared<RK4<Real, 2, 0>>());
   problem_explicit.verbose_mode(true);
-  problem_explicit.single_shooting(time, problem_explicit.ics());
+  std::cout << "tolerance = " << problem_explicit.tolerance() << std::endl;
+  problem_explicit.multiple_shooting(time, ics);
 
   BasicImplicitProblem problem_implicit(std::make_shared<RK4<Real, 2, 0>>());
   problem_implicit.verbose_mode(true);
-  problem_implicit.single_shooting(time, problem_explicit.ics());
+  problem_implicit.multiple_shooting(time, ics);
 
   BasicSemiExplicitProblem problem_semiexplicit(std::make_shared<RK4<Real, 2, 0>>());
   problem_semiexplicit.verbose_mode(true);
-  problem_semiexplicit.single_shooting(time, problem_explicit.ics());
+  problem_semiexplicit.multiple_shooting(time, ics);
 
   #ifdef SANDALS_ENABLE_PLOTTING
     auto esol = problem_explicit.solution();
@@ -99,7 +104,7 @@ int main(int argc, char **argv) {
     graph_ay->SetMarkerColor(colors[1]); graph_ay->SetMarkerStyle(8); graph_ay->Draw("P SAME");
     graph_ex->GetXaxis()->SetTitle("t (s)");
     graph_ex->GetYaxis()->SetTitle("x, y (-)");
-    graph_ex->GetXaxis()->SetLimits(0.0, 1.0);
+    graph_ex->GetXaxis()->SetLimits(time(0), time(Eigen::last));
     graph_ex->GetYaxis()->SetRangeUser(-1.25, 0.25);
     TLegend *leg1 = new TLegend(0.6, 0.7, 0.9, 0.9);
     leg1->AddEntry(graph_ex, "x (explicit)", "l");
@@ -118,7 +123,7 @@ int main(int argc, char **argv) {
     graph_ay->SetMarkerColor(colors[1]); graph_ay->Draw("P SAME");
     graph_ix->GetXaxis()->SetTitle("t (s)");
     graph_ix->GetYaxis()->SetTitle("x, y (-)");
-    graph_ix->GetXaxis()->SetLimits(0.0, 1.0);
+    graph_ix->GetXaxis()->SetLimits(time(0), time(Eigen::last));
     graph_ix->GetYaxis()->SetRangeUser(-1.25, 0.25);
     TLegend *leg2 = new TLegend(0.6, 0.7, 0.9, 0.9);
     leg2->AddEntry(graph_ix, "x (implicit)", "l");
@@ -137,7 +142,7 @@ int main(int argc, char **argv) {
     graph_ay->SetMarkerColor(colors[1]); graph_ay->Draw("P SAME");
     graph_sx->GetXaxis()->SetTitle("t (s)");
     graph_sx->GetYaxis()->SetTitle("x, y (-)");
-    graph_sx->GetXaxis()->SetLimits(0.0, 1.0);
+    graph_sx->GetXaxis()->SetLimits(time(0), time(Eigen::last));
     graph_sx->GetYaxis()->SetRangeUser(-1.25, 0.25);
     TLegend *leg3 = new TLegend(0.6, 0.7, 0.9, 0.9);
     leg3->AddEntry(graph_sx, "x (semi-explicit)", "l");

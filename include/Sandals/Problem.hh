@@ -52,13 +52,14 @@ namespace Sandals
 
   private:
     std::string   m_name{"(undefined)"}; /**< Name of the problem. */
-    SystemPtr     m_system; /**< ODE/DAE system. */
-    IntegratorPtr m_integrator; /**< Runge-Kutta method. */
-    SolutionPtr   m_solution; /**< Solution of the problem. */
+    SystemPtr     m_system;              /**< ODE/DAE system. */
+    IntegratorPtr m_integrator;          /**< Runge-Kutta method. */
+    SolutionPtr   m_solution;            /**< Solution of the problem. */
 
-    bool    m_verbose{false};                   /**< Verbose mode boolean. */
-    Real    m_tolerance{EPSILON_HIGH}; /**< Tolerance for the solution. */
+    bool    m_verbose{false};          /**< Verbose mode boolean. */
+    Real    m_tolerance{SQRT_EPSILON}; /**< Tolerance for the solution. */
     Integer m_max_iterations{100};     /**< Maximum number of iterations. */
+    Integer m_subintervals{1};         /**< Number of subintervals for the shooting methods. */
 
   public:
     /**
@@ -173,6 +174,19 @@ namespace Sandals
     {this->m_max_iterations = t_max_iterations;}
 
     /**
+    * Get the number of subintervals for the shooting methods.
+    * \return The number of subintervals for the shooting methods.
+    */
+    Integer & subintervals() {return this->m_subintervals;}
+
+    /**
+    * Set the number of subintervals for the shooting methods.
+    * \param[in] t_subintervals The number of subintervals for the shooting methods.
+    */
+    void subintervals(Integer const t_subintervals)
+    {this->m_subintervals = t_subintervals;}
+
+    /**
     * Evaluate the boundary conditions function of the problem \f$ \mathbf{b}(\mathbf{x}_{\text{ini}},
     * \mathbf{x}_{\text{end}}) \f$.
     * \param[in] x_ini Initial states \f$ \mathbf{x}_{\text{ini}} \f$.
@@ -202,13 +216,13 @@ namespace Sandals
     virtual MatrixJF Jb_x_end(VectorF const & x_ini, VectorF const & x_end) const = 0;
 
     /**
-    * Solve the boundary value problem (BVP) using the Runge-Kutta method uning a single shooting method.
+    * Solve the boundary value problem (BVP) using the single shooting method.
     * \param[in] t_mesh Independent variable (or time) mesh \f$ \mathbf{t} \f$.
     * \param[in] ics Initial conditions \f$ \mathbf{x}(t = 0) \f$.
     * \param[out] sol The solution of the system over the mesh of independent variable.
     * \return True if the system is successfully solved, false otherwise.
-    * \warning Do not use the solution for internal backtracking, as the step callback may directly
-    * modify the solution.
+    * \warning Do not use the solution object for internal backtracking, as the step callback may
+    * directly modify the solution.
     */
     bool single_shooting(VectorX const & t_mesh, VectorF const & ics)
     {
@@ -218,10 +232,10 @@ namespace Sandals
       #define CMD "Sandals::Problem::single_shooting(...): "
 
       // Temporary variables
-      VectorF bcs, x_ini, x_end;
-      ShootingF x_sol, x_step, b;
-      ShootingJF A(ShootingJF::Zero());
-      A.template block<N, N>(0, N) = MatrixJX::Identity();
+      VectorF b, x_ini, x_end;
+      ShootingF x_sol, x_step, b_sys;
+      ShootingJF A_sys;
+      A_sys.template block<N, N>(0, N) = MatrixJX::Identity();
 
       // Initialize the guess and the solution
       x_sol << ics, ics;
@@ -230,10 +244,10 @@ namespace Sandals
       // Solve the boundary value problem using a linearized Newton method
       MatrixJX Jx(MatrixJX::Identity());
       Eigen::FullPivLU<ShootingJF> lu;
-      for (Integer i{0}; i < this->m_max_iterations; ++i) {
+      for (Integer iter{0}; iter < this->m_max_iterations; ++iter) {
 
         /* Single shooting method
-                  [A]           {x}   =          {f}
+                [A_sys]          {x}  =       {b_sys}
          /   -Jx       I     \ /    \   / x_end - x_sol_end \
          |                   | | dx | = |                   |
          \ Jb_x_ini Jb_x_end / \    /   \        -b         /
@@ -250,32 +264,178 @@ namespace Sandals
         x_end = this->m_solution->x.col(this->m_solution->t.size() - 1);
 
         // Evaluate the residual of the boundary conditions
-        bcs = this->b(x_ini, x_end);
+        b = this->b(x_ini, x_end);
 
         // Print the iteration info
         if (this->m_verbose) {
-          std::cout << "Iteration " << i << ": |b| = " << bcs.norm() << std::endl
-                    << "  x(" << t_mesh.template head<1>() << ") = " << x_ini.transpose() << std::endl
-                    << "  x(" << t_mesh.template tail<1>() << ") = " << x_end.transpose() << std::endl;
+          std::cout
+            << "Iteration " << iter << ": |b| = " << b.norm() << std::endl
+            << "  x(" << t_mesh.template head<1>() << ") = " << x_ini.transpose() << std::endl
+            << "  x(" << t_mesh.template tail<1>() << ") = " << x_end.transpose() << std::endl;
         }
 
         // Check if the solution is found (i.e., if the boundary conditions are satisfied)
-        if (bcs.norm() < this->m_tolerance) {return true;}
+        if (b.norm() < this->m_tolerance) {return true;}
 
         // Build the linear system
-        b.template head<N>() = x_end - x_sol.template tail<N>();
-        b.template tail<N>() = -bcs;
-        A.template block<N, N>(0, 0) = -Jx;
-        A.template block<N, N>(N, 0) = this->Jb_x_ini(x_ini, x_end);
-        A.template block<N, N>(N, N) = this->Jb_x_end(x_ini, x_end);
+        b_sys.template head<N>() = x_end - x_sol.template tail<N>();
+        b_sys.template tail<N>() = -b;
+        A_sys.template block<N, N>(0, 0) = -Jx;
+        A_sys.template block<N, N>(N, 0) = this->Jb_x_ini(x_ini, x_end);
+        A_sys.template block<N, N>(N, N) = this->Jb_x_end(x_ini, x_end);
 
         // Compute the solution of the linear system
-        lu.compute(A);
+        lu.compute(A_sys);
         SANDALS_ASSERT(lu.rank() == 2*N, CMD "singular Jacobian detected.");
-        x_step = lu.solve(b);
+        x_step = lu.solve(b_sys);
 
         // Update the solution
         x_sol += x_step;
+      }
+
+      // If the loop completes without returning, indicate failure
+      if (this->m_verbose) {SANDALS_WARNING(CMD "maximum number of iterations reached.");}
+      return false;
+
+      #undef CMD
+    }
+
+    /**
+    * Solve the boundary value problem (BVP) using the multiple shooting method.
+    * \param[in] t_mesh Independent variable (or time) mesh \f$ \mathbf{t} \f$.
+    * \param[in] ics Initial conditions \f$ \mathbf{x}(t = 0) \f$.
+    * \return True if the system is successfully solved, false otherwise.
+    * \warning Do not use the solution object for internal backtracking, as the step callback may
+    * directly modify the solution.
+    */
+    bool multiple_shooting(VectorX const & t_mesh, VectorF const & ics)
+    {
+      using DynVec = Eigen::Matrix<Real, Eigen::Dynamic, 1>;
+      using DynMat = Eigen::Matrix<Real, Eigen::Dynamic, Eigen::Dynamic>;
+
+      #define CMD "Sandals::Problem::multiple_shooting(...): "
+
+      // Temporary variables
+      const Integer num_intervals{static_cast<Integer>(t_mesh.size()) - 1};
+
+      // Initialize the guess and the solution
+      std::vector<VectorF> x_guess(num_intervals + 1, ics);
+      this->m_solution->clear();
+      this->m_solution.resize(t_mesh.size());
+
+      // Solve the boundary value problem using a linearized Newton method
+      std::vector<MatrixJX> Jx(num_intervals, MatrixJX::Identity());
+      for (Integer iter{0}; iter < this->m_max_iterations; ++iter) {
+
+        // Store states at interval boundaries
+        std::vector<VectorF> x_states(num_intervals + 1);
+        x_states[0] = x_guess[0];
+
+        // Integrate each interval
+        std::vector<Solution<Real, N, M>> local_solutions(num_intervals);
+        for (Integer k{0}; k < num_intervals; ++k) {
+          Solution<Real, N, M> local_sol;
+          // The integrator expects the two-node segment [t_k, t_{k+1}]
+          //VectorX t_local_mesh(Eigen::LinSpaced(std::max(2, this->m_subintervals), t_mesh(k), t_mesh(k + 1)));
+          if (!this->m_integrator->solve(t_mesh.segment(k, 2), x_guess[k], local_sol, Jx[k])) {
+            SANDALS_ERROR(CMD "failed to integrate interval " << k << ".");
+            return false;
+          }
+          x_states[k + 1] = local_sol.x.col(local_sol.t.size() - 1);
+          local_solutions[k] = std::move(local_sol);
+        }
+
+        // Build continuity residual for states at interior nodes
+        const Integer continuity_rows{num_intervals*N};
+        const Integer unknowns{(num_intervals + 1)*N}; // state unknowns at every mesh node
+        DynVec residual(DynVec::Zero(continuity_rows));
+        for (Integer k{0}; k < num_intervals; ++k) {
+          residual.segment(k*N, N) = x_states[k + 1] - x_guess[k + 1];
+        }
+
+        // Boundary condition residuals
+        VectorF bcs(this->b(x_states[0], x_states[num_intervals]));
+        const Integer bc_rows{static_cast<Integer>(bcs.size())};
+
+        // Total residual vector: [continuity; -bcs]
+        DynVec total_residual(DynVec::Zero(continuity_rows + bc_rows));
+        total_residual.head(continuity_rows) = residual;
+        total_residual.segment(continuity_rows, bc_rows) = -bcs;
+
+        // Print the iteration info
+        if (this->m_verbose) {
+          std::cout
+            << "Iteration " << iter << ": |b| = " << bcs.norm() << ", |c| = " << residual.norm() << std::endl
+            << "  x(" << t_mesh.template head<1>() << ") = " << x_states[0].transpose() << std::endl
+            << "  x(" << t_mesh.template tail<1>() << ") = " << x_states[num_intervals].transpose() << std::endl;
+        }
+
+        // Check convergence
+        if (bcs.norm() < this->m_tolerance && residual.norm() < this->m_tolerance) {
+          // Merge local solutions into global solution (avoid duplicating boundary points)
+          // Collect times and states into temporaries, then store into m_solution
+          std::vector<Real> all_t;
+          std::vector<VectorF> all_x;
+          all_t.reserve(std::accumulate(local_solutions.begin(), local_solutions.end(), 0,
+            [] (int acc, auto &s){return acc + static_cast<int>(s.t.size());})
+          );
+          all_x.reserve(all_t.capacity());
+
+          for (Integer k{0}; k < num_intervals; ++k) {
+            const auto &ls = local_solutions[k];
+            for (Integer i{0}; i < ls.t.size(); ++i) {
+              // Skip the first point of intervals after the first to avoid duplication
+              if (k > 0 && i == 0) continue;
+              all_t.push_back(ls.t(i));
+              all_x.push_back(ls.x.col(i));
+            }
+          }
+
+          // Now fill this->m_solution from all_t / all_x
+          const Integer total_pts = static_cast<Integer>(all_t.size());
+          this->m_solution->t.resize(total_pts);
+          this->m_solution->x.resize(N, total_pts);
+          for (Integer i{0}; i < total_pts; ++i) {
+            this->m_solution->t(i) = all_t[i];
+            this->m_solution->x.col(i) = all_x[i];
+          }
+          return true;
+        }
+
+        // Build Jacobian matrix for Newton step
+        // Continuity rows x unknowns: (num_intervals*N) x ((num_intervals+1)*N)
+        DynMat jac(DynMat::Zero(continuity_rows, unknowns));
+
+        for (Integer k{0}; k < num_intervals; ++k) {
+          // -I at block (k,k), +I at block (k,k+1)
+          jac.block(k*N, k*N, N, N) = -MatrixJX::Identity();
+          jac.block(k*N, (k + 1)*N, N, N) =  MatrixJX::Identity();
+        }
+
+        // Boundary condition Jacobians (each is bc_rows x N)
+        MatrixJF Jb_ini = this->Jb_x_ini(x_states[0], x_states[num_intervals]); // bc_rows x N
+        MatrixJF Jb_end = this->Jb_x_end(x_states[0], x_states[num_intervals]); // bc_rows x N
+
+        // Append bc_rows rows to jac (same number of columns = unknowns)
+        jac.conservativeResize(continuity_rows + bc_rows, unknowns);
+        jac.block(continuity_rows, 0, Jb_ini.rows(), N) = Jb_ini;
+        // place Jb_end at the columns corresponding to the last node (index num_intervals)
+        jac.block(continuity_rows, num_intervals*N, Jb_end.rows(), N) = Jb_end;
+
+        // Solve for update. jac is typically (continuity_rows+bc_rows) x unknowns.
+        // Use least-squares solve (column-pivoting QR) to handle non-square systems / rank-deficient gracefully.
+        Eigen::ColPivHouseholderQR<DynMat> qr(jac);
+        if (qr.rank() < qr.cols()) {
+          SANDALS_ERROR(CMD "Jacobian is rank-deficient (rank = " << qr.rank()
+                        << ", cols = " << qr.cols() << ").");
+          return false;
+        }
+        DynVec x_step(qr.solve(total_residual));
+
+        // Update guesses
+        for (Integer k{0}; k < num_intervals + 1; ++k) {
+          x_guess[k] += x_step.template segment<N>(k*N);
+        }
       }
 
       // If the loop completes without returning, indicate failure
