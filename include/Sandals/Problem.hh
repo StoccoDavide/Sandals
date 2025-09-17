@@ -59,7 +59,7 @@ namespace Sandals
     bool    m_verbose{false};          /**< Verbose mode boolean. */
     Real    m_tolerance{SQRT_EPSILON}; /**< Tolerance for the solution. */
     Integer m_max_iterations{100};     /**< Maximum number of iterations. */
-    Integer m_subintervals{1};         /**< Number of subintervals for the shooting methods. */
+    Integer m_subintervals{10};         /**< Number of subintervals for the shooting methods. */
 
   public:
     /**
@@ -221,8 +221,6 @@ namespace Sandals
     * \param[in] ics Initial conditions \f$ \mathbf{x}(t = 0) \f$.
     * \param[out] sol The solution of the system over the mesh of independent variable.
     * \return True if the system is successfully solved, false otherwise.
-    * \warning Do not use the solution object for internal backtracking, as the step callback may
-    * directly modify the solution.
     */
     bool single_shooting(VectorX const & t_mesh, VectorF const & ics)
     {
@@ -305,8 +303,6 @@ namespace Sandals
     * \param[in] t_mesh Independent variable (or time) mesh \f$ \mathbf{t} \f$.
     * \param[in] ics Initial conditions \f$ \mathbf{x}(t = 0) \f$.
     * \return True if the system is successfully solved, false otherwise.
-    * \warning Do not use the solution object for internal backtracking, as the step callback may
-    * directly modify the solution.
     */
     bool multiple_shooting(VectorX const & t_mesh, VectorF const & ics)
     {
@@ -321,7 +317,7 @@ namespace Sandals
       // Initialize the guess and the solution
       std::vector<VectorF> x_guess(num_intervals + 1, ics);
       this->m_solution->clear();
-      this->m_solution.resize(t_mesh.size());
+      this->m_solution->resize(t_mesh.size());
 
       // Solve the boundary value problem using a linearized Newton method
       std::vector<MatrixJX> Jx(num_intervals, MatrixJX::Identity());
@@ -332,79 +328,60 @@ namespace Sandals
         x_states[0] = x_guess[0];
 
         // Integrate each interval
-        std::vector<Solution<Real, N, M>> local_solutions(num_intervals);
+        Solution<Real, N, M> local_sol;
         for (Integer k{0}; k < num_intervals; ++k) {
-          Solution<Real, N, M> local_sol;
           // The integrator expects the two-node segment [t_k, t_{k+1}]
-          //VectorX t_local_mesh(Eigen::LinSpaced(std::max(2, this->m_subintervals), t_mesh(k), t_mesh(k + 1)));
-          if (!this->m_integrator->solve(t_mesh.segment(k, 2), x_guess[k], local_sol, Jx[k])) {
+          Integer local_intervals{std::max(1, this->m_subintervals)};
+          VectorX t_local_mesh(VectorX::LinSpaced(local_intervals+1, t_mesh(k), t_mesh(k + 1)));
+          if (!this->m_integrator->solve(t_local_mesh, x_guess[k], local_sol, Jx[k])) {
             SANDALS_ERROR(CMD "failed to integrate interval " << k << ".");
             return false;
           }
-          x_states[k + 1] = local_sol.x.col(local_sol.t.size() - 1);
-          local_solutions[k] = std::move(local_sol);
+          // Save last state of the local solution into the states array
+          x_states[k + 1] = local_sol.x.col(local_intervals);
+          // Save the local solution into the global solution (avoid duplicating boundary points)
+          if (k == 0) {
+            this->m_solution->t(k)         = local_sol.t(0);
+            this->m_solution->t(k + 1)     = local_sol.t(local_intervals);
+            this->m_solution->x.col(k)     = local_sol.x.col(0);
+            this->m_solution->x.col(k + 1) = local_sol.x.col(local_intervals);
+          } else {
+            this->m_solution->t(k + 1)     = local_sol.t(local_intervals);
+            this->m_solution->x.col(k + 1) = local_sol.x.col(local_intervals);
+          }
         }
 
         // Build continuity residual for states at interior nodes
-        const Integer continuity_rows{num_intervals*N};
+        const Integer c_size{num_intervals*N};
         const Integer unknowns{(num_intervals + 1)*N}; // state unknowns at every mesh node
-        DynVec residual(DynVec::Zero(continuity_rows));
+        DynVec residual(DynVec::Zero(c_size));
         for (Integer k{0}; k < num_intervals; ++k) {
           residual.segment(k*N, N) = x_states[k + 1] - x_guess[k + 1];
         }
 
         // Boundary condition residuals
-        VectorF bcs(this->b(x_states[0], x_states[num_intervals]));
-        const Integer bc_rows{static_cast<Integer>(bcs.size())};
+        VectorF b(this->b(x_states[0], x_states[num_intervals]));
+        const Integer b_size{static_cast<Integer>(b.size())};
 
-        // Total residual vector: [continuity; -bcs]
-        DynVec total_residual(DynVec::Zero(continuity_rows + bc_rows));
-        total_residual.head(continuity_rows) = residual;
-        total_residual.segment(continuity_rows, bc_rows) = -bcs;
+        // Total residual vector: [continuity; -b]
+        DynVec total_residual(DynVec::Zero(c_size + b_size));
+        total_residual.head(c_size) = residual;
+        total_residual.segment(c_size, b_size) = -b;
 
         // Print the iteration info
         if (this->m_verbose) {
           std::cout
-            << "Iteration " << iter << ": |b| = " << bcs.norm() << ", |c| = " << residual.norm() << std::endl
+            << "Iteration " << iter << ": |b| = " << b.norm() << ", |c| = " << residual.norm() << std::endl
             << "  x(" << t_mesh.template head<1>() << ") = " << x_states[0].transpose() << std::endl
             << "  x(" << t_mesh.template tail<1>() << ") = " << x_states[num_intervals].transpose() << std::endl;
         }
 
         // Check convergence
-        if (bcs.norm() < this->m_tolerance && residual.norm() < this->m_tolerance) {
-          // Merge local solutions into global solution (avoid duplicating boundary points)
-          // Collect times and states into temporaries, then store into m_solution
-          std::vector<Real> all_t;
-          std::vector<VectorF> all_x;
-          all_t.reserve(std::accumulate(local_solutions.begin(), local_solutions.end(), 0,
-            [] (int acc, auto &s){return acc + static_cast<int>(s.t.size());})
-          );
-          all_x.reserve(all_t.capacity());
-
-          for (Integer k{0}; k < num_intervals; ++k) {
-            const auto &ls = local_solutions[k];
-            for (Integer i{0}; i < ls.t.size(); ++i) {
-              // Skip the first point of intervals after the first to avoid duplication
-              if (k > 0 && i == 0) continue;
-              all_t.push_back(ls.t(i));
-              all_x.push_back(ls.x.col(i));
-            }
-          }
-
-          // Now fill this->m_solution from all_t / all_x
-          const Integer total_pts = static_cast<Integer>(all_t.size());
-          this->m_solution->t.resize(total_pts);
-          this->m_solution->x.resize(N, total_pts);
-          for (Integer i{0}; i < total_pts; ++i) {
-            this->m_solution->t(i) = all_t[i];
-            this->m_solution->x.col(i) = all_x[i];
-          }
-          return true;
-        }
+        if (b.norm() < this->m_tolerance && residual.norm() < this->m_tolerance) {return true;}
 
         // Build Jacobian matrix for Newton step
         // Continuity rows x unknowns: (num_intervals*N) x ((num_intervals+1)*N)
-        DynMat jac(DynMat::Zero(continuity_rows, unknowns));
+        DynMat jac(DynMat::Zero(c_size, unknowns));
 
         for (Integer k{0}; k < num_intervals; ++k) {
           // -I at block (k,k), +I at block (k,k+1)
@@ -412,22 +389,21 @@ namespace Sandals
           jac.block(k*N, (k + 1)*N, N, N) =  MatrixJX::Identity();
         }
 
-        // Boundary condition Jacobians (each is bc_rows x N)
-        MatrixJF Jb_ini = this->Jb_x_ini(x_states[0], x_states[num_intervals]); // bc_rows x N
-        MatrixJF Jb_end = this->Jb_x_end(x_states[0], x_states[num_intervals]); // bc_rows x N
+        // Boundary condition Jacobians (each is b_size x N)
+        MatrixJF Jb_ini(this->Jb_x_ini(x_states[0], x_states[num_intervals])); // b_size x N
+        MatrixJF Jb_end(this->Jb_x_end(x_states[0], x_states[num_intervals])); // b_size x N
 
-        // Append bc_rows rows to jac (same number of columns = unknowns)
-        jac.conservativeResize(continuity_rows + bc_rows, unknowns);
-        jac.block(continuity_rows, 0, Jb_ini.rows(), N) = Jb_ini;
+        // Append b_size rows to jac (same number of columns = unknowns)
+        jac.conservativeResize(c_size + b_size, unknowns);
+        jac.block(c_size, 0, Jb_ini.rows(), N) = Jb_ini;
         // place Jb_end at the columns corresponding to the last node (index num_intervals)
-        jac.block(continuity_rows, num_intervals*N, Jb_end.rows(), N) = Jb_end;
+        jac.block(c_size, num_intervals*N, Jb_end.rows(), N) = Jb_end;
 
-        // Solve for update. jac is typically (continuity_rows+bc_rows) x unknowns.
-        // Use least-squares solve (column-pivoting QR) to handle non-square systems / rank-deficient gracefully.
+        // Solve for update. jac is typically (c_size+b_size) x unknowns
+        // Use QR (least-squares ) to handle non-square systems/rank-deficient
         Eigen::ColPivHouseholderQR<DynMat> qr(jac);
         if (qr.rank() < qr.cols()) {
-          SANDALS_ERROR(CMD "Jacobian is rank-deficient (rank = " << qr.rank()
-                        << ", cols = " << qr.cols() << ").");
+          SANDALS_ERROR(CMD "Jacobian is rank-deficient (rank = " << qr.rank() << ", cols = " << qr.cols() << ").");
           return false;
         }
         DynVec x_step(qr.solve(total_residual));

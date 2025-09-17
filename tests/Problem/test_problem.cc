@@ -12,7 +12,9 @@
 
 #include "Sandals.hh"
 #include "Sandals/Problem.hh"
-#include "Sandals/RungeKutta/RK4.hh"
+#include "Sandals/RungeKutta/RK4.hh" // ERK
+//#include "Sandals/RungeKutta/LobattoIIIA2.hh" // DIRK
+//#include "Sandals/RungeKutta/RadauIIA5.hh" // IRK
 
 #include "BasicExplicit.hh"
 #include "BasicImplicit.hh"
@@ -69,16 +71,15 @@ int main(int argc, char **argv) {
   ics << 10.0, -10.0;
 
   BasicExplicitProblem problem_explicit(std::make_shared<RK4<Real, 2, 0>>());
-  problem_explicit.verbose_mode(true);
-  std::cout << "tolerance = " << problem_explicit.tolerance() << std::endl;
+  problem_explicit.verbose_mode(false);
   problem_explicit.multiple_shooting(time, ics);
 
   BasicImplicitProblem problem_implicit(std::make_shared<RK4<Real, 2, 0>>());
-  problem_implicit.verbose_mode(true);
+  problem_implicit.verbose_mode(false);
   problem_implicit.multiple_shooting(time, ics);
 
   BasicSemiExplicitProblem problem_semiexplicit(std::make_shared<RK4<Real, 2, 0>>());
-  problem_semiexplicit.verbose_mode(true);
+  problem_semiexplicit.verbose_mode(false);
   problem_semiexplicit.multiple_shooting(time, ics);
 
   #ifdef SANDALS_ENABLE_PLOTTING
