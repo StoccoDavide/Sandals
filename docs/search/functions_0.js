@@ -4,6 +4,6 @@ var searchData=
   ['absolute_5ftolerance_1',['absolute_tolerance',['../class_sandals_1_1_runge_kutta.html#af52cd8fa983cd52e07a60640aee8380c',1,'Sandals::RungeKutta::absolute_tolerance()'],['../class_sandals_1_1_runge_kutta.html#a868cc95c6af6c5ec1b314cd943d18a5a',1,'Sandals::RungeKutta::absolute_tolerance(Real const t_absolute_tolerance)']]],
   ['adaptive_2',['adaptive',['../class_sandals_1_1_runge_kutta.html#a45a7798b0c54b0e75098cdebf5835115',1,'Sandals::RungeKutta']]],
   ['adaptive_5fmode_3',['adaptive_mode',['../class_sandals_1_1_runge_kutta.html#a0149c7f343424f3c20e27f15f85ae81e',1,'Sandals::RungeKutta']]],
-  ['adaptive_5fsolve_4',['adaptive_solve',['../class_sandals_1_1_runge_kutta.html#a9cd1eeb0bd22a8a26411897d0eca599d',1,'Sandals::RungeKutta']]],
-  ['advance_5',['advance',['../class_sandals_1_1_runge_kutta.html#a281bc79ed9060e913b00f5cf39c225b3',1,'Sandals::RungeKutta']]]
+  ['adaptive_5fsolve_4',['adaptive_solve',['../class_sandals_1_1_runge_kutta.html#a74dc2add72bc18265427cb5e801761ff',1,'Sandals::RungeKutta::adaptive_solve(VectorX const &amp;t_mesh, VectorN const &amp;ics, Solution&lt; Real, N, M &gt; &amp;sol, MatrixJX &amp;Jx) const'],['../class_sandals_1_1_runge_kutta.html#a9cd1eeb0bd22a8a26411897d0eca599d',1,'Sandals::RungeKutta::adaptive_solve(VectorX const &amp;t_mesh, VectorN const &amp;ics, Solution&lt; Real, N, M &gt; &amp;sol) const']]],
+  ['advance_5',['advance',['../class_sandals_1_1_runge_kutta.html#afad5ed1b4aa3195c3f4c5168819b8ffb',1,'Sandals::RungeKutta']]]
 ];

@@ -47,15 +47,19 @@ namespace Sandals {
   * \tparam N The dimension of the ODE/DAE system.
   * \tparam M The dimension of the invariants manifold.
   */
-  template <typename Real, Integer S, Integer N, Integer M>
+  template <typename Real, Integer S, Integer N, Integer M = 0>
   class RungeKutta
   {
+  public:
+    using real_type = Real; /**< Scalar number type. */
     using VectorX = Eigen::Vector<Real, Eigen::Dynamic>; /**< \f$ N \times 1 \f$ vector of Real number type (column vector). */
+    using MatrixJX = Eigen::Matrix<Real, N, N>; /**< Templetized matrix type. */
+
+  private:
     using MatrixX = Eigen::Matrix<Real, Eigen::Dynamic, Eigen::Dynamic>; /**< \f$ N \times N \f$ matrix of Real number type. */
     using VectorK = Eigen::Vector<Real, N*S>; /**< Templetized vector type. */
     using MatrixK = Eigen::Matrix<Real, N, S>; /**< Templetized matrix type. */
     using MatrixJK = Eigen::Matrix<Real, N*N, S>; /**< Templetized matrix type. */
-    using MatrixJX = Eigen::Matrix<Real, N, N>; /**< Templetized matrix type. */
     using MatrixJ = Eigen::Matrix<Real, N*S, N*S>; /**< Templetized matrix type. */
     using VectorP = Eigen::Matrix<Real, N+M, 1>; /**< Templetized vector type. */
     using MatrixP = Eigen::Matrix<Real, N+M, N+M>; /**< Templetized matrix type. */
@@ -170,7 +174,7 @@ namespace Sandals {
     * Get the stages \f$ s \f$ number of the Runge-Kutta method.
     * \return The stages \f$ s \f$ number of the Runge-Kutta method.
     */
-    Integer stages() const {return S;}
+    static constexpr Integer stages() {return S;}
 
     /**
     * Get the name of the Runge-Kutta method.
@@ -577,7 +581,7 @@ namespace Sandals {
     * \param[in] t_projection_tolerance The projection tolerance.
     */
     void projection_tolerance(Real const t_projection_tolerance)
-      {this->m_projection_tolerance = t_projection_tolerance;}
+    {this->m_projection_tolerance = t_projection_tolerance;}
 
     /**
     * Get the maximum number of projection iterations.
@@ -590,7 +594,7 @@ namespace Sandals {
     * \param[in] t_max_projection_iterations The maximum number of projection iterations.
     */
     void max_projection_iterations(Integer const t_max_projection_iterations)
-      {this->m_max_projection_iterations = t_max_projection_iterations;}
+    {this->m_max_projection_iterations = t_max_projection_iterations;}
 
     /**
     * Get projection mode.
@@ -1613,6 +1617,8 @@ namespace Sandals {
     {
       using Eigen::last;
 
+      #define CMD "Sandals::RungeKutta::solve(...): "
+
       // Instantiate output
       sol.resize(t_mesh.size());
 
@@ -1621,8 +1627,14 @@ namespace Sandals {
       sol.x.col(0) = ics;
       sol.h.col(0) = this->m_system->h(ics, t_mesh(0));
 
-      // Reset the derivative propagation matrix
-      if constexpr (Propagate) {Jx.setIdentity();}
+      // Check initial conditions
+      if constexpr (Propagate) {
+        if (!Jx.allFinite()) {
+          SANDALS_ERROR(CMD "in " << this->m_tableau.name << " solver, initial Jacobian " <<
+            "contains NaNs or Infs, aborting.");
+          return false;
+        }
+      }
 
       // Callback on initial conditions
       if (this->m_step_callback) {this->m_step_callback(0, ics, t_mesh(0));}
@@ -1630,12 +1642,13 @@ namespace Sandals {
       // Update the current step
       Integer step{0};
       VectorN x_old_step(ics), x_new_step(ics);
+      MatrixJX Jx_step;
       Real t_step{t_mesh(0)}, h_step{t_mesh(1) - t_mesh(0)}, h_tmp_step{h_step}, h_new_step;
       bool mesh_point_bool, saturation_bool;
 
       while (true) {
         // Integrate system
-        if (!this->template advance<Propagate>(x_old_step, t_step, h_step, x_new_step, h_new_step, Jx))
+        if (!this->template advance<Propagate>(x_old_step, t_step, h_step, x_new_step, h_new_step, Jx_step))
         {return false;}
 
         // Update the current step
@@ -1671,9 +1684,14 @@ namespace Sandals {
 
           // Update the previous step
           x_old_step = x_new_step;
+
+          // Propagate the derivative of the solution with respect to the states x
+          if constexpr (Propagate) {Jx *= Jx_step;}
         }
       }
       return true;
+
+      #undef CMD
     }
 
     /**
@@ -1719,6 +1737,15 @@ namespace Sandals {
 
       #define CMD "Sandals::RungeKutta::adaptive_solve(...): "
 
+      // Check initial conditions
+      if constexpr (Propagate) {
+        if (!Jx.allFinite()) {
+          SANDALS_ERROR(CMD "in " << this->m_tableau.name << " solver, initial Jacobian " <<
+            "contains NaNs or Infs, aborting.");
+          return false;
+        }
+      }
+
       // Check if the adaptive method is enabled and the method is embedded
       if (!this->is_embedded()) {
         SANDALS_WARNING(CMD "the method is not embedded, using solve(...) method.");
@@ -1752,10 +1779,11 @@ namespace Sandals {
       // Instantiate temporary variables
       Integer step{0};
       VectorN x_old_step(ics), x_new_step(ics);
+      MatrixJX Jx_step;
 
       while (true) {
         // Integrate system
-        this->template advance<Propagate>(x_old_step, t_step, h_step, x_new_step, h_new_step, Jx);
+        this->template advance<Propagate>(x_old_step, t_step, h_step, x_new_step, h_new_step, Jx_step);
 
         // Update the current step
         t_step += h_step;
@@ -1784,6 +1812,9 @@ namespace Sandals {
 
         // Update the previous step
         x_old_step = x_new_step;
+
+        // Propagate the derivative of the solution with respect to the states x
+        if constexpr (Propagate) {Jx *= Jx_step;}
       }
 
       // Resize the output
@@ -1838,7 +1869,7 @@ namespace Sandals {
         for (Integer k{0}; k < this->m_max_projection_iterations; ++k) {
 
           /* Standard projection method
-               [A]         {x}    =        {b}
+               [A]          {x}     =      {b}
            / I  Jh_x^T \ /   dx   \   / x_t - x_k \
            |           | |        | = |           |
            \ Jh_x    0 / \ lambda /   \    -h     /

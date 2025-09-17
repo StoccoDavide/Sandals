@@ -21,11 +21,10 @@ template<typename Real = double>
 class MazziaExplicit : public Explicit<Real, 4, 0>
 {
 public:
-  using VectorF  = typename Explicit<Real, 4, 0>::VectorF;
-  using MatrixJF = typename Explicit<Real, 4, 0>::MatrixJF;
-  using VectorH  = typename Explicit<Real, 4, 0>::VectorH;
-  using MatrixJH = typename Explicit<Real, 4, 0>::MatrixJH;
-  using VectorX  = Eigen::Matrix<Real, 4, 0>;
+  using typename Explicit<Real, 4, 0>::VectorF;
+  using typename Explicit<Real, 4, 0>::MatrixJF;
+  using typename Explicit<Real, 4, 0>::VectorH;
+  using typename Explicit<Real, 4, 0>::MatrixJH;
   using MatrixX  = Eigen::Matrix<Real, Eigen::Dynamic, 2>;
 
   MazziaExplicit() : Explicit<Real, 4, 0>("MazziaExplicit") {}
@@ -39,17 +38,17 @@ public:
        x(1),
       -x(0) - x(0)*x(0)*x(0) - x(3),
       -x(0) + x(3)*(1.0 - 3.0*x(0)*x(0)),
-      -x(1) - x(3);
+      -x(1) - x(2);
     return f;
   }
 
   MatrixJF Jf_x(VectorF const & x, Real /*t*/) const override {
     MatrixJF Jf_x;
     Jf_x <<
-      0.0, 1.0, 0.0, 0.0,
-      -3.0*x(0)*x(0) - 1.0, 0.0, 1.0, 0.0,
-      -1.0 + x(3)*(1.0 - 6.0*x(0)), 0.0, 0.0, x(3)*(1.0 - 3.0*x(0)*x(0)),
-      0.0, -1.0, 0.0, -1.0;
+      0.0,                   1.0, 0.0,         0.0,
+      -1.0 - 3.0*x(0)*x(0),  0.0, 0.0,        -1.0,
+      -1.0 - 6.0*x(0)*x(3), 0.0, 0.0, 1.0 - 3.0*x(0)*x(0),
+      0.0,                  -1.0, -1.0,        0.0;
     return Jf_x;
   }
 
@@ -61,19 +60,18 @@ public:
 
 };
 
-template<typename Real = double, Integer S>
-class MazziaExplicitProblem : public Problem<Real, 4, 0, S>
+template<typename Real, typename Integrator>
+class MazziaExplicitProblem : public Problem<Real, 4, 0, Integrator>
 {
 public:
-  using typename Problem<Real, 4, 0, S>::SystemPtr;
-  using typename Problem<Real, 4, 0, S>::RungeKuttaPtr;
-  using typename Problem<Real, 4, 0, S>::SolutionPtr;
-  using typename Problem<Real, 4, 0, S>::VectorX;
-  using typename Problem<Real, 4, 0, S>::VectorF;
-  using typename Problem<Real, 4, 0, S>::MatrixJF;
+  using typename Problem<Real, 4, 0, Integrator>::SystemPtr;
+  using typename Problem<Real, 4, 0, Integrator>::IntegratorPtr;
+  using typename Problem<Real, 4, 0, Integrator>::SolutionPtr;
+  using typename Problem<Real, 4, 0, Integrator>::VectorF;
+  using typename Problem<Real, 4, 0, Integrator>::MatrixJF;
 
-  MazziaExplicitProblem(RungeKuttaPtr rk)
-    : Problem<Real, 4, 0, S>("MazziaExplicitProblem", std::make_shared<MazziaExplicit<Real>>(), rk)
+  MazziaExplicitProblem(typename Integrator rk)
+    : Problem<Real, 4, 0, Integrator>("MazziaExplicitProblem", std::make_shared<MazziaExplicit<Real>>(), rk)
   {
     rk->system(this->system());
   }
@@ -92,7 +90,7 @@ public:
 
   MatrixJF Jb_x_ini(VectorF const & /*x_ini*/, VectorF const & /*x_end*/) const override
   {
-    MatrixJF Jb_x_ini = MatrixJF::Zero();
+    MatrixJF Jb_x_ini(MatrixJF::Zero());
     Jb_x_ini(0, 0) = 1.0;
     Jb_x_ini(1, 1) = 1.0;
     return Jb_x_ini;
@@ -100,7 +98,7 @@ public:
 
   MatrixJF Jb_x_end(VectorF const & /*x_ini*/, VectorF const & /*x_end*/) const override
   {
-    MatrixJF Jb_x_end = MatrixJF::Zero();
+    MatrixJF Jb_x_end(MatrixJF::Zero());
     Jb_x_end(2, 0) = 1.0;
     Jb_x_end(3, 1) = 1.0;
     return Jb_x_end;

@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['chebyshev51_2ehh_0',['Chebyshev51.hh',['../_chebyshev51_8hh.html',1,'']]]
+  ['explicit_2ehh_0',['Explicit.hh',['../_explicit_8hh.html',1,'']]],
+  ['expliciteuler_2ehh_1',['ExplicitEuler.hh',['../_explicit_euler_8hh.html',1,'']]]
 ];

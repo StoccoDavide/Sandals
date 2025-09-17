@@ -27,8 +27,6 @@ public:
   using MatrixJB = typename SemiExplicit<Real, 2, 1>::MatrixJB;
   using VectorH  = typename SemiExplicit<Real, 2, 1>::VectorH;
   using MatrixJH = typename SemiExplicit<Real, 2, 1>::MatrixJH;
-  using VectorX  = Eigen::Matrix<Real, 2, 1>;
-  using MatrixX  = Eigen::Matrix<Real, 2, Eigen::Dynamic>;
 
 private:
   Real    m_m{1.0};        // Mass (kg)

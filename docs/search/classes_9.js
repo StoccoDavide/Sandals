@@ -20,6 +20,5 @@ var searchData=
   ['rungekutta_3c_20real_2c_204_2c_20n_2c_200_20_3e_17',['RungeKutta&lt; Real, 4, N, 0 &gt;',['../class_sandals_1_1_runge_kutta.html',1,'Sandals']]],
   ['rungekutta_3c_20real_2c_205_2c_20n_2c_200_20_3e_18',['RungeKutta&lt; Real, 5, N, 0 &gt;',['../class_sandals_1_1_runge_kutta.html',1,'Sandals']]],
   ['rungekutta_3c_20real_2c_206_2c_20n_2c_200_20_3e_19',['RungeKutta&lt; Real, 6, N, 0 &gt;',['../class_sandals_1_1_runge_kutta.html',1,'Sandals']]],
-  ['rungekutta_3c_20real_2c_209_2c_20n_2c_200_20_3e_20',['RungeKutta&lt; Real, 9, N, 0 &gt;',['../class_sandals_1_1_runge_kutta.html',1,'Sandals']]],
-  ['rungekutta_3c_20real_2c_20n_2c_200_20_3e_21',['RungeKutta&lt; Real, N, 0 &gt;',['../class_sandals_1_1_runge_kutta.html',1,'Sandals']]]
+  ['rungekutta_3c_20real_2c_209_2c_20n_2c_200_20_3e_20',['RungeKutta&lt; Real, 9, N, 0 &gt;',['../class_sandals_1_1_runge_kutta.html',1,'Sandals']]]
 ];
