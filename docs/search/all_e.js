@@ -33,8 +33,8 @@ var searchData=
   ['m_5fsafety_5ffactor_30',['m_safety_factor',['../class_sandals_1_1_runge_kutta.html#abd3fe6ce6913f01a59d70c7bb4e659cd',1,'Sandals::RungeKutta']]],
   ['m_5fsolution_31',['m_solution',['../class_sandals_1_1_problem.html#a0834dc9a4bb8976ec2318951ebd2c6e8',1,'Sandals::Problem']]],
   ['m_5fstart_5ftime_32',['m_start_time',['../class_sandals_1_1_tic_toc.html#a37e5dbfe84fac294b8787be2c58b4335',1,'Sandals::TicToc']]],
-  ['m_5fstep_5fcallback_33',['m_step_callback',['../class_sandals_1_1_runge_kutta.html#ab26f53a39a658205024340f2875379b1',1,'Sandals::RungeKutta']]],
-  ['m_5fstop_5ftime_34',['m_stop_time',['../class_sandals_1_1_tic_toc.html#aba69960e928c0a554c714c7b4122c533',1,'Sandals::TicToc']]],
+  ['m_5fstop_5ftime_33',['m_stop_time',['../class_sandals_1_1_tic_toc.html#aba69960e928c0a554c714c7b4122c533',1,'Sandals::TicToc']]],
+  ['m_5fsubintervals_34',['m_subintervals',['../class_sandals_1_1_problem.html#a9342353832c286b877859a8dad9b31c1',1,'Sandals::Problem']]],
   ['m_5fsystem_35',['m_system',['../class_sandals_1_1_problem.html#a8c73bb6a76f53a33309b328f4a61e9f3',1,'Sandals::Problem::m_system'],['../class_sandals_1_1_runge_kutta.html#a974fe9dc2d0075bf254c23f7aae5b53c',1,'Sandals::RungeKutta::m_system']]],
   ['m_5fta_5fx_36',['m_TA_x',['../class_sandals_1_1_semi_explicit_wrapper.html#ad951bda805ad5bea5cf9ef978c1171cc',1,'Sandals::SemiExplicitWrapper']]],
   ['m_5ftableau_37',['m_tableau',['../class_sandals_1_1_runge_kutta.html#a9a5dd7fe85648fa2ac98ea187186539e',1,'Sandals::RungeKutta']]],
@@ -71,5 +71,6 @@ var searchData=
   ['minimization_20problem_68',['Constrained minimization problem',['../class_sandals_1_1_runge_kutta.html#autotoc_md24',1,'']]],
   ['mte22_69',['MTE22',['../class_sandals_1_1_m_t_e22.html',1,'Sandals::MTE22&lt; Real, N, M &gt;'],['../class_sandals_1_1_m_t_e22.html#a571f9c3ffcac326e6ef5cc28ae361296',1,'Sandals::MTE22::MTE22()'],['../class_sandals_1_1_m_t_e22.html#ac02ca044a55e065149b63a05434126cb',1,'Sandals::MTE22::MTE22(System t_system)']]],
   ['mte22_2ehh_70',['MTE22.hh',['../_m_t_e22_8hh.html',1,'']]],
-  ['mte22tableau_71',['MTE22Tableau',['../class_sandals_1_1_m_t_e22_tableau.html',1,'Sandals::MTE22Tableau&lt; Real &gt;'],['../class_sandals_1_1_m_t_e22_tableau.html#ae59ff3f33486a6837aace2be296bc60c',1,'Sandals::MTE22Tableau::MTE22Tableau()']]]
+  ['mte22tableau_71',['MTE22Tableau',['../class_sandals_1_1_m_t_e22_tableau.html',1,'Sandals::MTE22Tableau&lt; Real &gt;'],['../class_sandals_1_1_m_t_e22_tableau.html#ae59ff3f33486a6837aace2be296bc60c',1,'Sandals::MTE22Tableau::MTE22Tableau()']]],
+  ['multiple_5fshooting_72',['multiple_shooting',['../class_sandals_1_1_problem.html#a95d700286769b875d15fe60534342889',1,'Sandals::Problem']]]
 ];

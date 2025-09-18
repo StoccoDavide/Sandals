@@ -63,10 +63,10 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "_chebyshev51_8hh.html",
-"class_sandals_1_1_gauss_legendre2.html",
-"class_sandals_1_1_linear_wrapper.html#a42e4e2819fedc221c1e1643845c14442",
-"class_sandals_1_1_runge_kutta.html#a10a9500d9c90eecfcf727d2a143876ba",
-"class_sandals_1_1_s_s_p_i_r_k33.html#af370b75869d7268b9de4a226ffa8ce07",
+"class_sandals_1_1_fehlberg45_tableau.html#aad1b88e061eee2f4e7f73df2910eba64",
+"class_sandals_1_1_linear_wrapper.html#a3ed40fa5095dd41234b637d91ef0ff14",
+"class_sandals_1_1_runge_kutta.html#a0c16a91f1afd63cfbf83e0eeda021842",
+"class_sandals_1_1_s_s_p_i_r_k33.html#ae471337914bb99ee2cb4a9ccd552f304",
 "functions_func.html"
 ];
 

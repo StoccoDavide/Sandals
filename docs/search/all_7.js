@@ -18,6 +18,5 @@ var searchData=
   ['functionjb_15',['FunctionJB',['../class_sandals_1_1_semi_explicit_wrapper.html#a0b6275f5c89abe42d28e053e33da676c',1,'Sandals::SemiExplicitWrapper']]],
   ['functionjf_16',['FunctionJF',['../class_sandals_1_1_explicit_wrapper.html#a18e929a15d1ab81edce1f73d3b232b31',1,'Sandals::ExplicitWrapper::FunctionJF'],['../class_sandals_1_1_implicit_wrapper.html#a544ed7e004620b93c69667bbca012a5b',1,'Sandals::ImplicitWrapper::FunctionJF']]],
   ['functionjh_17',['FunctionJH',['../class_sandals_1_1_explicit_wrapper.html#ad48f0d34d2a0678e7cb71b936211797a',1,'Sandals::ExplicitWrapper::FunctionJH'],['../class_sandals_1_1_implicit_wrapper.html#a9bc79a3d67a58f0a343ccaf72d820368',1,'Sandals::ImplicitWrapper::FunctionJH'],['../class_sandals_1_1_linear_wrapper.html#ab754eb1d2684b435e50f26810c1213f4',1,'Sandals::LinearWrapper::FunctionJH'],['../class_sandals_1_1_semi_explicit_wrapper.html#aded6015b65bc177a7dc7ea1b912c3374',1,'Sandals::SemiExplicitWrapper::FunctionJH']]],
-  ['functionsc_18',['FunctionSC',['../class_sandals_1_1_runge_kutta.html#a8414a834176441d6a34aa2f992bc94dd',1,'Sandals::RungeKutta']]],
-  ['functionta_19',['FunctionTA',['../class_sandals_1_1_semi_explicit_wrapper.html#a767838d9c81cc2f61ca39c152da0968a',1,'Sandals::SemiExplicitWrapper']]]
+  ['functionta_18',['FunctionTA',['../class_sandals_1_1_semi_explicit_wrapper.html#a767838d9c81cc2f61ca39c152da0968a',1,'Sandals::SemiExplicitWrapper']]]
 ];

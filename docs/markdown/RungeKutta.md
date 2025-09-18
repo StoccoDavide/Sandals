@@ -77,7 +77,7 @@ For explicit systems, the derivatives of the intermediate variables \f$\mathbf{K
 \f[
   \begin{array}{l}
     \begin{cases}
-      \displaystyle\frac{\partial\mathbf{K}_1}{\partial\mathbf{x}_k} = h_k \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}(\mathbf{x}_k, t_k) \\
+      \displaystyle\frac{\partial\mathbf{K}_1}{\partial\mathbf{x}_k} = h_k \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\mathbf{x}_k, t_k\right) \\
       \displaystyle\frac{\partial\mathbf{K}_2}{\partial\mathbf{x}_k} = h_k \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\mathbf{x}_k + a_{21} \mathbf{K}_1, t_k + h_k c_2\right) \left(\mathbf{I} + a_{21} \displaystyle\frac{\partial\mathbf{K}_1}{\partial\mathbf{x}_k}\right) \\
       \displaystyle\frac{\partial\mathbf{K}_3}{\partial\mathbf{x}_k} = h_k \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\mathbf{x}_k + a_{31} \mathbf{K}_1 + a_{32} \mathbf{K}_2, t_k + h_k c_3\right) \left(\mathbf{I} + a_{31} \displaystyle\frac{\partial\mathbf{K}_1}{\partial\mathbf{x}_k} + a_{32} \displaystyle\frac{\partial\mathbf{K}_2}{\partial\mathbf{x}_k}\right) \\[-0.5em]
       \vdots \\[-0.5em]
@@ -103,7 +103,7 @@ In matrix form, this can be expressed as
   \end{bmatrix} =
   h_k
   \begin{bmatrix}
-    \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}(\mathbf{x}_k, t_k) \\
+    \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\mathbf{x}_k, t_k\right) \\
     \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\mathbf{x}_k + a_{21} \mathbf{K}_1, t_k + h_k c_2\right) \\
     \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\mathbf{x}_k + a_{31} \mathbf{K}_1 + a_{32} \mathbf{K}_2, t_k + h_k c_3\right) \\
     \vdots\\
@@ -306,11 +306,11 @@ For implicit systems, the derivatives of the intermediate variables \f$\mathbf{K
 In matrix form, this can be expressed as
 \f[
   \begin{bmatrix}
-    \displaystyle\frac{\partial\mathbf{F}_1}{\partial\mathbf{K}_1}\left(\cdot\right) & h_k a_{12} \displaystyle\frac{\partial\mathbf{F}_1}{\partial\mathbf{x}_k}\left(\cdot\right) & h_k a_{13} \displaystyle\frac{\partial\mathbf{F}_1}{\partial\mathbf{x}_k}\left(\cdot\right) & \cdots & h_k a_{1s} \displaystyle\frac{\partial\mathbf{F}_1}{\partial\mathbf{x}_k}\left(\cdot\right) \\
-    h_k a_{21} \displaystyle\frac{\partial\mathbf{F}_2}{\partial\mathbf{x}_k}\left(\cdot\right) & \displaystyle\frac{\partial\mathbf{F}_2}{\partial\mathbf{K}_2}\left(\cdot\right) & h_k a_{23} \displaystyle\frac{\partial\mathbf{F}_2}{\partial\mathbf{x}_k}\left(\cdot\right) & \cdots & \vdots \\
-    h_k a_{31} \displaystyle\frac{\partial\mathbf{F}_3}{\partial\mathbf{x}_k}\left(\cdot\right) & h_k a_{32} \displaystyle\frac{\partial\mathbf{F}_3}{\partial\mathbf{x}_k}\left(\cdot\right) & \displaystyle\frac{\partial\mathbf{F}_3}{\partial\mathbf{K}_3}\left(\cdot\right) & \ddots & \vdots \\
+    \displaystyle\frac{\partial\mathbf{F}_1}{\partial\mathbf{K}_1}\left(\cdot\right) + h_k a_{11} \displaystyle\frac{\partial\mathbf{F}_1}{\partial\mathbf{x}_k}\left(\cdot\right) & h_k a_{12} \displaystyle\frac{\partial\mathbf{F}_1}{\partial\mathbf{x}_k}\left(\cdot\right) & \cdots & \cdots & h_k a_{1s} \displaystyle\frac{\partial\mathbf{F}_1}{\partial\mathbf{x}_k}\left(\cdot\right) \\
+    h_k a_{21} \displaystyle\frac{\partial\mathbf{F}_2}{\partial\mathbf{x}_k}\left(\cdot\right) & \displaystyle\frac{\partial\mathbf{F}_2}{\partial\mathbf{K}_2}\left(\cdot\right) + h_k a_{22} \displaystyle\frac{\partial\mathbf{F}_2}{\partial\mathbf{x}_k}\left(\cdot\right) & \ddots & \cdots & h_k a_{2s} \displaystyle\frac{\partial\mathbf{F}_2}{\partial\mathbf{x}_k}\left(\cdot\right) \\
+    h_k a_{31} \displaystyle\frac{\partial\mathbf{F}_3}{\partial\mathbf{x}_k}\left(\cdot\right) & h_k a_{32} \displaystyle\frac{\partial\mathbf{F}_3}{\partial\mathbf{x}_k}\left(\cdot\right) & \displaystyle\frac{\partial\mathbf{F}_3}{\partial\mathbf{K}_3}\left(\cdot\right) + h_k a_{33} \displaystyle\frac{\partial\mathbf{F}_3}{\partial\mathbf{x}_k}\left(\cdot\right) & \ddots & \vdots \\
     \vdots & \vdots & \ddots & \ddots & h_k a_{s,s-1} \displaystyle\frac{\partial\mathbf{F}_s}{\partial\mathbf{x}_k}\left(\cdot\right) \\
-    h_k a_{s1} \displaystyle\frac{\partial\mathbf{F}_s}{\partial\mathbf{x}_k}\left(\cdot\right) & h_k a_{s2} \displaystyle\frac{\partial\mathbf{F}_s}{\partial\mathbf{x}_k}\left(\cdot\right) & \cdots & h_k a_{s,s-1} \displaystyle\frac{\partial\mathbf{F}_s}{\partial\mathbf{x}_k}\left(\cdot\right) & \displaystyle\frac{\partial\mathbf{F}_s}{\partial\mathbf{K}_s}\left(\cdot\right)
+    h_k a_{s1} \displaystyle\frac{\partial\mathbf{F}_s}{\partial\mathbf{x}_k}\left(\cdot\right) & h_k a_{s2} \displaystyle\frac{\partial\mathbf{F}_s}{\partial\mathbf{x}_k}\left(\cdot\right) & \cdots & h_k a_{s,s-1} \displaystyle\frac{\partial\mathbf{F}_s}{\partial\mathbf{x}_k}\left(\cdot\right) & \displaystyle\frac{\partial\mathbf{F}_s}{\partial\mathbf{K}_s}\left(\cdot\right) + h_k a_{ss} \displaystyle\frac{\partial\mathbf{F}_s}{\partial\mathbf{x}_k}\left(\cdot\right)
   \end{bmatrix}
   \begin{bmatrix}
     \displaystyle\frac{\partial\mathbf{K}_1}{\partial\mathbf{x}_k} \\
@@ -391,11 +391,11 @@ In matrix form, this can be expressed as
   \end{bmatrix} =
   h_k
   \begin{bmatrix}
-    \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\cdot\right) \\
-    \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\cdot\right) \\
-    \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\cdot\right) \\
+    \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\mathbf{x}_k + a_{11} \mathbf{K}_1, t_k + h_k c_1\right) \\
+    \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\mathbf{x}_k + a_{21} \mathbf{K}_1 + a_{22} \mathbf{K}_2, t_k + h_k c_2\right) \\
+    \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\mathbf{x}_k + a_{31} \mathbf{K}_1 + a_{32} \mathbf{K}_2 + a_{33} \mathbf{K}_3, t_k + h_k c_3\right) \\
     \vdots \\
-    \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\cdot\right)
+    \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\mathbf{x}_k + \displaystyle\sum_{j=1}^{s} a_{sj} \mathbf{K}_j, t_k + h_k c_s\right)
   \end{bmatrix} \text{.}
 \f]
 
@@ -452,11 +452,11 @@ For implicit systems, the derivatives of the intermediate variables \f$\mathbf{K
 In matrix form, this can be expressed as
 \f[
   \begin{bmatrix}
-    h_k a_{11} \displaystyle\frac{\partial\mathbf{F}_1}{\partial\mathbf{x}_k}\left(\cdot\right) & \mathbf{0} & \mathbf{0} & \cdots & \mathbf{0} \\
-    -h_k a_{21} \displaystyle\frac{\partial\mathbf{F}_2}{\partial\mathbf{x}_k}\left(\cdot\right) & h_k a_{22} \displaystyle\frac{\partial\mathbf{F}_2}{\partial\mathbf{x}_k}\left(\cdot\right) & \ddots & \mathbf{0} & \vdots \\
-    -h_k a_{31} \displaystyle\frac{\partial\mathbf{F}_3}{\partial\mathbf{x}_k}\left(\cdot\right) & -h_k a_{32} \displaystyle\frac{\partial\mathbf{F}_3}{\partial\mathbf{x}_k}\left(\cdot\right) & h_k a_{33} \displaystyle\frac{\partial\mathbf{F}_3}{\partial\mathbf{x}_k}\left(\cdot\right) & \ddots & \vdots \\
+    \displaystyle\frac{\partial\mathbf{F}_1}{\partial\mathbf{K}_1}\left(\cdot\right) + h_k a_{11} \displaystyle\frac{\partial\mathbf{F}_1}{\partial\mathbf{x}_k}\left(\cdot\right) & \mathbf{0} & \mathbf{0} & \cdots & \mathbf{0} \\
+    h_k a_{21} \displaystyle\frac{\partial\mathbf{F}_2}{\partial\mathbf{x}_k}\left(\cdot\right) & \displaystyle\frac{\partial\mathbf{F}_2}{\partial\mathbf{K}_2}\left(\cdot\right) + h_k a_{22} \displaystyle\frac{\partial\mathbf{F}_2}{\partial\mathbf{x}_k}\left(\cdot\right) & \ddots & \mathbf{0} & \vdots \\
+    h_k a_{31} \displaystyle\frac{\partial\mathbf{F}_3}{\partial\mathbf{x}_k}\left(\cdot\right) & h_k a_{32} \displaystyle\frac{\partial\mathbf{F}_3}{\partial\mathbf{x}_k}\left(\cdot\right) & \displaystyle\frac{\partial\mathbf{F}_3}{\partial\mathbf{K}_3}\left(\cdot\right) + h_k a_{33} \displaystyle\frac{\partial\mathbf{F}_3}{\partial\mathbf{x}_k}\left(\cdot\right) & \ddots & \vdots \\
     \vdots & \vdots & \ddots & \ddots & \mathbf{0} \\
-    -h_k a_{s1} \displaystyle\frac{\partial\mathbf{F}_s}{\partial\mathbf{x}_k}\left(\cdot\right) & -h_k a_{s2} \displaystyle\frac{\partial\mathbf{F}_s}{\partial\mathbf{x}_k}\left(\cdot\right) & \cdots & -h_k a_{s,s-1} \displaystyle\frac{\partial\mathbf{F}_s}{\partial\mathbf{x}_k}\left(\cdot\right) & \displaystyle\frac{\partial\mathbf{F}_s}{\partial\mathbf{K}_s}\left(\cdot\right)
+    h_k a_{s1} \displaystyle\frac{\partial\mathbf{F}_s}{\partial\mathbf{x}_k}\left(\cdot\right) & h_k a_{s2} \displaystyle\frac{\partial\mathbf{F}_s}{\partial\mathbf{x}_k}\left(\cdot\right) & \cdots & h_k a_{s,s-1} \displaystyle\frac{\partial\mathbf{F}_s}{\partial\mathbf{x}_k}\left(\cdot\right) & \displaystyle\frac{\partial\mathbf{F}_s}{\partial\mathbf{K}_s}\left(\cdot\right) + h_k a_{ss} \displaystyle\frac{\partial\mathbf{F}_s}{\partial\mathbf{x}_k}\left(\cdot\right)
   \end{bmatrix}
   \begin{bmatrix}
     \displaystyle\frac{\partial\mathbf{K}_1}{\partial\mathbf{x}_k} \\

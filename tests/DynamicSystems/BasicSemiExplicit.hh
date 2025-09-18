@@ -81,7 +81,7 @@ public:
   using VectorX = Eigen::Vector<Real, Eigen::Dynamic>;
   using MatrixX = Eigen::Matrix<Real, 2, Eigen::Dynamic>;
 
-  BasicSemiExplicitProblem(std::shared_ptr<Integrator> rk)
+  BasicSemiExplicitProblem(IntegratorPtr rk)
     : Problem<Real, 2, 0, Integrator>("BasicSemiExplicitProblem", std::make_shared<BasicExplicit<Real>>(), rk)
   {
     rk->system(this->system());

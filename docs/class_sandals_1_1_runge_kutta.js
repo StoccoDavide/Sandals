@@ -1,6 +1,5 @@
 var class_sandals_1_1_runge_kutta =
 [
-    [ "FunctionSC", "class_sandals_1_1_runge_kutta.html#a8414a834176441d6a34aa2f992bc94dd", null ],
     [ "MatrixJ", "class_sandals_1_1_runge_kutta.html#a4eedad8835d4f10d32c17bd38fb79bc4", null ],
     [ "MatrixJK", "class_sandals_1_1_runge_kutta.html#a2d80e266c799308f8d92f9f3cdcbd915", null ],
     [ "MatrixJX", "class_sandals_1_1_runge_kutta.html#aafe93029d65e4891d968bc0aabfe9c07", null ],
@@ -105,8 +104,6 @@ var class_sandals_1_1_runge_kutta =
     [ "solve", "class_sandals_1_1_runge_kutta.html#a27976843ed9282d4fd7d42eea6b219e5", null ],
     [ "stages", "class_sandals_1_1_runge_kutta.html#a5ee81d6ebe510ef3a1acb87d6843a7c5", null ],
     [ "step", "class_sandals_1_1_runge_kutta.html#a2ba4fd1d8bdfa653b69b5bacb5c9bc65", null ],
-    [ "step_callback", "class_sandals_1_1_runge_kutta.html#a27cb75e2dfd499f4a68e63a6473f67e9", null ],
-    [ "step_callback", "class_sandals_1_1_runge_kutta.html#aac94b5b34302a503bee639b5a130fb69", null ],
     [ "system", "class_sandals_1_1_runge_kutta.html#a1db088c1892855607d1b6e61ce5b163d", null ],
     [ "system", "class_sandals_1_1_runge_kutta.html#ab84869075568d96dff9d44a746b9d7e4", null ],
     [ "tableau", "class_sandals_1_1_runge_kutta.html#a1b97170d2348e14bd93c877ddfb32cf1", null ],
@@ -129,7 +126,6 @@ var class_sandals_1_1_runge_kutta =
     [ "m_relative_tolerance", "class_sandals_1_1_runge_kutta.html#a32f5ab526c0ad401e9c56acab0c473bd", null ],
     [ "m_reverse", "class_sandals_1_1_runge_kutta.html#a69fff3e55731c9566332393afd8f3476", null ],
     [ "m_safety_factor", "class_sandals_1_1_runge_kutta.html#abd3fe6ce6913f01a59d70c7bb4e659cd", null ],
-    [ "m_step_callback", "class_sandals_1_1_runge_kutta.html#ab26f53a39a658205024340f2875379b1", null ],
     [ "m_system", "class_sandals_1_1_runge_kutta.html#a974fe9dc2d0075bf254c23f7aae5b53c", null ],
     [ "m_tableau", "class_sandals_1_1_runge_kutta.html#a9a5dd7fe85648fa2ac98ea187186539e", null ],
     [ "m_verbose", "class_sandals_1_1_runge_kutta.html#abd002d72047afa9599375e385733c253", null ],

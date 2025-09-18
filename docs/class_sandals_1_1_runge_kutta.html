@@ -205,8 +205,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a67201d885d845eca398d270327597c98" id="r_a67201d885d845eca398d270327597c98"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a67201d885d845eca398d270327597c98">reverse</a> (bool t_reverse)</td></tr>
 <tr class="memitem:a05ff883f1ce8e8490a4f2bf315631df1" id="r_a05ff883f1ce8e8490a4f2bf315631df1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a05ff883f1ce8e8490a4f2bf315631df1">enable_reverse_mode</a> ()</td></tr>
 <tr class="memitem:abed6d60ac53b10f79f765bad9e91554c" id="r_abed6d60ac53b10f79f765bad9e91554c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abed6d60ac53b10f79f765bad9e91554c">disable_reverse_mode</a> ()</td></tr>
-<tr class="memitem:a27cb75e2dfd499f4a68e63a6473f67e9" id="r_a27cb75e2dfd499f4a68e63a6473f67e9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a8414a834176441d6a34aa2f992bc94dd">FunctionSC</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a27cb75e2dfd499f4a68e63a6473f67e9">step_callback</a> ()</td></tr>
-<tr class="memitem:aac94b5b34302a503bee639b5a130fb69" id="r_aac94b5b34302a503bee639b5a130fb69"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aac94b5b34302a503bee639b5a130fb69">step_callback</a> (<a class="el" href="#a8414a834176441d6a34aa2f992bc94dd">FunctionSC</a> const &amp;t_step_callback)</td></tr>
 <tr class="memitem:a7aef8bc09a1a59028992abc1b7812578" id="r_a7aef8bc09a1a59028992abc1b7812578"><td class="memItemLeft" align="right" valign="top">Real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7aef8bc09a1a59028992abc1b7812578">projection_tolerance</a> ()</td></tr>
 <tr class="memitem:a4d5bf50167b4d31529bbe6d54c24f63f" id="r_a4d5bf50167b4d31529bbe6d54c24f63f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4d5bf50167b4d31529bbe6d54c24f63f">projection_tolerance</a> (Real const t_projection_tolerance)</td></tr>
 <tr class="memitem:aa59cd6d30c37624fca248c3c1431acb7" id="r_aa59cd6d30c37624fca248c3c1431acb7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa59cd6d30c37624fca248c3c1431acb7">max_projection_iterations</a> ()</td></tr>
@@ -271,7 +269,6 @@ Private Types</h2></td></tr>
 <tr class="memitem:a12b70430fab5101698b596781094d9ce" id="r_a12b70430fab5101698b596781094d9ce"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a12b70430fab5101698b596781094d9ce">MatrixN</a> = typename <a class="el" href="class_sandals_1_1_implicit.html">Implicit</a>&lt;Real, N, M&gt;::MatrixJF</td></tr>
 <tr class="memitem:af1314be8f9f902f1aecb3ea1771bd576" id="r_af1314be8f9f902f1aecb3ea1771bd576"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af1314be8f9f902f1aecb3ea1771bd576">VectorM</a> = typename <a class="el" href="class_sandals_1_1_implicit.html">Implicit</a>&lt;Real, N, M&gt;::VectorH</td></tr>
 <tr class="memitem:a1a6f89acec6b558caeb96f5ef5bf8483" id="r_a1a6f89acec6b558caeb96f5ef5bf8483"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1a6f89acec6b558caeb96f5ef5bf8483">MatrixM</a> = typename <a class="el" href="class_sandals_1_1_implicit.html">Implicit</a>&lt;Real, N, M&gt;::MatrixJH</td></tr>
-<tr class="memitem:a8414a834176441d6a34aa2f992bc94dd" id="r_a8414a834176441d6a34aa2f992bc94dd"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8414a834176441d6a34aa2f992bc94dd">FunctionSC</a> = std::function&lt;void(<a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> const, <a class="el" href="#a6e7c649dd4dda6179ac007d1782383c9">VectorX</a> const &amp;, Real const)&gt;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pri-attribs" class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -290,7 +287,6 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:a6a38a0eb06409311c2a6c0acf5cc2e7b" id="r_a6a38a0eb06409311c2a6c0acf5cc2e7b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6a38a0eb06409311c2a6c0acf5cc2e7b">m_adaptive</a> {true}</td></tr>
 <tr class="memitem:abd002d72047afa9599375e385733c253" id="r_abd002d72047afa9599375e385733c253"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abd002d72047afa9599375e385733c253">m_verbose</a> {false}</td></tr>
 <tr class="memitem:a69fff3e55731c9566332393afd8f3476" id="r_a69fff3e55731c9566332393afd8f3476"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a69fff3e55731c9566332393afd8f3476">m_reverse</a> {false}</td></tr>
-<tr class="memitem:ab26f53a39a658205024340f2875379b1" id="r_ab26f53a39a658205024340f2875379b1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a8414a834176441d6a34aa2f992bc94dd">FunctionSC</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab26f53a39a658205024340f2875379b1">m_step_callback</a> {nullptr}</td></tr>
 <tr class="memitem:aafab8afc79cadc66080663f484e4fce8" id="r_aafab8afc79cadc66080663f484e4fce8"><td class="memItemLeft" align="right" valign="top">Real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aafab8afc79cadc66080663f484e4fce8">m_projection_tolerance</a> {EPSILON_HIGH}</td></tr>
 <tr class="memitem:af7b0f0ad735d90e5fb700b5fd64c7269" id="r_af7b0f0ad735d90e5fb700b5fd64c7269"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af7b0f0ad735d90e5fb700b5fd64c7269">m_max_projection_iterations</a> {5}</td></tr>
 <tr class="memitem:afee3c6ef4519389c39ce0479ab80fa31" id="r_afee3c6ef4519389c39ce0479ab80fa31"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afee3c6ef4519389c39ce0479ab80fa31">m_projection</a> {true}</td></tr>
@@ -370,7 +366,7 @@ Derivatives of \(\mathbf{K}\) with respect to \(\mathbf{x}_k\)</h4>
 <p>For explicit systems, the derivatives of the intermediate variables \(\mathbf{K}\) with respect to the states \(\mathbf{x}\) can be computed by the differentiation of the stage equations, which yields           </p><p class="formulaDsp">
 \[    \begin{array}{l}
       \begin{cases}
-        \displaystyle\frac{\partial\mathbf{K}_1}{\partial\mathbf{x}_k} = h_k \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}(\mathbf{x}_k, t_k) \\
+        \displaystyle\frac{\partial\mathbf{K}_1}{\partial\mathbf{x}_k} = h_k \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\mathbf{x}_k, t_k\right) \\
         \displaystyle\frac{\partial\mathbf{K}_2}{\partial\mathbf{x}_k} = h_k \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\mathbf{x}_k + a_{21} \mathbf{K}_1, t_k + h_k c_2\right) \left(\mathbf{I} + a_{21} \displaystyle\frac{\partial\mathbf{K}_1}{\partial\mathbf{x}_k}\right) \\
         \displaystyle\frac{\partial\mathbf{K}_3}{\partial\mathbf{x}_k} = h_k \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\mathbf{x}_k + a_{31} \mathbf{K}_1 + a_{32} \mathbf{K}_2, t_k + h_k c_3\right) \left(\mathbf{I} + a_{31} \displaystyle\frac{\partial\mathbf{K}_1}{\partial\mathbf{x}_k} + a_{32} \displaystyle\frac{\partial\mathbf{K}_2}{\partial\mathbf{x}_k}\right) \\[-0.5em]
         \vdots \\[-0.5em]
@@ -396,7 +392,7 @@ Derivatives of \(\mathbf{K}\) with respect to \(\mathbf{x}_k\)</h4>
     \end{bmatrix} =
     h_k
     \begin{bmatrix}
-      \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}(\mathbf{x}_k, t_k) \\
+      \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\mathbf{x}_k, t_k\right) \\
       \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\mathbf{x}_k + a_{21} \mathbf{K}_1, t_k + h_k c_2\right) \\
       \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\mathbf{x}_k + a_{31} \mathbf{K}_1 + a_{32} \mathbf{K}_2, t_k + h_k c_3\right) \\
       \vdots\\
@@ -592,11 +588,11 @@ Derivatives of \(\mathbf{K}\) with respect to \(\mathbf{x}_k\)</h4>
 </p>
 <p> In matrix form, this can be expressed as                        </p><p class="formulaDsp">
 \[    \begin{bmatrix}
-      \displaystyle\frac{\partial\mathbf{F}_1}{\partial\mathbf{K}_1}\left(\cdot\right) &amp; h_k a_{12} \displaystyle\frac{\partial\mathbf{F}_1}{\partial\mathbf{x}_k}\left(\cdot\right) &amp; h_k a_{13} \displaystyle\frac{\partial\mathbf{F}_1}{\partial\mathbf{x}_k}\left(\cdot\right) &amp; \cdots &amp; h_k a_{1s} \displaystyle\frac{\partial\mathbf{F}_1}{\partial\mathbf{x}_k}\left(\cdot\right) \\
-      h_k a_{21} \displaystyle\frac{\partial\mathbf{F}_2}{\partial\mathbf{x}_k}\left(\cdot\right) &amp; \displaystyle\frac{\partial\mathbf{F}_2}{\partial\mathbf{K}_2}\left(\cdot\right) &amp; h_k a_{23} \displaystyle\frac{\partial\mathbf{F}_2}{\partial\mathbf{x}_k}\left(\cdot\right) &amp; \cdots &amp; \vdots \\
-      h_k a_{31} \displaystyle\frac{\partial\mathbf{F}_3}{\partial\mathbf{x}_k}\left(\cdot\right) &amp; h_k a_{32} \displaystyle\frac{\partial\mathbf{F}_3}{\partial\mathbf{x}_k}\left(\cdot\right) &amp; \displaystyle\frac{\partial\mathbf{F}_3}{\partial\mathbf{K}_3}\left(\cdot\right) &amp; \ddots &amp; \vdots \\
+      \displaystyle\frac{\partial\mathbf{F}_1}{\partial\mathbf{K}_1}\left(\cdot\right) + h_k a_{11} \displaystyle\frac{\partial\mathbf{F}_1}{\partial\mathbf{x}_k}\left(\cdot\right) &amp; h_k a_{12} \displaystyle\frac{\partial\mathbf{F}_1}{\partial\mathbf{x}_k}\left(\cdot\right) &amp; \cdots &amp; \cdots &amp; h_k a_{1s} \displaystyle\frac{\partial\mathbf{F}_1}{\partial\mathbf{x}_k}\left(\cdot\right) \\
+      h_k a_{21} \displaystyle\frac{\partial\mathbf{F}_2}{\partial\mathbf{x}_k}\left(\cdot\right) &amp; \displaystyle\frac{\partial\mathbf{F}_2}{\partial\mathbf{K}_2}\left(\cdot\right) + h_k a_{22} \displaystyle\frac{\partial\mathbf{F}_2}{\partial\mathbf{x}_k}\left(\cdot\right) &amp; \ddots &amp; \cdots &amp; h_k a_{2s} \displaystyle\frac{\partial\mathbf{F}_2}{\partial\mathbf{x}_k}\left(\cdot\right) \\
+      h_k a_{31} \displaystyle\frac{\partial\mathbf{F}_3}{\partial\mathbf{x}_k}\left(\cdot\right) &amp; h_k a_{32} \displaystyle\frac{\partial\mathbf{F}_3}{\partial\mathbf{x}_k}\left(\cdot\right) &amp; \displaystyle\frac{\partial\mathbf{F}_3}{\partial\mathbf{K}_3}\left(\cdot\right) + h_k a_{33} \displaystyle\frac{\partial\mathbf{F}_3}{\partial\mathbf{x}_k}\left(\cdot\right) &amp; \ddots &amp; \vdots \\
       \vdots &amp; \vdots &amp; \ddots &amp; \ddots &amp; h_k a_{s,s-1} \displaystyle\frac{\partial\mathbf{F}_s}{\partial\mathbf{x}_k}\left(\cdot\right) \\
-      h_k a_{s1} \displaystyle\frac{\partial\mathbf{F}_s}{\partial\mathbf{x}_k}\left(\cdot\right) &amp; h_k a_{s2} \displaystyle\frac{\partial\mathbf{F}_s}{\partial\mathbf{x}_k}\left(\cdot\right) &amp; \cdots &amp; h_k a_{s,s-1} \displaystyle\frac{\partial\mathbf{F}_s}{\partial\mathbf{x}_k}\left(\cdot\right) &amp; \displaystyle\frac{\partial\mathbf{F}_s}{\partial\mathbf{K}_s}\left(\cdot\right)
+      h_k a_{s1} \displaystyle\frac{\partial\mathbf{F}_s}{\partial\mathbf{x}_k}\left(\cdot\right) &amp; h_k a_{s2} \displaystyle\frac{\partial\mathbf{F}_s}{\partial\mathbf{x}_k}\left(\cdot\right) &amp; \cdots &amp; h_k a_{s,s-1} \displaystyle\frac{\partial\mathbf{F}_s}{\partial\mathbf{x}_k}\left(\cdot\right) &amp; \displaystyle\frac{\partial\mathbf{F}_s}{\partial\mathbf{K}_s}\left(\cdot\right) + h_k a_{ss} \displaystyle\frac{\partial\mathbf{F}_s}{\partial\mathbf{x}_k}\left(\cdot\right)
     \end{bmatrix}
     \begin{bmatrix}
       \displaystyle\frac{\partial\mathbf{K}_1}{\partial\mathbf{x}_k} \\
@@ -675,11 +671,11 @@ Derivatives of \(\mathbf{K}\) with respect to \(\mathbf{x}_k\)</h4>
     \end{bmatrix} =
     h_k
     \begin{bmatrix}
-      \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\cdot\right) \\
-      \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\cdot\right) \\
-      \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\cdot\right) \\
+      \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\mathbf{x}_k + a_{11} \mathbf{K}_1, t_k + h_k c_1\right) \\
+      \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\mathbf{x}_k + a_{21} \mathbf{K}_1 + a_{22} \mathbf{K}_2, t_k + h_k c_2\right) \\
+      \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\mathbf{x}_k + a_{31} \mathbf{K}_1 + a_{32} \mathbf{K}_2 + a_{33} \mathbf{K}_3, t_k + h_k c_3\right) \\
       \vdots \\
-      \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\cdot\right)
+      \displaystyle\frac{\partial\mathbf{f}}{\partial\mathbf{x}_k}\left(\mathbf{x}_k + \displaystyle\sum_{j=1}^{s} a_{sj} \mathbf{K}_j, t_k + h_k c_s\right)
     \end{bmatrix} \text{.}
 \]
 </p>
@@ -734,11 +730,11 @@ Derivatives of \(\mathbf{K}\) with respect to \(\mathbf{x}_k\)</h4>
 </p>
 <p> In matrix form, this can be expressed as                        </p><p class="formulaDsp">
 \[    \begin{bmatrix}
-      h_k a_{11} \displaystyle\frac{\partial\mathbf{F}_1}{\partial\mathbf{x}_k}\left(\cdot\right) &amp; \mathbf{0} &amp; \mathbf{0} &amp; \cdots &amp; \mathbf{0} \\
-      -h_k a_{21} \displaystyle\frac{\partial\mathbf{F}_2}{\partial\mathbf{x}_k}\left(\cdot\right) &amp; h_k a_{22} \displaystyle\frac{\partial\mathbf{F}_2}{\partial\mathbf{x}_k}\left(\cdot\right) &amp; \ddots &amp; \mathbf{0} &amp; \vdots \\
-      -h_k a_{31} \displaystyle\frac{\partial\mathbf{F}_3}{\partial\mathbf{x}_k}\left(\cdot\right) &amp; -h_k a_{32} \displaystyle\frac{\partial\mathbf{F}_3}{\partial\mathbf{x}_k}\left(\cdot\right) &amp; h_k a_{33} \displaystyle\frac{\partial\mathbf{F}_3}{\partial\mathbf{x}_k}\left(\cdot\right) &amp; \ddots &amp; \vdots \\
+      \displaystyle\frac{\partial\mathbf{F}_1}{\partial\mathbf{K}_1}\left(\cdot\right) + h_k a_{11} \displaystyle\frac{\partial\mathbf{F}_1}{\partial\mathbf{x}_k}\left(\cdot\right) &amp; \mathbf{0} &amp; \mathbf{0} &amp; \cdots &amp; \mathbf{0} \\
+      h_k a_{21} \displaystyle\frac{\partial\mathbf{F}_2}{\partial\mathbf{x}_k}\left(\cdot\right) &amp; \displaystyle\frac{\partial\mathbf{F}_2}{\partial\mathbf{K}_2}\left(\cdot\right) + h_k a_{22} \displaystyle\frac{\partial\mathbf{F}_2}{\partial\mathbf{x}_k}\left(\cdot\right) &amp; \ddots &amp; \mathbf{0} &amp; \vdots \\
+      h_k a_{31} \displaystyle\frac{\partial\mathbf{F}_3}{\partial\mathbf{x}_k}\left(\cdot\right) &amp; h_k a_{32} \displaystyle\frac{\partial\mathbf{F}_3}{\partial\mathbf{x}_k}\left(\cdot\right) &amp; \displaystyle\frac{\partial\mathbf{F}_3}{\partial\mathbf{K}_3}\left(\cdot\right) + h_k a_{33} \displaystyle\frac{\partial\mathbf{F}_3}{\partial\mathbf{x}_k}\left(\cdot\right) &amp; \ddots &amp; \vdots \\
       \vdots &amp; \vdots &amp; \ddots &amp; \ddots &amp; \mathbf{0} \\
-      -h_k a_{s1} \displaystyle\frac{\partial\mathbf{F}_s}{\partial\mathbf{x}_k}\left(\cdot\right) &amp; -h_k a_{s2} \displaystyle\frac{\partial\mathbf{F}_s}{\partial\mathbf{x}_k}\left(\cdot\right) &amp; \cdots &amp; -h_k a_{s,s-1} \displaystyle\frac{\partial\mathbf{F}_s}{\partial\mathbf{x}_k}\left(\cdot\right) &amp; \displaystyle\frac{\partial\mathbf{F}_s}{\partial\mathbf{K}_s}\left(\cdot\right)
+      h_k a_{s1} \displaystyle\frac{\partial\mathbf{F}_s}{\partial\mathbf{x}_k}\left(\cdot\right) &amp; h_k a_{s2} \displaystyle\frac{\partial\mathbf{F}_s}{\partial\mathbf{x}_k}\left(\cdot\right) &amp; \cdots &amp; h_k a_{s,s-1} \displaystyle\frac{\partial\mathbf{F}_s}{\partial\mathbf{x}_k}\left(\cdot\right) &amp; \displaystyle\frac{\partial\mathbf{F}_s}{\partial\mathbf{K}_s}\left(\cdot\right) + h_k a_{ss} \displaystyle\frac{\partial\mathbf{F}_s}{\partial\mathbf{x}_k}\left(\cdot\right)
     \end{bmatrix}
     \begin{bmatrix}
       \displaystyle\frac{\partial\mathbf{K}_1}{\partial\mathbf{x}_k} \\
@@ -814,31 +810,6 @@ Constrained minimization problem</h2>
   </dd>
 </dl>
 </div><a name="doc-typedef-members" id="doc-typedef-members"></a><h2 id="header-doc-typedef-members" class="groupheader">Member Typedef Documentation</h2>
-<a id="a8414a834176441d6a34aa2f992bc94dd" name="a8414a834176441d6a34aa2f992bc94dd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8414a834176441d6a34aa2f992bc94dd">&#9670;&#160;</a></span>FunctionSC</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> S, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">using <a class="el" href="class_sandals_1_1_runge_kutta.html">Sandals::RungeKutta</a>&lt; Real, S, N, M &gt;::FunctionSC = std::function&lt;void(<a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> const, <a class="el" href="#a6e7c649dd4dda6179ac007d1782383c9">VectorX</a> const &amp;, Real const)&gt;</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Step callback function type. </p>
-
-</div>
-</div>
 <a id="a4eedad8835d4f10d32c17bd38fb79bc4" name="a4eedad8835d4f10d32c17bd38fb79bc4"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a4eedad8835d4f10d32c17bd38fb79bc4">&#9670;&#160;</a></span>MatrixJ</h2>
 
@@ -1609,7 +1580,6 @@ template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if the system is successfully solved, false otherwise. </dd></dl>
-<dl class="section warning"><dt>Warning</dt><dd>Do not use the solution for internal backtracking, as the step callback may directly modify the solution. </dd></dl>
 
 </div>
 </div>
@@ -1669,7 +1639,6 @@ template&lt;bool Propagate = true&gt; </div>
   </table>
   </dd>
 </dl>
-<dl class="section warning"><dt>Warning</dt><dd>Do not use the solution for internal backtracking, as the step callback may directly modify the solution. </dd></dl>
 
 </div>
 </div>
@@ -4722,7 +4691,6 @@ template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if the system is successfully solved, false otherwise. </dd></dl>
-<dl class="section warning"><dt>Warning</dt><dd>Do not use the solution for internal backtracking, as the step callback may directly modify the solution. </dd></dl>
 
 </div>
 </div>
@@ -4782,7 +4750,6 @@ template&lt;bool Propagate = true&gt; </div>
   </table>
   </dd>
 </dl>
-<dl class="section warning"><dt>Warning</dt><dd>Do not use the solution for internal backtracking, as the step callback may directly modify the solution. </dd></dl>
 
 </div>
 </div>
@@ -4875,67 +4842,6 @@ template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if the step is successfully computed, false otherwise. </dd></dl>
-
-</div>
-</div>
-<a id="a27cb75e2dfd499f4a68e63a6473f67e9" name="a27cb75e2dfd499f4a68e63a6473f67e9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a27cb75e2dfd499f4a68e63a6473f67e9">&#9670;&#160;</a></span>step_callback() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> S, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="#a8414a834176441d6a34aa2f992bc94dd">FunctionSC</a> <a class="el" href="class_sandals_1_1_runge_kutta.html">Sandals::RungeKutta</a>&lt; Real, S, N, M &gt;::step_callback </td>
-          <td>(</td>
-          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Get the step callback function. </p><dl class="section return"><dt>Returns</dt><dd>The step callback function. </dd></dl>
-
-</div>
-</div>
-<a id="aac94b5b34302a503bee639b5a130fb69" name="aac94b5b34302a503bee639b5a130fb69"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aac94b5b34302a503bee639b5a130fb69">&#9670;&#160;</a></span>step_callback() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> S, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="class_sandals_1_1_runge_kutta.html">Sandals::RungeKutta</a>&lt; Real, S, N, M &gt;::step_callback </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="#a8414a834176441d6a34aa2f992bc94dd">FunctionSC</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>t_step_callback</em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Set the step callback function. </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">t_step_callback</td><td>The step callback function. </td></tr>
-  </table>
-  </dd>
-</dl>
 
 </div>
 </div>
@@ -5518,31 +5424,6 @@ template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581
 </table>
 </div><div class="memdoc">
 <p>Safety factor for adaptive step \( f \). </p>
-
-</div>
-</div>
-<a id="ab26f53a39a658205024340f2875379b1" name="ab26f53a39a658205024340f2875379b1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab26f53a39a658205024340f2875379b1">&#9670;&#160;</a></span>m_step_callback</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> S, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="#a8414a834176441d6a34aa2f992bc94dd">FunctionSC</a> <a class="el" href="class_sandals_1_1_runge_kutta.html">Sandals::RungeKutta</a>&lt; Real, S, N, M &gt;::m_step_callback {nullptr}</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Step callback function. </p>
 
 </div>
 </div>

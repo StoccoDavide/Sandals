@@ -66,7 +66,7 @@ public:
   using VectorX = Eigen::Vector<Real, Eigen::Dynamic>;
   using MatrixX = Eigen::Matrix<Real, 2, Eigen::Dynamic>;
 
-  BasicImplicitProblem(std::shared_ptr<Integrator> rk)
+  BasicImplicitProblem(IntegratorPtr rk)
     : Problem<Real, 2, 0, Integrator>("BasicImplicitProblem", std::make_shared<BasicExplicit<Real>>(), rk)
   {
     rk->system(this->system());

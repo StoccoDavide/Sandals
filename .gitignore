@@ -51,5 +51,5 @@
 # Fetched content
 third_party/
 
-# Sandbox folder
-sandbox/
+# Xcode folder
+xcode/

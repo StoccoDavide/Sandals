@@ -317,7 +317,7 @@ namespace Sandals
       // Initialize the guess and the solution
       std::vector<VectorF> x_guess(num_intervals + 1, ics);
       this->m_solution->clear();
-      this->m_solution->resize(t_mesh.size());
+      this->m_solution->resize(static_cast<Integer>(t_mesh.size()));
 
       // Solve the boundary value problem using a linearized Newton method
       std::vector<MatrixJX> Jx(num_intervals, MatrixJX::Identity());
@@ -353,7 +353,7 @@ namespace Sandals
 
         // Build continuity residual for states at interior nodes
         const Integer c_size{num_intervals*N};
-        const Integer unknowns{(num_intervals + 1)*N}; // state unknowns at every mesh node
+        const Integer x_size{(num_intervals + 1)*N}; // state unknowns at every mesh node
         DynVec residual(DynVec::Zero(c_size));
         for (Integer k{0}; k < num_intervals; ++k) {
           residual.segment(k*N, N) = x_states[k + 1] - x_guess[k + 1];
@@ -363,10 +363,14 @@ namespace Sandals
         VectorF b(this->b(x_states[0], x_states[num_intervals]));
         const Integer b_size{static_cast<Integer>(b.size())};
 
+        // Check size consistency
+        SANDALS_ASSERT(c_size + b_size == x_size,
+          CMD "expected square linear system, got " << (c_size + b_size) << " x " << x_size << ".");
+
         // Total residual vector: [continuity; -b]
-        DynVec total_residual(DynVec::Zero(c_size + b_size));
-        total_residual.head(c_size) = residual;
-        total_residual.segment(c_size, b_size) = -b;
+        DynVec b_sys(DynVec::Zero(c_size + b_size));
+        b_sys.head(c_size) = residual;
+        b_sys.segment(c_size, b_size) = -b;
 
         // Print the iteration info
         if (this->m_verbose) {
@@ -380,33 +384,23 @@ namespace Sandals
         if (b.norm() < this->m_tolerance && residual.norm() < this->m_tolerance) {return true;}
 
         // Build Jacobian matrix for Newton step
-        // Continuity rows x unknowns: (num_intervals*N) x ((num_intervals+1)*N)
-        DynMat jac(DynMat::Zero(c_size, unknowns));
-
+        DynMat A_sys(DynMat::Zero(x_size, x_size));
         for (Integer k{0}; k < num_intervals; ++k) {
-          // -I at block (k,k), +I at block (k,k+1)
-          jac.block(k*N, k*N, N, N) = -MatrixJX::Identity();
-          jac.block(k*N, (k + 1)*N, N, N) =  MatrixJX::Identity();
+          A_sys.block(k*N, k*N, N, N)       = -MatrixJX::Identity(); // -I at block (k, k)
+          A_sys.block(k*N, (k + 1)*N, N, N) =  MatrixJX::Identity(); // +I at block (k, k+1)
         }
+        MatrixJF Jb_ini(this->Jb_x_ini(x_states[0], x_states[num_intervals]));
+        MatrixJF Jb_end(this->Jb_x_end(x_states[0], x_states[num_intervals]));
+        A_sys.block(c_size, 0, Jb_ini.rows(), N) = Jb_ini;
+        A_sys.block(c_size, num_intervals*N, Jb_end.rows(), N) = Jb_end;
 
-        // Boundary condition Jacobians (each is b_size x N)
-        MatrixJF Jb_ini(this->Jb_x_ini(x_states[0], x_states[num_intervals])); // b_size x N
-        MatrixJF Jb_end(this->Jb_x_end(x_states[0], x_states[num_intervals])); // b_size x N
-
-        // Append b_size rows to jac (same number of columns = unknowns)
-        jac.conservativeResize(c_size + b_size, unknowns);
-        jac.block(c_size, 0, Jb_ini.rows(), N) = Jb_ini;
-        // place Jb_end at the columns corresponding to the last node (index num_intervals)
-        jac.block(c_size, num_intervals*N, Jb_end.rows(), N) = Jb_end;
-
-        // Solve for update. jac is typically (c_size+b_size) x unknowns
-        // Use QR (least-squares ) to handle non-square systems/rank-deficient
-        Eigen::ColPivHouseholderQR<DynMat> qr(jac);
-        if (qr.rank() < qr.cols()) {
-          SANDALS_ERROR(CMD "Jacobian is rank-deficient (rank = " << qr.rank() << ", cols = " << qr.cols() << ").");
+        // Solve the linear system
+        Eigen::FullPivLU<DynMat> lu(A_sys);
+        if (lu.rank() < lu.cols()) {
+          SANDALS_ERROR(CMD "singular linear system detected.");
           return false;
         }
-        DynVec x_step(qr.solve(total_residual));
+        DynVec x_step(lu.solve(b_sys));
 
         // Update guesses
         for (Integer k{0}; k < num_intervals + 1; ++k) {

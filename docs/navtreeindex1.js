@@ -1,5 +1,6 @@
 var NAVTREEINDEX1 =
 {
+"class_sandals_1_1_fehlberg45_tableau.html#aad1b88e061eee2f4e7f73df2910eba64":[5,0,0,7,0],
 "class_sandals_1_1_gauss_legendre2.html":[4,0,0,8],
 "class_sandals_1_1_gauss_legendre2.html":[5,0,0,8],
 "class_sandals_1_1_gauss_legendre2.html#a9d32f7ae393c4cdd52837029876f00e7":[4,0,0,8,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX1 =
 "class_sandals_1_1_linear_wrapper.html#a360342dd2e61a81dddcd93b24e6b31a0":[5,0,0,23,1],
 "class_sandals_1_1_linear_wrapper.html#a394921e4c9e2b08070e2bec958e2072f":[4,0,0,23,26],
 "class_sandals_1_1_linear_wrapper.html#a394921e4c9e2b08070e2bec958e2072f":[5,0,0,23,26],
-"class_sandals_1_1_linear_wrapper.html#a3ed40fa5095dd41234b637d91ef0ff14":[4,0,0,23,21],
-"class_sandals_1_1_linear_wrapper.html#a3ed40fa5095dd41234b637d91ef0ff14":[5,0,0,23,21]
+"class_sandals_1_1_linear_wrapper.html#a3ed40fa5095dd41234b637d91ef0ff14":[4,0,0,23,21]
 };

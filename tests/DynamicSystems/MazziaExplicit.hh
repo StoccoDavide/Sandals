@@ -70,7 +70,7 @@ public:
   using typename Problem<Real, 4, 0, Integrator>::VectorF;
   using typename Problem<Real, 4, 0, Integrator>::MatrixJF;
 
-  MazziaExplicitProblem(typename Integrator rk)
+  MazziaExplicitProblem(IntegratorPtr rk)
     : Problem<Real, 4, 0, Integrator>("MazziaExplicitProblem", std::make_shared<MazziaExplicit<Real>>(), rk)
   {
     rk->system(this->system());
@@ -104,5 +104,10 @@ public:
     return Jb_x_end;
   }
 };
+
+template<typename Integrator>
+MazziaExplicitProblem(std::shared_ptr<Integrator>)
+    -> MazziaExplicitProblem<typename Integrator::real_type, Integrator>;
+
 
 #endif // TESTS_MAZZIA_EXPLICIT_HH

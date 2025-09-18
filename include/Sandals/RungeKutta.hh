@@ -928,14 +928,15 @@ namespace Sandals {
 
       // Propagate the derivative of K with respect to x
       VectorN x_node, x_dot_node;
-      MatrixN JF_x, JF_x_dot, jac;
+      MatrixN JF_x, JF_x_dot, A, b;
       std::array<MatrixN, S> dK_dx;
+      Eigen::FullPivLU<MatrixN> lu;
       for (Integer i{0}; i < S; ++i) {
         // Compute the node
         x_node = x + K(all, seqN(0, i)) * this->m_tableau.A(i, seqN(0, i)).transpose();
         x_dot_node = K.col(i) / h;
 
-        // Compute the Jacobians of F with respect to x and x_dot at the node
+        // Compute the Aobians of F with respect to x and x_dot at the node
         if (!this->m_reverse) {
           JF_x     = this->m_system->JF_x(x_node, x_dot_node, t + h*this->m_tableau.c(i));
           JF_x_dot = this->m_system->JF_x_dot(x_node, x_dot_node, t + h*this->m_tableau.c(i));
@@ -945,14 +946,15 @@ namespace Sandals {
         }
 
         // Propagate the derivative of K with respect to x
-        jac = MatrixN::Identity();
+        A = JF_x_dot;
+        b = -h * JF_x;
         for (Integer j{0}; j < i; ++j) {
-          jac += dK_dx[j] * this->m_tableau.A(i, j);
+          b -= h * this->m_tableau.A(i, j) * JF_x * dK_dx[j];
         }
-        // Solve the linear system: JF_x_dot/h * dK_dx[i] + JF_x * jac = 0
-        // Rearranged: dK_dx[i] = -h * JF_x * jac * (JF_x_dot)^(-1)
-        // But since JF_x_dot/h is the Jacobian w.r.t. x_dot, we solve for dK_dx[i]
-        dK_dx[i] = -(JF_x * jac).lu().solve(JF_x_dot / h);
+
+        // Solve the linear system
+        lu.compute(A);
+        dK_dx[i] = lu.solve(b);
 
         // Check for NaNs or Infs
         if (!dK_dx[i].allFinite()) {return false;}
@@ -1082,9 +1084,9 @@ namespace Sandals {
         for (Integer j{0}; j < S; ++j) {
           jdx = seqN(j*N, N);
           if (i == j) {
-            jac(idx, jdx) = this->m_tableau.A(i,j) * JF_x + JF_x_dot / h;
+            jac(idx, jdx) = this->m_tableau.A(i, j) * JF_x + JF_x_dot / h;
           } else {
-            jac(idx, jdx) = this->m_tableau.A(i,j) * JF_x;
+            jac(idx, jdx) = this->m_tableau.A(i, j) * JF_x;
           }
         }
       }
@@ -1159,6 +1161,7 @@ namespace Sandals {
       Eigen::Matrix<Real, N*S, N*S> A;
       Eigen::Matrix<Real, N*S, N> b;
       std::array<MatrixN, S> dK_dx;
+      Eigen::FullPivLU<Eigen::Matrix<Real, N*S, N*S>> lu;
       for (Integer i{0}; i < S; ++i) {
         // Compute the node
         x_node = x + K * this->m_tableau.A.row(i).transpose();
@@ -1174,21 +1177,24 @@ namespace Sandals {
         }
 
         // Fill the big linear system
-        A.block(i*N, i*N, N, N) = JF_x_dot;
+        A.template block<N, N>(i*N, i*N) = JF_x_dot;
         for (Integer j{0}; j < S; ++j) {
-          A.block(i*N, j*N, N, N) += h * this->m_tableau.A(i, j) * JF_x;
+          A.template block<N, N>(i*N, j*N) += h * this->m_tableau.A(i, j) * JF_x;
         }
-        b.block(i*N, 0, N, N) = -h * JF_x;
+        b.template block<N, N>(i*N, 0) = -h * JF_x;
 
         // Check for NaNs or Infs
         if (!JF_x.allFinite() || !JF_x_dot.allFinite()) {return false;}
       }
 
       // Solve the big linear system
-      Eigen::Matrix<Real, N*S, N> dK_dx_mat(A.lu().solve(b));
+      lu.compute(A);
+      Eigen::Matrix<Real, N*S, N> dK_dx_mat(lu.solve(b));
+      if (!dK_dx_mat.allFinite()) {return false;}
+
+      // Reshape the solution
       for (Integer i{0}; i < S; ++i) {
-        dK_dx[i] = dK_dx_mat.block(i*N, 0, N, N);
-        if (!dK_dx[i].allFinite()) {return false;}
+        dK_dx[i] = dK_dx_mat.template block<N, N>(i*N, 0);
       }
 
       // Compute the derivative of x_new with respect to x
@@ -1358,6 +1364,7 @@ namespace Sandals {
       VectorN x_node, x_dot_node;
       MatrixN JF_x, JF_x_dot, A, b;
       std::array<MatrixN, S> dK_dx;
+      Eigen::FullPivLU<MatrixN> lu;
       for (Integer i{0}; i < S; ++i) {
         // Compute the node
         x_node = x + K(all, seqN(0, i+1)) * this->m_tableau.A(i, seqN(0, i+1)).transpose();
@@ -1376,9 +1383,12 @@ namespace Sandals {
         A = JF_x_dot;
         b = -h * JF_x;
         for (Integer j{0}; j < i; ++j) {
-          b -= h * this->m_tableau.A(i,j) * JF_x * dK_dx[j];
+          b -= h * this->m_tableau.A(i, j) * JF_x * dK_dx[j];
         }
-        dK_dx[i] = A.lu().solve(b);
+
+        // Solve the linear system
+        lu.compute(A);
+        dK_dx[i] = lu.solve(b);
 
         // Check for NaNs or Infs
         if (!dK_dx[i].allFinite()) {return false;}
@@ -1603,7 +1613,7 @@ namespace Sandals {
       #define CMD "Sandals::RungeKutta::solve(...): "
 
       // Instantiate output
-      sol.resize(t_mesh.size());
+      sol.resize(static_cast<Integer>(t_mesh.size()));
 
       // Store initial conditions
       sol.t(0)     = t_mesh(0);

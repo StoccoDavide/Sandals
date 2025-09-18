@@ -7,5 +7,6 @@ var searchData=
   ['min_5fsafety_5ffactor_4',['min_safety_factor',['../class_sandals_1_1_runge_kutta.html#a0e5f53ffe5c78e74d4fd62984f299e37',1,'Sandals::RungeKutta::min_safety_factor()'],['../class_sandals_1_1_runge_kutta.html#a9950c91897a01db2ae10f842bff12839',1,'Sandals::RungeKutta::min_safety_factor(Real const t_min_safety_factor)']]],
   ['min_5fstep_5',['min_step',['../class_sandals_1_1_runge_kutta.html#a00a09a51e7534a2c60d97525fad60ba7',1,'Sandals::RungeKutta::min_step()'],['../class_sandals_1_1_runge_kutta.html#a9ef1408119bf8f8e2eabe5c9e16d5909',1,'Sandals::RungeKutta::min_step(Real const t_min_step)']]],
   ['mte22_6',['MTE22',['../class_sandals_1_1_m_t_e22.html#a571f9c3ffcac326e6ef5cc28ae361296',1,'Sandals::MTE22::MTE22()'],['../class_sandals_1_1_m_t_e22.html#ac02ca044a55e065149b63a05434126cb',1,'Sandals::MTE22::MTE22(System t_system)']]],
-  ['mte22tableau_7',['MTE22Tableau',['../class_sandals_1_1_m_t_e22_tableau.html#ae59ff3f33486a6837aace2be296bc60c',1,'Sandals::MTE22Tableau']]]
+  ['mte22tableau_7',['MTE22Tableau',['../class_sandals_1_1_m_t_e22_tableau.html#ae59ff3f33486a6837aace2be296bc60c',1,'Sandals::MTE22Tableau']]],
+  ['multiple_5fshooting_8',['multiple_shooting',['../class_sandals_1_1_problem.html#a95d700286769b875d15fe60534342889',1,'Sandals::Problem']]]
 ];

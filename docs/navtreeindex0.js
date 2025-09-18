@@ -44,6 +44,7 @@ var NAVTREEINDEX0 =
 "_m_t_e22_8hh_source.html":[6,0,1,0,0,10],
 "_problem_8hh.html":[6,0,1,0,2],
 "_problem_8hh.html#a0a5ceb9ceb914e08d345410b561cb37a":[6,0,1,0,2,1],
+"_problem_8hh.html#a0a5ceb9ceb914e08d345410b561cb37a":[6,0,1,0,2,2],
 "_problem_8hh_source.html":[6,0,1,0,2],
 "_r_k4_8hh.html":[6,0,1,0,0,16],
 "_r_k4_8hh.html#af96a23a78c814f147142dbff7baf7e35":[6,0,1,0,0,16,2],
@@ -248,6 +249,5 @@ var NAVTREEINDEX0 =
 "class_sandals_1_1_fehlberg45.html#ae469de804b9e198cac55d1938933ac32":[5,0,0,6,2],
 "class_sandals_1_1_fehlberg45_tableau.html":[4,0,0,7],
 "class_sandals_1_1_fehlberg45_tableau.html":[5,0,0,7],
-"class_sandals_1_1_fehlberg45_tableau.html#aad1b88e061eee2f4e7f73df2910eba64":[4,0,0,7,0],
-"class_sandals_1_1_fehlberg45_tableau.html#aad1b88e061eee2f4e7f73df2910eba64":[5,0,0,7,0]
+"class_sandals_1_1_fehlberg45_tableau.html#aad1b88e061eee2f4e7f73df2910eba64":[4,0,0,7,0]
 };

@@ -13,8 +13,8 @@
 #include "Sandals.hh"
 #include "Sandals/Problem.hh"
 #include "Sandals/RungeKutta/RK4.hh" // ERK
-//#include "Sandals/RungeKutta/LobattoIIIA2.hh" // DIRK
-//#include "Sandals/RungeKutta/RadauIIA5.hh" // IRK
+#include "Sandals/RungeKutta/LobattoIIIA2.hh" // DIRK
+#include "Sandals/RungeKutta/RadauIIA5.hh" // IRK
 
 #include "BasicExplicit.hh"
 #include "BasicImplicit.hh"
@@ -66,27 +66,30 @@ int main(int argc, char **argv) {
 
   static constexpr long num_points{10};
 
-  Eigen::VectorXd time = Eigen::VectorXd::LinSpaced(num_points, 0.0, 1.0);
+  Eigen::VectorXd time(Eigen::VectorXd::LinSpaced(num_points, 0.0, 1.0));
   Eigen::Vector<Real, 2> ics;
   ics << 10.0, -10.0;
 
-  BasicExplicitProblem problem_explicit(std::make_shared<RK4<Real, 2, 0>>());
-  problem_explicit.verbose_mode(false);
+  BasicExplicitProblem problem_explicit(std::make_shared<RadauIIA5<Real, 2, 0>>());
+  problem_explicit.verbose_mode(true);
+  problem_explicit.integrator()->verbose_mode(false);
   problem_explicit.multiple_shooting(time, ics);
 
-  BasicImplicitProblem problem_implicit(std::make_shared<RK4<Real, 2, 0>>());
-  problem_implicit.verbose_mode(false);
+  BasicImplicitProblem problem_implicit(std::make_shared<RadauIIA5<Real, 2, 0>>());
+  problem_implicit.verbose_mode(true);
+  problem_implicit.integrator()->verbose_mode(false);
   problem_implicit.multiple_shooting(time, ics);
 
-  BasicSemiExplicitProblem problem_semiexplicit(std::make_shared<RK4<Real, 2, 0>>());
-  problem_semiexplicit.verbose_mode(false);
+  BasicSemiExplicitProblem problem_semiexplicit(std::make_shared<RadauIIA5<Real, 2, 0>>());
+  problem_semiexplicit.verbose_mode(true);
+  problem_semiexplicit.integrator()->verbose_mode(false);
   problem_semiexplicit.multiple_shooting(time, ics);
 
   #ifdef SANDALS_ENABLE_PLOTTING
     auto esol = problem_explicit.solution();
     auto isol = problem_implicit.solution();
     auto ssol = problem_semiexplicit.solution();
-    auto asol = problem_explicit.analytical_solution(esol->t);
+    auto asol = problem_semiexplicit.analytical_solution(esol->t);
 
     auto colors = matlab_lines_colormap();
 
