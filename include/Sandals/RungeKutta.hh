@@ -25,9 +25,9 @@
 #include <Sandals/Tableau.hh>
 #include <Sandals/Solution.hh>
 
-//#ifdef SANDALS_CHECK_FINITE_DIFFERENCES
+#ifdef SANDALS_CHECK_FINITE_DIFFERENCES
 #include <Optimist/FiniteDifferences.hh>
-//#endif
+#endif
 
 namespace Sandals {
 
@@ -790,7 +790,7 @@ namespace Sandals {
       for (Integer i{0}; i < S; ++i) {Jx += h * dK_dx[i] * this->m_tableau.b(i);}
 
       // Check the Jacobian with finite differences
-      //#ifdef SANDALS_CHECK_FINITE_DIFFERENCES
+      #ifdef SANDALS_CHECK_FINITE_DIFFERENCES
       MatrixJX Jx_fd;
       auto fun = [this, &t, &h, &K](VectorN const & x_fd, VectorN & x_new_fd) -> bool {
         MatrixK K_fd(K);
@@ -806,13 +806,11 @@ namespace Sandals {
         return x_new_fd.allFinite();
       };
       bool fd_ok{Optimist::FiniteDifferences::Jacobian(x, fun, Jx_fd)};
-      std::cout << "Jx    = \n" << Jx << std::endl;
-      std::cout << "Jx_fd = \n" << Jx_fd << std::endl;
       if (fd_ok && Jx_fd.allFinite()) {
         Real err{(Jx - Jx_fd).norm() / (1.0 + Jx_fd.norm())};
         SANDALS_ASSERT_WARNING(err < EPSILON_LOW, CMD "Jacobian propagation error = " << err);
       }
-      //#endif
+      #endif
 
       return true;
 
@@ -1001,7 +999,7 @@ namespace Sandals {
       for (Integer i{0}; i < S; ++i) {Jx += h * dK_dx[i] * this->m_tableau.b(i);}
 
       // Efficient finite difference Jacobian check
-      //#ifdef SANDALS_CHECK_FINITE_DIFFERENCE
+      #ifdef SANDALS_CHECK_FINITE_DIFFERENCE
       MatrixJX Jx_fd;
       auto fun = [this, &t, &h, &K](VectorN const & x_fd, VectorN & x_new_fd) -> bool {
         MatrixK K_fd(K);
@@ -1022,7 +1020,7 @@ namespace Sandals {
         Real err{(Jx - Jx_fd).norm() / (1.0 + Jx_fd.norm())};
         SANDALS_ASSERT_WARNING(err < EPSILON_LOW, CMD "Jacobian propagation error = " << err);
       }
-      //#endif
+      #endif
 
       return true;
 
@@ -1265,7 +1263,7 @@ namespace Sandals {
       Jx.setIdentity();
       for (Integer i{0}; i < S; ++i) {Jx += h * dK_dx[i] * this->m_tableau.b(i);}
 
-      //#ifdef SANDALS_CHECK_FINITE_DIFFERENCE
+      #ifdef SANDALS_CHECK_FINITE_DIFFERENCE
       MatrixJX Jx_fd;
       auto fun = [this, &t, &h, &K](VectorN const & x_fd, VectorN & x_new_fd) -> bool {
         MatrixK K_fd(K);
@@ -1286,7 +1284,7 @@ namespace Sandals {
         Real err{(Jx - Jx_fd).norm() / (1.0 + Jx_fd.norm())};
         SANDALS_ASSERT_WARNING(err < EPSILON_LOW, CMD "Jacobian propagation error = " << err);
       }
-      //#endif
+      #endif
 
       return true;
 
@@ -1489,7 +1487,7 @@ namespace Sandals {
       Jx.setIdentity();
       for (Integer i{0}; i < S; ++i) {Jx += h * dK_dx[i] * this->m_tableau.b(i);}
 
-      //#ifdef SANDALS_CHECK_FINITE_DIFFERENCE
+      #ifdef SANDALS_CHECK_FINITE_DIFFERENCE
       MatrixJX Jx_fd;
       auto fun = [this, &t, &h, &K](VectorN const & x_fd, VectorN & x_new_fd) -> bool {
         MatrixK K_fd(K);
@@ -1510,7 +1508,7 @@ namespace Sandals {
         Real err{(Jx - Jx_fd).norm() / (1.0 + Jx_fd.norm())};
         SANDALS_ASSERT_WARNING(err < EPSILON_LOW, CMD "Jacobian propagation error = " << err);
       }
-      //#endif
+      #endif
 
       return true;
 
@@ -1770,6 +1768,9 @@ namespace Sandals {
           h_step = h_new_step;
         }
 
+        // Propagate the derivative of the solution with respect to the states x
+        if constexpr (Propagate) {Jx *= Jx_step;}
+
         // Store solution if the step is a mesh point
         if (!this->m_adaptive || mesh_point_bool) {
 
@@ -1788,9 +1789,8 @@ namespace Sandals {
           // Update the previous step
           x_old_step = x_new_step;
 
-          // Propagate the derivative of the solution with respect to the states x
-          if constexpr (Propagate) {Jx *= Jx_step;}
         }
+
       }
       return true;
 
@@ -1891,6 +1891,9 @@ namespace Sandals {
 
         SANDALS_ASSERT(step < sol.size(), CMD "safety length exceeded.");
 
+        // Propagate the derivative of the solution with respect to the states x
+        if constexpr (Propagate) {Jx *= Jx_step;}
+
         // Update temporaries
         step += 1;
 
@@ -1905,9 +1908,6 @@ namespace Sandals {
 
         // Update the previous step
         x_old_step = x_new_step;
-
-        // Propagate the derivative of the solution with respect to the states x
-        if constexpr (Propagate) {Jx *= Jx_step;}
       }
 
       // Resize the output

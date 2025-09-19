@@ -8,8 +8,8 @@
  * e-mail: davide.stocco@unitn.it                             e-mail: enrico.bertolazzi@unitn.it *
 \* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-#ifndef TESTS_PROBLEMS_BASIC_EXPLICIT_HH
-#define TESTS_PROBLEMS_BASIC_EXPLICIT_HH
+#ifndef TESTS_PROBLEMS_SHAMPINE2_EXPLICIT_HH
+#define TESTS_PROBLEMS_SHAMPINE2_EXPLICIT_HH
 
 #include "Sandals.hh"
 #include "Sandals/Problem.hh"
@@ -18,7 +18,7 @@
 using namespace Sandals;
 
 template<typename Real = double>
-class BasicExplicit : public Explicit<Real, 2, 0>
+class Shampine2Explicit : public Explicit<Real, 2, 0>
 {
 public:
   using typename Explicit<Real, 2, 0>::VectorF;
@@ -26,20 +26,29 @@ public:
   using typename Explicit<Real, 2, 0>::VectorH;
   using typename Explicit<Real, 2, 0>::MatrixJH;
 
-  BasicExplicit() : Explicit<Real, 2, 0>("BasicExplicit") {}
+private:
+  Real m_p{1.0e-1}; // Parameter
 
-  ~BasicExplicit() {}
+public:
+  Shampine2Explicit() : Explicit<Real, 2, 0>("Shampine2Explicit") {}
 
-  VectorF f(VectorF const & x, Real const /*t*/) const override
+  ~Shampine2Explicit() {}
+
+  void p(Real const p) {this->m_p = p;}
+
+  Real p() const {return this->m_p;}
+
+  VectorF f(VectorF const & x, Real const t) const override
   {
     VectorF f;
-    f << x(1), 1.0;
+    f << x(1), -3.0*this->m_p*x(0) / std::pow(this->m_p + t*t, 2.0);
     return f;
   }
 
-  MatrixJF Jf_x(VectorF const & /*x*/, Real const /*t*/) const override {
+  MatrixJF Jf_x(VectorF const & /*x*/, Real const t) const override {
     MatrixJF Jf_x(MatrixJF::Zero());
     Jf_x(0, 1) = 1.0;
+    Jf_x(1, 0) = -3.0*this->m_p / ((this->m_p + t*t)*(this->m_p + t*t));
     return Jf_x;
   }
 
@@ -52,7 +61,7 @@ public:
 };
 
 template<typename Real, typename Integrator>
-class BasicExplicitProblem : public Problem<Real, 2, 0, Integrator>
+class Shampine2ExplicitProblem : public Problem<Real, 2, 0, Integrator>
 {
 public:
   using typename Problem<Real, 2, 0, Integrator>::SystemPtr;
@@ -63,19 +72,23 @@ public:
   using VectorX = Eigen::Vector<Real, Eigen::Dynamic>;
   using MatrixX = Eigen::Matrix<Real, 2, Eigen::Dynamic>;
 
-  BasicExplicitProblem(IntegratorPtr rk)
-    : Problem<Real, 2, 0, Integrator>("BasicExplicitProblem", std::make_shared<BasicExplicit<Real>>(), rk)
+  Shampine2ExplicitProblem(IntegratorPtr rk)
+    : Problem<Real, 2, 0, Integrator>("Shampine2ExplicitProblem", std::make_shared<Shampine2Explicit<Real>>(), rk)
   {
     rk->system(this->system());
   }
 
-  ~BasicExplicitProblem() {}
+  ~Shampine2ExplicitProblem() {}
+
+  void p(Real const p) {static_cast<Shampine2Explicit<Real>*>(this->integrator()->system().get())->p(p);}
+
+  Real p() const {return static_cast<const Shampine2Explicit<Real>*>(this->integrator()->system().get())->p();}
 
   VectorF b(VectorF const & x_ini, VectorF const & x_end) const override
   {
     VectorF b;
-    b(0) = x_ini(0);
-    b(1) = x_end(1);
+    b(0) = x_ini(0) + 0.1 / std::sqrt(this->p()+0.01);
+    b(1) = x_end(0) - 0.1 / std::sqrt(this->p()+0.01);
     return b;
   }
 
@@ -89,13 +102,15 @@ public:
   MatrixJF Jb_x_end(VectorF const & /*x_ini*/, VectorF const & /*x_end*/) const override
   {
     MatrixJF Jb_x_end(MatrixJF::Zero());
-    Jb_x_end(1, 1) = 1.0;
+    Jb_x_end(1, 0) = 1.0;
     return Jb_x_end;
   }
 
   VectorF analytical_solution(Real const t) const {
     VectorF x;
-    x << 0.5*t*t - t, t - 1.0;
+    x <<
+      this->p() / std::pow(this->p() + t*t, 1.5),
+      t / std::sqrt(this->p() + t*t);
     return x;
   }
 
@@ -107,7 +122,7 @@ public:
 };
 
 template<typename Integrator>
-BasicExplicitProblem(std::shared_ptr<Integrator>)
-    -> BasicExplicitProblem<typename Integrator::real_type, Integrator>;
+Shampine2ExplicitProblem(std::shared_ptr<Integrator>)
+    -> Shampine2ExplicitProblem<typename Integrator::real_type, Integrator>;
 
-#endif // TESTS_PROBLEMS_BASIC_EXPLICIT_HH
+#endif // TESTS_PROBLEMS_SHAMPINE2_EXPLICIT_HH

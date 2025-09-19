@@ -96,12 +96,6 @@ public:
     return Jb_x_end;
   }
 
-  VectorF ics() const {
-    VectorF ics;
-    ics << 0.0, 0.5;
-    return ics;
-  }
-
   VectorF analytical_solution(Real const t) const {
     VectorF x;
     constexpr Real c0{0.0};
