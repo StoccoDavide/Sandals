@@ -8,54 +8,70 @@
  * e-mail: davide.stocco@unitn.it                             e-mail: enrico.bertolazzi@unitn.it *
 \* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-#ifndef TESTS_BASIC_IMPLICIT_HH
-#define TESTS_BASIC_IMPLICIT_HH
+#ifndef TESTS_PROBLEMS_BASIC_SEMIEXPLICIT_HH
+#define TESTS_PROBLEMS_BASIC_SEMIEXPLICIT_HH
 
 #include "Sandals.hh"
 #include "Sandals/Problem.hh"
-#include "Sandals/System/Implicit.hh"
+#include "Sandals/System/SemiExplicit.hh"
 
 using namespace Sandals;
 
 template<typename Real = double>
-class BasicImplicit : public Implicit<Real, 2, 0>
+class BasicSemiExplicit : public SemiExplicit<Real, 2, 0>
 {
 public:
-  using typename Implicit<Real, 2, 0>::VectorF;
-  using typename Implicit<Real, 2, 0>::MatrixJF;
-  using typename Implicit<Real, 2, 0>::VectorH;
-  using typename Implicit<Real, 2, 0>::MatrixJH;
+  using VectorF  = typename SemiExplicit<Real, 2, 0>::VectorF;
+  using MatrixA  = typename SemiExplicit<Real, 2, 0>::MatrixA;
+  using TensorTA = typename SemiExplicit<Real, 2, 0>::TensorTA;
+  using VectorB  = typename SemiExplicit<Real, 2, 0>::VectorB;
+  using MatrixJB = typename SemiExplicit<Real, 2, 0>::MatrixJB;
+  using VectorH  = typename SemiExplicit<Real, 2, 0>::VectorH;
+  using MatrixJH = typename SemiExplicit<Real, 2, 0>::MatrixJH;
 
-  BasicImplicit() : Implicit<Real, 2, 0>("BasicImplicit") {}
+  BasicSemiExplicit() : SemiExplicit<Real, 2, 0>("BasicSemiExplicit") {}
 
-  ~BasicImplicit() {}
+  ~BasicSemiExplicit() {}
 
-  VectorF F(VectorF const & x,  VectorF const &x_dot, Real /*t*/) const override
+  MatrixA A(VectorF const & /*x*/, Real const /*t*/) const override
   {
-    VectorF F;
-    F << x_dot(0) - x(1), x_dot(1) - 1.0;
-    return F;
+    MatrixA A;
+    A.setIdentity();
+    return A;
   }
 
-  MatrixJF JF_x(VectorF const & /*x*/, Real /*t*/) const override {
-    MatrixJF JF_x(MatrixJF::Zero());
-    JF_x(0, 1) = -1.0;
-    return JF_x;
+  TensorTA TA_x(VectorF const & /*x*/, Real const /*t*/) const override
+  {
+    TensorTA TA_x(2);
+    TA_x[0].setZero();
+    TA_x[1].setZero();
+    return TA_x;
   }
 
-  MatrixJF JF_x_dot(VectorF const &/*x*/, VectorF const &/*x_dot*/, Real /*t*/) const override
-  {return MatrixJF::Identity();}
+  VectorB b(VectorF const &x, Real const /*t*/) const override
+  {
+    VectorF b;
+    b <<  x(1), 1.0;
+    return b;
+  }
 
-  VectorH h(VectorF const & /*x*/, Real /*t*/) const override {return VectorH::Zero();}
+  MatrixJB Jb_x(VectorF const & /*x*/, Real const /*t*/) const override {
+    MatrixJB Jb_x(MatrixJB::Zero());
+    Jb_x(0, 1) = 1.0;
+    return Jb_x;
+  }
 
-  MatrixJH Jh_x(VectorF const & /*x*/, Real /*t*/) const override {return MatrixJH::Zero();}
+  //virtual VectorH h(VectorF const & x, Real const t) const = 0;
+  VectorH h(VectorF const & /*x*/, Real const /*t*/) const override {return VectorH::Zero();}
 
-  bool in_domain(VectorF const & /*x*/, Real /*t*/) const override {return true;}
+  MatrixJH Jh_x(VectorF const & /*x*/, Real const /*t*/) const override {return MatrixJH::Zero();}
+
+  bool in_domain(VectorF const & /*x*/, Real const /*t*/) const override {return true;}
 
 };
 
 template<typename Real, typename Integrator>
-class BasicImplicitProblem : public Problem<Real, 2, 0, Integrator>
+class BasicSemiExplicitProblem : public Problem<Real, 2, 0, Integrator>
 {
 public:
   using typename Problem<Real, 2, 0, Integrator>::SystemPtr;
@@ -66,13 +82,13 @@ public:
   using VectorX = Eigen::Vector<Real, Eigen::Dynamic>;
   using MatrixX = Eigen::Matrix<Real, 2, Eigen::Dynamic>;
 
-  BasicImplicitProblem(IntegratorPtr rk)
-    : Problem<Real, 2, 0, Integrator>("BasicImplicitProblem", std::make_shared<BasicExplicit<Real>>(), rk)
+  BasicSemiExplicitProblem(IntegratorPtr rk)
+    : Problem<Real, 2, 0, Integrator>("BasicSemiExplicitProblem", std::make_shared<BasicSemiExplicit<Real>>(), rk)
   {
     rk->system(this->system());
   }
 
-  ~BasicImplicitProblem() {}
+  ~BasicSemiExplicitProblem() {}
 
   VectorF b(VectorF const & x_ini, VectorF const & x_end) const override
   {
@@ -118,7 +134,7 @@ public:
 };
 
 template<typename Integrator>
-BasicImplicitProblem(std::shared_ptr<Integrator>)
-    -> BasicImplicitProblem<typename Integrator::real_type, Integrator>;
+BasicSemiExplicitProblem(std::shared_ptr<Integrator>)
+    -> BasicSemiExplicitProblem<typename Integrator::real_type, Integrator>;
 
-#endif // TESTS_BASIC_IMPLICIT_HH
+#endif // TESTS_PROBLEMS_BASIC_SEMIEXPLICIT_HH

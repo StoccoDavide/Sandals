@@ -25,6 +25,10 @@
 #include <Sandals/Tableau.hh>
 #include <Sandals/Solution.hh>
 
+//#ifdef SANDALS_CHECK_FINITE_DIFFERENCES
+#include <Optimist/FiniteDifferences.hh>
+//#endif
+
 namespace Sandals {
 
   /*\
@@ -750,6 +754,8 @@ namespace Sandals {
     bool erk_explicit_propagate(VectorN const & x, Real const t, Real const h, MatrixK const & K,
       MatrixJX & Jx) const
     {
+      #define CMD "Sandals::RungeKutta::erk_explicit_propagate(): "
+
       using Eigen::all;
       using Eigen::seqN;
 
@@ -776,13 +782,41 @@ namespace Sandals {
 
         // Check for NaNs or Infs
         if (!dK_dx[i].allFinite()) {return false;}
+
       }
 
       // Compute the derivative of x_new with respect to x
       Jx.setIdentity();
       for (Integer i{0}; i < S; ++i) {Jx += h * dK_dx[i] * this->m_tableau.b(i);}
 
+      // Check the Jacobian with finite differences
+      //#ifdef SANDALS_CHECK_FINITE_DIFFERENCES
+      MatrixJX Jx_fd;
+      auto fun = [this, &t, &h, &K](VectorN const & x_fd, VectorN & x_new_fd) -> bool {
+        MatrixK K_fd(K);
+        for (Integer k{0}; k < S; ++k) {
+          VectorN x_node_fd = x_fd + K_fd(Eigen::all, Eigen::seqN(0, k)) * this->m_tableau.A(k, Eigen::seqN(0, k)).transpose();
+           if (!this->m_reverse) {
+            K_fd.col(k) = h * static_cast<Explicit<Real, N, M> const *>(this->m_system.get())->f(x_node_fd, t + h*this->m_tableau.c(k));
+          } else {
+            K_fd.col(k) = h * static_cast<Explicit<Real, N, M> const *>(this->m_system.get())->f_reverse(x_node_fd, t + h*this->m_tableau.c(k));
+          }
+        }
+        x_new_fd = x_fd + K_fd * this->m_tableau.b;
+        return x_new_fd.allFinite();
+      };
+      bool fd_ok{Optimist::FiniteDifferences::Jacobian(x, fun, Jx_fd)};
+      std::cout << "Jx    = \n" << Jx << std::endl;
+      std::cout << "Jx_fd = \n" << Jx_fd << std::endl;
+      if (fd_ok && Jx_fd.allFinite()) {
+        Real err{(Jx - Jx_fd).norm() / (1.0 + Jx_fd.norm())};
+        SANDALS_ASSERT_WARNING(err < EPSILON_LOW, CMD "Jacobian propagation error = " << err);
+      }
+      //#endif
+
       return true;
+
+      #undef CMD
     }
 
     /**
@@ -923,6 +957,8 @@ namespace Sandals {
     bool erk_implicit_propagate(VectorN const & x, Real const t, Real const h, MatrixK const & K,
       MatrixJX & Jx) const
     {
+      #define CMD "Sandals::RungeKutta::erk_implicit_propagate(): "
+
       using Eigen::all;
       using Eigen::seqN;
 
@@ -964,7 +1000,33 @@ namespace Sandals {
       Jx.setIdentity();
       for (Integer i{0}; i < S; ++i) {Jx += h * dK_dx[i] * this->m_tableau.b(i);}
 
+      // Efficient finite difference Jacobian check
+      //#ifdef SANDALS_CHECK_FINITE_DIFFERENCE
+      MatrixJX Jx_fd;
+      auto fun = [this, &t, &h, &K](VectorN const & x_fd, VectorN & x_new_fd) -> bool {
+        MatrixK K_fd(K);
+        for (Integer k{0}; k < S; ++k) {
+          VectorN x_node_fd(x_fd + K_fd(Eigen::all, Eigen::seqN(0, k)) * this->m_tableau.A(k, Eigen::seqN(0, k)).transpose());
+          VectorN x_dot_node_fd(K_fd.col(k) / h);
+          if (!this->m_reverse) {
+            K_fd.col(k) = h * this->m_system->F(x_node_fd, x_dot_node_fd, t + h*this->m_tableau.c(k));
+          } else {
+            K_fd.col(k) = h * this->m_system->F_reverse(x_node_fd, x_dot_node_fd, t + h*this->m_tableau.c(k));
+          }
+        }
+        x_new_fd = x_fd + K_fd * this->m_tableau.b;
+        return x_new_fd.allFinite();
+      };
+      bool fd_ok{Optimist::FiniteDifferences::Jacobian(x, fun, Jx_fd)};
+      if (fd_ok && Jx_fd.allFinite()) {
+        Real err{(Jx - Jx_fd).norm() / (1.0 + Jx_fd.norm())};
+        SANDALS_ASSERT_WARNING(err < EPSILON_LOW, CMD "Jacobian propagation error = " << err);
+      }
+      //#endif
+
       return true;
+
+      #undef CMD
     }
 
     /*\
@@ -1152,6 +1214,8 @@ namespace Sandals {
     bool irk_propagate(VectorN const & x, Real const t, Real const h, MatrixK const & K,
       MatrixJX & Jx) const
     {
+      #define CMD "Sandals::RungeKutta::irk_propagate(): "
+
       using Eigen::all;
       using Eigen::seqN;
 
@@ -1201,7 +1265,32 @@ namespace Sandals {
       Jx.setIdentity();
       for (Integer i{0}; i < S; ++i) {Jx += h * dK_dx[i] * this->m_tableau.b(i);}
 
+      //#ifdef SANDALS_CHECK_FINITE_DIFFERENCE
+      MatrixJX Jx_fd;
+      auto fun = [this, &t, &h, &K](VectorN const & x_fd, VectorN & x_new_fd) -> bool {
+        MatrixK K_fd(K);
+        for (Integer k{0}; k < S; ++k) {
+          VectorN x_node_fd{x_fd + K_fd(Eigen::all, Eigen::seqN(0, k)) * this->m_tableau.A(k, Eigen::seqN(0, k)).transpose()};
+          VectorN x_dot_node_fd{K_fd.col(k) / h};
+          if (!this->m_reverse) {
+            K_fd.col(k) = h * this->m_system->F(x_node_fd, x_dot_node_fd, t + h*this->m_tableau.c(k));
+          } else {
+            K_fd.col(k) = h * this->m_system->F_reverse(x_node_fd, x_dot_node_fd, t + h*this->m_tableau.c(k));
+          }
+        }
+        x_new_fd = x_fd + K_fd * this->m_tableau.b;
+        return x_new_fd.allFinite();
+      };
+      bool fd_ok{Optimist::FiniteDifferences::Jacobian(x, fun, Jx_fd)};
+      if (fd_ok && Jx_fd.allFinite()) {
+        Real err{(Jx - Jx_fd).norm() / (1.0 + Jx_fd.norm())};
+        SANDALS_ASSERT_WARNING(err < EPSILON_LOW, CMD "Jacobian propagation error = " << err);
+      }
+      //#endif
+
       return true;
+
+      #undef CMD
     }
 
     /*\
@@ -1357,6 +1446,8 @@ namespace Sandals {
     bool dirk_propagate(VectorN const & x, Real const t, Real const h, MatrixK const & K,
       MatrixJX & Jx) const
     {
+      #define CMD "Sandals::RungeKutta::dirk_propagate(): "
+
       using Eigen::all;
       using Eigen::seqN;
 
@@ -1398,7 +1489,32 @@ namespace Sandals {
       Jx.setIdentity();
       for (Integer i{0}; i < S; ++i) {Jx += h * dK_dx[i] * this->m_tableau.b(i);}
 
+      //#ifdef SANDALS_CHECK_FINITE_DIFFERENCE
+      MatrixJX Jx_fd;
+      auto fun = [this, &t, &h, &K](VectorN const & x_fd, VectorN & x_new_fd) -> bool {
+        MatrixK K_fd(K);
+        for (Integer k{0}; k < S; ++k) {
+          VectorN x_node_fd{x_fd + K_fd(Eigen::all, Eigen::seqN(0, k)) * this->m_tableau.A(k, Eigen::seqN(0, k)).transpose()};
+          VectorN x_dot_node_fd{K_fd.col(k) / h};
+          if (!this->m_reverse) {
+            K_fd.col(k) = h * this->m_system->F(x_node_fd, x_dot_node_fd, t + h*this->m_tableau.c(k));
+          } else {
+            K_fd.col(k) = h * this->m_system->F_reverse(x_node_fd, x_dot_node_fd, t + h*this->m_tableau.c(k));
+          }
+        }
+        x_new_fd = x_fd + K_fd * this->m_tableau.b;
+        return x_new_fd.allFinite();
+      };
+      bool fd_ok{Optimist::FiniteDifferences::Jacobian(x, fun, Jx_fd)};
+      if (fd_ok && Jx_fd.allFinite()) {
+        Real err{(Jx - Jx_fd).norm() / (1.0 + Jx_fd.norm())};
+        SANDALS_ASSERT_WARNING(err < EPSILON_LOW, CMD "Jacobian propagation error = " << err);
+      }
+      //#endif
+
       return true;
+
+      #undef CMD
     }
 
     /**
@@ -1715,10 +1831,10 @@ namespace Sandals {
     bool adaptive_solve(VectorX const & t_mesh, VectorN const & ics, Solution<Real, N, M> & sol,
       MatrixJX & Jx) const
     {
+      #define CMD "Sandals::RungeKutta::adaptive_solve(...): "
+
       using Eigen::all;
       using Eigen::last;
-
-      #define CMD "Sandals::RungeKutta::adaptive_solve(...): "
 
       // Check initial conditions
       if constexpr (Propagate) {
@@ -1968,9 +2084,9 @@ namespace Sandals {
     */
     Real estimate_order(std::vector<VectorX> const & t_mesh, VectorN const & ics, std::function<MatrixX(VectorX)> & sol) const
     {
-      using Eigen::last;
-
       #define CMD "Sandals::RungeKutta::estimate_order(...): "
+
+      using Eigen::last;
 
       SANDALS_ASSERT(t_mesh.size() > Integer(1), CMD "expected at least two time meshes.");
 

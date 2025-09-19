@@ -10,8 +10,8 @@
 
 #pragma once
 
-#ifndef TESTS_SIMPLE_PENDULUM_IMPLICIT_HH
-#define TESTS_SIMPLE_PENDULUM_IMPLICIT_HH
+#ifndef TESTS_SYSTEMS_SIMPLE_PENDULUM_IMPLICIT_HH
+#define TESTS_SYSTEMS_SIMPLE_PENDULUM_IMPLICIT_HH
 
 #include "Sandals.hh"
 #include "Sandals/System/Implicit.hh"
@@ -39,30 +39,30 @@ public:
 
   ~SimplePendulumImplicit() {}
 
-  VectorF F(VectorF const &x, VectorF const &x_dot, Real /*t*/) const override
+  VectorF F(VectorF const &x, VectorF const &x_dot, Real const /*t*/) const override
   {
     VectorF F;
     F << x_dot(0) - x(1), x_dot(1) + this->m_g / this->m_l * std::sin(x(0));
     return F;
   }
 
-  MatrixJF JF_x(VectorF const &x, VectorF const &/*x_dot*/, Real /*t*/) const override
+  MatrixJF JF_x(VectorF const &x, VectorF const & /*x_dot*/, Real const /*t*/) const override
   {
     MatrixJF JF_x;
     JF_x << 0.0, -1.0, this->m_g / this->m_l * std::cos(x(0)), 0.0;
     return JF_x;
   }
 
-  MatrixJF JF_x_dot(VectorF const &/*x*/, VectorF const &/*x_dot*/, Real /*t*/) const override
+  MatrixJF JF_x_dot(VectorF const & /*x*/, VectorF const & /*x_dot*/, Real const /*t*/) const override
   {return MatrixJF::Identity();}
 
-  VectorH h(VectorF const &/*x*/, Real /*t*/) const override {return VectorH::Zero();}
+  VectorH h(VectorF const & /*x*/, Real const /*t*/) const override {return VectorH::Zero();}
 
-  MatrixJH Jh_x(VectorF const &/*x*/, Real /*t*/) const override {return MatrixJH::Zero();}
+  MatrixJH Jh_x(VectorF const & /*x*/, Real const /*t*/) const override {return MatrixJH::Zero();}
 
-  bool in_domain(VectorF const &/*x*/, Real /*t*/) const override {return true;}
+  bool in_domain(VectorF const & /*x*/, Real const /*t*/) const override {return true;}
 
   VectorF const & ics() const {return this->m_ics;}
 };
 
-#endif // TESTS_SIMPLE_PENDULUM_IMPLICIT_HH
+#endif // TESTS_SYSTEMS_SIMPLE_PENDULUM_IMPLICIT_HH

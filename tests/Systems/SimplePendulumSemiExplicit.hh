@@ -10,8 +10,8 @@
 
 #pragma once
 
-#ifndef TESTS_SIMPLE_PENDULUM_SEMIEXPLICIT_HH
-#define TESTS_SIMPLE_PENDULUM_SEMIEXPLICIT_HH
+#ifndef TESTS_SYSTEMS_SIMPLE_PENDULUM_SEMIEXPLICIT_HH
+#define TESTS_SYSTEMS_SIMPLE_PENDULUM_SEMIEXPLICIT_HH
 
 #include "Sandals.hh"
 #include "Sandals/System/SemiExplicit.hh"
@@ -42,14 +42,14 @@ public:
 
   ~SimplePendulumSemiExplicit() {}
 
-  MatrixA A(VectorF const &/*x*/, Real /*t*/) const override
+  MatrixA A(VectorF const & /*x*/, Real const /*t*/) const override
   {
     MatrixA A;
     A.setIdentity();
     return A;
   }
 
-  TensorTA TA_x(VectorF const &/*x*/, Real /*t*/) const override
+  TensorTA TA_x(VectorF const & /*x*/, Real const /*t*/) const override
   {
     TensorTA TA_x(2);
     TA_x[0].setZero();
@@ -57,28 +57,28 @@ public:
     return TA_x;
   }
 
-  VectorB b(VectorF const &x, Real /*t*/) const override
+  VectorB b(VectorF const &x, Real const /*t*/) const override
   {
     VectorB b;
     b << x(1), -this->m_g / this->m_l * std::sin(x(0));
     return b;
   }
 
-  MatrixJB Jb_x(VectorF const &x, Real /*t*/) const override
+  MatrixJB Jb_x(VectorF const &x, Real const /*t*/) const override
   {
     MatrixJB Jb_x;
     Jb_x << 0.0, 1.0, -this->m_g / this->m_l * std::cos(x(0)), 0.0;
     return Jb_x;
   }
 
-  VectorH h(VectorF const &/*x*/, Real /*t*/) const override {return VectorH::Zero();}
+  VectorH h(VectorF const & /*x*/, Real const /*t*/) const override {return VectorH::Zero();}
 
-  MatrixJH Jh_x(VectorF const &/*x*/, Real /*t*/) const override {return MatrixJH::Zero();}
+  MatrixJH Jh_x(VectorF const & /*x*/, Real const /*t*/) const override {return MatrixJH::Zero();}
 
-  bool in_domain(VectorF const &/*x*/, Real /*t*/) const override {return true;}
+  bool in_domain(VectorF const & /*x*/, Real const /*t*/) const override {return true;}
 
   VectorF const & ics() const {return this->m_ics;}
 
 };
 
-#endif // TESTS_SIMPLE_PENDULUM_SEMIEXPLICIT_HH
+#endif // TESTS_SYSTEMS_SIMPLE_PENDULUM_SEMIEXPLICIT_HH

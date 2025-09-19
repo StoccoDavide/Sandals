@@ -10,8 +10,8 @@
 
 #pragma once
 
-#ifndef TESTS_THREE_BODY_EXPLICIT_HH
-#define TESTS_THREE_BODY_EXPLICIT_HH
+#ifndef TESTS_SYSTEMS_THREE_BODY_EXPLICIT_HH
+#define TESTS_SYSTEMS_THREE_BODY_EXPLICIT_HH
 
 #include "Sandals.hh"
 #include "Sandals/System/Explicit.hh"
@@ -105,7 +105,7 @@ public:
 
   ~ThreeBodyExplicit() {}
 
-  VectorF f(VectorF const &x, Real /*t*/)  const override
+  VectorF f(VectorF const &x, Real const /*t*/)  const override
   {
     #define CMD "Sandals::ThreeBodyExplicit::f(...): "
 
@@ -135,7 +135,7 @@ public:
     #undef CMD
   }
 
-  MatrixJF Jf_x(VectorF const &x, Real /*t*/) const override
+  MatrixJF Jf_x(VectorF const &x, Real const /*t*/) const override
   {
     #define CMD "Sandals::ThreeBodyExplicit::Jf_x(...): "
 
@@ -201,11 +201,11 @@ public:
     #undef CMD
   }
 
-  VectorH h(VectorF const &/*x*/, Real /*t*/) const override {return VectorH::Zero();}
+  VectorH h(VectorF const & /*x*/, Real const /*t*/) const override {return VectorH::Zero();}
 
-  MatrixJH Jh_x(VectorF const &/*x*/, Real /*t*/) const override {return MatrixJH::Zero();}
+  MatrixJH Jh_x(VectorF const & /*x*/, Real const /*t*/) const override {return MatrixJH::Zero();}
 
-  bool in_domain(VectorF const &/*x*/, Real /*t*/) const override {return true;}
+  bool in_domain(VectorF const & /*x*/, Real const /*t*/) const override {return true;}
 
   VectorF ics() const
   {
@@ -228,4 +228,4 @@ public:
 
 };
 
-#endif // TESTS_THREE_BODY_EXPLICIT_HH
+#endif // TESTS_SYSTEMS_THREE_BODY_EXPLICIT_HH

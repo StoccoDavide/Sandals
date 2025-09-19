@@ -8,69 +8,51 @@
  * e-mail: davide.stocco@unitn.it                             e-mail: enrico.bertolazzi@unitn.it *
 \* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-#ifndef TESTS_BASIC_SEMIEXPLICIT_HH
-#define TESTS_BASIC_SEMIEXPLICIT_HH
+#ifndef TESTS_PROBLEMS_BASIC_EXPLICIT_HH
+#define TESTS_PROBLEMS_BASIC_EXPLICIT_HH
 
 #include "Sandals.hh"
 #include "Sandals/Problem.hh"
-#include "Sandals/System/SemiExplicit.hh"
+#include "Sandals/System/Explicit.hh"
 
 using namespace Sandals;
 
 template<typename Real = double>
-class BasicSemiExplicit : public SemiExplicit<Real, 2, 0>
+class BasicExplicit : public Explicit<Real, 2, 0>
 {
 public:
-  using VectorF  = typename SemiExplicit<Real, 2, 1>::VectorF;
-  using MatrixA  = typename SemiExplicit<Real, 2, 1>::MatrixA;
-  using TensorTA = typename SemiExplicit<Real, 2, 1>::TensorTA;
-  using VectorB  = typename SemiExplicit<Real, 2, 1>::VectorB;
-  using MatrixJB = typename SemiExplicit<Real, 2, 1>::MatrixJB;
-  using VectorH  = typename SemiExplicit<Real, 2, 1>::VectorH;
-  using MatrixJH = typename SemiExplicit<Real, 2, 1>::MatrixJH;
+  using typename Explicit<Real, 2, 0>::VectorF;
+  using typename Explicit<Real, 2, 0>::MatrixJF;
+  using typename Explicit<Real, 2, 0>::VectorH;
+  using typename Explicit<Real, 2, 0>::MatrixJH;
 
-  BasicSemiExplicit() : SemiExplicit<Real, 2, 0>("BasicSemiExplicit") {}
+  BasicExplicit() : Explicit<Real, 2, 0>("BasicExplicit") {}
 
-  ~BasicSemiExplicit() {}
+  ~BasicExplicit() {}
 
-  MatrixA A(VectorF const &/*x*/, Real /*t*/) const override
+  VectorF f(VectorF const & x, Real const /*t*/) const override
   {
-    MatrixA A;
-    A.setIdentity();
-    return A;
+    VectorF f;
+    f << x(1), 1.0;
+    return f;
   }
 
-  TensorTA TA_x(VectorF const &/*x*/, Real /*t*/) const override
-  {
-    TensorTA TA_x(2);
-    TA_x[0].setZero();
-    TA_x[1].setZero();
-    return TA_x;
+  MatrixJF Jf_x(VectorF const & /*x*/, Real const /*t*/) const override {
+    MatrixJF Jf_x(MatrixJF::Zero());
+    Jf_x(0, 1) = 1.0;
+    return Jf_x;
   }
 
-  VectorB b(VectorF const &x, Real /*t*/) const override
-  {
-    VectorF b;
-    b <<  x(1), 1.0;
-    return b;
-  }
+  VectorH h(VectorF const & /*x*/, Real const /*t*/) const override {return VectorH::Zero();}
 
-  MatrixJB Jb_x(VectorF const &/*x*/, Real /*t*/) const override {
-    MatrixJB Jb_x(MatrixJB::Zero());
-    Jb_x(0, 1) = 1.0;
-    return Jb_x;
-  }
+  MatrixJH Jh_x(VectorF const & /*x*/, Real const /*t*/) const override {return MatrixJH::Zero();}
 
-  VectorH h(VectorF const & /*x*/, Real /*t*/) const override {return VectorH::Zero();}
-
-  MatrixJH Jh_x(VectorF const & /*x*/, Real /*t*/) const override {return MatrixJH::Zero();}
-
-  bool in_domain(VectorF const & /*x*/, Real /*t*/) const override {return true;}
+  bool in_domain(VectorF const & /*x*/, Real const /*t*/) const override {return true;}
 
 };
 
 template<typename Real, typename Integrator>
-class BasicSemiExplicitProblem : public Problem<Real, 2, 0, Integrator>
+class BasicExplicitProblem : public Problem<Real, 2, 0, Integrator>
 {
 public:
   using typename Problem<Real, 2, 0, Integrator>::SystemPtr;
@@ -81,13 +63,13 @@ public:
   using VectorX = Eigen::Vector<Real, Eigen::Dynamic>;
   using MatrixX = Eigen::Matrix<Real, 2, Eigen::Dynamic>;
 
-  BasicSemiExplicitProblem(IntegratorPtr rk)
-    : Problem<Real, 2, 0, Integrator>("BasicSemiExplicitProblem", std::make_shared<BasicExplicit<Real>>(), rk)
+  BasicExplicitProblem(IntegratorPtr rk)
+    : Problem<Real, 2, 0, Integrator>("BasicExplicitProblem", std::make_shared<BasicExplicit<Real>>(), rk)
   {
     rk->system(this->system());
   }
 
-  ~BasicSemiExplicitProblem() {}
+  ~BasicExplicitProblem() {}
 
   VectorF b(VectorF const & x_ini, VectorF const & x_end) const override
   {
@@ -119,9 +101,7 @@ public:
 
   VectorF analytical_solution(Real const t) const {
     VectorF x;
-    constexpr Real c0{0.0};
-    constexpr Real c1{-1.0};
-    x << 0.5*t*t + c1*t + c0, t + c1;
+    x << 0.5*t*t - t, t - 1.0;
     return x;
   }
 
@@ -133,7 +113,7 @@ public:
 };
 
 template<typename Integrator>
-BasicSemiExplicitProblem(std::shared_ptr<Integrator>)
-    -> BasicSemiExplicitProblem<typename Integrator::real_type, Integrator>;
+BasicExplicitProblem(std::shared_ptr<Integrator>)
+    -> BasicExplicitProblem<typename Integrator::real_type, Integrator>;
 
-#endif // TESTS_BASIC_SEMIEXPLICIT_HH
+#endif // TESTS_PROBLEMS_BASIC_EXPLICIT_HH

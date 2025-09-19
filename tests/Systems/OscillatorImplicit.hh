@@ -10,24 +10,24 @@
 
 #pragma once
 
-#ifndef TESTS_OSCILLATOR_EXPLICIT_HH
-#define TESTS_OSCILLATOR_EXPLICIT_HH
+#ifndef TESTS_SYSTEMS_OSCILLATOR_IMPLICIT_HH
+#define TESTS_SYSTEMS_OSCILLATOR_IMPLICIT_HH
 
 #include "Sandals.hh"
-#include "Sandals/System/Explicit.hh"
+#include "Sandals/System/Implicit.hh"
 
 using namespace Sandals;
 
 template<typename Real = double>
-class OscillatorExplicit : public Explicit<Real, 2, 1>
+class OscillatorImplicit : public Implicit<Real, 2, 1>
 {
 public:
-  using VectorF  = typename Explicit<Real, 2, 1>::VectorF;
-  using MatrixJF = typename Explicit<Real, 2, 1>::MatrixJF;
-  using VectorH  = typename Explicit<Real, 2, 1>::VectorH;
-  using MatrixJH = typename Explicit<Real, 2, 1>::MatrixJH;
+  using VectorF  = typename Implicit<Real, 2, 1>::VectorF;
+  using MatrixJF = typename Implicit<Real, 2, 1>::MatrixJF;
+  using VectorH  = typename Implicit<Real, 2, 1>::VectorH;
+  using MatrixJH = typename Implicit<Real, 2, 1>::MatrixJH;
   using VectorX  = Eigen::Matrix<Real, 2, 1>;
-  using MatrixX  = Eigen::Matrix<Real, Eigen::Dynamic, 2>;
+  using MatrixX  = Eigen::Matrix<Real, 2, Eigen::Dynamic>;
 
 private:
   Real    m_m{1.0};        // Mass (kg)
@@ -35,38 +35,41 @@ private:
   VectorF m_ics{1.0, 0.0}; // Initial conditions
 
 public:
-  OscillatorExplicit() : Explicit<Real, 2, 1>("OscillatorExplicit") {}
+  OscillatorImplicit() : Implicit<Real, 2, 1>("OscillatorImplicit") {}
 
-  ~OscillatorExplicit() {}
+  ~OscillatorImplicit() {}
 
-  VectorF f(VectorF const &x, Real /*t*/) const override
+  VectorF F(VectorF const &x, VectorF const &x_dot, Real const /*t*/) const override
   {
-    VectorF f;
-    f << x(1), -this->m_k/this->m_m*x(0);
-    return f;
+    VectorF F;
+    F << x_dot(0)-x(1), x_dot(1)+this->m_k/this->m_m*x(0);
+    return F;
   }
 
-  MatrixJF Jf_x(VectorF const &/*x*/, Real /*t*/) const override {
-    MatrixJF Jf_x;
-    Jf_x << 0.0, 1.0, -this->m_k/this->m_m, 0.0;
-    return Jf_x;
+  MatrixJF JF_x(VectorF const & /*x*/, VectorF const & /*x_dot*/, Real const /*t*/) const override {
+    MatrixJF JF_x;
+    JF_x << -1.0, 1.0, this->m_k/this->m_m, 0.0;
+    return JF_x;
   }
+
+  MatrixJF JF_x_dot(VectorF const & /*x*/, VectorF const & /*x_dot*/, Real const /*t*/) const override
+  {return MatrixJF::Identity();}
 
   Real energy(VectorF const &x) const {return this->m_m/2.0*x(1)*x(1) + this->m_k/2.0*x(0)*x(0);}
 
-  VectorH h(VectorF const &x, Real /*t*/) const override {
+  VectorH h(VectorF const &x, Real const /*t*/) const override {
     VectorH h;
     h << this->energy(x) - this->energy(this->m_ics);
     return h;
   }
 
-  MatrixJH Jh_x(VectorF const &x, Real /*t*/) const override {
+  MatrixJH Jh_x(VectorF const &x, Real const /*t*/) const override {
     MatrixJH Jh_x;
     Jh_x << this->m_k*x(0), this->m_m*x(1);
     return Jh_x;
   }
 
-  bool in_domain(VectorF const &/*x*/, Real /*t*/) const override {return true;}
+  bool in_domain(VectorF const & /*x*/, Real const /*t*/) const override {return true;}
 
   VectorF analytical_solution(Real t) const {
     VectorF x;
@@ -84,4 +87,4 @@ public:
   VectorF const & ics() const {return this->m_ics;}
 };
 
-#endif // TESTS_OSCILLATOR_EXPLICIT_HH
+#endif // TESTS_SYSTEMS_OSCILLATOR_IMPLICIT_HH

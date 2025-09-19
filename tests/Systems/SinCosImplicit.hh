@@ -10,8 +10,8 @@
 
 #pragma once
 
-#ifndef TESTS_SINCOS_IMPLICIT_HH
-#define TESTS_SINCOS_IMPLICIT_HH
+#ifndef TESTS_SYSTEMS_SINCOS_IMPLICIT_HH
+#define TESTS_SYSTEMS_SINCOS_IMPLICIT_HH
 
 #include "Sandals.hh"
 #include "Sandals/System/Implicit.hh"
@@ -34,24 +34,24 @@ public:
 
   ~SinCosImplicit() {}
 
-  VectorF F(VectorF const &/*x*/, VectorF const &x_dot, Real t) const override
+  VectorF F(VectorF const & /*x*/, VectorF const &x_dot, Real t) const override
   {
     VectorF F;
     F << x_dot(0) - std::cos(t), x_dot(1) - std::sin(t);
     return F;
   }
 
-  MatrixJF JF_x(VectorF const &/*x*/, VectorF const &/*x_dot*/, Real /*t*/) const override
+  MatrixJF JF_x(VectorF const & /*x*/, VectorF const & /*x_dot*/, Real const /*t*/) const override
   {return MatrixJF::Zero();}
 
-  MatrixJF JF_x_dot(VectorF const &/*x*/, VectorF const &/*x_dot*/, Real /*t*/) const override
+  MatrixJF JF_x_dot(VectorF const & /*x*/, VectorF const & /*x_dot*/, Real const /*t*/) const override
   {return MatrixJF::Identity();}
 
-  VectorH h(VectorF const &/*x*/, Real /*t*/) const override {return VectorH::Zero();}
+  VectorH h(VectorF const & /*x*/, Real const /*t*/) const override {return VectorH::Zero();}
 
-  MatrixJH Jh_x(VectorF const &/*x*/, Real /*t*/) const override {return MatrixJH::Zero();}
+  MatrixJH Jh_x(VectorF const & /*x*/, Real const /*t*/) const override {return MatrixJH::Zero();}
 
-  bool in_domain(VectorF const &/*x*/, Real /*t*/) const override {return true;}
+  bool in_domain(VectorF const & /*x*/, Real const /*t*/) const override {return true;}
 
   VectorF ics() const {return VectorF::Zero();}
 
@@ -68,4 +68,4 @@ public:
   }
 };
 
-#endif // TESTS_SINCOS_IMPLICIT_HH
+#endif // TESTS_SYSTEMS_SINCOS_IMPLICIT_HH

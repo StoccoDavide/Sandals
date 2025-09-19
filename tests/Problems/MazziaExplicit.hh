@@ -8,8 +8,8 @@
  * e-mail: davide.stocco@unitn.it                             e-mail: enrico.bertolazzi@unitn.it *
 \* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-#ifndef TESTS_MAZZIA_EXPLICIT_HH
-#define TESTS_MAZZIA_EXPLICIT_HH
+#ifndef TESTS_PROBLEMS_MAZZIA_EXPLICIT_HH
+#define TESTS_PROBLEMS_MAZZIA_EXPLICIT_HH
 
 #include "Sandals.hh"
 #include "Sandals/Problem.hh"
@@ -31,7 +31,7 @@ public:
 
   ~MazziaExplicit() {}
 
-  VectorF f(VectorF const & x, Real /*t*/) const override
+  VectorF f(VectorF const & x, Real const /*t*/) const override
   {
     VectorF f;
     f <<
@@ -42,7 +42,7 @@ public:
     return f;
   }
 
-  MatrixJF Jf_x(VectorF const & x, Real /*t*/) const override {
+  MatrixJF Jf_x(VectorF const & x, Real const /*t*/) const override {
     MatrixJF Jf_x;
     Jf_x <<
       0.0,                   1.0, 0.0,         0.0,
@@ -52,11 +52,11 @@ public:
     return Jf_x;
   }
 
-  VectorH h(VectorF const & /*x*/, Real /*t*/) const override {return VectorH::Zero();}
+  VectorH h(VectorF const & /*x*/, Real const /*t*/) const override {return VectorH::Zero();}
 
-  MatrixJH Jh_x(VectorF const & /*x*/, Real /*t*/) const override {return MatrixJH::Zero();}
+  MatrixJH Jh_x(VectorF const & /*x*/, Real const /*t*/) const override {return MatrixJH::Zero();}
 
-  bool in_domain(VectorF const & /*x*/, Real /*t*/) const override {return true;}
+  bool in_domain(VectorF const & /*x*/, Real const /*t*/) const override {return true;}
 
 };
 
@@ -110,4 +110,4 @@ MazziaExplicitProblem(std::shared_ptr<Integrator>)
     -> MazziaExplicitProblem<typename Integrator::real_type, Integrator>;
 
 
-#endif // TESTS_MAZZIA_EXPLICIT_HH
+#endif // TESTS_PROBLEMS_MAZZIA_EXPLICIT_HH

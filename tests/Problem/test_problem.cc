@@ -67,23 +67,36 @@ int main(int argc, char **argv) {
   static constexpr long num_points{10};
 
   Eigen::VectorXd time(Eigen::VectorXd::LinSpaced(num_points, 0.0, 1.0));
-  Eigen::Vector<Real, 2> ics;
-  ics << 10.0, -10.0;
 
-  BasicExplicitProblem problem_explicit(std::make_shared<RadauIIA5<Real, 2, 0>>());
+  std::cout << "\n=== Basic Explicit Problem ===\n" << std::endl;
+
+  BasicExplicitProblem problem_explicit(std::make_shared<LobattoIIIA2<Real, 2>>());
   problem_explicit.verbose_mode(true);
   problem_explicit.integrator()->verbose_mode(false);
-  problem_explicit.multiple_shooting(time, ics);
+  {
+    std::vector<Eigen::Vector<Real, 2>> guess(num_points, Eigen::Vector<Real, 2>::Zero());
+    problem_explicit.multiple_shooting(time, guess);
+  }
 
-  BasicImplicitProblem problem_implicit(std::make_shared<RadauIIA5<Real, 2, 0>>());
+  std::cout << "\n=== Basic Implicit Problem ===\n" << std::endl;
+
+  BasicImplicitProblem problem_implicit(std::make_shared<LobattoIIIA2<Real, 2>>());
   problem_implicit.verbose_mode(true);
   problem_implicit.integrator()->verbose_mode(false);
-  problem_implicit.multiple_shooting(time, ics);
+  {
+    std::vector<Eigen::Vector<Real, 2>> guess(num_points, Eigen::Vector<Real, 2>::Zero());
+    problem_implicit.multiple_shooting(time, guess);
+  }
 
-  BasicSemiExplicitProblem problem_semiexplicit(std::make_shared<RadauIIA5<Real, 2, 0>>());
+  std::cout << "\n=== Basic Semi-Explicit Problem ===\n" << std::endl;
+
+  BasicSemiExplicitProblem problem_semiexplicit(std::make_shared<LobattoIIIA2<Real, 2>>());
   problem_semiexplicit.verbose_mode(true);
   problem_semiexplicit.integrator()->verbose_mode(false);
-  problem_semiexplicit.multiple_shooting(time, ics);
+  {
+    std::vector<Eigen::Vector<Real, 2>> guess(num_points, Eigen::Vector<Real, 2>::Zero());
+    problem_semiexplicit.multiple_shooting(time, guess);
+  }
 
   #ifdef SANDALS_ENABLE_PLOTTING
     auto esol = problem_explicit.solution();

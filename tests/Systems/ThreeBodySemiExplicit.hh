@@ -8,8 +8,8 @@
  * e-mail: davide.stocco@unitn.it                             e-mail: enrico.bertolazzi@unitn.it *
 \* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-#ifndef TESTS_THREE_BODY_SEMIEXPLICIT_HH
-#define TESTS_THREE_BODY_SEMIEXPLICIT_HH
+#ifndef TESTS_SYSTEMS_THREE_BODY_SEMIEXPLICIT_HH
+#define TESTS_SYSTEMS_THREE_BODY_SEMIEXPLICIT_HH
 
 #include "Sandals.hh"
 #include "Sandals/System/SemiExplicit.hh"
@@ -108,21 +108,21 @@ public:
 
   ~ThreeBodySemiExplicit() {}
 
-  MatrixA A(VectorF const &/*x*/, Real /*t*/) const override
+  MatrixA A(VectorF const & /*x*/, Real const /*t*/) const override
   {
     MatrixA A;
     A.setIdentity();
     return A;
   }
 
-  TensorTA TA_x(VectorF const &/*x*/, Real /*t*/) const override
+  TensorTA TA_x(VectorF const & /*x*/, Real const /*t*/) const override
   {
     TensorTA TA_x(12);
     for (int i = 0; i < 12; ++i) {TA_x[i].setZero();}
     return TA_x;
   }
 
-  VectorB b(VectorF const &x, Real /*t*/)  const override
+  VectorB b(VectorF const &x, Real const /*t*/)  const override
   {
     #define CMD "Sandals::ThreeBodySemiExplicit::f(...): "
 
@@ -152,7 +152,7 @@ public:
     #undef CMD
   }
 
-  MatrixJB Jb_x(VectorF const &x, Real /*t*/) const override
+  MatrixJB Jb_x(VectorF const &x, Real const /*t*/) const override
   {
     #define CMD "Sandals::ThreeBodySemiExplicit::Jf_x(...): "
 
@@ -218,11 +218,11 @@ public:
     #undef CMD
   }
 
-  VectorH h(VectorF const &/*x*/, Real /*t*/) const override {return VectorH::Zero();}
+  VectorH h(VectorF const & /*x*/, Real const /*t*/) const override {return VectorH::Zero();}
 
-  MatrixJH Jh_x(VectorF const &/*x*/, Real /*t*/) const override {return MatrixJH::Zero();}
+  MatrixJH Jh_x(VectorF const & /*x*/, Real const /*t*/) const override {return MatrixJH::Zero();}
 
-  bool in_domain(VectorF const &/*x*/, Real /*t*/) const override {return true;}
+  bool in_domain(VectorF const & /*x*/, Real const /*t*/) const override {return true;}
 
   VectorF ics() const
   {
@@ -245,4 +245,4 @@ public:
 
 };
 
-#endif // TESTS_THREE_BODY_SEMIEXPLICIT_HH
+#endif // TESTS_SYSTEMS_THREE_BODY_SEMIEXPLICIT_HH
