@@ -80,7 +80,7 @@ namespace Sandals
     * Tableau reference.
     * \param[in] t_system The system reference.
     */
-    Ralston2(System t_system) : RungeKutta<Real, 2, N, M>(Ralston2Tableau<Real>(), t_system) {}
+    Ralston2(System t_system) : RungeKutta<Real, 2, N, M>(Ralston2Tableau<Real>(), std::move(t_system)) {}
 
   }; // class Ralston2
 

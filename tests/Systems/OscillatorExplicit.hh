@@ -30,16 +30,15 @@ public:
   using MatrixX  = Eigen::Matrix<Real, Eigen::Dynamic, 2>;
 
 private:
-  Real    m_m{1.0};        // Mass (kg)
-  Real    m_k{1.0};        // Spring constant (N/m)
-  VectorF m_ics{1.0, 0.0}; // Initial conditions
+  Real m_m{1.0}; // Mass (kg)
+  Real m_k{1.0}; // Spring constant (N/m)
 
 public:
   OscillatorExplicit() : Explicit<Real, 2, 1>("OscillatorExplicit") {}
 
   ~OscillatorExplicit() {}
 
-  VectorF f(VectorF const &x, Real const /*t*/) const override
+  VectorF f(VectorF const & x, Real const /*t*/) const override
   {
     VectorF f;
     f << x(1), -this->m_k/this->m_m*x(0);
@@ -52,15 +51,15 @@ public:
     return Jf_x;
   }
 
-  Real energy(VectorF const &x) const {return this->m_m/2.0*x(1)*x(1) + this->m_k/2.0*x(0)*x(0);}
+  Real energy(VectorF const & x) const {return this->m_m/2.0*x(1)*x(1) + this->m_k/2.0*x(0)*x(0);}
 
-  VectorH h(VectorF const &x, Real const /*t*/) const override {
+  VectorH h(VectorF const & x, Real const /*t*/) const override {
     VectorH h;
-    h << this->energy(x) - this->energy(this->m_ics);
+    h << this->energy(x) - this->energy(OscillatorExplicit::ics());
     return h;
   }
 
-  MatrixJH Jh_x(VectorF const &x, Real const /*t*/) const override {
+  MatrixJH Jh_x(VectorF const & x, Real const /*t*/) const override {
     MatrixJH Jh_x;
     Jh_x << this->m_k*x(0), this->m_m*x(1);
     return Jh_x;
@@ -75,13 +74,13 @@ public:
     return x;
   }
 
-  MatrixX analytical_solution(VectorX const &t) const {
+  MatrixX analytical_solution(VectorX const & t) const {
     MatrixX x(2, t.size());
     for (int i = 0; i < t.size(); ++i) {x.col(i) = this->analytical_solution(t(i));}
     return x;
   }
 
-  VectorF const & ics() const {return this->m_ics;}
+  static VectorF ics() {return VectorF::Unit(0, 2);}
 };
 
 #endif // TESTS_SYSTEMS_OSCILLATOR_EXPLICIT_HH

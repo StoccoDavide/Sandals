@@ -35,7 +35,7 @@ var searchData=
   ['m_5fstart_5ftime_32',['m_start_time',['../class_sandals_1_1_tic_toc.html#a37e5dbfe84fac294b8787be2c58b4335',1,'Sandals::TicToc']]],
   ['m_5fstop_5ftime_33',['m_stop_time',['../class_sandals_1_1_tic_toc.html#aba69960e928c0a554c714c7b4122c533',1,'Sandals::TicToc']]],
   ['m_5fsubintervals_34',['m_subintervals',['../class_sandals_1_1_problem.html#a9342353832c286b877859a8dad9b31c1',1,'Sandals::Problem']]],
-  ['m_5fsystem_35',['m_system',['../class_sandals_1_1_problem.html#a8c73bb6a76f53a33309b328f4a61e9f3',1,'Sandals::Problem::m_system'],['../class_sandals_1_1_runge_kutta.html#a974fe9dc2d0075bf254c23f7aae5b53c',1,'Sandals::RungeKutta::m_system']]],
+  ['m_5fsystem_35',['m_system',['../class_sandals_1_1_runge_kutta.html#a7ba51367d7d321bdb0512b969608b62b',1,'Sandals::RungeKutta']]],
   ['m_5fta_5fx_36',['m_TA_x',['../class_sandals_1_1_semi_explicit_wrapper.html#ad951bda805ad5bea5cf9ef978c1171cc',1,'Sandals::SemiExplicitWrapper']]],
   ['m_5ftableau_37',['m_tableau',['../class_sandals_1_1_runge_kutta.html#a9a5dd7fe85648fa2ac98ea187186539e',1,'Sandals::RungeKutta']]],
   ['m_5ftolerance_38',['m_tolerance',['../class_sandals_1_1_problem.html#ab28e07490bc00150e9a10c6ac2a4d997',1,'Sandals::Problem']]],
@@ -53,8 +53,8 @@ var searchData=
   ['matrixjk_50',['MatrixJK',['../class_sandals_1_1_runge_kutta.html#a2d80e266c799308f8d92f9f3cdcbd915',1,'Sandals::RungeKutta']]],
   ['matrixjx_51',['MatrixJX',['../class_sandals_1_1_problem.html#ac1cb5525e81abfcbe1fc85ab6a2f5e78',1,'Sandals::Problem::MatrixJX'],['../class_sandals_1_1_runge_kutta.html#aafe93029d65e4891d968bc0aabfe9c07',1,'Sandals::RungeKutta::MatrixJX']]],
   ['matrixk_52',['MatrixK',['../class_sandals_1_1_runge_kutta.html#aa03ed9b688641e7e64a34bc62ab4e136',1,'Sandals::RungeKutta']]],
-  ['matrixm_53',['MatrixM',['../class_sandals_1_1_runge_kutta.html#a1a6f89acec6b558caeb96f5ef5bf8483',1,'Sandals::RungeKutta::MatrixM'],['../struct_sandals_1_1_solution.html#a8d36c053aeaf543ed94ae91a6fdd5fea',1,'Sandals::Solution::MatrixM']]],
-  ['matrixn_54',['MatrixN',['../class_sandals_1_1_runge_kutta.html#a12b70430fab5101698b596781094d9ce',1,'Sandals::RungeKutta::MatrixN'],['../struct_sandals_1_1_solution.html#a3ec068cc61fef7c6bc64b8ea57e56e5b',1,'Sandals::Solution::MatrixN']]],
+  ['matrixm_53',['MatrixM',['../class_sandals_1_1_problem.html#af6fe402b97094519714a1e1b81e70232',1,'Sandals::Problem::MatrixM'],['../class_sandals_1_1_runge_kutta.html#a1a6f89acec6b558caeb96f5ef5bf8483',1,'Sandals::RungeKutta::MatrixM'],['../struct_sandals_1_1_solution.html#a2819f24fa37c42a1e611a54692be65d0',1,'Sandals::Solution::MatrixM']]],
+  ['matrixn_54',['MatrixN',['../class_sandals_1_1_problem.html#ae3d88f5d24952de722e36365aa24948f',1,'Sandals::Problem::MatrixN'],['../class_sandals_1_1_runge_kutta.html#a12b70430fab5101698b596781094d9ce',1,'Sandals::RungeKutta::MatrixN'],['../struct_sandals_1_1_solution.html#a828afafe49887f7ae1d80e6edfc920cd',1,'Sandals::Solution::MatrixN']]],
   ['matrixp_55',['MatrixP',['../class_sandals_1_1_runge_kutta.html#a45188c6c7dca9698ff7f3beca21ce98c',1,'Sandals::RungeKutta']]],
   ['matrixs_56',['MatrixS',['../class_sandals_1_1_runge_kutta.html#a042d8496b2380909755a1d67946c50e4',1,'Sandals::RungeKutta']]],
   ['matrixx_57',['MatrixX',['../class_sandals_1_1_runge_kutta.html#ad49cfea9a52d2fca80ff2f2a4eeb993c',1,'Sandals::RungeKutta']]],
@@ -72,5 +72,5 @@ var searchData=
   ['mte22_69',['MTE22',['../class_sandals_1_1_m_t_e22.html',1,'Sandals::MTE22&lt; Real, N, M &gt;'],['../class_sandals_1_1_m_t_e22.html#a571f9c3ffcac326e6ef5cc28ae361296',1,'Sandals::MTE22::MTE22()'],['../class_sandals_1_1_m_t_e22.html#ac02ca044a55e065149b63a05434126cb',1,'Sandals::MTE22::MTE22(System t_system)']]],
   ['mte22_2ehh_70',['MTE22.hh',['../_m_t_e22_8hh.html',1,'']]],
   ['mte22tableau_71',['MTE22Tableau',['../class_sandals_1_1_m_t_e22_tableau.html',1,'Sandals::MTE22Tableau&lt; Real &gt;'],['../class_sandals_1_1_m_t_e22_tableau.html#ae59ff3f33486a6837aace2be296bc60c',1,'Sandals::MTE22Tableau::MTE22Tableau()']]],
-  ['multiple_5fshooting_72',['multiple_shooting',['../class_sandals_1_1_problem.html#a95d700286769b875d15fe60534342889',1,'Sandals::Problem']]]
+  ['multiple_5fshooting_72',['multiple_shooting',['../class_sandals_1_1_problem.html#a9223ad957724ce4f2fa3d92f950df06b',1,'Sandals::Problem::multiple_shooting(VectorX const &amp;t_mesh, std::vector&lt; VectorF &gt; const &amp;x_guess)'],['../class_sandals_1_1_problem.html#ae0338d25a357478f71d23ece4b15f358',1,'Sandals::Problem::multiple_shooting(VectorX const &amp;t_mesh, MatrixM const &amp;x_guess)']]]
 ];

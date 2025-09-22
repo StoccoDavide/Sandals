@@ -68,7 +68,7 @@ using namespace Sandals;
 
 using Real = double;
 
-int main(int argc, char **argv) {
+int main(int argc, char ** argv) {
 
 #ifdef SANDALS_ENABLE_PLOTTING
   TApplication app("plot", &argc, argv);
@@ -81,7 +81,7 @@ int main(int argc, char **argv) {
   Fehlberg45<Real, 2, 0>::Time time = Eigen::VectorXd::LinSpaced(1000, 0.0, 10.0);
 
   SinCosImplicit system_implicit;
-  Fehlberg45<Real, 2, 0> integrator_implicit(std::make_shared<SinCosImplicit<Real>>(system_implicit));
+  Fehlberg45<Real, 2, 0> integrator_implicit(std::make_unique<SinCosImplicit<Real>>(system_implicit));
   integrator_implicit.enable_projection();
   integrator_implicit.disable_reverse_mode();
   Solution<Real, 2, 0> solution_implicit;
@@ -90,15 +90,15 @@ int main(int argc, char **argv) {
   integrator_implicit.adaptive_solve(time, system_implicit.ics(), solution_implicit_adaptive);
 
 #ifdef SANDALS_ENABLE_PLOTTING
-  TCanvas *c1a = new TCanvas("c1a", "Oscillator Implicit", 800, 600);
-  TGraph *g1a_x0 = to_TGraph(solution_implicit.t, solution_implicit.x.row(0));
-  TGraph *g1a_x1 = to_TGraph(solution_implicit.t, solution_implicit.x.row(1));
-  TGraph *g1a_x0a = to_TGraph(solution_implicit_adaptive.t, solution_implicit_adaptive.x.row(0));
-  TGraph *g1a_x1a = to_TGraph(solution_implicit_adaptive.t, solution_implicit_adaptive.x.row(1));
+  TCanvas *c1a = new TCanvas("c1a", "Oscillator Implicit", 1200, 800);
+  TGraph *g1a_x0 = to_TGraph(solution_implicit.eigen_t(), solution_implicit.eigen_x(0));
+  TGraph *g1a_x1 = to_TGraph(solution_implicit.eigen_t(), solution_implicit.eigen_x(1));
+  TGraph *g1a_x0a = to_TGraph(solution_implicit_adaptive.eigen_t(), solution_implicit_adaptive.eigen_x(0));
+  TGraph *g1a_x1a = to_TGraph(solution_implicit_adaptive.eigen_t(), solution_implicit_adaptive.eigen_x(1));
 
   auto colors = matlab_lines_colormap();
-  g1a_x0->SetLineColor(colors[0]);  g1a_x0->Draw("AL");
-  g1a_x1->SetLineColor(colors[0]);  g1a_x1->Draw("L SAME");
+  g1a_x0->SetLineColor(colors[0]); g1a_x0->Draw("AL");
+  g1a_x1->SetLineColor(colors[0]); g1a_x1->Draw("L SAME");
   g1a_x0a->SetLineColor(colors[1]); g1a_x0a->SetLineStyle(9); g1a_x0a->Draw("L SAME");
   g1a_x1a->SetLineColor(colors[1]); g1a_x1a->SetLineStyle(9); g1a_x1a->Draw("L SAME");
   g1a_x0->SetTitle("Sine Implicit");
@@ -116,7 +116,7 @@ int main(int argc, char **argv) {
 #endif
 
   SinCosExplicit system_explicit;
-  Fehlberg45<Real, 2, 0> integrator_explicit(std::make_shared<SinCosExplicit<Real>>(system_explicit));
+  Fehlberg45<Real, 2, 0> integrator_explicit(std::make_unique<SinCosExplicit<Real>>(system_explicit));
   integrator_explicit.enable_projection();
   integrator_explicit.disable_reverse_mode();
   Solution<Real, 2, 0> solution_explicit;
@@ -125,14 +125,14 @@ int main(int argc, char **argv) {
   integrator_explicit.adaptive_solve(time, system_explicit.ics(), solution_explicit_adaptive);
 
 #ifdef SANDALS_ENABLE_PLOTTING
-  TCanvas *c1b = new TCanvas("c1b", "Sine Explicit", 800, 600);
-  TGraph *g1b_x0 = to_TGraph(solution_explicit.t, solution_explicit.x.row(0));
-  TGraph *g1b_x1 = to_TGraph(solution_explicit.t, solution_explicit.x.row(1));
-  TGraph *g1b_x0a = to_TGraph(solution_explicit_adaptive.t, solution_explicit_adaptive.x.row(0));
-  TGraph *g1b_x1a = to_TGraph(solution_explicit_adaptive.t, solution_explicit_adaptive.x.row(1));
+  TCanvas *c1b = new TCanvas("c1b", "Sine Explicit", 1200, 800);
+  TGraph *g1b_x0 = to_TGraph(solution_explicit.eigen_t(), solution_explicit.eigen_x(0));
+  TGraph *g1b_x1 = to_TGraph(solution_explicit.eigen_t(), solution_explicit.eigen_x(1));
+  TGraph *g1b_x0a = to_TGraph(solution_explicit_adaptive.eigen_t(), solution_explicit_adaptive.eigen_x(0));
+  TGraph *g1b_x1a = to_TGraph(solution_explicit_adaptive.eigen_t(), solution_explicit_adaptive.eigen_x(1));
 
-  g1b_x0->SetLineColor(colors[0]);  g1b_x0->Draw("AL");
-  g1b_x1->SetLineColor(colors[0]);  g1b_x1->Draw("L SAME");
+  g1b_x0->SetLineColor(colors[0]); g1b_x0->Draw("AL");
+  g1b_x1->SetLineColor(colors[0]); g1b_x1->Draw("L SAME");
   g1b_x0a->SetLineColor(colors[1]); g1b_x0a->SetLineStyle(9); g1b_x0a->Draw("L SAME");
   g1b_x1a->SetLineColor(colors[1]); g1b_x1a->SetLineStyle(9); g1b_x1a->Draw("L SAME");
   g1b_x0->SetTitle("Sine Explicit");
@@ -150,7 +150,7 @@ int main(int argc, char **argv) {
 #endif
 
   SinCosSemiExplicit system_semiexplicit;
-  Fehlberg45<Real, 2, 0> integrator_semiexplicit(std::make_shared<SinCosSemiExplicit<Real>>(system_semiexplicit));
+  Fehlberg45<Real, 2, 0> integrator_semiexplicit(std::make_unique<SinCosSemiExplicit<Real>>(system_semiexplicit));
   integrator_semiexplicit.enable_projection();
   integrator_semiexplicit.disable_reverse_mode();
   Solution<Real, 2, 0> solution_semiexplicit;
@@ -159,14 +159,14 @@ int main(int argc, char **argv) {
   integrator_semiexplicit.adaptive_solve(time, system_semiexplicit.ics(), solution_semiexplicit_adaptive);
 
 #ifdef SANDALS_ENABLE_PLOTTING
-  TCanvas *c1c = new TCanvas("c1c", "Oscillator SemiExplicit", 800, 600);
-  TGraph *g1c_x0 = to_TGraph(solution_semiexplicit.t, solution_semiexplicit.x.row(0));
-  TGraph *g1c_x1 = to_TGraph(solution_semiexplicit.t, solution_semiexplicit.x.row(1));
-  TGraph *g1c_x0a = to_TGraph(solution_semiexplicit_adaptive.t, solution_semiexplicit_adaptive.x.row(0));
-  TGraph *g1c_x1a = to_TGraph(solution_semiexplicit_adaptive.t, solution_semiexplicit_adaptive.x.row(1));
+  TCanvas *c1c = new TCanvas("c1c", "Oscillator SemiExplicit", 1200, 800);
+  TGraph *g1c_x0 = to_TGraph(solution_semiexplicit.eigen_t(), solution_semiexplicit.eigen_x(0));
+  TGraph *g1c_x1 = to_TGraph(solution_semiexplicit.eigen_t(), solution_semiexplicit.eigen_x(1));
+  TGraph *g1c_x0a = to_TGraph(solution_semiexplicit_adaptive.eigen_t(), solution_semiexplicit_adaptive.eigen_x(0));
+  TGraph *g1c_x1a = to_TGraph(solution_semiexplicit_adaptive.eigen_t(), solution_semiexplicit_adaptive.eigen_x(1));
 
-  g1c_x0->SetLineColor(colors[0]);  g1c_x0->Draw("AL");
-  g1c_x1->SetLineColor(colors[0]);  g1c_x1->Draw("L SAME");
+  g1c_x0->SetLineColor(colors[0]); g1c_x0->Draw("AL");
+  g1c_x1->SetLineColor(colors[0]); g1c_x1->Draw("L SAME");
   g1c_x0a->SetLineColor(colors[1]); g1c_x0a->SetLineStyle(9); g1c_x0a->Draw("L SAME");
   g1c_x1a->SetLineColor(colors[1]); g1c_x1a->SetLineStyle(9); g1c_x1a->Draw("L SAME");
   g1c_x0->SetTitle("Oscillator SemiExplicit");

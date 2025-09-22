@@ -42,7 +42,7 @@ namespace Sandals
   {
   public:
     using Type = enum class Type : Integer {IMPLICIT = 0, EXPLICIT = 1, SEMIEXPLICIT = 1}; /**< System type enumeration. */
-    using Pointer = std::shared_ptr<Implicit<Real, N, M>>; /**< Shared pointer to an implicit ODE system. */
+    using Pointer = std::unique_ptr<Implicit<Real, N, M>>; /**< Unique pointer to an implicit ODE system. */
     using VectorF = Eigen::Vector<Real, N>; /**< Templetized vector type. */
     using MatrixJF = Eigen::Matrix<Real, N, N>; /**< Templetized matrix type. */
     using VectorH = Eigen::Vector<Real, M>; /**< Templetized vector type. */
@@ -64,7 +64,7 @@ namespace Sandals
     /**
     * Class constructor for an implicit ODE/DAE system.
     */
-    Implicit() : m_type(Type::IMPLICIT), m_name("(missing name)") {}
+    Implicit() : m_type(Type::IMPLICIT), m_name("(undefined name)") {}
 
     /**
     * Class constructor for an implicit ODE/DAE system.
@@ -267,7 +267,8 @@ namespace Sandals
   class ImplicitWrapper : public Implicit<Real, N, M>
   {
   public:
-    using Pointer = std::shared_ptr<ImplicitWrapper<Real, N, M>>; /**< Shared pointer to an implicit ODE system. */
+    using Scalar = Real; /**< Scalar type. */
+    using Pointer = std::unique_ptr<ImplicitWrapper<Real, N, M>>; /**< Unique pointer to an implicit ODE system. */
     using typename Implicit<Real, N, M>::VectorF; /**< Templetized vector type. */
     using typename Implicit<Real, N, M>::MatrixJF; /**< Templetized matrix type. */
     using typename Implicit<Real, N, M>::VectorH; /**< Templetized vector type. */

@@ -80,7 +80,7 @@ namespace Sandals
     * Class constructor for a Heun's order 3 solver given a Tableau reference.
     * \param[in] t_system The system reference.
     */
-    Heun3(System t_system) : RungeKutta<Real, 3, N, M>(Heun3Tableau<Real>(), t_system) {}
+    Heun3(System t_system) : RungeKutta<Real, 3, N, M>(Heun3Tableau<Real>(), std::move(t_system)) {}
 
   }; // class Heun3
 

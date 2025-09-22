@@ -25,7 +25,7 @@
 #include <Sandals/Tableau.hh>
 #include <Sandals/Solution.hh>
 
-#ifdef SANDALS_CHECK_FINITE_DIFFERENCES
+#ifdef SANDALS_CHECK_JACOBIANS
 #include <Optimist/FiniteDifferences.hh>
 #endif
 
@@ -55,7 +55,7 @@ namespace Sandals {
   class RungeKutta
   {
   public:
-    using real_type = Real; /**< Scalar number type. */
+    using Scalar = Real; /**< Scalar number type. */
     using VectorX = Eigen::Vector<Real, Eigen::Dynamic>; /**< \f$ N \times 1 \f$ vector of Real number type (column vector). */
     using MatrixJX = Eigen::Matrix<Real, N, N>; /**< Templetized matrix type. */
 
@@ -80,7 +80,8 @@ namespace Sandals {
     SANDALS_BASIC_CONSTANTS(Real) /**< Basic constants. */
     const Real SQRT_EPSILON{std::sqrt(EPSILON)}; /**< Square root of machine epsilon epsilon static constant value. */ \
 
-    using System = typename Implicit<Real, N, M>::Pointer; /**< Shared pointer to an implicit ODE/DAE system. */
+    using System = Implicit<Real, N, M>; /**< Implicit ODE/DAE system. */
+    using SystemPtr = typename Implicit<Real, N, M>::Pointer; /**< Unique pointer to an implicit ODE/DAE system. */
     using Type = typename Tableau<Real, S>::Type; /**< Runge-Kutta type enumeration. */
     using Time = Eigen::Vector<Real, Eigen::Dynamic>; /**< Templetized vector type for the independent variable (or time). */
 
@@ -90,7 +91,7 @@ namespace Sandals {
     mutable Eigen::FullPivLU<MatrixP> m_lu;        /**< LU decomposition for the projection matrix. */
 
     Tableau<Real, S> m_tableau;                    /**< Butcher tableau of the Runge-Kutta method. */
-    System     m_system;                           /**< ODE/DAE system object pointer. */
+    SystemPtr  m_system;                           /**< ODE/DAE system object pointer. */
     Real       m_absolute_tolerance{1e-6};         /**< Absolute tolerance for adaptive step \f$ \epsilon_{\text{abs}} \f$. */
     Real       m_relative_tolerance{1e-3};         /**< Relative tolerance for adaptive step \f$ \epsilon_{\text{rel}} \f$. */
     Real       m_safety_factor{0.9};               /**< Safety factor for adaptive step \f$ f \f$. */
@@ -129,10 +130,10 @@ namespace Sandals {
     /**
     * Class constructor for the Runge-Kutta method.
     * \param[in] t_tableau The Tableau reference.
-    * \param[in] t_system The ODE/DAE system shared pointer.
+    * \param[in] t_system The ODE/DAE system unique pointer.
     */
-    RungeKutta(Tableau<Real, S> const & t_tableau, System t_system)
-      : m_tableau(t_tableau), m_system(t_system) {
+    RungeKutta(Tableau<Real, S> const & t_tableau, SystemPtr t_system)
+      : m_tableau(t_tableau), m_system(std::move(t_system)) {
       this->verbose_mode(this->m_verbose);
     }
 
@@ -221,16 +222,22 @@ namespace Sandals {
     VectorS c() const {return this->m_tableau.c;}
 
     /**
-    * Get the ODE/DAE system pointer.
-    * \return The ODE/DAE system pointer.
+    * Get the ODE/DAE system object pointer.
+    * \return The ODE/DAE system object pointer.
     */
-    System system() {return this->m_system;}
+    System * system() {return this->m_system.get();}
 
     /**
-    * Set the ODE/DAE system pointer.
-    * \param[in] t_system The ODE/DAE system pointer.
+    * Get the ODE/DAE system object pointer.
+    * \return The ODE/DAE system object pointer.
     */
-    void system(System t_system) {this->m_system = t_system;}
+    System const * system() const {return this->m_system.get();}
+
+    /**
+    * Set the ODE/DAE system.
+    * \param[in] t_system The ODE/DAE system.
+    */
+    void system(SystemPtr t_system) {this->m_system = std::move(t_system);}
 
     /**
     * Set the implicit ODE/DAE system with lambda functions.
@@ -249,7 +256,7 @@ namespace Sandals {
       typename ImplicitWrapper<Real, N, M>::FunctionJH Jh_x = ImplicitWrapper<Real, N, M>::DefaultJH,
       typename ImplicitWrapper<Real, N, M>::FunctionID in_domain = ImplicitWrapper<Real, N, M>::DefaultID
     ) {
-      this->m_system = std::make_shared<ImplicitWrapper<Real, N, M>>(F, JF_x, JF_x_dot, h, Jh_x, in_domain);
+      this->m_system = std::make_unique<ImplicitWrapper<Real, N, M>>(F, JF_x, JF_x_dot, h, Jh_x, in_domain);
     }
 
     /**
@@ -271,7 +278,7 @@ namespace Sandals {
       typename ImplicitWrapper<Real, N, M>::FunctionJH Jh_x = ImplicitWrapper<Real, N, M>::DefaultJH,
       typename ImplicitWrapper<Real, N, M>::FunctionID in_domain = ImplicitWrapper<Real, N, M>::DefaultID
     ) {
-      this->m_system = std::make_shared<ImplicitWrapper<Real, N, M>>(name, F, JF_x, JF_x_dot, h, Jh_x, in_domain);
+      this->m_system = std::make_unique<ImplicitWrapper<Real, N, M>>(name, F, JF_x, JF_x_dot, h, Jh_x, in_domain);
     }
 
     /**
@@ -289,7 +296,7 @@ namespace Sandals {
       typename ExplicitWrapper<Real, N, M>::FunctionJH Jh_x = ExplicitWrapper<Real, N, M>::DefaultJH,
       typename ExplicitWrapper<Real, N, M>::FunctionID in_domain = ExplicitWrapper<Real, N, M>::DefaultID
     ) {
-      this->m_system = std::make_shared<ExplicitWrapper<Real, N, M>>(f, Jf_x, h, Jh_x, in_domain);
+      this->m_system = std::make_unique<ExplicitWrapper<Real, N, M>>(f, Jf_x, h, Jh_x, in_domain);
     }
 
     /**
@@ -309,7 +316,7 @@ namespace Sandals {
       typename ExplicitWrapper<Real, N, M>::FunctionJH Jh_x = ExplicitWrapper<Real, N, M>::DefaultJH,
       typename ExplicitWrapper<Real, N, M>::FunctionID in_domain = ExplicitWrapper<Real, N, M>::DefaultID
     ) {
-      this->m_system = std::make_shared<ExplicitWrapper<Real, N, M>>(name, f, Jf_x, h, Jh_x, in_domain);
+      this->m_system = std::make_unique<ExplicitWrapper<Real, N, M>>(name, f, Jf_x, h, Jh_x, in_domain);
     }
 
     /**
@@ -329,7 +336,7 @@ namespace Sandals {
       typename LinearWrapper<Real, N, M>::FunctionJH Jh_x = LinearWrapper<Real, N, M>::DefaultJH,
       typename LinearWrapper<Real, N, M>::FunctionID in_domain = LinearWrapper<Real, N, M>::DefaultID
     ) {
-      this->m_system = std::make_shared<LinearWrapper<Real, N, M>>(E, A, b, h, Jh_x, in_domain);
+      this->m_system = std::make_unique<LinearWrapper<Real, N, M>>(E, A, b, h, Jh_x, in_domain);
     }
 
     /**
@@ -351,7 +358,7 @@ namespace Sandals {
       typename LinearWrapper<Real, N, M>::FunctionJH Jh_x = LinearWrapper<Real, N, M>::DefaultJH,
       typename LinearWrapper<Real, N, M>::FunctionID in_domain = LinearWrapper<Real, N, M>::DefaultID
     ) {
-      this->m_system = std::make_shared<LinearWrapper<Real, N, M>>(name, E, A, b, h, Jh_x, in_domain);
+      this->m_system = std::make_unique<LinearWrapper<Real, N, M>>(name, E, A, b, h, Jh_x, in_domain);
     }
 
     /**
@@ -373,7 +380,7 @@ namespace Sandals {
       typename SemiExplicitWrapper<Real, N, M>::FunctionJH Jh_x = SemiExplicitWrapper<Real, N, M>::DefaultJH,
       typename SemiExplicitWrapper<Real, N, M>::FunctionID in_domain = SemiExplicitWrapper<Real, N, M>::DefaultID
     ) {
-      this->m_system = std::make_shared<SemiExplicitWrapper<Real, N, M>>(A, TA_x, b, Jb_x, h, Jh_x, in_domain);
+      this->m_system = std::make_unique<SemiExplicitWrapper<Real, N, M>>(A, TA_x, b, Jb_x, h, Jh_x, in_domain);
     }
 
     /**
@@ -397,7 +404,7 @@ namespace Sandals {
       typename SemiExplicitWrapper<Real, N, M>::FunctionJH Jh_x = SemiExplicitWrapper<Real, N, M>::DefaultJH,
       typename SemiExplicitWrapper<Real, N, M>::FunctionID in_domain = SemiExplicitWrapper<Real, N, M>::DefaultID
     ) {
-      this->m_system = std::make_shared<SemiExplicitWrapper<Real, N, M>>(name, A, TA_x, b, Jb_x, h, Jh_x, in_domain);
+      this->m_system = std::make_unique<SemiExplicitWrapper<Real, N, M>>(name, A, TA_x, b, Jb_x, h, Jh_x, in_domain);
     }
 
     /**
@@ -790,7 +797,7 @@ namespace Sandals {
       for (Integer i{0}; i < S; ++i) {Jx += h * dK_dx[i] * this->m_tableau.b(i);}
 
       // Check the Jacobian with finite differences
-      #ifdef SANDALS_CHECK_FINITE_DIFFERENCES
+      #ifdef SANDALS_CHECK_JACOBIANS
       MatrixJX Jx_fd;
       auto fun = [this, &t, &h, &K](VectorN const & x_fd, VectorN & x_new_fd) -> bool {
         MatrixK K_fd(K);
@@ -999,7 +1006,7 @@ namespace Sandals {
       for (Integer i{0}; i < S; ++i) {Jx += h * dK_dx[i] * this->m_tableau.b(i);}
 
       // Efficient finite difference Jacobian check
-      #ifdef SANDALS_CHECK_FINITE_DIFFERENCE
+      #ifdef SANDALS_CHECK_JACOBIANS
       MatrixJX Jx_fd;
       auto fun = [this, &t, &h, &K](VectorN const & x_fd, VectorN & x_new_fd) -> bool {
         MatrixK K_fd(K);
@@ -1263,7 +1270,7 @@ namespace Sandals {
       Jx.setIdentity();
       for (Integer i{0}; i < S; ++i) {Jx += h * dK_dx[i] * this->m_tableau.b(i);}
 
-      #ifdef SANDALS_CHECK_FINITE_DIFFERENCE
+      #ifdef SANDALS_CHECK_JACOBIANS
       MatrixJX Jx_fd;
       auto fun = [this, &t, &h, &K](VectorN const & x_fd, VectorN & x_new_fd) -> bool {
         MatrixK K_fd(K);
@@ -1487,7 +1494,7 @@ namespace Sandals {
       Jx.setIdentity();
       for (Integer i{0}; i < S; ++i) {Jx += h * dK_dx[i] * this->m_tableau.b(i);}
 
-      #ifdef SANDALS_CHECK_FINITE_DIFFERENCE
+      #ifdef SANDALS_CHECK_JACOBIANS
       MatrixJX Jx_fd;
       auto fun = [this, &t, &h, &K](VectorN const & x_fd, VectorN & x_new_fd) -> bool {
         MatrixK K_fd(K);

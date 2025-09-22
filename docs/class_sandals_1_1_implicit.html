@@ -143,7 +143,7 @@ $(function(){initNavTree('class_sandals_1_1_implicit.html','','class_sandals_1_1
 <tr class="heading"><td colspan="2"><h2 id="header-pub-types" class="groupheader"><a id="pub-types" name="pub-types"></a>
 Public Types</h2></td></tr>
 <tr class="memitem:a6198d522358fae0f71c34f58fd679037" id="r_a6198d522358fae0f71c34f58fd679037"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6198d522358fae0f71c34f58fd679037">Type</a> = enum class <a class="el" href="#a6198d522358fae0f71c34f58fd679037">Type</a> : <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> {IMPLICIT = 0, EXPLICIT = 1, SEMIEXPLICIT = 1}</td></tr>
-<tr class="memitem:ab8c4bd5c8761169ebd176967c69671d3" id="r_ab8c4bd5c8761169ebd176967c69671d3"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab8c4bd5c8761169ebd176967c69671d3">Pointer</a> = std::shared_ptr&lt;<a class="el" href="class_sandals_1_1_implicit.html">Implicit</a>&lt;Real, N, M&gt;&gt;</td></tr>
+<tr class="memitem:a0144fc17197bdb35c0208611f83f280f" id="r_a0144fc17197bdb35c0208611f83f280f"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0144fc17197bdb35c0208611f83f280f">Pointer</a> = std::unique_ptr&lt;<a class="el" href="class_sandals_1_1_implicit.html">Implicit</a>&lt;Real, N, M&gt;&gt;</td></tr>
 <tr class="memitem:a2a572c1717ee411d8bcd366eb50b4faf" id="r_a2a572c1717ee411d8bcd366eb50b4faf"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2a572c1717ee411d8bcd366eb50b4faf">VectorF</a> = Eigen::Vector&lt;Real, N&gt;</td></tr>
 <tr class="memitem:a0f6ed8a93dd0a78c31cc1cba5c2b085d" id="r_a0f6ed8a93dd0a78c31cc1cba5c2b085d"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0f6ed8a93dd0a78c31cc1cba5c2b085d">MatrixJF</a> = Eigen::Matrix&lt;Real, N, N&gt;</td></tr>
 <tr class="memitem:a3d0eff3748a32b15083a9b488feac033" id="r_a3d0eff3748a32b15083a9b488feac033"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3d0eff3748a32b15083a9b488feac033">VectorH</a> = Eigen::Vector&lt;Real, M&gt;</td></tr>
@@ -227,8 +227,8 @@ template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581
 
 </div>
 </div>
-<a id="ab8c4bd5c8761169ebd176967c69671d3" name="ab8c4bd5c8761169ebd176967c69671d3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab8c4bd5c8761169ebd176967c69671d3">&#9670;&#160;</a></span>Pointer</h2>
+<a id="a0144fc17197bdb35c0208611f83f280f" name="a0144fc17197bdb35c0208611f83f280f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0144fc17197bdb35c0208611f83f280f">&#9670;&#160;</a></span>Pointer</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -236,11 +236,11 @@ template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581
 template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; Real, N, M &gt;::Pointer = std::shared_ptr&lt;<a class="el" href="class_sandals_1_1_implicit.html">Implicit</a>&lt;Real, N, M&gt;&gt;</td>
+          <td class="memname">using <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit</a>&lt; Real, N, M &gt;::Pointer = std::unique_ptr&lt;<a class="el" href="class_sandals_1_1_implicit.html">Implicit</a>&lt;Real, N, M&gt;&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Shared pointer to an implicit ODE system. </p>
+<p>Unique pointer to an implicit ODE system. </p>
 
 </div>
 </div>

@@ -94,7 +94,7 @@ namespace Sandals
     * Class constructor for a Runge-Kutta solver given a Tableau reference.
     * \param[in] t_system The system reference.
     */
-    GaussLegendre6(System t_system) : RungeKutta<Real, 3, N, M>(GaussLegendre6Tableau<Real>(), t_system) {}
+    GaussLegendre6(System t_system) : RungeKutta<Real, 3, N, M>(GaussLegendre6Tableau<Real>(), std::move(t_system)) {}
 
   }; // class GaussLegendre6
 

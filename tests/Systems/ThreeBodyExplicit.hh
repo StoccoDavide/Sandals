@@ -105,7 +105,7 @@ public:
 
   ~ThreeBodyExplicit() {}
 
-  VectorF f(VectorF const &x, Real const /*t*/)  const override
+  VectorF f(VectorF const & x, Real const /*t*/)  const override
   {
     #define CMD "Sandals::ThreeBodyExplicit::f(...): "
 
@@ -135,7 +135,7 @@ public:
     #undef CMD
   }
 
-  MatrixJF Jf_x(VectorF const &x, Real const /*t*/) const override
+  MatrixJF Jf_x(VectorF const & x, Real const /*t*/) const override
   {
     #define CMD "Sandals::ThreeBodyExplicit::Jf_x(...): "
 
@@ -207,7 +207,7 @@ public:
 
   bool in_domain(VectorF const & /*x*/, Real const /*t*/) const override {return true;}
 
-  VectorF ics() const
+  static VectorF ics()
   {
     VectorF ics;
     ics <<

@@ -66,6 +66,7 @@ if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
   option(SANDALS_BUILD_TESTS "Build tests" OFF)
   option(SANDALS_BUILD_BENCHMARKS "Build benchmarks" OFF)
   option(SANDALS_BUILD_EXAMPLES "Build examples" OFF)
+  option(SANDALS_CHECK_JACOBIANS "Check Jacobians" OFF)
   option(SANDALS_ENABLE_PLOTTING "Enable plotting" OFF)
 
   file(GLOB_RECURSE HEADER_FILES_HH "${CMAKE_CURRENT_SOURCE_DIR}/include/*.hh")
@@ -89,6 +90,10 @@ if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
 
   if(SANDALS_BUILD_EXAMPLES)
     add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/examples)
+  endif()
+
+  if(SANDALS_CHECK_JACOBIANS)
+    target_compile_definitions(Sandals INTERFACE SANDALS_CHECK_JACOBIANS)
   endif()
 
   if(SANDALS_ENABLE_PLOTTING)

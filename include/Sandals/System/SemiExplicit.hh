@@ -42,7 +42,7 @@ namespace Sandals {
   class SemiExplicit : public Explicit<Real, N, M>
   {
   public:
-    using Pointer = std::shared_ptr<SemiExplicit<Real, N, M>>; /**< Shared pointer to a semi-explicit ODE/DAE system. */
+    using Pointer = std::unique_ptr<SemiExplicit<Real, N, M>>; /**< Unique pointer to a semi-explicit ODE/DAE system. */
     using VectorF = typename Explicit<Real, N, M>::VectorF; /**< Templetized vector type. */
     using MatrixJF = typename Explicit<Real, N, M>::MatrixJF; /**< Templetized matrix type. */
     using MatrixA = typename Explicit<Real, N, M>::MatrixJF; /**< Templetized matrix type. */
@@ -58,7 +58,7 @@ namespace Sandals {
     /**
     * Class constructor for the semi-explicit ODE/DAE system.
     */
-    SemiExplicit() : Explicit<Real, N, M>(Type::SEMIEXPLICIT, "(missing name)") {}
+    SemiExplicit() : Explicit<Real, N, M>(Type::SEMIEXPLICIT, "(undefined name)") {}
 
     /**
     * Class constructor for the semi-explicit ODE/DAE system.
@@ -259,7 +259,7 @@ namespace Sandals {
   class SemiExplicitWrapper : public SemiExplicit<Real, N, M>
   {
   public:
-    using Pointer = std::shared_ptr<SemiExplicitWrapper<Real, N, M>>; /**< Shared pointer to a semi-explicit ODE/DAE system. */
+    using Pointer = std::unique_ptr<SemiExplicitWrapper<Real, N, M>>; /**< Unique pointer to a semi-explicit ODE/DAE system. */
     using typename SemiExplicit<Real, N, M>::VectorF; /**< Templetized vector type. */
     using typename SemiExplicit<Real, N, M>::MatrixA; /**< Templetized matrix type. */
     using typename SemiExplicit<Real, N, M>::TensorTA; /**< Templetized matrix type. */

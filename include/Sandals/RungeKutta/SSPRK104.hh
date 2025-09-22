@@ -96,7 +96,7 @@ namespace Sandals
     * a Tableau reference.
     * \param[in] t_system The system reference.
     */
-    SSPRK104(System t_system) : RungeKutta<Real, 10, N, M>(SSPRK104Tableau<Real>(), t_system) {}
+    SSPRK104(System t_system) : RungeKutta<Real, 10, N, M>(SSPRK104Tableau<Real>(), std::move(t_system)) {}
 
   }; // class SSPRK104
 

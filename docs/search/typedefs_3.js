@@ -10,8 +10,8 @@ var searchData=
   ['matrixjk_7',['MatrixJK',['../class_sandals_1_1_runge_kutta.html#a2d80e266c799308f8d92f9f3cdcbd915',1,'Sandals::RungeKutta']]],
   ['matrixjx_8',['MatrixJX',['../class_sandals_1_1_problem.html#ac1cb5525e81abfcbe1fc85ab6a2f5e78',1,'Sandals::Problem::MatrixJX'],['../class_sandals_1_1_runge_kutta.html#aafe93029d65e4891d968bc0aabfe9c07',1,'Sandals::RungeKutta::MatrixJX']]],
   ['matrixk_9',['MatrixK',['../class_sandals_1_1_runge_kutta.html#aa03ed9b688641e7e64a34bc62ab4e136',1,'Sandals::RungeKutta']]],
-  ['matrixm_10',['MatrixM',['../class_sandals_1_1_runge_kutta.html#a1a6f89acec6b558caeb96f5ef5bf8483',1,'Sandals::RungeKutta::MatrixM'],['../struct_sandals_1_1_solution.html#a8d36c053aeaf543ed94ae91a6fdd5fea',1,'Sandals::Solution::MatrixM']]],
-  ['matrixn_11',['MatrixN',['../class_sandals_1_1_runge_kutta.html#a12b70430fab5101698b596781094d9ce',1,'Sandals::RungeKutta::MatrixN'],['../struct_sandals_1_1_solution.html#a3ec068cc61fef7c6bc64b8ea57e56e5b',1,'Sandals::Solution::MatrixN']]],
+  ['matrixm_10',['MatrixM',['../class_sandals_1_1_problem.html#af6fe402b97094519714a1e1b81e70232',1,'Sandals::Problem::MatrixM'],['../class_sandals_1_1_runge_kutta.html#a1a6f89acec6b558caeb96f5ef5bf8483',1,'Sandals::RungeKutta::MatrixM'],['../struct_sandals_1_1_solution.html#a2819f24fa37c42a1e611a54692be65d0',1,'Sandals::Solution::MatrixM']]],
+  ['matrixn_11',['MatrixN',['../class_sandals_1_1_problem.html#ae3d88f5d24952de722e36365aa24948f',1,'Sandals::Problem::MatrixN'],['../class_sandals_1_1_runge_kutta.html#a12b70430fab5101698b596781094d9ce',1,'Sandals::RungeKutta::MatrixN'],['../struct_sandals_1_1_solution.html#a828afafe49887f7ae1d80e6edfc920cd',1,'Sandals::Solution::MatrixN']]],
   ['matrixp_12',['MatrixP',['../class_sandals_1_1_runge_kutta.html#a45188c6c7dca9698ff7f3beca21ce98c',1,'Sandals::RungeKutta']]],
   ['matrixs_13',['MatrixS',['../class_sandals_1_1_runge_kutta.html#a042d8496b2380909755a1d67946c50e4',1,'Sandals::RungeKutta']]],
   ['matrixx_14',['MatrixX',['../class_sandals_1_1_runge_kutta.html#ad49cfea9a52d2fca80ff2f2a4eeb993c',1,'Sandals::RungeKutta']]]

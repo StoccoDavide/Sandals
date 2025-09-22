@@ -144,13 +144,13 @@ $(function(){initNavTree('class_sandals_1_1_explicit.html','','class_sandals_1_1
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-types" class="groupheader"><a id="pub-types" name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a1e3f3ba127e9177db2a56811efc38c05" id="r_a1e3f3ba127e9177db2a56811efc38c05"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1e3f3ba127e9177db2a56811efc38c05">Pointer</a> = std::shared_ptr&lt;<a class="el" href="class_sandals_1_1_explicit.html">Explicit</a>&lt;Real, N, M&gt;&gt;</td></tr>
+<tr class="memitem:a75fecb933d0276743c5c57e10138ccca" id="r_a75fecb933d0276743c5c57e10138ccca"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a75fecb933d0276743c5c57e10138ccca">Pointer</a> = std::unique_ptr&lt;<a class="el" href="class_sandals_1_1_explicit.html">Explicit</a>&lt;Real, N, M&gt;&gt;</td></tr>
 <tr class="memitem:afdda0ad23f2ca6d2c87a564ea31bc02f" id="r_afdda0ad23f2ca6d2c87a564ea31bc02f"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afdda0ad23f2ca6d2c87a564ea31bc02f">VectorF</a> = typename <a class="el" href="class_sandals_1_1_implicit.html">Implicit</a>&lt;Real, N, M&gt;::VectorF</td></tr>
 <tr class="memitem:ae8d2fba7756319303c025da59c0f0ee5" id="r_ae8d2fba7756319303c025da59c0f0ee5"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae8d2fba7756319303c025da59c0f0ee5">MatrixJF</a> = typename <a class="el" href="class_sandals_1_1_implicit.html">Implicit</a>&lt;Real, N, M&gt;::MatrixJF</td></tr>
 <tr class="memitem:ab498b358a77a9c3ae19ec5a3aa14966f" id="r_ab498b358a77a9c3ae19ec5a3aa14966f"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab498b358a77a9c3ae19ec5a3aa14966f">Type</a> = typename <a class="el" href="class_sandals_1_1_implicit.html">Implicit</a>&lt;Real, N, M&gt;::Type</td></tr>
 <tr class="inherit_header pub_types_class_sandals_1_1_implicit"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pub_types_class_sandals_1_1_implicit')"><span class="dynarrow"><span class="arrowhead closed"></span></span>Public Types inherited from <a class="el" href="class_sandals_1_1_implicit.html">Sandals::Implicit&lt; Real, N, 0 &gt;</a></td></tr>
 <tr class="memitem:a6198d522358fae0f71c34f58fd679037 inherit pub_types_class_sandals_1_1_implicit" id="r_a6198d522358fae0f71c34f58fd679037"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_implicit.html#a6198d522358fae0f71c34f58fd679037">Type</a></td></tr>
-<tr class="memitem:ab8c4bd5c8761169ebd176967c69671d3 inherit pub_types_class_sandals_1_1_implicit" id="r_ab8c4bd5c8761169ebd176967c69671d3"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_implicit.html#ab8c4bd5c8761169ebd176967c69671d3">Pointer</a></td></tr>
+<tr class="memitem:a0144fc17197bdb35c0208611f83f280f inherit pub_types_class_sandals_1_1_implicit" id="r_a0144fc17197bdb35c0208611f83f280f"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_implicit.html#a0144fc17197bdb35c0208611f83f280f">Pointer</a></td></tr>
 <tr class="memitem:a2a572c1717ee411d8bcd366eb50b4faf inherit pub_types_class_sandals_1_1_implicit" id="r_a2a572c1717ee411d8bcd366eb50b4faf"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_implicit.html#a2a572c1717ee411d8bcd366eb50b4faf">VectorF</a></td></tr>
 <tr class="memitem:a0f6ed8a93dd0a78c31cc1cba5c2b085d inherit pub_types_class_sandals_1_1_implicit" id="r_a0f6ed8a93dd0a78c31cc1cba5c2b085d"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_implicit.html#a0f6ed8a93dd0a78c31cc1cba5c2b085d">MatrixJF</a></td></tr>
 <tr class="memitem:a3d0eff3748a32b15083a9b488feac033 inherit pub_types_class_sandals_1_1_implicit" id="r_a3d0eff3748a32b15083a9b488feac033"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sandals_1_1_implicit.html#a3d0eff3748a32b15083a9b488feac033">VectorH</a></td></tr>
@@ -221,8 +221,8 @@ template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581
 
 </div>
 </div>
-<a id="a1e3f3ba127e9177db2a56811efc38c05" name="a1e3f3ba127e9177db2a56811efc38c05"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1e3f3ba127e9177db2a56811efc38c05">&#9670;&#160;</a></span>Pointer</h2>
+<a id="a75fecb933d0276743c5c57e10138ccca" name="a75fecb933d0276743c5c57e10138ccca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a75fecb933d0276743c5c57e10138ccca">&#9670;&#160;</a></span>Pointer</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -230,11 +230,11 @@ template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581
 template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="class_sandals_1_1_explicit.html">Sandals::Explicit</a>&lt; Real, N, M &gt;::Pointer = std::shared_ptr&lt;<a class="el" href="class_sandals_1_1_explicit.html">Explicit</a>&lt;Real, N, M&gt;&gt;</td>
+          <td class="memname">using <a class="el" href="class_sandals_1_1_explicit.html">Sandals::Explicit</a>&lt; Real, N, M &gt;::Pointer = std::unique_ptr&lt;<a class="el" href="class_sandals_1_1_explicit.html">Explicit</a>&lt;Real, N, M&gt;&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Shared pointer to an explicit ODE system. </p>
+<p>Unique pointer to an explicit ODE system. </p>
 
 </div>
 </div>

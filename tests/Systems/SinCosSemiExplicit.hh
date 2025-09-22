@@ -66,17 +66,17 @@ public:
 
   bool in_domain(VectorF const & /*x*/, Real const /*t*/) const override {return true;}
 
-  VectorF ics() const {return VectorF::Zero();}
+  static VectorF ics() {return VectorF::Zero();}
 
-  VectorF analytical_solution(Real t) const {
+  static VectorF analytical_solution(Real const t) {
     VectorF x;
     x << std::sin(t), Real(1.0)-std::cos(t);
     return x;
   }
 
-  MatrixX analytical_solution(VectorX const &t) const {
+  static MatrixX analytical_solution(VectorX const & t) {
     MatrixX x(2, t.size());
-    for (int i = 0; i < t.size(); ++i) {x.col(i) = this->analytical_solution(t(i));}
+    for (int i = 0; i < t.size(); ++i) {x.col(i) = SinCosSemiExplicit::analytical_solution(t(i));}
     return x;
   }
 };

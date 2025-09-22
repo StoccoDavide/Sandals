@@ -20,8 +20,8 @@
 #include "Sandals/RungeKutta/GaussLegendre6.hh"
 #include "Sandals/RungeKutta/Heun2.hh"
 #include "Sandals/RungeKutta/Heun3.hh"
-#include "Sandals/RungeKutta/LobattoIIIA2.hh"
 #include "Sandals/RungeKutta/ImplicitEuler.hh"
+#include "Sandals/RungeKutta/LobattoIIIA2.hh"
 #include "Sandals/RungeKutta/MTE22.hh"
 #include "Sandals/RungeKutta/RadauIIA3.hh"
 #include "Sandals/RungeKutta/RadauIIA5.hh"
@@ -50,8 +50,8 @@ TEST(Tableau, GaussLegendre4) {GaussLegendre4Tableau<Real> tbl; EXPECT_TRUE(tbl.
 TEST(Tableau, GaussLegendre6) {GaussLegendre6Tableau<Real> tbl; EXPECT_TRUE(tbl.check());}
 TEST(Tableau, Heun2)          {Heun2Tableau<Real> tbl;          EXPECT_TRUE(tbl.check());}
 TEST(Tableau, Heun3)          {Heun3Tableau<Real> tbl;          EXPECT_TRUE(tbl.check());}
-TEST(Tableau, LobattoIIIA2)   {LobattoIIIA2Tableau<Real> tbl;   EXPECT_TRUE(tbl.check());}
 TEST(Tableau, ImplicitEuler)  {ImplicitEulerTableau<Real> tbl;  EXPECT_TRUE(tbl.check());}
+TEST(Tableau, LobattoIIIA2)   {LobattoIIIA2Tableau<Real> tbl;   EXPECT_TRUE(tbl.check());}
 TEST(Tableau, RadauIIA3)      {RadauIIA3Tableau<Real> tbl;      EXPECT_TRUE(tbl.check());}
 TEST(Tableau, RadauIIA5)      {RadauIIA5Tableau<Real> tbl;      EXPECT_TRUE(tbl.check());}
 TEST(Tableau, Ralston2)       {Ralston2Tableau<Real> tbl;       EXPECT_TRUE(tbl.check());}
@@ -67,8 +67,8 @@ TEST(Tableau, SSPRK43)        {SSPRK43Tableau<Real> tbl;        EXPECT_TRUE(tbl.
 TEST(Tableau, SSPRK93)        {SSPRK93Tableau<Real> tbl;        EXPECT_TRUE(tbl.check());}
 TEST(Tableau, SSPRK104)       {SSPRK104Tableau<Real> tbl;       EXPECT_TRUE(tbl.check());}
 
-// Run all the tests.
-int main(int argc, char **argv) {
+// Run all the tests
+int main(int argc, char ** argv) {
   testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }

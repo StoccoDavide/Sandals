@@ -22,6 +22,7 @@ BUILD_DEBUG      = false
 BUILD_TESTS      = true
 BUILD_EXAMPLES   = false
 BUILD_BENCHMARKS = false
+CHECK_JACOBIANS  = true
 ENABLE_PLOTTING  = true
 
 case RUBY_PLATFORM
@@ -72,6 +73,11 @@ if BUILD_DEBUG then
   cmd_cmake_build += "-DCMAKE_BUILD_TYPE:VAR=Debug "
 else
   cmd_cmake_build += "-DCMAKE_BUILD_TYPE:VAR=Release "
+end
+if CHECK_JACOBIANS then
+  cmd_cmake_build += "-DSANDALS_CHECK_JACOBIANS:VAR=true "
+else
+  cmd_cmake_build += "-DSANDALS_CHECK_JACOBIANS:VAR=false "
 end
 if ENABLE_PLOTTING then
   cmd_cmake_build += "-DSANDALS_ENABLE_PLOTTING:VAR=true "

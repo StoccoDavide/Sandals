@@ -8,14 +8,93 @@
  * e-mail: davide.stocco@unitn.it                             e-mail: enrico.bertolazzi@unitn.it *
 \* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-#ifndef TESTS_PROBLEMS_BASIC_SEMIEXPLICIT_HH
-#define TESTS_PROBLEMS_BASIC_SEMIEXPLICIT_HH
+#ifndef TESTS_PROBLEMS_BASIC_HH
+#define TESTS_PROBLEMS_BASIC_HH
 
-#include "Sandals.hh"
-#include "Sandals/Problem.hh"
+#include "Sandals/System/Explicit.hh"
+#include "Sandals/System/Implicit.hh"
 #include "Sandals/System/SemiExplicit.hh"
+#include "Sandals/Problem.hh"
 
 using namespace Sandals;
+
+//  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+template<typename Real = double>
+class BasicExplicit : public Explicit<Real, 2, 0>
+{
+public:
+  using typename Explicit<Real, 2, 0>::VectorF;
+  using typename Explicit<Real, 2, 0>::MatrixJF;
+  using typename Explicit<Real, 2, 0>::VectorH;
+  using typename Explicit<Real, 2, 0>::MatrixJH;
+
+  BasicExplicit() : Explicit<Real, 2, 0>("BasicExplicit") {}
+
+  ~BasicExplicit() {}
+
+  VectorF f(VectorF const & x, Real const /*t*/) const override
+  {
+    VectorF f;
+    f << x(1), 1.0;
+    return f;
+  }
+
+  MatrixJF Jf_x(VectorF const & /*x*/, Real const /*t*/) const override {
+    MatrixJF Jf_x(MatrixJF::Zero());
+    Jf_x(0, 1) = 1.0;
+    return Jf_x;
+  }
+
+  VectorH h(VectorF const & /*x*/, Real const /*t*/) const override {return VectorH::Zero();}
+
+  MatrixJH Jh_x(VectorF const & /*x*/, Real const /*t*/) const override {return MatrixJH::Zero();}
+
+  bool in_domain(VectorF const & /*x*/, Real const /*t*/) const override {return true;}
+
+};
+
+//  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+template<typename Real = double>
+class BasicImplicit : public Implicit<Real, 2, 0>
+{
+public:
+  using typename Implicit<Real, 2, 0>::VectorF;
+  using typename Implicit<Real, 2, 0>::MatrixJF;
+  using typename Implicit<Real, 2, 0>::VectorH;
+  using typename Implicit<Real, 2, 0>::MatrixJH;
+
+  BasicImplicit() : Implicit<Real, 2, 0>("BasicImplicit") {}
+
+  ~BasicImplicit() {}
+
+  VectorF F(VectorF const & x, VectorF const & x_dot, Real const /*t*/) const override
+  {
+    VectorF F;
+    F << x_dot(0) - x(1), x_dot(1) - 1.0;
+    return F;
+  }
+
+  MatrixJF JF_x(VectorF const & /*x*/, VectorF const & /*x_dot*/, Real const /*t*/) const override {
+    MatrixJF JF_x(MatrixJF::Zero());
+    JF_x(0, 1) = -1.0;
+    return JF_x;
+  }
+
+  MatrixJF JF_x_dot(VectorF const & /*x*/, VectorF const & /*x_dot*/, Real const /*t*/) const override
+  {return MatrixJF::Identity();}
+
+  VectorH h(VectorF const & /*x*/, Real const /*t*/) const override {return VectorH::Zero();}
+
+  MatrixJH Jh_x(VectorF const & /*x*/, Real const /*t*/) const override {return MatrixJH::Zero();}
+
+  bool in_domain(VectorF const & /*x*/, Real const /*t*/) const override {return true;}
+
+};
+
+//  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 
 template<typename Real = double>
 class BasicSemiExplicit : public SemiExplicit<Real, 2, 0>
@@ -61,7 +140,6 @@ public:
     return Jb_x;
   }
 
-  //virtual VectorH h(VectorF const & x, Real const t) const = 0;
   VectorH h(VectorF const & /*x*/, Real const /*t*/) const override {return VectorH::Zero();}
 
   MatrixJH Jh_x(VectorF const & /*x*/, Real const /*t*/) const override {return MatrixJH::Zero();}
@@ -70,8 +148,10 @@ public:
 
 };
 
-template<typename Real, typename Integrator>
-class BasicSemiExplicitProblem : public Problem<Real, 2, 0, Integrator>
+//  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+template<typename Real, typename System, typename Integrator>
+class BasicProblem : public Problem<Real, 2, 0, Integrator>
 {
 public:
   using typename Problem<Real, 2, 0, Integrator>::SystemPtr;
@@ -82,13 +162,14 @@ public:
   using VectorX = Eigen::Vector<Real, Eigen::Dynamic>;
   using MatrixX = Eigen::Matrix<Real, 2, Eigen::Dynamic>;
 
-  BasicSemiExplicitProblem(IntegratorPtr rk)
-    : Problem<Real, 2, 0, Integrator>("BasicSemiExplicitProblem", std::make_shared<BasicSemiExplicit<Real>>(), rk)
-  {
-    rk->system(this->system());
-  }
+  BasicProblem()
+    : Problem<Real, 2, 0, Integrator>("BasicProblem", std::make_unique<System>(), std::make_unique<Integrator>()) {}
 
-  ~BasicSemiExplicitProblem() {}
+  ~BasicProblem() {}
+
+  static Real time_start() {return 0.0;}
+
+  static Real time_end() {return 1.0;}
 
   VectorF b(VectorF const & x_ini, VectorF const & x_end) const override
   {
@@ -112,23 +193,21 @@ public:
     return Jb_x_end;
   }
 
-  VectorF analytical_solution(Real const t) const {
+  static VectorF analytical_solution(Real const t) {
     VectorF x;
-    constexpr Real c0{0.0};
-    constexpr Real c1{-1.0};
-    x << 0.5*t*t + c1*t + c0, t + c1;
+    x << 0.5*t*t - t, t - 1.0;
     return x;
   }
 
-  MatrixX analytical_solution(VectorX const & t) const {
+  static MatrixX analytical_solution(VectorX const & t) {
     MatrixX x(2, t.size());
-    for (Integer i{0}; i < t.size(); ++i) {x.col(i) = this->analytical_solution(t(i));}
+    for (Integer i{0}; i < t.size(); ++i) {
+      x.col(i) = BasicProblem<Real, System, Integrator>::analytical_solution(t(i));
+    }
     return x;
   }
 };
 
-template<typename Integrator>
-BasicSemiExplicitProblem(std::shared_ptr<Integrator>)
-    -> BasicSemiExplicitProblem<typename Integrator::real_type, Integrator>;
+//  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-#endif // TESTS_PROBLEMS_BASIC_SEMIEXPLICIT_HH
+#endif // TESTS_PROBLEMS_BASIC_HH

@@ -11,17 +11,15 @@
 #include <memory>
 
 #include "Sandals.hh"
-#include "Sandals/Problem.hh"
+
+#include "Sandals/RungeKutta/ExplicitEuler.hh" // ERK
+#include "Sandals/RungeKutta/Heun2.hh" // ERK
 #include "Sandals/RungeKutta/RK4.hh" // ERK
 #include "Sandals/RungeKutta/LobattoIIIA2.hh" // DIRK
 #include "Sandals/RungeKutta/RadauIIA5.hh" // IRK
 
-#include "BasicExplicit.hh"
-#include "BasicImplicit.hh"
-#include "BasicSemiExplicit.hh"
-
-#include "Shampine2Explicit.hh"
-
+#include "Basic.hh"
+#include "Shampine2.hh"
 
 #ifdef SANDALS_ENABLE_PLOTTING
 #include <TApplication.h>
@@ -57,7 +55,7 @@ using namespace Sandals;
 
 using Real = double;
 
-int main(int argc, char **argv) {
+int main(int argc, char ** argv) {
 
 #ifdef SANDALS_ENABLE_PLOTTING
   TApplication app("plot", &argc, argv);
@@ -68,9 +66,9 @@ int main(int argc, char **argv) {
 #endif
 
   // Istantiate the problems
-  Shampine2ExplicitProblem problem_explicit(std::make_shared<RadauIIA5<Real, 2>>());
-  BasicImplicitProblem problem_implicit(std::make_shared<LobattoIIIA2<Real, 2>>());
-  BasicSemiExplicitProblem problem_semiexplicit(std::make_shared<LobattoIIIA2<Real, 2>>());
+  Shampine2Problem<Real, Shampine2Explicit<Real>, Heun2<Real, 2>> problem_explicit;
+  Shampine2Problem<Real, Shampine2Implicit<Real>, Heun2<Real, 2>> problem_implicit;
+  Shampine2Problem<Real, Shampine2SemiExplicit<Real>, Heun2<Real, 2>> problem_semiexplicit;
 
   // Set verbose mode
   problem_explicit.verbose_mode(true);
@@ -81,11 +79,13 @@ int main(int argc, char **argv) {
   problem_semiexplicit.integrator()->verbose_mode(false);
 
   // Set solution parameters
-  static constexpr long num_points{10};
+  static constexpr long num_points{100};
   problem_explicit.subintervals(1);
   problem_implicit.subintervals(1);
   problem_semiexplicit.subintervals(1);
-  Eigen::Vector<Real, Eigen::Dynamic> time(Eigen::Vector<Real, Eigen::Dynamic>::LinSpaced(num_points, -0.1, 0.1));
+  Eigen::Vector<Real, Eigen::Dynamic> time(Eigen::Vector<Real, Eigen::Dynamic>::LinSpaced(
+    num_points, problem_explicit.time_start(), problem_explicit.time_end()
+  ));
   std::vector<Eigen::Vector<Real, 2>> guess(num_points, Eigen::Vector<Real, 2>::Zero());
 
   // Solve the problems with shooting
@@ -100,7 +100,7 @@ int main(int argc, char **argv) {
   auto esol = problem_explicit.solution();
   auto isol = problem_implicit.solution();
   auto ssol = problem_semiexplicit.solution();
-  auto asol = problem_explicit.analytical_solution(esol->t);
+  auto asol = problem_explicit.analytical_solution(esol.t);
 
   auto colors = matlab_lines_colormap();
 
@@ -108,10 +108,10 @@ int main(int argc, char **argv) {
   canvas->Divide(3, 1);
 
   canvas->cd(1);
-  TGraph *graph_ex = to_TGraph(esol->t, esol->x.row(0));
-  TGraph *graph_ey = to_TGraph(esol->t, esol->x.row(1));
-  TGraph *graph_ax = to_TGraph(esol->t, asol.row(0).transpose().eval());
-  TGraph *graph_ay = to_TGraph(esol->t, asol.row(1).transpose().eval());
+  TGraph *graph_ex = to_TGraph(esol.t, esol.eigen_x(0));
+  TGraph *graph_ey = to_TGraph(esol.t, esol.eigen_x(1));
+  TGraph *graph_ax = to_TGraph(esol.t, asol.row(0).transpose().eval());
+  TGraph *graph_ay = to_TGraph(esol.t, asol.row(1).transpose().eval());
   graph_ex->SetTitle("Explicit vs Analytical");
   graph_ex->SetLineColor(colors[0]); graph_ex->Draw("AL");
   graph_ey->SetLineColor(colors[1]); graph_ey->Draw("L SAME");
@@ -120,7 +120,7 @@ int main(int argc, char **argv) {
   graph_ex->GetXaxis()->SetTitle("t (s)");
   graph_ex->GetYaxis()->SetTitle("x, y (-)");
   graph_ex->GetXaxis()->SetLimits(time(0), time(Eigen::last));
-  //graph_ex->GetYaxis()->SetRangeUser(-1.25, -1.25);
+  graph_ex->GetYaxis()->SetRangeUser(-1.25, 0.25);
   TLegend *leg1 = new TLegend(0.6, 0.7, 0.9, 0.9);
   leg1->AddEntry(graph_ex, "x (explicit)", "l");
   leg1->AddEntry(graph_ey, "y (explicit)", "l");
@@ -129,8 +129,8 @@ int main(int argc, char **argv) {
   leg1->Draw();
 
   canvas->cd(2);
-  TGraph *graph_ix = to_TGraph(isol->t, isol->x.row(0));
-  TGraph *graph_iy = to_TGraph(isol->t, isol->x.row(1));
+  TGraph *graph_ix = to_TGraph(isol.t, isol.eigen_x(0));
+  TGraph *graph_iy = to_TGraph(isol.t, isol.eigen_x(1));
   graph_ix->SetTitle("Implicit vs Analytical");
   graph_ix->SetLineColor(colors[0]); graph_ix->SetLineStyle(9); graph_ix->Draw("AL");
   graph_iy->SetLineColor(colors[1]); graph_iy->SetLineStyle(9); graph_iy->Draw("L SAME");
@@ -148,8 +148,8 @@ int main(int argc, char **argv) {
   leg2->Draw();
 
   canvas->cd(3);
-  TGraph *graph_sx = to_TGraph(ssol->t, ssol->x.row(0));
-  TGraph *graph_sy = to_TGraph(ssol->t, ssol->x.row(1));
+  TGraph *graph_sx = to_TGraph(ssol.t, ssol.eigen_x(0));
+  TGraph *graph_sy = to_TGraph(ssol.t, ssol.eigen_x(1));
   graph_sx->SetTitle("Semi-Explicit vs Analytical");
   graph_sx->SetLineColor(colors[0]); graph_sx->SetLineStyle(7); graph_sx->Draw("AL");
   graph_sy->SetLineColor(colors[1]); graph_sy->SetLineStyle(7); graph_sy->Draw("L SAME");
@@ -172,4 +172,3 @@ int main(int argc, char **argv) {
 
   return 0;
 }
-

@@ -41,7 +41,7 @@ namespace Sandals {
   class Explicit : public Implicit<Real, N, M>
   {
   public:
-    using Pointer = std::shared_ptr<Explicit<Real, N, M>>; /**< Shared pointer to an explicit ODE system. */
+    using Pointer = std::unique_ptr<Explicit<Real, N, M>>; /**< Unique pointer to an explicit ODE system. */
     using VectorF = typename Implicit<Real, N, M>::VectorF; /**< Templetized vector type. */
     using MatrixJF = typename Implicit<Real, N, M>::MatrixJF; /**< Templetized matrix type. */
     using Type = typename Implicit<Real, N, M>::Type; /**< System type enumeration. */
@@ -58,7 +58,7 @@ namespace Sandals {
     /**
     * Class constructor for the explicit ODE system.
     */
-    Explicit() : Implicit<Real, N, M>(Type::EXPLICIT, "(missing name)") {}
+    Explicit() : Implicit<Real, N, M>(Type::EXPLICIT, "(undefined name)") {}
 
     /**
     * Class constructor for the explicit ODE system.
@@ -240,7 +240,7 @@ namespace Sandals {
   class ExplicitWrapper : public Explicit<Real, N, M>
   {
   public:
-    using Pointer = std::shared_ptr<ExplicitWrapper<Real, N, M>>; /**< Shared pointer to an explicit ODE system. */
+    using Pointer = std::unique_ptr<ExplicitWrapper<Real, N, M>>; /**< Unique pointer to an explicit ODE system. */
     using typename Explicit<Real, N, M>::VectorF; /**< Templetized vector type. */
     using typename Explicit<Real, N, M>::MatrixJF; /**< Templetized matrix type. */
     using typename Explicit<Real, N, M>::VectorH; /**< Templetized vector type. */

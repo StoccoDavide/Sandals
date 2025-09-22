@@ -90,7 +90,7 @@ namespace Sandals
     * Class constructor for a Runge-Kutta-Fehlberg 4(5) solver given a Tableau reference.
     * \param[in] t_system The system reference.
     */
-    Fehlberg45(System t_system) : RungeKutta<Real, 6, N, M>(Fehlberg45Tableau<Real>(), t_system) {}
+    Fehlberg45(System t_system) : RungeKutta<Real, 6, N, M>(Fehlberg45Tableau<Real>(), std::move(t_system)) {}
 
   }; // class Fehlberg45
 

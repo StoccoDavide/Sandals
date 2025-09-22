@@ -76,7 +76,7 @@ namespace Sandals
     * Class constructor for a Implicit Euler solver given a Tableau reference.
     * \param[in] t_system The system reference.
     */
-    ImplicitEuler(System t_system) : RungeKutta<Real, 1, N, M>(ImplicitEulerTableau<Real>(), t_system) {}
+    ImplicitEuler(System t_system) : RungeKutta<Real, 1, N, M>(ImplicitEulerTableau<Real>(), std::move(t_system)) {}
 
   }; // class ImplicitEuler
 

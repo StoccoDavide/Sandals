@@ -9,7 +9,7 @@ var class_sandals_1_1_linear_wrapper =
     [ "MatrixA", "class_sandals_1_1_linear_wrapper.html#ac70ff96e72edfe29ebe18e82894b4ebd", null ],
     [ "MatrixE", "class_sandals_1_1_linear_wrapper.html#af83ee41230b4fd6f2cae6b83dd0e05d3", null ],
     [ "MatrixJF", "class_sandals_1_1_linear_wrapper.html#aba50eaddcc5f090dc6b51a8a02038e42", null ],
-    [ "Pointer", "class_sandals_1_1_linear_wrapper.html#ad8af17ecbf34419270a729c670fea669", null ],
+    [ "Pointer", "class_sandals_1_1_linear_wrapper.html#aafde2af7ff1fb0e3987d0fa8a45a48db", null ],
     [ "VectorB", "class_sandals_1_1_linear_wrapper.html#af9815de50ee2531ca8d5ef1de3d95fbd", null ],
     [ "LinearWrapper", "class_sandals_1_1_linear_wrapper.html#a1282c5825b9db7e3891924ba13073c99", null ],
     [ "LinearWrapper", "class_sandals_1_1_linear_wrapper.html#a67be32678c4a6ab779f9c94b3015ec56", null ],

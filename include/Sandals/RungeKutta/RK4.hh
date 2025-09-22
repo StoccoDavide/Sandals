@@ -82,7 +82,7 @@ namespace Sandals
     * Class constructor for a Runge-Kutta order 4 solver given a Tableau reference.
     * \param[in] t_system The system reference.
     */
-    RK4(System t_system) : RungeKutta<Real, 4, N, M>(RK4Tableau<Real>(), t_system) {}
+    RK4(System t_system) : RungeKutta<Real, 4, N, M>(RK4Tableau<Real>(), std::move(t_system)) {}
 
   }; // class RK4
 

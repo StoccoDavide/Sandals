@@ -3,7 +3,7 @@ var class_sandals_1_1_semi_explicit =
     [ "MatrixA", "class_sandals_1_1_semi_explicit.html#ad85d83f491e3917774857b8390707ef3", null ],
     [ "MatrixJB", "class_sandals_1_1_semi_explicit.html#a465a77d69b5bb180c718c31e892ad06f", null ],
     [ "MatrixJF", "class_sandals_1_1_semi_explicit.html#a7095382445713d465e0726c8a65c13d9", null ],
-    [ "Pointer", "class_sandals_1_1_semi_explicit.html#a710a8bebd76a68b1d458b403d477623c", null ],
+    [ "Pointer", "class_sandals_1_1_semi_explicit.html#a12434c4f7b5e2b78b078f4a88ea878b5", null ],
     [ "TensorTA", "class_sandals_1_1_semi_explicit.html#ae04afcf2abd486185b62499b1d3a580d", null ],
     [ "Type", "class_sandals_1_1_semi_explicit.html#a4adff30aa88b46d34d4797bf2c44de81", null ],
     [ "VectorB", "class_sandals_1_1_semi_explicit.html#ac7eae290d59883f177c542b5a283122b", null ],

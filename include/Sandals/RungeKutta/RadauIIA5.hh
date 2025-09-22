@@ -92,7 +92,7 @@ namespace Sandals
     * Class constructor for a Radau IIA order 5 solver given a Tableau reference.
     * \param[in] t_system The system reference.
     */
-    RadauIIA5(System t_system) : RungeKutta<Real, 3, N, M>(RadauIIA5Tableau<Real>(), t_system) {}
+    RadauIIA5(System t_system) : RungeKutta<Real, 3, N, M>(RadauIIA5Tableau<Real>(), std::move(t_system)) {}
 
   }; // class RadauIIA5
 

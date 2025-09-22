@@ -80,7 +80,7 @@ namespace Sandals
     * solver given a Tableau reference.
     * \param[in] t_system The system reference.
     */
-    Heun2(System t_system) : RungeKutta<Real, 2, N, M>(Heun2Tableau<Real>(), t_system) {}
+    Heun2(System t_system) : RungeKutta<Real, 2, N, M>(Heun2Tableau<Real>(), std::move(t_system)) {}
 
   }; // class Heun2
 

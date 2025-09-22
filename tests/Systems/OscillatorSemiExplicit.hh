@@ -27,11 +27,12 @@ public:
   using MatrixJB = typename SemiExplicit<Real, 2, 1>::MatrixJB;
   using VectorH  = typename SemiExplicit<Real, 2, 1>::VectorH;
   using MatrixJH = typename SemiExplicit<Real, 2, 1>::MatrixJH;
+  using VectorX  = Eigen::Vector<Real, Eigen::Dynamic>;
+  using MatrixX  = Eigen::Matrix<Real, 2, Eigen::Dynamic>;
 
 private:
-  Real    m_m{1.0};        // Mass (kg)
-  Real    m_k{1.0};        // Spring constant (N/m)
-  VectorF m_ics{1.0, 0.0}; // Initial conditions
+  Real m_m{1.0}; // Mass (kg)
+  Real m_k{1.0}; // Spring constant (N/m)
 
 public:
   OscillatorSemiExplicit() : SemiExplicit<Real, 2, 1>("OscillatorSemiExplicit") {}
@@ -53,7 +54,7 @@ public:
     return TA_x;
   }
 
-  VectorB b(VectorF const &x, Real const /*t*/) const override
+  VectorB b(VectorF const & x, Real const /*t*/) const override
   {
     VectorF b;
     b << x(1), -this->m_k/this->m_m*x(0);
@@ -66,15 +67,15 @@ public:
     return Jb_x;
   }
 
-  Real energy(VectorF const &x) const {return this->m_m/2.0*x(1)*x(1) + this->m_k/2.0*x(0)*x(0);}
+  Real energy(VectorF const & x) const {return this->m_m/2.0*x(1)*x(1) + this->m_k/2.0*x(0)*x(0);}
 
-  VectorH h(VectorF const &x, Real const /*t*/) const override {
+  VectorH h(VectorF const & x, Real const /*t*/) const override {
     VectorH h;
-    h << this->energy(x) - this->energy(this->m_ics);
+    h << this->energy(x) - this->energy(OscillatorSemiExplicit::ics());
     return h;
   }
 
-  MatrixJH Jh_x(VectorF const &x, Real const /*t*/) const override {
+  MatrixJH Jh_x(VectorF const & x, Real const /*t*/) const override {
     MatrixJH Jh_x;
     Jh_x << this->m_k*x(0), this->m_m*x(1);
     return Jh_x;
@@ -89,13 +90,13 @@ public:
     return x;
   }
 
-  MatrixX analytical_solution(VectorX const &t) const {
+  MatrixX analytical_solution(VectorX const & t) const {
     MatrixX x(2, t.size());
-    for (int i = 0; i < t.size(); ++i) {x.col(i) = this->analytical_solution(t(i));}
+    for (int i = 0; i < t.size(); ++i) {x.col(i) = OscillatorSemiExplicit::analytical_solution(t(i));}
     return x;
   }
 
-  VectorF const & ics() const {return this->m_ics;}
+  static VectorF ics() {return VectorF::Unit(0, 2);}
 };
 
 #endif // TESTS_SYSTEMS_OSCILLATOR_SEMIEXPLICIT_HH

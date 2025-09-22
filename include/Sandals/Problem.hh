@@ -41,9 +41,10 @@ namespace Sandals
     SANDALS_BASIC_CONSTANTS(Real) /**< Basic constants. */
     const Real SQRT_EPSILON{std::sqrt(EPSILON)}; /**< Square root of machine epsilon epsilon static constant value. */ \
 
-    using SystemPtr = typename Implicit<Real, N, M>::Pointer; /**< Shared pointer to an ODE/DAE system. */
-    using IntegratorPtr = std::shared_ptr<Integrator>; /**< Shared pointer to a Runge-Kutta method. */
-    using SolutionPtr = std::shared_ptr<Solution<Real, N, M>>; /**< Shared pointer to a solution. */
+    using System = Implicit<Real, N, M>; /**< Unique pointer to an ODE/DAE system. */
+    using SystemPtr = typename Implicit<Real, N, M>::Pointer; /**< Unique pointer to an ODE/DAE system. */
+    using IntegratorPtr = std::unique_ptr<Integrator>; /**< Unique pointer to a Runge-Kutta method. */
+    using SolutionPtr = std::unique_ptr<Solution<Real, N, M>>; /**< Unique pointer to a solution. */
 
     using VectorX = typename Integrator::VectorX;
     using MatrixJX = typename Integrator::MatrixJX;
@@ -53,28 +54,27 @@ namespace Sandals
     using MatrixM = typename Solution<Real, N, M>::MatrixM;
 
   private:
-    std::string   m_name{"(undefined)"}; /**< Name of the problem. */
-    SystemPtr     m_system;              /**< ODE/DAE system. */
-    IntegratorPtr m_integrator;          /**< Runge-Kutta method. */
-    SolutionPtr   m_solution;            /**< Solution of the problem. */
+    std::string   m_name{"(undefined name)"}; /**< Name of the problem. */
+    IntegratorPtr m_integrator;               /**< Runge-Kutta method. */
+    SolutionPtr   m_solution;                 /**< Solution of the problem. */
 
-    bool    m_verbose{false};          /**< Verbose mode boolean. */
-    Real    m_tolerance{SQRT_EPSILON}; /**< Tolerance for the solution. */
-    Integer m_max_iterations{100};     /**< Maximum number of iterations. */
-    Integer m_subintervals{1};         /**< Number of subintervals for the shooting methods. */
+    bool    m_verbose{false};                /**< Verbose mode boolean. */
+    Real    m_tolerance{std::sqrt(EPSILON)}; /**< Tolerance for the solution. */
+    Integer m_max_iterations{100};           /**< Maximum number of iterations. */
+    Integer m_subintervals{1};               /**< Number of subintervals for the shooting methods. */
 
   public:
     /**
     * Class constructor for the boundary value problem (BVP).
     * \param[in] t_name The name of the problem.
-    * \param[in] t_system The ODE/DAE system shared pointer.
-    * \param[in] t_integrator The integrator shared pointer.
+    * \param[in] t_system The ODE/DAE system unique pointer.
+    * \param[in] t_integrator The integrator unique pointer.
     */
     Problem(std::string t_name, SystemPtr t_system, IntegratorPtr t_integrator)
-      : m_name(t_name), m_integrator(t_integrator)
+      : m_name(t_name), m_integrator(std::move(t_integrator))
     {
-      this->m_integrator->system(t_system);
-      this->m_solution = std::make_shared<Solution<Real, N, M>>();
+      this->m_integrator->system(std::move(t_system));
+      this->m_solution = std::make_unique<Solution<Real, N, M>>();
     }
 
     /**
@@ -98,13 +98,13 @@ namespace Sandals
     * Get the ODE/DAE system pointer.
     * \return The ODE/DAE system pointer.
     */
-    SystemPtr system() {return this->m_integrator->system();}
+    System * system() {return this->m_integrator->system();}
 
     /**
     * Get the ODE/DAE system const pointer.
     * \return The ODE/DAE system const pointer.
     */
-    SystemPtr const system() const {return this->m_integrator->system();}
+    System const * system() const {return this->m_integrator->system();}
 
     /**
     * Set the ODE/DAE system pointer.
@@ -116,31 +116,31 @@ namespace Sandals
     * Get the integrator pointer.
     * \return The integrator pointer.
     */
-    IntegratorPtr integrator() {return this->m_integrator;}
+    Integrator * integrator() {return this->m_integrator.get();}
 
     /**
     * Get the integrator const pointer.
     * \return The integrator const pointer.
     */
-    IntegratorPtr const integrator() const {return this->m_integrator;}
+    Integrator const * integrator() const {return this->m_integrator.get();}
 
     /**
     * Set the integrator pointer.
     * \param[in] t_integrator The integrator pointer.
     */
-    void integrator(IntegratorPtr t_integrator) {this->m_integrator = t_integrator;}
+    void integrator(IntegratorPtr t_integrator) {this->m_integrator = std::move(t_integrator);}
 
     /**
     * Get the solution pointer.
     * \return The solution pointer.
     */
-    SolutionPtr solution() {return this->m_solution;}
+    Solution<Real, N, M> & solution() {return *this->m_solution;}
 
     /**
     * Get the solution const pointer.
     * \return The solution const pointer.
     */
-    SolutionPtr const solution() const {return this->m_solution;}
+    Solution<Real, N, M> const & solution() const {return *this->m_solution;}
 
     /**
     * Get the verbose mode.

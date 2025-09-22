@@ -5,7 +5,7 @@ var class_sandals_1_1_explicit_wrapper =
     [ "FunctionID", "class_sandals_1_1_explicit_wrapper.html#aa263d29c4f5d7ab171f6fe928c9a4d45", null ],
     [ "FunctionJF", "class_sandals_1_1_explicit_wrapper.html#a18e929a15d1ab81edce1f73d3b232b31", null ],
     [ "FunctionJH", "class_sandals_1_1_explicit_wrapper.html#ad48f0d34d2a0678e7cb71b936211797a", null ],
-    [ "Pointer", "class_sandals_1_1_explicit_wrapper.html#a497860927cef68e96ecc1a2dedec0999", null ],
+    [ "Pointer", "class_sandals_1_1_explicit_wrapper.html#abab0b8dbdcf7d99538661a4d8d2524bd", null ],
     [ "ExplicitWrapper", "class_sandals_1_1_explicit_wrapper.html#ade4317fa686eda59204431c1221ff244", null ],
     [ "ExplicitWrapper", "class_sandals_1_1_explicit_wrapper.html#a49a4d72322f27d807b4518a1a9610f00", null ],
     [ "~ExplicitWrapper", "class_sandals_1_1_explicit_wrapper.html#aea242842f5ce6ed0d9b197ff5e7da7cb", null ],

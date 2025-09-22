@@ -142,10 +142,11 @@ $(function(){initNavTree('class_sandals_1_1_runge_kutta.html','','class_sandals_
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-types" class="groupheader"><a id="pub-types" name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a83637d45eb70ea3243d64893753da49c" id="r_a83637d45eb70ea3243d64893753da49c"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a83637d45eb70ea3243d64893753da49c">real_type</a> = Real</td></tr>
+<tr class="memitem:a4ee50bc60372ee8bb364d6c8a03a37da" id="r_a4ee50bc60372ee8bb364d6c8a03a37da"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4ee50bc60372ee8bb364d6c8a03a37da">Scalar</a> = Real</td></tr>
 <tr class="memitem:a6e7c649dd4dda6179ac007d1782383c9" id="r_a6e7c649dd4dda6179ac007d1782383c9"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6e7c649dd4dda6179ac007d1782383c9">VectorX</a> = Eigen::Vector&lt;Real, Eigen::Dynamic&gt;</td></tr>
 <tr class="memitem:aafe93029d65e4891d968bc0aabfe9c07" id="r_aafe93029d65e4891d968bc0aabfe9c07"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aafe93029d65e4891d968bc0aabfe9c07">MatrixJX</a> = Eigen::Matrix&lt;Real, N, N&gt;</td></tr>
-<tr class="memitem:a29df6fe078d0e5f4f3a9aa7de8aba02d" id="r_a29df6fe078d0e5f4f3a9aa7de8aba02d"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a29df6fe078d0e5f4f3a9aa7de8aba02d">System</a> = typename <a class="el" href="class_sandals_1_1_implicit.html">Implicit</a>&lt;Real, N, M&gt;::Pointer</td></tr>
+<tr class="memitem:ad54fcf60323a45e0013d4574c5646259" id="r_ad54fcf60323a45e0013d4574c5646259"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad54fcf60323a45e0013d4574c5646259">System</a> = <a class="el" href="class_sandals_1_1_implicit.html">Implicit</a>&lt;Real, N, M&gt;</td></tr>
+<tr class="memitem:a4ae590ba41ce52ba6e68553c1040ceb8" id="r_a4ae590ba41ce52ba6e68553c1040ceb8"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4ae590ba41ce52ba6e68553c1040ceb8">SystemPtr</a> = typename <a class="el" href="class_sandals_1_1_implicit.html">Implicit</a>&lt;Real, N, M&gt;::Pointer</td></tr>
 <tr class="memitem:a548521671a4c85bfdd73d7979cf431f4" id="r_a548521671a4c85bfdd73d7979cf431f4"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a548521671a4c85bfdd73d7979cf431f4">Type</a> = typename <a class="el" href="struct_sandals_1_1_tableau.html">Tableau</a>&lt;Real, S&gt;::Type</td></tr>
 <tr class="memitem:ad905ea001ac4127795725dd8bc8faf5f" id="r_ad905ea001ac4127795725dd8bc8faf5f"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad905ea001ac4127795725dd8bc8faf5f">Time</a> = Eigen::Vector&lt;Real, Eigen::Dynamic&gt;</td></tr>
 </table><table class="memberdecls">
@@ -154,7 +155,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a2636bba440d01c00f8bb8d926060e842" id="r_a2636bba440d01c00f8bb8d926060e842"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2636bba440d01c00f8bb8d926060e842">RungeKutta</a> (const <a class="el" href="class_sandals_1_1_runge_kutta.html">RungeKutta</a> &amp;)=delete</td></tr>
 <tr class="memitem:a18bcb8de5b2e4a71b5ed33561043e5b9" id="r_a18bcb8de5b2e4a71b5ed33561043e5b9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_sandals_1_1_runge_kutta.html">RungeKutta</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a18bcb8de5b2e4a71b5ed33561043e5b9">operator=</a> (<a class="el" href="class_sandals_1_1_runge_kutta.html">RungeKutta</a> const &amp;)=delete</td></tr>
 <tr class="memitem:a3ff0b79b898cb27fd7a33a0e30c9da41" id="r_a3ff0b79b898cb27fd7a33a0e30c9da41"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3ff0b79b898cb27fd7a33a0e30c9da41">RungeKutta</a> (<a class="el" href="struct_sandals_1_1_tableau.html">Tableau</a>&lt; Real, S &gt; const &amp;t_tableau)</td></tr>
-<tr class="memitem:a2e5439cc41572563bc926b0e7339059e" id="r_a2e5439cc41572563bc926b0e7339059e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2e5439cc41572563bc926b0e7339059e">RungeKutta</a> (<a class="el" href="struct_sandals_1_1_tableau.html">Tableau</a>&lt; Real, S &gt; const &amp;t_tableau, <a class="el" href="#a29df6fe078d0e5f4f3a9aa7de8aba02d">System</a> t_system)</td></tr>
+<tr class="memitem:ad478f7c5ffa5f26e1b42b801109263b0" id="r_ad478f7c5ffa5f26e1b42b801109263b0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad478f7c5ffa5f26e1b42b801109263b0">RungeKutta</a> (<a class="el" href="struct_sandals_1_1_tableau.html">Tableau</a>&lt; Real, S &gt; const &amp;t_tableau, <a class="el" href="#a4ae590ba41ce52ba6e68553c1040ceb8">SystemPtr</a> t_system)</td></tr>
 <tr class="memitem:ad149d0cc375350b56dbbdb964ff068f7" id="r_ad149d0cc375350b56dbbdb964ff068f7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a548521671a4c85bfdd73d7979cf431f4">Type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad149d0cc375350b56dbbdb964ff068f7">type</a> () const</td></tr>
 <tr class="memitem:a01d08e13af16af4bf0a741efcbf59029" id="r_a01d08e13af16af4bf0a741efcbf59029"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a01d08e13af16af4bf0a741efcbf59029">is_erk</a> () const</td></tr>
 <tr class="memitem:aa72d80f97725b2318ff8cb4cb3a80f85" id="r_aa72d80f97725b2318ff8cb4cb3a80f85"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa72d80f97725b2318ff8cb4cb3a80f85">is_irk</a> () const</td></tr>
@@ -168,8 +169,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a53b3ea9f4425939d709e5a045805b1ba" id="r_a53b3ea9f4425939d709e5a045805b1ba"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a0de3c7401358746b3c56207b684f7691">VectorS</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a53b3ea9f4425939d709e5a045805b1ba">b</a> () const</td></tr>
 <tr class="memitem:a22979b4a9c5a8aa0eee984505fb39e87" id="r_a22979b4a9c5a8aa0eee984505fb39e87"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a0de3c7401358746b3c56207b684f7691">VectorS</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a22979b4a9c5a8aa0eee984505fb39e87">b_embedded</a> () const</td></tr>
 <tr class="memitem:a63a7ec16bd770bc90e218dbf76923e9b" id="r_a63a7ec16bd770bc90e218dbf76923e9b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a0de3c7401358746b3c56207b684f7691">VectorS</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a63a7ec16bd770bc90e218dbf76923e9b">c</a> () const</td></tr>
-<tr class="memitem:a1db088c1892855607d1b6e61ce5b163d" id="r_a1db088c1892855607d1b6e61ce5b163d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a29df6fe078d0e5f4f3a9aa7de8aba02d">System</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1db088c1892855607d1b6e61ce5b163d">system</a> ()</td></tr>
-<tr class="memitem:ab84869075568d96dff9d44a746b9d7e4" id="r_ab84869075568d96dff9d44a746b9d7e4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab84869075568d96dff9d44a746b9d7e4">system</a> (<a class="el" href="#a29df6fe078d0e5f4f3a9aa7de8aba02d">System</a> t_system)</td></tr>
+<tr class="memitem:ac0dce338bb6230b8c7973ad04573058e" id="r_ac0dce338bb6230b8c7973ad04573058e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#ad54fcf60323a45e0013d4574c5646259">System</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac0dce338bb6230b8c7973ad04573058e">system</a> ()</td></tr>
+<tr class="memitem:a1019b9be44c53af5a47b27d06e1a5203" id="r_a1019b9be44c53af5a47b27d06e1a5203"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#ad54fcf60323a45e0013d4574c5646259">System</a> const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1019b9be44c53af5a47b27d06e1a5203">system</a> () const</td></tr>
+<tr class="memitem:aed9d115856d4b7da7617717af35c9971" id="r_aed9d115856d4b7da7617717af35c9971"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aed9d115856d4b7da7617717af35c9971">system</a> (<a class="el" href="#a4ae590ba41ce52ba6e68553c1040ceb8">SystemPtr</a> t_system)</td></tr>
 <tr class="memitem:a7903e6da15d8ae026b72bfaaf41d33ab" id="r_a7903e6da15d8ae026b72bfaaf41d33ab"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7903e6da15d8ae026b72bfaaf41d33ab">implicit_system</a> (typename <a class="el" href="class_sandals_1_1_implicit_wrapper.html">ImplicitWrapper</a>&lt; Real, N, M &gt;::FunctionF F, typename <a class="el" href="class_sandals_1_1_implicit_wrapper.html">ImplicitWrapper</a>&lt; Real, N, M &gt;::FunctionJF JF_x, typename <a class="el" href="class_sandals_1_1_implicit_wrapper.html">ImplicitWrapper</a>&lt; Real, N, M &gt;::FunctionJF JF_x_dot, typename <a class="el" href="class_sandals_1_1_implicit_wrapper.html">ImplicitWrapper</a>&lt; Real, N, M &gt;::FunctionH h=<a class="el" href="class_sandals_1_1_implicit_wrapper.html">ImplicitWrapper</a>&lt; Real, N, M &gt;::DefaultH, typename <a class="el" href="class_sandals_1_1_implicit_wrapper.html">ImplicitWrapper</a>&lt; Real, N, M &gt;::FunctionJH Jh_x=<a class="el" href="class_sandals_1_1_implicit_wrapper.html">ImplicitWrapper</a>&lt; Real, N, M &gt;::DefaultJH, typename <a class="el" href="class_sandals_1_1_implicit_wrapper.html">ImplicitWrapper</a>&lt; Real, N, M &gt;::FunctionID in_domain=<a class="el" href="class_sandals_1_1_implicit_wrapper.html">ImplicitWrapper</a>&lt; Real, N, M &gt;::DefaultID)</td></tr>
 <tr class="memitem:afcdf184bbbe71e7936e481f470b60a76" id="r_afcdf184bbbe71e7936e481f470b60a76"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afcdf184bbbe71e7936e481f470b60a76">implicit_system</a> (std::string <a class="el" href="#a719fdcc801d0f0827bc471dc58e0c620">name</a>, typename <a class="el" href="class_sandals_1_1_implicit_wrapper.html">ImplicitWrapper</a>&lt; Real, N, M &gt;::FunctionF F, typename <a class="el" href="class_sandals_1_1_implicit_wrapper.html">ImplicitWrapper</a>&lt; Real, N, M &gt;::FunctionJF JF_x, typename <a class="el" href="class_sandals_1_1_implicit_wrapper.html">ImplicitWrapper</a>&lt; Real, N, M &gt;::FunctionJF JF_x_dot, typename <a class="el" href="class_sandals_1_1_implicit_wrapper.html">ImplicitWrapper</a>&lt; Real, N, M &gt;::FunctionH h=<a class="el" href="class_sandals_1_1_implicit_wrapper.html">ImplicitWrapper</a>&lt; Real, N, M &gt;::DefaultH, typename <a class="el" href="class_sandals_1_1_implicit_wrapper.html">ImplicitWrapper</a>&lt; Real, N, M &gt;::FunctionJH Jh_x=<a class="el" href="class_sandals_1_1_implicit_wrapper.html">ImplicitWrapper</a>&lt; Real, N, M &gt;::DefaultJH, typename <a class="el" href="class_sandals_1_1_implicit_wrapper.html">ImplicitWrapper</a>&lt; Real, N, M &gt;::FunctionID in_domain=<a class="el" href="class_sandals_1_1_implicit_wrapper.html">ImplicitWrapper</a>&lt; Real, N, M &gt;::DefaultID)</td></tr>
 <tr class="memitem:a941ba4866228284e0be88d7c1e34d3f8" id="r_a941ba4866228284e0be88d7c1e34d3f8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a941ba4866228284e0be88d7c1e34d3f8">explicit_system</a> (typename <a class="el" href="class_sandals_1_1_explicit_wrapper.html">ExplicitWrapper</a>&lt; Real, N, M &gt;::FunctionF f, typename <a class="el" href="class_sandals_1_1_explicit_wrapper.html">ExplicitWrapper</a>&lt; Real, N, M &gt;::FunctionJF Jf_x, typename <a class="el" href="class_sandals_1_1_explicit_wrapper.html">ExplicitWrapper</a>&lt; Real, N, M &gt;::FunctionH h=<a class="el" href="class_sandals_1_1_explicit_wrapper.html">ExplicitWrapper</a>&lt; Real, N, M &gt;::DefaultH, typename <a class="el" href="class_sandals_1_1_explicit_wrapper.html">ExplicitWrapper</a>&lt; Real, N, M &gt;::FunctionJH Jh_x=<a class="el" href="class_sandals_1_1_explicit_wrapper.html">ExplicitWrapper</a>&lt; Real, N, M &gt;::DefaultJH, typename <a class="el" href="class_sandals_1_1_explicit_wrapper.html">ExplicitWrapper</a>&lt; Real, N, M &gt;::FunctionID in_domain=<a class="el" href="class_sandals_1_1_explicit_wrapper.html">ExplicitWrapper</a>&lt; Real, N, M &gt;::DefaultID)</td></tr>
@@ -276,7 +278,7 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:afae7d4ccf127f65b06dfa55fcc1b3314" id="r_afae7d4ccf127f65b06dfa55fcc1b3314"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#af759b115312eeb7dd27de038b9a0fcbd">NewtonK</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afae7d4ccf127f65b06dfa55fcc1b3314">m_newtonK</a></td></tr>
 <tr class="memitem:a94fd96f0ffa122d5d873f6bdc400f0e1" id="r_a94fd96f0ffa122d5d873f6bdc400f0e1"><td class="memItemLeft" align="right" valign="top">Eigen::FullPivLU&lt; <a class="el" href="#a45188c6c7dca9698ff7f3beca21ce98c">MatrixP</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a94fd96f0ffa122d5d873f6bdc400f0e1">m_lu</a></td></tr>
 <tr class="memitem:a9a5dd7fe85648fa2ac98ea187186539e" id="r_a9a5dd7fe85648fa2ac98ea187186539e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_sandals_1_1_tableau.html">Tableau</a>&lt; Real, S &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9a5dd7fe85648fa2ac98ea187186539e">m_tableau</a></td></tr>
-<tr class="memitem:a974fe9dc2d0075bf254c23f7aae5b53c" id="r_a974fe9dc2d0075bf254c23f7aae5b53c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a29df6fe078d0e5f4f3a9aa7de8aba02d">System</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a974fe9dc2d0075bf254c23f7aae5b53c">m_system</a></td></tr>
+<tr class="memitem:a7ba51367d7d321bdb0512b969608b62b" id="r_a7ba51367d7d321bdb0512b969608b62b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a4ae590ba41ce52ba6e68553c1040ceb8">SystemPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7ba51367d7d321bdb0512b969608b62b">m_system</a></td></tr>
 <tr class="memitem:a153ee4e61fc14061e4eb208c2b085ea4" id="r_a153ee4e61fc14061e4eb208c2b085ea4"><td class="memItemLeft" align="right" valign="top">Real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a153ee4e61fc14061e4eb208c2b085ea4">m_absolute_tolerance</a> {1e-6}</td></tr>
 <tr class="memitem:a32f5ab526c0ad401e9c56acab0c473bd" id="r_a32f5ab526c0ad401e9c56acab0c473bd"><td class="memItemLeft" align="right" valign="top">Real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a32f5ab526c0ad401e9c56acab0c473bd">m_relative_tolerance</a> {1e-3}</td></tr>
 <tr class="memitem:abd3fe6ce6913f01a59d70c7bb4e659cd" id="r_abd3fe6ce6913f01a59d70c7bb4e659cd"><td class="memItemLeft" align="right" valign="top">Real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abd3fe6ce6913f01a59d70c7bb4e659cd">m_safety_factor</a> {0.9}</td></tr>
@@ -1077,8 +1079,8 @@ template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581
 
 </div>
 </div>
-<a id="a83637d45eb70ea3243d64893753da49c" name="a83637d45eb70ea3243d64893753da49c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a83637d45eb70ea3243d64893753da49c">&#9670;&#160;</a></span>real_type</h2>
+<a id="a4ee50bc60372ee8bb364d6c8a03a37da" name="a4ee50bc60372ee8bb364d6c8a03a37da"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4ee50bc60372ee8bb364d6c8a03a37da">&#9670;&#160;</a></span>Scalar</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1086,16 +1088,16 @@ template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581
 template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> S, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="class_sandals_1_1_runge_kutta.html">Sandals::RungeKutta</a>&lt; Real, S, N, M &gt;::real_type = Real</td>
+          <td class="memname">using <a class="el" href="class_sandals_1_1_runge_kutta.html">Sandals::RungeKutta</a>&lt; Real, S, N, M &gt;::Scalar = Real</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Scalar number type. </p>
+<p><a class="el" href="#a4ee50bc60372ee8bb364d6c8a03a37da">Scalar</a> number type. </p>
 
 </div>
 </div>
-<a id="a29df6fe078d0e5f4f3a9aa7de8aba02d" name="a29df6fe078d0e5f4f3a9aa7de8aba02d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a29df6fe078d0e5f4f3a9aa7de8aba02d">&#9670;&#160;</a></span>System</h2>
+<a id="ad54fcf60323a45e0013d4574c5646259" name="ad54fcf60323a45e0013d4574c5646259"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad54fcf60323a45e0013d4574c5646259">&#9670;&#160;</a></span>System</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1103,11 +1105,28 @@ template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581
 template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> S, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="class_sandals_1_1_runge_kutta.html">Sandals::RungeKutta</a>&lt; Real, S, N, M &gt;::System = typename <a class="el" href="class_sandals_1_1_implicit.html">Implicit</a>&lt;Real, N, M&gt;::Pointer</td>
+          <td class="memname">using <a class="el" href="class_sandals_1_1_runge_kutta.html">Sandals::RungeKutta</a>&lt; Real, S, N, M &gt;::System = <a class="el" href="class_sandals_1_1_implicit.html">Implicit</a>&lt;Real, N, M&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Shared pointer to an implicit ODE/DAE system. </p>
+<p><a class="el" href="class_sandals_1_1_implicit.html" title="Class container for the system of implicit ODEs/DAEs.">Implicit</a> ODE/DAE system. </p>
+
+</div>
+</div>
+<a id="a4ae590ba41ce52ba6e68553c1040ceb8" name="a4ae590ba41ce52ba6e68553c1040ceb8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4ae590ba41ce52ba6e68553c1040ceb8">&#9670;&#160;</a></span>SystemPtr</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> S, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="class_sandals_1_1_runge_kutta.html">Sandals::RungeKutta</a>&lt; Real, S, N, M &gt;::SystemPtr = typename <a class="el" href="class_sandals_1_1_implicit.html">Implicit</a>&lt;Real, N, M&gt;::Pointer</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Unique pointer to an implicit ODE/DAE system. </p>
 
 </div>
 </div>
@@ -1349,8 +1368,8 @@ template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581
 
 </div>
 </div>
-<a id="a2e5439cc41572563bc926b0e7339059e" name="a2e5439cc41572563bc926b0e7339059e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2e5439cc41572563bc926b0e7339059e">&#9670;&#160;</a></span>RungeKutta() <span class="overload">[3/3]</span></h2>
+<a id="ad478f7c5ffa5f26e1b42b801109263b0" name="ad478f7c5ffa5f26e1b42b801109263b0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad478f7c5ffa5f26e1b42b801109263b0">&#9670;&#160;</a></span>RungeKutta() <span class="overload">[3/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1368,7 +1387,7 @@ template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="#a29df6fe078d0e5f4f3a9aa7de8aba02d">System</a></td>          <td class="paramname"><span class="paramname"><em>t_system</em></span>&#160;)</td>
+          <td class="paramtype"><a class="el" href="#a4ae590ba41ce52ba6e68553c1040ceb8">SystemPtr</a></td>          <td class="paramname"><span class="paramname"><em>t_system</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -1380,7 +1399,7 @@ template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581
 <p>Class constructor for the Runge-Kutta method. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">t_tableau</td><td>The <a class="el" href="struct_sandals_1_1_tableau.html" title="Struct container for the Butcher tableau of a Runge-Kutta method.">Tableau</a> reference. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">t_system</td><td>The ODE/DAE system shared pointer. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">t_system</td><td>The ODE/DAE system unique pointer. </td></tr>
   </table>
   </dd>
 </dl>
@@ -4845,8 +4864,8 @@ template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581
 
 </div>
 </div>
-<a id="a1db088c1892855607d1b6e61ce5b163d" name="a1db088c1892855607d1b6e61ce5b163d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1db088c1892855607d1b6e61ce5b163d">&#9670;&#160;</a></span>system() <span class="overload">[1/2]</span></h2>
+<a id="ac0dce338bb6230b8c7973ad04573058e" name="ac0dce338bb6230b8c7973ad04573058e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac0dce338bb6230b8c7973ad04573058e">&#9670;&#160;</a></span>system() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -4857,7 +4876,7 @@ template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="#a29df6fe078d0e5f4f3a9aa7de8aba02d">System</a> <a class="el" href="class_sandals_1_1_runge_kutta.html">Sandals::RungeKutta</a>&lt; Real, S, N, M &gt;::system </td>
+          <td class="memname"><a class="el" href="#ad54fcf60323a45e0013d4574c5646259">System</a> * <a class="el" href="class_sandals_1_1_runge_kutta.html">Sandals::RungeKutta</a>&lt; Real, S, N, M &gt;::system </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
@@ -4869,12 +4888,40 @@ template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Get the ODE/DAE system pointer. </p><dl class="section return"><dt>Returns</dt><dd>The ODE/DAE system pointer. </dd></dl>
+<p>Get the ODE/DAE system object pointer. </p><dl class="section return"><dt>Returns</dt><dd>The ODE/DAE system object pointer. </dd></dl>
 
 </div>
 </div>
-<a id="ab84869075568d96dff9d44a746b9d7e4" name="ab84869075568d96dff9d44a746b9d7e4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab84869075568d96dff9d44a746b9d7e4">&#9670;&#160;</a></span>system() <span class="overload">[2/2]</span></h2>
+<a id="a1019b9be44c53af5a47b27d06e1a5203" name="a1019b9be44c53af5a47b27d06e1a5203"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1019b9be44c53af5a47b27d06e1a5203">&#9670;&#160;</a></span>system() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> S, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#ad54fcf60323a45e0013d4574c5646259">System</a> const  * <a class="el" href="class_sandals_1_1_runge_kutta.html">Sandals::RungeKutta</a>&lt; Real, S, N, M &gt;::system </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Get the ODE/DAE system object pointer. </p><dl class="section return"><dt>Returns</dt><dd>The ODE/DAE system object pointer. </dd></dl>
+
+</div>
+</div>
+<a id="aed9d115856d4b7da7617717af35c9971" name="aed9d115856d4b7da7617717af35c9971"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aed9d115856d4b7da7617717af35c9971">&#9670;&#160;</a></span>system() <span class="overload">[3/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -4887,7 +4934,7 @@ template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581
         <tr>
           <td class="memname">void <a class="el" href="class_sandals_1_1_runge_kutta.html">Sandals::RungeKutta</a>&lt; Real, S, N, M &gt;::system </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="#a29df6fe078d0e5f4f3a9aa7de8aba02d">System</a></td>          <td class="paramname"><span class="paramname"><em>t_system</em></span></td><td>)</td>
+          <td class="paramtype"><a class="el" href="#a4ae590ba41ce52ba6e68553c1040ceb8">SystemPtr</a></td>          <td class="paramname"><span class="paramname"><em>t_system</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -4897,9 +4944,9 @@ template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Set the ODE/DAE system pointer. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Set the ODE/DAE system. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">t_system</td><td>The ODE/DAE system pointer. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">t_system</td><td>The ODE/DAE system. </td></tr>
   </table>
   </dd>
 </dl>
@@ -5427,8 +5474,8 @@ template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581
 
 </div>
 </div>
-<a id="a974fe9dc2d0075bf254c23f7aae5b53c" name="a974fe9dc2d0075bf254c23f7aae5b53c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a974fe9dc2d0075bf254c23f7aae5b53c">&#9670;&#160;</a></span>m_system</h2>
+<a id="a7ba51367d7d321bdb0512b969608b62b" name="a7ba51367d7d321bdb0512b969608b62b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7ba51367d7d321bdb0512b969608b62b">&#9670;&#160;</a></span>m_system</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -5439,7 +5486,7 @@ template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="#a29df6fe078d0e5f4f3a9aa7de8aba02d">System</a> <a class="el" href="class_sandals_1_1_runge_kutta.html">Sandals::RungeKutta</a>&lt; Real, S, N, M &gt;::m_system</td>
+          <td class="memname"><a class="el" href="#a4ae590ba41ce52ba6e68553c1040ceb8">SystemPtr</a> <a class="el" href="class_sandals_1_1_runge_kutta.html">Sandals::RungeKutta</a>&lt; Real, S, N, M &gt;::m_system</td>
         </tr>
       </table>
   </td>

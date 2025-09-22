@@ -81,7 +81,7 @@ namespace Sandals
     * solver given a Tableau reference.
     * \param[in] t_system The system reference.
     */
-    SSPRK22star(System t_system) : RungeKutta<Real, 2, N, M>(SSPRK22starTableau<Real>(), t_system) {}
+    SSPRK22star(System t_system) : RungeKutta<Real, 2, N, M>(SSPRK22starTableau<Real>(), std::move(t_system)) {}
 
   }; // class SSPRK22star
 

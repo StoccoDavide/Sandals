@@ -40,7 +40,7 @@ namespace Sandals {
   class Linear : public Explicit<Real, N, M>
   {
   public:
-    using Pointer = std::shared_ptr<SemiExplicit<Real, N, M>>; /**< Shared pointer to a linear ODE/DAE system. */
+    using Pointer = std::unique_ptr<SemiExplicit<Real, N, M>>; /**< Unique pointer to a linear ODE/DAE system. */
     using VectorF = typename Explicit<Real, N, M>::VectorF; /**< Templetized vector type. */
     using MatrixJF = typename Explicit<Real, N, M>::MatrixJF; /**< Templetized matrix type. */
     using MatrixE = typename Explicit<Real, N, M>::MatrixJF; /**< Templetized matrix type. */
@@ -55,7 +55,7 @@ namespace Sandals {
     /**
     * Class constructor for the linear ODE/DAE system.
     */
-    Linear() : Explicit<Real, N, M>(Type::LINEAR, "(missing name)") {}
+    Linear() : Explicit<Real, N, M>(Type::LINEAR, "(undefined name)") {}
 
     /**
     * Class constructor for the linear ODE/DAE system.
@@ -199,7 +199,7 @@ namespace Sandals {
   class LinearWrapper : public Linear<Real, N, M>
   {
   public:
-    using Pointer = std::shared_ptr<LinearWrapper<Real, N, M>>; /**< Shared pointer to a linear ODE/DAE system. */
+    using Pointer = std::unique_ptr<LinearWrapper<Real, N, M>>; /**< Unique pointer to a linear ODE/DAE system. */
     using typename Linear<Real, N, M>::VectorF; /**< Templetized vector type. */
     using MatrixJF = typename Linear<Real, N, M>::MatrixJF; /**< Templetized matrix type. */
     using MatrixE = typename Linear<Real, N, M>::MatrixJF; /**< Templetized matrix type. */
@@ -237,7 +237,7 @@ namespace Sandals {
     * \param[in] t_in_domain The in-domain function.
     */
     LinearWrapper(FunctionE t_E, FunctionA t_A, FunctionB t_b, FunctionH t_h = DefaultH, FunctionJH
-      t_Jh_x = DefaultJH, FunctionID t_in_domain = DefaultID) : Linear<Real, N, M>("(missing name)"),
+      t_Jh_x = DefaultJH, FunctionID t_in_domain = DefaultID) : Linear<Real, N, M>("(undefined name)"),
       m_E(t_E), m_A(t_A), m_b(t_b), m_h(t_h), m_Jh_x(t_Jh_x), m_in_domain(t_in_domain)
     {}
 

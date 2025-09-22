@@ -83,7 +83,7 @@ namespace Sandals
     * Class constructor for a 5-stage Runge-Kutta-Chebyshev order 1 solver given a Tableau reference.
     * \param[in] t_system The system reference.
     */
-    Chebyshev51(System t_system) : RungeKutta<Real, 5, N, M>(Chebyshev51Tableau<Real>(), t_system) {}
+    Chebyshev51(System t_system) : RungeKutta<Real, 5, N, M>(Chebyshev51Tableau<Real>(), std::move(t_system)) {}
 
   }; // class Chebyshev51
 

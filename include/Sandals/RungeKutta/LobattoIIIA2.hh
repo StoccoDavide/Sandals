@@ -78,7 +78,7 @@ namespace Sandals
     * Class constructor for a Lobatto IIIA order 2 solver given a Tableau reference.
     * \param[in] t_system The system reference.
     */
-    LobattoIIIA2(System t_system) : RungeKutta<Real, 2, N, M>(LobattoIIIA2Tableau<Real>(), t_system) {}
+    LobattoIIIA2(System t_system) : RungeKutta<Real, 2, N, M>(LobattoIIIA2Tableau<Real>(), std::move(t_system)) {}
 
   }; // class LobattoIIIA2
 

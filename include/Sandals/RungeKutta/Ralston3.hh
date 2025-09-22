@@ -80,7 +80,7 @@ namespace Sandals
     * Class constructor for a Ralston's order 3 solver given a Tableau reference.
     * \param[in] t_system The system reference.
     */
-    Ralston3(System t_system) : RungeKutta<Real, 3, N, M>(Ralston3Tableau<Real>(), t_system) {}
+    Ralston3(System t_system) : RungeKutta<Real, 3, N, M>(Ralston3Tableau<Real>(), std::move(t_system)) {}
 
   }; // class Ralston3
 

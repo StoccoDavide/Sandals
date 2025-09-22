@@ -82,7 +82,7 @@ namespace Sandals
     * Class constructor for a Gauss-Legendre order 2 solver given a Tableau reference.
     * \param[in] t_system The system reference.
     */
-    GaussLegendre2(System t_system) : RungeKutta<Real, 1, N, M>(GaussLegendre2Tableau<Real>(), t_system) {}
+    GaussLegendre2(System t_system) : RungeKutta<Real, 1, N, M>(GaussLegendre2Tableau<Real>(), std::move(t_system)) {}
 
   }; // class GaussLegendre2
 

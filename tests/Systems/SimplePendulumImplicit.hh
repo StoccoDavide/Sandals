@@ -30,23 +30,22 @@ public:
   using MatrixX  = Eigen::Matrix<Real, 2, Eigen::Dynamic>;
 
 private:
-  Real    m_l{1.0};        // Length of the pendulum (m)
-  Real    m_g{9.81};       // Gravity acceleration (m/s^2)
-  VectorF m_ics{1.0, 0.0}; // Initial conditions
+  Real m_l{1.0}; // Length of the pendulum (m)
+  Real m_g{9.81}; // Gravity acceleration (m/s^2)
 
 public:
   SimplePendulumImplicit() : Implicit<Real, 2, 0>("SimplePendulumImplicit") {}
 
   ~SimplePendulumImplicit() {}
 
-  VectorF F(VectorF const &x, VectorF const &x_dot, Real const /*t*/) const override
+  VectorF F(VectorF const & x, VectorF const & x_dot, Real const /*t*/) const override
   {
     VectorF F;
     F << x_dot(0) - x(1), x_dot(1) + this->m_g / this->m_l * std::sin(x(0));
     return F;
   }
 
-  MatrixJF JF_x(VectorF const &x, VectorF const & /*x_dot*/, Real const /*t*/) const override
+  MatrixJF JF_x(VectorF const & x, VectorF const & /*x_dot*/, Real const /*t*/) const override
   {
     MatrixJF JF_x;
     JF_x << 0.0, -1.0, this->m_g / this->m_l * std::cos(x(0)), 0.0;
@@ -62,7 +61,7 @@ public:
 
   bool in_domain(VectorF const & /*x*/, Real const /*t*/) const override {return true;}
 
-  VectorF const & ics() const {return this->m_ics;}
+  static VectorF ics() {return VectorF::Unit(0, 2);}
 };
 
 #endif // TESTS_SYSTEMS_SIMPLE_PENDULUM_IMPLICIT_HH

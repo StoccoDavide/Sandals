@@ -78,7 +78,7 @@ namespace Sandals
     * Class constructor for a minimal truncation error order 2 solver given a Tableau reference.
     * \param[in] t_system The system reference.
     */
-    MTE22(System t_system) : RungeKutta<Real, 2, N, M>(MTE22Tableau<Real>(), t_system) {}
+    MTE22(System t_system) : RungeKutta<Real, 2, N, M>(MTE22Tableau<Real>(), std::move(t_system)) {}
 
   }; // class MTE22
 

@@ -122,7 +122,7 @@ public:
     return TA_x;
   }
 
-  VectorB b(VectorF const &x, Real const /*t*/)  const override
+  VectorB b(VectorF const & x, Real const /*t*/)  const override
   {
     #define CMD "Sandals::ThreeBodySemiExplicit::f(...): "
 
@@ -152,7 +152,7 @@ public:
     #undef CMD
   }
 
-  MatrixJB Jb_x(VectorF const &x, Real const /*t*/) const override
+  MatrixJB Jb_x(VectorF const & x, Real const /*t*/) const override
   {
     #define CMD "Sandals::ThreeBodySemiExplicit::Jf_x(...): "
 
@@ -224,7 +224,7 @@ public:
 
   bool in_domain(VectorF const & /*x*/, Real const /*t*/) const override {return true;}
 
-  VectorF ics() const
+  static VectorF ics()
   {
     VectorF ics;
     ics <<

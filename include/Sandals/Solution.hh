@@ -54,15 +54,13 @@ namespace Sandals {
   * \tparam Real The scalar number type.
   * \tparam N The dimension of the ODE/DAE system.
   * \tparam M The dimension of the invariants manifold.
-  * \note The solution is stored in a row-major format. This allows to extract contiguous
-  * vectors from the states and invariants matrices, which is useful for I/O operations.
   */
   template <typename Real, Integer N, Integer M = 0>
   struct Solution
   {
     using Vector  = Eigen::Vector<Real, Eigen::Dynamic>; /**< Templetized vector type. */
-    using MatrixN = Eigen::Matrix<Real, N, Eigen::Dynamic, Eigen::RowMajor>; /**< Templetized matrix type. */
-    using MatrixM = Eigen::Matrix<Real, M, Eigen::Dynamic, Eigen::RowMajor>; /**< Templetized matrix type. */
+    using MatrixN = Eigen::Matrix<Real, N, Eigen::Dynamic>; /**< Templetized matrix type. */
+    using MatrixM = Eigen::Matrix<Real, M, Eigen::Dynamic>; /**< Templetized matrix type. */
 
     Vector  t; /**< Independent variable (or time) solution vector \f$ \mathbf{t} \f$. */
     MatrixN x; /**< States solution matrix \f$ \mathbf{X} \f$. */
@@ -116,7 +114,7 @@ namespace Sandals {
     */
     bool is_empty() const
     {
-      return this->t.size() == 0 && this->x.cols()== 0 && this->h.cols() == 0;
+      return this->t.size() == 0 && this->x.cols() == 0 && this->h.cols() == 0;
     }
 
     /**
@@ -138,7 +136,7 @@ namespace Sandals {
     * Get the independent variable (or time) vector \f$ \mathbf{t} \f$ as Eigen library vector.
     * \return The independent variable (or time) vector \f$ \mathbf{t} \f$ as Eigen library vector.
     */
-    Vector eig_t() const {return this->t;}
+    Vector eigen_t() const {return this->t;}
 
     /**
     * Get the \f$ i \f$-th state vector \f$ \mathbf{x}_i \f$ as a standard library vector.
@@ -149,6 +147,16 @@ namespace Sandals {
     {
       Vector tmp(this->x.row(i));
       return std::vector<Real>(tmp.data(), tmp.data() + tmp.size());
+    }
+
+    /**
+    * Get the i\f$ i \f$-th state vector \f$ \mathbf{x}_i \f$ as a Eigen library vector.
+    * \param[in] i The index of the state vector.
+    * \return The \f$ i \f$-th state vector as a Eigen library vector.
+    */
+    Vector eigen_x(Integer i) const
+    {
+      return this->x.row(i).transpose().eval();
     }
 
     /**
@@ -166,10 +174,10 @@ namespace Sandals {
     * Get a map of the states vectors \f$ \mathbf{X} \f$ as Eigen library vectors.
     * \return A map of the states vectors as Eigen library vectors.
     */
-    std::map<Integer, Vector> eig_x() const
+    std::map<Integer, Vector> eigen_x() const
     {
       std::map<Integer, Vector> x_map;
-      for (Integer i{0}; i < N; ++i) {x_map[i] = this->x.row(i);}
+      for (Integer i{0}; i < N; ++i) {x_map[i] = this->x.row(i).transpose().eval();}
       return x_map;
     }
 
@@ -190,10 +198,10 @@ namespace Sandals {
     * \param[in] names The names of the states vectors.
     * \return A map of the states vectors as Eigen library vectors.
     */
-    std::map<std::string, Vector> eig_x(std::vector<std::string> const & names) const
+    std::map<std::string, Vector> eigen_x(std::vector<std::string> const & names) const
     {
       std::map<std::string, Vector> x_map;
-      for (Integer i{0}; i < N; ++i) {x_map[names[i]] = this->x.row(i);}
+      for (Integer i{0}; i < N; ++i) {x_map[names[i]] = this->x.row(i).transpose().eval();}
       return x_map;
     }
 
@@ -206,6 +214,16 @@ namespace Sandals {
     {
       Vector tmp(this->h.row(i));
       return std::vector<Real>(tmp.data(), tmp.data() + tmp.size());
+    }
+
+     /**
+    * Get the \f$ i \f$-th invariants vector \f$ \mathbf{h}_i \f$ as a Eigen library vector.
+    * \param[in] i The index of the invariant vector.
+    * \return The \f$ i \f$-th invariants vector as a Eigen library vector.
+    */
+    Vector eigen_h(Integer const i) const
+    {
+      return this->h.row(i).transpose().eval();
     }
 
     /**
@@ -223,10 +241,10 @@ namespace Sandals {
     * Get a map of the invariants vectors \f$ \mathbf{H} \f$ as Eigen library vectors.
     * \return A map of the invariants vectors as Eigen library vectors.
     */
-    std::map<Integer, Vector> eig_h() const
+    std::map<Integer, Vector> eigen_h() const
     {
       std::map<Integer, Vector> h_map;
-      for (Integer i{0}; i < M; ++i) {h_map[i] = this->h.row(i);}
+      for (Integer i{0}; i < M; ++i) {h_map[i] = this->h.row(i).transpose().eval();}
       return h_map;
     }
 
@@ -247,10 +265,10 @@ namespace Sandals {
     * \param[in] names The names of the invariants vectors.
     * \return A map of the invariants vectors as Eigen library vectors.
     */
-    std::map<std::string, Vector> eig_h(std::vector<std::string> const & names) const
+    std::map<std::string, Vector> eigen_h(std::vector<std::string> const & names) const
     {
       std::map<std::string, Vector> h_map;
-      for (Integer i{0}; i < M; ++i) {h_map[names[i]] = this->h.row(i);}
+      for (Integer i{0}; i < M; ++i) {h_map[names[i]] = this->h.row(i).transpose().eval();}
       return h_map;
     }
   };

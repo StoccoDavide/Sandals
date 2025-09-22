@@ -1,9 +1,9 @@
 var searchData=
 [
   ['e_0',['E',['../class_sandals_1_1_linear.html#a502afce3734a2d5e0d3432d049d309a8',1,'Sandals::Linear::E()'],['../class_sandals_1_1_linear_wrapper.html#a871a1ae11492caabcfc3c42945144402',1,'Sandals::LinearWrapper::E()'],['../class_sandals_1_1_linear_wrapper.html#ab99d2f4069e97cb908fa13073e2b41db',1,'Sandals::LinearWrapper::E(Real const t) const override']]],
-  ['eig_5fh_1',['eig_h',['../struct_sandals_1_1_solution.html#aeea73e61c7fb1e8467f8f619b44dabdc',1,'Sandals::Solution::eig_h() const'],['../struct_sandals_1_1_solution.html#a654c0b4f97ada9bcace0529e532b41dc',1,'Sandals::Solution::eig_h(std::vector&lt; std::string &gt; const &amp;names) const']]],
-  ['eig_5ft_2',['eig_t',['../struct_sandals_1_1_solution.html#a2f1d1dbe74461a6e2dbf93ac13a827ca',1,'Sandals::Solution']]],
-  ['eig_5fx_3',['eig_x',['../struct_sandals_1_1_solution.html#adea05b6a7a23d6ef2ac63624bb6a854e',1,'Sandals::Solution::eig_x() const'],['../struct_sandals_1_1_solution.html#a268de3f243f43d864aa7f0ac8f562e3b',1,'Sandals::Solution::eig_x(std::vector&lt; std::string &gt; const &amp;names) const']]],
+  ['eigen_5fh_1',['eigen_h',['../struct_sandals_1_1_solution.html#a428c972235e68c7ab2d271e544f314a9',1,'Sandals::Solution::eigen_h(Integer const i) const'],['../struct_sandals_1_1_solution.html#a37ac6642556fe01bd19f87791dc07d19',1,'Sandals::Solution::eigen_h() const'],['../struct_sandals_1_1_solution.html#a6b30ec8cee74c3ecbc27908cdba73ba7',1,'Sandals::Solution::eigen_h(std::vector&lt; std::string &gt; const &amp;names) const']]],
+  ['eigen_5ft_2',['eigen_t',['../struct_sandals_1_1_solution.html#a1e4fb8cec906e2544538dbc7868f6483',1,'Sandals::Solution']]],
+  ['eigen_5fx_3',['eigen_x',['../struct_sandals_1_1_solution.html#a264a93a6d8576147aa13002e44e6715c',1,'Sandals::Solution::eigen_x(Integer i) const'],['../struct_sandals_1_1_solution.html#a79e5c4d0cc6cca26cc2217a244091e06',1,'Sandals::Solution::eigen_x() const'],['../struct_sandals_1_1_solution.html#a1934e6691bfb9838cbd7ced562ef3308',1,'Sandals::Solution::eigen_x(std::vector&lt; std::string &gt; const &amp;names) const']]],
   ['elapsed_5fms_4',['elapsed_ms',['../class_sandals_1_1_tic_toc.html#a8533f3b6e2a6f30f82ec0822b166a148',1,'Sandals::TicToc']]],
   ['elapsed_5fs_5',['elapsed_s',['../class_sandals_1_1_tic_toc.html#a9e791cf6c241c00788b723dac3b0a94d',1,'Sandals::TicToc']]],
   ['elapsed_5fus_6',['elapsed_us',['../class_sandals_1_1_tic_toc.html#a1059604acc7fc19f3498b4e1bb755797',1,'Sandals::TicToc']]],

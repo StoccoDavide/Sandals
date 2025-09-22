@@ -76,7 +76,7 @@ namespace Sandals
     * Class constructor for a Explicit Euler solver given a Tableau reference.
     * \param[in] t_system The system reference.
     */
-    ExplicitEuler(System t_system) : RungeKutta<Real, 1, N, M>(ExplicitEulerTableau<Real>(), t_system) {}
+    ExplicitEuler(System t_system) : RungeKutta<Real, 1, N, M>(ExplicitEulerTableau<Real>(), std::move(t_system)) {}
 
   }; // class ExplicitEuler
 

@@ -33,9 +33,8 @@ public:
   using MatrixX  = Eigen::Matrix<Real, 2, Eigen::Dynamic>;
 
 private:
-  Real    m_l{1.0};        // Length of the pendulum (m)
-  Real    m_g{9.81};       // Gravity acceleration (m/s^2)
-  VectorF m_ics{1.0, 0.0}; // Initial conditions
+  Real m_l{1.0}; // Length of the pendulum (m)
+  Real m_g{9.81}; // Gravity acceleration (m/s^2)
 
 public:
   SimplePendulumSemiExplicit() : SemiExplicit<double, 2, 0>("SimplePendulumSemiExplicit") {}
@@ -57,14 +56,14 @@ public:
     return TA_x;
   }
 
-  VectorB b(VectorF const &x, Real const /*t*/) const override
+  VectorB b(VectorF const & x, Real const /*t*/) const override
   {
     VectorB b;
     b << x(1), -this->m_g / this->m_l * std::sin(x(0));
     return b;
   }
 
-  MatrixJB Jb_x(VectorF const &x, Real const /*t*/) const override
+  MatrixJB Jb_x(VectorF const & x, Real const /*t*/) const override
   {
     MatrixJB Jb_x;
     Jb_x << 0.0, 1.0, -this->m_g / this->m_l * std::cos(x(0)), 0.0;
@@ -77,8 +76,7 @@ public:
 
   bool in_domain(VectorF const & /*x*/, Real const /*t*/) const override {return true;}
 
-  VectorF const & ics() const {return this->m_ics;}
-
+  static VectorF ics() {return VectorF::Unit(0, 2);}
 };
 
 #endif // TESTS_SYSTEMS_SIMPLE_PENDULUM_SEMIEXPLICIT_HH
