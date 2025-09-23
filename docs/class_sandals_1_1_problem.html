@@ -146,7 +146,8 @@ Public Types</h2></td></tr>
 <tr class="memitem:ae5658919c6f06fc9a54e9a09e7a6b2ae" id="r_ae5658919c6f06fc9a54e9a09e7a6b2ae"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae5658919c6f06fc9a54e9a09e7a6b2ae">SystemPtr</a> = typename <a class="el" href="class_sandals_1_1_implicit.html">Implicit</a>&lt;Real, N, M&gt;::Pointer</td></tr>
 <tr class="memitem:a032d24ecbe59187f11b3ff75342f3a44" id="r_a032d24ecbe59187f11b3ff75342f3a44"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a032d24ecbe59187f11b3ff75342f3a44">IntegratorPtr</a> = std::unique_ptr&lt;Integrator&gt;</td></tr>
 <tr class="memitem:ade5cf4d14e51628b683c056e12600c7e" id="r_ade5cf4d14e51628b683c056e12600c7e"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ade5cf4d14e51628b683c056e12600c7e">SolutionPtr</a> = std::unique_ptr&lt;<a class="el" href="struct_sandals_1_1_solution.html">Solution</a>&lt;Real, N, M&gt;&gt;</td></tr>
-<tr class="memitem:a708a2817c578917ee4ba1618eeeb3648" id="r_a708a2817c578917ee4ba1618eeeb3648"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a708a2817c578917ee4ba1618eeeb3648">VectorX</a> = typename Integrator::VectorX</td></tr>
+<tr class="memitem:aeb0cf1d868c5e684e908c0e408fcd47b" id="r_aeb0cf1d868c5e684e908c0e408fcd47b"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aeb0cf1d868c5e684e908c0e408fcd47b">VectorX</a> = Eigen::Vector&lt;Real, Eigen::Dynamic&gt;</td></tr>
+<tr class="memitem:a05a533c777643fd0dd1ad648bb7f8d1c" id="r_a05a533c777643fd0dd1ad648bb7f8d1c"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a05a533c777643fd0dd1ad648bb7f8d1c">MatrixX</a> = Eigen::Matrix&lt;Real, N, Eigen::Dynamic&gt;</td></tr>
 <tr class="memitem:ac1cb5525e81abfcbe1fc85ab6a2f5e78" id="r_ac1cb5525e81abfcbe1fc85ab6a2f5e78"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac1cb5525e81abfcbe1fc85ab6a2f5e78">MatrixJX</a> = typename Integrator::MatrixJX</td></tr>
 <tr class="memitem:a73ea74089f00f9f2d68ad3bfcbb7dda7" id="r_a73ea74089f00f9f2d68ad3bfcbb7dda7"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a73ea74089f00f9f2d68ad3bfcbb7dda7">VectorF</a> = typename <a class="el" href="class_sandals_1_1_implicit.html">Implicit</a>&lt;Real, N, M&gt;::VectorF</td></tr>
 <tr class="memitem:a13120c7cd40d5b185d0b9eeb18f5e697" id="r_a13120c7cd40d5b185d0b9eeb18f5e697"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a13120c7cd40d5b185d0b9eeb18f5e697">MatrixJF</a> = typename <a class="el" href="class_sandals_1_1_implicit.html">Implicit</a>&lt;Real, N, M&gt;::MatrixJF</td></tr>
@@ -180,9 +181,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a96a2d04e29792a61ef986e17f7b40202" id="r_a96a2d04e29792a61ef986e17f7b40202"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="#a73ea74089f00f9f2d68ad3bfcbb7dda7">VectorF</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a96a2d04e29792a61ef986e17f7b40202">b</a> (<a class="el" href="#a73ea74089f00f9f2d68ad3bfcbb7dda7">VectorF</a> const &amp;x_ini, <a class="el" href="#a73ea74089f00f9f2d68ad3bfcbb7dda7">VectorF</a> const &amp;x_end) const =0</td></tr>
 <tr class="memitem:a95244cf2ad082153f399f70d55f3e7f5" id="r_a95244cf2ad082153f399f70d55f3e7f5"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="#a13120c7cd40d5b185d0b9eeb18f5e697">MatrixJF</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a95244cf2ad082153f399f70d55f3e7f5">Jb_x_ini</a> (<a class="el" href="#a73ea74089f00f9f2d68ad3bfcbb7dda7">VectorF</a> const &amp;x_ini, <a class="el" href="#a73ea74089f00f9f2d68ad3bfcbb7dda7">VectorF</a> const &amp;x_end) const =0</td></tr>
 <tr class="memitem:afc01a21e7c4a897dd071b4b23e34d984" id="r_afc01a21e7c4a897dd071b4b23e34d984"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="#a13120c7cd40d5b185d0b9eeb18f5e697">MatrixJF</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afc01a21e7c4a897dd071b4b23e34d984">Jb_x_end</a> (<a class="el" href="#a73ea74089f00f9f2d68ad3bfcbb7dda7">VectorF</a> const &amp;x_ini, <a class="el" href="#a73ea74089f00f9f2d68ad3bfcbb7dda7">VectorF</a> const &amp;x_end) const =0</td></tr>
-<tr class="memitem:ab8521cdf4e236e631d179c45826abe85" id="r_ab8521cdf4e236e631d179c45826abe85"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab8521cdf4e236e631d179c45826abe85">single_shooting</a> (<a class="el" href="#a708a2817c578917ee4ba1618eeeb3648">VectorX</a> const &amp;t_mesh, <a class="el" href="#a73ea74089f00f9f2d68ad3bfcbb7dda7">VectorF</a> const &amp;ics)</td></tr>
-<tr class="memitem:a9223ad957724ce4f2fa3d92f950df06b" id="r_a9223ad957724ce4f2fa3d92f950df06b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9223ad957724ce4f2fa3d92f950df06b">multiple_shooting</a> (<a class="el" href="#a708a2817c578917ee4ba1618eeeb3648">VectorX</a> const &amp;t_mesh, std::vector&lt; <a class="el" href="#a73ea74089f00f9f2d68ad3bfcbb7dda7">VectorF</a> &gt; const &amp;x_guess)</td></tr>
-<tr class="memitem:ae0338d25a357478f71d23ece4b15f358" id="r_ae0338d25a357478f71d23ece4b15f358"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae0338d25a357478f71d23ece4b15f358">multiple_shooting</a> (<a class="el" href="#a708a2817c578917ee4ba1618eeeb3648">VectorX</a> const &amp;t_mesh, <a class="el" href="#af6fe402b97094519714a1e1b81e70232">MatrixM</a> const &amp;x_guess)</td></tr>
+<tr class="memitem:ab8521cdf4e236e631d179c45826abe85" id="r_ab8521cdf4e236e631d179c45826abe85"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab8521cdf4e236e631d179c45826abe85">single_shooting</a> (<a class="el" href="#aeb0cf1d868c5e684e908c0e408fcd47b">VectorX</a> const &amp;t_mesh, <a class="el" href="#a73ea74089f00f9f2d68ad3bfcbb7dda7">VectorF</a> const &amp;ics)</td></tr>
+<tr class="memitem:ad19084464ee4bbdca220d2e7b6847c3a" id="r_ad19084464ee4bbdca220d2e7b6847c3a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad19084464ee4bbdca220d2e7b6847c3a">multiple_shooting</a> (<a class="el" href="#aeb0cf1d868c5e684e908c0e408fcd47b">VectorX</a> const &amp;t_mesh, <a class="el" href="#a05a533c777643fd0dd1ad648bb7f8d1c">MatrixX</a> const &amp;x_guess)</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -290,6 +290,23 @@ template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581
 
 </div>
 </div>
+<a id="a05a533c777643fd0dd1ad648bb7f8d1c" name="a05a533c777643fd0dd1ad648bb7f8d1c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a05a533c777643fd0dd1ad648bb7f8d1c">&#9670;&#160;</a></span>MatrixX</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M, typename Integrator&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="class_sandals_1_1_problem.html">Sandals::Problem</a>&lt; Real, N, M, Integrator &gt;::MatrixX = Eigen::Matrix&lt;Real, N, Eigen::Dynamic&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Dynamic matrix of real numbers. </p>
+
+</div>
+</div>
 <a id="ade5cf4d14e51628b683c056e12600c7e" name="ade5cf4d14e51628b683c056e12600c7e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ade5cf4d14e51628b683c056e12600c7e">&#9670;&#160;</a></span>SolutionPtr</h2>
 
@@ -357,8 +374,8 @@ template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581
 
 </div>
 </div>
-<a id="a708a2817c578917ee4ba1618eeeb3648" name="a708a2817c578917ee4ba1618eeeb3648"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a708a2817c578917ee4ba1618eeeb3648">&#9670;&#160;</a></span>VectorX</h2>
+<a id="aeb0cf1d868c5e684e908c0e408fcd47b" name="aeb0cf1d868c5e684e908c0e408fcd47b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeb0cf1d868c5e684e908c0e408fcd47b">&#9670;&#160;</a></span>VectorX</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -366,10 +383,11 @@ template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581
 template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M, typename Integrator&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="class_sandals_1_1_problem.html">Sandals::Problem</a>&lt; Real, N, M, Integrator &gt;::VectorX = typename Integrator::VectorX</td>
+          <td class="memname">using <a class="el" href="class_sandals_1_1_problem.html">Sandals::Problem</a>&lt; Real, N, M, Integrator &gt;::VectorX = Eigen::Vector&lt;Real, Eigen::Dynamic&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Dynamic vector of real numbers. </p>
 
 </div>
 </div>
@@ -775,8 +793,8 @@ template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581
 
 </div>
 </div>
-<a id="ae0338d25a357478f71d23ece4b15f358" name="ae0338d25a357478f71d23ece4b15f358"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae0338d25a357478f71d23ece4b15f358">&#9670;&#160;</a></span>multiple_shooting() <span class="overload">[1/2]</span></h2>
+<a id="ad19084464ee4bbdca220d2e7b6847c3a" name="ad19084464ee4bbdca220d2e7b6847c3a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad19084464ee4bbdca220d2e7b6847c3a">&#9670;&#160;</a></span>multiple_shooting()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -789,52 +807,12 @@ template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581
         <tr>
           <td class="memname">bool <a class="el" href="class_sandals_1_1_problem.html">Sandals::Problem</a>&lt; Real, N, M, Integrator &gt;::multiple_shooting </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="#a708a2817c578917ee4ba1618eeeb3648">VectorX</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>t_mesh</em></span>, </td>
+          <td class="paramtype"><a class="el" href="#aeb0cf1d868c5e684e908c0e408fcd47b">VectorX</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>t_mesh</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="#af6fe402b97094519714a1e1b81e70232">MatrixM</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>x_guess</em></span>&#160;)</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Solve the boundary value problem (BVP) using the multiple shooting method. </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">t_mesh</td><td>Independent variable (or time) mesh \( \mathbf{t} \). </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">ics</td><td>Initial conditions \( \mathbf{x}(t = 0) \). </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">x_guess</td><td>Initial guess for the states at the mesh nodes. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>True if the system is successfully solved, false otherwise. </dd></dl>
-
-</div>
-</div>
-<a id="a9223ad957724ce4f2fa3d92f950df06b" name="a9223ad957724ce4f2fa3d92f950df06b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9223ad957724ce4f2fa3d92f950df06b">&#9670;&#160;</a></span>multiple_shooting() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M, typename Integrator&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool <a class="el" href="class_sandals_1_1_problem.html">Sandals::Problem</a>&lt; Real, N, M, Integrator &gt;::multiple_shooting </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="#a708a2817c578917ee4ba1618eeeb3648">VectorX</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>t_mesh</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::vector&lt; <a class="el" href="#a73ea74089f00f9f2d68ad3bfcbb7dda7">VectorF</a> &gt; const &amp;</td>          <td class="paramname"><span class="paramname"><em>x_guess</em></span>&#160;)</td>
+          <td class="paramtype"><a class="el" href="#a05a533c777643fd0dd1ad648bb7f8d1c">MatrixX</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>x_guess</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -930,7 +908,7 @@ template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581
         <tr>
           <td class="memname">bool <a class="el" href="class_sandals_1_1_problem.html">Sandals::Problem</a>&lt; Real, N, M, Integrator &gt;::single_shooting </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="#a708a2817c578917ee4ba1618eeeb3648">VectorX</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>t_mesh</em></span>, </td>
+          <td class="paramtype"><a class="el" href="#aeb0cf1d868c5e684e908c0e408fcd47b">VectorX</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>t_mesh</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>

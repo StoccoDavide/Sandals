@@ -253,6 +253,7 @@ Static Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a8f3fbbfb40701c98c1371ec84a7a5012" id="r_a8f3fbbfb40701c98c1371ec84a7a5012"><td class="memItemLeft" align="right" valign="top">const Real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8f3fbbfb40701c98c1371ec84a7a5012">SQRT_EPSILON</a> {std::sqrt(EPSILON)}</td></tr>
+<tr class="memitem:afbf6657628b86865c088dba408721dd2" id="r_afbf6657628b86865c088dba408721dd2"><td class="memItemLeft" align="right" valign="top">const Real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afbf6657628b86865c088dba408721dd2">CBRT_EPSILON</a> {std::cbrt(EPSILON)}</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pri-types" class="groupheader"><a id="pri-types" name="pri-types"></a>
 Private Types</h2></td></tr>
@@ -341,10 +342,10 @@ ERK methods for explicit dynamic systems</h3>
 <p> In matrix form, this can be expressed as                        </p><p class="formulaDsp">
 \[    \begin{bmatrix}
       \mathbf{I} &amp; \mathbf{0} &amp; \cdots &amp; \cdots &amp; \mathbf{0} \\
-      a_{21} &amp; \mathbf{I} &amp; \ddots &amp; \mathbf{0} &amp; \vdots \\
-      a_{31} &amp; a_{32} &amp; \mathbf{I} &amp; \ddots &amp; \vdots \\
-      \vdots &amp; \vdots &amp; \ddots &amp; \ddots &amp; \mathbf{0} \\
-      a_{s1} &amp; a_{s2} &amp; \cdots &amp; a_{s,s-1} &amp; \mathbf{I}
+      \mathbf{0} &amp; \mathbf{I} &amp; \ddots &amp; \mathbf{0} &amp; \vdots \\
+      \vdots &amp; \vdots &amp; \ddots &amp; \ddots &amp; \vdots \\
+      \vdots &amp; \mathbf{0} &amp; \ddots &amp; \mathbf{I} &amp; \mathbf{0} \\
+      \mathbf{0} &amp; \cdots &amp; \cdots &amp; \mathbf{0} &amp; \mathbf{I} \\
     \end{bmatrix}
     \begin{bmatrix}
       \mathbf{K}_1 \\
@@ -406,7 +407,7 @@ Derivatives of \(\mathbf{K}\) with respect to \(\mathbf{x}_k\)</h4>
 Derivatives of \(\mathbf{x}_{k+1}\) with respect to \(\mathbf{x}_k\)</h4>
 <p>The derivatives of the next state \(\mathbf{x}_{k+1}\) with respect to the states \(\mathbf{x}\) can be computed as    </p><p class="formulaDsp">
 \[    \displaystyle\frac{\partial\mathbf{x}_{k+1}}{\partial\mathbf{x}_k} =
-    \mathbf{I} + h_k \displaystyle\sum_{i=1}^s b_i \frac{\partial\mathbf{K}_i}{\partial\mathbf{x}_k} \text{.}
+    \mathbf{I} + \displaystyle\sum_{i=1}^s b_i \frac{\partial\mathbf{K}_i}{\partial\mathbf{x}_k} \text{.}
 \]
 </p>
 <p> where the derivatives of the intermediate variables \(\mathbf{K}_i\) with respect to the states \(\mathbf{x}_k\) are computed as described above.</p>
@@ -545,7 +546,7 @@ Derivatives of \(\mathbf{K}\) with respect to \(\mathbf{x}_k\)</h4>
 Derivatives of \(\mathbf{x}_{k+1}\) with respect to \(\mathbf{x}_k\)</h4>
 <p>The derivatives of the next state \(\mathbf{x}_{k+1}\) with respect to the states \(\mathbf{x}\) can be computed as    </p><p class="formulaDsp">
 \[    \displaystyle\frac{\partial\mathbf{x}_{k+1}}{\partial\mathbf{x}_k} =
-    \mathbf{I} + h_k \displaystyle\sum_{i=1}^s b_i \frac{\partial\mathbf{K}_i}{\partial\mathbf{x}_k} \text{.}
+    \mathbf{I} + \displaystyle\sum_{i=1}^s b_i \frac{\partial\mathbf{K}_i}{\partial\mathbf{x}_k} \text{.}
 \]
 </p>
 <p> where the derivatives of the intermediate variables \(\mathbf{K}_i\) with respect to the states \(\mathbf{x}_k\) are computed as described above.</p>
@@ -685,7 +686,7 @@ Derivatives of \(\mathbf{K}\) with respect to \(\mathbf{x}_k\)</h4>
 Derivatives of \(\mathbf{x}_{k+1}\) with respect to \(\mathbf{x}_k\)</h4>
 <p>The derivatives of the next state \(\mathbf{x}_{k+1}\) with respect to the states \(\mathbf{x}\) can be computed as    </p><p class="formulaDsp">
 \[    \displaystyle\frac{\partial\mathbf{x}_{k+1}}{\partial\mathbf{x}_k} =
-    \mathbf{I} + h_k \displaystyle\sum_{i=1}^s b_i \frac{\partial\mathbf{K}_i}{\partial\mathbf{x}_k} \text{.}
+    \mathbf{I} + \displaystyle\sum_{i=1}^s b_i \frac{\partial\mathbf{K}_i}{\partial\mathbf{x}_k} \text{.}
 \]
 </p>
 <p> where the derivatives of the intermediate variables \(\mathbf{K}_i\) with respect to the states \(\mathbf{x}_k\) are computed as described above.</p>
@@ -1302,7 +1303,7 @@ template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581
         </tr>
       </table>
 </div><div class="memdoc">
-<p>\( N \times 1 \) vector of Real number type (column vector). </p>
+<p>\( N \times 1 \) vector d. </p>
 
 </div>
 </div>
@@ -5099,6 +5100,23 @@ template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581
 </div>
 </div>
 <a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Member Data Documentation</h2>
+<a id="afbf6657628b86865c088dba408721dd2" name="afbf6657628b86865c088dba408721dd2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afbf6657628b86865c088dba408721dd2">&#9670;&#160;</a></span>CBRT_EPSILON</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> S, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">const Real <a class="el" href="class_sandals_1_1_runge_kutta.html">Sandals::RungeKutta</a>&lt; Real, S, N, M &gt;::CBRT_EPSILON {std::cbrt(EPSILON)}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Cube root of machine epsilon epsilon static constant value. </p>
+
+</div>
+</div>
 <a id="a153ee4e61fc14061e4eb208c2b085ea4" name="a153ee4e61fc14061e4eb208c2b085ea4"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a153ee4e61fc14061e4eb208c2b085ea4">&#9670;&#160;</a></span>m_absolute_tolerance</h2>
 

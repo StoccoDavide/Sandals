@@ -14,5 +14,5 @@ var searchData=
   ['matrixn_11',['MatrixN',['../class_sandals_1_1_problem.html#ae3d88f5d24952de722e36365aa24948f',1,'Sandals::Problem::MatrixN'],['../class_sandals_1_1_runge_kutta.html#a12b70430fab5101698b596781094d9ce',1,'Sandals::RungeKutta::MatrixN'],['../struct_sandals_1_1_solution.html#a828afafe49887f7ae1d80e6edfc920cd',1,'Sandals::Solution::MatrixN']]],
   ['matrixp_12',['MatrixP',['../class_sandals_1_1_runge_kutta.html#a45188c6c7dca9698ff7f3beca21ce98c',1,'Sandals::RungeKutta']]],
   ['matrixs_13',['MatrixS',['../class_sandals_1_1_runge_kutta.html#a042d8496b2380909755a1d67946c50e4',1,'Sandals::RungeKutta']]],
-  ['matrixx_14',['MatrixX',['../class_sandals_1_1_runge_kutta.html#ad49cfea9a52d2fca80ff2f2a4eeb993c',1,'Sandals::RungeKutta']]]
+  ['matrixx_14',['MatrixX',['../class_sandals_1_1_problem.html#a05a533c777643fd0dd1ad648bb7f8d1c',1,'Sandals::Problem::MatrixX'],['../class_sandals_1_1_runge_kutta.html#ad49cfea9a52d2fca80ff2f2a4eeb993c',1,'Sandals::RungeKutta::MatrixX']]]
 ];

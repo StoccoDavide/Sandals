@@ -113,6 +113,7 @@ var class_sandals_1_1_runge_kutta =
     [ "type", "class_sandals_1_1_runge_kutta.html#ad149d0cc375350b56dbbdb964ff068f7", null ],
     [ "verbose_mode", "class_sandals_1_1_runge_kutta.html#a8c266146d39ac74762308d0a23a348f6", null ],
     [ "verbose_mode", "class_sandals_1_1_runge_kutta.html#a82bbdac77996e873a51dc2ae07a2437d", null ],
+    [ "CBRT_EPSILON", "class_sandals_1_1_runge_kutta.html#afbf6657628b86865c088dba408721dd2", null ],
     [ "m_absolute_tolerance", "class_sandals_1_1_runge_kutta.html#a153ee4e61fc14061e4eb208c2b085ea4", null ],
     [ "m_adaptive", "class_sandals_1_1_runge_kutta.html#a6a38a0eb06409311c2a6c0acf5cc2e7b", null ],
     [ "m_lu", "class_sandals_1_1_runge_kutta.html#a94fd96f0ffa122d5d873f6bdc400f0e1", null ],

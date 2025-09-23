@@ -12,10 +12,18 @@
 
 #include "Sandals.hh"
 
-#include "Sandals/RungeKutta/ExplicitEuler.hh" // ERK
-#include "Sandals/RungeKutta/Heun2.hh" // ERK
-#include "Sandals/RungeKutta/RK4.hh" // ERK
-#include "Sandals/RungeKutta/LobattoIIIA2.hh" // DIRK
+// #include "Sandals/RungeKutta/ExplicitEuler.hh" // ERK - OK
+// #include "Sandals/RungeKutta/Heun2.hh" // ERK - OK
+// #include "Sandals/RungeKutta/Heun3.hh" // ERK - OK
+// #include "Sandals/RungeKutta/RK4.hh" // ERK - OK
+// #include "Sandals/RungeKutta/SSPRK104.hh" // ERK - OK
+// #include "Sandals/RungeKutta/LobattoIIIA2.hh" // DIRK - OK
+// #include "Sandals/RungeKutta/SSPIRK33.hh" // DIRK - OK
+#include "Sandals/RungeKutta/ImplicitEuler.hh" // IRK - OK
+#include "Sandals/RungeKutta/GaussLegendre2.hh" // IRK
+#include "Sandals/RungeKutta/GaussLegendre4.hh" // IRK
+#include "Sandals/RungeKutta/GaussLegendre6.hh" // IRK
+#include "Sandals/RungeKutta/RadauIIA3.hh" // IRK
 #include "Sandals/RungeKutta/RadauIIA5.hh" // IRK
 
 #include "Basic.hh"
@@ -68,9 +76,9 @@ int main(int argc, char ** argv) {
 #endif
 
   // Istantiate the problems
-  Shampine2Problem<Real, Shampine2Explicit<Real>, ExplicitEuler<Real, 2>> problem_explicit;
-  Shampine2Problem<Real, Shampine2Implicit<Real>, ExplicitEuler<Real, 2>> problem_implicit;
-  Shampine2Problem<Real, Shampine2SemiExplicit<Real>, ExplicitEuler<Real, 2>> problem_semiexplicit;
+  Shampine2Problem<Real, Shampine2Explicit<Real>, GaussLegendre6<Real, 2>> problem_explicit;
+  Shampine2Problem<Real, Shampine2Implicit<Real>, GaussLegendre6<Real, 2>> problem_implicit;
+  Shampine2Problem<Real, Shampine2SemiExplicit<Real>, GaussLegendre6<Real, 2>> problem_semiexplicit;
 
   // Set verbose mode
   problem_explicit.verbose_mode(true);
@@ -81,10 +89,10 @@ int main(int argc, char ** argv) {
   problem_semiexplicit.integrator()->verbose_mode(false);
 
   // Set solution parameters
-  static constexpr long num_points{10};
-  problem_explicit.subintervals(10);
-  problem_implicit.subintervals(10);
-  problem_semiexplicit.subintervals(10);
+  static constexpr long num_points{50};
+  problem_explicit.subintervals(1);
+  problem_implicit.subintervals(1);
+  problem_semiexplicit.subintervals(1);
   Eigen::Vector<Real, Eigen::Dynamic> time(Eigen::Vector<Real, Eigen::Dynamic>::LinSpaced(
     num_points, problem_explicit.time_start(), problem_explicit.time_end()
   ));
@@ -94,14 +102,14 @@ int main(int argc, char ** argv) {
   std::cout << "\n=== Basic Explicit Problem ===\n" << std::endl;
   problem_explicit.multiple_shooting(time, guess);
   std::cout << "\n=== Basic Implicit Problem ===\n" << std::endl;
-  //problem_implicit.multiple_shooting(time, guess);
+  problem_implicit.multiple_shooting(time, guess);
   std::cout << "\n=== Basic Semi-Explicit Problem ===\n" << std::endl;
-  //problem_semiexplicit.multiple_shooting(time, guess);
+  problem_semiexplicit.multiple_shooting(time, guess);
 
   #ifdef SANDALS_ENABLE_PLOTTING
   auto esol = problem_explicit.solution();
-  auto isol = problem_explicit.solution();
-  auto ssol = problem_explicit.solution();
+  auto isol = problem_implicit.solution();
+  auto ssol = problem_semiexplicit.solution();
   auto asol = problem_explicit.analytical_solution(esol.t);
 
   auto colors = matlab_lines_colormap();

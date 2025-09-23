@@ -205,7 +205,14 @@ namespace Sandals
     * \param[in] t_subintervals The number of subintervals for the shooting methods.
     */
     void subintervals(Integer const t_subintervals)
-    {this->m_subintervals = t_subintervals;}
+    {
+      #define CMD "Sandals::Problem::subintervals(...): "
+
+      SANDALS_ASSERT(t_subintervals > 0, CMD "number of subintervals must be positive.");
+      this->m_subintervals = t_subintervals;
+
+      #undef CMD
+    }
 
     /**
     * Evaluate the boundary conditions function of the problem \f$ \mathbf{b}(\mathbf{x}_{\text{ini}},

@@ -90,7 +90,7 @@ public:
   VectorF F(VectorF const & x, VectorF const & x_dot, Real const t) const override
   {
     VectorF F;
-    F << x_dot(0) - x(1), x_dot(1) + 3.0*this->m_p*x(1) / std::pow(this->m_p + t*t, 2.0);
+    F << x_dot(0) - x(1), x_dot(1) + 3.0*this->m_p*x(0) / std::pow(this->m_p + t*t, 2.0);
     return F;
   }
 
@@ -156,7 +156,7 @@ public:
   VectorB b(VectorF const &x, Real const t) const override
   {
     VectorF b;
-    b <<  x(1), -3.0*this->m_p*x(0) / std::pow(this->m_p + t*t, 2.0);
+    b << x(1), -3.0*this->m_p*x(0) / std::pow(this->m_p + t*t, 2.0);
     return b;
   }
 

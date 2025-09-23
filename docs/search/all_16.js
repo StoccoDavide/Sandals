@@ -9,6 +9,6 @@ var searchData=
   ['vectorn_6',['VectorN',['../class_sandals_1_1_runge_kutta.html#a38adc5949f0384409ba3831c38a78fce',1,'Sandals::RungeKutta']]],
   ['vectorp_7',['VectorP',['../class_sandals_1_1_runge_kutta.html#a1b4ed942f44296b89ffcec0edbc152b2',1,'Sandals::RungeKutta']]],
   ['vectors_8',['VectorS',['../class_sandals_1_1_runge_kutta.html#a0de3c7401358746b3c56207b684f7691',1,'Sandals::RungeKutta']]],
-  ['vectorx_9',['VectorX',['../class_sandals_1_1_problem.html#a708a2817c578917ee4ba1618eeeb3648',1,'Sandals::Problem::VectorX'],['../class_sandals_1_1_runge_kutta.html#a6e7c649dd4dda6179ac007d1782383c9',1,'Sandals::RungeKutta::VectorX']]],
+  ['vectorx_9',['VectorX',['../class_sandals_1_1_problem.html#aeb0cf1d868c5e684e908c0e408fcd47b',1,'Sandals::Problem::VectorX'],['../class_sandals_1_1_runge_kutta.html#a6e7c649dd4dda6179ac007d1782383c9',1,'Sandals::RungeKutta::VectorX']]],
   ['verbose_5fmode_10',['verbose_mode',['../class_sandals_1_1_problem.html#aa92216a9ee07c1e48205b5192cc53167',1,'Sandals::Problem::verbose_mode()'],['../class_sandals_1_1_problem.html#a077a6f6ea6672df7fad6d42bf6df8673',1,'Sandals::Problem::verbose_mode(bool t_verbose)'],['../class_sandals_1_1_runge_kutta.html#a8c266146d39ac74762308d0a23a348f6',1,'Sandals::RungeKutta::verbose_mode()'],['../class_sandals_1_1_runge_kutta.html#a82bbdac77996e873a51dc2ae07a2437d',1,'Sandals::RungeKutta::verbose_mode(bool t_verbose)']]]
 ];

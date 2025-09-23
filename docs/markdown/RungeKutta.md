@@ -49,10 +49,10 @@ In matrix form, this can be expressed as
 \f[
   \begin{bmatrix}
     \mathbf{I} & \mathbf{0} & \cdots & \cdots & \mathbf{0} \\
-    a_{21} & \mathbf{I} & \ddots & \mathbf{0} & \vdots \\
-    a_{31} & a_{32} & \mathbf{I} & \ddots & \vdots \\
-    \vdots & \vdots & \ddots & \ddots & \mathbf{0} \\
-    a_{s1} & a_{s2} & \cdots & a_{s,s-1} & \mathbf{I}
+    \mathbf{0} & \mathbf{I} & \ddots & \mathbf{0} & \vdots \\
+    \vdots & \vdots & \ddots & \ddots & \vdots \\
+    \vdots & \mathbf{0} & \ddots & \mathbf{I} & \mathbf{0} \\
+    \mathbf{0} & \cdots & \cdots & \mathbf{0} & \mathbf{I} \\
   \end{bmatrix}
   \begin{bmatrix}
     \mathbf{K}_1 \\
@@ -116,7 +116,7 @@ In matrix form, this can be expressed as
 The derivatives of the next state \f$\mathbf{x}_{k+1}\f$ with respect to the states \f$\mathbf{x}\f$ can be computed as
 \f[
   \displaystyle\frac{\partial\mathbf{x}_{k+1}}{\partial\mathbf{x}_k} =
-  \mathbf{I} + h_k \displaystyle\sum_{i=1}^s b_i \frac{\partial\mathbf{K}_i}{\partial\mathbf{x}_k} \text{.}
+  \mathbf{I} + \displaystyle\sum_{i=1}^s b_i \frac{\partial\mathbf{K}_i}{\partial\mathbf{x}_k} \text{.}
 \f]
 where the derivatives of the intermediate variables \f$\mathbf{K}_i\f$ with respect to the states \f$\mathbf{x}_k\f$ are computed as described above.
 
@@ -260,7 +260,7 @@ In matrix form, this can be expressed as
 The derivatives of the next state \f$\mathbf{x}_{k+1}\f$ with respect to the states \f$\mathbf{x}\f$ can be computed as
 \f[
   \displaystyle\frac{\partial\mathbf{x}_{k+1}}{\partial\mathbf{x}_k} =
-  \mathbf{I} + h_k \displaystyle\sum_{i=1}^s b_i \frac{\partial\mathbf{K}_i}{\partial\mathbf{x}_k} \text{.}
+  \mathbf{I} + \displaystyle\sum_{i=1}^s b_i \frac{\partial\mathbf{K}_i}{\partial\mathbf{x}_k} \text{.}
 \f]
 where the derivatives of the intermediate variables \f$\mathbf{K}_i\f$ with respect to the states \f$\mathbf{x}_k\f$ are computed as described above.
 
@@ -404,7 +404,7 @@ In matrix form, this can be expressed as
 The derivatives of the next state \f$\mathbf{x}_{k+1}\f$ with respect to the states \f$\mathbf{x}\f$ can be computed as
 \f[
   \displaystyle\frac{\partial\mathbf{x}_{k+1}}{\partial\mathbf{x}_k} =
-  \mathbf{I} + h_k \displaystyle\sum_{i=1}^s b_i \frac{\partial\mathbf{K}_i}{\partial\mathbf{x}_k} \text{.}
+  \mathbf{I} + \displaystyle\sum_{i=1}^s b_i \frac{\partial\mathbf{K}_i}{\partial\mathbf{x}_k} \text{.}
 \f]
 where the derivatives of the intermediate variables \f$\mathbf{K}_i\f$ with respect to the states \f$\mathbf{x}_k\f$ are computed as described above.
 

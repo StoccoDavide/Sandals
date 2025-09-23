@@ -9,5 +9,5 @@ var searchData=
   ['vectorn_6',['VectorN',['../class_sandals_1_1_runge_kutta.html#a38adc5949f0384409ba3831c38a78fce',1,'Sandals::RungeKutta']]],
   ['vectorp_7',['VectorP',['../class_sandals_1_1_runge_kutta.html#a1b4ed942f44296b89ffcec0edbc152b2',1,'Sandals::RungeKutta']]],
   ['vectors_8',['VectorS',['../class_sandals_1_1_runge_kutta.html#a0de3c7401358746b3c56207b684f7691',1,'Sandals::RungeKutta']]],
-  ['vectorx_9',['VectorX',['../class_sandals_1_1_problem.html#a708a2817c578917ee4ba1618eeeb3648',1,'Sandals::Problem::VectorX'],['../class_sandals_1_1_runge_kutta.html#a6e7c649dd4dda6179ac007d1782383c9',1,'Sandals::RungeKutta::VectorX']]]
+  ['vectorx_9',['VectorX',['../class_sandals_1_1_problem.html#aeb0cf1d868c5e684e908c0e408fcd47b',1,'Sandals::Problem::VectorX'],['../class_sandals_1_1_runge_kutta.html#a6e7c649dd4dda6179ac007d1782383c9',1,'Sandals::RungeKutta::VectorX']]]
 ];
