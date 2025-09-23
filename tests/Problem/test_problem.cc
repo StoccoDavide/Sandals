@@ -19,6 +19,8 @@
 #include "Sandals/RungeKutta/RadauIIA5.hh" // IRK
 
 #include "Basic.hh"
+#include "Poisson.hh"
+#include "Shampine0.hh"
 #include "Shampine2.hh"
 
 #ifdef SANDALS_ENABLE_PLOTTING
@@ -66,9 +68,9 @@ int main(int argc, char ** argv) {
 #endif
 
   // Istantiate the problems
-  Shampine2Problem<Real, Shampine2Explicit<Real>, Heun2<Real, 2>> problem_explicit;
-  Shampine2Problem<Real, Shampine2Implicit<Real>, Heun2<Real, 2>> problem_implicit;
-  Shampine2Problem<Real, Shampine2SemiExplicit<Real>, Heun2<Real, 2>> problem_semiexplicit;
+  Shampine2Problem<Real, Shampine2Explicit<Real>, ExplicitEuler<Real, 2>> problem_explicit;
+  Shampine2Problem<Real, Shampine2Implicit<Real>, ExplicitEuler<Real, 2>> problem_implicit;
+  Shampine2Problem<Real, Shampine2SemiExplicit<Real>, ExplicitEuler<Real, 2>> problem_semiexplicit;
 
   // Set verbose mode
   problem_explicit.verbose_mode(true);
@@ -79,27 +81,27 @@ int main(int argc, char ** argv) {
   problem_semiexplicit.integrator()->verbose_mode(false);
 
   // Set solution parameters
-  static constexpr long num_points{100};
-  problem_explicit.subintervals(1);
-  problem_implicit.subintervals(1);
-  problem_semiexplicit.subintervals(1);
+  static constexpr long num_points{10};
+  problem_explicit.subintervals(10);
+  problem_implicit.subintervals(10);
+  problem_semiexplicit.subintervals(10);
   Eigen::Vector<Real, Eigen::Dynamic> time(Eigen::Vector<Real, Eigen::Dynamic>::LinSpaced(
     num_points, problem_explicit.time_start(), problem_explicit.time_end()
   ));
-  std::vector<Eigen::Vector<Real, 2>> guess(num_points, Eigen::Vector<Real, 2>::Zero());
+  Eigen::Matrix<Real, 2, Eigen::Dynamic> guess(2, num_points); guess.setConstant(1.0);
 
   // Solve the problems with shooting
   std::cout << "\n=== Basic Explicit Problem ===\n" << std::endl;
   problem_explicit.multiple_shooting(time, guess);
   std::cout << "\n=== Basic Implicit Problem ===\n" << std::endl;
-  problem_implicit.multiple_shooting(time, guess);
+  //problem_implicit.multiple_shooting(time, guess);
   std::cout << "\n=== Basic Semi-Explicit Problem ===\n" << std::endl;
-  problem_semiexplicit.multiple_shooting(time, guess);
+  //problem_semiexplicit.multiple_shooting(time, guess);
 
   #ifdef SANDALS_ENABLE_PLOTTING
   auto esol = problem_explicit.solution();
-  auto isol = problem_implicit.solution();
-  auto ssol = problem_semiexplicit.solution();
+  auto isol = problem_explicit.solution();
+  auto ssol = problem_explicit.solution();
   auto asol = problem_explicit.analytical_solution(esol.t);
 
   auto colors = matlab_lines_colormap();
@@ -120,7 +122,7 @@ int main(int argc, char ** argv) {
   graph_ex->GetXaxis()->SetTitle("t (s)");
   graph_ex->GetYaxis()->SetTitle("x, y (-)");
   graph_ex->GetXaxis()->SetLimits(time(0), time(Eigen::last));
-  graph_ex->GetYaxis()->SetRangeUser(-1.25, 0.25);
+  graph_ex->GetYaxis()->SetRangeUser(-1, 1); //asol.minCoeff()*1.1, asol.maxCoeff()*1.1);
   TLegend *leg1 = new TLegend(0.6, 0.7, 0.9, 0.9);
   leg1->AddEntry(graph_ex, "x (explicit)", "l");
   leg1->AddEntry(graph_ey, "y (explicit)", "l");
@@ -139,7 +141,7 @@ int main(int argc, char ** argv) {
   graph_ix->GetXaxis()->SetTitle("t (s)");
   graph_ix->GetYaxis()->SetTitle("x, y (-)");
   graph_ix->GetXaxis()->SetLimits(time(0), time(Eigen::last));
-  graph_ix->GetYaxis()->SetRangeUser(-1.25, 0.25);
+  graph_ix->GetYaxis()->SetRangeUser(-1, 1); //asol.minCoeff()*1.1, asol.maxCoeff()*1.1);
   TLegend *leg2 = new TLegend(0.6, 0.7, 0.9, 0.9);
   leg2->AddEntry(graph_ix, "x (implicit)", "l");
   leg2->AddEntry(graph_iy, "y (implicit)", "l");
@@ -158,7 +160,7 @@ int main(int argc, char ** argv) {
   graph_sx->GetXaxis()->SetTitle("t (s)");
   graph_sx->GetYaxis()->SetTitle("x, y (-)");
   graph_sx->GetXaxis()->SetLimits(time(0), time(Eigen::last));
-  graph_sx->GetYaxis()->SetRangeUser(-1.25, 0.25);
+  graph_sx->GetYaxis()->SetRangeUser(-1, 1); //asol.minCoeff()*1.1, asol.maxCoeff()*1.1);
   TLegend *leg3 = new TLegend(0.6, 0.7, 0.9, 0.9);
   leg3->AddEntry(graph_sx, "x (semi-explicit)", "l");
   leg3->AddEntry(graph_sy, "y (semi-explicit)", "l");

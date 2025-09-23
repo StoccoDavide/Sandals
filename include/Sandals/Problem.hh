@@ -46,7 +46,8 @@ namespace Sandals
     using IntegratorPtr = std::unique_ptr<Integrator>; /**< Unique pointer to a Runge-Kutta method. */
     using SolutionPtr = std::unique_ptr<Solution<Real, N, M>>; /**< Unique pointer to a solution. */
 
-    using VectorX = typename Integrator::VectorX;
+    using VectorX = Eigen::Vector<Real, Eigen::Dynamic>; /**< Dynamic vector of real numbers. */
+    using MatrixX = Eigen::Matrix<Real, N, Eigen::Dynamic>; /**< Dynamic matrix of real numbers. */
     using MatrixJX = typename Integrator::MatrixJX;
     using VectorF = typename Implicit<Real, N, M>::VectorF;
     using MatrixJF = typename Implicit<Real, N, M>::MatrixJF;
@@ -304,11 +305,8 @@ namespace Sandals
 
         // Compute the solution of the linear system
         lu.compute(A_sys);
-        SANDALS_ASSERT(lu.rank() == 2*N, CMD "singular Jacobian detected.");
-        x_step = lu.solve(b_sys);
-
-        // Update the solution
-        x_sol += x_step;
+        SANDALS_ASSERT(lu.rank() == lu.cols(), CMD "singular Jacobian detected.");
+        x_sol += lu.solve(b_sys);
       }
 
       // If the loop completes without returning, indicate failure
@@ -325,7 +323,7 @@ namespace Sandals
     * \param[in] x_guess Initial guess for the states at the mesh nodes.
     * \return True if the system is successfully solved, false otherwise.
     */
-    bool multiple_shooting(VectorX const & t_mesh, std::vector<VectorF> const & x_guess)
+    bool multiple_shooting(VectorX const & t_mesh, MatrixX const & x_guess)
     {
       #define CMD "Sandals::Problem::multiple_shooting(...): "
 
@@ -335,7 +333,7 @@ namespace Sandals
       // Check if the mesh and the guess have compatible sizes
       SANDALS_ASSERT(t_mesh.size() > 1,
         CMD "expected at least two time mesh points.");
-      SANDALS_ASSERT(static_cast<Integer>(x_guess.size()) == t_mesh.size(),
+      SANDALS_ASSERT(x_guess.cols() == t_mesh.size(),
         CMD "incompatible sizes between time mesh and states guess.");
 
       // Temporary variables
@@ -345,7 +343,7 @@ namespace Sandals
       const Integer x_size{(num_intervals + 1)*N};
 
       // Prepare the linear system for the Newton step
-      DynVec x_step(x_size), b_sys(c_size + N);
+      DynVec b_sys(c_size + N);
       DynMat A_sys(DynMat::Zero(x_size, x_size));
       for (Integer k{0}; k < num_intervals; ++k) {
         A_sys.template block<N, N>(k*N, (k + 1)*N).setIdentity();
@@ -358,7 +356,7 @@ namespace Sandals
       this->m_solution->h.setZero();
 
       // Initial guess for the states as the guess at the mesh nodes
-      std::vector<VectorF> x_sol(x_guess);
+      MatrixX x_sol(x_guess);
 
       // Solve the boundary value problem using a linearized Newton method
       VectorX t_local_mesh;
@@ -371,7 +369,7 @@ namespace Sandals
         for (Integer k{0}; k < num_intervals; ++k) {
           t_local_mesh = VectorX::LinSpaced(local_intervals+1, t_mesh(k), t_mesh(k + 1));
           Jx.setIdentity();
-          bool ok{this->m_integrator->template solve<true>(t_local_mesh, x_sol[k], local_sol, Jx)};
+          bool ok{this->m_integrator->template solve<true>(t_local_mesh, x_sol.col(k), local_sol, Jx)};
           if (!ok) {
             SANDALS_ERROR(CMD "failed to integrate interval " << k << ".");
             return false;
@@ -388,7 +386,7 @@ namespace Sandals
           A_sys.template block<N, N>(k*N, k*N) = -Jx;
 
           // Continuity residual for interior nodes
-          b_sys.template segment<N>(k*N) = this->m_solution->x.col(k + 1) - x_sol[k + 1];
+          b_sys.template segment<N>(k*N) = this->m_solution->x.col(k + 1) - x_sol.col(k + 1);
         }
 
         // Boundary condition residuals
@@ -413,14 +411,8 @@ namespace Sandals
 
         // Solve the linear system
         qr.compute(A_sys);
-        if (qr.rank() < qr.cols()) {
-          SANDALS_ERROR(CMD "singular linear system detected.");
-          return false;
-        }
-        x_step = qr.solve(b_sys);
-
-        // Update guesses
-        for (Integer k{0}; k < num_intervals + 1; ++k) {x_sol[k] += x_step.template segment<N>(k*N);}
+        SANDALS_ASSERT(qr.rank() == qr.cols(), CMD "singular linear system detected.");
+        x_sol += qr.solve(b_sys).reshaped(N, num_intervals + 1);
       }
 
       // If the loop completes without returning, indicate failure
@@ -430,31 +422,6 @@ namespace Sandals
       #undef CMD
     }
 
-    /**
-    * Solve the boundary value problem (BVP) using the multiple shooting method.
-    * \param[in] t_mesh Independent variable (or time) mesh \f$ \mathbf{t} \f$.
-    * \param[in] ics Initial conditions \f$ \mathbf{x}(t = 0) \f$.
-    * \param[in] x_guess Initial guess for the states at the mesh nodes.
-    * \return True if the system is successfully solved, false otherwise.
-    */
-    bool multiple_shooting(VectorX const & t_mesh, MatrixM const & x_guess)
-    {
-      #define CMD "Sandals::Problem::multiple_shooting(...): "
-
-      // Check if the mesh and the guess have compatible sizes
-      SANDALS_ASSERT(t_mesh.size() > 1,
-        CMD "expected at least two time mesh points.");
-      SANDALS_ASSERT(static_cast<Integer>(x_guess.rows()) == t_mesh.size(),
-        CMD "incompatible sizes between time mesh and states guess.");
-
-      // Recast the guess to a standard vector of vectors
-      std::vector<VectorF> x_guess_tmp(t_mesh.size());
-      for (Integer k{0}; k < static_cast<Integer>(t_mesh.size()); ++k) {
-        x_guess_tmp[k] = x_guess.row(k).transpose();
-      }
-      return this->multiple_shooting(t_mesh, x_guess_tmp);
-
-    }
   }; // class Problem
 
 } // namespace Sandals

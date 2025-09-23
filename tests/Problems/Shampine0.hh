@@ -8,8 +8,8 @@
  * e-mail: davide.stocco@unitn.it                             e-mail: enrico.bertolazzi@unitn.it *
 \* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-#ifndef TESTS_PROBLEMS_SHAMPINE2_HH
-#define TESTS_PROBLEMS_SHAMPINE2_HH
+#ifndef TESTS_PROBLEMS_SHAMPINE0_HH
+#define TESTS_PROBLEMS_SHAMPINE0_HH
 
 #include "Sandals/System/Explicit.hh"
 #include "Sandals/System/Implicit.hh"
@@ -21,7 +21,7 @@ using namespace Sandals;
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 template<typename Real = double>
-class Shampine2Explicit : public Explicit<Real, 2, 0>
+class Shampine0Explicit : public Explicit<Real, 2, 0>
 {
 public:
   using typename Explicit<Real, 2, 0>::VectorF;
@@ -30,28 +30,28 @@ public:
   using typename Explicit<Real, 2, 0>::MatrixJH;
 
 private:
-  Real m_p{1.0e-5}; // Parameter
+  Real m_lambda{1.0}; // Parameter
 
 public:
-  Shampine2Explicit() : Explicit<Real, 2, 0>("Shampine2Explicit") {}
+  Shampine0Explicit() : Explicit<Real, 2, 0>("Shampine0Explicit") {}
 
-  ~Shampine2Explicit() {}
+  ~Shampine0Explicit() {}
 
-  void p(Real const p) {this->m_p = p;}
+  void lambda(Real const lambda) {this->m_lambda = lambda;}
 
-  Real p() const {return this->m_p;}
+  Real lambda() const {return this->m_lambda;}
 
-  VectorF f(VectorF const & x, Real const t) const override
+  VectorF f(VectorF const & x, Real const /*t*/) const override
   {
     VectorF f;
-    f << x(1), -3.0*this->m_p*x(0) / std::pow(this->m_p + t*t, 2.0);
+    f << x(1), -this->m_lambda*x(0);
     return f;
   }
 
-  MatrixJF Jf_x(VectorF const & /*x*/, Real const t) const override {
+  MatrixJF Jf_x(VectorF const & /*x*/, Real const /*t*/) const override {
     MatrixJF Jf_x(MatrixJF::Zero());
     Jf_x(0, 1) = 1.0;
-    Jf_x(1, 0) = -3.0*this->m_p / std::pow(this->m_p + t*t, 2.0);
+    Jf_x(1, 0) = -this->m_lambda;
     return Jf_x;
   }
 
@@ -67,7 +67,7 @@ public:
 
 
 template<typename Real = double>
-class Shampine2Implicit : public Implicit<Real, 2, 0>
+class Shampine0Implicit : public Implicit<Real, 2, 0>
 {
 public:
   using typename Implicit<Real, 2, 0>::VectorF;
@@ -76,28 +76,28 @@ public:
   using typename Implicit<Real, 2, 0>::MatrixJH;
 
 private:
-  Real m_p{1.0e-5}; // Parameter
+  Real m_lambda{1.0}; // Parameter
 
 public:
-  Shampine2Implicit() : Implicit<Real, 2, 0>("Shampine2Implicit") {}
+  Shampine0Implicit() : Implicit<Real, 2, 0>("Shampine0Implicit") {}
 
-  ~Shampine2Implicit() {}
+  ~Shampine0Implicit() {}
 
-  void p(Real const p) {this->m_p = p;}
+  void lambda(Real const lambda) {this->m_lambda = lambda;}
 
-  Real p() const {return this->m_p;}
+  Real lambda() const {return this->m_lambda;}
 
-  VectorF F(VectorF const & x, VectorF const & x_dot, Real const t) const override
+  VectorF F(VectorF const & x, VectorF const & x_dot, Real const /*t*/) const override
   {
     VectorF F;
-    F << x_dot(0) - x(1), x_dot(1) + 3.0*this->m_p*x(1) / std::pow(this->m_p + t*t, 2.0);
+    F << x_dot(0) - x(1), x_dot(1) + this->m_lambda*x(0);
     return F;
   }
 
-  MatrixJF JF_x(VectorF const & /*x*/, VectorF const & /*x_dot*/, Real const t) const override {
+  MatrixJF JF_x(VectorF const & /*x*/, VectorF const & /*x_dot*/, Real const /*t*/) const override {
     MatrixJF JF_x(MatrixJF::Zero());
     JF_x(0, 1) = -1.0;
-    JF_x(1, 0) = 3.0*this->m_p / std::pow(this->m_p + t*t, 2.0);
+    JF_x(1, 0) = this->m_lambda;
     return JF_x;
   }
 
@@ -115,7 +115,7 @@ public:
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 template<typename Real = double>
-class Shampine2SemiExplicit : public SemiExplicit<Real, 2, 0>
+class Shampine0SemiExplicit : public SemiExplicit<Real, 2, 0>
 {
 public:
   using VectorF  = typename SemiExplicit<Real, 2, 0>::VectorF;
@@ -127,16 +127,16 @@ public:
   using MatrixJH = typename SemiExplicit<Real, 2, 0>::MatrixJH;
 
 private:
-  Real m_p{1.0e-5}; // Parameter
+  Real m_lambda{1.0}; // Parameter
 
 public:
-  Shampine2SemiExplicit() : SemiExplicit<Real, 2, 0>("Shampine2SemiExplicit") {}
+  Shampine0SemiExplicit() : SemiExplicit<Real, 2, 0>("Shampine0SemiExplicit") {}
 
-  ~Shampine2SemiExplicit() {}
+  ~Shampine0SemiExplicit() {}
 
-  void p(Real const p) {this->m_p = p;}
+  void lambda(Real const lambda) {this->m_lambda = lambda;}
 
-  Real p() const {return this->m_p;}
+  Real lambda() const {return this->m_lambda;}
 
   MatrixA A(VectorF const & /*x*/, Real const /*t*/) const override
   {
@@ -153,17 +153,17 @@ public:
     return TA_x;
   }
 
-  VectorB b(VectorF const &x, Real const t) const override
+  VectorB b(VectorF const &x, Real const /*t*/) const override
   {
     VectorF b;
-    b <<  x(1), -3.0*this->m_p*x(0) / std::pow(this->m_p + t*t, 2.0);
+    b <<  x(1), -this->m_lambda*x(0);
     return b;
   }
 
-  MatrixJB Jb_x(VectorF const & /*x*/, Real const t) const override {
+  MatrixJB Jb_x(VectorF const & /*x*/, Real const /*t*/) const override {
     MatrixJB Jb_x(MatrixJB::Zero());
     Jb_x(0, 1) = 1.0;
-    Jb_x(1, 0) = -3.0*this->m_p / std::pow(this->m_p + t*t, 2.0);
+    Jb_x(1, 0) = -this->m_lambda;
     return Jb_x;
   }
 
@@ -178,7 +178,7 @@ public:
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 template<typename Real, typename System, typename Integrator>
-class Shampine2Problem : public Problem<Real, 2, 0, Integrator>
+class Shampine0Problem : public Problem<Real, 2, 0, Integrator>
 {
 public:
   using typename Problem<Real, 2, 0, Integrator>::SystemPtr;
@@ -189,25 +189,25 @@ public:
   using VectorX = Eigen::Vector<Real, Eigen::Dynamic>;
   using MatrixX = Eigen::Matrix<Real, 2, Eigen::Dynamic>;
 
-  Shampine2Problem()
-    : Problem<Real, 2, 0, Integrator>("Shampine2Problem", std::make_unique<System>(),
+  Shampine0Problem()
+    : Problem<Real, 2, 0, Integrator>("Shampine0Problem", std::make_unique<System>(),
       std::make_unique<Integrator>()) {}
 
-  ~Shampine2Problem() {}
+  ~Shampine0Problem() {}
 
-  static Real time_start() {return -0.1;}
+  static Real time_start() {return 0.0;}
 
-  static Real time_end() {return 0.1;}
+  static Real time_end() {return M_PI;}
 
-  void p(Real const p) {static_cast<System*>(this->integrator()->system())->p(p);}
+  void lambda(Real const lambda) {static_cast<System*>(this->integrator()->system())->lambda(lambda);}
 
-  Real p() const {return static_cast<const System*>(this->integrator()->system())->p();}
+  Real lambda() const {return static_cast<const System*>(this->integrator()->system())->lambda();}
 
   VectorF b(VectorF const & x_ini, VectorF const & x_end) const override
   {
     VectorF b;
-    b(0) = x_ini(0) + 0.1 / std::sqrt(this->p()+0.01);
-    b(1) = x_end(0) - 0.1 / std::sqrt(this->p()+0.01);
+    b(0) = x_ini(0);
+    b(1) = x_end(0);
     return b;
   }
 
@@ -225,18 +225,16 @@ public:
     return Jb_x_end;
   }
 
-  VectorF analytical_solution(Real const t) const {
+  VectorF analytical_solution(Real const /*t*/) const {
     VectorF x;
-    x <<
-      t / std::sqrt(this->p() + t*t),
-      this->p() / std::pow(this->p() + t*t, 1.5);
+    x << 0.0, 0.0;
     return x;
   }
 
   MatrixX analytical_solution(VectorX const & t) const {
     MatrixX x(2, t.size());
     for (Integer i{0}; i < t.size(); ++i) {
-      x.col(i) = Shampine2Problem<Real, System, Integrator>::analytical_solution(t(i));
+      x.col(i) = Shampine0Problem<Real, System, Integrator>::analytical_solution(t(i));
     }
     return x;
   }
@@ -244,4 +242,4 @@ public:
 
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-#endif // TESTS_PROBLEMS_SHAMPINE2_HH
+#endif // TESTS_PROBLEMS_SHAMPINE0_HH

@@ -56,7 +56,7 @@ namespace Sandals {
   {
   public:
     using Scalar = Real; /**< Scalar number type. */
-    using VectorX = Eigen::Vector<Real, Eigen::Dynamic>; /**< \f$ N \times 1 \f$ vector of Real number type (column vector). */
+    using VectorX = Eigen::Vector<Real, Eigen::Dynamic>; /**< \f$ N \times 1 \f$ vector d. */
     using MatrixJX = Eigen::Matrix<Real, N, N>; /**< Templetized matrix type. */
 
   private:
@@ -766,13 +766,13 @@ namespace Sandals {
       using Eigen::all;
       using Eigen::seqN;
 
-      // Propagate the derivative of K with respect to x
       VectorN x_node;
-      MatrixN Jf_x;
+      MatrixN Jf_x, tmp;
       std::array<MatrixN, S> dK_dx;
       for (Integer i{0}; i < S; ++i) {
         // Compute the node
         x_node = x + K(all, seqN(0, i)) * this->m_tableau.A(i, seqN(0, i)).transpose();
+        (void)K;
 
         // Compute the Jacobian of f with respect to x at the node
         if (!this->m_reverse) {
@@ -782,27 +782,26 @@ namespace Sandals {
         }
 
         // Propagate the derivative of K with respect to x
-        dK_dx[i] = h * Jf_x;
-        for (Integer j{0}; j < i; ++j) {
-          dK_dx[i] += h * Jf_x * dK_dx[j] * this->m_tableau.A(i, j);
-        }
+        tmp.setIdentity();
+        for (Integer j{0}; j < i; ++j) {tmp += dK_dx[j] * this->m_tableau.A(i, j);}
+        if (i > 0) {dK_dx[i] = h * Jf_x * tmp;}
+        else {dK_dx[i] = h * Jf_x;}
 
         // Check for NaNs or Infs
         if (!dK_dx[i].allFinite()) {return false;}
-
       }
 
       // Compute the derivative of x_new with respect to x
       Jx.setIdentity();
-      for (Integer i{0}; i < S; ++i) {Jx += h * dK_dx[i] * this->m_tableau.b(i);}
+      for (Integer i{0}; i < S; ++i) {Jx += this->m_tableau.b(i) * dK_dx[i];}
 
-      // Check the Jacobian with finite differences
       #ifdef SANDALS_CHECK_JACOBIANS
-      MatrixJX Jx_fd;
-      auto fun = [this, &t, &h, &K](VectorN const & x_fd, VectorN & x_new_fd) -> bool {
-        MatrixK K_fd(K);
+      // Compute the function for finite differences
+      auto fun = [this, &t, &h](VectorN const & x_fd, VectorN & x_new_fd) -> bool {
+        MatrixK K_fd;
+        VectorN x_node_fd;
         for (Integer k{0}; k < S; ++k) {
-          VectorN x_node_fd = x_fd + K_fd(Eigen::all, Eigen::seqN(0, k)) * this->m_tableau.A(k, Eigen::seqN(0, k)).transpose();
+          x_node_fd = x_fd + K_fd(all, seqN(0, k)) * this->m_tableau.A(k, seqN(0, k)).transpose();
            if (!this->m_reverse) {
             K_fd.col(k) = h * static_cast<Explicit<Real, N, M> const *>(this->m_system.get())->f(x_node_fd, t + h*this->m_tableau.c(k));
           } else {
@@ -812,10 +811,14 @@ namespace Sandals {
         x_new_fd = x_fd + K_fd * this->m_tableau.b;
         return x_new_fd.allFinite();
       };
-      bool fd_ok{Optimist::FiniteDifferences::Jacobian(x, fun, Jx_fd)};
-      if (fd_ok && Jx_fd.allFinite()) {
-        Real err{(Jx - Jx_fd).norm() / (1.0 + Jx_fd.norm())};
-        SANDALS_ASSERT_WARNING(err < EPSILON_LOW, CMD "Jacobian propagation error = " << err);
+
+      // Compute the Jacobian with finite differences
+      MatrixJX Jx_fd;
+      if (Optimist::FiniteDifferences::Jacobian(x, fun, Jx_fd)) {
+        Real err{(Jx - Jx_fd).norm()};
+        SANDALS_ASSERT_WARNING(err < EPSILON_LOW,
+          CMD "Jacobian propagation error = " << err << " > " << EPSILON_LOW << "\n" <<
+          " Jx =\n" << Jx << "\n Jx_fd =\n" << Jx_fd);
       }
       #endif
 
@@ -967,7 +970,6 @@ namespace Sandals {
       using Eigen::all;
       using Eigen::seqN;
 
-      // Propagate the derivative of K with respect to x
       VectorN x_node, x_dot_node;
       MatrixN JF_x, JF_x_dot, A, b;
       std::array<MatrixN, S> dK_dx;
@@ -977,7 +979,7 @@ namespace Sandals {
         x_node = x + K(all, seqN(0, i)) * this->m_tableau.A(i, seqN(0, i)).transpose();
         x_dot_node = K.col(i) / h;
 
-        // Compute the Aobians of F with respect to x and x_dot at the node
+        // Compute the Jacobians of F with respect to x and x_dot at the node
         if (!this->m_reverse) {
           JF_x     = this->m_system->JF_x(x_node, x_dot_node, t + h*this->m_tableau.c(i));
           JF_x_dot = this->m_system->JF_x_dot(x_node, x_dot_node, t + h*this->m_tableau.c(i));
@@ -988,10 +990,9 @@ namespace Sandals {
 
         // Propagate the derivative of K with respect to x
         A = JF_x_dot;
-        b = -h * JF_x;
-        for (Integer j{0}; j < i; ++j) {
-          b -= h * this->m_tableau.A(i, j) * JF_x * dK_dx[j];
-        }
+        b.setIdentity();
+        for (Integer j{0}; j < i; ++j) {b += dK_dx[j] * this->m_tableau.A(i, j);}
+        b *= -h * JF_x;
 
         // Solve the linear system
         lu.compute(A);
@@ -1005,14 +1006,14 @@ namespace Sandals {
       Jx.setIdentity();
       for (Integer i{0}; i < S; ++i) {Jx += h * dK_dx[i] * this->m_tableau.b(i);}
 
-      // Efficient finite difference Jacobian check
       #ifdef SANDALS_CHECK_JACOBIANS
-      MatrixJX Jx_fd;
-      auto fun = [this, &t, &h, &K](VectorN const & x_fd, VectorN & x_new_fd) -> bool {
-        MatrixK K_fd(K);
+      // Compute the function for finite differences
+      auto fun = [this, &t, &h](VectorN const & x_fd, VectorN & x_new_fd) -> bool {
+        MatrixK K_fd;
+        VectorN x_node_fd, x_dot_node_fd;
         for (Integer k{0}; k < S; ++k) {
-          VectorN x_node_fd(x_fd + K_fd(Eigen::all, Eigen::seqN(0, k)) * this->m_tableau.A(k, Eigen::seqN(0, k)).transpose());
-          VectorN x_dot_node_fd(K_fd.col(k) / h);
+          x_node_fd = x_fd + K_fd(Eigen::all, Eigen::seqN(0, k)) * this->m_tableau.A(k, Eigen::seqN(0, k)).transpose();
+          x_dot_node_fd = K_fd.col(k) / h;
           if (!this->m_reverse) {
             K_fd.col(k) = h * this->m_system->F(x_node_fd, x_dot_node_fd, t + h*this->m_tableau.c(k));
           } else {
@@ -1022,10 +1023,14 @@ namespace Sandals {
         x_new_fd = x_fd + K_fd * this->m_tableau.b;
         return x_new_fd.allFinite();
       };
-      bool fd_ok{Optimist::FiniteDifferences::Jacobian(x, fun, Jx_fd)};
-      if (fd_ok && Jx_fd.allFinite()) {
-        Real err{(Jx - Jx_fd).norm() / (1.0 + Jx_fd.norm())};
-        SANDALS_ASSERT_WARNING(err < EPSILON_LOW, CMD "Jacobian propagation error = " << err);
+
+      // Compute the Jacobian with finite differences
+      MatrixJX Jx_fd;
+      if (Optimist::FiniteDifferences::Jacobian(x, fun, Jx_fd)) {
+        Real err{(Jx - Jx_fd).norm()};
+        SANDALS_ASSERT_WARNING(err < EPSILON_LOW,
+          CMD "Jacobian propagation error = " << err << " > " << EPSILON_LOW << "\n" <<
+          " Jx =\n" << Jx << "\n Jx_fd =\n" << Jx_fd);
       }
       #endif
 
@@ -1776,7 +1781,7 @@ namespace Sandals {
         }
 
         // Propagate the derivative of the solution with respect to the states x
-        if constexpr (Propagate) {Jx *= Jx_step;}
+        if constexpr (Propagate) {Jx = Jx_step * Jx;}
 
         // Store solution if the step is a mesh point
         if (!this->m_adaptive || mesh_point_bool) {

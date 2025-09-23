@@ -8,38 +8,45 @@
  * e-mail: davide.stocco@unitn.it                             e-mail: enrico.bertolazzi@unitn.it *
 \* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-#ifndef TESTS_PROBLEMS_BASIC_EXPLICIT_HH
-#define TESTS_PROBLEMS_BASIC_EXPLICIT_HH
+#ifndef TESTS_PROBLEMS_MAZZIA_EXPLICIT_HH
+#define TESTS_PROBLEMS_MAZZIA_EXPLICIT_HH
 
-#include "Sandals.hh"
-#include "Sandals/Problem.hh"
 #include "Sandals/System/Explicit.hh"
 
 using namespace Sandals;
 
 template<typename Real = double>
-class BasicExplicit : public Explicit<Real, 2, 0>
+class MazziaExplicit : public Explicit<Real, 4, 0>
 {
 public:
-  using typename Explicit<Real, 2, 0>::VectorF;
-  using typename Explicit<Real, 2, 0>::MatrixJF;
-  using typename Explicit<Real, 2, 0>::VectorH;
-  using typename Explicit<Real, 2, 0>::MatrixJH;
+  using typename Explicit<Real, 4, 0>::VectorF;
+  using typename Explicit<Real, 4, 0>::MatrixJF;
+  using typename Explicit<Real, 4, 0>::VectorH;
+  using typename Explicit<Real, 4, 0>::MatrixJH;
+  using MatrixX  = Eigen::Matrix<Real, Eigen::Dynamic, 2>;
 
-  BasicExplicit() : Explicit<Real, 2, 0>("BasicExplicit") {}
+  MazziaExplicit() : Explicit<Real, 4, 0>("MazziaExplicit") {}
 
-  ~BasicExplicit() {}
+  ~MazziaExplicit() {}
 
   VectorF f(VectorF const & x, Real const /*t*/) const override
   {
     VectorF f;
-    f << x(1), 1.0;
+    f <<
+       x(1),
+      -x(0) - x(0)*x(0)*x(0) - x(3),
+      -x(0) + x(3)*(1.0 - 3.0*x(0)*x(0)),
+      -x(1) - x(2);
     return f;
   }
 
-  MatrixJF Jf_x(VectorF const & /*x*/, Real const /*t*/) const override {
-    MatrixJF Jf_x(MatrixJF::Zero());
-    Jf_x(0, 1) = 1.0;
+  MatrixJF Jf_x(VectorF const & x, Real const /*t*/) const override {
+    MatrixJF Jf_x;
+    Jf_x <<
+      0.0,                   1.0, 0.0,         0.0,
+      -1.0 - 3.0*x(0)*x(0),  0.0, 0.0,        -1.0,
+      -1.0 - 6.0*x(0)*x(3), 0.0, 0.0, 1.0 - 3.0*x(0)*x(0),
+      0.0,                  -1.0, -1.0,        0.0;
     return Jf_x;
   }
 
@@ -52,30 +59,28 @@ public:
 };
 
 template<typename Real, typename Integrator>
-class BasicExplicitProblem : public Problem<Real, 2, 0, Integrator>
+class MazziaExplicitProblem : public Problem<Real, 4, 0, Integrator>
 {
 public:
-  using typename Problem<Real, 2, 0, Integrator>::SystemPtr;
-  using typename Problem<Real, 2, 0, Integrator>::IntegratorPtr;
-  using typename Problem<Real, 2, 0, Integrator>::SolutionPtr;
-  using typename Problem<Real, 2, 0, Integrator>::VectorF;
-  using typename Problem<Real, 2, 0, Integrator>::MatrixJF;
-  using VectorX = Eigen::Vector<Real, Eigen::Dynamic>;
-  using MatrixX = Eigen::Matrix<Real, 2, Eigen::Dynamic>;
+  using typename Problem<Real, 4, 0, Integrator>::SystemPtr;
+  using typename Problem<Real, 4, 0, Integrator>::IntegratorPtr;
+  using typename Problem<Real, 4, 0, Integrator>::SolutionPtr;
+  using typename Problem<Real, 4, 0, Integrator>::VectorF;
+  using typename Problem<Real, 4, 0, Integrator>::MatrixJF;
 
-  BasicExplicitProblem(IntegratorPtr rk)
-    : Problem<Real, 2, 0, Integrator>("BasicExplicitProblem", std::make_shared<BasicExplicit<Real>>(), rk)
-  {
-    rk->system(this->system());
-  }
+  MazziaExplicitProblem(IntegratorPtr rk)
+    : Problem<Real, 4, 0, Integrator>("MazziaExplicitProblem", std::make_unique<MazziaExplicit<Real>>(),
+      std::move(rk)) {}
 
-  ~BasicExplicitProblem() {}
+  ~MazziaExplicitProblem() {}
 
   VectorF b(VectorF const & x_ini, VectorF const & x_end) const override
   {
     VectorF b;
-    b(0) = x_ini(0);
-    b(1) = x_end(1);
+    b(0) = x_ini(0) - 1.0;
+    b(1) = x_ini(1) - 0.0;
+    b(2) = x_end(0) - 0.75;
+    b(3) = x_end(1) + 0.0;
     return b;
   }
 
@@ -83,31 +88,22 @@ public:
   {
     MatrixJF Jb_x_ini(MatrixJF::Zero());
     Jb_x_ini(0, 0) = 1.0;
+    Jb_x_ini(1, 1) = 1.0;
     return Jb_x_ini;
   }
 
   MatrixJF Jb_x_end(VectorF const & /*x_ini*/, VectorF const & /*x_end*/) const override
   {
     MatrixJF Jb_x_end(MatrixJF::Zero());
-    Jb_x_end(1, 1) = 1.0;
+    Jb_x_end(2, 0) = 1.0;
+    Jb_x_end(3, 1) = 1.0;
     return Jb_x_end;
-  }
-
-  VectorF analytical_solution(Real const t) const {
-    VectorF x;
-    x << 0.5*t*t - t, t - 1.0;
-    return x;
-  }
-
-  MatrixX analytical_solution(VectorX const & t) const {
-    MatrixX x(2, t.size());
-    for (Integer i{0}; i < t.size(); ++i) {x.col(i) = this->analytical_solution(t(i));}
-    return x;
   }
 };
 
 template<typename Integrator>
-BasicExplicitProblem(std::shared_ptr<Integrator>)
-    -> BasicExplicitProblem<typename Integrator::real_type, Integrator>;
+MazziaExplicitProblem(std::unique_ptr<Integrator>)
+    -> MazziaExplicitProblem<typename Integrator::Scalar, Integrator>;
 
-#endif // TESTS_PROBLEMS_BASIC_EXPLICIT_HH
+
+#endif // TESTS_PROBLEMS_MAZZIA_EXPLICIT_HH
