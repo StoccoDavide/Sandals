@@ -249,6 +249,8 @@ Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 id="header-pub-static-methods" class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a5ee81d6ebe510ef3a1acb87d6843a7c5" id="r_a5ee81d6ebe510ef3a1acb87d6843a7c5"><td class="memItemLeft" align="right" valign="top">static constexpr <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5ee81d6ebe510ef3a1acb87d6843a7c5">stages</a> ()</td></tr>
+<tr class="memitem:ae06d5025d22314f6a1533acdb872bfbb" id="r_ae06d5025d22314f6a1533acdb872bfbb"><td class="memItemLeft" align="right" valign="top">static constexpr <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae06d5025d22314f6a1533acdb872bfbb">equations_number</a> ()</td></tr>
+<tr class="memitem:af976639deee4063a6b0ce59c7fcd65c1" id="r_af976639deee4063a6b0ce59c7fcd65c1"><td class="memItemLeft" align="right" valign="top">static constexpr <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af976639deee4063a6b0ce59c7fcd65c1">invariants_number</a> ()</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -2316,6 +2318,34 @@ template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581
 
 </div>
 </div>
+<a id="ae06d5025d22314f6a1533acdb872bfbb" name="ae06d5025d22314f6a1533acdb872bfbb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae06d5025d22314f6a1533acdb872bfbb">&#9670;&#160;</a></span>equations_number()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> S, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> <a class="el" href="class_sandals_1_1_runge_kutta.html">Sandals::RungeKutta</a>&lt; Real, S, N, M &gt;::equations_number </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel static">static</span><span class="mlabel constexpr">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Get the number of equations of the ODE/DAE system. </p><dl class="section return"><dt>Returns</dt><dd>The number of equations of the ODE/DAE system. </dd></dl>
+
+</div>
+</div>
 <a id="a96b9264a29d4aa75684de7b045b96c3c" name="a96b9264a29d4aa75684de7b045b96c3c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a96b9264a29d4aa75684de7b045b96c3c">&#9670;&#160;</a></span>erk_explicit_propagate()</h2>
 
@@ -3154,6 +3184,34 @@ template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="af976639deee4063a6b0ce59c7fcd65c1" name="af976639deee4063a6b0ce59c7fcd65c1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af976639deee4063a6b0ce59c7fcd65c1">&#9670;&#160;</a></span>invariants_number()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> S, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> <a class="el" href="class_sandals_1_1_runge_kutta.html">Sandals::RungeKutta</a>&lt; Real, S, N, M &gt;::invariants_number </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel static">static</span><span class="mlabel constexpr">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Get the number of invariants of the ODE/DAE system. </p><dl class="section return"><dt>Returns</dt><dd>The number of invariants of the ODE/DAE system. </dd></dl>
 
 </div>
 </div>
@@ -4797,7 +4855,7 @@ template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Get the stages \( s \) number of the Runge-Kutta method. </p><dl class="section return"><dt>Returns</dt><dd>The stages \( s \) number of the Runge-Kutta method. </dd></dl>
+<p>Get the number of stages of the Runge-Kutta method. </p><dl class="section return"><dt>Returns</dt><dd>The number of stages of the Runge-Kutta method. </dd></dl>
 
 </div>
 </div>

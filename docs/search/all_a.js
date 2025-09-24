@@ -20,7 +20,7 @@ var searchData=
   ['integrator_17',['integrator',['../class_sandals_1_1_problem.html#a837c385a1f76b4ac0932257e200094bc',1,'Sandals::Problem::integrator()'],['../class_sandals_1_1_problem.html#aa40daafa38b51dd4a2ecc9a56eb8d596',1,'Sandals::Problem::integrator() const'],['../class_sandals_1_1_problem.html#a702de08f6e1e69e3f6410a5dda728be3',1,'Sandals::Problem::integrator(IntegratorPtr t_integrator)']]],
   ['integratorptr_18',['IntegratorPtr',['../class_sandals_1_1_problem.html#a032d24ecbe59187f11b3ff75342f3a44',1,'Sandals::Problem']]],
   ['invariants_20manifold_19',['Projection on the invariants manifold',['../class_sandals_1_1_runge_kutta.html#autotoc_md23',1,'']]],
-  ['invariants_5fnumber_20',['invariants_number',['../class_sandals_1_1_implicit.html#aad59a225a57fc8ece8971c6a9b7663a4',1,'Sandals::Implicit']]],
+  ['invariants_5fnumber_20',['invariants_number',['../class_sandals_1_1_runge_kutta.html#af976639deee4063a6b0ce59c7fcd65c1',1,'Sandals::RungeKutta::invariants_number()'],['../struct_sandals_1_1_solution.html#a2736beeac4b712a8a70122a3fc612dc7',1,'Sandals::Solution::invariants_number()'],['../class_sandals_1_1_implicit.html#ad27b77038d7bcd15c8e823b5410858b1',1,'Sandals::Implicit::invariants_number()']]],
   ['irk_20methods_20for_20explicit_20dynamic_20systems_21',['IRK methods for explicit dynamic systems',['../class_sandals_1_1_runge_kutta.html#autotoc_md10',1,'']]],
   ['irk_20methods_20for_20implicit_20dynamic_20systems_22',['IRK methods for implicit dynamic systems',['../class_sandals_1_1_runge_kutta.html#autotoc_md13',1,'']]],
   ['irk_5ffunction_23',['irk_function',['../class_sandals_1_1_runge_kutta.html#af08549da5fee935f3d05113e3b682af5',1,'Sandals::RungeKutta']]],

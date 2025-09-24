@@ -15,8 +15,8 @@
 // #include "Sandals/RungeKutta/ExplicitEuler.hh" // ERK - OK
 // #include "Sandals/RungeKutta/Heun2.hh" // ERK - OK
 // #include "Sandals/RungeKutta/Heun3.hh" // ERK - OK
-// #include "Sandals/RungeKutta/RK4.hh" // ERK - OK
-// #include "Sandals/RungeKutta/SSPRK104.hh" // ERK - OK
+#include "Sandals/RungeKutta/RK4.hh" // ERK - OK
+#include "Sandals/RungeKutta/SSPRK104.hh" // ERK - OK
 // #include "Sandals/RungeKutta/LobattoIIIA2.hh" // DIRK - OK
 // #include "Sandals/RungeKutta/SSPIRK33.hh" // DIRK - OK
 #include "Sandals/RungeKutta/ImplicitEuler.hh" // IRK - OK
@@ -29,7 +29,10 @@
 #include "Basic.hh"
 #include "Poisson.hh"
 #include "Shampine0.hh"
+#include "Shampine1.hh"
 #include "Shampine2.hh"
+#include "Hypersensitive0.hh"
+#include "Hypersensitive1.hh"
 
 #ifdef SANDALS_ENABLE_PLOTTING
 #include <TApplication.h>
@@ -62,8 +65,15 @@ std::vector<Color_t> matlab_lines_colormap() {
 #endif
 
 using namespace Sandals;
-
 using Real = double;
+
+#ifndef PROBLEM_INIT
+#define PROBLEM_INIT(PROBLEM, INTEGRATOR)                                                \
+  constexpr Integer D{PROBLEM##Explicit<Real>::equations_number()};                      \
+  PROBLEM##Problem<Real, PROBLEM##Explicit<Real>, INTEGRATOR<Real, D>> problem_explicit; \
+  PROBLEM##Problem<Real, PROBLEM##Implicit<Real>, INTEGRATOR<Real, D>> problem_implicit; \
+  PROBLEM##Problem<Real, PROBLEM##SemiExplicit<Real>, INTEGRATOR<Real, D>> problem_semiexplicit;
+#endif
 
 int main(int argc, char ** argv) {
 
@@ -76,27 +86,40 @@ int main(int argc, char ** argv) {
 #endif
 
   // Istantiate the problems
-  Shampine2Problem<Real, Shampine2Explicit<Real>, GaussLegendre6<Real, 2>> problem_explicit;
-  Shampine2Problem<Real, Shampine2Implicit<Real>, GaussLegendre6<Real, 2>> problem_implicit;
-  Shampine2Problem<Real, Shampine2SemiExplicit<Real>, GaussLegendre6<Real, 2>> problem_semiexplicit;
+  PROBLEM_INIT(Poisson, GaussLegendre6)
 
   // Set verbose mode
-  problem_explicit.verbose_mode(true);
+  constexpr bool verbose{true};
+  problem_explicit.verbose_mode(verbose);
+  problem_implicit.verbose_mode(verbose);
+  problem_semiexplicit.verbose_mode(verbose);
   problem_explicit.integrator()->verbose_mode(false);
-  problem_implicit.verbose_mode(true);
   problem_implicit.integrator()->verbose_mode(false);
-  problem_semiexplicit.verbose_mode(true);
   problem_semiexplicit.integrator()->verbose_mode(false);
 
+  // Set solver tolerance
+  problem_explicit.tolerance(1.0e-8);
+  problem_implicit.tolerance(1.0e-8);
+  problem_semiexplicit.tolerance(1.0e-8);
+
+  // Set solver maximum number of iterations
+  problem_explicit.max_iterations(100);
+  problem_implicit.max_iterations(100);
+  problem_semiexplicit.max_iterations(100);
+
   // Set solution parameters
-  static constexpr long num_points{50};
-  problem_explicit.subintervals(1);
-  problem_implicit.subintervals(1);
-  problem_semiexplicit.subintervals(1);
+  constexpr Integer num_points{200};
+  problem_explicit.subintervals(5);
+  problem_implicit.subintervals(5);
+  problem_semiexplicit.subintervals(5);
+
+  // Set time mesh
   Eigen::Vector<Real, Eigen::Dynamic> time(Eigen::Vector<Real, Eigen::Dynamic>::LinSpaced(
     num_points, problem_explicit.time_start(), problem_explicit.time_end()
   ));
-  Eigen::Matrix<Real, 2, Eigen::Dynamic> guess(2, num_points); guess.setConstant(1.0);
+
+  // Set initial guess
+  Eigen::Matrix<Real, D, Eigen::Dynamic> guess(problem_explicit.guess(time));
 
   // Solve the problems with shooting
   std::cout << "\n=== Basic Explicit Problem ===\n" << std::endl;
@@ -130,7 +153,9 @@ int main(int argc, char ** argv) {
   graph_ex->GetXaxis()->SetTitle("t (s)");
   graph_ex->GetYaxis()->SetTitle("x, y (-)");
   graph_ex->GetXaxis()->SetLimits(time(0), time(Eigen::last));
-  graph_ex->GetYaxis()->SetRangeUser(-1, 1); //asol.minCoeff()*1.1, asol.maxCoeff()*1.1);
+  graph_ex->GetYaxis()->SetRangeUser(
+    std::min(asol.minCoeff(), esol.x.minCoeff())*1.1, std::max(asol.maxCoeff(), esol.x.maxCoeff())*1.1
+  );
   TLegend *leg1 = new TLegend(0.6, 0.7, 0.9, 0.9);
   leg1->AddEntry(graph_ex, "x (explicit)", "l");
   leg1->AddEntry(graph_ey, "y (explicit)", "l");
@@ -149,7 +174,9 @@ int main(int argc, char ** argv) {
   graph_ix->GetXaxis()->SetTitle("t (s)");
   graph_ix->GetYaxis()->SetTitle("x, y (-)");
   graph_ix->GetXaxis()->SetLimits(time(0), time(Eigen::last));
-  graph_ix->GetYaxis()->SetRangeUser(-1, 1); //asol.minCoeff()*1.1, asol.maxCoeff()*1.1);
+  graph_ix->GetYaxis()->SetRangeUser(
+    std::min(asol.minCoeff(), esol.x.minCoeff())*1.1, std::max(asol.maxCoeff(), esol.x.maxCoeff())*1.1
+  );
   TLegend *leg2 = new TLegend(0.6, 0.7, 0.9, 0.9);
   leg2->AddEntry(graph_ix, "x (implicit)", "l");
   leg2->AddEntry(graph_iy, "y (implicit)", "l");
@@ -168,7 +195,9 @@ int main(int argc, char ** argv) {
   graph_sx->GetXaxis()->SetTitle("t (s)");
   graph_sx->GetYaxis()->SetTitle("x, y (-)");
   graph_sx->GetXaxis()->SetLimits(time(0), time(Eigen::last));
-  graph_sx->GetYaxis()->SetRangeUser(-1, 1); //asol.minCoeff()*1.1, asol.maxCoeff()*1.1);
+  graph_sx->GetYaxis()->SetRangeUser(
+    std::min(asol.minCoeff(), esol.x.minCoeff())*1.1, std::max(asol.maxCoeff(), esol.x.maxCoeff())*1.1
+  );
   TLegend *leg3 = new TLegend(0.6, 0.7, 0.9, 0.9);
   leg3->AddEntry(graph_sx, "x (semi-explicit)", "l");
   leg3->AddEntry(graph_sy, "y (semi-explicit)", "l");

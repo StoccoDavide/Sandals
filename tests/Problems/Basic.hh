@@ -113,24 +113,20 @@ public:
   ~BasicSemiExplicit() {}
 
   MatrixA A(VectorF const & /*x*/, Real const /*t*/) const override
-  {
-    MatrixA A;
-    A.setIdentity();
-    return A;
-  }
+  {return MatrixA::Identity();}
 
   TensorTA TA_x(VectorF const & /*x*/, Real const /*t*/) const override
   {
-    TensorTA TA_x(2);
+    TensorTA TA_x;
     TA_x[0].setZero();
     TA_x[1].setZero();
     return TA_x;
   }
 
-  VectorB b(VectorF const &x, Real const /*t*/) const override
+  VectorB b(VectorF const & x, Real const /*t*/) const override
   {
     VectorF b;
-    b <<  x(1), 1.0;
+    b << x(1), 1.0;
     return b;
   }
 
@@ -174,8 +170,7 @@ public:
   VectorF b(VectorF const & x_ini, VectorF const & x_end) const override
   {
     VectorF b;
-    b(0) = x_ini(0);
-    b(1) = x_end(1);
+    b << x_ini(0), x_end(1);
     return b;
   }
 
@@ -206,6 +201,11 @@ public:
     }
     return x;
   }
+
+  static VectorF guess(Real const /*t*/) {return VectorF::Zero();}
+
+  static MatrixX guess(VectorX const & t) {return MatrixX::Zero(2, t.size());}
+
 };
 
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

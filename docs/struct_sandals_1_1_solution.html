@@ -170,6 +170,11 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a2d399d1892af12ed8ef1a1333503dbde" id="r_a2d399d1892af12ed8ef1a1333503dbde"><td class="memItemLeft" align="right" valign="top">std::map&lt; std::string, std::vector&lt; Real &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2d399d1892af12ed8ef1a1333503dbde">std_h</a> (std::vector&lt; std::string &gt; const &amp;names) const</td></tr>
 <tr class="memitem:a6b30ec8cee74c3ecbc27908cdba73ba7" id="r_a6b30ec8cee74c3ecbc27908cdba73ba7"><td class="memItemLeft" align="right" valign="top">std::map&lt; std::string, <a class="el" href="#aeda556287c2b0c04f07f4e42ed3dabc8">Vector</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6b30ec8cee74c3ecbc27908cdba73ba7">eigen_h</a> (std::vector&lt; std::string &gt; const &amp;names) const</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-static-methods" class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:ae4045370dfdfd8350b6dc4a2b7a92e9d" id="r_ae4045370dfdfd8350b6dc4a2b7a92e9d"><td class="memItemLeft" align="right" valign="top">static constexpr <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae4045370dfdfd8350b6dc4a2b7a92e9d">equations_number</a> ()</td></tr>
+<tr class="memitem:a2736beeac4b712a8a70122a3fc612dc7" id="r_a2736beeac4b712a8a70122a3fc612dc7"><td class="memItemLeft" align="right" valign="top">static constexpr <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2736beeac4b712a8a70122a3fc612dc7">invariants_number</a> ()</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:ab314e00036a1feb83c115e58bc7f2322" id="r_ab314e00036a1feb83c115e58bc7f2322"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#aeda556287c2b0c04f07f4e42ed3dabc8">Vector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab314e00036a1feb83c115e58bc7f2322">t</a></td></tr>
@@ -596,6 +601,62 @@ template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A map of the states vectors as Eigen library vectors. </dd></dl>
+
+</div>
+</div>
+<a id="ae4045370dfdfd8350b6dc4a2b7a92e9d" name="ae4045370dfdfd8350b6dc4a2b7a92e9d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae4045370dfdfd8350b6dc4a2b7a92e9d">&#9670;&#160;</a></span>equations_number()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> <a class="el" href="struct_sandals_1_1_solution.html">Sandals::Solution</a>&lt; Real, N, M &gt;::equations_number </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel static">static</span><span class="mlabel constexpr">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Get the number of equations of the ODE/DAE system. </p><dl class="section return"><dt>Returns</dt><dd>The number of equations of the ODE/DAE system. </dd></dl>
+
+</div>
+</div>
+<a id="a2736beeac4b712a8a70122a3fc612dc7" name="a2736beeac4b712a8a70122a3fc612dc7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2736beeac4b712a8a70122a3fc612dc7">&#9670;&#160;</a></span>invariants_number()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> <a class="el" href="struct_sandals_1_1_solution.html">Sandals::Solution</a>&lt; Real, N, M &gt;::invariants_number </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel static">static</span><span class="mlabel constexpr">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Get the number of invariants of the ODE/DAE system. </p><dl class="section return"><dt>Returns</dt><dd>The number of invariants of the ODE/DAE system. </dd></dl>
 
 </div>
 </div>

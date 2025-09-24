@@ -14,6 +14,8 @@ var struct_sandals_1_1_solution =
     [ "eigen_x", "struct_sandals_1_1_solution.html#a79e5c4d0cc6cca26cc2217a244091e06", null ],
     [ "eigen_x", "struct_sandals_1_1_solution.html#a264a93a6d8576147aa13002e44e6715c", null ],
     [ "eigen_x", "struct_sandals_1_1_solution.html#a1934e6691bfb9838cbd7ced562ef3308", null ],
+    [ "equations_number", "struct_sandals_1_1_solution.html#ae4045370dfdfd8350b6dc4a2b7a92e9d", null ],
+    [ "invariants_number", "struct_sandals_1_1_solution.html#a2736beeac4b712a8a70122a3fc612dc7", null ],
     [ "is_empty", "struct_sandals_1_1_solution.html#a2652cdc6cd87035e4979a8ca2203e678", null ],
     [ "resize", "struct_sandals_1_1_solution.html#a188bd81cd55745661c1d53b3aa6ddabb", null ],
     [ "size", "struct_sandals_1_1_solution.html#a1781b29d8e876c79d2fd7a92e3088faa", null ],

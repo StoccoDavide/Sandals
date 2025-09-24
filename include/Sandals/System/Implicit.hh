@@ -117,13 +117,13 @@ namespace Sandals
     * Get the number of equations of the ODE/DAE system.
     * \return The number of equations of the ODE/DAE system.
     */
-    Integer equations_number() const {return N;}
+    static constexpr Integer equations_number() {return N;}
 
     /**
     * Get the number of invariants of the ODE/DAE system.
     * \return The number of invariants of the ODE/DAE system.
     */
-    Integer invariants_number() const {return M;}
+    static constexpr Integer invariants_number() {return M;}
 
     /**
     * Evaluate the ODE/DAE system \f$ \mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, t) \f$.

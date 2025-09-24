@@ -38,15 +38,11 @@ public:
   ~SinSemiExplicit() {}
 
   MatrixA A(VectorF const & /*x*/, Real const /*t*/) const override
-  {
-    MatrixA A;
-    A.setIdentity();
-    return A;
-  }
+  {return MatrixA::Identity();}
 
   TensorTA TA_x(VectorF const & /*x*/, Real const /*t*/) const override
   {
-    TensorTA TA_x(1);
+    TensorTA TA_x;
     TA_x[0].setZero();
     return TA_x;
   }

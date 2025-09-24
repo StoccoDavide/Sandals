@@ -36,14 +36,14 @@ public:
   VectorF f(VectorF const & x, Real const /*t*/) const override
   {
     VectorF f;
-    f << x(1), -5.0*std::sin(50.0*M_PI*x(0)) - 1.0*std::sin(2.0*M_PI*x(0));
+    f << x(1), -5.0*std::sin(10.0*M_PI*x(0)) - std::sin(2.0*M_PI*x(0));
     return f;
   }
 
-  MatrixJF Jf_x(VectorF const & /*x*/, Real const /*t*/) const override {
+  MatrixJF Jf_x(VectorF const & x, Real const /*t*/) const override {
     MatrixJF Jf_x(MatrixJF::Zero());
     Jf_x(0, 1) = 1.0;
-    Jf_x(1, 0) = -5.0*50.0*M_PI*std::cos(50.0*M_PI*0.0) - 1.0*2.0*M_PI*std::cos(2.0*M_PI*0.0);
+    Jf_x(1, 0) = -50.0*M_PI*std::cos(10.0*M_PI*x(0)) - 2.0*M_PI*std::cos(2.0*M_PI*x(0));
     return Jf_x;
   }
 
@@ -73,14 +73,14 @@ public:
   VectorF F(VectorF const & x, VectorF const & x_dot, Real const /*t*/) const override
   {
     VectorF F;
-    F << x_dot(0) - x(1), x_dot(1) + 5.0*std::sin(50.0*M_PI*x(0)) + 1.0*std::sin(2.0*M_PI*x(0));
+    F << x_dot(0) - x(1), x_dot(1) + 5.0*std::sin(10.0*M_PI*x(0)) + std::sin(2.0*M_PI*x(0));
     return F;
   }
 
-  MatrixJF JF_x(VectorF const & /*x*/, VectorF const & /*x_dot*/, Real const /*t*/) const override {
+  MatrixJF JF_x(VectorF const & x, VectorF const & /*x_dot*/, Real const /*t*/) const override {
     MatrixJF JF_x(MatrixJF::Zero());
     JF_x(0, 1) = -1.0;
-    JF_x(1, 0) = 5.0*50.0*M_PI*std::cos(50.0*M_PI*0.0) + 1.0*2.0*M_PI*std::cos(2.0*M_PI*0.0);
+    JF_x(1, 0) = 50.0*M_PI*std::cos(10.0*M_PI*x(0)) + 2.0*M_PI*std::cos(2.0*M_PI*x(0));
     return JF_x;
   }
 
@@ -115,31 +115,27 @@ public:
   ~PoissonSemiExplicit() {}
 
   MatrixA A(VectorF const & /*x*/, Real const /*t*/) const override
-  {
-    MatrixA A;
-    A.setIdentity();
-    return A;
-  }
+  {return MatrixA::Identity();}
 
   TensorTA TA_x(VectorF const & /*x*/, Real const /*t*/) const override
   {
-    TensorTA TA_x(2);
+    TensorTA TA_x;
     TA_x[0].setZero();
     TA_x[1].setZero();
     return TA_x;
   }
 
-  VectorB b(VectorF const &x, Real const /*t*/) const override
+  VectorB b(VectorF const & x, Real const /*t*/) const override
   {
     VectorF b;
-    b <<  x(1), -5.0*std::sin(50.0*M_PI*x(0)) - 1.0*std::sin(2.0*M_PI*x(0));
+    b << x(1), -5.0*std::sin(10.0*M_PI*x(0)) - std::sin(2.0*M_PI*x(0));
     return b;
   }
 
-  MatrixJB Jb_x(VectorF const & /*x*/, Real const /*t*/) const override {
+  MatrixJB Jb_x(VectorF const & x, Real const /*t*/) const override {
     MatrixJB Jb_x(MatrixJB::Zero());
     Jb_x(0, 1) = 1.0;
-    Jb_x(1, 0) = -5.0*50.0*M_PI*std::cos(50.0*M_PI*0.0) - 1.0*2.0*M_PI*std::cos(2.0*M_PI*0.0);
+    Jb_x(1, 0) = -50.0*M_PI*std::cos(10.0*M_PI*x(0)) - 2.0*M_PI*std::cos(2.0*M_PI*x(0));
     return Jb_x;
   }
 
@@ -199,8 +195,8 @@ public:
   static VectorF analytical_solution(Real const t) {
     VectorF x;
     x <<
-      std::sin(2.0*M_PI*t)/(4.0*M_PI*M_PI) + std::sin(50.0*M_PI*t)/(500.0*M_PI*M_PI),
-      std::cos(2.0*M_PI*t)/(2.0*M_PI) + std::cos(50.0*M_PI*t)/(10.0*M_PI);
+      std::sin(2.0*M_PI*t)/(4.0*M_PI*M_PI) + std::sin(10.0*M_PI*t)/(20.0*M_PI*M_PI),
+      std::cos(2.0*M_PI*t)/(2.0*M_PI) + std::cos(10.0*M_PI*t)/(2.0*M_PI);
     return x;
   }
 
@@ -211,6 +207,11 @@ public:
     }
     return x;
   }
+
+  static VectorF guess(Real const /*t*/) {return VectorF::Ones();}
+
+  static MatrixX guess(VectorX const & t) {return MatrixX::Ones(2, t.size());}
+
 };
 
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

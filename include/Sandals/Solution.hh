@@ -79,6 +79,18 @@ namespace Sandals {
       : t(size), x(Vector::Zero(N, size)), h(Vector::Zero(M, size)) {}
 
     /**
+    * Get the number of equations of the ODE/DAE system.
+    * \return The number of equations of the ODE/DAE system.
+    */
+    static constexpr Integer equations_number() {return N;}
+
+    /**
+    * Get the number of invariants of the ODE/DAE system.
+    * \return The number of invariants of the ODE/DAE system.
+    */
+    static constexpr Integer invariants_number() {return M;}
+
+    /**
     * Resize the independent variable (or time) vector and states matrix.
     * \param[in] size The size of the independent variable (or time) vector and states matrix.
     */

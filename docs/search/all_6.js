@@ -11,7 +11,7 @@ var searchData=
   ['enable_5fprojection_8',['enable_projection',['../class_sandals_1_1_runge_kutta.html#a2baa06f0f2ff851d0a3445cbe6409dbd',1,'Sandals::RungeKutta']]],
   ['enable_5freverse_5fmode_9',['enable_reverse_mode',['../class_sandals_1_1_runge_kutta.html#a05ff883f1ce8e8490a4f2bf315631df1',1,'Sandals::RungeKutta']]],
   ['enable_5fverbose_5fmode_10',['enable_verbose_mode',['../class_sandals_1_1_problem.html#aec330af41b5f7a947402ad6459f4be06',1,'Sandals::Problem::enable_verbose_mode()'],['../class_sandals_1_1_runge_kutta.html#aa56e75434f33e14f3bff7147831d918e',1,'Sandals::RungeKutta::enable_verbose_mode()']]],
-  ['equations_5fnumber_11',['equations_number',['../class_sandals_1_1_implicit.html#a86c98b1098360f6d8e336319af4b54b4',1,'Sandals::Implicit']]],
+  ['equations_5fnumber_11',['equations_number',['../class_sandals_1_1_runge_kutta.html#ae06d5025d22314f6a1533acdb872bfbb',1,'Sandals::RungeKutta::equations_number()'],['../struct_sandals_1_1_solution.html#ae4045370dfdfd8350b6dc4a2b7a92e9d',1,'Sandals::Solution::equations_number()'],['../class_sandals_1_1_implicit.html#aa2d2df8e431dbf61761ca42c830c773b',1,'Sandals::Implicit::equations_number()']]],
   ['erk_20methods_20for_20explicit_20dynamic_20systems_12',['ERK methods for explicit dynamic systems',['../class_sandals_1_1_runge_kutta.html#autotoc_md3',1,'']]],
   ['erk_20methods_20for_20implicit_20dynamic_20systems_13',['ERK methods for implicit dynamic systems',['../class_sandals_1_1_runge_kutta.html#autotoc_md6',1,'']]],
   ['erk_5fexplicit_5fpropagate_14',['erk_explicit_propagate',['../class_sandals_1_1_runge_kutta.html#a96b9264a29d4aa75684de7b045b96c3c',1,'Sandals::RungeKutta']]],

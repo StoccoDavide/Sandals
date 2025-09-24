@@ -139,21 +139,17 @@ public:
   Real p() const {return this->m_p;}
 
   MatrixA A(VectorF const & /*x*/, Real const /*t*/) const override
-  {
-    MatrixA A;
-    A.setIdentity();
-    return A;
-  }
+  {return MatrixA::Identity();}
 
   TensorTA TA_x(VectorF const & /*x*/, Real const /*t*/) const override
   {
-    TensorTA TA_x(2);
+    TensorTA TA_x;
     TA_x[0].setZero();
     TA_x[1].setZero();
     return TA_x;
   }
 
-  VectorB b(VectorF const &x, Real const t) const override
+  VectorB b(VectorF const & x, Real const t) const override
   {
     VectorF b;
     b << x(1), -3.0*this->m_p*x(0) / std::pow(this->m_p + t*t, 2.0);
@@ -206,8 +202,7 @@ public:
   VectorF b(VectorF const & x_ini, VectorF const & x_end) const override
   {
     VectorF b;
-    b(0) = x_ini(0) + 0.1 / std::sqrt(this->p()+0.01);
-    b(1) = x_end(0) - 0.1 / std::sqrt(this->p()+0.01);
+    b << x_ini(0) + 0.1 / std::sqrt(this->p() + 0.01), x_end(0) - 0.1 / std::sqrt(this->p() + 0.01);
     return b;
   }
 
@@ -240,6 +235,11 @@ public:
     }
     return x;
   }
+
+  static VectorF guess(Real const /*t*/) {return VectorF::Zero();}
+
+  static MatrixX guess(VectorX const & t) {return MatrixX::Zero(2, t.size());}
+
 };
 
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

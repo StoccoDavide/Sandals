@@ -54,6 +54,12 @@ namespace Sandals {
     bool        is_embedded{false};  /**< Embedded method boolean. */
 
     /**
+    * Get the number of stages of the Butcher tableau.
+    * \return The number of stages of the Butcher tableau.
+    */
+    static constexpr Integer stages() {return S;}
+
+    /**
     * Check the Butcher tableau consistency for a generic Runge-Kutta method.
     * \param[in] verbose Verbosity flag.
     * \return True if the Butcher tableau is consistent and its order is verified, false otherwise.
@@ -392,6 +398,7 @@ namespace Sandals {
 
       #undef CMD
     }
+
   }; // struct Tableau
 
 } // namespace Sandals

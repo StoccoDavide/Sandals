@@ -139,6 +139,24 @@ namespace Sandals {
     }
 
     /**
+    * Get the number of stages of the Runge-Kutta method.
+    * \return The number of stages of the Runge-Kutta method.
+    */
+    static constexpr Integer stages() {return S;}
+
+    /**
+    * Get the number of equations of the ODE/DAE system.
+    * \return The number of equations of the ODE/DAE system.
+    */
+    static constexpr Integer equations_number() {return N;}
+
+    /**
+    * Get the number of invariants of the ODE/DAE system.
+    * \return The number of invariants of the ODE/DAE system.
+    */
+    static constexpr Integer invariants_number() {return M;}
+
+    /**
     * Get the enumeration type of the Runge-Kutta method.
     * \return The enumeration type of the Runge-Kutta method.
     */
@@ -173,12 +191,6 @@ namespace Sandals {
     * \return The Tableau const reference.
     */
     Tableau<Real, S> const & tableau() const {return this->m_tableau;}
-
-    /**
-    * Get the stages \f$ s \f$ number of the Runge-Kutta method.
-    * \return The stages \f$ s \f$ number of the Runge-Kutta method.
-    */
-    static constexpr Integer stages() {return S;}
 
     /**
     * Get the name of the Runge-Kutta method.

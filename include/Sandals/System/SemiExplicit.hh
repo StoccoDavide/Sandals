@@ -46,7 +46,7 @@ namespace Sandals {
     using VectorF = typename Explicit<Real, N, M>::VectorF; /**< Templetized vector type. */
     using MatrixJF = typename Explicit<Real, N, M>::MatrixJF; /**< Templetized matrix type. */
     using MatrixA = typename Explicit<Real, N, M>::MatrixJF; /**< Templetized matrix type. */
-    using TensorTA = typename std::vector<MatrixJF>; /**< Templetized matrix type. */
+    using TensorTA = typename std::array<MatrixJF, N>; /**< Templetized matrix type. */
     using VectorB = typename Explicit<Real, N, M>::VectorF; /**< Templetized vector type. */
     using MatrixJB = typename Explicit<Real, N, M>::MatrixJF; /**< Templetized vector type. */
     using Type = typename Explicit<Real, N, M>::Type; /**< System type enumeration. */

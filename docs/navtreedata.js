@@ -66,8 +66,8 @@ var NAVTREEINDEX =
 "class_sandals_1_1_fehlberg45.html#ae469de804b9e198cac55d1938933ac32",
 "class_sandals_1_1_linear_wrapper.html#a348344356af95bf6f521a2cd88cb4540",
 "class_sandals_1_1_ralston4_tableau.html#a0ae8d1f003d4e8eb53eeb6efca56d115",
-"class_sandals_1_1_runge_kutta.html#af759b115312eeb7dd27de038b9a0fcbd",
-"class_sandals_1_1_tic_toc.html#a9438b39fbcab41087dd959be9ba03387"
+"class_sandals_1_1_runge_kutta.html#af52cd8fa983cd52e07a60640aee8380c",
+"class_sandals_1_1_tic_toc.html#a63dc8a90775af963f9fb79055e92fb12"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronization';

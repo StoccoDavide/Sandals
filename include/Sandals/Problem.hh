@@ -402,7 +402,7 @@ namespace Sandals
         // Print the iteration info
         if (this->m_verbose) {
           std::cout
-            << "Iteration " << iter << ": |b| = " <<  b_sys.norm() << std::endl
+            << "Iteration " << iter << ": |b| = " << b_sys.norm() << std::endl
             << "  x(" << t_mesh.template head<1>() << ") = " << this->m_solution->x.col(0).transpose() << std::endl
             << "  x(" << t_mesh.template tail<1>() << ") = " << this->m_solution->x.col(num_intervals).transpose() << std::endl;
         }
