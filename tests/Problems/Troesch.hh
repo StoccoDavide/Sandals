@@ -8,8 +8,8 @@
  * e-mail: davide.stocco@unitn.it                             e-mail: enrico.bertolazzi@unitn.it *
 \* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-#ifndef TESTS_PROBLEMS_HYPERSENSITIVE0_HH
-#define TESTS_PROBLEMS_HYPERSENSITIVE0_HH
+#ifndef TESTS_PROBLEMS_TROESCH0_HH
+#define TESTS_PROBLEMS_TROESCH0_HH
 
 #include "Sandals/System/Explicit.hh"
 #include "Sandals/System/Implicit.hh"
@@ -21,38 +21,37 @@ using namespace Sandals;
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 template<typename Real = double>
-class Hypersensitive0Explicit : public Explicit<Real, 4, 0>
+class TroeschExplicit : public Explicit<Real, 2, 0>
 {
 public:
-  using typename Explicit<Real, 4, 0>::VectorF;
-  using typename Explicit<Real, 4, 0>::MatrixJF;
-  using typename Explicit<Real, 4, 0>::VectorH;
-  using typename Explicit<Real, 4, 0>::MatrixJH;
+  using typename Explicit<Real, 2, 0>::VectorF;
+  using typename Explicit<Real, 2, 0>::MatrixJF;
+  using typename Explicit<Real, 2, 0>::VectorH;
+  using typename Explicit<Real, 2, 0>::MatrixJH;
 
-  Hypersensitive0Explicit() : Explicit<Real, 4, 0>("Hypersensitive0Explicit") {}
+private:
+  Real m_lambda{1.0e-2};
 
-  ~Hypersensitive0Explicit() {}
+public:
+  TroeschExplicit() : Explicit<Real, 2, 0>("TroeschExplicit") {}
+
+  ~TroeschExplicit() {}
+
+  void lambda(Real const lambda) {this->m_lambda = lambda;}
+
+  Real lambda() const {return this->m_lambda;}
 
   VectorF f(VectorF const & x, Real const /*t*/) const override
   {
     VectorF f;
-    f <<
-      x(1),
-      -x(0) - x(0)*x(0)*x(0) - x(3),
-      -x(0) + x(3)*(1.0 + 3.0*x(0)*x(0)),
-      -x(1) - x(2);
+    f << x(1), this->m_lambda*std::sinh(this->m_lambda*x(0));
     return f;
   }
 
   MatrixJF Jf_x(VectorF const & x, Real const /*t*/) const override {
     MatrixJF Jf_x(MatrixJF::Zero());
     Jf_x(0, 1) = 1.0;
-    Jf_x(1, 0) = -1.0 - 3.0*x(0)*x(0);
-    Jf_x(1, 3) = -1.0;
-    Jf_x(2, 0) = -1.0 + 6.0*x(0)*x(3);
-    Jf_x(2, 3) = 1.0 + 3.0*x(0)*x(0);
-    Jf_x(3, 1) = -1.0;
-    Jf_x(3, 2) = -1.0;
+    Jf_x(1, 0) = this->m_lambda*this->m_lambda*std::cosh(this->m_lambda*x(0));
     return Jf_x;
   }
 
@@ -66,39 +65,39 @@ public:
 
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+
 template<typename Real = double>
-class Hypersensitive0Implicit : public Implicit<Real, 4, 0>
+class TroeschImplicit : public Implicit<Real, 2, 0>
 {
 public:
-  using typename Implicit<Real, 4, 0>::VectorF;
-  using typename Implicit<Real, 4, 0>::MatrixJF;
-  using typename Implicit<Real, 4, 0>::VectorH;
-  using typename Implicit<Real, 4, 0>::MatrixJH;
+  using typename Implicit<Real, 2, 0>::VectorF;
+  using typename Implicit<Real, 2, 0>::MatrixJF;
+  using typename Implicit<Real, 2, 0>::VectorH;
+  using typename Implicit<Real, 2, 0>::MatrixJH;
 
-  Hypersensitive0Implicit() : Implicit<Real, 4, 0>("Hypersensitive0Implicit") {}
+private:
+  Real m_lambda{1.0e-2};
 
-  ~Hypersensitive0Implicit() {}
+public:
+  TroeschImplicit() : Implicit<Real, 2, 0>("TroeschImplicit") {}
+
+  ~TroeschImplicit() {}
+
+  void lambda(Real const lambda) {this->m_lambda = lambda;}
+
+  Real lambda() const {return this->m_lambda;}
 
   VectorF F(VectorF const & x, VectorF const & x_dot, Real const /*t*/) const override
   {
     VectorF F;
-    F <<
-      x_dot(0) - x(1),
-      x_dot(1) + x(0) + x(0)*x(0)*x(0) + x(3),
-      x_dot(2) + x(0) - x(3)*(1.0 + 3.0*x(0)*x(0)),
-      x_dot(3) + x(1) + x(2);
+    F << x_dot(0) - x(1), x_dot(1) - this->m_lambda*std::sinh(this->m_lambda*x(0));
     return F;
   }
 
   MatrixJF JF_x(VectorF const & x, VectorF const & /*x_dot*/, Real const /*t*/) const override {
     MatrixJF JF_x(MatrixJF::Zero());
     JF_x(0, 1) = -1.0;
-    JF_x(1, 0) = 1.0 + 3.0*x(0)*x(0);
-    JF_x(1, 3) = 1.0;
-    JF_x(2, 0) = 1.0 - 6.0*x(0)*x(3);
-    JF_x(2, 3) = -1.0 - 3.0*x(0)*x(0);
-    JF_x(3, 1) = 1.0;
-    JF_x(3, 2) = 1.0;
+    JF_x(1, 0) = -this->m_lambda*this->m_lambda*std::cosh(this->m_lambda*x(0));
     return JF_x;
   }
 
@@ -116,20 +115,28 @@ public:
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 template<typename Real = double>
-class Hypersensitive0SemiExplicit : public SemiExplicit<Real, 4, 0>
+class TroeschSemiExplicit : public SemiExplicit<Real, 2, 0>
 {
 public:
-  using VectorF  = typename SemiExplicit<Real, 4, 0>::VectorF;
-  using MatrixA  = typename SemiExplicit<Real, 4, 0>::MatrixA;
-  using TensorTA = typename SemiExplicit<Real, 4, 0>::TensorTA;
-  using VectorB  = typename SemiExplicit<Real, 4, 0>::VectorB;
-  using MatrixJB = typename SemiExplicit<Real, 4, 0>::MatrixJB;
-  using VectorH  = typename SemiExplicit<Real, 4, 0>::VectorH;
-  using MatrixJH = typename SemiExplicit<Real, 4, 0>::MatrixJH;
+  using VectorF  = typename SemiExplicit<Real, 2, 0>::VectorF;
+  using MatrixA  = typename SemiExplicit<Real, 2, 0>::MatrixA;
+  using TensorTA = typename SemiExplicit<Real, 2, 0>::TensorTA;
+  using VectorB  = typename SemiExplicit<Real, 2, 0>::VectorB;
+  using MatrixJB = typename SemiExplicit<Real, 2, 0>::MatrixJB;
+  using VectorH  = typename SemiExplicit<Real, 2, 0>::VectorH;
+  using MatrixJH = typename SemiExplicit<Real, 2, 0>::MatrixJH;
 
-  Hypersensitive0SemiExplicit() : SemiExplicit<Real, 4, 0>("Hypersensitive0SemiExplicit") {}
+private:
+  Real m_lambda{1.0e-2};
 
-  ~Hypersensitive0SemiExplicit() {}
+public:
+  TroeschSemiExplicit() : SemiExplicit<Real, 2, 0>("TroeschSemiExplicit") {}
+
+  ~TroeschSemiExplicit() {}
+
+  void lambda(Real const lambda) {this->m_lambda = lambda;}
+
+  Real lambda() const {return this->m_lambda;}
 
   MatrixA A(VectorF const & /*x*/, Real const /*t*/) const override
   {return MatrixA::Identity();}
@@ -139,31 +146,20 @@ public:
     TensorTA TA_x;
     TA_x[0].setZero();
     TA_x[1].setZero();
-    TA_x[2].setZero();
-    TA_x[3].setZero();
     return TA_x;
   }
 
   VectorB b(VectorF const & x, Real const /*t*/) const override
   {
-    VectorB b;
-    b <<
-      x(1),
-      -x(0) - x(0)*x(0)*x(0) - x(3),
-      -x(0) + x(3)*(1.0 + 3.0*x(0)*x(0)),
-      -x(1) - x(2);
+    VectorF b;
+    b << x(1), this->m_lambda*std::sinh(this->m_lambda*x(0));
     return b;
   }
 
   MatrixJB Jb_x(VectorF const & x, Real const /*t*/) const override {
     MatrixJB Jb_x(MatrixJB::Zero());
     Jb_x(0, 1) = 1.0;
-    Jb_x(1, 0) = -1.0 - 3.0*x(0)*x(0);
-    Jb_x(1, 3) = -1.0;
-    Jb_x(2, 0) = -1.0 + 6.0*x(0)*x(3);
-    Jb_x(2, 3) = 1.0 + 3.0*x(0)*x(0);
-    Jb_x(3, 1) = -1.0;
-    Jb_x(3, 2) = -1.0;
+    Jb_x(1, 0) = this->m_lambda*this->m_lambda*std::cosh(this->m_lambda*x(0));
     return Jb_x;
   }
 
@@ -178,35 +174,35 @@ public:
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 template<typename Real, typename System, typename Integrator>
-class Hypersensitive0Problem : public Problem<Real, 4, 0, Integrator>
+class TroeschProblem : public Problem<Real, 2, 0, Integrator>
 {
 public:
-  using typename Problem<Real, 4, 0, Integrator>::SystemPtr;
-  using typename Problem<Real, 4, 0, Integrator>::IntegratorPtr;
-  using typename Problem<Real, 4, 0, Integrator>::SolutionPtr;
-  using typename Problem<Real, 4, 0, Integrator>::VectorF;
-  using typename Problem<Real, 4, 0, Integrator>::MatrixJF;
+  using typename Problem<Real, 2, 0, Integrator>::SystemPtr;
+  using typename Problem<Real, 2, 0, Integrator>::IntegratorPtr;
+  using typename Problem<Real, 2, 0, Integrator>::SolutionPtr;
+  using typename Problem<Real, 2, 0, Integrator>::VectorF;
+  using typename Problem<Real, 2, 0, Integrator>::MatrixJF;
   using VectorX = Eigen::Vector<Real, Eigen::Dynamic>;
-  using MatrixX = Eigen::Matrix<Real, 4, Eigen::Dynamic>;
+  using MatrixX = Eigen::Matrix<Real, 2, Eigen::Dynamic>;
 
-  Hypersensitive0Problem()
-    : Problem<Real, 4, 0, Integrator>("Hypersensitive0Problem", std::make_unique<System>(),
+  TroeschProblem()
+    : Problem<Real, 2, 0, Integrator>("TroeschProblem", std::make_unique<System>(),
       std::make_unique<Integrator>()) {}
 
-  ~Hypersensitive0Problem() {}
+  ~TroeschProblem() {}
 
   static Real time_start() {return 0.0;}
 
   static Real time_end() {return 1.0;}
 
+  void lambda(Real const lambda) {static_cast<System*>(this->integrator()->system())->lambda(lambda);}
+
+  Real lambda() const {return static_cast<const System*>(this->integrator()->system())->lambda();}
+
   VectorF b(VectorF const & x_ini, VectorF const & x_end) const override
   {
     VectorF b;
-    b <<
-      x_ini(0) - 1.0,
-      x_ini(1),
-      x_end(0) - 0.75,
-      x_end(1);
+    b << x_ini(0), x_end(0) - 1.0;
     return b;
   }
 
@@ -214,28 +210,40 @@ public:
   {
     MatrixJF Jb_x_ini(MatrixJF::Zero());
     Jb_x_ini(0, 0) = 1.0;
-    Jb_x_ini(1, 1) = 1.0;
     return Jb_x_ini;
   }
 
   MatrixJF Jb_x_end(VectorF const & /*x_ini*/, VectorF const & /*x_end*/) const override
   {
     MatrixJF Jb_x_end(MatrixJF::Zero());
-    Jb_x_end(2, 0) = 1.0;
-    Jb_x_end(3, 1) = 1.0;
+    Jb_x_end(1, 0) = 1.0;
     return Jb_x_end;
   }
 
-  VectorF analytical_solution(Real const /*t*/) const {return VectorF::Zero();}
+  VectorF analytical_solution(Real const t) const {
+    VectorF x;
+    Real lambda{this->lambda()};
+    Real c{1.0 - std::sinh(lambda)/lambda};
+    x <<
+      std::sinh(t*lambda)/lambda + t*c,
+      std::cosh(t*lambda) + c;
+    return x;
+  }
 
-  MatrixX analytical_solution(VectorX const & t) const {return MatrixX::Zero(4, t.size());}
+  MatrixX analytical_solution(VectorX const & t) const {
+    MatrixX x(2, t.size());
+    for (Integer i{0}; i < t.size(); ++i) {
+      x.col(i) = TroeschProblem<Real, System, Integrator>::analytical_solution(t(i));
+    }
+    return x;
+  }
 
-  static VectorF guess(Real const /*t*/) {return VectorF::Ones();}
+  static VectorF guess(Real const /*t*/) {return VectorF::Zero();}
 
-  static MatrixX guess(VectorX const & t) {return MatrixX::Ones(4, t.size());}
+  static MatrixX guess(VectorX const & t) {return MatrixX::Zero(2, t.size());}
 
 };
 
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-#endif // TESTS_PROBLEMS_HYPERSENSITIVE0_HH
+#endif // TESTS_PROBLEMS_TROESCH0_HH

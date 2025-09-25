@@ -36,15 +36,15 @@ public:
   VectorF f(VectorF const & x, Real const /*t*/) const override
   {
     VectorF f;
-    f << x(0)*x(0)*x(0) - 0.5*x(1), -2.0*x(0) + 3.0*x(0)*x(1)*x(1);
+    f << -x(0)*x(0)*x(0) - 0.5*x(1), -2.0*x(0) + 3.0*x(0)*x(0)*x(1);
     return f;
   }
 
   MatrixJF Jf_x(VectorF const & x, Real const /*t*/) const override {
     MatrixJF Jf_x;
     Jf_x <<
-      3.0*x(0)*x(0),        -0.5,
-      -2.0 + 3.0*x(1)*x(1), 6.0*x(0)*x(1);
+      -3.0*x(0)*x(0),       -0.5,
+      -2.0 + 6.0*x(0)*x(1), 3.0*x(0)*x(0);
     return Jf_x;
   }
 
@@ -74,15 +74,15 @@ public:
   VectorF F(VectorF const & x, VectorF const & x_dot, Real const /*t*/) const override
   {
     VectorF F;
-    F << x_dot(0) - x(0)*x(0)*x(0) + 0.5*x(1), x_dot(1) + 2.0*x(0) - 3.0*x(0)*x(1)*x(1);
+    F << x_dot(0) + x(0)*x(0)*x(0) + 0.5*x(1), x_dot(1) + 2.0*x(0) - 3.0*x(0)*x(0)*x(1);
     return F;
   }
 
   MatrixJF JF_x(VectorF const & x, VectorF const & /*x_dot*/, Real const /*t*/) const override {
     MatrixJF JF_x(MatrixJF::Zero());
     JF_x <<
-      -3.0*x(0)*x(0),      0.5,
-      2.0 - 3.0*x(1)*x(1), -6.0*x(0)*x(1);
+      3.0*x(0)*x(0),       0.5,
+      2.0 - 6.0*x(0)*x(1), -3.0*x(0)*x(0);
     return JF_x;
   }
 
@@ -129,15 +129,15 @@ public:
   VectorB b(VectorF const & x, Real const /*t*/) const override
   {
     VectorB b;
-    b << x(0)*x(0)*x(0) - 0.5*x(1), -2.0*x(0) + 3.0*x(0)*x(1)*x(1);
+    b << -x(0)*x(0)*x(0) - 0.5*x(1), -2.0*x(0) + 3.0*x(0)*x(0)*x(1);
     return b;
   }
 
   MatrixJB Jb_x(VectorF const & x, Real const /*t*/) const override {
     MatrixJB Jb_x;
     Jb_x <<
-      3.0*x(0)*x(0),        -0.5,
-      -2.0 + 3.0*x(1)*x(1), 6.0*x(0)*x(1);
+      -3.0*x(0)*x(0),       -0.5,
+      -2.0 + 6.0*x(0)*x(1), 3.0*x(0)*x(0);
     return Jb_x;
   }
 

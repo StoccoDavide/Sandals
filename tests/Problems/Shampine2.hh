@@ -30,7 +30,7 @@ public:
   using typename Explicit<Real, 2, 0>::MatrixJH;
 
 private:
-  Real m_p{1.0e-5}; // Parameter
+  Real m_p{1.0e-5};
 
 public:
   Shampine2Explicit() : Explicit<Real, 2, 0>("Shampine2Explicit") {}
@@ -76,7 +76,7 @@ public:
   using typename Implicit<Real, 2, 0>::MatrixJH;
 
 private:
-  Real m_p{1.0e-5}; // Parameter
+  Real m_p{1.0e-5};
 
 public:
   Shampine2Implicit() : Implicit<Real, 2, 0>("Shampine2Implicit") {}
@@ -127,7 +127,7 @@ public:
   using MatrixJH = typename SemiExplicit<Real, 2, 0>::MatrixJH;
 
 private:
-  Real m_p{1.0e-5}; // Parameter
+  Real m_p{1.0e-5};
 
 public:
   Shampine2SemiExplicit() : SemiExplicit<Real, 2, 0>("Shampine2SemiExplicit") {}

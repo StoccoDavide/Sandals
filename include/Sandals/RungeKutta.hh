@@ -75,6 +75,7 @@ namespace Sandals {
     using MatrixN = typename Implicit<Real, N, M>::MatrixJF; /**< Templetized matrix type. */
     using VectorM = typename Implicit<Real, N, M>::VectorH; /**< Templetized vector type. */
     using MatrixM = typename Implicit<Real, N, M>::MatrixJH; /**< Templetized matrix type. */
+    using FunctionSC = std::function<void(Integer const, VectorX const &, Real const)>; /**< Step callback function type. */
 
   public:
     SANDALS_BASIC_CONSTANTS(Real) /**< Basic constants. */
@@ -103,6 +104,7 @@ namespace Sandals {
     bool       m_adaptive{true};                   /**< Adaptive step mode boolean. */
     bool       m_verbose{false};                   /**< Verbose mode boolean. */
     bool       m_reverse{false};                   /**< Time reverse mode boolean. */
+    FunctionSC m_step_callback{nullptr};           /**< Step callback function. */
 
     Real    m_projection_tolerance{EPSILON_HIGH}; /**< Projection tolerance \f$ \epsilon_{\text{proj}} \f$. */
     Integer m_max_projection_iterations{5};       /**< Maximum number of projection steps. */
@@ -568,7 +570,7 @@ namespace Sandals {
     * Set the time reverse mode.
     * \param[in] t_reverse The time reverse mode.
     */
-    void reverse(bool t_reverse) {this->m_reverse = t_reverse;}
+    void reverse_mode(bool t_reverse) {this->m_reverse = t_reverse;}
 
     /**
     * Enable the time reverse mode.
@@ -579,6 +581,18 @@ namespace Sandals {
     * Disable the time reverse mode.
     */
     void disable_reverse_mode() {this->m_reverse = false;}
+
+    /**
+    * Get the step callback function.
+    * \return The step callback function.
+    */
+    FunctionSC step_callback() {return this->m_step_callback;}
+
+    /**
+    * Set the step callback function.
+    * \param[in] t_step_callback The step callback function.
+    */
+    void step_callback(FunctionSC const & t_step_callback) {this->m_step_callback = t_step_callback;}
 
     /**
     * Get the projection tolerance.
@@ -774,7 +788,7 @@ namespace Sandals {
     bool erk_explicit_propagate(VectorN const & x, Real const t, Real const h, MatrixK const & K,
       MatrixJX & Jx) const
     {
-      #define CMD "Sandals::RungeKutta::erk_explicit_propagate(): "
+      #define CMD "Sandals::RungeKutta::erk_explicit_propagate(...): "
 
       using Eigen::all;
       using Eigen::seqN;
@@ -971,7 +985,7 @@ namespace Sandals {
     bool erk_implicit_propagate(VectorN const & x, Real const t, Real const h, MatrixK const & K,
       MatrixJX & Jx) const
     {
-      #define CMD "Sandals::RungeKutta::erk_implicit_propagate(): "
+      #define CMD "Sandals::RungeKutta::erk_implicit_propagate(...): "
 
       using Eigen::all;
       using Eigen::seqN;
@@ -1219,7 +1233,7 @@ namespace Sandals {
     bool irk_propagate(VectorN const & x, Real const t, Real const h, MatrixK const & K,
       MatrixJX & Jx) const
     {
-      #define CMD "Sandals::RungeKutta::irk_propagate(): "
+      #define CMD "Sandals::RungeKutta::irk_propagate(...): "
 
       using Eigen::all;
       using Eigen::seqN;
@@ -1276,7 +1290,7 @@ namespace Sandals {
       if (Optimist::FiniteDifferences::Jacobian(x, fun, Jx_fd)) {
         Real err{(Jx - Jx_fd).norm()};
         SANDALS_ASSERT_WARNING(err < CBRT_EPSILON,
-          CMD "Jacobian propagation at time t = " << t << ", error = " << err << " > " << CBRT_EPSILON << ".");
+          CMD "Jacobian propagation error = " << err << " > " << CBRT_EPSILON << ".");
       }
       #endif
 
@@ -1438,7 +1452,7 @@ namespace Sandals {
     bool dirk_propagate(VectorN const & x, Real const t, Real const h, MatrixK const & K,
       MatrixJX & Jx) const
     {
-      #define CMD "Sandals::RungeKutta::dirk_propagate(): "
+      #define CMD "Sandals::RungeKutta::dirk_propagate(...): "
 
       using Eigen::all;
       using Eigen::seqN;
@@ -1522,7 +1536,7 @@ namespace Sandals {
       SANDALS_ASSERT(this->m_system->in_domain(x_old, t_old), CMD "in " << this->m_tableau.name <<
         " solver, at t = " << t_old << ", x = " << x_old.transpose() << ", system out of domain.");
 
-      if (this->is_erk() && this->m_system->is_explicit()) {
+      if (this->is_erk() && (this->m_system->is_explicit() || this->m_system->is_semiexplicit())) {
         return this->erk_explicit_step(x_old, t_old, h_old, x_new, h_new, K);
       } else if (this->is_erk() && this->m_system->is_implicit()) {
         return this->erk_implicit_step(x_old, t_old, h_old, x_new, h_new, K);
@@ -1553,7 +1567,7 @@ namespace Sandals {
     {
       #define CMD "Sandals::RungeKutta::propagate(...): "
 
-      if (this->is_erk() && this->m_system->is_explicit()) {
+      if (this->is_erk() && (this->m_system->is_explicit() || this->m_system->is_semiexplicit())) {
         return this->erk_explicit_propagate(x, t, h, K, Jx);
       } else if (this->is_erk() && this->m_system->is_implicit()) {
         return this->erk_implicit_propagate(x, t, h, K, Jx);
@@ -1584,14 +1598,14 @@ namespace Sandals {
     * \return True if the step is successfully computed, false otherwise.
     */
     template <bool Propagate = true>
-    bool advance(VectorN const & x_old, Real const t_old, Real const h_old, VectorN & x_new,
+    bool advance(VectorN const & x_old, Real const t_old, Real h_old, VectorN & x_new,
       Real & h_new, MatrixJX & Jx) const
     {
       #define CMD "Sandals::RungeKutta::advance(...): "
 
       // Check step size
-      SANDALS_ASSERT(h_old > Real(0.0), CMD "in " << this->m_tableau.name << " solver, h = "<<
-        h_old << ", expected > 0.");
+      SANDALS_ASSERT(h_old > 0.0,
+        CMD "in " << this->m_tableau.name << ", negative step size detected (h = " << h_old << ").");
 
       // Reset the derivative propagation matrix
       if constexpr (Propagate) {Jx.setIdentity();}
@@ -1602,7 +1616,7 @@ namespace Sandals {
 
         // Store temporary variables
         VectorN x_tmp(x_old);
-        Real t_tmp{t_old}, h_tmp{h_old / Real(2.0)};
+        Real t_tmp{t_old}, h_tmp{h_old / 2.0};
 
         // Substepping logic
         Integer max_k{this->m_max_substeps * this->m_max_substeps}, k{2};
@@ -1616,7 +1630,7 @@ namespace Sandals {
               MatrixJX Jx_tmp;
               if (!this->propagate(x_tmp, t_tmp, h_tmp, K, Jx_tmp)) {
                 SANDALS_WARNING(CMD "in " << this->m_tableau.name << " solver, at t = " << t_tmp <<
-                  ", Jacobian propagation failed, aborting.");
+                  ", Jacobian propagation failed.");
                 return false;
               }
 
@@ -1632,7 +1646,7 @@ namespace Sandals {
               k -= 1;
               // If the substepping index is even, double the step size
               if (k % 2 == 0) {
-                h_tmp = Real(2.0) * h_tmp;
+                h_tmp *= 2.0;
                 if (this->m_verbose) {
                   SANDALS_WARNING(CMD "in " << this->m_tableau.name << " solver, at t = " << t_tmp <<
                     ", integration succedded disable one substepping layer.");
@@ -1649,13 +1663,13 @@ namespace Sandals {
             // If the substepping index is too high, abort the integration
             k += 2;
             SANDALS_ASSERT(k < max_k, CMD "in " << this->m_tableau.name << " solver, at t = " <<
-              t_tmp << ", integration failed with h = " << h_tmp << ", aborting.");
+              t_tmp << ", integration failed with h = " << h_tmp << ".");
             return false;
 
             // Otherwise, try again with a smaller step
             if (this->m_verbose) {SANDALS_WARNING(CMD "in " << this->m_tableau.name << " solver, " <<
               "at t = " << t_tmp << ", integration failed, adding substepping layer.");}
-            h_tmp /= Real(2.0);
+            h_tmp /= 2.0;
             continue;
           }
 
@@ -1672,7 +1686,7 @@ namespace Sandals {
         if constexpr (Propagate) {
           if (!this->propagate(x_old, t_old, h_old, K, Jx)) {
             SANDALS_WARNING(CMD "in " << this->m_tableau.name << " solver, at t = " << t_old <<
-              ", Jacobian propagation failed, aborting.");
+              ", Jacobian propagation failed.");
             return false;
           }
         }
@@ -1705,6 +1719,8 @@ namespace Sandals {
     * \return True if the system is successfully solved, false otherwise.
     * \tparam Propagate If true, propagate the derivative of the solution with respect to the
     * states \f$ \mathbf{x} \f$.
+    * \warning Do not use the Solution object in the step callback function to avoid unpredicted
+    * behaviors.
     */
     template <bool Propagate = true>
     bool solve(VectorX const & t_mesh, VectorN const & ics, Solution<Real, N, M> & sol, MatrixJX & Jx) const
@@ -1725,10 +1741,13 @@ namespace Sandals {
       if constexpr (Propagate) {
         if (!Jx.allFinite()) {
           SANDALS_ERROR(CMD "in " << this->m_tableau.name << " solver, initial Jacobian " <<
-            "contains NaNs or Infs, aborting.");
+            "contains NaNs or Infs.");
           return false;
         }
       }
+
+      // Callback on initial conditions
+      if (this->m_step_callback) {this->m_step_callback(0, ics, t_mesh(0));}
 
       // Update the current step
       Integer step{0};
@@ -1770,6 +1789,9 @@ namespace Sandals {
           sol.x.col(step) = x_new_step;
           sol.h.col(step) = this->m_system->h(x_new_step, t_step);
 
+          // Callback after the step is completed
+          if (this->m_step_callback) {this->m_step_callback(step, x_new_step, t_step);}
+
           // Check if the current step is the last one
           if (std::abs(t_step - t_mesh(last)) < SQRT_EPSILON) {break;}
 
@@ -1792,6 +1814,8 @@ namespace Sandals {
     * \param[in] ics Initial conditions \f$ \mathbf{x}(t = 0) \f$.
     * \param[out] sol The solution of the system over the mesh of independent variable.
     * \return True if the system is successfully solved, false otherwise.
+    * \warning Do not use the Solution object in the step callback function to avoid unpredicted
+    * behaviors.
     */
     bool solve(VectorX const & t_mesh, VectorN const & ics, Solution<Real, N, M> & sol) const
     {
@@ -1813,6 +1837,8 @@ namespace Sandals {
     * \return True if the system is successfully solved, false otherwise.
     * \tparam Propagate If true, propagate the derivative of the solution with respect to the
     * states \f$ \mathbf{x} \f$.
+    * \warning Do not use the Solution object in the step callback function to avoid unpredicted
+    * behaviors.
     */
     template <bool Propagate = true>
     bool adaptive_solve(VectorX const & t_mesh, VectorN const & ics, Solution<Real, N, M> & sol,
@@ -1827,7 +1853,7 @@ namespace Sandals {
       if constexpr (Propagate) {
         if (!Jx.allFinite()) {
           SANDALS_ERROR(CMD "in " << this->m_tableau.name << " solver, initial Jacobian " <<
-            "contains NaNs or Infs, aborting.");
+            "contains non-finite values.");
           return false;
         }
       }
@@ -1859,6 +1885,9 @@ namespace Sandals {
       // Reset the derivative propagation matrix
       if constexpr (Propagate) {Jx.setIdentity();}
 
+      // Callback on initial conditions
+      if (this->m_step_callback) {this->m_step_callback(0, ics, t_mesh(0));}
+
       // Instantiate temporary variables
       Integer step{0};
       VectorN x_old_step(ics), x_new_step(ics);
@@ -1889,6 +1918,9 @@ namespace Sandals {
         sol.x.col(step) = x_new_step;
         sol.h.col(step) = this->m_system->h(x_new_step, t_step);
 
+        // Callback after the step is completed
+        if (this->m_step_callback) {this->m_step_callback(step, x_new_step, t_step);}
+
         // Check if the current step is the last one
         if (std::abs(t_step - t_mesh(last)) < SQRT_EPSILON) {break;}
         else if (t_step + h_step > t_mesh(last)) {h_step = t_mesh(last) - t_step;}
@@ -1914,6 +1946,8 @@ namespace Sandals {
     * \param[in] ics Initial conditions \f$ \mathbf{x}(t = 0) \f$.
     * \param[out] sol The solution of the system over the mesh of independent variable.
     * \return True if the system is successfully solved, false otherwise.
+    * \warning Do not use the Solution object in the step callback function to avoid unpredicted
+    * behaviors.
     */
     bool adaptive_solve(VectorX const & t_mesh, VectorN const & ics, Solution<Real, N, M> & sol) const
     {

@@ -17,8 +17,8 @@
 // #include "Sandals/RungeKutta/Heun3.hh" // ERK - OK
 #include "Sandals/RungeKutta/RK4.hh" // ERK - OK
 #include "Sandals/RungeKutta/SSPRK104.hh" // ERK - OK
-// #include "Sandals/RungeKutta/LobattoIIIA2.hh" // DIRK - OK
-// #include "Sandals/RungeKutta/SSPIRK33.hh" // DIRK - OK
+#include "Sandals/RungeKutta/LobattoIIIA2.hh" // DIRK - OK
+#include "Sandals/RungeKutta/SSPIRK33.hh" // DIRK - OK
 #include "Sandals/RungeKutta/ImplicitEuler.hh" // IRK - OK
 #include "Sandals/RungeKutta/GaussLegendre2.hh" // IRK
 #include "Sandals/RungeKutta/GaussLegendre4.hh" // IRK
@@ -28,11 +28,13 @@
 
 #include "Basic.hh"
 #include "Poisson.hh"
+#include "Troesch.hh"
 #include "Shampine0.hh"
 #include "Shampine1.hh"
-#include "Shampine2.hh"
+#include "Shock.hh"
 #include "Hypersensitive0.hh"
 #include "Hypersensitive1.hh"
+#include "FalknerSkan.hh"
 
 #ifdef SANDALS_ENABLE_PLOTTING
 #include <TApplication.h>
@@ -86,7 +88,7 @@ int main(int argc, char ** argv) {
 #endif
 
   // Istantiate the problems
-  PROBLEM_INIT(Poisson, GaussLegendre6)
+  PROBLEM_INIT(Shock, LobattoIIIA2)
 
   // Set verbose mode
   constexpr bool verbose{true};
@@ -97,10 +99,16 @@ int main(int argc, char ** argv) {
   problem_implicit.integrator()->verbose_mode(false);
   problem_semiexplicit.integrator()->verbose_mode(false);
 
+  // Set reverse mode
+  constexpr bool reverse{true};
+  problem_explicit.integrator()->reverse_mode(reverse);
+  problem_implicit.integrator()->reverse_mode(reverse);
+  problem_semiexplicit.integrator()->reverse_mode(reverse);
+
   // Set solver tolerance
-  problem_explicit.tolerance(1.0e-8);
-  problem_implicit.tolerance(1.0e-8);
-  problem_semiexplicit.tolerance(1.0e-8);
+  problem_explicit.tolerance(1.0e-12);
+  problem_implicit.tolerance(1.0e-12);
+  problem_semiexplicit.tolerance(1.0e-12);
 
   // Set solver maximum number of iterations
   problem_explicit.max_iterations(100);
@@ -108,10 +116,10 @@ int main(int argc, char ** argv) {
   problem_semiexplicit.max_iterations(100);
 
   // Set solution parameters
-  constexpr Integer num_points{200};
-  problem_explicit.subintervals(5);
-  problem_implicit.subintervals(5);
-  problem_semiexplicit.subintervals(5);
+  constexpr Integer num_points{100};
+  problem_explicit.subintervals(2);
+  problem_implicit.subintervals(2);
+  problem_semiexplicit.subintervals(2);
 
   // Set time mesh
   Eigen::Vector<Real, Eigen::Dynamic> time(Eigen::Vector<Real, Eigen::Dynamic>::LinSpaced(
@@ -122,11 +130,11 @@ int main(int argc, char ** argv) {
   Eigen::Matrix<Real, D, Eigen::Dynamic> guess(problem_explicit.guess(time));
 
   // Solve the problems with shooting
-  std::cout << "\n=== Basic Explicit Problem ===\n" << std::endl;
+  std::cout << std::endl << "=== Basic Explicit Problem ===" << std::endl << std::endl;
   problem_explicit.multiple_shooting(time, guess);
-  std::cout << "\n=== Basic Implicit Problem ===\n" << std::endl;
+  std::cout << std::endl << "=== Basic Implicit Problem ===" << std::endl << std::endl;
   problem_implicit.multiple_shooting(time, guess);
-  std::cout << "\n=== Basic Semi-Explicit Problem ===\n" << std::endl;
+  std::cout << std::endl << "=== Basic Semi-Explicit Problem ===" << std::endl << std::endl;
   problem_semiexplicit.multiple_shooting(time, guess);
 
   #ifdef SANDALS_ENABLE_PLOTTING
@@ -154,7 +162,7 @@ int main(int argc, char ** argv) {
   graph_ex->GetYaxis()->SetTitle("x, y (-)");
   graph_ex->GetXaxis()->SetLimits(time(0), time(Eigen::last));
   graph_ex->GetYaxis()->SetRangeUser(
-    std::min(asol.minCoeff(), esol.x.minCoeff())*1.1, std::max(asol.maxCoeff(), esol.x.maxCoeff())*1.1
+    -2.5, 2.5//std::min(asol.minCoeff(), esol.x.minCoeff())*1.1, std::max(asol.maxCoeff(), esol.x.maxCoeff())*1.1
   );
   TLegend *leg1 = new TLegend(0.6, 0.7, 0.9, 0.9);
   leg1->AddEntry(graph_ex, "x (explicit)", "l");
@@ -175,7 +183,7 @@ int main(int argc, char ** argv) {
   graph_ix->GetYaxis()->SetTitle("x, y (-)");
   graph_ix->GetXaxis()->SetLimits(time(0), time(Eigen::last));
   graph_ix->GetYaxis()->SetRangeUser(
-    std::min(asol.minCoeff(), esol.x.minCoeff())*1.1, std::max(asol.maxCoeff(), esol.x.maxCoeff())*1.1
+    -2.5, 2.5//std::min(asol.minCoeff(), esol.x.minCoeff())*1.1, std::max(asol.maxCoeff(), esol.x.maxCoeff())*1.1
   );
   TLegend *leg2 = new TLegend(0.6, 0.7, 0.9, 0.9);
   leg2->AddEntry(graph_ix, "x (implicit)", "l");
@@ -196,7 +204,7 @@ int main(int argc, char ** argv) {
   graph_sx->GetYaxis()->SetTitle("x, y (-)");
   graph_sx->GetXaxis()->SetLimits(time(0), time(Eigen::last));
   graph_sx->GetYaxis()->SetRangeUser(
-    std::min(asol.minCoeff(), esol.x.minCoeff())*1.1, std::max(asol.maxCoeff(), esol.x.maxCoeff())*1.1
+    -2.5, 2.5//std::min(asol.minCoeff(), esol.x.minCoeff())*1.1, std::max(asol.maxCoeff(), esol.x.maxCoeff())*1.1
   );
   TLegend *leg3 = new TLegend(0.6, 0.7, 0.9, 0.9);
   leg3->AddEntry(graph_sx, "x (semi-explicit)", "l");

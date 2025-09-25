@@ -29,17 +29,9 @@ public:
   using typename Explicit<Real, 5, 0>::VectorH;
   using typename Explicit<Real, 5, 0>::MatrixJH;
 
-private:
-  Real m_lambda{1.0}; // Parameter
-
-public:
   Shampine1Explicit() : Explicit<Real, 5, 0>("Shampine1Explicit") {}
 
   ~Shampine1Explicit() {}
-
-  void lambda(Real const lambda) {this->m_lambda = lambda;}
-
-  Real lambda() const {return this->m_lambda;}
 
   VectorF f(VectorF const & x, Real const /*t*/) const override
   {
@@ -92,17 +84,9 @@ public:
   using typename Implicit<Real, 5, 0>::VectorH;
   using typename Implicit<Real, 5, 0>::MatrixJH;
 
-private:
-  Real m_lambda{1.0}; // Parameter
-
-public:
   Shampine1Implicit() : Implicit<Real, 5, 0>("Shampine1Implicit") {}
 
   ~Shampine1Implicit() {}
-
-  void lambda(Real const lambda) {this->m_lambda = lambda;}
-
-  Real lambda() const {return this->m_lambda;}
 
   VectorF F(VectorF const & x, VectorF const & x_dot, Real const /*t*/) const override
   {
@@ -160,17 +144,9 @@ public:
   using VectorH  = typename SemiExplicit<Real, 5, 0>::VectorH;
   using MatrixJH = typename SemiExplicit<Real, 5, 0>::MatrixJH;
 
-private:
-  Real m_lambda{1.0}; // Parameter
-
-public:
   Shampine1SemiExplicit() : SemiExplicit<Real, 5, 0>("Shampine1SemiExplicit") {}
 
   ~Shampine1SemiExplicit() {}
-
-  void lambda(Real const lambda) {this->m_lambda = lambda;}
-
-  Real lambda() const {return this->m_lambda;}
 
   MatrixA A(VectorF const & /*x*/, Real const /*t*/) const override
   {return MatrixA::Identity();}
@@ -247,11 +223,7 @@ public:
 
   static Real time_start() {return 0.0;}
 
-  static Real time_end() {return 1.0;}
-
-  void lambda(Real const lambda) {static_cast<System*>(this->integrator()->system())->lambda(lambda);}
-
-  Real lambda() const {return static_cast<const System*>(this->integrator()->system())->lambda();}
+  static Real time_end() {return 40.0;}
 
   VectorF b(VectorF const & x_ini, VectorF const & x_end) const override
   {
