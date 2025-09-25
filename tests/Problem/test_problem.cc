@@ -106,9 +106,9 @@ int main(int argc, char ** argv) {
   problem_semiexplicit.integrator()->reverse_mode(reverse);
 
   // Set solver tolerance
-  problem_explicit.tolerance(1.0e-12);
-  problem_implicit.tolerance(1.0e-12);
-  problem_semiexplicit.tolerance(1.0e-12);
+  problem_explicit.tolerance(1.0e-10);
+  problem_implicit.tolerance(1.0e-10);
+  problem_semiexplicit.tolerance(1.0e-10);
 
   // Set solver maximum number of iterations
   problem_explicit.max_iterations(100);
@@ -116,12 +116,13 @@ int main(int argc, char ** argv) {
   problem_semiexplicit.max_iterations(100);
 
   // Set solution parameters
-  constexpr Integer num_points{100};
-  problem_explicit.subintervals(2);
-  problem_implicit.subintervals(2);
-  problem_semiexplicit.subintervals(2);
+  constexpr Integer num_subintervals{2};
+  problem_explicit.subintervals(num_subintervals);
+  problem_implicit.subintervals(num_subintervals);
+  problem_semiexplicit.subintervals(num_subintervals);
 
   // Set time mesh
+  constexpr Integer num_points{500};
   Eigen::Vector<Real, Eigen::Dynamic> time(Eigen::Vector<Real, Eigen::Dynamic>::LinSpaced(
     num_points, problem_explicit.time_start(), problem_explicit.time_end()
   ));
@@ -141,7 +142,7 @@ int main(int argc, char ** argv) {
   auto esol = problem_explicit.solution();
   auto isol = problem_implicit.solution();
   auto ssol = problem_semiexplicit.solution();
-  auto asol = problem_explicit.analytical_solution(esol.t);
+  auto asol = problem_explicit.analytical_solution(reverse ? esol.t.reverse().eval() : esol.t);
 
   auto colors = matlab_lines_colormap();
 
@@ -156,13 +157,15 @@ int main(int argc, char ** argv) {
   graph_ex->SetTitle("Explicit vs Analytical");
   graph_ex->SetLineColor(colors[0]); graph_ex->Draw("AL");
   graph_ey->SetLineColor(colors[1]); graph_ey->Draw("L SAME");
-  graph_ax->SetMarkerColor(colors[0]); graph_ax->SetMarkerStyle(8); graph_ax->Draw("P SAME");
-  graph_ay->SetMarkerColor(colors[1]); graph_ay->SetMarkerStyle(8); graph_ay->Draw("P SAME");
-  graph_ex->GetXaxis()->SetTitle("t (s)");
-  graph_ex->GetYaxis()->SetTitle("x, y (-)");
-  graph_ex->GetXaxis()->SetLimits(time(0), time(Eigen::last));
+  if (asol.norm() > 1.0e-12) { // If the solution is zero, do not plot it
+    graph_ax->SetMarkerColor(colors[0]); graph_ax->SetMarkerStyle(8); graph_ax->Draw("P SAME");
+    graph_ay->SetMarkerColor(colors[1]); graph_ay->SetMarkerStyle(8); graph_ay->Draw("P SAME");
+  }
+  graph_ex->GetXaxis()->SetTitle("Time");
+  graph_ex->GetYaxis()->SetTitle("States");
+  graph_ex->GetXaxis()->SetLimits(time.minCoeff(), time.maxCoeff());
   graph_ex->GetYaxis()->SetRangeUser(
-    -2.5, 2.5//std::min(asol.minCoeff(), esol.x.minCoeff())*1.1, std::max(asol.maxCoeff(), esol.x.maxCoeff())*1.1
+    std::min(asol.minCoeff(), esol.x.minCoeff())*1.1, std::max(asol.maxCoeff(), esol.x.maxCoeff())*1.1
   );
   TLegend *leg1 = new TLegend(0.6, 0.7, 0.9, 0.9);
   leg1->AddEntry(graph_ex, "x (explicit)", "l");
@@ -177,13 +180,15 @@ int main(int argc, char ** argv) {
   graph_ix->SetTitle("Implicit vs Analytical");
   graph_ix->SetLineColor(colors[0]); graph_ix->SetLineStyle(9); graph_ix->Draw("AL");
   graph_iy->SetLineColor(colors[1]); graph_iy->SetLineStyle(9); graph_iy->Draw("L SAME");
-  graph_ax->SetMarkerColor(colors[0]); graph_ax->Draw("P SAME");
-  graph_ay->SetMarkerColor(colors[1]); graph_ay->Draw("P SAME");
-  graph_ix->GetXaxis()->SetTitle("t (s)");
-  graph_ix->GetYaxis()->SetTitle("x, y (-)");
-  graph_ix->GetXaxis()->SetLimits(time(0), time(Eigen::last));
+  if (asol.norm() > 1.0e-12) { // If the solution is zero, do not plot it
+    graph_ax->SetMarkerColor(colors[0]); graph_ax->Draw("P SAME");
+    graph_ay->SetMarkerColor(colors[1]); graph_ay->Draw("P SAME");
+  }
+  graph_ix->GetXaxis()->SetTitle("Time");
+  graph_ix->GetYaxis()->SetTitle("States");
+  graph_ix->GetXaxis()->SetLimits(time.minCoeff(), time.maxCoeff());
   graph_ix->GetYaxis()->SetRangeUser(
-    -2.5, 2.5//std::min(asol.minCoeff(), esol.x.minCoeff())*1.1, std::max(asol.maxCoeff(), esol.x.maxCoeff())*1.1
+    std::min(asol.minCoeff(), esol.x.minCoeff())*1.1, std::max(asol.maxCoeff(), esol.x.maxCoeff())*1.1
   );
   TLegend *leg2 = new TLegend(0.6, 0.7, 0.9, 0.9);
   leg2->AddEntry(graph_ix, "x (implicit)", "l");
@@ -198,17 +203,19 @@ int main(int argc, char ** argv) {
   graph_sx->SetTitle("Semi-Explicit vs Analytical");
   graph_sx->SetLineColor(colors[0]); graph_sx->SetLineStyle(7); graph_sx->Draw("AL");
   graph_sy->SetLineColor(colors[1]); graph_sy->SetLineStyle(7); graph_sy->Draw("L SAME");
-  graph_ax->SetMarkerColor(colors[0]); graph_ax->Draw("P SAME");
-  graph_ay->SetMarkerColor(colors[1]); graph_ay->Draw("P SAME");
-  graph_sx->GetXaxis()->SetTitle("t (s)");
-  graph_sx->GetYaxis()->SetTitle("x, y (-)");
-  graph_sx->GetXaxis()->SetLimits(time(0), time(Eigen::last));
+  if (asol.norm() > 1.0e-12) { // If the solution is zero, do not plot it
+    graph_ax->SetMarkerColor(colors[0]); graph_ax->Draw("P SAME");
+    graph_ay->SetMarkerColor(colors[1]); graph_ay->Draw("P SAME");
+  }
+  graph_sx->GetXaxis()->SetTitle("Time");
+  graph_sx->GetYaxis()->SetTitle("States");
+  graph_sx->GetXaxis()->SetLimits(time.minCoeff(), time.maxCoeff());
   graph_sx->GetYaxis()->SetRangeUser(
-    -2.5, 2.5//std::min(asol.minCoeff(), esol.x.minCoeff())*1.1, std::max(asol.maxCoeff(), esol.x.maxCoeff())*1.1
+    std::min(asol.minCoeff(), esol.x.minCoeff())*1.1, std::max(asol.maxCoeff(), esol.x.maxCoeff())*1.1
   );
   TLegend *leg3 = new TLegend(0.6, 0.7, 0.9, 0.9);
-  leg3->AddEntry(graph_sx, "x (semi-explicit)", "l");
-  leg3->AddEntry(graph_sy, "y (semi-explicit)", "l");
+  leg3->AddEntry(graph_sx, "x (semiexplicit)", "l");
+  leg3->AddEntry(graph_sy, "y (semiexplicit)", "l");
   leg3->AddEntry(graph_ax, "x (analytical)", "p");
   leg3->AddEntry(graph_ay, "y (analytical)", "p");
   leg3->Draw();

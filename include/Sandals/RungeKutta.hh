@@ -1605,7 +1605,7 @@ namespace Sandals {
 
       // Check step size
       SANDALS_ASSERT(h_old > 0.0,
-        CMD "in " << this->m_tableau.name << ", negative step size detected (h = " << h_old << ").");
+        CMD "in " << this->m_tableau.name << ", inconsistent step size detected (h = " << h_old << ").");
 
       // Reset the derivative propagation matrix
       if constexpr (Propagate) {Jx.setIdentity();}

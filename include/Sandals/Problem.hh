@@ -348,6 +348,8 @@ namespace Sandals
       const Integer local_intervals{std::max(1, this->m_subintervals)};
       const Integer c_size{num_intervals*N};
       const Integer x_size{(num_intervals + 1)*N};
+      Integer idx_x_ini{0}, idx_x_end{num_intervals};
+      if (this->m_integrator->reverse_mode()) {idx_x_ini = num_intervals; idx_x_end = 0;}
 
       // Prepare the linear system for the Newton step
       DynVec b_sys(c_size + N);
@@ -376,8 +378,7 @@ namespace Sandals
         for (Integer k{0}; k < num_intervals; ++k) {
           t_local_mesh = VectorX::LinSpaced(local_intervals+1, t_mesh(k), t_mesh(k + 1));
           Jx.setIdentity();
-          bool ok{this->m_integrator->template solve<true>(t_local_mesh, x_sol.col(k), local_sol, Jx)};
-          if (!ok) {
+          if (!this->m_integrator->template solve<true>(t_local_mesh, x_sol.col(k), local_sol, Jx)) {
             SANDALS_ERROR(CMD "failed to integrate interval " << k << ".");
             return false;
           }
@@ -397,7 +398,8 @@ namespace Sandals
         }
 
         // Boundary condition residuals
-        b_sys.template tail<N>() = -this->b(this->m_solution->x.col(0), this->m_solution->x.col(num_intervals));
+        b_sys.template tail<N>() =
+          -this->b(this->m_solution->x.col(idx_x_ini), this->m_solution->x.col(idx_x_end));
 
         // Print the iteration info
         if (this->m_verbose) {
@@ -412,9 +414,9 @@ namespace Sandals
 
         // Update the boundary condition Jacobian blocks
         A_sys.template block<N, N>(c_size, 0) =
-          this->Jb_x_ini(this->m_solution->x.col(0), this->m_solution->x.col(num_intervals));
+          this->Jb_x_ini(this->m_solution->x.col(idx_x_ini), this->m_solution->x.col(idx_x_end));
         A_sys.template block<N, N>(c_size, num_intervals*N) =
-          this->Jb_x_end(this->m_solution->x.col(0), this->m_solution->x.col(num_intervals));
+          this->Jb_x_end(this->m_solution->x.col(idx_x_ini), this->m_solution->x.col(idx_x_end));
 
         // Solve the linear system
         qr.compute(A_sys);
