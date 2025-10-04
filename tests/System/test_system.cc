@@ -65,7 +65,6 @@ std::vector<Color_t> matlab_lines_colormap() {
 #endif
 
 using namespace Sandals;
-
 using Real = double;
 
 int main(int argc, char ** argv) {
@@ -107,7 +106,7 @@ int main(int argc, char ** argv) {
   c1a->SetTitle("Sine Implicit");
 
   TLegend *leg = new TLegend(0.7, 0.7, 0.9, 0.9);
-  leg->AddEntry(g1a_x0,  "Implicit x0 (fixed)", "l"); // "l" = line, "p" = point
+  leg->AddEntry(g1a_x0,  "Implicit x0 (fixed)", "l");
   leg->AddEntry(g1a_x1,  "Implicit x1 (fixed)", "l");
   leg->AddEntry(g1a_x0a, "Implicit x0 (adaptive)", "l");
   leg->AddEntry(g1a_x1a, "Implicit x1 (adaptive)", "l");

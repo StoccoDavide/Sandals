@@ -8,6 +8,8 @@
  * e-mail: davide.stocco@unitn.it                             e-mail: enrico.bertolazzi@unitn.it *
 \* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+#pragma once
+
 #ifndef TESTS_PROBLEMS_BASIC_HH
 #define TESTS_PROBLEMS_BASIC_HH
 
@@ -95,7 +97,6 @@ public:
 
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-
 template<typename Real = double>
 class BasicSemiExplicit : public SemiExplicit<Real, 2, 0>
 {
@@ -125,7 +126,7 @@ public:
 
   VectorB b(VectorF const & x, Real const /*t*/) const override
   {
-    VectorF b;
+    VectorB b;
     b << x(1), 1.0;
     return b;
   }
@@ -188,16 +189,16 @@ public:
     return Jb_x_end;
   }
 
-  static VectorF analytical_solution(Real const t) {
+  static VectorF exact_solution(Real const t) {
     VectorF x;
     x << 0.5*t*t - t, t - 1.0;
     return x;
   }
 
-  static MatrixX analytical_solution(VectorX const & t) {
+  static MatrixX exact_solution(VectorX const & t) {
     MatrixX x(2, t.size());
     for (Integer i{0}; i < t.size(); ++i) {
-      x.col(i) = BasicProblem<Real, System, Integrator>::analytical_solution(t(i));
+      x.col(i) = BasicProblem<Real, System, Integrator>::exact_solution(t(i));
     }
     return x;
   }

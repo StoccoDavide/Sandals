@@ -8,6 +8,8 @@
  * e-mail: davide.stocco@unitn.it                             e-mail: enrico.bertolazzi@unitn.it *
 \* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+#pragma once
+
 #ifndef TESTS_PROBLEMS_POISSON_HH
 #define TESTS_PROBLEMS_POISSON_HH
 
@@ -97,7 +99,6 @@ public:
 
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-
 template<typename Real = double>
 class PoissonSemiExplicit : public SemiExplicit<Real, 2, 0>
 {
@@ -127,7 +128,7 @@ public:
 
   VectorB b(VectorF const & x, Real const /*t*/) const override
   {
-    VectorF b;
+    VectorB b;
     b << x(1), -5.0*std::sin(10.0*M_PI*x(0)) - std::sin(2.0*M_PI*x(0));
     return b;
   }
@@ -192,7 +193,7 @@ public:
     return Jb_x_end;
   }
 
-  static VectorF analytical_solution(Real const t) {
+  static VectorF exact_solution(Real const t) {
     VectorF x;
     x <<
       std::sin(2.0*M_PI*t)/(4.0*M_PI*M_PI) + std::sin(10.0*M_PI*t)/(20.0*M_PI*M_PI),
@@ -200,10 +201,10 @@ public:
     return x;
   }
 
-  static MatrixX analytical_solution(VectorX const & t) {
+  static MatrixX exact_solution(VectorX const & t) {
     MatrixX x(2, t.size());
     for (Integer i{0}; i < t.size(); ++i) {
-      x.col(i) = PoissonProblem<Real, System, Integrator>::analytical_solution(t(i));
+      x.col(i) = PoissonProblem<Real, System, Integrator>::exact_solution(t(i));
     }
     return x;
   }

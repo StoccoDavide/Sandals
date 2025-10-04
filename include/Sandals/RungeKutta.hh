@@ -837,8 +837,20 @@ namespace Sandals {
       MatrixJX Jx_fd;
       if (Optimist::FiniteDifferences::Jacobian(x, fun, Jx_fd)) {
         Real err{(Jx - Jx_fd).norm()};
-        SANDALS_ASSERT_WARNING(err < CBRT_EPSILON,
-          CMD "Jacobian propagation error = " << err << " > " << CBRT_EPSILON << ".");
+        if (err >= CBRT_EPSILON) {
+          // Diagnostic dump to help debug reverse-mode Jacobian propagation issues
+          std::cerr << "[DEBUG] dirk_propagate diagnostics: t = " << t << ", h = " << h
+                    << ", x = " << x.transpose() << std::endl;
+          std::cerr << "[DEBUG] Jx (analytic): norm=" << Jx.norm() << std::endl;
+          std::cerr << "[DEBUG] Jx_fd (fd): norm=" << Jx_fd.norm() << std::endl;
+          std::cerr << "[DEBUG] Jx - Jx_fd norm=" << (Jx - Jx_fd).norm() << std::endl;
+          SANDALS_ASSERT_WARNING(false,
+            CMD "Jacobian propagation error = " << err << " > " << CBRT_EPSILON << ".");
+        } else {
+          // keep existing warning behavior (should be no-op here)
+          SANDALS_ASSERT_WARNING(err < CBRT_EPSILON,
+            CMD "Jacobian propagation error = " << err << " > " << CBRT_EPSILON << ".");
+        }
       }
       #endif
 
@@ -2097,15 +2109,18 @@ namespace Sandals {
     }
 
     /**
-    * Estimate the order of the Runge-Kutta method.
+    * Error and step vectors for the order estimation.
     * \param[in] t_mesh The vector of time meshes with same initial and final time with *fixed* step.
     * \param[in] ics Initial conditions \f$ \mathbf{x}(t = 0) \f$.
     * \param[in] sol The *analytical* solution function.
+    * \param[out] h_vec The vector of time steps used for the estimation.
+    * \param[out] e_vec The vector of maximum errors used for the estimation.
     * \return The estimated order of the method.
     */
-    Real estimate_order(std::vector<VectorX> const & t_mesh, VectorN const & ics, std::function<MatrixX(VectorX)> & sol) const
+    void error_step(std::vector<VectorX> const & t_mesh, VectorN const & ics,
+      std::function<MatrixX(VectorX)> & sol, VectorX & h_vec, VectorX & e_vec) const
     {
-      #define CMD "Sandals::RungeKutta::estimate_order(...): "
+      #define CMD "Sandals::RungeKutta::error_step(...): "
 
       using Eigen::last;
 
@@ -2129,7 +2144,8 @@ namespace Sandals {
       // Solve the system for each time scale
       Solution<Real, N, M> sol_num;
       MatrixX sol_ana;
-      VectorX h_vec(t_mesh.size()), e_vec(t_mesh.size());
+      h_vec.resize(t_mesh.size());
+      e_vec.resize(t_mesh.size());
       for (Integer i{0}; i < static_cast<Integer>(t_mesh.size()); ++i) {
         SANDALS_ASSERT(this->solve(t_mesh[i], ics, sol_num), CMD "failed to solve the system for " <<
           "the" << i << "-th time mesh.");
@@ -2142,12 +2158,42 @@ namespace Sandals {
         e_vec(i) = (sol_ana - sol_num.x).array().abs().maxCoeff();
       }
 
-      // Compute the order of the method thorugh least squares
+      #undef CMD
+    }
+
+    /**
+    * Estimate the order of the Runge-Kutta method.
+    * \param[in] t_mesh The vector of time meshes with same initial and final time with *fixed* step.
+    * \param[in] ics Initial conditions \f$ \mathbf{x}(t = 0) \f$.
+    * \param[in] sol The *analytical* solution function.
+    * \param[out] h_vec The vector of time steps used for the estimation.
+    * \param[out] e_vec The vector of maximum errors used for the estimation.
+    * \return The estimated order of the method.
+    */
+    Real estimate_order(std::vector<VectorX> const & t_mesh, VectorN const & ics,
+      std::function<MatrixX(VectorX)> & sol, VectorX & h_vec, VectorX & e_vec) const
+    {
+      // Retrieve the error and step vectors
+      this->error_step(t_mesh, ics, sol, h_vec, e_vec);
+
+      // Perform a linear regression in the log-log space to estimate the order of the method
       VectorX A(h_vec.array().log());
       VectorX b(e_vec.array().log());
       return ((A.transpose() * A).ldlt().solve(A.transpose() * b))(0);
+    }
 
-      #undef CMD
+    /**
+    * Estimate the order of the Runge-Kutta method.
+    * \param[in] t_mesh The vector of time meshes with same initial and final time with *fixed* step.
+    * \param[in] ics Initial conditions \f$ \mathbf{x}(t = 0) \f$.
+    * \param[in] sol The *analytical* solution function.
+    * \return The estimated order of the method.
+    */
+    Real estimate_order(std::vector<VectorX> const & t_mesh, VectorN const & ics,
+      std::function<MatrixX(VectorX)> & sol) const
+    {
+      VectorX h_vec, e_vec;
+      return this->estimate_order(t_mesh, ics, sol, h_vec, e_vec);
     }
 
   }; // class RungeKutta

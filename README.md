@@ -39,7 +39,7 @@ fetchcontent_makeavailable(Sandals)
 target_link_libraries(your_target PRIVATE Sandals::Sandals)
 ```
 
-If you already have `Sandals` somewhere on your system, you can use `find_pacakge` directly.
+If you already have `Sandals` somewhere on your system, you can use `find_package` directly.
 
 ```cmake
 # Optionally specify a custom path to find content from

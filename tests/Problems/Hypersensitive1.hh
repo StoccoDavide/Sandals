@@ -8,6 +8,8 @@
  * e-mail: davide.stocco@unitn.it                             e-mail: enrico.bertolazzi@unitn.it *
 \* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+#pragma once
+
 #ifndef TESTS_PROBLEMS_HYPERSENSITIVE1_HH
 #define TESTS_PROBLEMS_HYPERSENSITIVE1_HH
 
@@ -196,9 +198,9 @@ public:
     return Jb_x_end;
   }
 
-  VectorF analytical_solution(Real const /*t*/) const {return VectorF::Zero();}
+  VectorF exact_solution(Real const /*t*/) const {return VectorF::Zero();}
 
-  MatrixX analytical_solution(VectorX const & t) const {return MatrixX::Zero(2, t.size());}
+  MatrixX exact_solution(VectorX const & t) const {return MatrixX::Zero(2, t.size());}
 
   static VectorF guess(Real const /*t*/) {return VectorF::Ones();}
 

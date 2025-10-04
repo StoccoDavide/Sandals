@@ -79,16 +79,16 @@ public:
 
   bool in_domain(VectorF const & /*x*/, Real const /*t*/) const override {return true;}
 
-  VectorF analytical_solution(Real t) const {
+  VectorF exact_solution(Real t) const {
     VectorF x;
     Real tmp{std::sqrt(this->m_k / this->m_m)};
     x << std::cos(tmp*t), -tmp*std::sin(tmp*t);
     return x;
   }
 
-  MatrixX analytical_solution(VectorX const & t) const {
+  MatrixX exact_solution(VectorX const & t) const {
     MatrixX x(2, t.size());
-    for (int i = 0; i < t.size(); ++i) {x.col(i) = OscillatorSemiExplicit::analytical_solution(t(i));}
+    for (int i = 0; i < t.size(); ++i) {x.col(i) = OscillatorSemiExplicit::exact_solution(t(i));}
     return x;
   }
 

@@ -65,15 +65,15 @@ public:
 
   static VectorF ics() {return VectorF::Zero();}
 
-  static VectorF analytical_solution(Real const t) {
+  static VectorF exact_solution(Real const t) {
     VectorF x;
     x << std::sin(t);
     return x;
   }
 
-  static MatrixX analytical_solution(VectorX const & t) {
+  static MatrixX exact_solution(VectorX const & t) {
     MatrixX x(1, t.size());
-    for (int i = 0; i < t.size(); ++i) {x.col(i) = SinSemiExplicit::analytical_solution(t(i));}
+    for (int i = 0; i < t.size(); ++i) {x.col(i) = SinSemiExplicit::exact_solution(t(i));}
     return x;
   }
 };

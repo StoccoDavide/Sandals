@@ -53,3 +53,6 @@ third_party/
 
 # Xcode folder
 xcode/
+
+# Temporary files
+tmp/

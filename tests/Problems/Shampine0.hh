@@ -8,6 +8,8 @@
  * e-mail: davide.stocco@unitn.it                             e-mail: enrico.bertolazzi@unitn.it *
 \* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+#pragma once
+
 #ifndef TESTS_PROBLEMS_SHAMPINE0_HH
 #define TESTS_PROBLEMS_SHAMPINE0_HH
 
@@ -64,7 +66,6 @@ public:
 };
 
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 
 template<typename Real = double>
 class Shampine0Implicit : public Implicit<Real, 2, 0>
@@ -151,7 +152,7 @@ public:
 
   VectorB b(VectorF const & x, Real const /*t*/) const override
   {
-    VectorF b;
+    VectorB b;
     b << x(1), -this->m_lambda*x(0);
     return b;
   }
@@ -220,9 +221,9 @@ public:
     return Jb_x_end;
   }
 
-  VectorF analytical_solution(Real const /*t*/) const {return VectorF::Zero();}
+  VectorF exact_solution(Real const /*t*/) const {return VectorF::Zero();}
 
-  MatrixX analytical_solution(VectorX const & t) const {return MatrixX::Zero(2, t.size());}
+  MatrixX exact_solution(VectorX const & t) const {return MatrixX::Zero(2, t.size());}
 
   static VectorF guess(Real const /*t*/) {return VectorF::Ones();}
 

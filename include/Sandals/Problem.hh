@@ -39,7 +39,10 @@ namespace Sandals
   {
   public:
     SANDALS_BASIC_CONSTANTS(Real) /**< Basic constants. */
-    const Real SQRT_EPSILON{std::sqrt(EPSILON)}; /**< Square root of machine epsilon epsilon static constant value. */ \
+    const Real SQRT_EPSILON{std::sqrt(EPSILON)}; /**< Square root of machine epsilon epsilon static constant value. */
+
+    using ShootingChoice = enum class ShootingChoice : Integer {SINGLE = 0, MULTIPLE = 1}; /**< Shooting method choice. */
+    using ContinuationChoice = enum class ContinuationChoice : Integer {NONE = 0, SIMPLE = 1}; /**< Continuation method choice. */
 
     using System = Implicit<Real, N, M>; /**< Unique pointer to an ODE/DAE system. */
     using SystemPtr = typename Implicit<Real, N, M>::Pointer; /**< Unique pointer to an ODE/DAE system. */
@@ -286,8 +289,13 @@ namespace Sandals
         }
 
         // Retrieve the initial and final states
-        x_ini = x_sol.template head<N>();
-        x_end = this->m_solution->x.col(this->m_solution->t.size() - 1);
+        if (!this->m_integrator->reverse_mode()) {
+          x_ini = x_sol.template head<N>();
+          x_end = this->m_solution->x.col(this->m_solution->t.size() - 1);
+        } else {
+          x_ini = this->m_solution->x.col(this->m_solution->t.size() - 1);
+          x_end = x_sol.template head<N>();
+        }
 
         // Evaluate the residual of the boundary conditions
         b = this->b(x_ini, x_end);
@@ -431,7 +439,31 @@ namespace Sandals
       #undef CMD
     }
 
-  }; // class Problem
+    /**
+    * Solve the boundary value problem using a shooting method.
+    * \param[in] t_mesh Independent variable (or time) mesh \f$ \mathbf{t} \f$.
+    * \param[in] ics Initial conditions \f$ \mathbf{x}(t = 0) \f$.
+    * \param[in] x_guess Initial guess for the states at the mesh nodes (only for multiple shooting).
+    * \tparam ShootingType Type of shooting method to use (single or multiple).
+    */
+    template <ShootingChoice ShootingType = ShootingChoice::MULTIPLE>
+    bool solve(VectorX const & t_mesh, VectorF const & ics, MatrixX & x_guess)
+    {
+      #define CMD "Sandals::Problem::solve(...): "
+
+      if constexpr (ShootingType == ShootingChoice::SINGLE) {
+        return this->single_shooting(t_mesh, ics);
+      } else if constexpr (ShootingType == ShootingChoice::MULTIPLE) {
+        return this->multiple_shooting(t_mesh, x_guess);
+      } else {
+        SANDALS_ERROR(CMD "unknown shooting method.");
+        return false;
+      }
+
+      #undef CMD
+    }
+
+  }; // Problem
 
 } // namespace Sandals
 

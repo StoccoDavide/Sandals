@@ -21,7 +21,7 @@ end
 BUILD_DEBUG      = false
 BUILD_TESTS      = true
 BUILD_EXAMPLES   = false
-BUILD_BENCHMARKS = false
+BUILD_BENCHMARKS = true
 CHECK_JACOBIANS  = true
 ENABLE_PLOTTING  = true
 

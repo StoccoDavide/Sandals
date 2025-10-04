@@ -8,6 +8,8 @@
  * e-mail: davide.stocco@unitn.it                             e-mail: enrico.bertolazzi@unitn.it *
 \* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+#pragma once
+
 #ifndef TESTS_PROBLEMS_TROESCH0_HH
 #define TESTS_PROBLEMS_TROESCH0_HH
 
@@ -64,7 +66,6 @@ public:
 };
 
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 
 template<typename Real = double>
 class TroeschImplicit : public Implicit<Real, 2, 0>
@@ -151,7 +152,7 @@ public:
 
   VectorB b(VectorF const & x, Real const /*t*/) const override
   {
-    VectorF b;
+    VectorB b;
     b << x(1), this->m_lambda*std::sinh(this->m_lambda*x(0));
     return b;
   }
@@ -220,7 +221,7 @@ public:
     return Jb_x_end;
   }
 
-  VectorF analytical_solution(Real const t) const {
+  VectorF exact_solution(Real const t) const {
     VectorF x;
     Real lambda{this->lambda()};
     Real c{1.0 - std::sinh(lambda)/lambda};
@@ -230,10 +231,10 @@ public:
     return x;
   }
 
-  MatrixX analytical_solution(VectorX const & t) const {
+  MatrixX exact_solution(VectorX const & t) const {
     MatrixX x(2, t.size());
     for (Integer i{0}; i < t.size(); ++i) {
-      x.col(i) = TroeschProblem<Real, System, Integrator>::analytical_solution(t(i));
+      x.col(i) = TroeschProblem<Real, System, Integrator>::exact_solution(t(i));
     }
     return x;
   }

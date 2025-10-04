@@ -72,7 +72,7 @@ public:
       (SinCosImplicit<Real>::ics() - SinCosExplicit<Real>::ics()).norm() < SQRT_EPSILON &&
       (SinCosImplicit<Real>::ics() - SinCosSemiExplicit<Real>::ics()).norm() < SQRT_EPSILON,
       "Initial conditions are not equal.");
-    sol = [] (Eigen::VectorXd t) -> Eigen::MatrixXd {return SinCosImplicit<Real>::analytical_solution(t);};
+    sol = [] (Eigen::VectorXd t) -> Eigen::MatrixXd {return SinCosImplicit<Real>::exact_solution(t);};
   }
 
   void TearDown() override {}
