@@ -32,7 +32,7 @@ public:
   using typename Explicit<Real, 2, 0>::MatrixJH;
 
 private:
-  Real m_e{1.0e-2};
+  Real m_e{1.0e-1};
 
 public:
   ShockExplicit() : Explicit<Real, 2, 0>("ShockExplicit") {}
@@ -80,7 +80,7 @@ public:
   using typename Implicit<Real, 2, 0>::MatrixJH;
 
 private:
-  Real m_e{1.0e-2};
+  Real m_e{1.0e-1};
 
 public:
   ShockImplicit() : Implicit<Real, 2, 0>("ShockImplicit") {}
@@ -134,7 +134,7 @@ public:
   using MatrixJH = typename SemiExplicit<Real, 2, 0>::MatrixJH;
 
 private:
-  Real m_e{1.0e-2};
+  Real m_e{1.0e-1};
 
 public:
   ShockSemiExplicit() : SemiExplicit<Real, 2, 0>("ShockSemiExplicit") {}

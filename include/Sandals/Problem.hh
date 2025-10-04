@@ -264,7 +264,10 @@ namespace Sandals
       VectorF b, x_ini, x_end;
       ShootingF x_sol, x_step, b_sys;
       ShootingJF A_sys;
-      A_sys.template block<N, N>(0, N) = MatrixJX::Identity();
+      A_sys.template block<N, N>(0, N).setIdentity();
+      const Integer num_intervals{static_cast<Integer>(t_mesh.size()) - 1};
+      Integer idx_x_ini{0}, idx_x_end{num_intervals};
+      if (this->m_integrator->reverse_mode()) {idx_x_ini = num_intervals; idx_x_end = 0;}
 
       // Initialize the guess and the solution
       x_sol << ics, ics;
@@ -289,13 +292,8 @@ namespace Sandals
         }
 
         // Retrieve the initial and final states
-        if (!this->m_integrator->reverse_mode()) {
-          x_ini = x_sol.template head<N>();
-          x_end = this->m_solution->x.col(this->m_solution->t.size() - 1);
-        } else {
-          x_ini = this->m_solution->x.col(this->m_solution->t.size() - 1);
-          x_end = x_sol.template head<N>();
-        }
+        x_ini = this->m_solution->x.col(idx_x_ini);
+        x_end = this->m_solution->x.col(idx_x_end);
 
         // Evaluate the residual of the boundary conditions
         b = this->b(x_ini, x_end);
@@ -304,8 +302,8 @@ namespace Sandals
         if (this->m_verbose) {
           std::cout
             << "Iteration " << iter << ": |b| = " << b.norm() << std::endl
-            << "  x(" << t_mesh.template head<1>() << ") = " << x_ini.transpose() << std::endl
-            << "  x(" << t_mesh.template tail<1>() << ") = " << x_end.transpose() << std::endl;
+            << "  x(" << t_mesh(idx_x_ini) << ") = " << x_ini.transpose() << std::endl
+            << "  x(" << t_mesh(idx_x_end) << ") = " << x_end.transpose() << std::endl;
         }
 
         // Check if the solution is found (i.e., if the boundary conditions are satisfied)
@@ -315,8 +313,13 @@ namespace Sandals
         b_sys.template head<N>() = x_end - x_sol.template tail<N>();
         b_sys.template tail<N>() = -b;
         A_sys.template block<N, N>(0, 0) = -Jx;
-        A_sys.template block<N, N>(N, 0) = this->Jb_x_ini(x_ini, x_end);
-        A_sys.template block<N, N>(N, N) = this->Jb_x_end(x_ini, x_end);
+        if (this->m_integrator->reverse_mode()) {
+          A_sys.template block<N, N>(N, N) = this->Jb_x_ini(x_ini, x_end);
+          A_sys.template block<N, N>(N, 0) = this->Jb_x_end(x_ini, x_end);
+        } else {
+          A_sys.template block<N, N>(N, 0) = this->Jb_x_ini(x_ini, x_end);
+          A_sys.template block<N, N>(N, N) = this->Jb_x_end(x_ini, x_end);
+        }
 
         // Compute the solution of the linear system
         lu.compute(A_sys);
@@ -352,6 +355,7 @@ namespace Sandals
         CMD "incompatible sizes between time mesh and states guess.");
 
       // Temporary variables
+      VectorF x_ini, x_end;
       const Integer num_intervals{static_cast<Integer>(t_mesh.size()) - 1};
       const Integer local_intervals{std::max(1, this->m_subintervals)};
       const Integer c_size{num_intervals*N};
@@ -405,26 +409,27 @@ namespace Sandals
           b_sys.template segment<N>(k*N) = this->m_solution->x.col(k + 1) - x_sol.col(k + 1);
         }
 
+        // Update the boundary condition states
+        x_ini = this->m_solution->x.col(idx_x_ini);
+        x_end = this->m_solution->x.col(idx_x_end);
+
         // Boundary condition residuals
-        b_sys.template tail<N>() =
-          -this->b(this->m_solution->x.col(idx_x_ini), this->m_solution->x.col(idx_x_end));
+        b_sys.template tail<N>() = -this->b(x_ini, x_end);
 
         // Print the iteration info
         if (this->m_verbose) {
           std::cout
             << "Iteration " << iter << ": |b| = " << b_sys.norm() << std::endl
-            << "  x(" << t_mesh.template head<1>() << ") = " << this->m_solution->x.col(0).transpose() << std::endl
-            << "  x(" << t_mesh.template tail<1>() << ") = " << this->m_solution->x.col(num_intervals).transpose() << std::endl;
+            << "  x(" << t_mesh(idx_x_ini) << ") = " << x_ini.transpose() << std::endl
+            << "  x(" << t_mesh(idx_x_end) << ") = " << x_end.transpose() << std::endl;
         }
 
         // Check convergence
         if (b_sys.norm() < this->m_tolerance) {return true;}
 
         // Update the boundary condition Jacobian blocks
-        A_sys.template block<N, N>(c_size, 0) =
-          this->Jb_x_ini(this->m_solution->x.col(idx_x_ini), this->m_solution->x.col(idx_x_end));
-        A_sys.template block<N, N>(c_size, num_intervals*N) =
-          this->Jb_x_end(this->m_solution->x.col(idx_x_ini), this->m_solution->x.col(idx_x_end));
+        A_sys.template block<N, N>(c_size, idx_x_ini*N) = this->Jb_x_ini(x_ini, x_end);
+        A_sys.template block<N, N>(c_size, idx_x_end*N) = this->Jb_x_end(x_ini, x_end);
 
         // Solve the linear system
         qr.compute(A_sys);

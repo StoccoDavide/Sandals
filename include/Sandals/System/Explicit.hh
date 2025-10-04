@@ -153,7 +153,7 @@ namespace Sandals {
     * \mathbf{x}, -t) \f$.
     * \param[in] x States \f$ \mathbf{x} \f$.
     * \param[in] t Independent variable (or time) \f$ t \f$.
-    * \return The time-reversed system function \f$ \mathbf{f}(\mathbf{x}, -t) \f$.
+    * \return The time-reversed system function \f$ -\mathbf{f}(\mathbf{x}, -t) \f$.
     */
     VectorF f_reverse(VectorF const & x, Real const t) const
     {
@@ -162,10 +162,10 @@ namespace Sandals {
 
     /**
     * Time reversal of the Jacobian of the explicit ODE system function \f$ \mathbf{f}(\mathbf{x}, t) \f$
-    * with respect to the states \f$ \mathbf{x} = -\mathbf{Jf}_{\mathbf{x}}(\mathbf{x}, -t) \f$.
+    * with respect to the states \f$ \mathbf{x} \f$, i.e., \f$ -\mathbf{Jf}_{\mathbf{x}}(\mathbf{x}, -t) \f$.
     * \param[in] x States \f$ \mathbf{x} \f$.
     * \param[in] t Independent variable (or time) \f$ t \f$.
-    * \return The time-reversed Jacobian \f$ \mathbf{Jf}_{\mathbf{x}}(\mathbf{x}, -t) \f$.
+    * \return The time-reversed Jacobian \f$ -\mathbf{Jf}_{\mathbf{x}}(\mathbf{x}, -t) \f$.
     */
     MatrixJF Jf_x_reverse(VectorF const & x, Real const t) const
     {
@@ -178,26 +178,26 @@ namespace Sandals {
     * \param[in] x States \f$ \mathbf{x} \f$.
     * \param[in] x_dot States derivative \f$ \mathbf{x}^{\prime} \f$.
     * \param[in] t Independent variable (or time) \f$ t \f$.
-    * \return The time-reversed system function \f$ \mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, -t) \f$.
+    * \return The time-reversed system function \f$ -\mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, -t) \f$.
     */
     VectorF F_reverse(VectorF const & x, VectorF const & x_dot, Real const t) const
     {
-      return -x_dot - this->f(x, -t);
+      return -x_dot + this->f(x, -t);
     }
 
     /**
     * Time reversal of the Jacobian of the implicit ODE system function \f$ \mathbf{F}(\mathbf{x},
-    * \mathbf{x}^{\prime}, t) \f$ with respect to the states \f$ \mathbf{x} = -\mathbf{JF}_{\mathbf{x}}
-    * (\mathbf{x}, -\mathbf{x}^{\prime}, -t) \f$.
+    * \mathbf{x}^{\prime}, t) \f$ with respect to the states \f$ \mathbf{x} \f$, i.e.,
+    * \f$ -\mathbf{JF}_{\mathbf{x}}(\mathbf{x}, -\mathbf{x}^{\prime}, -t) \f$.
     * \param[in] x States \f$ \mathbf{x} \f$.
     * \param[in] x_dot States derivative \f$ \mathbf{x}^{\prime} \f$.
     * \param[in] t Independent variable (or time) \f$ t \f$.
-    * \return The time-reversed Jacobian \f$ \mathbf{JF}_{\mathbf{x}}(\mathbf{x}, -\mathbf{x}^{\prime},
+    * \return The time-reversed Jacobian \f$ -\mathbf{JF}_{\mathbf{x}}(\mathbf{x}, -\mathbf{x}^{\prime},
     * -t) \f$.
     */
     MatrixJF JF_x_reverse(VectorF const & x, VectorF const &/*x_dot*/, Real const t) const
     {
-      return -this->Jf_x(x, -t);
+      return this->Jf_x(x, -t);
     }
 
     /**

@@ -88,7 +88,7 @@ int main(int argc, char ** argv) {
 #endif
 
   // Istantiate the problems
-  PROBLEM_INIT(Basic, RK4)
+  PROBLEM_INIT(Shock, RK4)
 
   // Set verbose mode
   constexpr bool verbose{true};
@@ -106,14 +106,14 @@ int main(int argc, char ** argv) {
   problem_semiexplicit.integrator()->reverse_mode(reverse);
 
   // Set solver tolerance
-  problem_explicit.tolerance(1.0e-10);
-  problem_implicit.tolerance(1.0e-10);
-  problem_semiexplicit.tolerance(1.0e-10);
+  problem_explicit.tolerance(1.0e-8);
+  problem_implicit.tolerance(1.0e-8);
+  problem_semiexplicit.tolerance(1.0e-8);
 
   // Set solver maximum number of iterations
-  problem_explicit.max_iterations(100);
-  problem_implicit.max_iterations(100);
-  problem_semiexplicit.max_iterations(100);
+  problem_explicit.max_iterations(10);
+  problem_implicit.max_iterations(10);
+  problem_semiexplicit.max_iterations(10);
 
   // Set solution parameters
   constexpr Integer num_subintervals{2};
@@ -122,7 +122,7 @@ int main(int argc, char ** argv) {
   problem_semiexplicit.subintervals(num_subintervals);
 
   // Set time mesh
-  constexpr Integer num_points{6};
+  constexpr Integer num_points{11};
   Eigen::Vector<Real, Eigen::Dynamic> time(Eigen::Vector<Real, Eigen::Dynamic>::LinSpaced(
     num_points, problem_explicit.time_start(), problem_explicit.time_end()
   ));
@@ -132,11 +132,11 @@ int main(int argc, char ** argv) {
 
   // Solve the problems with shooting
   std::cout << std::endl << "=== Explicit Problem" << std::endl << std::endl;
-  problem_explicit.multiple_shooting(time, guess);
+  problem_explicit.single_shooting(time, guess);
   std::cout << std::endl << "=== Implicit Problem" << std::endl << std::endl;
-  problem_implicit.multiple_shooting(time, guess);
+  problem_implicit.single_shooting(time, guess);
   std::cout << std::endl << "=== Semi-Explicit Problem" << std::endl << std::endl;
-  problem_semiexplicit.multiple_shooting(time, guess);
+  problem_semiexplicit.single_shooting(time, guess);
 
   #ifdef SANDALS_ENABLE_PLOTTING
   auto sol_e = problem_explicit.solution();

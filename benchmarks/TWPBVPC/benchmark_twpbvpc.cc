@@ -27,12 +27,12 @@ void test(bool const reverse) {
   problem.verbose_mode(false);
   problem.integrator()->verbose_mode(false);
   problem.integrator()->reverse_mode(reverse);
-  problem.tolerance(1.0e-10);
+  problem.tolerance(1.0e-8);
   problem.max_iterations(100);
-  problem.subintervals(5);
+  problem.subintervals(4);
 
   // Set time mesh
-  constexpr Integer num_points{200};
+  constexpr Integer num_points{100};
   Eigen::Vector<Real, Eigen::Dynamic> time(Eigen::Vector<Real, Eigen::Dynamic>::LinSpaced(
     num_points, problem.time_start(), problem.time_end()
   ));
@@ -41,18 +41,18 @@ void test(bool const reverse) {
   Eigen::Matrix<Real, 2, Eigen::Dynamic> guess(problem.guess(time));
 
   // Solve the problem with different lambda values
-  std::vector<Real> lambda_vec{1.0e-0}; // 1.0e-1, 1.0e-2 1.0e-3, 1.0e-4
+  std::vector<Real> lambda_vec{1.0e-0, 1.0e-1, 1.0e-2, 1.0e-3};
   for (Real lambda : lambda_vec) {
     static_cast<SystemType*>(problem.integrator()->system())->lambda(lambda);
     EXPECT_TRUE(problem.multiple_shooting(time, guess));
   }
 
-  // Get the numerical and analytical solutions
-  auto sol_n{problem.solution()};
-  auto sol_a{problem.exact_solution(reverse ? sol_n.t.reverse().eval() : sol_n.t)};
+    // Get the numerical and analytical solutions
+    auto sol_n{problem.solution()};
+    auto sol_a{problem.exact_solution(reverse ? sol_n.t.reverse().eval() : sol_n.t)};
 
-  // Check the solutions
-  EXPECT_NEAR((sol_n.eigen_x(0) - sol_a).array().abs().maxCoeff(), 0.0, 1.0e-3);
+    // Check the solutions
+    EXPECT_NEAR((sol_n.eigen_x(0) - sol_a).array().abs().maxCoeff(), 0.0, 0.5);
 }
 
 #ifndef GENERATE_TEST

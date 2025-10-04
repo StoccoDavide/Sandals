@@ -753,10 +753,10 @@ namespace Sandals {
       VectorN x_node;
       for (Integer i{0}; i < S; ++i) {
         x_node = x_old + K(all, seqN(0, i)) * this->m_tableau.A(i, seqN(0, i)).transpose();
-        if (!this->m_reverse) {
-          K.col(i) = h_old * static_cast<Explicit<Real, N, M> const *>(this->m_system.get())->f(x_node, t_old + h_old*this->m_tableau.c(i));
-        } else {
+        if (this->m_reverse) {
           K.col(i) = h_old * static_cast<Explicit<Real, N, M> const *>(this->m_system.get())->f_reverse(x_node, t_old + h_old*this->m_tableau.c(i));
+        } else {
+          K.col(i) = h_old * static_cast<Explicit<Real, N, M> const *>(this->m_system.get())->f(x_node, t_old + h_old*this->m_tableau.c(i));
         }
       }
       if (!K.allFinite()) {return false;}
@@ -766,7 +766,7 @@ namespace Sandals {
 
       // Adapt next step
       if (this->m_adaptive && this->m_tableau.is_embedded) {
-        VectorN x_emb = x_old + K * this->m_tableau.b_e;
+        VectorN x_emb(x_old + K * this->m_tableau.b_e);
         h_new = this->estimate_step(x_new, x_emb, h_old);
       }
       return true;
@@ -802,10 +802,10 @@ namespace Sandals {
         (void)K;
 
         // Compute the Jacobian of f with respect to x at the node
-        if (!this->m_reverse) {
-          Jf_x = static_cast<Explicit<Real, N, M> const *>(this->m_system.get())->Jf_x(x_node, t + h*this->m_tableau.c(i));
-        } else {
+        if (this->m_reverse) {
           Jf_x = static_cast<Explicit<Real, N, M> const *>(this->m_system.get())->Jf_x_reverse(x_node, t + h*this->m_tableau.c(i));
+        } else {
+          Jf_x = static_cast<Explicit<Real, N, M> const *>(this->m_system.get())->Jf_x(x_node, t + h*this->m_tableau.c(i));
         }
 
         // Propagate the derivative of K with respect to x
@@ -837,20 +837,8 @@ namespace Sandals {
       MatrixJX Jx_fd;
       if (Optimist::FiniteDifferences::Jacobian(x, fun, Jx_fd)) {
         Real err{(Jx - Jx_fd).norm()};
-        if (err >= CBRT_EPSILON) {
-          // Diagnostic dump to help debug reverse-mode Jacobian propagation issues
-          std::cerr << "[DEBUG] dirk_propagate diagnostics: t = " << t << ", h = " << h
-                    << ", x = " << x.transpose() << std::endl;
-          std::cerr << "[DEBUG] Jx (analytic): norm=" << Jx.norm() << std::endl;
-          std::cerr << "[DEBUG] Jx_fd (fd): norm=" << Jx_fd.norm() << std::endl;
-          std::cerr << "[DEBUG] Jx - Jx_fd norm=" << (Jx - Jx_fd).norm() << std::endl;
-          SANDALS_ASSERT_WARNING(false,
-            CMD "Jacobian propagation error = " << err << " > " << CBRT_EPSILON << ".");
-        } else {
-          // keep existing warning behavior (should be no-op here)
-          SANDALS_ASSERT_WARNING(err < CBRT_EPSILON,
-            CMD "Jacobian propagation error = " << err << " > " << CBRT_EPSILON << ".");
-        }
+        SANDALS_ASSERT_WARNING(err < CBRT_EPSILON,
+          CMD "Jacobian propagation error = " << err << " > " << CBRT_EPSILON << ".");
       }
       #endif
 
@@ -885,10 +873,10 @@ namespace Sandals {
       using Eigen::all;
       using Eigen::seqN;
       VectorN x_node(x + K(all, seqN(0, s)) * this->m_tableau.A(s, seqN(0, s)).transpose());
-      if (!this->m_reverse) {
-        fun = this->m_system->F(x_node, K.col(s)/h, t + h * this->m_tableau.c(s));
-      } else {
+      if (this->m_reverse) {
         fun = this->m_system->F_reverse(x_node, K.col(s)/h, t + h * this->m_tableau.c(s));
+      } else {
+        fun = this->m_system->F(x_node, K.col(s)/h, t + h * this->m_tableau.c(s));
       }
     }
 
@@ -929,10 +917,10 @@ namespace Sandals {
       using Eigen::all;
       using Eigen::seqN;
       VectorN x_node(x + K(all, seqN(0, s)) * this->m_tableau.A(s, seqN(0, s)).transpose());
-      if (!this->m_reverse) {
-        jac = this->m_system->JF_x_dot(x_node, K.col(s)/h, t + h * this->m_tableau.c(s)) / h;
-      } else {
+      if (this->m_reverse) {
         jac = this->m_system->JF_x_dot_reverse(x_node, K.col(s)/h, t + h * this->m_tableau.c(s)) / h;
+      } else {
+        jac = this->m_system->JF_x_dot(x_node, K.col(s)/h, t + h * this->m_tableau.c(s)) / h;
       }
     }
 
@@ -1012,12 +1000,12 @@ namespace Sandals {
         x_dot_node = K.col(i) / h;
 
         // Compute the Jacobians of F with respect to x and x_dot at the node
-        if (!this->m_reverse) {
-          JF_x     = this->m_system->JF_x(x_node, x_dot_node, t + h*this->m_tableau.c(i));
-          JF_x_dot = this->m_system->JF_x_dot(x_node, x_dot_node, t + h*this->m_tableau.c(i));
-        } else {
+        if (this->m_reverse) {
           JF_x     = this->m_system->JF_x_reverse(x_node, x_dot_node, t + h*this->m_tableau.c(i));
           JF_x_dot = this->m_system->JF_x_dot_reverse(x_node, x_dot_node, t + h*this->m_tableau.c(i));
+        } else {
+          JF_x     = this->m_system->JF_x(x_node, x_dot_node, t + h*this->m_tableau.c(i));
+          JF_x_dot = this->m_system->JF_x_dot(x_node, x_dot_node, t + h*this->m_tableau.c(i));
         }
 
         // Propagate the derivative of K with respect to x
@@ -1100,10 +1088,10 @@ namespace Sandals {
       MatrixK fun_mat;
       for (Integer i{0}; i < S; ++i) {
         x_node = x + K_mat * this->m_tableau.A.row(i).transpose();
-        if (!this->m_reverse) {
-          fun_mat.col(i) = this->m_system->F(x_node, K_mat.col(i)/h, t + h * this->m_tableau.c(i));
-        } else {
+        if (this->m_reverse) {
           fun_mat.col(i) = this->m_system->F_reverse(x_node, K_mat.col(i)/h, t + h * this->m_tableau.c(i));
+        } else {
+          fun_mat.col(i) = this->m_system->F(x_node, K_mat.col(i)/h, t + h * this->m_tableau.c(i));
         }
       }
       fun = fun_mat.reshaped(N*S, 1);
@@ -1164,12 +1152,12 @@ namespace Sandals {
 
         // Compute the Jacobians with respect to x and x_dot
         x_dot_node = K_mat.col(i) / h;
-        if (!this->m_reverse) {
-          JF_x     = this->m_system->JF_x(x_node, x_dot_node, t_node);
-          JF_x_dot = this->m_system->JF_x_dot(x_node, x_dot_node, t_node);
-        } else {
+        if (this->m_reverse) {
           JF_x     = this->m_system->JF_x_reverse(x_node, x_dot_node, t_node);
           JF_x_dot = this->m_system->JF_x_dot_reverse(x_node, x_dot_node, t_node);
+        } else {
+          JF_x     = this->m_system->JF_x(x_node, x_dot_node, t_node);
+          JF_x_dot = this->m_system->JF_x_dot(x_node, x_dot_node, t_node);
         }
 
         // Combine the Jacobians with respect to x and x_dot to obtain the Jacobian with respect to K
@@ -1262,12 +1250,12 @@ namespace Sandals {
         x_dot_node = K.col(i) / h;
 
         // Compute the Jacobians of F with respect to x and x_dot at the node
-        if (!this->m_reverse) {
-          JF_x     = this->m_system->JF_x(x_node, x_dot_node, t + h*this->m_tableau.c(i));
-          JF_x_dot = this->m_system->JF_x_dot(x_node, x_dot_node, t + h*this->m_tableau.c(i));
-        } else {
+        if (this->m_reverse) {
           JF_x     = this->m_system->JF_x_reverse(x_node, x_dot_node, t + h*this->m_tableau.c(i));
           JF_x_dot = this->m_system->JF_x_dot_reverse(x_node, x_dot_node, t + h*this->m_tableau.c(i));
+        } else {
+          JF_x     = this->m_system->JF_x(x_node, x_dot_node, t + h*this->m_tableau.c(i));
+          JF_x_dot = this->m_system->JF_x_dot(x_node, x_dot_node, t + h*this->m_tableau.c(i));
         }
 
         // Fill the big linear system
@@ -1346,10 +1334,10 @@ namespace Sandals {
       using Eigen::all;
       using Eigen::seqN;
       VectorN x_node(x + K(all, seqN(0, n+1)) * this->m_tableau.A(n, seqN(0, n+1)).transpose());
-      if (!this->m_reverse) {
-        fun = this->m_system->F(x_node, K.col(n)/h, t + h * this->m_tableau.c(n));
-      } else {
+      if (this->m_reverse) {
         fun = this->m_system->F_reverse(x_node, K.col(n)/h, t + h * this->m_tableau.c(n));
+      } else {
+        fun = this->m_system->F(x_node, K.col(n)/h, t + h * this->m_tableau.c(n));
       }
     }
 
@@ -1394,12 +1382,12 @@ namespace Sandals {
       Real t_node{t + h * this->m_tableau.c(n)};
       VectorN x_node(x + K(all, seqN(0, n+1)) * this->m_tableau.A(n, seqN(0, n+1)).transpose());
       VectorN x_dot_node(K.col(n)/h);
-      if (!this->m_reverse) {
-        jac = this->m_tableau.A(n,n) * this->m_system->JF_x(x_node, x_dot_node, t_node) +
-          this->m_system->JF_x_dot(x_node, x_dot_node, t_node) / h;
-      } else {
-        jac = this->m_tableau.A(n,n) * this->m_system->JF_x_reverse(x_node, x_dot_node, t_node) +
+      if (this->m_reverse) {
+        jac = this->m_tableau.A(n, n) * this->m_system->JF_x_reverse(x_node, x_dot_node, t_node) +
           this->m_system->JF_x_dot_reverse(x_node, x_dot_node, t_node) / h;
+      } else {
+        jac = this->m_tableau.A(n, n) * this->m_system->JF_x(x_node, x_dot_node, t_node) +
+          this->m_system->JF_x_dot(x_node, x_dot_node, t_node) / h;
       }
     }
 
@@ -1480,12 +1468,12 @@ namespace Sandals {
         x_dot_node = K.col(i) / h;
 
         // Compute the Jacobians of F with respect to x and x_dot at the node
-        if (!this->m_reverse) {
-          JF_x     = this->m_system->JF_x(x_node, x_dot_node, t + h*this->m_tableau.c(i));
-          JF_x_dot = this->m_system->JF_x_dot(x_node, x_dot_node, t + h*this->m_tableau.c(i));
-        } else {
+        if (this->m_reverse) {
           JF_x     = this->m_system->JF_x_reverse(x_node, x_dot_node, t + h*this->m_tableau.c(i));
           JF_x_dot = this->m_system->JF_x_dot_reverse(x_node, x_dot_node, t + h*this->m_tableau.c(i));
+        } else {
+          JF_x     = this->m_system->JF_x(x_node, x_dot_node, t + h*this->m_tableau.c(i));
+          JF_x_dot = this->m_system->JF_x_dot(x_node, x_dot_node, t + h*this->m_tableau.c(i));
         }
 
         // Propagate the derivative of K with respect to x
