@@ -142,6 +142,8 @@ $(function(){initNavTree('class_sandals_1_1_problem.html','','class_sandals_1_1_
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-types" class="groupheader"><a id="pub-types" name="pub-types"></a>
 Public Types</h2></td></tr>
+<tr class="memitem:acbc7b723bd5409ae6ad347385e19de30" id="r_acbc7b723bd5409ae6ad347385e19de30"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acbc7b723bd5409ae6ad347385e19de30">ShootingChoice</a> = enum class <a class="el" href="#acbc7b723bd5409ae6ad347385e19de30">ShootingChoice</a> : <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> {SINGLE = 0, MULTIPLE = 1}</td></tr>
+<tr class="memitem:afcad0f85fb81fc05dc1300aea17dd183" id="r_afcad0f85fb81fc05dc1300aea17dd183"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afcad0f85fb81fc05dc1300aea17dd183">ContinuationChoice</a> = enum class <a class="el" href="#afcad0f85fb81fc05dc1300aea17dd183">ContinuationChoice</a> : <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> {NONE = 0, SIMPLE = 1}</td></tr>
 <tr class="memitem:a50f4e38c20da4e1f8b8148286e575e98" id="r_a50f4e38c20da4e1f8b8148286e575e98"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a50f4e38c20da4e1f8b8148286e575e98">System</a> = <a class="el" href="class_sandals_1_1_implicit.html">Implicit</a>&lt;Real, N, M&gt;</td></tr>
 <tr class="memitem:ae5658919c6f06fc9a54e9a09e7a6b2ae" id="r_ae5658919c6f06fc9a54e9a09e7a6b2ae"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae5658919c6f06fc9a54e9a09e7a6b2ae">SystemPtr</a> = typename <a class="el" href="class_sandals_1_1_implicit.html">Implicit</a>&lt;Real, N, M&gt;::Pointer</td></tr>
 <tr class="memitem:a032d24ecbe59187f11b3ff75342f3a44" id="r_a032d24ecbe59187f11b3ff75342f3a44"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a032d24ecbe59187f11b3ff75342f3a44">IntegratorPtr</a> = std::unique_ptr&lt;Integrator&gt;</td></tr>
@@ -183,6 +185,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:afc01a21e7c4a897dd071b4b23e34d984" id="r_afc01a21e7c4a897dd071b4b23e34d984"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="#a13120c7cd40d5b185d0b9eeb18f5e697">MatrixJF</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afc01a21e7c4a897dd071b4b23e34d984">Jb_x_end</a> (<a class="el" href="#a73ea74089f00f9f2d68ad3bfcbb7dda7">VectorF</a> const &amp;x_ini, <a class="el" href="#a73ea74089f00f9f2d68ad3bfcbb7dda7">VectorF</a> const &amp;x_end) const =0</td></tr>
 <tr class="memitem:ab8521cdf4e236e631d179c45826abe85" id="r_ab8521cdf4e236e631d179c45826abe85"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab8521cdf4e236e631d179c45826abe85">single_shooting</a> (<a class="el" href="#aeb0cf1d868c5e684e908c0e408fcd47b">VectorX</a> const &amp;t_mesh, <a class="el" href="#a73ea74089f00f9f2d68ad3bfcbb7dda7">VectorF</a> const &amp;ics)</td></tr>
 <tr class="memitem:ad19084464ee4bbdca220d2e7b6847c3a" id="r_ad19084464ee4bbdca220d2e7b6847c3a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad19084464ee4bbdca220d2e7b6847c3a">multiple_shooting</a> (<a class="el" href="#aeb0cf1d868c5e684e908c0e408fcd47b">VectorX</a> const &amp;t_mesh, <a class="el" href="#a05a533c777643fd0dd1ad648bb7f8d1c">MatrixX</a> const &amp;x_guess)</td></tr>
+<tr class="memitem:ab1340358f4edf43ffbccf3ab4801794b" id="r_ab1340358f4edf43ffbccf3ab4801794b"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="#acbc7b723bd5409ae6ad347385e19de30">ShootingChoice</a> ShootingType = ShootingChoice::MULTIPLE&gt; </td></tr>
+<tr class="memitem:ab1340358f4edf43ffbccf3ab4801794b template"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab1340358f4edf43ffbccf3ab4801794b">solve</a> (<a class="el" href="#aeb0cf1d868c5e684e908c0e408fcd47b">VectorX</a> const &amp;t_mesh, <a class="el" href="#a73ea74089f00f9f2d68ad3bfcbb7dda7">VectorF</a> const &amp;ics, <a class="el" href="#a05a533c777643fd0dd1ad648bb7f8d1c">MatrixX</a> &amp;x_guess)</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -209,6 +213,23 @@ class Sandals::Problem&lt; Real, N, M, Integrator &gt;</div><p>Class container f
   </dd>
 </dl>
 </div><a name="doc-typedef-members" id="doc-typedef-members"></a><h2 id="header-doc-typedef-members" class="groupheader">Member Typedef Documentation</h2>
+<a id="afcad0f85fb81fc05dc1300aea17dd183" name="afcad0f85fb81fc05dc1300aea17dd183"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afcad0f85fb81fc05dc1300aea17dd183">&#9670;&#160;</a></span>ContinuationChoice</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M, typename Integrator&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="class_sandals_1_1_problem.html">Sandals::Problem</a>&lt; Real, N, M, Integrator &gt;::ContinuationChoice = enum class <a class="el" href="#afcad0f85fb81fc05dc1300aea17dd183">ContinuationChoice</a> : <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> {NONE = 0, SIMPLE = 1}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Continuation method choice. </p>
+
+</div>
+</div>
 <a id="a032d24ecbe59187f11b3ff75342f3a44" name="a032d24ecbe59187f11b3ff75342f3a44"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a032d24ecbe59187f11b3ff75342f3a44">&#9670;&#160;</a></span>IntegratorPtr</h2>
 
@@ -304,6 +325,23 @@ template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581
       </table>
 </div><div class="memdoc">
 <p>Dynamic matrix of real numbers. </p>
+
+</div>
+</div>
+<a id="acbc7b723bd5409ae6ad347385e19de30" name="acbc7b723bd5409ae6ad347385e19de30"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acbc7b723bd5409ae6ad347385e19de30">&#9670;&#160;</a></span>ShootingChoice</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M, typename Integrator&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="class_sandals_1_1_problem.html">Sandals::Problem</a>&lt; Real, N, M, Integrator &gt;::ShootingChoice = enum class <a class="el" href="#acbc7b723bd5409ae6ad347385e19de30">ShootingChoice</a> : <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> {SINGLE = 0, MULTIPLE = 1}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Shooting method choice. </p>
 
 </div>
 </div>
@@ -987,6 +1025,58 @@ template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581
 </table>
 </div><div class="memdoc">
 <p>Get the solution const pointer. </p><dl class="section return"><dt>Returns</dt><dd>The solution const pointer. </dd></dl>
+
+</div>
+</div>
+<a id="ab1340358f4edf43ffbccf3ab4801794b" name="ab1340358f4edf43ffbccf3ab4801794b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab1340358f4edf43ffbccf3ab4801794b">&#9670;&#160;</a></span>solve()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M, typename Integrator&gt; </div>
+<div class="memtemplate">
+template&lt;<a class="el" href="#acbc7b723bd5409ae6ad347385e19de30">ShootingChoice</a> ShootingType = ShootingChoice::MULTIPLE&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="class_sandals_1_1_problem.html">Sandals::Problem</a>&lt; Real, N, M, Integrator &gt;::solve </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#aeb0cf1d868c5e684e908c0e408fcd47b">VectorX</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>t_mesh</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="#a73ea74089f00f9f2d68ad3bfcbb7dda7">VectorF</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>ics</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="#a05a533c777643fd0dd1ad648bb7f8d1c">MatrixX</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>x_guess</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Solve the boundary value problem using a shooting method. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">t_mesh</td><td>Independent variable (or time) mesh \( \mathbf{t} \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ics</td><td>Initial conditions \( \mathbf{x}(t = 0) \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">x_guess</td><td>Initial guess for the states at the mesh nodes (only for multiple shooting). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">ShootingType</td><td>Type of shooting method to use (single or multiple). </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

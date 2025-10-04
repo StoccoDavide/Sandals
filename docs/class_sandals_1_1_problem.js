@@ -1,11 +1,13 @@
 var class_sandals_1_1_problem =
 [
+    [ "ContinuationChoice", "class_sandals_1_1_problem.html#afcad0f85fb81fc05dc1300aea17dd183", null ],
     [ "IntegratorPtr", "class_sandals_1_1_problem.html#a032d24ecbe59187f11b3ff75342f3a44", null ],
     [ "MatrixJF", "class_sandals_1_1_problem.html#a13120c7cd40d5b185d0b9eeb18f5e697", null ],
     [ "MatrixJX", "class_sandals_1_1_problem.html#ac1cb5525e81abfcbe1fc85ab6a2f5e78", null ],
     [ "MatrixM", "class_sandals_1_1_problem.html#af6fe402b97094519714a1e1b81e70232", null ],
     [ "MatrixN", "class_sandals_1_1_problem.html#ae3d88f5d24952de722e36365aa24948f", null ],
     [ "MatrixX", "class_sandals_1_1_problem.html#a05a533c777643fd0dd1ad648bb7f8d1c", null ],
+    [ "ShootingChoice", "class_sandals_1_1_problem.html#acbc7b723bd5409ae6ad347385e19de30", null ],
     [ "SolutionPtr", "class_sandals_1_1_problem.html#ade5cf4d14e51628b683c056e12600c7e", null ],
     [ "System", "class_sandals_1_1_problem.html#a50f4e38c20da4e1f8b8148286e575e98", null ],
     [ "SystemPtr", "class_sandals_1_1_problem.html#ae5658919c6f06fc9a54e9a09e7a6b2ae", null ],
@@ -29,6 +31,7 @@ var class_sandals_1_1_problem =
     [ "single_shooting", "class_sandals_1_1_problem.html#ab8521cdf4e236e631d179c45826abe85", null ],
     [ "solution", "class_sandals_1_1_problem.html#a8a147bd8463e3b06ecd04ce9c5fb7998", null ],
     [ "solution", "class_sandals_1_1_problem.html#aac866814c83c4fecd5932504d0d9062c", null ],
+    [ "solve", "class_sandals_1_1_problem.html#ab1340358f4edf43ffbccf3ab4801794b", null ],
     [ "subintervals", "class_sandals_1_1_problem.html#adb32c74ae5aee7f43abe91a460a7c161", null ],
     [ "subintervals", "class_sandals_1_1_problem.html#a595b2a499c620c46699ea896eeaa0afd", null ],
     [ "system", "class_sandals_1_1_problem.html#a2fe4c89034d36de6a472f8c185ef9c16", null ],

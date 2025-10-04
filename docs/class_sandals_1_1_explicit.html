@@ -515,7 +515,7 @@ template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The time-reversed system function \( \mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, -t) \). </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The time-reversed system function \( -\mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, -t) \). </dd></dl>
 
 </div>
 </div>
@@ -555,7 +555,7 @@ template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The time-reversed system function \( \mathbf{f}(\mathbf{x}, -t) \). </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The time-reversed system function \( -\mathbf{f}(\mathbf{x}, -t) \). </dd></dl>
 
 </div>
 </div>
@@ -803,8 +803,7 @@ template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581
 </table>
 </div><div class="memdoc">
 <p>Time reversal of the Jacobian of the implicit ODE system function  \( \mathbf{F}(\mathbf{x},
-\mathbf{x}^{\prime}, t) \) with respect to the states  \( \mathbf{x} = -\mathbf{JF}_{\mathbf{x}}
-(\mathbf{x}, -\mathbf{x}^{\prime}, -t) \). </p><dl class="params"><dt>Parameters</dt><dd>
+\mathbf{x}^{\prime}, t) \) with respect to the states \( \mathbf{x} \), i.e., \( -\mathbf{JF}_{\mathbf{x}}(\mathbf{x}, -\mathbf{x}^{\prime}, -t) \). </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>States \( \mathbf{x} \). </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">x_dot</td><td>States derivative \( \mathbf{x}^{\prime} \). </td></tr>
@@ -812,7 +811,7 @@ template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The time-reversed Jacobian  \( \mathbf{JF}_{\mathbf{x}}(\mathbf{x}, -\mathbf{x}^{\prime},
+<dl class="section return"><dt>Returns</dt><dd>The time-reversed Jacobian  \( -\mathbf{JF}_{\mathbf{x}}(\mathbf{x}, -\mathbf{x}^{\prime},
 -t) \). </dd></dl>
 
 </div>
@@ -845,14 +844,14 @@ template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Time reversal of the Jacobian of the explicit ODE system function \( \mathbf{f}(\mathbf{x}, t) \) with respect to the states \( \mathbf{x} = -\mathbf{Jf}_{\mathbf{x}}(\mathbf{x}, -t) \). </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Time reversal of the Jacobian of the explicit ODE system function \( \mathbf{f}(\mathbf{x}, t) \) with respect to the states \( \mathbf{x} \), i.e., \( -\mathbf{Jf}_{\mathbf{x}}(\mathbf{x}, -t) \). </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>States \( \mathbf{x} \). </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">t</td><td>Independent variable (or time) \( t \). </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The time-reversed Jacobian \( \mathbf{Jf}_{\mathbf{x}}(\mathbf{x}, -t) \). </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The time-reversed Jacobian \( -\mathbf{Jf}_{\mathbf{x}}(\mathbf{x}, -t) \). </dd></dl>
 
 </div>
 </div>

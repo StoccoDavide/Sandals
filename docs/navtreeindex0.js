@@ -46,6 +46,7 @@ var NAVTREEINDEX0 =
 "_problem_8hh.html#a0a5ceb9ceb914e08d345410b561cb37a":[6,0,1,0,2,1],
 "_problem_8hh.html#a0a5ceb9ceb914e08d345410b561cb37a":[6,0,1,0,2,2],
 "_problem_8hh.html#a0a5ceb9ceb914e08d345410b561cb37a":[6,0,1,0,2,3],
+"_problem_8hh.html#a0a5ceb9ceb914e08d345410b561cb37a":[6,0,1,0,2,4],
 "_problem_8hh_source.html":[6,0,1,0,2],
 "_r_k4_8hh.html":[6,0,1,0,0,16],
 "_r_k4_8hh.html#af96a23a78c814f147142dbff7baf7e35":[6,0,1,0,0,16,2],
@@ -248,6 +249,5 @@ var NAVTREEINDEX0 =
 "class_sandals_1_1_fehlberg45.html":[5,0,0,6],
 "class_sandals_1_1_fehlberg45.html#a36286bb7519ab981d4948e24c07906a3":[4,0,0,6,0],
 "class_sandals_1_1_fehlberg45.html#a36286bb7519ab981d4948e24c07906a3":[5,0,0,6,0],
-"class_sandals_1_1_fehlberg45.html#a428917e0823c8f4e4a293b4805b2b202":[4,0,0,6,1],
-"class_sandals_1_1_fehlberg45.html#a428917e0823c8f4e4a293b4805b2b202":[5,0,0,6,1]
+"class_sandals_1_1_fehlberg45.html#a428917e0823c8f4e4a293b4805b2b202":[4,0,0,6,1]
 };

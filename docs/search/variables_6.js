@@ -33,12 +33,13 @@ var searchData=
   ['m_5fsafety_5ffactor_30',['m_safety_factor',['../class_sandals_1_1_runge_kutta.html#abd3fe6ce6913f01a59d70c7bb4e659cd',1,'Sandals::RungeKutta']]],
   ['m_5fsolution_31',['m_solution',['../class_sandals_1_1_problem.html#a0834dc9a4bb8976ec2318951ebd2c6e8',1,'Sandals::Problem']]],
   ['m_5fstart_5ftime_32',['m_start_time',['../class_sandals_1_1_tic_toc.html#a37e5dbfe84fac294b8787be2c58b4335',1,'Sandals::TicToc']]],
-  ['m_5fstop_5ftime_33',['m_stop_time',['../class_sandals_1_1_tic_toc.html#aba69960e928c0a554c714c7b4122c533',1,'Sandals::TicToc']]],
-  ['m_5fsubintervals_34',['m_subintervals',['../class_sandals_1_1_problem.html#a9342353832c286b877859a8dad9b31c1',1,'Sandals::Problem']]],
-  ['m_5fsystem_35',['m_system',['../class_sandals_1_1_runge_kutta.html#a7ba51367d7d321bdb0512b969608b62b',1,'Sandals::RungeKutta']]],
-  ['m_5fta_5fx_36',['m_TA_x',['../class_sandals_1_1_semi_explicit_wrapper.html#ad951bda805ad5bea5cf9ef978c1171cc',1,'Sandals::SemiExplicitWrapper']]],
-  ['m_5ftableau_37',['m_tableau',['../class_sandals_1_1_runge_kutta.html#a9a5dd7fe85648fa2ac98ea187186539e',1,'Sandals::RungeKutta']]],
-  ['m_5ftolerance_38',['m_tolerance',['../class_sandals_1_1_problem.html#ab28e07490bc00150e9a10c6ac2a4d997',1,'Sandals::Problem']]],
-  ['m_5ftype_39',['m_type',['../class_sandals_1_1_implicit.html#a66f633b610966c5a7e31245b12ca113a',1,'Sandals::Implicit']]],
-  ['m_5fverbose_40',['m_verbose',['../class_sandals_1_1_problem.html#a1ca23304045fe2fb10e0699c0b7f40e9',1,'Sandals::Problem::m_verbose'],['../class_sandals_1_1_runge_kutta.html#abd002d72047afa9599375e385733c253',1,'Sandals::RungeKutta::m_verbose']]]
+  ['m_5fstep_5fcallback_33',['m_step_callback',['../class_sandals_1_1_runge_kutta.html#ab26f53a39a658205024340f2875379b1',1,'Sandals::RungeKutta']]],
+  ['m_5fstop_5ftime_34',['m_stop_time',['../class_sandals_1_1_tic_toc.html#aba69960e928c0a554c714c7b4122c533',1,'Sandals::TicToc']]],
+  ['m_5fsubintervals_35',['m_subintervals',['../class_sandals_1_1_problem.html#a9342353832c286b877859a8dad9b31c1',1,'Sandals::Problem']]],
+  ['m_5fsystem_36',['m_system',['../class_sandals_1_1_runge_kutta.html#a7ba51367d7d321bdb0512b969608b62b',1,'Sandals::RungeKutta']]],
+  ['m_5fta_5fx_37',['m_TA_x',['../class_sandals_1_1_semi_explicit_wrapper.html#ad951bda805ad5bea5cf9ef978c1171cc',1,'Sandals::SemiExplicitWrapper']]],
+  ['m_5ftableau_38',['m_tableau',['../class_sandals_1_1_runge_kutta.html#a9a5dd7fe85648fa2ac98ea187186539e',1,'Sandals::RungeKutta']]],
+  ['m_5ftolerance_39',['m_tolerance',['../class_sandals_1_1_problem.html#ab28e07490bc00150e9a10c6ac2a4d997',1,'Sandals::Problem']]],
+  ['m_5ftype_40',['m_type',['../class_sandals_1_1_implicit.html#a66f633b610966c5a7e31245b12ca113a',1,'Sandals::Implicit']]],
+  ['m_5fverbose_41',['m_verbose',['../class_sandals_1_1_problem.html#a1ca23304045fe2fb10e0699c0b7f40e9',1,'Sandals::Problem::m_verbose'],['../class_sandals_1_1_runge_kutta.html#abd002d72047afa9599375e385733c253',1,'Sandals::RungeKutta::m_verbose']]]
 ];
