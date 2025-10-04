@@ -264,10 +264,17 @@ namespace Sandals
       VectorF b, x_ini, x_end;
       ShootingF x_sol, x_step, b_sys;
       ShootingJF A_sys;
-      A_sys.template block<N, N>(0, N).setIdentity();
+      const Integer local_intervals{std::max(1, this->m_subintervals)};
       const Integer num_intervals{static_cast<Integer>(t_mesh.size()) - 1};
       Integer idx_x_ini{0}, idx_x_end{num_intervals};
       if (this->m_integrator->reverse_mode()) {idx_x_ini = num_intervals; idx_x_end = 0;}
+
+      SANDALS_ASSERT_WARNING(local_intervals == 1,
+        CMD "please avoid using multiple subintervals with single shooting method, just resize the "
+        "mesh accordingly.");
+
+      // Prepare the linear system for the Newton step
+      A_sys.template block<N, N>(0, N).setIdentity();
 
       // Initialize the guess and the solution
       x_sol << ics, ics;
@@ -275,10 +282,10 @@ namespace Sandals
 
       // Solve the boundary value problem using a linearized Newton method
       MatrixJX Jx(MatrixJX::Identity());
-      Eigen::FullPivLU<ShootingJF> lu;
+      Eigen::ColPivHouseholderQR<ShootingJF> qr;
       for (Integer iter{0}; iter < this->m_max_iterations; ++iter) {
 
-        /* Single shooting method
+        /* Single shooting method scheme
                 [A_sys]          {x}  =       {b_sys}
          /   -Jx       I     \ /    \   / x_end - x_sol_end \
          |                   | | dx | = |                   |
@@ -322,9 +329,9 @@ namespace Sandals
         }
 
         // Compute the solution of the linear system
-        lu.compute(A_sys);
-        SANDALS_ASSERT(lu.rank() == lu.cols(), CMD "singular Jacobian detected.");
-        x_sol += lu.solve(b_sys);
+        qr.compute(A_sys);
+        SANDALS_ASSERT(qr.rank() == qr.cols(), CMD "singular Jacobian detected.");
+        x_sol += qr.solve(b_sys);
       }
 
       // If the loop completes without returning, indicate failure
@@ -385,6 +392,15 @@ namespace Sandals
       MatrixJX Jx;
       Eigen::ColPivHouseholderQR<DynMat> qr;
       for (Integer iter{0}; iter < this->m_max_iterations; ++iter) {
+
+        /* Multiple shooting method scheme
+                [A_sys]                   {x}  =         {b_sys}
+         /   -Jx_1     I              \ /  :  \   /  x_ini_2 - x_sol_1  \
+         |       .        .           | |  :  |   |          :          |
+         |          .        .        | | dx  | = |          :          |
+         |             -Jx_n     I    | |  :  |   | x_ini_n+1 - x_sol_n |
+         \ Jb_x_ini          Jb_x_end / \  :  /   \         -b         /
+        */
 
         // Integrate each interval with the local mesh
         for (Integer k{0}; k < num_intervals; ++k) {

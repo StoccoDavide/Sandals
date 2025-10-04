@@ -197,7 +197,7 @@ namespace Sandals {
     */
     MatrixJF JF_x_reverse(VectorF const & x, VectorF const &/*x_dot*/, Real const t) const
     {
-      return this->Jf_x(x, -t);
+      return -this->Jf_x(x, -t);
     }
 
     /**
