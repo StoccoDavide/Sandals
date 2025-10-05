@@ -11,7 +11,7 @@
 #include <memory>
 
 #include "Sandals.hh"
-#include "Sandals/RungeKutta/LobattoIIIA2.hh"
+#include "Sandals/RungeKutta/GaussLegendre6.hh"
 
 #include "TWPBVPC.hh"
 
@@ -67,7 +67,7 @@ int main(int argc, char ** argv) {
 #endif
 
   // Istantiate the problems
-  PROBLEM_INIT(BVPT2, LobattoIIIA2)
+  PROBLEM_INIT(BVPT4, GaussLegendre6)
 
   // Set verbose mode
   constexpr bool verbose{false};
@@ -79,7 +79,7 @@ int main(int argc, char ** argv) {
   problem_semiexplicit.integrator()->verbose_mode(false);
 
   // Set reverse mode
-  constexpr bool reverse{false};
+  constexpr bool reverse{true};
   problem_explicit.integrator()->reverse_mode(reverse);
   problem_implicit.integrator()->reverse_mode(reverse);
   problem_semiexplicit.integrator()->reverse_mode(reverse);

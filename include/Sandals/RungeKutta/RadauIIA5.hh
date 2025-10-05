@@ -67,6 +67,7 @@ namespace Sandals
       this->b << 4.0/9.0-s6/36.0, 4.0/9.0+s6/36, 1.0/9.0;
       this->c << 2.0/5.0-s6/10.0, 2.0/5.0+s6/10, 1.0;
     }
+
   }; // class RadauIIA5Tableau
 
   /**

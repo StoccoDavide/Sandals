@@ -53,6 +53,7 @@ namespace Sandals
       this->b << 3.0/4.0, 1.0/4.0;
       this->c << 1.0/3.0, 1.0;
     }
+
   }; // class RadauIIA3Tableau
 
   /**

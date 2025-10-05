@@ -53,6 +53,7 @@ namespace Sandals
       this->b << 1.0/2.0, 1.0/2.0;
       this->c << 0.0,     1.0;
     }
+
   }; // class Heun2Tableau
 
   /**

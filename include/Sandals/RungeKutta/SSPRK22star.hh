@@ -54,6 +54,7 @@ namespace Sandals
       this->b << 0.392374781489287, 0.607625218510713;
       this->c << 0.0, 0.822875655532364;
     }
+
   }; // class SSPRK22starTableau
 
   /**

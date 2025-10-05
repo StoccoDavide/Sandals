@@ -43,6 +43,7 @@ var hierarchy =
     [ "Sandals::RungeKutta< Real, 3, N, 0 >", "class_sandals_1_1_runge_kutta.html", [
       [ "Sandals::GaussLegendre6< Real, N, M >", "class_sandals_1_1_gauss_legendre6.html", null ],
       [ "Sandals::Heun3< Real, N, M >", "class_sandals_1_1_heun3.html", null ],
+      [ "Sandals::LobattoIIIA4< Real, N, M >", "class_sandals_1_1_lobatto_i_i_i_a4.html", null ],
       [ "Sandals::RadauIIA5< Real, N, M >", "class_sandals_1_1_radau_i_i_a5.html", null ],
       [ "Sandals::Ralston3< Real, N, M >", "class_sandals_1_1_ralston3.html", null ],
       [ "Sandals::SSPIRK33< Real, N, M >", "class_sandals_1_1_s_s_p_i_r_k33.html", null ],
@@ -86,6 +87,7 @@ var hierarchy =
     [ "Sandals::Tableau< Real, 3 >", "struct_sandals_1_1_tableau.html", [
       [ "Sandals::GaussLegendre6Tableau< Real >", "class_sandals_1_1_gauss_legendre6_tableau.html", null ],
       [ "Sandals::Heun3Tableau< Real >", "class_sandals_1_1_heun3_tableau.html", null ],
+      [ "Sandals::LobattoIIIA4Tableau< Real >", "class_sandals_1_1_lobatto_i_i_i_a4_tableau.html", null ],
       [ "Sandals::RadauIIA5Tableau< Real >", "class_sandals_1_1_radau_i_i_a5_tableau.html", null ],
       [ "Sandals::Ralston3Tableau< Real >", "class_sandals_1_1_ralston3_tableau.html", null ],
       [ "Sandals::SSPIRK33Tableau< Real >", "class_sandals_1_1_s_s_p_i_r_k33_tableau.html", null ],

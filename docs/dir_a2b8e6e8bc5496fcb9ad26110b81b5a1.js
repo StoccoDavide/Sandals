@@ -10,6 +10,7 @@ var dir_a2b8e6e8bc5496fcb9ad26110b81b5a1 =
     [ "Heun3.hh", "_heun3_8hh.html", "_heun3_8hh" ],
     [ "ImplicitEuler.hh", "_implicit_euler_8hh.html", "_implicit_euler_8hh" ],
     [ "LobattoIIIA2.hh", "_lobatto_i_i_i_a2_8hh.html", "_lobatto_i_i_i_a2_8hh" ],
+    [ "LobattoIIIA4.hh", "_lobatto_i_i_i_a4_8hh.html", "_lobatto_i_i_i_a4_8hh" ],
     [ "MTE22.hh", "_m_t_e22_8hh.html", "_m_t_e22_8hh" ],
     [ "RadauIIA3.hh", "_radau_i_i_a3_8hh.html", "_radau_i_i_a3_8hh" ],
     [ "RadauIIA5.hh", "_radau_i_i_a5_8hh.html", "_radau_i_i_a5_8hh" ],

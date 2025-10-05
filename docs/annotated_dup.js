@@ -27,6 +27,8 @@ var annotated_dup =
       [ "LinearWrapper", "class_sandals_1_1_linear_wrapper.html", "class_sandals_1_1_linear_wrapper" ],
       [ "LobattoIIIA2", "class_sandals_1_1_lobatto_i_i_i_a2.html", "class_sandals_1_1_lobatto_i_i_i_a2" ],
       [ "LobattoIIIA2Tableau", "class_sandals_1_1_lobatto_i_i_i_a2_tableau.html", "class_sandals_1_1_lobatto_i_i_i_a2_tableau" ],
+      [ "LobattoIIIA4", "class_sandals_1_1_lobatto_i_i_i_a4.html", "class_sandals_1_1_lobatto_i_i_i_a4" ],
+      [ "LobattoIIIA4Tableau", "class_sandals_1_1_lobatto_i_i_i_a4_tableau.html", "class_sandals_1_1_lobatto_i_i_i_a4_tableau" ],
       [ "MTE22", "class_sandals_1_1_m_t_e22.html", "class_sandals_1_1_m_t_e22" ],
       [ "MTE22Tableau", "class_sandals_1_1_m_t_e22_tableau.html", "class_sandals_1_1_m_t_e22_tableau" ],
       [ "Problem", "class_sandals_1_1_problem.html", "class_sandals_1_1_problem" ],

@@ -34,5 +34,6 @@ var searchData=
   ['is_5fexplicit_31',['is_explicit',['../class_sandals_1_1_implicit.html#a62d23a3876db59390272ae7500bb5cbe',1,'Sandals::Implicit']]],
   ['is_5fimplicit_32',['is_implicit',['../class_sandals_1_1_implicit.html#a38d6033591b582e4f5cf9ce8b5f2ce87',1,'Sandals::Implicit']]],
   ['is_5firk_33',['is_irk',['../class_sandals_1_1_runge_kutta.html#aa72d80f97725b2318ff8cb4cb3a80f85',1,'Sandals::RungeKutta']]],
-  ['is_5fsemiexplicit_34',['is_semiexplicit',['../class_sandals_1_1_implicit.html#a041f6ccaa38141afa0efe77494cd7c00',1,'Sandals::Implicit']]]
+  ['is_5fsemiexplicit_34',['is_semiexplicit',['../class_sandals_1_1_implicit.html#a041f6ccaa38141afa0efe77494cd7c00',1,'Sandals::Implicit']]],
+  ['is_5fsymplectic_35',['is_symplectic',['../struct_sandals_1_1_tableau.html#ac4619d3d8a0fd2a56395b71f0982a84c',1,'Sandals::Tableau']]]
 ];

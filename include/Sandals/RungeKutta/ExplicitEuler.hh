@@ -51,6 +51,7 @@ namespace Sandals
       this->b << 1.0;
       this->c << 0.0;
     }
+
   }; // class ExplicitEulerTableau
 
   /**

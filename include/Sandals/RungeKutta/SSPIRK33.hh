@@ -62,6 +62,7 @@ namespace Sandals
       this->b << t_3, t_3, t_3;
       this->c << t_4, t_1, t_5;
     }
+
   }; // class SSPIRK33Tableau
 
   /**

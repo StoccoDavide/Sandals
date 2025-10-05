@@ -88,7 +88,7 @@ int main(int argc, char ** argv) {
 #endif
 
   // Istantiate the problems
-  PROBLEM_INIT(Shock, RK4)
+  PROBLEM_INIT(FalknerSkan, SSPRK104)
 
   // Set verbose mode
   constexpr bool verbose{true};
@@ -100,7 +100,7 @@ int main(int argc, char ** argv) {
   problem_semiexplicit.integrator()->verbose_mode(false);
 
   // Set reverse mode
-  constexpr bool reverse{false};
+  constexpr bool reverse{true};
   problem_explicit.integrator()->reverse_mode(reverse);
   problem_implicit.integrator()->reverse_mode(reverse);
   problem_semiexplicit.integrator()->reverse_mode(reverse);
@@ -111,9 +111,9 @@ int main(int argc, char ** argv) {
   problem_semiexplicit.tolerance(1.0e-8);
 
   // Set solver maximum number of iterations
-  problem_explicit.max_iterations(10);
-  problem_implicit.max_iterations(10);
-  problem_semiexplicit.max_iterations(10);
+  problem_explicit.max_iterations(50);
+  problem_implicit.max_iterations(50);
+  problem_semiexplicit.max_iterations(50);
 
   // Set solution parameters
   constexpr Integer num_subintervals{2};
@@ -122,7 +122,7 @@ int main(int argc, char ** argv) {
   problem_semiexplicit.subintervals(num_subintervals);
 
   // Set time mesh
-  constexpr Integer num_points{11};
+  constexpr Integer num_points{13};
   Eigen::Vector<Real, Eigen::Dynamic> time(Eigen::Vector<Real, Eigen::Dynamic>::LinSpaced(
     num_points, problem_explicit.time_start(), problem_explicit.time_end()
   ));
@@ -132,11 +132,11 @@ int main(int argc, char ** argv) {
 
   // Solve the problems with shooting
   std::cout << std::endl << "=== Explicit Problem" << std::endl << std::endl;
-  problem_explicit.single_shooting(time, guess);
+  problem_explicit.multiple_shooting(time, guess);
   std::cout << std::endl << "=== Implicit Problem" << std::endl << std::endl;
-  problem_implicit.single_shooting(time, guess);
+  problem_implicit.multiple_shooting(time, guess);
   std::cout << std::endl << "=== Semi-Explicit Problem" << std::endl << std::endl;
-  problem_semiexplicit.single_shooting(time, guess);
+  problem_semiexplicit.multiple_shooting(time, guess);
 
   #ifdef SANDALS_ENABLE_PLOTTING
   auto sol_e = problem_explicit.solution();

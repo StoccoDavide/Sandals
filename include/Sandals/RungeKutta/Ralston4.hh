@@ -81,6 +81,7 @@ namespace Sandals
       this->b << b_1, b_2, b_3, b_4;
       this->c << 0.0, c_2, c_3, 1.0;
     }
+
   }; // class Ralston4Tableau
 
   /**

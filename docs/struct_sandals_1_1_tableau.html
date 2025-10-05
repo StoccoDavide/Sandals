@@ -149,6 +149,8 @@ Public Types</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ab3237880e41e9866269de887d8793c6d" id="r_ab3237880e41e9866269de887d8793c6d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab3237880e41e9866269de887d8793c6d">check</a> (bool verbose=false) const</td></tr>
+<tr class="memitem:ac4619d3d8a0fd2a56395b71f0982a84c" id="r_ac4619d3d8a0fd2a56395b71f0982a84c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac4619d3d8a0fd2a56395b71f0982a84c">is_symplectic</a> () const</td></tr>
+<tr class="memitem:a8b0ec68e58cc81d063eeda123f31d0b6" id="r_a8b0ec68e58cc81d063eeda123f31d0b6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8b0ec68e58cc81d063eeda123f31d0b6">compute_order</a> (<a class="el" href="#a8e304262118948930059d1ae1ee2723f">Matrix</a> const &amp;<a class="el" href="#a90927822c29822474927dac4b7560994">A</a>, <a class="el" href="#ab2055b5523106a4e2f4a3e85e09f24f2">Vector</a> const &amp;<a class="el" href="#adb6fc94d81cfc022af566b3cce1306a7">b</a>, <a class="el" href="#ab2055b5523106a4e2f4a3e85e09f24f2">Vector</a> const &amp;<a class="el" href="#ace7357aa2bd98b2c543574612646da53">c</a>, bool verbose=false) const</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-static-methods" class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -166,10 +168,6 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a7a1b861a82318fe9f3ee1e6a0bfdd8bc" id="r_a7a1b861a82318fe9f3ee1e6a0bfdd8bc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#ab2055b5523106a4e2f4a3e85e09f24f2">Vector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7a1b861a82318fe9f3ee1e6a0bfdd8bc">b_e</a> {Vector::Zero()}</td></tr>
 <tr class="memitem:ace7357aa2bd98b2c543574612646da53" id="r_ace7357aa2bd98b2c543574612646da53"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#ab2055b5523106a4e2f4a3e85e09f24f2">Vector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ace7357aa2bd98b2c543574612646da53">c</a></td></tr>
 <tr class="memitem:aebff8834ee2b097d092fe146b1dc3e32" id="r_aebff8834ee2b097d092fe146b1dc3e32"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aebff8834ee2b097d092fe146b1dc3e32">is_embedded</a> {false}</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 id="header-pri-methods" class="groupheader"><a id="pri-methods" name="pri-methods"></a>
-Private Member Functions</h2></td></tr>
-<tr class="memitem:a8b0ec68e58cc81d063eeda123f31d0b6" id="r_a8b0ec68e58cc81d063eeda123f31d0b6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8b0ec68e58cc81d063eeda123f31d0b6">compute_order</a> (<a class="el" href="#a8e304262118948930059d1ae1ee2723f">Matrix</a> const &amp;<a class="el" href="#a90927822c29822474927dac4b7560994">A</a>, <a class="el" href="#ab2055b5523106a4e2f4a3e85e09f24f2">Vector</a> const &amp;<a class="el" href="#adb6fc94d81cfc022af566b3cce1306a7">b</a>, <a class="el" href="#ab2055b5523106a4e2f4a3e85e09f24f2">Vector</a> const &amp;<a class="el" href="#ace7357aa2bd98b2c543574612646da53">c</a>, bool verbose=false) const</td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><div class="compoundTemplParams">template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> S&gt;<br />
@@ -270,13 +268,13 @@ template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Check the Butcher tableau consistency for a generic Runge-Kutta method. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Check the Butcher tableau order consistency for a generic Runge-Kutta method. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">verbose</td><td>Verbosity flag. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>True if the Butcher tableau is consistent and its order is verified, false otherwise. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the Butcher tableau is consistent with its order, false otherwise. </dd></dl>
 
 </div>
 </div>
@@ -314,7 +312,7 @@ template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel private">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -328,6 +326,34 @@ template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The calculated order of the Runge-Kutta method. </dd></dl>
+
+</div>
+</div>
+<a id="ac4619d3d8a0fd2a56395b71f0982a84c" name="ac4619d3d8a0fd2a56395b71f0982a84c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac4619d3d8a0fd2a56395b71f0982a84c">&#9670;&#160;</a></span>is_symplectic()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> S&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="struct_sandals_1_1_tableau.html">Sandals::Tableau</a>&lt; Real, S &gt;::is_symplectic </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Check the Butcher tableau order consistency for a generic symplectic Runge-Kutta method. </p><dl class="section return"><dt>Returns</dt><dd>True if the Butcher tableau is symplectic, false otherwise. </dd></dl>
 
 </div>
 </div>

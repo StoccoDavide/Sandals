@@ -5,6 +5,7 @@ var struct_sandals_1_1_tableau =
     [ "Vector", "struct_sandals_1_1_tableau.html#ab2055b5523106a4e2f4a3e85e09f24f2", null ],
     [ "check", "struct_sandals_1_1_tableau.html#ab3237880e41e9866269de887d8793c6d", null ],
     [ "compute_order", "struct_sandals_1_1_tableau.html#a8b0ec68e58cc81d063eeda123f31d0b6", null ],
+    [ "is_symplectic", "struct_sandals_1_1_tableau.html#ac4619d3d8a0fd2a56395b71f0982a84c", null ],
     [ "stages", "struct_sandals_1_1_tableau.html#af2de5854a53a8746dac03aa617e4933e", null ],
     [ "A", "struct_sandals_1_1_tableau.html#a90927822c29822474927dac4b7560994", null ],
     [ "b", "struct_sandals_1_1_tableau.html#adb6fc94d81cfc022af566b3cce1306a7", null ],

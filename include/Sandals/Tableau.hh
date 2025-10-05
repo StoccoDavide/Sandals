@@ -60,9 +60,9 @@ namespace Sandals {
     static constexpr Integer stages() {return S;}
 
     /**
-    * Check the Butcher tableau consistency for a generic Runge-Kutta method.
+    * Check the Butcher tableau order consistency for a generic Runge-Kutta method.
     * \param[in] verbose Verbosity flag.
-    * \return True if the Butcher tableau is consistent and its order is verified, false otherwise.
+    * \return True if the Butcher tableau is consistent with its order, false otherwise.
     */
     bool check(bool verbose = false) const {
 
@@ -109,7 +109,15 @@ namespace Sandals {
       #undef CMD
     }
 
-  private:
+    /**
+    * Check the Butcher tableau order consistency for a generic symplectic Runge-Kutta method.
+    * \return True if the Butcher tableau is symplectic, false otherwise.
+    */
+    bool is_symplectic() const {
+      return (b.asDiagonal()*A + A.transpose()*b.asDiagonal() - b*b.transpose()).cwiseAbs().maxCoeff()
+        < SQRT_EPSILON;
+    }
+
     /**
     * Check the order of a Runge-Kutta method according to the conditions taken from: *A family of
     * embedded Runge-Kutta formulae*, J. R. Dormand and P. J. Prince, Journal of Computational and

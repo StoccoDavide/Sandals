@@ -313,7 +313,7 @@ namespace Sandals
             << "  x(" << t_mesh(idx_x_end) << ") = " << x_end.transpose() << std::endl;
         }
 
-        // Check if the solution is found (i.e., if the boundary conditions are satisfied)
+        // Check convergence
         if (b.norm() < this->m_tolerance) {return true;}
 
         // Build the linear system

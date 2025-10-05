@@ -57,6 +57,7 @@ namespace Sandals
       this->b << 1.0/6.0, 1.0/6.0, 1.0/6.0, 1.0/2.0;
       this->c << 0.0,     1.0/2.0, 1.0,     1.0/2.0;
     }
+
   }; // class SSPRK43Tableau
 
   /**

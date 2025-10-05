@@ -21,6 +21,7 @@
 #include "Sandals/RungeKutta/Heun2.hh"
 #include "Sandals/RungeKutta/Heun3.hh"
 #include "Sandals/RungeKutta/LobattoIIIA2.hh"
+#include "Sandals/RungeKutta/LobattoIIIA4.hh"
 #include "Sandals/RungeKutta/ImplicitEuler.hh"
 #include "Sandals/RungeKutta/MTE22.hh"
 #include "Sandals/RungeKutta/RadauIIA3.hh"
@@ -78,23 +79,58 @@ public:
   void TearDown() override {}
 };
 
+#ifndef SYMPLECTIC
+#define SYMPLECTIC(RK) \
+  RK<Real, 2, 0> rk; \
+  if (rk.tableau().is_symplectic()) {EXPECT_TRUE(true);} else {GTEST_SKIP();}
+#endif
+
+#ifndef ORDER_SYSTEM
+#define ORDER_SYSTEM(RK, SYSTEM) \
+  RK<Real, 2, 0> rk(std::make_unique<SinCos##SYSTEM<Real>>()); \
+  EXPECT_GE(rk.estimate_order(t, SinCos##SYSTEM<Real>::ics(), sol), rk.order() - tolerance);
+#endif
+
 #ifndef ORDER_IMPLICIT_SYSTEM
 #define ORDER_IMPLICIT_SYSTEM(RK) \
-  RK<Real, 2, 0> rk(std::make_unique<SinCosImplicit<Real>>()); \
-  EXPECT_GE(rk.estimate_order(t, SinCosImplicit<Real>::ics(), sol), rk.order() - tolerance);
+  ORDER_SYSTEM(RK, Implicit)
 #endif
 
 #ifndef ORDER_EXPLICIT_SYSTEM
 #define ORDER_EXPLICIT_SYSTEM(RK) \
-  RK<Real, 2, 0> rk(std::make_unique<SinCosExplicit<Real>>()); \
-  EXPECT_GE(rk.estimate_order(t, SinCosExplicit<Real>::ics(), sol), rk.order() - tolerance);
+  ORDER_SYSTEM(RK, Explicit)
 #endif
 
 #ifndef ORDER_SEMIEXPLICIT_SYSTEM
 #define ORDER_SEMIEXPLICIT_SYSTEM(RK) \
-  RK<Real, 2, 0> rk(std::make_unique<SinCosSemiExplicit<Real>>()); \
-  EXPECT_GE(rk.estimate_order(t, SinCosSemiExplicit<Real>::ics(), sol), rk.order() - tolerance);
+  ORDER_SYSTEM(RK, SemiExplicit)
 #endif
+
+TEST(Symplectic, Chebyshev51)    {SYMPLECTIC(Chebyshev51)}
+TEST(Symplectic, ExplicitEuler)  {SYMPLECTIC(ExplicitEuler)}
+TEST(Symplectic, Fehlberg45)     {SYMPLECTIC(Fehlberg45)}
+TEST(Symplectic, GaussLegendre2) {SYMPLECTIC(GaussLegendre2)}
+TEST(Symplectic, GaussLegendre4) {SYMPLECTIC(GaussLegendre4)}
+TEST(Symplectic, GaussLegendre6) {SYMPLECTIC(GaussLegendre6)}
+TEST(Symplectic, Heun2)          {SYMPLECTIC(Heun2)}
+TEST(Symplectic, Heun3)          {SYMPLECTIC(Heun3)}
+TEST(Symplectic, LobattoIIIA2)   {SYMPLECTIC(LobattoIIIA2)}
+TEST(Symplectic, LobattoIIIA4)   {SYMPLECTIC(LobattoIIIA4)}
+TEST(Symplectic, ImplicitEuler)  {SYMPLECTIC(ImplicitEuler)}
+TEST(Symplectic, RadauIIA3)      {SYMPLECTIC(RadauIIA3)}
+TEST(Symplectic, RadauIIA5)      {SYMPLECTIC(RadauIIA5)}
+TEST(Symplectic, Ralston2)       {SYMPLECTIC(Ralston2)}
+TEST(Symplectic, Ralston3)       {SYMPLECTIC(Ralston3)}
+TEST(Symplectic, Ralston4)       {SYMPLECTIC(Ralston4)}
+TEST(Symplectic, RK4)            {SYMPLECTIC(RK4)}
+TEST(Symplectic, SSPIRK33)       {SYMPLECTIC(SSPIRK33)}
+TEST(Symplectic, SSPRK22)        {SYMPLECTIC(SSPRK22)}
+TEST(Symplectic, SSPRK22star)    {SYMPLECTIC(SSPRK22star)}
+TEST(Symplectic, SSPRK33)        {SYMPLECTIC(SSPRK33)}
+TEST(Symplectic, SSPRK42)        {SYMPLECTIC(SSPRK42)}
+TEST(Symplectic, SSPRK43)        {SYMPLECTIC(SSPRK43)}
+TEST(Symplectic, SSPRK93)        {SYMPLECTIC(SSPRK93)}
+TEST(Symplectic, SSPRK104)       {SYMPLECTIC(SSPRK104)}
 
 TEST(OrderImplicit, Chebyshev51)    {ORDER_IMPLICIT_SYSTEM(Chebyshev51)}
 TEST(OrderImplicit, ExplicitEuler)  {ORDER_IMPLICIT_SYSTEM(ExplicitEuler)}
@@ -105,6 +141,7 @@ TEST(OrderImplicit, GaussLegendre6) {ORDER_IMPLICIT_SYSTEM(GaussLegendre6)}
 TEST(OrderImplicit, Heun2)          {ORDER_IMPLICIT_SYSTEM(Heun2)}
 TEST(OrderImplicit, Heun3)          {ORDER_IMPLICIT_SYSTEM(Heun3)}
 TEST(OrderImplicit, LobattoIIIA2)   {ORDER_IMPLICIT_SYSTEM(LobattoIIIA2)}
+TEST(OrderImplicit, LobattoIIIA4)   {ORDER_IMPLICIT_SYSTEM(LobattoIIIA4)}
 TEST(OrderImplicit, ImplicitEuler)  {ORDER_IMPLICIT_SYSTEM(ImplicitEuler)}
 TEST(OrderImplicit, RadauIIA3)      {ORDER_IMPLICIT_SYSTEM(RadauIIA3)}
 TEST(OrderImplicit, RadauIIA5)      {ORDER_IMPLICIT_SYSTEM(RadauIIA5)}
@@ -130,6 +167,7 @@ TEST(OrderExplicit, GaussLegendre6) {ORDER_EXPLICIT_SYSTEM(GaussLegendre6)}
 TEST(OrderExplicit, Heun2)          {ORDER_EXPLICIT_SYSTEM(Heun2)}
 TEST(OrderExplicit, Heun3)          {ORDER_EXPLICIT_SYSTEM(Heun3)}
 TEST(OrderExplicit, LobattoIIIA2)   {ORDER_EXPLICIT_SYSTEM(LobattoIIIA2)}
+TEST(OrderExplicit, LobattoIIIA4)   {ORDER_EXPLICIT_SYSTEM(LobattoIIIA4)}
 TEST(OrderExplicit, ImplicitEuler)  {ORDER_EXPLICIT_SYSTEM(ImplicitEuler)}
 TEST(OrderExplicit, RadauIIA3)      {ORDER_EXPLICIT_SYSTEM(RadauIIA3)}
 TEST(OrderExplicit, RadauIIA5)      {ORDER_EXPLICIT_SYSTEM(RadauIIA5)}
@@ -155,6 +193,7 @@ TEST(OrderSemiExplicit, GaussLegendre6) {ORDER_SEMIEXPLICIT_SYSTEM(GaussLegendre
 TEST(OrderSemiExplicit, Heun2)          {ORDER_SEMIEXPLICIT_SYSTEM(Heun2)}
 TEST(OrderSemiExplicit, Heun3)          {ORDER_SEMIEXPLICIT_SYSTEM(Heun3)}
 TEST(OrderSemiExplicit, LobattoIIIA2)   {ORDER_SEMIEXPLICIT_SYSTEM(LobattoIIIA2)}
+TEST(OrderSemiExplicit, LobattoIIIA4)   {ORDER_SEMIEXPLICIT_SYSTEM(LobattoIIIA4)}
 TEST(OrderSemiExplicit, ImplicitEuler)  {ORDER_SEMIEXPLICIT_SYSTEM(ImplicitEuler)}
 TEST(OrderSemiExplicit, RadauIIA3)      {ORDER_SEMIEXPLICIT_SYSTEM(RadauIIA3)}
 TEST(OrderSemiExplicit, RadauIIA5)      {ORDER_SEMIEXPLICIT_SYSTEM(RadauIIA5)}

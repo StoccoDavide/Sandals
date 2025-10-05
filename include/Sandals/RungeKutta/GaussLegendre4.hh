@@ -62,6 +62,7 @@ namespace Sandals
       this->b << 1.0/2.0,   1.0/2.0;
       this->c << 1.0/2.0-t, 1.0/2.0+t;
     }
+
   }; // class GaussLegendre4Tableau
 
   /**
