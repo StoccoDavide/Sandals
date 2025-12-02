@@ -246,6 +246,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a9cd1eeb0bd22a8a26411897d0eca599d" id="r_a9cd1eeb0bd22a8a26411897d0eca599d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9cd1eeb0bd22a8a26411897d0eca599d">adaptive_solve</a> (<a class="el" href="#a6e7c649dd4dda6179ac007d1782383c9">VectorX</a> const &amp;t_mesh, <a class="el" href="#a38adc5949f0384409ba3831c38a78fce">VectorN</a> const &amp;ics, <a class="el" href="struct_sandals_1_1_solution.html">Solution</a>&lt; Real, N, M &gt; &amp;sol) const</td></tr>
 <tr class="memitem:afa92d3ea0b4f4a4676581cc2fa74b0e2" id="r_afa92d3ea0b4f4a4676581cc2fa74b0e2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afa92d3ea0b4f4a4676581cc2fa74b0e2">project</a> (<a class="el" href="#a38adc5949f0384409ba3831c38a78fce">VectorN</a> const &amp;x, Real const t, <a class="el" href="#a38adc5949f0384409ba3831c38a78fce">VectorN</a> &amp;x_projected) const</td></tr>
 <tr class="memitem:abdbc4fac093aa675f556bc73b69df93a" id="r_abdbc4fac093aa675f556bc73b69df93a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abdbc4fac093aa675f556bc73b69df93a">project_ics</a> (<a class="el" href="#a38adc5949f0384409ba3831c38a78fce">VectorN</a> const &amp;x, Real const t, std::vector&lt; <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> &gt; const &amp;projected_equations, std::vector&lt; <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> &gt; const &amp;projected_invariants, <a class="el" href="#a38adc5949f0384409ba3831c38a78fce">VectorN</a> &amp;x_projected) const</td></tr>
+<tr class="memitem:abdd0cc748e89ec40a6d75ef7c5d9f452" id="r_abdd0cc748e89ec40a6d75ef7c5d9f452"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abdd0cc748e89ec40a6d75ef7c5d9f452">project_propagate</a> (<a class="el" href="#a38adc5949f0384409ba3831c38a78fce">VectorN</a> const &amp;x_projected, Real const t, <a class="el" href="#aafe93029d65e4891d968bc0aabfe9c07">MatrixJX</a> &amp;Jx) const</td></tr>
 <tr class="memitem:ad9ae0c76785e6fef36198376b4820a30" id="r_ad9ae0c76785e6fef36198376b4820a30"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad9ae0c76785e6fef36198376b4820a30">error_step</a> (std::vector&lt; <a class="el" href="#a6e7c649dd4dda6179ac007d1782383c9">VectorX</a> &gt; const &amp;t_mesh, <a class="el" href="#a38adc5949f0384409ba3831c38a78fce">VectorN</a> const &amp;ics, std::function&lt; <a class="el" href="#ad49cfea9a52d2fca80ff2f2a4eeb993c">MatrixX</a>(<a class="el" href="#a6e7c649dd4dda6179ac007d1782383c9">VectorX</a>)&gt; &amp;sol, <a class="el" href="#a6e7c649dd4dda6179ac007d1782383c9">VectorX</a> &amp;h_vec, <a class="el" href="#a6e7c649dd4dda6179ac007d1782383c9">VectorX</a> &amp;e_vec) const</td></tr>
 <tr class="memitem:ad89a8dd20854e7ca8651321a9032e34c" id="r_ad89a8dd20854e7ca8651321a9032e34c"><td class="memItemLeft" align="right" valign="top">Real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad89a8dd20854e7ca8651321a9032e34c">estimate_order</a> (std::vector&lt; <a class="el" href="#a6e7c649dd4dda6179ac007d1782383c9">VectorX</a> &gt; const &amp;t_mesh, <a class="el" href="#a38adc5949f0384409ba3831c38a78fce">VectorN</a> const &amp;ics, std::function&lt; <a class="el" href="#ad49cfea9a52d2fca80ff2f2a4eeb993c">MatrixX</a>(<a class="el" href="#a6e7c649dd4dda6179ac007d1782383c9">VectorX</a>)&gt; &amp;sol, <a class="el" href="#a6e7c649dd4dda6179ac007d1782383c9">VectorX</a> &amp;h_vec, <a class="el" href="#a6e7c649dd4dda6179ac007d1782383c9">VectorX</a> &amp;e_vec) const</td></tr>
 <tr class="memitem:a0494d855575aaed4de19320a1523baaf" id="r_a0494d855575aaed4de19320a1523baaf"><td class="memItemLeft" align="right" valign="top">Real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0494d855575aaed4de19320a1523baaf">estimate_order</a> (std::vector&lt; <a class="el" href="#a6e7c649dd4dda6179ac007d1782383c9">VectorX</a> &gt; const &amp;t_mesh, <a class="el" href="#a38adc5949f0384409ba3831c38a78fce">VectorN</a> const &amp;ics, std::function&lt; <a class="el" href="#ad49cfea9a52d2fca80ff2f2a4eeb993c">MatrixX</a>(<a class="el" href="#a6e7c649dd4dda6179ac007d1782383c9">VectorX</a>)&gt; &amp;sol) const</td></tr>
@@ -771,46 +772,71 @@ Derivatives of \(\mathbf{x}_{k+1}\) with respect to \(\mathbf{x}_k\)</h4>
 </blockquote>
 <h1 class="doxsection"><a class="anchor" id="autotoc_md23"></a>
 Projection on the invariants manifold</h1>
-<p>In many applications, the dynamic system's states must satisfy certain constraints, which are typically expressed as invariants. For example, in mechanical systems, the constraints may represent the conservation of energy or momentum. In such cases, the states must be projected onto the manifold defined by the invariants to ensure that the system's dynamics are physically consistent. In <span class="tt"><a class="el" href="namespace_sandals.html" title="The namespace for the Sandals library.">Sandals</a></span>, the projection is performed using a simple iterative method, where the states are updated until the invariants are satisfied within a specified tolerance. In other words, at each step, the states are adjusted to ensure that the invariants are preserved.</p>
+<p>In many applications, the dynamic system's states system are required to satisfy certain constraints, which are typically expressed as invariants. For example, in mechanical systems, the constraints may represent the conservation of energy or momentum. In such cases, the states must be projected onto the manifold defined by the invariants to ensure that the system's dynamics are physically consistent. In <span class="tt"><a class="el" href="namespace_sandals.html" title="The namespace for the Sandals library.">Sandals</a></span>, the projection is performed using a simple iterative method, where the states are updated until the invariants are satisfied within a specified tolerance. In other words, at each step, the states are adjusted to ensure that the invariants are preserved.</p>
 <h2 class="doxsection"><a class="anchor" id="autotoc_md24"></a>
 Constrained minimization problem</h2>
 <p>Consider the constrained minimization problem   </p><p class="formulaDsp">
-\[    \underset{\mathbf{x}}{\text{minimize}} \quad \frac{1}{2}\left(\mathbf{x} - \tilde{\mathbf{x}}\right)^2 \quad \text{subject to} \quad \mathbf{h}(\mathbf{x}) = \mathbf{0} \text{,}
+\[    \underset{\tilde{\mathbf{x}}}{\text{minimize}} \quad \frac{1}{2}\left(\tilde{\mathbf{x}} - \mathbf{x}\right)^2 \quad \text{subject to} \quad \mathbf{h}(\tilde{\mathbf{x}}, t) = \mathbf{0} \text{,}
 \]
 </p>
 <p> whose Lagrangian is given by   </p><p class="formulaDsp">
-\[    \mathcal{L}(\mathbf{x}, \boldsymbol{\lambda}) = \frac{1}{2}\left(\mathbf{x} - \tilde{\mathbf{x}}\right)^2 + \boldsymbol{\lambda} \cdot \mathbf{h}(\mathbf{x})  \text{.}
+\[    \mathcal{L}(\tilde{\mathbf{x}}, \boldsymbol{\lambda}) = \frac{1}{2}\left(\tilde{\mathbf{x}} - \mathbf{x}\right)^2 + \boldsymbol{\lambda} \cdot \mathbf{h}(\tilde{\mathbf{x}}, t)  \text{.}
 \]
 </p>
-<p> The first-order Karush-Kuhn-Tucker conditions for this problem are then      </p><p class="formulaDsp">
+<p> Here, the vector \(\mathbf{x}\) represents the states obtained from the integration of the dynamic system, which may not satisfy the constraints defined by the function \(\mathbf{h}(\tilde{\mathbf{x}}, t)\). The vector \(\boldsymbol{\lambda}\) contains the Lagrange multipliers associated with the constraints. The goal is to find the states \(\tilde{\mathbf{x}}\) that are as close as possible to \(\mathbf{x}\) while satisfying the constraints \(\mathbf{h}(\tilde{\mathbf{x}}, t) = \mathbf{0}\).</p>
+<p>The first-order Karush-Kuhn-Tucker (KKT) conditions for this problem are then      </p><p class="formulaDsp">
 \[    \begin{cases}
-      \mathbf{x} + \mathbf{Jh}_{\mathbf{x}}^\top \boldsymbol{\lambda} = \tilde{\mathbf{x}} \\
-      \mathbf{h}(\mathbf{x}) = \mathbf{0}
+      \tilde{\mathbf{x}} + \mathbf{Jh}_{\mathbf{x}}(\tilde{\mathbf{x}}, t)^\top \boldsymbol{\lambda} = \mathbf{x} \\
+      \mathbf{h}(\tilde{\mathbf{x}}, t) = \mathbf{0}
     \end{cases} \text{.}
 \]
 </p>
 <p> This system of equations can be solved though the iterative solution of a linear system derived from the Taylor expansion      </p><p class="formulaDsp">
 \[    \begin{cases}
-      \mathbf{x} + \delta\mathbf{x} + \mathbf{Jh}_{\mathbf{x}}^\top(\mathbf{x} + \delta\mathbf{x}, t) \boldsymbol{\lambda} = \tilde{\mathbf{x}} \\
-      \mathbf{h}(\mathbf{x}) + \mathbf{Jh}_{\mathbf{x}}(\mathbf{x}, t) \delta\mathbf{x} + \mathcal{O}\left(\| \delta\mathbf{x} \|^2\right) = \mathbf{0}
-    \end{cases} \text{,}
+      \tilde{\mathbf{x}} + \delta\tilde{\mathbf{x}} + \mathbf{Jh}_{\mathbf{x}}(\tilde{\mathbf{x}}, t)^\top(\tilde{\mathbf{x}} + \delta\tilde{\mathbf{x}}) \boldsymbol{\lambda} = \mathbf{x} \\
+      \mathbf{h}(\tilde{\mathbf{x}}, t) + \mathbf{Jh}_{\mathbf{x}}(\tilde{\mathbf{x}}, t) \delta\tilde{\mathbf{x}} + \mathcal{O}\left(\| \delta\tilde{\mathbf{x}} \|^2\right) = \mathbf{0}
+    \end{cases} \text{,} \quad \text{where} \quad \mathbf{Jh}_{\mathbf{x}}(\tilde{\mathbf{x}}, t) = \displaystyle\frac{\partial\mathbf{h}}{\partial\mathbf{x}}(\tilde{\mathbf{x}}, t) \text{.}
 \]
 </p>
-<p> where \(\mathbf{Jh}_{\mathbf{x}}\) is the Jacobian of the constraint function \(\mathbf{h}(\mathbf{x})\) with respect to the states \(\mathbf{x}\). The linear system can be written in matrix form as             </p><p class="formulaDsp">
+<p> The linear system can be written in matrix form as             </p><p class="formulaDsp">
 \[    \begin{bmatrix}
-      \mathbf{I}              &amp; \mathbf{Jh}_{\mathbf{x}}^\top \\
-      \mathbf{Jh}_{\mathbf{x}} &amp; \mathbf{0}
+      \mathbf{I} &amp; \mathbf{Jh}_{\mathbf{x}}(\tilde{\mathbf{x}}, t)^\top \\
+      \mathbf{Jh}_{\mathbf{x}}(\tilde{\mathbf{x}}, t) &amp; \mathbf{0}
     \end{bmatrix}
     \begin{bmatrix}
-      \delta\mathbf{x} \\
+      \delta\tilde{\mathbf{x}} \\
       \boldsymbol{\lambda}
     \end{bmatrix} = \begin{bmatrix}
-      \tilde{\mathbf{x}} - \mathbf{x} \\
-      -\mathbf{h}(\mathbf{x})
+      \mathbf{x} - \tilde{\mathbf{x}} \\
+      -\mathbf{h}(\tilde{\mathbf{x}}, t)
     \end{bmatrix} \text{,}
 \]
 </p>
-<p> and the update step for the states is then \(\mathbf{x} = \tilde{\mathbf{x}} + \delta\mathbf{x}\).  </p>
+<p> and the update step for the states is then \(\tilde{\mathbf{x}} = \mathbf{x} + \delta\tilde{\mathbf{x}}\). Here \(\mathbf{I} \in \mathbb{R}^{n\times n}\) is the identity matrix, where \(n\) is the number of states, and \(\mathbf{Jh}_{\mathbf{x}}(\tilde{\mathbf{x}}, t) \in \mathbb{R}^{m\times n}\) is the Jacobian of the constraints, where \(m\) is the number of constraints.</p>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md25"></a>
+Derivatives of the projected states with respect to the unprojected states</h2>
+<p>The derivatives of the projected states \(\tilde{\mathbf{x}}\) with respect to the unprojected states \(\mathbf{x}\) can be computed by differentiating the KKT conditions, which yields      </p><p class="formulaDsp">
+\[    \begin{cases}
+      \displaystyle\frac{\partial\tilde{\mathbf{x}}}{\partial\mathbf{x}} + \mathbf{Jh}_{\mathbf{x}}(\tilde{\mathbf{x}}, t)^\top \displaystyle\frac{\partial\boldsymbol{\lambda}}{\partial\mathbf{x}} + \boldsymbol{\lambda}^\top \mathbf{Hh}_{\mathbf{xx}}(\tilde{\mathbf{x}}, t) \displaystyle\frac{\partial\tilde{\mathbf{x}}}{\partial\mathbf{x}} = \mathbf{I} \\
+      \mathbf{Jh}_{\mathbf{x}}(\tilde{\mathbf{x}}, t) \displaystyle\frac{\partial\tilde{\mathbf{x}}}{\partial\mathbf{x}} = \mathbf{0}
+    \end{cases} \text{,} \quad \text{where} \quad \mathbf{Hh}_{\mathbf{xx}}(\tilde{\mathbf{x}}, t) = \displaystyle\frac{\partial^2\mathbf{h}}{\partial\mathbf{x}^2}(\tilde{\mathbf{x}}, t) \text{.}
+\]
+</p>
+<p> where \(n\) is the number of constraints. This linear system can be expressed in matrix form as             </p><p class="formulaDsp">
+\[    \begin{bmatrix}
+      \mathbf{I} + \boldsymbol{\lambda}^\top \mathbf{Hh}_{\mathbf{xx}}(\tilde{\mathbf{x}}, t) &amp; \mathbf{Jh}_{\mathbf{x}}(\tilde{\mathbf{x}}, t)^\top \\
+      \mathbf{Jh}_{\mathbf{x}}(\tilde{\mathbf{x}}, t) &amp; \mathbf{0}
+    \end{bmatrix}
+    \begin{bmatrix}
+      \displaystyle\frac{\partial\tilde{\mathbf{x}}}{\partial\mathbf{x}} \\
+      \displaystyle\frac{\partial\boldsymbol{\lambda}}{\partial\mathbf{x}}
+    \end{bmatrix} = \begin{bmatrix}
+      \mathbf{I} \\
+      \mathbf{0}
+    \end{bmatrix} \text{.}
+\]
+</p>
+<p> Here, The hessian of the constraints \(\mathbf{Hh}_{\mathbf{xx}}(\tilde{\mathbf{x}}, t) \in \mathbb{R}^{m\times n\times n}\).  </p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">Real</td><td>The scalar number type. </td></tr>
@@ -4301,7 +4327,7 @@ template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581
 <p>Project the system solution \( \mathbf{x} \) on the invariants  \( \mathbf{h} (\mathbf{x},
 t) = \mathbf{0} \). </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>The initial guess for the states \(\widetilde{\mathbf{x}} \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>The initial guess for the states \(\tilde{\mathbf{x}} \). </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">t</td><td>The independent variable (or time) \( t \) at which the states are evaluated. </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">x_projected</td><td>The projected states \( \mathbf{x} \) closest to the invariants manifold \( \mathbf{h} (\mathbf{x}, t) = \mathbf{0} \). </td></tr>
   </table>
@@ -4357,7 +4383,7 @@ template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581
 <p>Project the system solution \( \mathbf{x} \) on the invariants  \( \mathbf{h} (\mathbf{x},
 t) = \mathbf{0} \). </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>The initial guess for the states \(\widetilde{\mathbf{x}} \). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>The initial guess for the states \(\tilde{\mathbf{x}} \). </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">t</td><td>The independent variable (or time) \( t \) at which the states are evaluated. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">projected_equations</td><td>The indices of the states to be projected. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">projected_invariants</td><td>The indices of the invariants to be projected. </td></tr>
@@ -4366,6 +4392,51 @@ t) = \mathbf{0} \). </p><dl class="params"><dt>Parameters</dt><dd>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if the solution is successfully projected, false otherwise. </dd></dl>
+
+</div>
+</div>
+<a id="abdd0cc748e89ec40a6d75ef7c5d9f452" name="abdd0cc748e89ec40a6d75ef7c5d9f452"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abdd0cc748e89ec40a6d75ef7c5d9f452">&#9670;&#160;</a></span>project_propagate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> S, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> N, <a class="el" href="namespace_sandals.html#a274386581669b8193eb9102c7214136c">Integer</a> M = 0&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="class_sandals_1_1_runge_kutta.html">Sandals::RungeKutta</a>&lt; Real, S, N, M &gt;::project_propagate </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#a38adc5949f0384409ba3831c38a78fce">VectorN</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>x_projected</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Real const</td>          <td class="paramname"><span class="paramname"><em>t</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="#aafe93029d65e4891d968bc0aabfe9c07">MatrixJX</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>Jx</em></span>&#160;) const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Propagate the derivative of the projected states \( \tilde{\mathbf{x}} \) with respect to the unprojected states \( \mathbf{x} \). </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">x_projected</td><td>The states \(\tilde{\mathbf{x}} \) at which the projection is evaluated. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">t</td><td>The independent variable (or time) \( t \) at which the states are evaluated. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">Jx</td><td>The derivative of the projected states \( \tilde{\mathbf{x}} \) with respect to the unprojected states \( \mathbf{x} \). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the propagation is successfully computed, false otherwise. </dd></dl>
 
 </div>
 </div>

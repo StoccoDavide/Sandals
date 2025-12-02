@@ -1625,17 +1625,15 @@ namespace Sandals {
           // Calculate the next step with substepping logic
           if (this->step(x_tmp, t_tmp, h_tmp, x_new, h_new_tmp, K)) {
 
+            // Propagate the derivative of K with respect to x
             if constexpr (Propagate) {
-              // Propagate the derivative of K with respect to x
               MatrixJX Jx_tmp;
               if (!this->propagate(x_tmp, t_tmp, h_tmp, K, Jx_tmp)) {
                 SANDALS_WARNING(CMD "in " << this->m_tableau.name << " solver, at t = " << t_tmp <<
                   ", Jacobian propagation failed.");
                 return false;
               }
-
-              // Update the derivative propagation
-              if constexpr (Propagate) {Jx = Jx_tmp * Jx;}
+              Jx = Jx_tmp * Jx;
             }
 
             // Accept the step
@@ -1697,6 +1695,15 @@ namespace Sandals {
         VectorN x_projected;
         if (this->project(x_new, t_old + h_new, x_projected)) {
           x_new = x_projected;
+          if constexpr (Propagate) {
+            MatrixJX Jx_projected;
+            if (!this->project_propagate(x_new, t_old + h_new, Jx_projected)) {
+              SANDALS_WARNING(CMD "in " << this->m_tableau.name << " solver, at t = " << t_old +
+                h_new << ", projection Jacobian propagation failed.");
+              return false;
+            }
+            Jx = Jx_projected * Jx;
+          }
         } else {
           return false;
         }
@@ -1797,9 +1804,7 @@ namespace Sandals {
 
           // Update the previous step
           x_old_step = x_new_step;
-
         }
-
       }
       return true;
 
@@ -1958,7 +1963,7 @@ namespace Sandals {
     /**
     * Project the system solution \f$ \mathbf{x} \f$ on the invariants \f$ \mathbf{h} (\mathbf{x},
     * t) = \mathbf{0} \f$.
-    * \param[in] x The initial guess for the states \f$\widetilde{\mathbf{x}} \f$.
+    * \param[in] x The initial guess for the states \f$\tilde{\mathbf{x}} \f$.
     * \param[in] t The independent variable (or time) \f$ t \f$ at which the states are evaluated.
     * \param[out] x_projected The projected states \f$ \mathbf{x} \f$ closest to the invariants
     * manifold \f$ \mathbf{h} (\mathbf{x}, t) = \mathbf{0} \f$.
@@ -1970,7 +1975,7 @@ namespace Sandals {
 
       // Check if there are any constraints
       x_projected = x;
-      if (M > Integer(0)) {
+      if constexpr (M > 0) {
 
         VectorM h;
         MatrixM Jh_x;
@@ -2023,7 +2028,7 @@ namespace Sandals {
     /**
     * Project the system solution \f$ \mathbf{x} \f$ on the invariants \f$ \mathbf{h} (\mathbf{x},
     * t) = \mathbf{0} \f$.
-    * \param[in] x The initial guess for the states \f$\widetilde{\mathbf{x}} \f$.
+    * \param[in] x The initial guess for the states \f$\tilde{\mathbf{x}} \f$.
     * \param[in] t The independent variable (or time) \f$ t \f$ at which the states are evaluated.
     * \param[in] projected_equations The indices of the states to be projected.
     * \param[in] projected_invariants The indices of the invariants to be projected.
@@ -2041,7 +2046,7 @@ namespace Sandals {
 
       // Check if there are any constraints
       x_projected = x;
-      if (H > Integer(0)) {
+      if (H > 0) {
 
         VectorM h;
         MatrixM Jh_x;
@@ -2088,8 +2093,60 @@ namespace Sandals {
           x_projected(projected_equations).noalias() += x_step;
         }
         if (this->m_verbose) {SANDALS_WARNING(CMD "maximum number of iterations reached.");}
-        return false;
+        return x_projected.allFinite();
       } else {
+        return true;
+      }
+
+      #undef CMD
+    }
+
+    /**
+    * Propagate the derivative of the projected states \f$ \tilde{\mathbf{x}} \f$ with respect to
+    * the unprojected states \f$ \mathbf{x} \f$.
+    * \param[in] x_projected The states \f$\tilde{\mathbf{x}} \f$ at which the projection is evaluated.
+    * \param[in] t The independent variable (or time) \f$ t \f$ at which the states are evaluated.
+    * \param[out] Jx The derivative of the projected states \f$ \tilde{\mathbf{x}} \f$ with respect to
+    * the unprojected states \f$ \mathbf{x} \f$.
+    * \return True if the propagation is successfully computed, false otherwise.
+    */
+    bool project_propagate(VectorN const & x_projected, Real const t, MatrixJX & Jx) const
+    {
+      #define CMD "Sandals::RungeKutta::project_propagate(...): "
+
+      // Check if there are any constraints
+      if constexpr (M > 0) {
+
+        /* Standard projection method
+              [A]             {x}      =  {b}
+          / I  Jh_x^T \ / dx_proj/d_x \   / I \
+          |           | |             | = |   |
+          \ Jh_x    0 / \ dlambda/dx  /   \ 0 /
+        */
+
+        // Evaluate the invariants vector and its Jacobian
+        MatrixM Jh_x(this->m_system->Jh_x(x_projected, t));
+
+        // Build the left-hand side matrix
+        MatrixP A;
+        A.template block<N, N>(0, 0).setIdentity();
+        A.template block<N, M>(0, N) = Jh_x.transpose();
+        A.template block<M, N>(N, 0) = Jh_x;
+        A.template block<M, M>(N, N).setZero();
+
+        // Build the right-hand side matrix
+        VectorP b;
+        b.template block<N, N>(0, 0).setIdentity();
+        b.template block<M, N>(N, 0).setZero();
+
+        // Compute the solution of the linear system
+        this->m_lu.compute(A);
+        SANDALS_ASSERT(this->m_lu.rank() == N+M, CMD "singular Jacobian detected.");
+        Jx = this->m_lu.solve(Jx).template block<N, N>(0, 0);
+
+        return Jx.allFinite();
+      } else {
+        Jx.setIdentity();
         return true;
       }
 

@@ -1,5 +1,6 @@
 var hierarchy =
 [
+    [ "Sandals::BoundaryValueProblem< Real, N, M, Integrator >", "class_sandals_1_1_boundary_value_problem.html", null ],
     [ "Sandals::Implicit< Real, N, M >", "class_sandals_1_1_implicit.html", null ],
     [ "Sandals::Implicit< Real, N, 0 >", "class_sandals_1_1_implicit.html", [
       [ "Sandals::Explicit< Real, N, M >", "class_sandals_1_1_explicit.html", null ],
@@ -20,7 +21,6 @@ var hierarchy =
         ] ]
       ] ]
     ] ],
-    [ "Sandals::Problem< Real, N, M, Integrator >", "class_sandals_1_1_problem.html", null ],
     [ "Sandals::RungeKutta< Real, S, N, M >", "class_sandals_1_1_runge_kutta.html", null ],
     [ "Sandals::RungeKutta< Real, 1, N, 0 >", "class_sandals_1_1_runge_kutta.html", [
       [ "Sandals::ExplicitEuler< Real, N, M >", "class_sandals_1_1_explicit_euler.html", null ],

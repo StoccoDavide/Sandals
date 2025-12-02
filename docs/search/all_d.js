@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['license_0',['License',['../index.html#autotoc_md31',1,'']]],
+  ['license_0',['License',['../index.html#autotoc_md32',1,'']]],
   ['linear_1',['Linear',['../class_sandals_1_1_linear.html',1,'Sandals::Linear&lt; Real, N, M &gt;'],['../class_sandals_1_1_linear.html#ab799eab3f8f772d13747833a693805ae',1,'Sandals::Linear::Linear()'],['../class_sandals_1_1_linear.html#aea0d04c7b724e1b749444bda537cc38a',1,'Sandals::Linear::Linear(std::string t_name)']]],
   ['linear_2ehh_2',['Linear.hh',['../_linear_8hh.html',1,'']]],
   ['linear_3c_20real_2c_20n_2c_200_20_3e_3',['Linear&lt; Real, N, 0 &gt;',['../class_sandals_1_1_linear.html',1,'Sandals']]],

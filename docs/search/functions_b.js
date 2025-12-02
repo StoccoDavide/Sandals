@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['max_5fiterations_0',['max_iterations',['../class_sandals_1_1_problem.html#a6f4e4722cb0381d82f66557dc8d6c935',1,'Sandals::Problem::max_iterations()'],['../class_sandals_1_1_problem.html#a9d9f98dc0fc8ea98ae7d99b06459824f',1,'Sandals::Problem::max_iterations(Integer const t_max_iterations)']]],
+  ['max_5fiterations_0',['max_iterations',['../class_sandals_1_1_boundary_value_problem.html#a3d8b436ea1052a312ab826ee36a81e8f',1,'Sandals::BoundaryValueProblem::max_iterations()'],['../class_sandals_1_1_boundary_value_problem.html#a89adff9d190f2247344badfd10cd9155',1,'Sandals::BoundaryValueProblem::max_iterations(Integer const t_max_iterations)']]],
   ['max_5fprojection_5fiterations_1',['max_projection_iterations',['../class_sandals_1_1_runge_kutta.html#aa59cd6d30c37624fca248c3c1431acb7',1,'Sandals::RungeKutta::max_projection_iterations()'],['../class_sandals_1_1_runge_kutta.html#ad71b177fac06912b323ea5bf5947afc1',1,'Sandals::RungeKutta::max_projection_iterations(Integer const t_max_projection_iterations)']]],
   ['max_5fsafety_5ffactor_2',['max_safety_factor',['../class_sandals_1_1_runge_kutta.html#afd18492d781b7f9054d2894a5d382c07',1,'Sandals::RungeKutta::max_safety_factor()'],['../class_sandals_1_1_runge_kutta.html#a6ccc5aea5a15aca1664e2f137602eaee',1,'Sandals::RungeKutta::max_safety_factor(Real const t_max_safety_factor)']]],
   ['max_5fsubsteps_3',['max_substeps',['../class_sandals_1_1_runge_kutta.html#a35aa0da091eaad3c55a49dfde59d2d29',1,'Sandals::RungeKutta::max_substeps()'],['../class_sandals_1_1_runge_kutta.html#a9e78d33695a0e27aa100cdc2d2bb95aa',1,'Sandals::RungeKutta::max_substeps(Integer const t_max_substeps)']]],
@@ -8,5 +8,5 @@ var searchData=
   ['min_5fstep_5',['min_step',['../class_sandals_1_1_runge_kutta.html#a00a09a51e7534a2c60d97525fad60ba7',1,'Sandals::RungeKutta::min_step()'],['../class_sandals_1_1_runge_kutta.html#a9ef1408119bf8f8e2eabe5c9e16d5909',1,'Sandals::RungeKutta::min_step(Real const t_min_step)']]],
   ['mte22_6',['MTE22',['../class_sandals_1_1_m_t_e22.html#a571f9c3ffcac326e6ef5cc28ae361296',1,'Sandals::MTE22::MTE22()'],['../class_sandals_1_1_m_t_e22.html#ac02ca044a55e065149b63a05434126cb',1,'Sandals::MTE22::MTE22(System t_system)']]],
   ['mte22tableau_7',['MTE22Tableau',['../class_sandals_1_1_m_t_e22_tableau.html#ae59ff3f33486a6837aace2be296bc60c',1,'Sandals::MTE22Tableau']]],
-  ['multiple_5fshooting_8',['multiple_shooting',['../class_sandals_1_1_problem.html#ad19084464ee4bbdca220d2e7b6847c3a',1,'Sandals::Problem']]]
+  ['multiple_5fshooting_8',['multiple_shooting',['../class_sandals_1_1_boundary_value_problem.html#a86c2f72d16d3066b9da2f58f6ef03630',1,'Sandals::BoundaryValueProblem']]]
 ];

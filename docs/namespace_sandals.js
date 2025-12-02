@@ -1,5 +1,6 @@
 var namespace_sandals =
 [
+    [ "BoundaryValueProblem", "class_sandals_1_1_boundary_value_problem.html", "class_sandals_1_1_boundary_value_problem" ],
     [ "Chebyshev51", "class_sandals_1_1_chebyshev51.html", "class_sandals_1_1_chebyshev51" ],
     [ "Chebyshev51Tableau", "class_sandals_1_1_chebyshev51_tableau.html", "class_sandals_1_1_chebyshev51_tableau" ],
     [ "Explicit", "class_sandals_1_1_explicit.html", "class_sandals_1_1_explicit" ],
@@ -30,7 +31,6 @@ var namespace_sandals =
     [ "LobattoIIIA4Tableau", "class_sandals_1_1_lobatto_i_i_i_a4_tableau.html", "class_sandals_1_1_lobatto_i_i_i_a4_tableau" ],
     [ "MTE22", "class_sandals_1_1_m_t_e22.html", "class_sandals_1_1_m_t_e22" ],
     [ "MTE22Tableau", "class_sandals_1_1_m_t_e22_tableau.html", "class_sandals_1_1_m_t_e22_tableau" ],
-    [ "Problem", "class_sandals_1_1_problem.html", "class_sandals_1_1_problem" ],
     [ "RadauIIA3", "class_sandals_1_1_radau_i_i_a3.html", "class_sandals_1_1_radau_i_i_a3" ],
     [ "RadauIIA3Tableau", "class_sandals_1_1_radau_i_i_a3_tableau.html", "class_sandals_1_1_radau_i_i_a3_tableau" ],
     [ "RadauIIA5", "class_sandals_1_1_radau_i_i_a5.html", "class_sandals_1_1_radau_i_i_a5" ],

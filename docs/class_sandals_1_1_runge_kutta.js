@@ -93,6 +93,7 @@ var class_sandals_1_1_runge_kutta =
     [ "order", "class_sandals_1_1_runge_kutta.html#a49b16e24fa0c4a848768363fd33e83d9", null ],
     [ "project", "class_sandals_1_1_runge_kutta.html#afa92d3ea0b4f4a4676581cc2fa74b0e2", null ],
     [ "project_ics", "class_sandals_1_1_runge_kutta.html#abdbc4fac093aa675f556bc73b69df93a", null ],
+    [ "project_propagate", "class_sandals_1_1_runge_kutta.html#abdd0cc748e89ec40a6d75ef7c5d9f452", null ],
     [ "projection", "class_sandals_1_1_runge_kutta.html#a00ee9af9c8bb2bc2a665ffbb6490ae69", null ],
     [ "projection", "class_sandals_1_1_runge_kutta.html#a0c16a91f1afd63cfbf83e0eeda021842", null ],
     [ "projection_tolerance", "class_sandals_1_1_runge_kutta.html#a7aef8bc09a1a59028992abc1b7812578", null ],

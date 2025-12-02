@@ -11,10 +11,10 @@
 include(SandalsGTest)
 include(SandalsRoot)
 
-file(GLOB_RECURSE TWPBVPC_PLOTS "${CMAKE_CURRENT_SOURCE_DIR}/TWPBVPC/plot_twpbvpc.cc")
-add_executable(plot_twpbvpc ${TWPBVPC_PLOTS})
-target_link_libraries(plot_twpbvpc PRIVATE Sandals ROOT::Core ROOT::Gpad)
+file(GLOB_RECURSE TWPBVPC_RUN "${CMAKE_CURRENT_SOURCE_DIR}/TWPBVPC/run_twpbvpc.cc")
+add_executable(run_twpbvpc ${TWPBVPC_RUN})
+target_link_libraries(run_twpbvpc PRIVATE Sandals GTest::gtest)
 
-file(GLOB_RECURSE TWPBVPC_BENCHMARK "${CMAKE_CURRENT_SOURCE_DIR}/TWPBVPC/benchmark_twpbvpc.cc")
-add_executable(benchmark_twpbvpc ${TWPBVPC_BENCHMARK})
-target_link_libraries(benchmark_twpbvpc PRIVATE Sandals GTest::gtest)
+file(GLOB_RECURSE TWPBVPC_PLOT "${CMAKE_CURRENT_SOURCE_DIR}/TWPBVPC/plot_twpbvpc.cc")
+add_executable(plot_twpbvpc ${TWPBVPC_PLOT})
+target_link_libraries(plot_twpbvpc PRIVATE Sandals ROOT::Core ROOT::Gpad)

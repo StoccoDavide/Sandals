@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['chebyshev51_2ehh_0',['Chebyshev51.hh',['../_chebyshev51_8hh.html',1,'']]]
+  ['boundaryvalueproblem_2ehh_0',['BoundaryValueProblem.hh',['../_boundary_value_problem_8hh.html',1,'']]]
 ];

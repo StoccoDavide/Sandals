@@ -16,9 +16,64 @@
 #include "Sandals/System/Explicit.hh"
 #include "Sandals/System/Implicit.hh"
 #include "Sandals/System/SemiExplicit.hh"
-#include "Sandals/Problem.hh"
+#include "Sandals/BoundaryValueProblem.hh"
 
 using namespace Sandals;
+
+//  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+/**
+  The problem is
+
+  $$
+  \lambda z^{\prime \prime}=z, \quad z(0)=1, \quad z(1)=0,
+  $$
+
+  with
+
+  $$
+  z \in \mathbb{R}, \quad t \in[0,1] .
+  $$
+
+
+  We write this problem in first order form by defining $y_1=z$, and $y_2=z^{\prime}$, yielding a system of differential equations of the form
+
+  $$
+  \binom{y_1}{y_2}^{\prime}=\binom{y_2}{\frac{1}{\lambda} f\left(y_1\right)},
+  $$
+
+  where
+
+  $$
+  f(z)=z,
+  $$
+
+  and
+
+  $$
+  \left(y_1, y_2\right)^T \in \mathbb{R}^2, \quad t \in[0,1] .
+  $$
+
+
+  The boundary conditions are obtained from
+
+  $$
+  \left(\begin{array}{ll}
+  1 & 0 \\
+  0 & 0
+  \end{array}\right)\binom{y_1(0)}{y_2(0)}+\left(\begin{array}{ll}
+  0 & 0 \\
+  1 & 0
+  \end{array}\right)\binom{y_1(1)}{y_2(1)}=\binom{1}{0} .
+  $$
+
+
+  Exact solution
+
+  $$
+  z(t)=(\exp (-t / \sqrt{\lambda})-\exp ((t-2) / \sqrt{\lambda})) /(1-\exp (-2 / \sqrt{\lambda})) .
+  $$
+*/
 
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -176,19 +231,19 @@ public:
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 template<typename Real, typename System, typename Integrator>
-class BVPT1Problem : public Problem<Real, 2, 0, Integrator>
+class BVPT1Problem : public BoundaryValueProblem<Real, 2, 0, Integrator>
 {
 public:
-  using typename Problem<Real, 2, 0, Integrator>::SystemPtr;
-  using typename Problem<Real, 2, 0, Integrator>::IntegratorPtr;
-  using typename Problem<Real, 2, 0, Integrator>::SolutionPtr;
-  using typename Problem<Real, 2, 0, Integrator>::VectorF;
-  using typename Problem<Real, 2, 0, Integrator>::MatrixJF;
+  using typename BoundaryValueProblem<Real, 2, 0, Integrator>::SystemPtr;
+  using typename BoundaryValueProblem<Real, 2, 0, Integrator>::IntegratorPtr;
+  using typename BoundaryValueProblem<Real, 2, 0, Integrator>::SolutionPtr;
+  using typename BoundaryValueProblem<Real, 2, 0, Integrator>::VectorF;
+  using typename BoundaryValueProblem<Real, 2, 0, Integrator>::MatrixJF;
   using VectorX = Eigen::Vector<Real, Eigen::Dynamic>;
   using MatrixX = Eigen::Matrix<Real, 2, Eigen::Dynamic>;
 
   BVPT1Problem()
-    : Problem<Real, 2, 0, Integrator>("BVPT1Problem", std::make_unique<System>(),
+    : BoundaryValueProblem<Real, 2, 0, Integrator>("BVPT1Problem", std::make_unique<System>(),
       std::make_unique<Integrator>()) {}
 
   ~BVPT1Problem() {}

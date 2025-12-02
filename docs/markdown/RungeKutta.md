@@ -481,44 +481,71 @@ In matrix form, this can be expressed as
 
 # Projection on the invariants manifold
 
-In many applications, the dynamic system's states must satisfy certain constraints, which are typically expressed as invariants. For example, in mechanical systems, the constraints may represent the conservation of energy or momentum. In such cases, the states must be projected onto the manifold defined by the invariants to ensure that the system's dynamics are physically consistent. In `Sandals`, the projection is performed using a simple iterative method, where the states are updated until the invariants are satisfied within a specified tolerance. In other words, at each step, the states are adjusted to ensure that the invariants are preserved.
+In many applications, the dynamic system's states system are required to satisfy certain constraints, which are typically expressed as invariants. For example, in mechanical systems, the constraints may represent the conservation of energy or momentum. In such cases, the states must be projected onto the manifold defined by the invariants to ensure that the system's dynamics are physically consistent. In `Sandals`, the projection is performed using a simple iterative method, where the states are updated until the invariants are satisfied within a specified tolerance. In other words, at each step, the states are adjusted to ensure that the invariants are preserved.
 
 ## Constrained minimization problem
 
 Consider the constrained minimization problem
 \f[
-  \underset{\mathbf{x}}{\text{minimize}} \quad \frac{1}{2}\left(\mathbf{x} - \tilde{\mathbf{x}}\right)^2 \quad \text{subject to} \quad \mathbf{h}(\mathbf{x}) = \mathbf{0} \text{,}
+  \underset{\tilde{\mathbf{x}}}{\text{minimize}} \quad \frac{1}{2}\left(\tilde{\mathbf{x}} - \mathbf{x}\right)^2 \quad \text{subject to} \quad \mathbf{h}(\tilde{\mathbf{x}}, t) = \mathbf{0} \text{,}
 \f]
 whose Lagrangian is given by
 \f[
-  \mathcal{L}(\mathbf{x}, \boldsymbol{\lambda}) = \frac{1}{2}\left(\mathbf{x} - \tilde{\mathbf{x}}\right)^2 + \boldsymbol{\lambda} \cdot \mathbf{h}(\mathbf{x})  \text{.}
+  \mathcal{L}(\tilde{\mathbf{x}}, \boldsymbol{\lambda}) = \frac{1}{2}\left(\tilde{\mathbf{x}} - \mathbf{x}\right)^2 + \boldsymbol{\lambda} \cdot \mathbf{h}(\tilde{\mathbf{x}}, t)  \text{.}
 \f]
-The first-order Karush-Kuhn-Tucker conditions for this problem are then
+Here, the vector \f$\mathbf{x}\f$ represents the states obtained from the integration of the dynamic system, which may not satisfy the constraints defined by the function \f$\mathbf{h}(\tilde{\mathbf{x}}, t)\f$. The vector \f$\boldsymbol{\lambda}\f$ contains the Lagrange multipliers associated with the constraints. The goal is to find the states \f$\tilde{\mathbf{x}}\f$ that are as close as possible to \f$\mathbf{x}\f$ while satisfying the constraints \f$\mathbf{h}(\tilde{\mathbf{x}}, t) = \mathbf{0}\f$.
+
+The first-order Karush-Kuhn-Tucker (KKT) conditions for this problem are then
 \f[
   \begin{cases}
-    \mathbf{x} + \mathbf{Jh}_{\mathbf{x}}^\top \boldsymbol{\lambda} = \tilde{\mathbf{x}} \\
-    \mathbf{h}(\mathbf{x}) = \mathbf{0}
+    \tilde{\mathbf{x}} + \mathbf{Jh}_{\mathbf{x}}(\tilde{\mathbf{x}}, t)^\top \boldsymbol{\lambda} = \mathbf{x} \\
+    \mathbf{h}(\tilde{\mathbf{x}}, t) = \mathbf{0}
   \end{cases} \text{.}
 \f]
 This system of equations can be solved though the iterative solution of a linear system derived from the Taylor expansion
 \f[
   \begin{cases}
-    \mathbf{x} + \delta\mathbf{x} + \mathbf{Jh}_{\mathbf{x}}^\top(\mathbf{x} + \delta\mathbf{x}, t) \boldsymbol{\lambda} = \tilde{\mathbf{x}} \\
-    \mathbf{h}(\mathbf{x}) + \mathbf{Jh}_{\mathbf{x}}(\mathbf{x}, t) \delta\mathbf{x} + \mathcal{O}\left(\| \delta\mathbf{x} \|^2\right) = \mathbf{0}
-  \end{cases} \text{,}
+    \tilde{\mathbf{x}} + \delta\tilde{\mathbf{x}} + \mathbf{Jh}_{\mathbf{x}}(\tilde{\mathbf{x}}, t)^\top(\tilde{\mathbf{x}} + \delta\tilde{\mathbf{x}}) \boldsymbol{\lambda} = \mathbf{x} \\
+    \mathbf{h}(\tilde{\mathbf{x}}, t) + \mathbf{Jh}_{\mathbf{x}}(\tilde{\mathbf{x}}, t) \delta\tilde{\mathbf{x}} + \mathcal{O}\left(\| \delta\tilde{\mathbf{x}} \|^2\right) = \mathbf{0}
+  \end{cases} \text{,} \quad \text{where} \quad \mathbf{Jh}_{\mathbf{x}}(\tilde{\mathbf{x}}, t) = \displaystyle\frac{\partial\mathbf{h}}{\partial\mathbf{x}}(\tilde{\mathbf{x}}, t) \text{.}
 \f]
-where \f$\mathbf{Jh}_{\mathbf{x}}\f$ is the Jacobian of the constraint function \f$\mathbf{h}(\mathbf{x})\f$ with respect to the states \f$\mathbf{x}\f$. The linear system can be written in matrix form as
+The linear system can be written in matrix form as
 \f[
   \begin{bmatrix}
-    \mathbf{I}              & \mathbf{Jh}_{\mathbf{x}}^\top \\
-    \mathbf{Jh}_{\mathbf{x}} & \mathbf{0}
+    \mathbf{I} & \mathbf{Jh}_{\mathbf{x}}(\tilde{\mathbf{x}}, t)^\top \\
+    \mathbf{Jh}_{\mathbf{x}}(\tilde{\mathbf{x}}, t) & \mathbf{0}
   \end{bmatrix}
   \begin{bmatrix}
-    \delta\mathbf{x} \\
+    \delta\tilde{\mathbf{x}} \\
     \boldsymbol{\lambda}
   \end{bmatrix} = \begin{bmatrix}
-    \tilde{\mathbf{x}} - \mathbf{x} \\
-    -\mathbf{h}(\mathbf{x})
+    \mathbf{x} - \tilde{\mathbf{x}} \\
+    -\mathbf{h}(\tilde{\mathbf{x}}, t)
   \end{bmatrix} \text{,}
 \f]
-and the update step for the states is then \f$\mathbf{x} = \tilde{\mathbf{x}} + \delta\mathbf{x}\f$.
+and the update step for the states is then \f$\tilde{\mathbf{x}} = \mathbf{x} + \delta\tilde{\mathbf{x}}\f$. Here \f$\mathbf{I} \in \mathbb{R}^{n\times n}\f$ is the identity matrix, where \f$n\f$ is the number of states, and \f$\mathbf{Jh}_{\mathbf{x}}(\tilde{\mathbf{x}}, t) \in \mathbb{R}^{m\times n}\f$ is the Jacobian of the constraints, where \f$m\f$ is the number of constraints.
+
+## Derivatives of the projected states with respect to the unprojected states
+
+The derivatives of the projected states \f$\tilde{\mathbf{x}}\f$ with respect to the unprojected states \f$\mathbf{x}\f$ can be computed by differentiating the KKT conditions, which yields
+\f[
+  \begin{cases}
+    \displaystyle\frac{\partial\tilde{\mathbf{x}}}{\partial\mathbf{x}} + \mathbf{Jh}_{\mathbf{x}}(\tilde{\mathbf{x}}, t)^\top \displaystyle\frac{\partial\boldsymbol{\lambda}}{\partial\mathbf{x}} + \boldsymbol{\lambda}^\top \mathbf{Hh}_{\mathbf{xx}}(\tilde{\mathbf{x}}, t) \displaystyle\frac{\partial\tilde{\mathbf{x}}}{\partial\mathbf{x}} = \mathbf{I} \\
+    \mathbf{Jh}_{\mathbf{x}}(\tilde{\mathbf{x}}, t) \displaystyle\frac{\partial\tilde{\mathbf{x}}}{\partial\mathbf{x}} = \mathbf{0}
+  \end{cases} \text{,} \quad \text{where} \quad \mathbf{Hh}_{\mathbf{xx}}(\tilde{\mathbf{x}}, t) = \displaystyle\frac{\partial^2\mathbf{h}}{\partial\mathbf{x}^2}(\tilde{\mathbf{x}}, t) \text{.}
+\f]
+where \f$n\f$ is the number of constraints. This linear system can be expressed in matrix form as
+\f[
+  \begin{bmatrix}
+    \mathbf{I} + \boldsymbol{\lambda}^\top \mathbf{Hh}_{\mathbf{xx}}(\tilde{\mathbf{x}}, t) & \mathbf{Jh}_{\mathbf{x}}(\tilde{\mathbf{x}}, t)^\top \\
+    \mathbf{Jh}_{\mathbf{x}}(\tilde{\mathbf{x}}, t) & \mathbf{0}
+  \end{bmatrix}
+  \begin{bmatrix}
+    \displaystyle\frac{\partial\tilde{\mathbf{x}}}{\partial\mathbf{x}} \\
+    \displaystyle\frac{\partial\boldsymbol{\lambda}}{\partial\mathbf{x}}
+  \end{bmatrix} = \begin{bmatrix}
+    \mathbf{I} \\
+    \mathbf{0}
+  \end{bmatrix} \text{.}
+\f]
+Here, The hessian of the constraints \f$\mathbf{Hh}_{\mathbf{xx}}(\tilde{\mathbf{x}}, t) \in \mathbb{R}^{m\times n\times n}\f$.
