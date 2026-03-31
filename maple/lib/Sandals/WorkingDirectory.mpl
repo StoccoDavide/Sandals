@@ -1,19 +1,19 @@
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# Copyright (c) 2025, Davide Stocco and Enrico Bertolazzi.                                        #
-#                                                                                                 #
-# The Sandals project is distributed under the BSD 2-Clause License.                              #
-#                                                                                                 #
-# Davide Stocco                                                                 Enrico Bertolazzi #
-# University of Trento                                                       University of Trento #
-# e-mail: davide.stocco@unitn.it                               e-mail: enrico.bertolazzi@unitn.it #
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Copyright (c) 2026, Davide Stocco and Enrico Bertolazzi.                    #
+#                                                                             #
+# The Sandals project is distributed under the BSD 2-Clause License.          #
+#                                                                             #
+# Davide Stocco                                             Enrico Bertolazzi #
+# University of Trento                                   University of Trento #
+# davide.stocco@unitn.it                           enrico.bertolazzi@unitn.it #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 # Working directory
 local m_working_directory := "";
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export ResetWorkingDirectory::static := proc(
   _self::Sandals,
@@ -25,7 +25,7 @@ export ResetWorkingDirectory::static := proc(
   return NULL;
 end proc: # ResetWorkingDirectory
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export CopyWorkingDirectory::static := proc(
   _self::Sandals,
@@ -38,7 +38,7 @@ export CopyWorkingDirectory::static := proc(
   return NULL;
 end proc: # CopyWorkingDirectory
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export GetWorkingDirectory::static := proc(
   _self::Sandals,
@@ -49,7 +49,7 @@ export GetWorkingDirectory::static := proc(
   return _self:-m_working_directory;
 end proc: # GetWorkingDirectory
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export SetWorkingDirectory::static := proc(
   _self::Sandals,
@@ -72,4 +72,4 @@ export SetWorkingDirectory::static := proc(
   return NULL;
 end proc: # SetWorkingDirectory
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

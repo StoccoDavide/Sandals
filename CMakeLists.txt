@@ -12,26 +12,18 @@ cmake_minimum_required(VERSION 3.14)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
-include(SandalsVersion)
-get_version_from_git()
+set(SANDALS_FULL_VERSION "0.0.0")
 
 project(Sandals
-  VERSION ${SANDALS_VERSION}
+  VERSION ${SANDALS_FULL_VERSION}
   DESCRIPTION "A C++ library for ODEs/DAEs integration"
   HOMEPAGE_URL "https://github.com/StoccoDavide/Sandals"
   LANGUAGES CXX
 )
 
-if(NOT SANDALS_VERSION_PRERELEASE)
-  set(SANDALS_FULL_VERSION "${SANDALS_VERSION}")
-  write_version_file()
-else()
-  set(SANDALS_FULL_VERSION "${SANDALS_VERSION}-${SANDALS_VERSION_PRERELEASE}")
-endif()
 message(STATUS "Sandals: version ${SANDALS_FULL_VERSION}")
 
-set(SANDALS_THIRD_PARTY_DIR "${CMAKE_CURRENT_SOURCE_DIR}/third_party")
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 
 if(NOT CMAKE_INSTALL_PREFIX)
@@ -39,9 +31,14 @@ if(NOT CMAKE_INSTALL_PREFIX)
   message(STATUS "Sandals: CMAKE_INSTALL_PREFIX not specified, defaulting to ${CMAKE_CURRENT_SOURCE_DIR}")
 endif()
 
+set(OPTIMIST_EXTERNAL_EIGEN OFF)
+if(TARGET eigen)
+  message(STATUS "Optimist: Found external eigen")
+  set(OPTIMIST_EXTERNAL_EIGEN ON)
+endif()
+
 # Dependencies
-include(SandalsEigen3)
-include(SandalsOptimist)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/external)
 
 # Library definition
 add_library(Sandals INTERFACE)
@@ -50,57 +47,45 @@ add_library(Sandals::Sandals ALIAS Sandals)
 target_link_libraries(Sandals INTERFACE Eigen3::Eigen Optimist::Optimist)
 
 target_include_directories(Sandals INTERFACE
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/core/include>
   $<INSTALL_INTERFACE:include>
 )
 
-# INFO: Ensure this options are only available to developers. In theory we could leave them available,
-# but the call to `target_sources` breaks `fetchcontent` compatibility due to absolute paths being
-# added to `INTERFACE_SOURCES`. I tried solving it, but it seems to be poorly documented, supported, etc.
-if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
-  if(NOT CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE "Debug")
-    message(STATUS "Sandals: CMAKE_BUILD_TYPE not specified, defaulting to ${CMAKE_BUILD_TYPE}")
-  endif()
+# Source files
+file(GLOB_RECURSE RELATIVE_HEADER_FILES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
+  "${CMAKE_CURRENT_SOURCE_DIR}/core/include/*.hh")
 
-  option(SANDALS_BUILD_TESTS "Build tests" OFF)
-  option(SANDALS_BUILD_BENCHMARKS "Build benchmarks" OFF)
-  option(SANDALS_BUILD_EXAMPLES "Build examples" OFF)
-  option(SANDALS_CHECK_JACOBIANS "Check Jacobians" OFF)
-  option(SANDALS_ENABLE_PLOTTING "Enable plotting" OFF)
-
-  file(GLOB_RECURSE HEADER_FILES_HH "${CMAKE_CURRENT_SOURCE_DIR}/include/*.hh")
-  foreach(HEADER_FILE IN LISTS HEADER_FILES_HH)
-    file(
-      RELATIVE_PATH
-      RELATIVE_PATH_HEADER_FILE
-      ${CMAKE_CURRENT_SOURCE_DIR} ${HEADER_FILE}
-    )
-    list(APPEND RELATIVE_HEADER_FILES ${RELATIVE_PATH_HEADER_FILE})
-  endforeach()
-  target_sources(Sandals INTERFACE $<BUILD_INTERFACE:${RELATIVE_HEADER_FILES}>)
-
-  if(SANDALS_BUILD_TESTS)
-    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/tests)
-  endif()
-
-  if(SANDALS_BUILD_BENCHMARKS)
-    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/benchmarks)
-  endif()
-
-  if(SANDALS_BUILD_EXAMPLES)
-    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/examples)
-  endif()
-
-  if(SANDALS_CHECK_JACOBIANS)
-    target_compile_definitions(Sandals INTERFACE SANDALS_CHECK_JACOBIANS)
-  endif()
-
-  if(SANDALS_ENABLE_PLOTTING)
-    target_compile_definitions(Sandals INTERFACE SANDALS_ENABLE_PLOTTING)
-  endif()
+# Tests
+option(SANDALS_BUILD_TESTS "Build tests" OFF)
+if(SANDALS_BUILD_TESTS)
+  add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/core/tests)
 endif()
 
+# Benchmarks
+option(SANDALS_BUILD_BENCHMARKS "Build benchmarks" OFF)
+if(SANDALS_BUILD_BENCHMARKS)
+  add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/core/benchmarks)
+endif()
+
+# Examples
+option(SANDALS_BUILD_EXAMPLES "Build examples" OFF)
+if(SANDALS_BUILD_EXAMPLES)
+  add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/core/examples)
+endif()
+
+# Jacobian checks
+option(SANDALS_CHECK_JACOBIANS "Check Jacobians" OFF)
+if(SANDALS_CHECK_JACOBIANS)
+  target_compile_definitions(Sandals INTERFACE SANDALS_CHECK_JACOBIANS)
+endif()
+
+# Plotting
+option(SANDALS_ENABLE_PLOTTING "Enable plotting" OFF)
+if(SANDALS_ENABLE_PLOTTING)
+  target_compile_definitions(Sandals INTERFACE SANDALS_ENABLE_PLOTTING)
+endif()
+
+# Set compilation flags
 if(MSVC)
   target_compile_options(Sandals INTERFACE /W4 /WX)
 else()
@@ -108,9 +93,22 @@ else()
 endif()
 
 # Installation
-install(TARGETS Sandals EXPORT SandalsTargets)
+if (NOT SANDALS_EXTERNAL_EIGEN)
+  install(
+    TARGETS eigen
+    EXPORT OptimistTargets
+  )
+endif()
 
-install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/ DESTINATION include)
+install(
+  TARGETS Sandals
+  EXPORT SandalsTargets
+  )
+
+install(
+  DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/
+  DESTINATION include
+)
 
 include(CMakePackageConfigHelpers)
 
@@ -139,6 +137,6 @@ configure_package_config_file(
 
 install(FILES
   ${CMAKE_CURRENT_BINARY_DIR}/SandalsConfig.cmake
-  ${CMAKE_CURRENT_BINARY_DIR}/SandalsConfigVersion.cmake
+  ${CMAKE_CURRENT_BINARY_DIR}/SandalsVersion.cmake
   DESTINATION lib/cmake/Sandals
 )

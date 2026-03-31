@@ -1,12 +1,12 @@
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# Copyright (c) 2025, Davide Stocco and Enrico Bertolazzi.                                        #
-#                                                                                                 #
-# The Sandals project is distributed under the BSD 2-Clause License.                              #
-#                                                                                                 #
-# Davide Stocco                                                                 Enrico Bertolazzi #
-# University of Trento                                                       University of Trento #
-# e-mail: davide.stocco@unitn.it                               e-mail: enrico.bertolazzi@unitn.it #
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Copyright (c) 2026, Davide Stocco and Enrico Bertolazzi.                    #
+#                                                                             #
+# The Sandals project is distributed under the BSD 2-Clause License.          #
+#                                                                             #
+# Davide Stocco                                             Enrico Bertolazzi #
+# University of Trento                                   University of Trento #
+# davide.stocco@unitn.it                           enrico.bertolazzi@unitn.it #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 %w(colorize rake fileutils).each do |gem|
   begin

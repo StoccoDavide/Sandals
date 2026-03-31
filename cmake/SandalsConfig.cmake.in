@@ -3,7 +3,9 @@
 include(CMakeFindDependencyMacro)
 
 # List dependencies
-find_dependency(Eigen3 REQUIRED)
+if (NOT OPTIMIST_EXTERNAL_EIGEN)
+  find_dependency(Eigen3 REQUIRED)
+endif()
 find_dependency(Optimist REQUIRED)
 
 # Provide the target

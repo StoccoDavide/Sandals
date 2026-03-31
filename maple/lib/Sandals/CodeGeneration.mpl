@@ -1,30 +1,32 @@
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# Copyright (c) 2025, Davide Stocco and Enrico Bertolazzi.                                        #
-#                                                                                                 #
-# The Sandals project is distributed under the BSD 2-Clause License.                              #
-#                                                                                                 #
-# Davide Stocco                                                                 Enrico Bertolazzi #
-# University of Trento                                                       University of Trento #
-# e-mail: davide.stocco@unitn.it                               e-mail: enrico.bertolazzi@unitn.it #
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Copyright (c) 2026, Davide Stocco and Enrico Bertolazzi.                    #
+#                                                                             #
+# The Sandals project is distributed under the BSD 2-Clause License.          #
+#                                                                             #
+# Davide Stocco                                             Enrico Bertolazzi #
+# University of Trento                                   University of Trento #
+# davide.stocco@unitn.it                           enrico.bertolazzi@unitn.it #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 # Code generation
-local m_path          := ".";
-local m_indent        := "  ";
-local m_name          := "Untitled";
-local m_info          := "No class description available.";
-local m_vars_info     := [];
-local m_data          := [];
-local m_data_info     := [];
-local m_time          := [];
-local m_ics           := [];
-local m_domain        := [];
-local m_user_function := [];
-local m_comp_sequence := [];
+local m_path           := ".";
+local m_indent         := "  ";
+local m_name           := "Untitled";
+local m_info           := "No class description available.";
+local m_vars_info      := [];
+local m_data           := [];
+local m_data_info      := [];
+local m_time           := [];
+local m_domain         := [];
+local m_user_function  := [];
+local m_comp_sequence  := [];
+local m_ics            := [];
+local m_guess          := [];
+local m_exact_solution := [];
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export ResetCodeGeneration::static := proc(
   _self::Sandals,
@@ -32,22 +34,24 @@ export ResetCodeGeneration::static := proc(
 
   description "Reset the code generation parameters.";
 
-  _self:-m_path          := ".";
-  _self:-m_indent        := "  ";
-  _self:-m_name          := "Untitled";
-  _self:-m_info          := "No class description available.";
-  _self:-m_vars_info     := [];
-  _self:-m_data          := [];
-  _self:-m_data_info     := [];
-  _self:-m_time          := [];
-  _self:-m_ics           := [];
-  _self:-m_domain        := [];
-  _self:-m_user_function := [];
-  _self:-m_comp_sequence := [];
+  _self:-m_path           := ".";
+  _self:-m_indent         := "  ";
+  _self:-m_name           := "Untitled";
+  _self:-m_info           := "No class description available.";
+  _self:-m_vars_info      := [];
+  _self:-m_data           := [];
+  _self:-m_data_info      := [];
+  _self:-m_time           := [];
+  _self:-m_domain         := [];
+  _self:-m_user_function  := [];
+  _self:-m_comp_sequence  := [];
+  _self:-m_ics            := [];
+  _self:-m_guess          := [];
+  _self:-m_exact_solution := [];
   return NULL;
 end proc: # ResetCodeGeneration
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export CopyCodeGeneration::static := proc(
   _self::Sandals,
@@ -56,22 +60,24 @@ export CopyCodeGeneration::static := proc(
 
   description "Copy the objects <proto> into <self>.";
 
-  _self:-m_path          := proto:-m_path;
-  _self:-m_indent        := proto:-m_indent;
-  _self:-m_name          := proto:-m_name;
-  _self:-m_info          := proto:-m_info;
-  _self:-m_vars_info     := proto:-m_vars_info;
-  _self:-m_data          := proto:-m_data;
-  _self:-m_data_info     := proto:-m_data_info;
-  _self:-m_time          := proto:-m_time;
-  _self:-m_ics           := proto:-m_ics;
-  _self:-m_domain        := proto:-m_domain;
-  _self:-m_user_function := proto:-m_user_function;
-  _self:-m_comp_sequence := proto:-m_comp_sequence;
+  _self:-m_path           := proto:-m_path;
+  _self:-m_indent         := proto:-m_indent;
+  _self:-m_name           := proto:-m_name;
+  _self:-m_info           := proto:-m_info;
+  _self:-m_vars_info      := proto:-m_vars_info;
+  _self:-m_data           := proto:-m_data;
+  _self:-m_data_info      := proto:-m_data_info;
+  _self:-m_time           := proto:-m_time;
+  _self:-m_domain         := proto:-m_domain;
+  _self:-m_user_function  := proto:-m_user_function;
+  _self:-m_comp_sequence  := proto:-m_comp_sequence;
+  _self:-m_ics            := proto:-m_ics;
+  _self:-m_guess          := proto:-m_guess;
+  _self:-m_exact_solution := proto:-m_exact_solution;
   return NULL;
 end proc: # CopyCodeGeneration
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export GetPath::static := proc(
   _self::Sandals,
@@ -82,7 +88,7 @@ export GetPath::static := proc(
   return _self:-m_path;
 end proc: # GetPath
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export SetPath::static := proc(
   _self::Sandals,
@@ -99,7 +105,7 @@ export SetPath::static := proc(
   return NULL;
 end proc: # SetPath
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export GetIndent::static := proc(
   _self::Sandals,
@@ -110,7 +116,7 @@ export GetIndent::static := proc(
   return _self:-m_indent;
 end proc: # GetIndent
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export SetIndent::static := proc(
   _self::Sandals,
@@ -123,7 +129,7 @@ export SetIndent::static := proc(
   return NULL;
 end proc: # SetIndent
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export GetIndentSize::static := proc(
   _self::Sandals,
@@ -134,7 +140,7 @@ export GetIndentSize::static := proc(
   return length(_self:-m_indent);
 end proc: # GetIndentSize
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export SetIndentSize::static := proc(
   _self::Sandals,
@@ -147,7 +153,7 @@ export SetIndentSize::static := proc(
   return NULL;
 end proc: # SetIndentSize
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export GetName::static := proc(
   _self::Sandals,
@@ -158,7 +164,7 @@ export GetName::static := proc(
   return _self:-m_name;
 end proc: # GetName
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export SetName::static := proc(
   _self::Sandals,
@@ -171,7 +177,7 @@ export SetName::static := proc(
   return NULL;
 end proc: # SetName
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export GetInfo::static := proc(
   _self::Sandals,
@@ -182,7 +188,7 @@ export GetInfo::static := proc(
   return _self:-m_indent;
 end proc: # GetInfo
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export SetInfo::static := proc(
   _self::Sandals,
@@ -195,7 +201,7 @@ export SetInfo::static := proc(
   return NULL;
 end proc: # SetInfo
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export GetVarsInfo::static := proc(
   _self::Sandals,
@@ -206,7 +212,7 @@ export GetVarsInfo::static := proc(
   return _self:-m_vars_info;
 end proc: # GetVarsInfo
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export SetVarsInfo::static := proc(
   _self::Sandals,
@@ -223,7 +229,7 @@ export SetVarsInfo::static := proc(
   return NULL;
 end proc: # SetVarsInfo
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export GetData::static := proc(
   _self::Sandals,
@@ -234,7 +240,7 @@ export GetData::static := proc(
   return _self:-m_data;
 end proc: # GetData
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export SetData::static := proc(
   _self::Sandals,
@@ -251,7 +257,7 @@ export SetData::static := proc(
   return NULL;
 end proc: # SetData
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export GetDataInfo::static := proc(
   _self::Sandals,
@@ -262,7 +268,7 @@ export GetDataInfo::static := proc(
   return _self:-m_data_info;
 end proc: # GetDataInfo
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export SetDataInfo::static := proc(
   _self::Sandals,
@@ -279,7 +285,7 @@ export SetDataInfo::static := proc(
   return NULL;
 end proc: # SetDataInfo
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export GetTime::static := proc(
   _self::Sandals,
@@ -290,7 +296,7 @@ export GetTime::static := proc(
   return _self:-m_time;
 end proc: # GetTime
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export SetTime::static := proc(
   _self::Sandals,
@@ -321,41 +327,7 @@ export SetTime::static := proc(
   return NULL;
 end proc: # SetTime
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-export GetIcs::static := proc(
-  _self::Sandals,
-  $)::list(algebraic);
-
-  description "Return the integration initial conditions.";
-
-  return _self:-m_ics;
-end proc: # GetIcs
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-export SetIcs::static := proc(
-  _self::Sandals,
-  ics::{list(algebraic), Vector(algebraic)},
-  $)
-
-  description "Set the integration initial conditions to <ics>.";
-
-  local ics_lst;
-
-  ics_lst := `if`(not type(ics, list), convert(ics, list), ics);
-
-  if (nops(ics_lst) > 0) then
-    if (nops(ics_lst) <> nops(_self:-m_vars)) then
-      error("invalid initial conditions detected.");
-    end if;
-  end if;
-
-  _self:-m_ics := ics_lst;
-  return NULL;
-end proc: # SetIcs
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export SetDomain::static := proc(
   _self::Sandals,
@@ -368,7 +340,7 @@ export SetDomain::static := proc(
   return NULL;
 end proc: # SetDomain
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export GetDomain::static := proc(
   _self::Sandals,
@@ -379,7 +351,7 @@ export GetDomain::static := proc(
   return _self:-m_domain;
 end proc: # GetDomain
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export AddUserFunction::static := proc(
   _self::Sandals,
@@ -403,7 +375,7 @@ export AddUserFunction::static := proc(
   return NULL;
 end proc: # AddUserFunction
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export GetUserFunction::static := proc(
   _self::Sandals,
@@ -420,7 +392,7 @@ export GetUserFunction::static := proc(
   end if;
 end proc: # GetUserFunction
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export GetUserFunctionDecl::static := proc(
   _self::Sandals,
@@ -445,7 +417,7 @@ export GetUserFunctionDecl::static := proc(
   return out;
 end proc: # GetUserFunctionDecl
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export GetUserFunctionVars::static := proc(
   _self::Sandals,
@@ -468,7 +440,7 @@ export GetUserFunctionVars::static := proc(
   return out;
 end proc: # GetUserFunctionVars
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export GetUserFunctionImpl::static := proc(
   _self::Sandals,
@@ -493,7 +465,7 @@ export GetUserFunctionImpl::static := proc(
   return out;
 end proc: # GetUserFunctionImpl
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export GetUserFunctionName::static := proc(
   _self::Sandals,
@@ -520,7 +492,7 @@ export GetUserFunctionName::static := proc(
   return out;
 end proc: # GetUserFunctionName
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export AddCompSequence::static := proc(
   _self::Sandals,
@@ -541,7 +513,7 @@ export AddCompSequence::static := proc(
   return NULL;
 end proc: # SetCompSequence
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export GetCompSequence::static := proc(
   _self::Sandals,
@@ -558,7 +530,111 @@ export GetCompSequence::static := proc(
   end if;
 end proc: # GetCompSequence
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+export GetIcs::static := proc(
+  _self::Sandals,
+  $)::list(algebraic);
+
+  description "Return the integration initial conditions.";
+
+  return _self:-m_ics;
+end proc: # GetIcs
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+export SetIcs::static := proc(
+  _self::Sandals,
+  ics::{list(algebraic), Vector(algebraic)},
+  $)
+
+  description "Set the integration initial conditions to <ics>.";
+
+  local ics_lst;
+
+  ics_lst := `if`(not type(ics, list), convert(ics, list), ics);
+
+  if (nops(ics_lst) > 0) then
+    if (nops(ics_lst) <> nops(_self:-m_vars)) then
+      error("invalid initial conditions detected.");
+    end if;
+  end if;
+
+  _self:-m_ics := ics_lst;
+  return NULL;
+end proc: # SetIcs
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+export GetGuess::static := proc(
+  _self::Sandals,
+  $)::{symbol, function(symbol), list({symbol, function(symbol)})};
+
+  description "Return the initial guess for the BVP.";
+
+  return _self:-m_guess;
+end proc: # GetGuess
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+export SetGuess::static := proc(
+  _self::Sandals,
+  guess::{symbol, function(symbol), list({symbol, function(symbol)})},
+  $)
+
+  description "Set the initial guess for the BVP to <guess>.";
+
+  local guess_lst;
+
+  guess_lst := `if`(not type(guess, list), convert(guess, list), guess);
+
+  if (nops(guess_lst) > 0) then
+    if (nops(guess_lst) <> nops(_self:-m_vars)) then
+      error("invalid initial guess detected.");
+    end if;
+  end if;
+
+  _self:-m_guess := guess_lst;
+  return NULL;
+end proc: # SetGuess
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+export GetExactSolution::static := proc(
+  _self::Sandals,
+  $)::{symbol, function(symbol), list({symbol, function(symbol)})};
+
+  description "Return the exact solution, if available.";
+
+  return _self:-m_exact_solution;
+end proc: # GetExactSolution
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+export SetExactSolution::static := proc(
+  _self::Sandals,
+  exact_solution::{symbol, function(symbol), list({symbol, function(symbol)})},
+  $)
+
+  description "Set the exact solution to <exact_solution>.";
+
+  local exact_solution_lst;
+
+  exact_solution_lst := `if`(not type(exact_solution, list),
+    convert(exact_solution, list),
+    exact_solution);
+
+  if (nops(exact_solution_lst) > 0) then
+    if (nops(exact_solution_lst) <> nops(_self:-m_vars)) then
+      error("invalid exact solution detected.");
+    end if;
+  end if;
+
+  _self:-m_exact_solution := exact_solution_lst;
+  return NULL;
+end proc: # SetExactSolution
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export GenerateFile::static := proc(
   fname::string,
@@ -575,7 +651,7 @@ export GenerateFile::static := proc(
   return NULL;
 end proc: # GenerateFile
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export ClearFile::static := proc(
   fname::string,
@@ -591,7 +667,7 @@ export ClearFile::static := proc(
   return NULL;
 end proc: # ClearFile
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export ApplyPrefix::static := proc(
   pre::string,
@@ -617,7 +693,7 @@ export ApplyPrefix::static := proc(
   return out
 end proc: # ApplyPrefix
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export Indent::static := proc(
   _self::Sandals,
@@ -629,7 +705,7 @@ export Indent::static := proc(
   return ApplyPrefix(_self:-m_indent, str);
 end proc: # Indent
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export Translate::static := proc(
   _self::Sandals,
@@ -666,7 +742,7 @@ export Translate::static := proc(
   ));
 end proc:
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export ExtractData::static := proc(
   _self::Sandals,
@@ -695,7 +771,7 @@ export ExtractData::static := proc(
   return out;
 end proc: # ExtractData
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export ExtractInputs::static := proc(
   _self::Sandals,
@@ -740,7 +816,7 @@ export ExtractInputs::static := proc(
   return out;
 end proc: # ExtractInputs
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export ExtractElements::static := proc(
   _self::Sandals,
@@ -777,7 +853,7 @@ export ExtractElements::static := proc(
   return lst, out;
 end proc: # ExtractElements
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export GenerateFunctionHeader::static := proc(
   _self::Sandals,
@@ -815,7 +891,7 @@ export GenerateFunctionHeader::static := proc(
   return cat(`if`(nops(vars) > 0, StringTools:-Delete(out, -2..-1), out), ") ", spec, "\n{\n");
 end proc: # GenerateFunctionHeader
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export GenerateFunctionBody::static := proc(
   _self::Sandals,
@@ -851,7 +927,7 @@ export GenerateFunctionBody::static := proc(
   );
 end proc: # GenerateFunctionBody
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export TranslateRealFunction::static := proc(
   _self::Sandals,
@@ -924,7 +1000,7 @@ export TranslateRealFunction::static := proc(
   );
 end proc: # TranslateRealFunction
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export TranslateDomainFunction::static := proc(
   _self::Sandals,
@@ -1004,7 +1080,7 @@ export TranslateDomainFunction::static := proc(
   );
 end proc: # TranslateDomainFunction
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export TranslateVectorFunction::static := proc(
   _self::Sandals,
@@ -1081,7 +1157,7 @@ export TranslateVectorFunction::static := proc(
   );
 end proc: # TranslateVectorFunction
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export TranslateMatrixFunction::static := proc(
   _self::Sandals,
@@ -1152,7 +1228,7 @@ export TranslateMatrixFunction::static := proc(
   );
 end proc: # TranslateMatrixFunction
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export TranslateTensorFunction::static := proc(
   _self::Sandals,
@@ -1238,7 +1314,7 @@ export TranslateTensorFunction::static := proc(
   );
 end proc: # TranslateTensorFunction
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export GenerateClassData::static := proc(
   _self::Sandals,
@@ -1260,7 +1336,7 @@ export GenerateClassData::static := proc(
   return out;
 end proc: # GenerateClassData
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export GenerateClassConstructor::static := proc(
   _self::Sandals,
@@ -1298,7 +1374,7 @@ export GenerateClassConstructor::static := proc(
     );
 end proc: # GenerateClassConstructor
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export GenerateClassIcs::static := proc(
   _self::Sandals,
@@ -1318,7 +1394,7 @@ export GenerateClassIcs::static := proc(
   end if;
 end proc: # GenerateClassIcs
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export GenerateClassUserFunction::static := proc(
   _self::Sandals,
@@ -1352,7 +1428,7 @@ export GenerateClassUserFunction::static := proc(
   end if;
 end proc: # GenerateClassUserFunction
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export GenerateClassTime::static := proc(
   _self::Sandals,
@@ -1373,7 +1449,7 @@ export GenerateClassTime::static := proc(
   end if;
 end proc: # GenerateClassTime
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export GenerateClassDomain::static := proc(
   _self::Sandals,
@@ -1402,14 +1478,14 @@ export GenerateClassDomain::static := proc(
   end if;
 end proc: # GenerateClassDomain
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 #   ___                 _ _      _ _
 #  |_ _|_ __ ___  _ __ | (_) ___(_) |_
 #   | || '_ ` _ \| '_ \| | |/ __| | __|
 #   | || | | | | | |_) | | | (__| | |_
 #  |___|_| |_| |_| .__/|_|_|\___|_|\__|
 #                |_|
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export TranslateImplicitSystem::static := proc(
   _self::Sandals,
@@ -1580,7 +1656,7 @@ export TranslateImplicitSystem::static := proc(
   );
 end proc: # TranslateImplicitSystem
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export CheckDefinition::static := proc(
   _self::Sandals,
@@ -1615,7 +1691,7 @@ export CheckDefinition::static := proc(
   return true;
 end proc: # CheckDefinition
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export CheckUserFunction::static := proc(
   _self::Sandals,
@@ -1643,9 +1719,9 @@ export CheckUserFunction::static := proc(
   return true;
 end proc: # CheckUserFunction
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-export GenerateCode::static := proc(
+export GenerateSystemCode::static := proc(
   _self::Sandals,
   name::string := _self:-m_name,
   {
@@ -1713,16 +1789,51 @@ export GenerateCode::static := proc(
 
   # Return the results
   return NULL;
-end proc: # GenerateCode
+end proc: # GenerateSystemCode
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+export GenerateBoundaryValueProblemCode::static := proc(
+  _self::Sandals,
+  name::string := _self:-m_name,
+  $)
+
+  description "Generate C++ code for the loaded boundary value problem. The code is saved in the "
+    "directory <path> with the name <name>.hh.";
+
+  local class_str;
+
+  # Check if all the indeterminates are defined
+  _self:-CheckDefinition(_self, "b_ini", _self:-m_b_ini);
+  _self:-CheckDefinition(_self, "b_end", _self:-m_b_end);
+  _self:-CheckUserFunction(_self);
+
+  # Check if the path exists
+  if not FileTools:-Exists(_self:-m_path) then
+    if _self:-m_warning_mode then
+      WARNING("directory ""%1"" has been created.", _self:-m_path);
+    end if;
+    FileTools:-MakeDirectory(_self:-m_path);
+  end if;
+
+  # Generate class body string
+  class_str := _self:-TranslateBoundaryValueProblem(_self, _self:-GetB(_self));
+
+  # Generate the C++ code
+  _self:-GenerateFile(cat(_self:-m_path, "/", name, ".hh"), class_str);
+
+  # Return the results
+  return NULL;
+end proc: # GenerateBoundaryValueProblemCode
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 #   _____            _ _      _ _
 #  | ____|_  ___ __ | (_) ___(_) |_
 #  |  _| \ \/ / '_ \| | |/ __| | __|
 #  | |___ >  <| |_) | | | (__| | |_
 #  |_____/_/\_\ .__/|_|_|\___|_|\__|
 #             |_|
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export TranslateExplicitSystem::static := proc(
   _self::Sandals,
@@ -1858,14 +1969,14 @@ export TranslateExplicitSystem::static := proc(
   );
 end proc: # TranslateExplicitSystem
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 #   ____                 _ _____            _ _      _ _
 #  / ___|  ___ _ __ ___ (_) ____|_  ___ __ | (_) ___(_) |_
 #  \___ \ / _ \ '_ ` _ \| |  _| \ \/ / '_ \| | |/ __| | __|
 #   ___) |  __/ | | | | | | |___ >  <| |_) | | | (__| | |_
 #  |____/ \___|_| |_| |_|_|_____/_/\_\ .__/|_|_|\___|_|\__|
 #                                    |_|
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export TranslateSemiExplicitSystem::static := proc(
   _self::Sandals,
@@ -2029,14 +2140,14 @@ export TranslateSemiExplicitSystem::static := proc(
   );
 end proc: # TranslateSemiExplicitSystem
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 #   _     _
 #  | |   (_)_ __   ___  __ _ _ __
 #  | |   | | '_ \ / _ \/ _` | '__|
 #  | |___| | | | |  __/ (_| | |
 #  |_____|_|_| |_|\___|\__,_|_|
 #
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export TranslateLinearSystem::static := proc(
   _self::Sandals,
@@ -2189,3 +2300,116 @@ export TranslateLinearSystem::static := proc(
   );
 end proc: # TranslateLinearSystem
 
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+#  ____                        _                __     __    _            ____            _     _
+# | __ )  ___  _   _ _ __   __| | __ _ _ __ _   \ \   / /_ _| |_   _  ___|  _ \ _ __ ___ | |__ | | ___ _ __ ___
+# |  _ \ / _ \| | | | '_ \ / _` |/ _` | '__| | | \ \ / / _` | | | | |/ _ \ |_) | '__/ _ \| '_ \| |/ _ \ '_ ` _ \
+# | |_) | (_) | |_| | | | | (_| | (_| | |  | |_| |\ V / (_| | | |_| |  __/  __/| | | (_) | |_) | |  __/ | | | | |
+# |____/ \___/ \__,_|_| |_|\__,_|\__,_|_|   \__, | \_/ \__,_|_|\__,_|\___|_|   |_|  \___/|_.__/|_|\___|_| |_| |_|
+#                                           |___/
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+export TranslateBoundaryValueProblem::static := proc(
+  _self::Sandals,
+  b::Vector(algebraic),
+  $)::string;
+
+  description "Generate the boundary conditions for a boundary value problem with boundary "
+    "conditions <b>.";
+
+  local x, b_tmp, rm_deps, i, data_str, num_bc, vars_info;
+
+  # Store system states
+  x     := _self:-m_vars;
+  x_ini := _self:-m_vars_ini;
+  x_end := _self:-m_vars_end;
+
+  # Prepare veriables for substitution (x(t) -> x)
+  rm_deps := convert(x =~ op~(0, x), list);
+
+  # Generate expressions with proper variables dependencices
+  x        := convert(subs(op(rm_deps), x), list);
+  b_tmp    := subs(op(rm_deps), b);
+  Jb_x_ini := subs(op(rm_deps), Sandals:-DoJacobian(b, x_ini));
+  Jb_x_end := subs(op(rm_deps), Sandals:-DoJacobian(b, x_end));
+
+  # Function utilities strings
+  i := _self:-m_indent;
+
+  # Return output string
+  return cat(
+    "/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\\\n"
+    " * Copyright (c) 2025, Davide Stocco and Enrico Bertolazzi.                                      *\n"
+    " *                                                                                               *\n"
+    " * The Sandals project is distributed under the BSD 2-Clause License.                            *\n"
+    " *                                                                                               *\n"
+    " * Davide Stocco                                                               Enrico Bertolazzi *\n"
+    " * University of Trento                                                     University of Trento *\n"
+    " * e-mail: davide.stocco@unitn.it                             e-mail: enrico.bertolazzi@unitn.it *\n"
+    "\\* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */\n"
+    "\n",
+    "// C++ generated code for the boundary value problem: ", name, "\n",
+    "// This file has been automatically generated by Sandals.\n",
+    "// DISCLAIMER: If you need to edit it, do it wisely!\n",
+    "\n",
+    "#ifndef SANDALS_MAPLE_CODEGEN_", StringTools:-UpperCase(name), "_BOUNDARY_VALUE_PROBLEM_HH\n",
+    "#define SANDALS_MAPLE_CODEGEN_", StringTools:-UpperCase(name), "_BOUNDARY_VALUE_PROBLEM_HH\n",
+    "\n",
+    "using namespace Sandals;\n"
+    "using namespace std;\n"
+    "\n",
+    "// ", _self:-m_info, "\n",
+    "class ", name, " : public Linear<", num_eqns, ", ", num_invs, ">\n",
+    "{\n",
+    i, "// Class data\n",
+    data_str,
+    "\n",
+    "public:\n",
+    i, "using VectorF  = typename Linear<", num_eqns, ", ", num_invs, ">::VectorF;\n",
+    i, "using MatrixE  = typename Linear<", num_eqns, ", ", num_invs, ">::MatrixE;\n",
+    i, "using MatrixA  = typename Linear<", num_eqns, ", ", num_invs, ">::MatrixA;\n",
+    i, "using VectorB  = typename Linear<", num_eqns, ", ", num_invs, ">::VectorB;\n",
+    i, "using VectorH  = typename Linear<", num_eqns, ", ", num_invs, ">::VectorH;\n",
+    i, "using MatrixJH = typename Linear<", num_eqns, ", ", num_invs, ">::MatrixJH;\n",
+    "\n",
+    _self:-Indent(_self, _self:-GenerateClassConstructor(
+      _self, name, "Linear",
+      parse("num_eqns") = num_eqns,
+      parse("num_invs") = num_invs,
+      parse("info")     = "Class constructor."
+    )),
+    "\n",
+    _self:-Indent(_self, _self:-TranslateVectorFunction(
+      _self, "b", [x, [t]], b_tmp,
+      ["VectorF const &", "Real"], [vars_info[-1]], "VectorB",
+      parse("spec") = "const override",
+      parse("info") = "Evaluate the boundary conditions b residuals."
+    )),
+    "\n",
+    _self:-Indent(_self, _self:-TranslateMatrixFunction(
+      _self, "Jb_x_ini", [x, [t]], Jb_x_ini,
+      ["VectorF const &", "Real"], [vars_info[-1]], "MatrixJB",
+      parse("spec") = "const override",
+      parse("info") = "Evaluate the Jacobian of b with respect to x at the initial point."
+    )),
+    "\n",
+    _self:-Indent(_self, _self:-TranslateMatrixFunction(
+      _self, "Jb_x_end", [x, [t]], Jb_x_end,
+      ["VectorF const &", "Real"], [vars_info[-1]], "MatrixJB",
+      parse("spec") = "const override",
+      parse("info") = "Evaluate the Jacobian of b with respect to x at the end point."
+    )),
+    "\n",
+    time_fun,
+    "\n",
+    guess_fun,
+    "\n",
+    exact_solution_fun,
+    "\n",
+    "}; // class ", name, "\n",
+    "\n",
+    "#endif // SANDALS_MAPLE_CODEGEN_", StringTools:-UpperCase(name), "_BOUNDARY_VALUE_PROBLEM_HH\n"
+  );
+end proc: # TranslateBoundaryValueProblem
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

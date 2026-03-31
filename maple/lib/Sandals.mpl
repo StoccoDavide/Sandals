@@ -225,6 +225,7 @@ module Sandals()
 $include "./lib/Sandals/WorkingDirectory.mpl"
 $include "./lib/Sandals/Differentiation.mpl"
 $include "./lib/Sandals/System.mpl"
+$include "./lib/Sandals/BoundaryValueProblem.mpl"
 $include "./lib/Sandals/CodeGeneration.mpl"
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

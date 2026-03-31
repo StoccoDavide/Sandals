@@ -1,14 +1,14 @@
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# Copyright (c) 2025, Davide Stocco and Enrico Bertolazzi.                                        #
-#                                                                                                 #
-# The Sandals project is distributed under the BSD 2-Clause License.                              #
-#                                                                                                 #
-# Davide Stocco                                                                 Enrico Bertolazzi #
-# University of Trento                                                       University of Trento #
-# e-mail: davide.stocco@unitn.it                               e-mail: enrico.bertolazzi@unitn.it #
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Copyright (c) 2026, Davide Stocco and Enrico Bertolazzi.                    #
+#                                                                             #
+# The Sandals project is distributed under the BSD 2-Clause License.          #
+#                                                                             #
+# Davide Stocco                                             Enrico Bertolazzi #
+# University of Trento                                   University of Trento #
+# davide.stocco@unitn.it                           enrico.bertolazzi@unitn.it #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export DoDiff::static := proc(
   # _passed
@@ -28,7 +28,7 @@ export DoDiff::static := proc(
   return out;
 end proc: # DoDiff
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export DoGradient::static := proc(
   fnc::algebraic,
@@ -54,7 +54,7 @@ export DoGradient::static := proc(
   return out;
 end proc: # DoGradient
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export DoHessian::static := proc(
   fnc::algebraic,
@@ -84,7 +84,7 @@ export DoHessian::static := proc(
   return out;
 end proc: # DoHessian
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export DoJacobian::static := proc(
   fnc::Vector,
@@ -146,4 +146,4 @@ export DoTensor::static := proc(
   return out;
 end proc: # DoTensor
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

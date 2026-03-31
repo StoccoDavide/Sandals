@@ -1,14 +1,14 @@
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# Copyright (c) 2025, Davide Stocco and Enrico Bertolazzi.                                        #
-#                                                                                                 #
-# The Sandals project is distributed under the BSD 2-Clause License.                              #
-#                                                                                                 #
-# Davide Stocco                                                                 Enrico Bertolazzi #
-# University of Trento                                                       University of Trento #
-# e-mail: davide.stocco@unitn.it                               e-mail: enrico.bertolazzi@unitn.it #
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Copyright (c) 2026, Davide Stocco and Enrico Bertolazzi.                    #
+#                                                                             #
+# The Sandals project is distributed under the BSD 2-Clause License.          #
+#                                                                             #
+# Davide Stocco                                             Enrico Bertolazzi #
+# University of Trento                                   University of Trento #
+# davide.stocco@unitn.it                           enrico.bertolazzi@unitn.it #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 # System handling
 local m_system_type   := "Empty";
@@ -20,7 +20,7 @@ local m_A             := [];
 local m_b             := [];
 local m_h             := [];
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export ResetSystem::static := proc(
   _self::Sandals,
@@ -39,7 +39,7 @@ export ResetSystem::static := proc(
   return NULL;
 end proc: # ResetSystem
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export CopySystem::static := proc(
   _self::Sandals,
@@ -59,7 +59,7 @@ export CopySystem::static := proc(
   return NULL;
 end proc: # CopySystem
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export GetSystemType::static := proc(
   _self::Sandals,
@@ -70,7 +70,7 @@ export GetSystemType::static := proc(
   return _self:-m_system_type;
 end proc: # GetSystemType
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export GetVars::static := proc(
   _self::Sandals,
@@ -88,7 +88,7 @@ export GetVars::static := proc(
   end if;
 end proc: # GetVars
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export SetVars::static := proc(
   _self::Sandals,
@@ -105,7 +105,7 @@ export SetVars::static := proc(
   return NULL;
 end proc: # SetVars
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export GetF::static := proc(
   _self::Sandals,
@@ -125,7 +125,7 @@ export GetF::static := proc(
   end if;
 end proc: # GetF
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export GetE::static := proc(
   _self::Sandals,
@@ -145,7 +145,7 @@ export GetE::static := proc(
   end if;
 end proc: # GetE
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export GetA::static := proc(
   _self::Sandals,
@@ -163,7 +163,7 @@ export GetA::static := proc(
   end if;
 end proc: # GetA
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export GetB::static := proc(
   _self::Sandals,
@@ -182,7 +182,7 @@ export GetB::static := proc(
   end if;
 end proc: # GetB
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export GetH::static := proc(
   _self::Sandals,
@@ -200,7 +200,7 @@ export GetH::static := proc(
   end if;
 end proc: # GetH
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export GetDifferentalEquations::static := proc(
   _self::Sandals,
@@ -246,7 +246,7 @@ export GetDifferentalEquations::static := proc(
   return convert(out, list);
 end proc: # GetDifferentialEquations
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export GetInvariants::static := proc(
   _self::Sandals,
@@ -264,7 +264,7 @@ export GetInvariants::static := proc(
   end if;
 end proc: # GetInvariants
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export GetEquations::static := proc(
   _self::Sandals,
@@ -284,7 +284,7 @@ export GetEquations::static := proc(
   ];
 end proc: # GetEquations
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export DiffOrder::static := proc(
   eqns::list,
@@ -300,7 +300,7 @@ export DiffOrder::static := proc(
   end if;
 end proc: # SystemDegree
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export LoadSystem::static := proc(
   _self::Sandals,
@@ -332,7 +332,7 @@ export LoadSystem::static := proc(
   return NULL;
 end proc: # LoadSystem
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export LoadImplicitSystem::static := proc(
   _self::Sandals,
@@ -394,7 +394,7 @@ export LoadImplicitSystem::static := proc(
   return NULL;
 end proc: # LoadImplicitSystem
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export LoadExplicitSystem::static := proc(
   _self::Sandals,
@@ -533,7 +533,7 @@ export LoadExplicitSystem::static := proc(
   return NULL;
 end proc: # LoadExplicitSystem
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export ToImplicit::static := proc(
   _self::Sandals,
@@ -562,7 +562,7 @@ export ToImplicit::static := proc(
   return NULL;
 end proc: # ToImplicit
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export ToExplicit::static := proc(
   _self::Sandals,
@@ -592,7 +592,7 @@ export ToExplicit::static := proc(
   return NULL;
 end proc: # ToExplicit
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export ToSemiExplicit::static := proc(
   _self::Sandals,
@@ -622,7 +622,7 @@ export ToSemiExplicit::static := proc(
   return NULL;
 end proc: # ToSemiExplicit
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 export ToLinear::static := proc(
   _self::Sandals,
@@ -652,4 +652,4 @@ export ToLinear::static := proc(
   return NULL;
 end proc: # ToLinear
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
