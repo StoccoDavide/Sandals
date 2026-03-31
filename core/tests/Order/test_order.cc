@@ -45,7 +45,6 @@ using namespace Sandals;
 using Real = double;
 
 static const Real tolerance{0.05};
-static Eigen::Vector2d ics;
 static std::vector<Eigen::VectorXd> t;
 static std::function<Eigen::MatrixXd(Eigen::VectorXd)> sol;
 static const Real SQRT_EPSILON{std::sqrt(std::numeric_limits<Real>::epsilon())};

@@ -43,8 +43,8 @@ namespace Sandals {
   class Linear : public Explicit<Real, N, M> {
    public:
     using Pointer =
-        std::unique_ptr<SemiExplicit<Real, N, M>>; /**< Unique pointer to a
-                                                      linear ODE/DAE system. */
+        std::unique_ptr<Linear<Real, N, M>>;    /**< Unique pointer to a
+                                                         linear ODE/DAE system. */
     using VectorF =
         typename Explicit<Real, N, M>::VectorF; /**< Templetized vector type. */
     using MatrixJF = typename Explicit<Real, N, M>::MatrixJF; /**< Templetized

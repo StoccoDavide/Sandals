@@ -13,7 +13,7 @@
 #ifndef TESTS_PROBLEMS_BASIC_HH
 #define TESTS_PROBLEMS_BASIC_HH
 
-#include "Sandals/BoundaryValueProblem.hh"
+#include "Sandals/System/BoundaryValueProblem.hh"
 #include "Sandals/System/Explicit.hh"
 #include "Sandals/System/Implicit.hh"
 #include "Sandals/System/SemiExplicit.hh"
@@ -21,7 +21,6 @@
 using namespace Sandals;
 
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-//  - - - - - - - - - -
 
 template <typename Real = double>
 class BasicExplicit : public Explicit<Real, 2, 0> {
@@ -61,7 +60,6 @@ class BasicExplicit : public Explicit<Real, 2, 0> {
 };
 
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-//  - - - - - - - - - -
 
 template <typename Real = double>
 class BasicImplicit : public Implicit<Real, 2, 0> {
@@ -111,7 +109,6 @@ class BasicImplicit : public Implicit<Real, 2, 0> {
 };
 
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-//  - - - - - - - - - -
 
 template <typename Real = double>
 class BasicSemiExplicit : public SemiExplicit<Real, 2, 0> {
@@ -165,7 +162,6 @@ class BasicSemiExplicit : public SemiExplicit<Real, 2, 0> {
 };
 
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-//  - - - - - - - - - -
 
 template <typename Real, typename System, typename Integrator>
 class BasicProblem : public BoundaryValueProblem<Real, 2, 0, Integrator> {
@@ -238,6 +234,5 @@ class BasicProblem : public BoundaryValueProblem<Real, 2, 0, Integrator> {
 };
 
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-//  - - - - - - - - - -
 
 #endif  // TESTS_PROBLEMS_BASIC_HH

@@ -13,7 +13,7 @@
 #ifndef TESTS_PROBLEMS_HYPERSENSITIVE1_HH
 #define TESTS_PROBLEMS_HYPERSENSITIVE1_HH
 
-#include "Sandals/BoundaryValueProblem.hh"
+#include "Sandals/System/BoundaryValueProblem.hh"
 #include "Sandals/System/Explicit.hh"
 #include "Sandals/System/Implicit.hh"
 #include "Sandals/System/SemiExplicit.hh"
@@ -21,7 +21,6 @@
 using namespace Sandals;
 
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-//  - - - - - - - - - -
 
 template <typename Real = double>
 class Hypersensitive1Explicit : public Explicit<Real, 2, 0> {
@@ -63,7 +62,6 @@ class Hypersensitive1Explicit : public Explicit<Real, 2, 0> {
 };
 
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-//  - - - - - - - - - -
 
 template <typename Real = double>
 class Hypersensitive1Implicit : public Implicit<Real, 2, 0> {
@@ -114,7 +112,6 @@ class Hypersensitive1Implicit : public Implicit<Real, 2, 0> {
 };
 
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-//  - - - - - - - - - -
 
 template <typename Real = double>
 class Hypersensitive1SemiExplicit : public SemiExplicit<Real, 2, 0> {
@@ -171,7 +168,6 @@ class Hypersensitive1SemiExplicit : public SemiExplicit<Real, 2, 0> {
 };
 
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-//  - - - - - - - - - -
 
 template <typename Real, typename System, typename Integrator>
 class Hypersensitive1Problem
@@ -239,6 +235,5 @@ class Hypersensitive1Problem
 };
 
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-//  - - - - - - - - - -
 
 #endif  // TESTS_PROBLEMS_HYPERSENSITIVE1_HH

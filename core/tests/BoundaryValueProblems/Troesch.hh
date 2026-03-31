@@ -13,7 +13,7 @@
 #ifndef TESTS_PROBLEMS_TROESCH0_HH
 #define TESTS_PROBLEMS_TROESCH0_HH
 
-#include "Sandals/BoundaryValueProblem.hh"
+#include "Sandals/System/BoundaryValueProblem.hh"
 #include "Sandals/System/Explicit.hh"
 #include "Sandals/System/Implicit.hh"
 #include "Sandals/System/SemiExplicit.hh"
@@ -21,7 +21,6 @@
 using namespace Sandals;
 
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-//  - - - - - - - - - -
 
 template <typename Real = double>
 class TroeschExplicit : public Explicit<Real, 2, 0> {
@@ -75,7 +74,6 @@ class TroeschExplicit : public Explicit<Real, 2, 0> {
 };
 
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-//  - - - - - - - - - -
 
 template <typename Real = double>
 class TroeschImplicit : public Implicit<Real, 2, 0> {
@@ -140,7 +138,6 @@ class TroeschImplicit : public Implicit<Real, 2, 0> {
 };
 
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-//  - - - - - - - - - -
 
 template <typename Real = double>
 class TroeschSemiExplicit : public SemiExplicit<Real, 2, 0> {
@@ -208,7 +205,6 @@ class TroeschSemiExplicit : public SemiExplicit<Real, 2, 0> {
 };
 
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-//  - - - - - - - - - -
 
 template <typename Real, typename System, typename Integrator>
 class TroeschProblem : public BoundaryValueProblem<Real, 2, 0, Integrator> {
@@ -291,6 +287,5 @@ class TroeschProblem : public BoundaryValueProblem<Real, 2, 0, Integrator> {
 };
 
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-//  - - - - - - - - - -
 
 #endif  // TESTS_PROBLEMS_TROESCH0_HH

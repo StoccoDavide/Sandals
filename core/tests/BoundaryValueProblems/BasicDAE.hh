@@ -11,7 +11,7 @@
 #ifndef TESTS_PROBLEMS_BASIC_DAE_HH
 #define TESTS_PROBLEMS_BASIC_DAE_HH
 
-#include "Sandals/BoundaryValueProblem.hh"
+#include "Sandals/System/BoundaryValueProblem.hh"
 #include "Sandals/System/Explicit.hh"
 #include "Sandals/System/Implicit.hh"
 #include "Sandals/System/SemiExplicit.hh"
@@ -19,7 +19,6 @@
 using namespace Sandals;
 
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-//  - - - - - - - - - -
 
 template <typename Real = double>
 class BasicDAEImplicit : public Implicit<Real, 2, 0> {
@@ -74,7 +73,6 @@ class BasicDAEImplicit : public Implicit<Real, 2, 0> {
 };
 
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-//  - - - - - - - - - -
 
 template <typename Real, typename System, typename Integrator>
 class BasicDAEProblem : public BoundaryValueProblem<Real, 2, 0, Integrator> {
@@ -148,6 +146,5 @@ class BasicDAEProblem : public BoundaryValueProblem<Real, 2, 0, Integrator> {
 };
 
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-//  - - - - - - - - - -
 
 #endif  // TESTS_PROBLEMS_BASIC_DAE_HH

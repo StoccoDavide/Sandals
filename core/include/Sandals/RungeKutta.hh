@@ -69,16 +69,17 @@ namespace Sandals {
         Eigen::Matrix<Real, N * N, S>;          /**< Templetized matrix type. */
     using MatrixJ =
         Eigen::Matrix<Real, N * S, N * S>;      /**< Templetized matrix type. */
-    using VectorP =
-        Eigen::Matrix<Real, N + M, 1>;          /**< Templetized vector type. */
+    using VectorP = Eigen::Vector<Real, N + M>; /**< Templetized vector type. */
     using MatrixP =
         Eigen::Matrix<Real, N + M, N + M>;      /**< Templetized matrix type. */
     using NewtonX =
-        Optimist::RootFinder::Newton<Real, N>;  /**< Templetized Newton solver
-                                                   for ERK and DIRK methods. */
+        Optimist::RootFinder::Newton<Eigen::Vector<Real, N>>; /**< Templetized
+                                                  Newton solver for ERK and DIRK
+                                                  methods. */
     using NewtonK =
-        Optimist::RootFinder::Newton<Real, N * S>; /**< Templetized Newton
-                                                      solver for IRK methods. */
+        Optimist::RootFinder::Newton<Eigen::Vector<Real, N * S>>; /**<
+                                                      Templetized Newton solver
+                                                      for IRK methods. */
     using VectorS =
         typename Tableau<Real, S>::Vector;      /**< Templetized vector type. */
     using MatrixS =
@@ -1006,8 +1007,8 @@ namespace Sandals {
                            VectorN &x_new,
                            Real &h_new,
                            MatrixK &K) const {
-      using Eigen::all;
       using Eigen::seqN;
+      using Eigen::placeholders::all;
 
       // Compute the K variables in the case of an explicit method and explicit
       // system
@@ -1068,8 +1069,8 @@ namespace Sandals {
                                 MatrixJX &Jx) const {
 #define CMD "Sandals::RungeKutta::erk_explicit_propagate(...): "
 
-      using Eigen::all;
       using Eigen::seqN;
+      using Eigen::placeholders::all;
 
       VectorN x_node;
       MatrixN Jf_x;
@@ -1122,7 +1123,7 @@ namespace Sandals {
 
       // Compute the Jacobian with finite differences
       MatrixJX Jx_fd;
-      if (Optimist::FiniteDifferences::Jacobian(x, fun, Jx_fd)) {
+      if (Optimist::FiniteDifferences::Jacobian(fun, x, Jx_fd)) {
         Real err{(Jx - Jx_fd).norm()};
         SANDALS_ASSERT_WARNING(err < CBRT_EPSILON,
                                CMD "Jacobian propagation error = "
@@ -1165,8 +1166,8 @@ namespace Sandals {
                                const Real h,
                                const MatrixK &K,
                                VectorN &fun) const {
-      using Eigen::all;
       using Eigen::seqN;
+      using Eigen::placeholders::all;
       VectorN x_node(x + K(all, seqN(0, s)) *
                              this->m_tableau.A(s, seqN(0, s)).transpose());
       if (this->m_reverse) {
@@ -1220,8 +1221,8 @@ namespace Sandals {
                                const Real h,
                                const MatrixK &K,
                                MatrixN &jac) const {
-      using Eigen::all;
       using Eigen::seqN;
+      using Eigen::placeholders::all;
       VectorN x_node(x + K(all, seqN(0, s)) *
                              this->m_tableau.A(s, seqN(0, s)).transpose());
       if (this->m_reverse) {
@@ -1269,14 +1270,16 @@ namespace Sandals {
       for (Integer s{0}; s < S; ++s) {
         if (this->m_newtonX.solve(
                 [this, s, &K, &x_old, t_old, h_old](const VectorN &K_fun,
-                                                    VectorN &fun) {
+                                                    VectorN &fun) -> bool {
                   K.col(s) = K_fun;
                   this->erk_implicit_function(s, x_old, t_old, h_old, K, fun);
+                  return fun.allFinite();
                 },
                 [this, s, &K, &x_old, t_old, h_old](const VectorN &K_jac,
-                                                    MatrixN &jac) {
+                                                    MatrixN &jac) -> bool {
                   K.col(s) = K_jac;
                   this->erk_implicit_jacobian(s, x_old, t_old, h_old, K, jac);
+                  return jac.allFinite();
                 },
                 K_ini,
                 K_sol)) {
@@ -1323,8 +1326,8 @@ namespace Sandals {
                                 MatrixJX &Jx) const {
 #define CMD "Sandals::RungeKutta::erk_implicit_propagate(...): "
 
-      using Eigen::all;
       using Eigen::seqN;
+      using Eigen::placeholders::all;
 
       VectorN x_node, x_dot_node;
       MatrixN JF_x, JF_x_dot, A, b;
@@ -1388,7 +1391,7 @@ namespace Sandals {
 
       // Compute the Jacobian with finite differences
       MatrixJX Jx_fd;
-      if (Optimist::FiniteDifferences::Jacobian(x, fun, Jx_fd)) {
+      if (Optimist::FiniteDifferences::Jacobian(fun, x, Jx_fd)) {
         Real err{(Jx - Jx_fd).norm()};
         SANDALS_ASSERT_WARNING(err < CBRT_EPSILON,
                                CMD "Jacobian propagation error = "
@@ -1583,11 +1586,15 @@ namespace Sandals {
 
       // Check if the solver converged
       if (!this->m_newtonK.solve(
-              [this, &x_old, t_old, h_old](const VectorK &K_fun, VectorK &fun) {
+              [this, &x_old, t_old, h_old](const VectorK &K_fun,
+                                           VectorK &fun) -> bool {
                 this->irk_function(x_old, t_old, h_old, K_fun, fun);
+                return fun.allFinite();
               },
-              [this, &x_old, t_old, h_old](const VectorK &K_jac, MatrixJ &jac) {
+              [this, &x_old, t_old, h_old](const VectorK &K_jac,
+                                           MatrixJ &jac) -> bool {
                 this->irk_jacobian(x_old, t_old, h_old, K_jac, jac);
+                return jac.allFinite();
               },
               K_ini,
               K_vec)) {
@@ -1637,8 +1644,8 @@ namespace Sandals {
                        MatrixJX &Jx) const {
 #define CMD "Sandals::RungeKutta::irk_propagate(...): "
 
-      using Eigen::all;
       using Eigen::seqN;
+      using Eigen::placeholders::all;
 
       // Propagate the derivative of K with respect to x
       VectorN x_node, x_dot_node;
@@ -1701,7 +1708,7 @@ namespace Sandals {
 
       // Compute the Jacobian with finite differences
       MatrixJX Jx_fd;
-      if (Optimist::FiniteDifferences::Jacobian(x, fun, Jx_fd)) {
+      if (Optimist::FiniteDifferences::Jacobian(fun, x, Jx_fd)) {
         Real err{(Jx - Jx_fd).norm()};
         SANDALS_ASSERT_WARNING(err < CBRT_EPSILON,
                                CMD "Jacobian propagation error = "
@@ -1753,8 +1760,8 @@ namespace Sandals {
                        const Real h,
                        const MatrixK &K,
                        VectorN &fun) const {
-      using Eigen::all;
       using Eigen::seqN;
+      using Eigen::placeholders::all;
       VectorN x_node(x + K(all, seqN(0, n + 1)) *
                              this->m_tableau.A(n, seqN(0, n + 1)).transpose());
       if (this->m_reverse) {
@@ -1811,8 +1818,8 @@ namespace Sandals {
                        const Real h,
                        const MatrixK &K,
                        MatrixN &jac) const {
-      using Eigen::all;
       using Eigen::seqN;
+      using Eigen::placeholders::all;
       Real t_node{t + h * this->m_tableau.c(n)};
       VectorN x_node(x + K(all, seqN(0, n + 1)) *
                              this->m_tableau.A(n, seqN(0, n + 1)).transpose());
@@ -1860,14 +1867,16 @@ namespace Sandals {
       for (Integer n{0}; n < S; ++n) {
         if (this->m_newtonX.solve(
                 [this, n, &K, &x_old, t_old, h_old](const VectorN &K_fun,
-                                                    VectorN &fun) {
+                                                    VectorN &fun) -> bool {
                   K.col(n) = K_fun;
                   this->dirk_function(n, x_old, t_old, h_old, K, fun);
+                  return fun.allFinite();
                 },
                 [this, n, &K, &x_old, t_old, h_old](const VectorN &K_jac,
-                                                    MatrixN &jac) {
+                                                    MatrixN &jac) -> bool {
                   K.col(n) = K_jac;
                   this->dirk_jacobian(n, x_old, t_old, h_old, K, jac);
+                  return jac.allFinite();
                 },
                 K_ini,
                 K_sol)) {
@@ -1914,8 +1923,8 @@ namespace Sandals {
                         MatrixJX &Jx) const {
 #define CMD "Sandals::RungeKutta::dirk_propagate(...): "
 
-      using Eigen::all;
       using Eigen::seqN;
+      using Eigen::placeholders::all;
 
       // Propagate the derivative of K with respect to x for DIRK methods
       VectorN x_node, x_dot_node;
@@ -1980,16 +1989,14 @@ namespace Sandals {
 
       // Compute the Jacobian with finite differences
       MatrixJX Jx_fd;
-      if (Optimist::FiniteDifferences::Jacobian(x, fun, Jx_fd)) {
+      if (Optimist::FiniteDifferences::Jacobian(fun, x, Jx_fd)) {
         Real err{(Jx - Jx_fd).norm()};
         SANDALS_ASSERT_WARNING(err < CBRT_EPSILON,
                                CMD "Jacobian propagation error = "
                                    << err << " > " << CBRT_EPSILON << ".");
       }
 #endif
-
       return true;
-
 #undef CMD
     }
 
@@ -2259,7 +2266,7 @@ namespace Sandals {
                const VectorN &ics,
                Solution<Real, N, M> &sol,
                MatrixJX &Jx) const {
-      using Eigen::last;
+      using Eigen::placeholders::last;
 
 #define CMD "Sandals::RungeKutta::solve(...): "
 
@@ -2402,8 +2409,8 @@ namespace Sandals {
                         MatrixJX &Jx) const {
 #define CMD "Sandals::RungeKutta::adaptive_solve(...): "
 
-      using Eigen::all;
-      using Eigen::last;
+      using Eigen::placeholders::all;
+      using Eigen::placeholders::last;
 
       // Check initial conditions
       if constexpr (Propagate) {
@@ -2768,7 +2775,7 @@ namespace Sandals {
                     VectorX &e_vec) const {
 #define CMD "Sandals::RungeKutta::error_step(...): "
 
-      using Eigen::last;
+      using Eigen::placeholders::last;
 
       SANDALS_ASSERT(t_mesh.size() > Integer(1),
                      CMD "expected at least two time meshes.");

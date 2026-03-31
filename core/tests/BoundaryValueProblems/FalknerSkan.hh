@@ -13,7 +13,7 @@
 #ifndef TESTS_PROBLEMS_FALKNERSKAN_HH
 #define TESTS_PROBLEMS_FALKNERSKAN_HH
 
-#include "Sandals/BoundaryValueProblem.hh"
+#include "Sandals/System/BoundaryValueProblem.hh"
 #include "Sandals/System/Explicit.hh"
 #include "Sandals/System/Implicit.hh"
 #include "Sandals/System/SemiExplicit.hh"
@@ -21,7 +21,6 @@
 using namespace Sandals;
 
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-//  - - - - - - - - - -
 
 template <typename Real = double>
 class FalknerSkanExplicit : public Explicit<Real, 3, 0> {
@@ -74,7 +73,6 @@ class FalknerSkanExplicit : public Explicit<Real, 3, 0> {
 };
 
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-//  - - - - - - - - - -
 
 template <typename Real = double>
 class FalknerSkanImplicit : public Implicit<Real, 3, 0> {
@@ -137,7 +135,6 @@ class FalknerSkanImplicit : public Implicit<Real, 3, 0> {
 };
 
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-//  - - - - - - - - - -
 
 template <typename Real = double>
 class FalknerSkanSemiExplicit : public SemiExplicit<Real, 3, 0> {
@@ -206,7 +203,6 @@ class FalknerSkanSemiExplicit : public SemiExplicit<Real, 3, 0> {
 };
 
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-//  - - - - - - - - - -
 
 template <typename Real, typename System, typename Integrator>
 class FalknerSkanProblem : public BoundaryValueProblem<Real, 3, 0, Integrator> {
@@ -282,6 +278,5 @@ class FalknerSkanProblem : public BoundaryValueProblem<Real, 3, 0, Integrator> {
 };
 
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-//  - - - - - - - - - -
 
 #endif  // TESTS_PROBLEMS_FALKNERSKAN_HH

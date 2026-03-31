@@ -13,7 +13,7 @@
 #ifndef TESTS_PROBLEMS_SHAMPINE1_HH
 #define TESTS_PROBLEMS_SHAMPINE1_HH
 
-#include "Sandals/BoundaryValueProblem.hh"
+#include "Sandals/System/BoundaryValueProblem.hh"
 #include "Sandals/System/Explicit.hh"
 #include "Sandals/System/Implicit.hh"
 #include "Sandals/System/SemiExplicit.hh"
@@ -21,7 +21,6 @@
 using namespace Sandals;
 
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-//  - - - - - - - - - -
 
 template <typename Real = double>
 class Shampine1Explicit : public Explicit<Real, 5, 0> {
@@ -77,7 +76,6 @@ class Shampine1Explicit : public Explicit<Real, 5, 0> {
 };
 
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-//  - - - - - - - - - -
 
 template <typename Real = double>
 class Shampine1Implicit : public Implicit<Real, 5, 0> {
@@ -145,7 +143,6 @@ class Shampine1Implicit : public Implicit<Real, 5, 0> {
 };
 
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-//  - - - - - - - - - -
 
 template <typename Real = double>
 class Shampine1SemiExplicit : public SemiExplicit<Real, 5, 0> {
@@ -218,7 +215,6 @@ class Shampine1SemiExplicit : public SemiExplicit<Real, 5, 0> {
 };
 
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-//  - - - - - - - - - -
 
 template <typename Real, typename System, typename Integrator>
 class Shampine1Problem : public BoundaryValueProblem<Real, 5, 0, Integrator> {
@@ -297,6 +293,5 @@ class Shampine1Problem : public BoundaryValueProblem<Real, 5, 0, Integrator> {
 };
 
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-//  - - - - - - - - - -
 
 #endif  // TESTS_PROBLEMS_SHAMPINE1_HH
