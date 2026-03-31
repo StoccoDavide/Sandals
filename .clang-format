@@ -1,0 +1,29 @@
+---
+BasedOnStyle: Chromium
+NamespaceIndentation: All
+TabWidth: '2'
+UseTab: Never
+PointerAlignment: Right
+AlignConsecutiveAssignments: Consecutive
+AlignOperands: Align
+AlignTrailingComments:
+  Kind: Always
+  OverEmptyLines: 2
+AllowShortBlocksOnASingleLine: Empty
+AllowShortEnumsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: Empty
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLambdasOnASingleLine: Empty
+AllowShortLoopsOnASingleLine: false
+EmptyLineBeforeAccessModifier: LogicalBlock
+IncludeBlocks: Regroup
+QualifierAlignment: Left
+AlignConsecutiveMacros: Consecutive
+AllowAllArgumentsOnNextLine: false
+AllowAllParametersOfDeclarationOnNextLine: false
+BinPackArguments: false
+BracedInitializerIndentWidth: 2
+ColumnLimit: 80
+FixNamespaceComments: true
+IndentAccessModifiers: false
+...
