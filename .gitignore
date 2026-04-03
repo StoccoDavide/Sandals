@@ -48,11 +48,8 @@
 *.mla
 *.bak
 
-# Fetched content
-third_party/
-
-# Xcode folder
-xcode/
+# Clang format
+.clang-format
 
 # Temporary files
 tmp/

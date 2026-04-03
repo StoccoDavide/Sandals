@@ -11,6 +11,11 @@
 #ifndef SANDALS_BOUNDARY_VALUE_PROBLEM_HH
 #define SANDALS_BOUNDARY_VALUE_PROBLEM_HH
 
+// Sparse linear algebra solvers
+#include <Eigen/SparseLU>
+#include <Eigen/SparseQR>
+
+// Sandals Runge-Kutta integrator
 #include <Sandals/RungeKutta.hh>
 
 namespace Sandals {
@@ -48,7 +53,7 @@ namespace Sandals {
     using ContinuationChoice = enum class ContinuationChoice : Integer {
       NONE   = 0,
       SIMPLE = 1
-    };                        /**< Continuation method choice. */
+    }; /**< Continuation method choice. */
 
     using System =
         Implicit<Real, N, M>; /**< Unique pointer to an ODE/DAE system. */
@@ -69,8 +74,8 @@ namespace Sandals {
     using MatrixJX = typename Integrator::MatrixJX;
     using VectorF  = typename Implicit<Real, N, M>::VectorF;
     using MatrixJF = typename Implicit<Real, N, M>::MatrixJF;
-    using MatrixN  = typename Solution<Real, N, M>::MatrixN;
-    using MatrixM  = typename Solution<Real, N, M>::MatrixM;
+    using VectorH  = typename Implicit<Real, N, M>::VectorH;
+    using MatrixJH = typename Implicit<Real, N, M>::MatrixJH;
 
    private:
     std::string m_name{"(undefined name)"}; /**< Name of the BVP. */
@@ -314,17 +319,24 @@ namespace Sandals {
      * \param[out] sol The solution of the system over the mesh of independent
      * variable.
      * \return True if the system is successfully solved, false otherwise.
+     * \warning Single shooting method is not recommended for stiff problems,
+     * as it may fail to converge. Nonetheless, invariants preservation is not
+     * implemented for the single shooting method.
      */
     bool single_shooting(const VectorX &t_mesh, const VectorF &ics) {
 #define CMD "Sandals::BoundaryValueProblem::single_shooting(...): "
 
-      using ShootingF  = Eigen::Matrix<Real, 2 * N, 1>;
-      using ShootingJF = Eigen::Matrix<Real, 2 * N, 2 * N>;
+      using VectorShooting = Eigen::Vector<Real, 2 * N>;
+      using MatrixShooting = Eigen::Matrix<Real, 2 * N, 2 * N>;
 
       // Temporary variables
       VectorF b, x_ini, x_end;
-      ShootingF x_sol, x_step, b_sys;
-      ShootingJF A_sys;
+
+      // Shooting method scheme
+      VectorShooting x_sol, x_step, b_sys;
+      MatrixShooting A_sys;
+
+      // Temporary variables
       const Integer local_intervals{std::max(1, this->m_subintervals)};
       const Integer num_intervals{static_cast<Integer>(t_mesh.size()) - 1};
       Integer idx_x_ini{0}, idx_x_end{num_intervals};
@@ -340,7 +352,9 @@ namespace Sandals {
                              "mesh accordingly.");
 
       // Prepare the linear system for the Newton step
-      A_sys.template block<N, N>(0, N).setIdentity();
+      for (Integer i{0}; i < N; ++i) {
+        A_sys.insert(i, i) = -1.0;
+      }
 
       // Initialize the guess and the solution
       x_sol << ics, ics;
@@ -348,7 +362,7 @@ namespace Sandals {
 
       // Solve the boundary value problem using a linearized Newton method
       MatrixJX Jx(MatrixJX::Identity());
-      Eigen::ColPivHouseholderQR<ShootingJF> qr;
+      Eigen::ColPivHouseholderQR<MatrixShooting> qr;
       for (Integer iter{0}; iter < this->m_max_iterations; ++iter) {
         /* Single shooting method scheme
                 [A_sys]          {x}  =       {b_sys}
@@ -390,8 +404,6 @@ namespace Sandals {
         }
 
         // Build the linear system
-        b_sys.template head<N>()         = x_end - x_sol.template tail<N>();
-        b_sys.template tail<N>()         = -b;
         A_sys.template block<N, N>(0, 0) = -Jx;
         if (this->m_integrator->reverse_mode()) {
           A_sys.template block<N, N>(N, N) = this->Jb_x_ini(x_ini, x_end);
@@ -400,8 +412,11 @@ namespace Sandals {
           A_sys.template block<N, N>(N, 0) = this->Jb_x_ini(x_ini, x_end);
           A_sys.template block<N, N>(N, N) = this->Jb_x_end(x_ini, x_end);
         }
+        b_sys.template head<N>() = x_end - x_sol.template tail<N>();
+        b_sys.template tail<N>() = -b;
 
         // Compute the solution of the linear system
+        A_sys.makeCompressed();
         qr.compute(A_sys);
         SANDALS_ASSERT(qr.rank() == qr.cols(),
                        CMD "singular Jacobian detected.");
@@ -427,8 +442,8 @@ namespace Sandals {
     bool multiple_shooting(const VectorX &t_mesh, const MatrixX &x_guess) {
 #define CMD "Sandals::BoundaryValueProblem::multiple_shooting(...): "
 
-      using DynVec = Eigen::Matrix<Real, Eigen::Dynamic, 1>;
-      using DynMat = Eigen::Matrix<Real, Eigen::Dynamic, Eigen::Dynamic>;
+      using VectorShooting = Eigen::Vector<Real, Eigen::Dynamic>;
+      using MatrixShooting = Eigen::SparseMatrix<Real>;
 
       // Check if the mesh and the guess have compatible sizes
       SANDALS_ASSERT(t_mesh.size() > 1,
@@ -443,6 +458,8 @@ namespace Sandals {
       const Integer local_intervals{std::max(1, this->m_subintervals)};
       const Integer c_size{num_intervals * N};
       const Integer x_size{(num_intervals + 1) * N};
+      const Integer h_size{(num_intervals + 1) * M};
+      const Real sqrt_sigma{std::sqrt(0.1)};
       Integer idx_x_ini{0}, idx_x_end{num_intervals};
       if (this->m_integrator->reverse_mode()) {
         idx_x_ini = num_intervals;
@@ -450,10 +467,14 @@ namespace Sandals {
       }
 
       // Prepare the linear system for the Newton step
-      DynVec b_sys(c_size + N);
-      DynMat A_sys(DynMat::Zero(x_size, x_size));
+      VectorShooting b_sys(c_size + h_size + N);
+      MatrixShooting A_sys(x_size + h_size, x_size);
+      A_sys.reserve(2 * N * N * num_intervals + 2 * N * N + N * M);
       for (Integer k{0}; k < num_intervals; ++k) {
-        A_sys.template block<N, N>(k * N, (k + 1) * N).setIdentity();
+        // A_sys.template block<N, N>(k * N, (k + 1) * N).setIdentity();
+        for (Integer i{0}; i < N; ++i) {
+          A_sys.insert(k * N + i, (k + 1) * N + i) = 1.0;
+        }
       }
 
       // Initialize the solution
@@ -469,7 +490,8 @@ namespace Sandals {
       VectorX t_local_mesh;
       Solution<Real, N, M> local_sol;
       MatrixJX Jx;
-      Eigen::ColPivHouseholderQR<DynMat> qr;
+      MatrixJH Jh;
+      Eigen::SparseQR<MatrixShooting, Eigen::COLAMDOrdering<Integer>> qr;
       for (Integer iter{0}; iter < this->m_max_iterations; ++iter) {
         /* Multiple shooting method scheme
                 [A_sys]                   {x}  =         {b_sys}
@@ -477,6 +499,10 @@ namespace Sandals {
          |       .        .           | |  :  |   |          :          |
          |          .        .        | | dx  | = |          :          |
          |             -Jx_n     I    | |  :  |   | x_ini_n+1 - x_sol_n |
+         |  σ½*Jh_0    0              | |  :  |   |      -σ^½*h_0       |
+         |       .        .           | |  :  |   |          :          |
+         |          .        .        | |  :  |   |          :          |
+         |         σ½*Jh_m       0    | |  :  |   |      -σ^½*h_m       |
          \ Jb_x_ini          Jb_x_end / \  :  /   \         -b         /
         */
 
@@ -492,6 +518,7 @@ namespace Sandals {
             SANDALS_ERROR(CMD "failed to integrate interval " << k << ".");
             return false;
           }
+
           // Store the local solution
           if (k == 0) {
             this->m_solution->x.col(0) = local_sol.x.col(0);
@@ -500,12 +527,40 @@ namespace Sandals {
           this->m_solution->x.col(k + 1) = local_sol.x.col(local_intervals);
           this->m_solution->h.col(k + 1) = local_sol.h.col(local_intervals);
 
+          // Compute the Jacobian of contraints manifold
+          if constexpr (M > 0) {
+            Jh = this->m_integrator->system()->Jh_x(
+                this->m_solution->x.col(k + 1),
+                t_mesh(k + 1));
+          }
+
           // Jacobian propagation for the current interval
-          A_sys.template block<N, N>(k * N, k * N) = -Jx;
+          // A_sys.template block<N, N>(k * N, k * N) = -Jx;
+          for (Integer i{0}; i < N; ++i) {
+            for (Integer j{0}; j < N; ++j) {
+              A_sys.coeffRef(k * N + i, k * N + j) = -Jx(i, j);
+            }
+          }
+
+          // Jacobian blocks for the constraints manifold
+          if constexpr (M > 0) {
+            for (Integer i{0}; i < M; ++i) {
+              for (Integer j{0}; j < N; ++j) {
+                A_sys.coeffRef(c_size + k * M + i, k * N + j) =
+                    sqrt_sigma * Jh(i, j);
+              }
+            }
+          }
 
           // Continuity residual for interior nodes
           b_sys.template segment<N>(k * N) =
               this->m_solution->x.col(k + 1) - x_sol.col(k + 1);
+
+          // Residual for the constraints manifold
+          if constexpr (M > 0) {
+            b_sys.template segment<M>(c_size + k * M) =
+                -sqrt_sigma * this->m_solution->h.col(k + 1);
+          }
         }
 
         // Update the boundary condition states
@@ -531,12 +586,21 @@ namespace Sandals {
         }
 
         // Update the boundary condition Jacobian blocks
-        A_sys.template block<N, N>(c_size, idx_x_ini * N) =
-            this->Jb_x_ini(x_ini, x_end);
-        A_sys.template block<N, N>(c_size, idx_x_end * N) =
-            this->Jb_x_end(x_ini, x_end);
+        // A_sys.template block<N, N>(c_size, idx_x_ini * N) =
+        //    this->Jb_x_ini(x_ini, x_end);
+        // A_sys.template block<N, N>(c_size, idx_x_end * N) =
+        //    this->Jb_x_end(x_ini, x_end);
+        auto Jb_x_ini(this->Jb_x_ini(x_ini, x_end));
+        auto Jb_x_end(this->Jb_x_end(x_ini, x_end));
+        for (Integer i{0}; i < N; ++i) {
+          for (Integer j{0}; j < N; ++j) {
+            A_sys.coeffRef(c_size + i, idx_x_ini * N + j) = Jb_x_ini(i, j);
+            A_sys.coeffRef(c_size + i, idx_x_end * N + j) = Jb_x_end(i, j);
+          }
+        }
 
         // Solve the linear system
+        A_sys.makeCompressed();
         qr.compute(A_sys);
         SANDALS_ASSERT(qr.rank() == qr.cols(),
                        CMD "singular linear system detected.");
@@ -554,11 +618,13 @@ namespace Sandals {
 
     /**
      * Solve the boundary value problem using a shooting method.
-     * \param[in] t_mesh Independent variable (or time) mesh \f$ \mathbf{t} \f$.
+     * \param[in] t_mesh Independent variable (or time) mesh \f$ \mathbf{t}
+     * \f$.
      * \param[in] ics Initial conditions \f$ \mathbf{x}(t = 0) \f$.
      * \param[in] x_guess Initial guess for the states at the mesh nodes (only
      * for multiple shooting).
-     * \tparam ShootingType Type of shooting method to use (single or multiple).
+     * \tparam ShootingType Type of shooting method to use (single or
+     * multiple).
      */
     template <ShootingChoice ShootingType = ShootingChoice::MULTIPLE>
     bool solve(const VectorX &t_mesh, const VectorF &ics, MatrixX &x_guess) {

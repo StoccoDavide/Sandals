@@ -45,7 +45,7 @@ namespace Sandals {
       IMPLICIT     = 0,
       EXPLICIT     = 1,
       SEMIEXPLICIT = 1
-    };                                          /**< System type enumeration. */
+    }; /**< System type enumeration. */
     using Pointer =
         std::unique_ptr<Implicit<Real, N, M>>;  /**< Unique pointer to an
                                                    implicit ODE system. */
@@ -354,13 +354,13 @@ namespace Sandals {
 
     inline static const FunctionH DefaultH = [](const VectorF &, const Real) {
       return VectorH::Zero();
-    };                          /**< Default mass matrix function. */
+    }; /**< Default mass matrix function. */
     inline static const FunctionJH DefaultJH = [](const VectorF &, const Real) {
       return MatrixJH::Zero();
-    };                          /**< Default system matrix function. */
+    }; /**< Default system matrix function. */
     inline static const FunctionID DefaultID = [](const VectorF &, const Real) {
       return true;
-    };                          /**< Default in-domain function. */
+    }; /**< Default in-domain function. */
 
    private:
     FunctionF m_F{nullptr};     /**< Implicit ODE system function. */

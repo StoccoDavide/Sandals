@@ -21,10 +21,3 @@ add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/optimist)
 if (SANDALS_BUILD_TESTS)
   add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/googletest)
 endif()
-
-# ROOT
-if (SANDALS_ENABLE_PLOTTING)
-  find_package(ROOT REQUIRED COMPONENTS Core Gpad)
-  include_directories(${ROOT_INCLUDE_DIRS})
-  link_directories(${ROOT_LIBRARY_DIRS})
-endif()

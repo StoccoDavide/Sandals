@@ -44,6 +44,19 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/external)
 add_library(Sandals INTERFACE)
 add_library(Sandals::Sandals ALIAS Sandals)
 
+# ROOT
+if (SANDALS_ENABLE_PLOTTING)
+  set(ROOT_REQUIRED_COMPONENTS Core Gpad)
+  find_package(ROOT REQUIRED COMPONENTS ${ROOT_REQUIRED_COMPONENTS})
+  if(NOT TARGET ROOT::Core OR NOT TARGET ROOT::Gpad)
+    message(FATAL_ERROR "Sandals: ROOT libraries not found.")
+  endif()
+else()
+  add_library(ROOT::Core INTERFACE IMPORTED)
+  add_library(ROOT::Gpad INTERFACE IMPORTED)
+  message(STATUS "Sandals: Plotting disabled, skipping ROOT dependency.")
+endif()
+
 target_link_libraries(Sandals INTERFACE Eigen3::Eigen Optimist::Optimist)
 
 target_include_directories(Sandals INTERFACE

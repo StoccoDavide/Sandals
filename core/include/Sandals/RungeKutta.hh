@@ -846,7 +846,7 @@ namespace Sandals {
      * Get projection mode.
      * \return The projection mode.
      */
-    bool projection() {
+    bool projection_mode() {
       return this->m_projection;
     }
 
@@ -854,7 +854,7 @@ namespace Sandals {
      * Set the projection mode.
      * \param[in] t_projection The projection mode.
      */
-    void projection(bool t_projection) {
+    void projection_mode(bool t_projection) {
       this->m_projection = t_projection;
     }
 
@@ -2719,41 +2719,23 @@ namespace Sandals {
                            MatrixJX &Jx) const {
 #define CMD "Sandals::RungeKutta::project_propagate(...): "
 
-      // Check if there are any constraints
+      Jx.setIdentity();
       if constexpr (M > 0) {
-        /* Standard projection method
-              [A]             {x}      =  {b}
-          / I  Jh_x^T \ / dx_proj/d_x \   / I \
-          |           | |             | = |   |
-          \ Jh_x    0 / \ dlambda/dx  /   \ 0 /
-        */
-
-        // Evaluate the invariants vector and its Jacobian
-        MatrixM Jh_x(this->m_system->Jh_x(x_projected, t));
-
-        // Build the left-hand side matrix
-        MatrixP A;
-        A.template block<N, N>(0, 0).setIdentity();
-        A.template block<N, M>(0, N) = Jh_x.transpose();
-        A.template block<M, N>(N, 0) = Jh_x;
-        A.template block<M, M>(N, N).setZero();
-
-        // Build the right-hand side matrix
-        VectorP b;
-        b.template block<N, N>(0, 0).setIdentity();
-        b.template block<M, N>(N, 0).setZero();
-
-        // Compute the solution of the linear system
-        this->m_lu.compute(A);
-        SANDALS_ASSERT(this->m_lu.rank() == N + M,
-                       CMD "singular Jacobian detected.");
-        Jx = this->m_lu.solve(Jx).template block<N, N>(0, 0);
-
-        return Jx.allFinite();
-      } else {
-        Jx.setIdentity();
-        return true;
+        (void)x_projected;
+        (void)t;
+        (void)Jx;
+        // MatrixM Jh = this->m_system->Jh_x(x_projected, t);
+        //  auto Q     = Jh.qr().Q();
+        //  Jx *= (Eigen::Matrix<Real, N, N>::Identity() - Q * Q.transpose());
+        if (!Jx.allFinite()) {
+          SANDALS_WARNING(CMD "in " << this->m_tableau.name
+                                    << " solver, at t = " << t
+                                    << ", projection Jacobian contains "
+                                    << "non-finite values.");
+          return false;
+        }
       }
+      return true;
 
 #undef CMD
     }

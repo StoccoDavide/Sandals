@@ -124,8 +124,8 @@ namespace Sandals {
      */
     void conservative_resize(const Integer size) {
       this->t.conservativeResize(size);
-      this->x.conservativeResize(Eigen::NoChange, size);
-      this->h.conservativeResize(Eigen::NoChange, size);
+      // this->x.conservativeResize(Eigen::NoChange, size);
+      // this->h.conservativeResize(Eigen::NoChange, size);
     }
 
     /**
