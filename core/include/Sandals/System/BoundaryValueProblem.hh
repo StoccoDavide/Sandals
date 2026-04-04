@@ -349,6 +349,9 @@ namespace Sandals {
       using VectorShooting = Eigen::Vector<Real, 2 * N>;
       using MatrixShooting = Eigen::Matrix<Real, 2 * N, 2 * N>;
 
+      // Disable adaptive time-stepping
+      this->m_integrator->disable_adaptive_mode();
+
       // Temporary variables
       VectorF b, x_ini, x_end;
 
@@ -472,6 +475,9 @@ namespace Sandals {
                      CMD
                      "incompatible sizes between time mesh and states guess.");
 
+      // Disable adaptive time-stepping
+      this->m_integrator->disable_adaptive_mode();
+
       // Temporary variables
       VectorF x_ini, x_end;
       const Integer num_intervals{static_cast<Integer>(t_mesh.size()) - 1};
@@ -510,10 +516,6 @@ namespace Sandals {
       triplets.reserve(c_size * (N + 1) + h_size * N + 2 * N * N);
       for (Integer iter{0}; iter < this->m_max_iterations; ++iter) {
         /* Multiple shooting method scheme
-        Jx_i R^NxN          I R^NxN
-        Jb_x_ini R^NxN     Jb_x_end R^NxN
-        Jh_i R^MxN
-        A_sys R^(num_intervals*N + h_size + N) x (num_intervals+1)*N
                 [A_sys]                   {x}  =         {b_sys}
          /   -Jx_1     I              \           /  x_ini_2 - x_sol_1  \
          |       .        .           |           |          :          |
@@ -554,10 +556,8 @@ namespace Sandals {
 
           // Jacobian propagation for the current interval
           for (Integer i{0}; i < N; ++i) {
-            // A_sys.coeffRef(k * N + i, (k + 1) * N + i) = 1.0;
             triplets.emplace_back(k * N + i, (k + 1) * N + i, 1.0);
             for (Integer j{0}; j < N; ++j) {
-              // A_sys.coeffRef(k * N + i, k * N + j) = -Jx(i, j);
               triplets.emplace_back(k * N + i, k * N + j, -Jx(i, j));
             }
           }
@@ -575,8 +575,6 @@ namespace Sandals {
               // Insert the Jacobian in the linear system
               for (Integer i{0}; i < M; ++i) {
                 for (Integer j{0}; j < N; ++j) {
-                  // A_sys.coeffRef(c_size + k * M + i, k * N + j) =
-                  //     sqrt_sigma * Jh(i, j);
                   triplets.emplace_back(c_size + k * M + i,
                                         k * N + j,
                                         sqrt_sigma * Jh(i, j));
@@ -617,13 +615,9 @@ namespace Sandals {
         MatrixJX Jb_x_end(this->Jb_x_end(x_ini, x_end));
         for (Integer i{0}; i < N; ++i) {
           for (Integer j{0}; j < N; ++j) {
-            // A_sys.coeffRef(c_size + h_size + i, idx_x_ini * N + j) =
-            //     Jb_x_ini(i, j);
             triplets.emplace_back(c_size + h_size + i,
                                   idx_x_ini * N + j,
                                   Jb_x_ini(i, j));
-            // A_sys.coeffRef(c_size + h_size + i, idx_x_end * N + j) =
-            //     Jb_x_end(i, j);
             triplets.emplace_back(c_size + h_size + i,
                                   idx_x_end * N + j,
                                   Jb_x_end(i, j));
@@ -634,9 +628,8 @@ namespace Sandals {
         A_sys.setFromTriplets(triplets.begin(), triplets.end());
         A_sys.makeCompressed();
         qr.compute(A_sys);
-        // SANDALS_ASSERT(qr.rank() == qr.cols(),
-        //                CMD "singular linear system detected (rank = "
-        //                    << qr.rank() << " ≠ " << qr.cols() << ").");
+        SANDALS_ASSERT(qr.info() == Eigen::Success,
+                       CMD "failed to factorize the linear system.");
 
         // Update the solution
         delta_x_sol = qr.solve(b_sys).reshaped(N, num_intervals + 1);

@@ -2607,9 +2607,8 @@ namespace Sandals {
           SANDALS_WARNING(CMD "maximum number of iterations reached.");
         }
         return false;
-      } else {
-        return true;
       }
+      return true;
 
 #undef CMD
     }
@@ -2707,7 +2706,7 @@ namespace Sandals {
      * projection is evaluated.
      * \param[in] t The independent variable (or time) \f$ t \f$ at which the
      * states are evaluated.
-     * \param[out] Jx The derivative of the projected states \f$
+     * \param[out] Jx_projection The derivative of the projected states \f$
      * \tilde{\mathbf{x}} \f$ with respect to the unprojected states \f$
      * \mathbf{x} \f$.
      * \return True if the propagation is successfully computed, false
@@ -2715,15 +2714,15 @@ namespace Sandals {
      */
     bool project_propagate(const VectorN &x_projected,
                            const Real t,
-                           MatrixJX &Jx) const {
+                           MatrixJX &Jx_projection) const {
 #define CMD "Sandals::RungeKutta::project_propagate(...): "
 
       if constexpr (M > 0) {
         using MatrixNM = Eigen::Matrix<Real, N, M>;
         MatrixNM JhT(this->m_system->Jh_x(x_projected, t).transpose());
         Eigen::FullPivHouseholderQR<MatrixNM> qr(JhT);
-        MatrixJX Jx_projection(MatrixJX::Identity() -
-                               qr.matrixQ() * qr.matrixQ().transpose());
+        Jx_projection =
+            MatrixJX::Identity() - qr.matrixQ() * qr.matrixQ().transpose();
         if (!Jx_projection.allFinite()) {
           SANDALS_WARNING(CMD "in " << this->m_tableau.name
                                     << " solver, at t = " << t
@@ -2750,7 +2749,8 @@ namespace Sandals {
                                      << err << " > " << CBRT_EPSILON << ".");
         }
 #endif
-        Jx = Jx_projection * Jx;
+      } else {
+        Jx_projection.setIdentity();
       }
       return true;
 #undef CMD

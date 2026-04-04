@@ -91,16 +91,16 @@ int main(int argc, char **argv) {
   problem_index_0.tolerance(1.0e-8);
 
   // Set solver maximum number of iterations
-  problem_index_3.max_iterations(300);
-  problem_index_0.max_iterations(300);
+  problem_index_3.max_iterations(30);
+  problem_index_0.max_iterations(30);
 
   // Set solution parameters
-  constexpr Integer num_subintervals{2};
+  constexpr Integer num_subintervals{1};
   problem_index_3.subintervals(num_subintervals);
   problem_index_0.subintervals(num_subintervals);
 
   // Set time mesh
-  constexpr Integer num_points{100};
+  constexpr Integer num_points{300};
   Eigen::Vector<Real, Eigen::Dynamic> time(
       Eigen::Vector<Real, Eigen::Dynamic>::LinSpaced(
           num_points,
@@ -111,9 +111,10 @@ int main(int argc, char **argv) {
   Eigen::Matrix<Real, N, Eigen::Dynamic> guess(problem_index_3.guess(time));
 
   // Solve the problems with shooting
+  problem_index_3.sigma(1.0);
+  problem_index_0.sigma(1.0);
   problem_index_3.multiple_shooting(time, guess);
-  // problem_index_0.sigma(1.0);
-  // problem_index_0.multiple_shooting(time, guess);
+  problem_index_0.multiple_shooting(time, guess);
 
 #ifdef SANDALS_ENABLE_PLOTTING
   auto sol_index_3 = problem_index_3.solution();
@@ -125,20 +126,27 @@ int main(int argc, char **argv) {
   canvas->Divide(2, 1);
 
   canvas->cd(1);
-  TGraph *graph_x = to_TGraph(sol_index_3.t, sol_index_3.eigen_x(0));
-  graph_x->SetLineColor(colors[0]);
-  graph_x->Draw("AL");
-  graph_x->GetXaxis()->SetTitle("t");
-  graph_x->GetYaxis()->SetTitle("x");
-  graph_x->GetXaxis()->SetLimits(time.minCoeff(), time.maxCoeff());
+  TGraph *graph_x_3 = to_TGraph(sol_index_3.t, sol_index_3.eigen_x(0));
+  TGraph *graph_x_0 = to_TGraph(sol_index_0.t, sol_index_0.eigen_x(0));
+  graph_x_3->SetLineColor(colors[0]);
+  graph_x_3->Draw("AL");
+  graph_x_3->GetXaxis()->SetTitle("t");
+  graph_x_3->GetYaxis()->SetTitle("x");
+  graph_x_0->SetLineColor(colors[1]);
+  graph_x_0->Draw("L SAME");
+  graph_x_0->GetXaxis()->SetLimits(time.minCoeff(), time.maxCoeff());
 
   canvas->cd(2);
-  TGraph *graph_f = to_TGraph(sol_index_3.t, sol_index_3.eigen_x(4));
-  graph_f->SetLineColor(colors[1]);
-  graph_f->Draw("AL");
-  graph_f->GetXaxis()->SetTitle("t");
-  graph_f->GetYaxis()->SetTitle("f");
-  graph_f->GetXaxis()->SetLimits(time.minCoeff(), time.maxCoeff());
+  TGraph *graph_f_3 = to_TGraph(sol_index_3.t, sol_index_3.eigen_x(4));
+  TGraph *graph_f_0 = to_TGraph(sol_index_0.t, sol_index_0.eigen_x(4));
+  graph_f_3->SetLineColor(colors[1]);
+  graph_f_3->Draw("AL");
+  graph_f_0->SetLineColor(colors[0]);
+  graph_f_0->Draw("L SAME");
+  graph_f_3->GetXaxis()->SetTitle("t");
+  graph_f_3->GetYaxis()->SetTitle("f");
+  graph_f_3->GetXaxis()->SetLimits(time.minCoeff(), time.maxCoeff());
+  graph_f_0->GetXaxis()->SetLimits(time.minCoeff(), time.maxCoeff());
 
   canvas->Update();
   app.Run();
