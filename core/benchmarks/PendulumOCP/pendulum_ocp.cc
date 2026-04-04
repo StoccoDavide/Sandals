@@ -12,6 +12,7 @@
 
 #include "PendulumOCP.hh"
 #include "Sandals.hh"
+#include "Sandals/RungeKutta/RK4.hh"
 #include "Sandals/RungeKutta/RadauIIA5.hh"
 
 #ifdef SANDALS_ENABLE_PLOTTING
@@ -90,11 +91,11 @@ int main(int argc, char **argv) {
   problem_index_0.tolerance(1.0e-8);
 
   // Set solver maximum number of iterations
-  problem_index_3.max_iterations(100);
-  problem_index_0.max_iterations(100);
+  problem_index_3.max_iterations(300);
+  problem_index_0.max_iterations(300);
 
   // Set solution parameters
-  constexpr Integer num_subintervals{1};
+  constexpr Integer num_subintervals{2};
   problem_index_3.subintervals(num_subintervals);
   problem_index_0.subintervals(num_subintervals);
 
@@ -110,8 +111,9 @@ int main(int argc, char **argv) {
   Eigen::Matrix<Real, N, Eigen::Dynamic> guess(problem_index_3.guess(time));
 
   // Solve the problems with shooting
-  // problem_index_3.multiple_shooting(time, guess);
-  problem_index_0.multiple_shooting(time, guess);
+  problem_index_3.multiple_shooting(time, guess);
+  // problem_index_0.sigma(1.0);
+  // problem_index_0.multiple_shooting(time, guess);
 
 #ifdef SANDALS_ENABLE_PLOTTING
   auto sol_index_3 = problem_index_3.solution();
@@ -120,15 +122,23 @@ int main(int argc, char **argv) {
   auto colors = matlab_lines_colormap();
 
   TCanvas *canvas = new TCanvas("canvas", "Solution Comparison", 1200, 400);
-  canvas->Divide(1, 1);
+  canvas->Divide(2, 1);
 
   canvas->cd(1);
-  TGraph *graph_i = to_TGraph(sol_index_0.t, sol_index_0.eigen_x(0));
-  graph_i->SetLineColor(colors[0]);
-  graph_i->Draw("AL");
-  graph_i->GetXaxis()->SetTitle("t");
-  graph_i->GetYaxis()->SetTitle("x_1");
-  graph_i->GetXaxis()->SetLimits(time.minCoeff(), time.maxCoeff());
+  TGraph *graph_x = to_TGraph(sol_index_3.t, sol_index_3.eigen_x(0));
+  graph_x->SetLineColor(colors[0]);
+  graph_x->Draw("AL");
+  graph_x->GetXaxis()->SetTitle("t");
+  graph_x->GetYaxis()->SetTitle("x");
+  graph_x->GetXaxis()->SetLimits(time.minCoeff(), time.maxCoeff());
+
+  canvas->cd(2);
+  TGraph *graph_f = to_TGraph(sol_index_3.t, sol_index_3.eigen_x(4));
+  graph_f->SetLineColor(colors[1]);
+  graph_f->Draw("AL");
+  graph_f->GetXaxis()->SetTitle("t");
+  graph_f->GetYaxis()->SetTitle("f");
+  graph_f->GetXaxis()->SetLimits(time.minCoeff(), time.maxCoeff());
 
   canvas->Update();
   app.Run();

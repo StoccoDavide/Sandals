@@ -18,6 +18,6 @@ endif()
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/optimist)
 
 # GoogleTest
-if (SANDALS_BUILD_TESTS)
+if (SANDALS_BUILD_TESTS OR SANDALS_BUILD_BENCHMARKS)
   add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/googletest)
 endif()

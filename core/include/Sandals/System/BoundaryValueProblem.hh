@@ -84,6 +84,8 @@ namespace Sandals {
 
     bool m_verbose{false};                  /**< Verbose mode boolean. */
     Real m_tolerance{std::sqrt(EPSILON)};   /**< Tolerance for the solution. */
+    Real m_sigma{0.01}; /**< Invariants manifold weight for the multiple
+                           shooting method. */
     Integer m_max_iterations{100}; /**< Maximum number of iterations. */
     Integer m_subintervals{
       1}; /**< Number of subintervals for the shooting methods. */
@@ -236,6 +238,24 @@ namespace Sandals {
     }
 
     /**
+     * Get the weight \f$ \sigma \f$ of the invariants manifold for the multiple
+     * shooting method.
+     * \return The weight \f$ \sigma \f$.
+     */
+    Real sigma() {
+      return this->m_sigma;
+    }
+
+    /**
+     * Set the weight \f$ \sigma \f$ of the invariants manifold for the multiple
+     * \param[in] t_sigma The weight \f$ \sigma \f$ of the invariants manifold
+     * for the multiple shooting method.
+     */
+    void sigma(const Real t_sigma) {
+      this->m_sigma = t_sigma;
+    }
+
+    /**
      * Get the maximum number of iterations.
      * \return The maximum number of iterations.
      */
@@ -362,7 +382,7 @@ namespace Sandals {
 
       // Solve the boundary value problem using a linearized Newton method
       MatrixJX Jx(MatrixJX::Identity());
-      Eigen::ColPivHouseholderQR<MatrixShooting> qr;
+      Eigen::FullPivHouseholderQR<MatrixShooting> qr;
       for (Integer iter{0}; iter < this->m_max_iterations; ++iter) {
         /* Single shooting method scheme
                 [A_sys]          {x}  =       {b_sys}
@@ -458,8 +478,9 @@ namespace Sandals {
       const Integer local_intervals{std::max(1, this->m_subintervals)};
       const Integer c_size{num_intervals * N};
       const Integer x_size{(num_intervals + 1) * N};
-      const Integer h_size{(num_intervals + 1) * M};
-      const Real sqrt_sigma{std::sqrt(0.1)};
+      const Integer h_size{
+        this->m_integrator->projection_mode() ? (num_intervals + 1) * M : 0};
+      const Real sqrt_sigma{std::sqrt(this->m_sigma)};
       Integer idx_x_ini{0}, idx_x_end{num_intervals};
       if (this->m_integrator->reverse_mode()) {
         idx_x_ini = num_intervals;
@@ -469,22 +490,15 @@ namespace Sandals {
       // Prepare the linear system for the Newton step
       VectorShooting b_sys(c_size + h_size + N);
       MatrixShooting A_sys(x_size + h_size, x_size);
-      A_sys.reserve(2 * N * N * num_intervals + 2 * N * N + N * M);
-      for (Integer k{0}; k < num_intervals; ++k) {
-        // A_sys.template block<N, N>(k * N, (k + 1) * N).setIdentity();
-        for (Integer i{0}; i < N; ++i) {
-          A_sys.insert(k * N + i, (k + 1) * N + i) = 1.0;
-        }
-      }
+      A_sys.reserve(c_size * (N + 1) + h_size * N + 2 * N * N);
 
       // Initialize the solution
       this->m_solution->clear();
       this->m_solution->resize(t_mesh.size());
       this->m_solution->t = t_mesh;
-      this->m_solution->h.setZero();
 
       // Initial guess for the states as the guess at the mesh nodes
-      MatrixX x_sol(x_guess);
+      MatrixX x_sol(x_guess), delta_x_sol(x_guess);
 
       // Solve the boundary value problem using a linearized Newton method
       VectorX t_local_mesh;
@@ -492,19 +506,30 @@ namespace Sandals {
       MatrixJX Jx;
       MatrixJH Jh;
       Eigen::SparseQR<MatrixShooting, Eigen::COLAMDOrdering<Integer>> qr;
+      std::vector<Eigen::Triplet<Real>> triplets;
+      triplets.reserve(c_size * (N + 1) + h_size * N + 2 * N * N);
       for (Integer iter{0}; iter < this->m_max_iterations; ++iter) {
         /* Multiple shooting method scheme
+        Jx_i R^NxN          I R^NxN
+        Jb_x_ini R^NxN     Jb_x_end R^NxN
+        Jh_i R^MxN
+        A_sys R^(num_intervals*N + h_size + N) x (num_intervals+1)*N
                 [A_sys]                   {x}  =         {b_sys}
-         /   -Jx_1     I              \ /  :  \   /  x_ini_2 - x_sol_1  \
-         |       .        .           | |  :  |   |          :          |
-         |          .        .        | | dx  | = |          :          |
+         /   -Jx_1     I              \           /  x_ini_2 - x_sol_1  \
+         |       .        .           |           |          :          |
+         |          .        .        | /  :  \ = |          :          |
          |             -Jx_n     I    | |  :  |   | x_ini_n+1 - x_sol_n |
-         |  σ½*Jh_0    0              | |  :  |   |      -σ^½*h_0       |
+         |  σ½*Jh_0    0              | | dx  |   |      -σ^½*h_0       |
          |       .        .           | |  :  |   |          :          |
-         |          .        .        | |  :  |   |          :          |
-         |         σ½*Jh_m       0    | |  :  |   |      -σ^½*h_m       |
-         \ Jb_x_ini          Jb_x_end / \  :  /   \         -b         /
+         |          .        .        | \  :  /   |          :          |
+         |         σ½*Jh_m       0    |           |     -σ^½*h_m        |
+         \ Jb_x_ini          Jb_x_end /           \         -b          /
         */
+
+        // Reset the linear system
+        triplets.clear();
+        A_sys.setZero();
+        b_sys.setZero();
 
         // Integrate each interval with the local mesh
         for (Integer k{0}; k < num_intervals; ++k) {
@@ -527,28 +552,13 @@ namespace Sandals {
           this->m_solution->x.col(k + 1) = local_sol.x.col(local_intervals);
           this->m_solution->h.col(k + 1) = local_sol.h.col(local_intervals);
 
-          // Compute the Jacobian of contraints manifold
-          if constexpr (M > 0) {
-            Jh = this->m_integrator->system()->Jh_x(
-                this->m_solution->x.col(k + 1),
-                t_mesh(k + 1));
-          }
-
           // Jacobian propagation for the current interval
-          // A_sys.template block<N, N>(k * N, k * N) = -Jx;
           for (Integer i{0}; i < N; ++i) {
+            // A_sys.coeffRef(k * N + i, (k + 1) * N + i) = 1.0;
+            triplets.emplace_back(k * N + i, (k + 1) * N + i, 1.0);
             for (Integer j{0}; j < N; ++j) {
-              A_sys.coeffRef(k * N + i, k * N + j) = -Jx(i, j);
-            }
-          }
-
-          // Jacobian blocks for the constraints manifold
-          if constexpr (M > 0) {
-            for (Integer i{0}; i < M; ++i) {
-              for (Integer j{0}; j < N; ++j) {
-                A_sys.coeffRef(c_size + k * M + i, k * N + j) =
-                    sqrt_sigma * Jh(i, j);
-              }
+              // A_sys.coeffRef(k * N + i, k * N + j) = -Jx(i, j);
+              triplets.emplace_back(k * N + i, k * N + j, -Jx(i, j));
             }
           }
 
@@ -556,10 +566,27 @@ namespace Sandals {
           b_sys.template segment<N>(k * N) =
               this->m_solution->x.col(k + 1) - x_sol.col(k + 1);
 
-          // Residual for the constraints manifold
+          // Compute the Jacobian of contraints manifold
           if constexpr (M > 0) {
-            b_sys.template segment<M>(c_size + k * M) =
-                -sqrt_sigma * this->m_solution->h.col(k + 1);
+            if (!this->m_integrator->projection_mode()) {
+              Jh = this->m_integrator->system()->Jh_x(
+                  this->m_solution->x.col(k + 1),
+                  t_mesh(k + 1));
+              // Insert the Jacobian in the linear system
+              for (Integer i{0}; i < M; ++i) {
+                for (Integer j{0}; j < N; ++j) {
+                  // A_sys.coeffRef(c_size + k * M + i, k * N + j) =
+                  //     sqrt_sigma * Jh(i, j);
+                  triplets.emplace_back(c_size + k * M + i,
+                                        k * N + j,
+                                        sqrt_sigma * Jh(i, j));
+                }
+              }
+
+              // Residual for the constraints manifold
+              b_sys.template segment<M>(c_size + k * M) =
+                  -sqrt_sigma * this->m_solution->h.col(k + 1);
+            }
           }
         }
 
@@ -581,30 +608,46 @@ namespace Sandals {
         }
 
         // Check convergence
-        if (b_sys.norm() < this->m_tolerance) {
+        if (b_sys.norm() < this->m_tolerance * this->m_tolerance) {
           return true;
         }
 
         // Update the boundary condition Jacobian blocks
-        // A_sys.template block<N, N>(c_size, idx_x_ini * N) =
-        //    this->Jb_x_ini(x_ini, x_end);
-        // A_sys.template block<N, N>(c_size, idx_x_end * N) =
-        //    this->Jb_x_end(x_ini, x_end);
-        auto Jb_x_ini(this->Jb_x_ini(x_ini, x_end));
-        auto Jb_x_end(this->Jb_x_end(x_ini, x_end));
+        MatrixJX Jb_x_ini(this->Jb_x_ini(x_ini, x_end));
+        MatrixJX Jb_x_end(this->Jb_x_end(x_ini, x_end));
         for (Integer i{0}; i < N; ++i) {
           for (Integer j{0}; j < N; ++j) {
-            A_sys.coeffRef(c_size + i, idx_x_ini * N + j) = Jb_x_ini(i, j);
-            A_sys.coeffRef(c_size + i, idx_x_end * N + j) = Jb_x_end(i, j);
+            // A_sys.coeffRef(c_size + h_size + i, idx_x_ini * N + j) =
+            //     Jb_x_ini(i, j);
+            triplets.emplace_back(c_size + h_size + i,
+                                  idx_x_ini * N + j,
+                                  Jb_x_ini(i, j));
+            // A_sys.coeffRef(c_size + h_size + i, idx_x_end * N + j) =
+            //     Jb_x_end(i, j);
+            triplets.emplace_back(c_size + h_size + i,
+                                  idx_x_end * N + j,
+                                  Jb_x_end(i, j));
           }
         }
 
         // Solve the linear system
+        A_sys.setFromTriplets(triplets.begin(), triplets.end());
         A_sys.makeCompressed();
         qr.compute(A_sys);
-        SANDALS_ASSERT(qr.rank() == qr.cols(),
-                       CMD "singular linear system detected.");
-        x_sol += qr.solve(b_sys).reshaped(N, num_intervals + 1);
+        // SANDALS_ASSERT(qr.rank() == qr.cols(),
+        //                CMD "singular linear system detected (rank = "
+        //                    << qr.rank() << " ≠ " << qr.cols() << ").");
+
+        // Update the solution
+        delta_x_sol = qr.solve(b_sys).reshaped(N, num_intervals + 1);
+        if (!delta_x_sol.allFinite()) {
+          SANDALS_ERROR(CMD "invalid solution of the linear system.");
+          return false;
+        } else if (delta_x_sol.norm() < this->m_tolerance * this->m_tolerance) {
+          SANDALS_WARNING(CMD "small update step, possible convergence.");
+          return false;
+        }
+        x_sol += delta_x_sol;
       }
 
       // If the loop completes without returning, indicate failure

@@ -1079,7 +1079,6 @@ namespace Sandals {
         // Compute the node
         x_node = x + K(all, seqN(0, i)) *
                          this->m_tableau.A(i, seqN(0, i)).transpose();
-        (void)K;
 
         // Compute the Jacobian of f with respect to x at the node
         if (this->m_reverse) {
@@ -1126,7 +1125,7 @@ namespace Sandals {
       if (Optimist::FiniteDifferences::Jacobian(fun, x, Jx_fd)) {
         Real err{(Jx - Jx_fd).norm()};
         SANDALS_ASSERT_WARNING(err < CBRT_EPSILON,
-                               CMD "Jacobian propagation error = "
+                               CMD "ERK Jacobian propagation error = "
                                    << err << " > " << CBRT_EPSILON << ".");
       }
 #endif
@@ -1394,7 +1393,7 @@ namespace Sandals {
       if (Optimist::FiniteDifferences::Jacobian(fun, x, Jx_fd)) {
         Real err{(Jx - Jx_fd).norm()};
         SANDALS_ASSERT_WARNING(err < CBRT_EPSILON,
-                               CMD "Jacobian propagation error = "
+                               CMD "ERK Jacobian propagation error = "
                                    << err << " > " << CBRT_EPSILON << ".");
       }
 #endif
@@ -1711,7 +1710,7 @@ namespace Sandals {
       if (Optimist::FiniteDifferences::Jacobian(fun, x, Jx_fd)) {
         Real err{(Jx - Jx_fd).norm()};
         SANDALS_ASSERT_WARNING(err < CBRT_EPSILON,
-                               CMD "Jacobian propagation error = "
+                               CMD "IRK Jacobian propagation error = "
                                    << err << " > " << CBRT_EPSILON << ".");
       }
 #endif
@@ -1992,7 +1991,7 @@ namespace Sandals {
       if (Optimist::FiniteDifferences::Jacobian(fun, x, Jx_fd)) {
         Real err{(Jx - Jx_fd).norm()};
         SANDALS_ASSERT_WARNING(err < CBRT_EPSILON,
-                               CMD "Jacobian propagation error = "
+                               CMD "DIRK Jacobian propagation error = "
                                    << err << " > " << CBRT_EPSILON << ".");
       }
 #endif
@@ -2719,24 +2718,41 @@ namespace Sandals {
                            MatrixJX &Jx) const {
 #define CMD "Sandals::RungeKutta::project_propagate(...): "
 
-      Jx.setIdentity();
       if constexpr (M > 0) {
-        (void)x_projected;
-        (void)t;
-        (void)Jx;
-        // MatrixM Jh = this->m_system->Jh_x(x_projected, t);
-        //  auto Q     = Jh.qr().Q();
-        //  Jx *= (Eigen::Matrix<Real, N, N>::Identity() - Q * Q.transpose());
-        if (!Jx.allFinite()) {
+        using MatrixNM = Eigen::Matrix<Real, N, M>;
+        MatrixNM JhT(this->m_system->Jh_x(x_projected, t).transpose());
+        Eigen::FullPivHouseholderQR<MatrixNM> qr(JhT);
+        MatrixJX Jx_projection(MatrixJX::Identity() -
+                               qr.matrixQ() * qr.matrixQ().transpose());
+        if (!Jx_projection.allFinite()) {
           SANDALS_WARNING(CMD "in " << this->m_tableau.name
                                     << " solver, at t = " << t
                                     << ", projection Jacobian contains "
                                     << "non-finite values.");
           return false;
         }
+#ifdef SANDALS_CHECK_JACOBIANS
+        // Function for the finite differences
+        auto fun = [this, t](const VectorN &x) {
+          VectorN x_fd;
+          this->project(x, t, x_fd);
+          return x_fd;
+        };
+
+        // Compute the Jacobian with finite differences
+        MatrixJX Jx_projection_fd;
+        if (Optimist::FiniteDifferences::Jacobian(fun,
+                                                  x_projected,
+                                                  Jx_projection_fd)) {
+          Real err{(Jx_projection - Jx_projection_fd).norm()};
+          SANDALS_ASSERT_WARNING(err < CBRT_EPSILON,
+                                 CMD "projection Jacobian propagation error = "
+                                     << err << " > " << CBRT_EPSILON << ".");
+        }
+#endif
+        Jx = Jx_projection * Jx;
       }
       return true;
-
 #undef CMD
     }
 
@@ -2819,8 +2835,8 @@ namespace Sandals {
       // Retrieve the error and step vectors
       this->error_step(t_mesh, ics, sol, h_vec, e_vec);
 
-      // Perform a linear regression in the log-log space to estimate the order
-      // of the method
+      // Perform a linear regression in the log-log space to estimate the
+      // order of the method
       VectorX A(h_vec.array().log());
       VectorX b(e_vec.array().log());
       return ((A.transpose() * A).ldlt().solve(A.transpose() * b))(0);

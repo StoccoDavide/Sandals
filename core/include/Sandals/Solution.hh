@@ -78,7 +78,7 @@ namespace Sandals {
     /**
      * Class constructor for the Solution class.
      */
-    Solution() : t(0), x(Vector::Zero(N, 0)), h(Vector::Zero(M, 0)) {}
+    Solution() : t(0), x(MatrixN::Zero(N, 0)), h(MatrixM::Zero(M, 0)) {}
 
     /**
      * Class constructor for the Solution class given the independent variable
@@ -87,7 +87,7 @@ namespace Sandals {
      * states matrix.
      */
     Solution(const Integer size)
-        : t(size), x(Vector::Zero(N, size)), h(Vector::Zero(M, size)) {}
+        : t(size), x(MatrixN::Zero(N, size)), h(MatrixM::Zero(M, size)) {}
 
     /**
      * Get the number of equations of the ODE/DAE system.
