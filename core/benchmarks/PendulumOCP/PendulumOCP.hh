@@ -948,8 +948,8 @@ class PendulumOCPProblem
 
     // Angle theta is defined such that theta=0 corresponds to the initial
     // position (l, 0) and theta=-pi corresponds to the final position (-l, 0).
-    const Real theta     = -M_PI * t / (time_end() - time_start());
-    const Real theta_dot = -M_PI / (time_end() - time_start());
+    const Real theta{-M_PI * t / (time_end() - time_start())};
+    const Real theta_dot{-M_PI / (time_end() - time_start())};
 
     // Cartesian coordinates
     const Real x{l * std::cos(theta)};

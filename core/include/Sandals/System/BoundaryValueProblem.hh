@@ -485,7 +485,7 @@ namespace Sandals {
       const Integer c_size{num_intervals * N};
       const Integer x_size{(num_intervals + 1) * N};
       const Integer h_size{
-        this->m_integrator->projection_mode() ? (num_intervals + 1) * M : 0};
+        this->m_integrator->projection_mode() ? 0 : (num_intervals + 1) * M};
       const Real sqrt_sigma{std::sqrt(this->m_sigma)};
       Integer idx_x_ini{0}, idx_x_end{num_intervals};
       if (this->m_integrator->reverse_mode()) {
