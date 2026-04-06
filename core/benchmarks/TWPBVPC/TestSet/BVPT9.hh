@@ -10,8 +10,8 @@
 
 #pragma once
 
-#ifndef TESTS_PROBLEMS_BVPT3_HH
-#define TESTS_PROBLEMS_BVPT3_HH
+#ifndef TESTS_PROBLEMS_BVPT9_HH
+#define TESTS_PROBLEMS_BVPT9_HH
 
 #include "Sandals/System/BoundaryValueProblem.hh"
 #include "Sandals/System/Explicit.hh"
@@ -23,7 +23,7 @@ using namespace Sandals;
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 template <typename Real = double>
-class BVPT3Explicit : public Explicit<Real, 2, 0> {
+class BVPT9Explicit : public Explicit<Real, 2, 0> {
  public:
   using typename Explicit<Real, 2, 0>::VectorF;
   using typename Explicit<Real, 2, 0>::MatrixJF;
@@ -34,9 +34,9 @@ class BVPT3Explicit : public Explicit<Real, 2, 0> {
   Real m_lambda{1.0e-3};
 
  public:
-  BVPT3Explicit() : Explicit<Real, 2, 0>("BVPT3Explicit") {}
+  BVPT9Explicit() : Explicit<Real, 2, 0>("BVPT9Explicit") {}
 
-  ~BVPT3Explicit() {}
+  ~BVPT9Explicit() {}
 
   void lambda(const Real lambda) {
     this->m_lambda = lambda;
@@ -47,19 +47,18 @@ class BVPT3Explicit : public Explicit<Real, 2, 0> {
   }
 
   VectorF f(const VectorF &x, const Real t) const override {
+    Real den{this->m_lambda + t * t};
     VectorF f;
-    f << x(1), 1.0 / this->m_lambda *
-                   (-(2.0 + std::cos(M_PI * t)) * x(1) + x(0) -
-                    (1.0 + this->m_lambda * M_PI * M_PI) * std::cos(M_PI * t) -
-                    (2.0 + std::cos(M_PI * t)) * M_PI * std::sin(M_PI * t));
+    f << x(1), -(4.0 * t * x(1) + 2.0 * x(0)) / den;
     return f;
   }
 
   MatrixJF Jf_x(const VectorF & /*x*/, const Real t) const override {
+    Real den{this->m_lambda + t * t};
     MatrixJF Jf_x(MatrixJF::Zero());
     Jf_x(0, 1) = 1.0;
-    Jf_x(1, 0) = 1.0 / this->m_lambda;
-    Jf_x(1, 1) = -(2.0 + std::cos(M_PI * t)) / this->m_lambda;
+    Jf_x(1, 0) = -2.0 / den;
+    Jf_x(1, 1) = -4.0 * t / den;
     return Jf_x;
   }
 
@@ -79,7 +78,7 @@ class BVPT3Explicit : public Explicit<Real, 2, 0> {
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 template <typename Real = double>
-class BVPT3Implicit : public Implicit<Real, 2, 0> {
+class BVPT9Implicit : public Implicit<Real, 2, 0> {
  public:
   using typename Implicit<Real, 2, 0>::VectorF;
   using typename Implicit<Real, 2, 0>::MatrixJF;
@@ -90,9 +89,9 @@ class BVPT3Implicit : public Implicit<Real, 2, 0> {
   Real m_lambda{1.0e-3};
 
  public:
-  BVPT3Implicit() : Implicit<Real, 2, 0>("BVPT3Implicit") {}
+  BVPT9Implicit() : Implicit<Real, 2, 0>("BVPT9Implicit") {}
 
-  ~BVPT3Implicit() {}
+  ~BVPT9Implicit() {}
 
   void lambda(const Real lambda) {
     this->m_lambda = lambda;
@@ -105,23 +104,20 @@ class BVPT3Implicit : public Implicit<Real, 2, 0> {
   VectorF F(const VectorF &x,
             const VectorF &x_dot,
             const Real t) const override {
+    Real den{this->m_lambda + t * t};
     VectorF F;
-    F << x_dot(0) - x(1),
-        x_dot(1) -
-            1.0 / this->m_lambda *
-                (-(2.0 + std::cos(M_PI * t)) * x(1) + x(0) -
-                 (1.0 + this->m_lambda * M_PI * M_PI) * std::cos(M_PI * t) -
-                 (2.0 + std::cos(M_PI * t)) * M_PI * std::sin(M_PI * t));
+    F << x_dot(0) - x(1), x_dot(1) + (4.0 * t * x(1) + 2.0 * x(0)) / den;
     return F;
   }
 
   MatrixJF JF_x(const VectorF & /*x*/,
                 const VectorF & /*x_dot*/,
                 const Real t) const override {
+    Real den{this->m_lambda + t * t};
     MatrixJF JF_x(MatrixJF::Zero());
     JF_x(0, 1) = -1.0;
-    JF_x(1, 0) = -1.0 / this->m_lambda;
-    JF_x(1, 1) = (2.0 + std::cos(M_PI * t)) / this->m_lambda;
+    JF_x(1, 0) = 2.0 / den;
+    JF_x(1, 1) = 4.0 * t / den;
     return JF_x;
   }
 
@@ -147,7 +143,7 @@ class BVPT3Implicit : public Implicit<Real, 2, 0> {
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 template <typename Real = double>
-class BVPT3SemiExplicit : public SemiExplicit<Real, 2, 0> {
+class BVPT9SemiExplicit : public SemiExplicit<Real, 2, 0> {
  public:
   using VectorF  = typename SemiExplicit<Real, 2, 0>::VectorF;
   using MatrixA  = typename SemiExplicit<Real, 2, 0>::MatrixA;
@@ -161,9 +157,9 @@ class BVPT3SemiExplicit : public SemiExplicit<Real, 2, 0> {
   Real m_lambda{1.0e-3};
 
  public:
-  BVPT3SemiExplicit() : SemiExplicit<Real, 2, 0>("BVPT3SemiExplicit") {}
+  BVPT9SemiExplicit() : SemiExplicit<Real, 2, 0>("BVPT9SemiExplicit") {}
 
-  ~BVPT3SemiExplicit() {}
+  ~BVPT9SemiExplicit() {}
 
   void lambda(const Real lambda) {
     this->m_lambda = lambda;
@@ -185,19 +181,18 @@ class BVPT3SemiExplicit : public SemiExplicit<Real, 2, 0> {
   }
 
   VectorB b(const VectorF &x, const Real t) const override {
+    Real den{this->m_lambda + t * t};
     VectorB b;
-    b << x(1), 1.0 / this->m_lambda *
-                   (-(2.0 + std::cos(M_PI * t)) * x(1) + x(0) -
-                    (1.0 + this->m_lambda * M_PI * M_PI) * std::cos(M_PI * t) -
-                    (2.0 + std::cos(M_PI * t)) * M_PI * std::sin(M_PI * t));
+    b << x(1), -(4.0 * t * x(1) + 2.0 * x(0)) / den;
     return b;
   }
 
   MatrixJB Jb_x(const VectorF & /*x*/, const Real t) const override {
+    Real den{this->m_lambda + t * t};
     MatrixJB Jb_x(MatrixJB::Zero());
     Jb_x(0, 1) = 1.0;
-    Jb_x(1, 0) = 1.0 / this->m_lambda;
-    Jb_x(1, 1) = -(2.0 + std::cos(M_PI * t)) / this->m_lambda;
+    Jb_x(1, 0) = -2.0 / den;
+    Jb_x(1, 1) = -4.0 * t / den;
     return Jb_x;
   }
 
@@ -217,7 +212,7 @@ class BVPT3SemiExplicit : public SemiExplicit<Real, 2, 0> {
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 template <typename Real, typename System, typename Integrator>
-class BVPT3Problem : public BoundaryValueProblem<Real, 2, 0, Integrator> {
+class BVPT9Problem : public BoundaryValueProblem<Real, 2, 0, Integrator> {
  public:
   using typename BoundaryValueProblem<Real, 2, 0, Integrator>::SystemPtr;
   using typename BoundaryValueProblem<Real, 2, 0, Integrator>::IntegratorPtr;
@@ -227,13 +222,13 @@ class BVPT3Problem : public BoundaryValueProblem<Real, 2, 0, Integrator> {
   using VectorX = Eigen::Vector<Real, Eigen::Dynamic>;
   using MatrixX = Eigen::Matrix<Real, 2, Eigen::Dynamic>;
 
-  BVPT3Problem()
+  BVPT9Problem()
       : BoundaryValueProblem<Real, 2, 0, Integrator>(
-            "BVPT3Problem",
+            "BVPT9Problem",
             std::make_unique<System>(),
             std::make_unique<Integrator>()) {}
 
-  ~BVPT3Problem() {}
+  ~BVPT9Problem() {}
 
   static Real time_start() {
     return -1.0;
@@ -252,8 +247,9 @@ class BVPT3Problem : public BoundaryValueProblem<Real, 2, 0, Integrator> {
   }
 
   VectorF b(const VectorF &x_ini, const VectorF &x_end) const override {
+    Real eta{1.0 / (1.0 + this->lambda())};
     VectorF b;
-    b << x_ini(0) + 1.0, x_end(0) + 1.0;
+    b << x_ini(0) - eta, x_end(0) - eta;
     return b;
   }
 
@@ -276,13 +272,13 @@ class BVPT3Problem : public BoundaryValueProblem<Real, 2, 0, Integrator> {
   }
 
   Real exact_solution(const Real t) const {
-    return std::cos(M_PI * t);
+    return 1.0 / (t * t + this->lambda());
   }
 
   VectorX exact_solution(const VectorX &t) const {
     VectorX x(t.size());
     for (Integer i{0}; i < t.size(); ++i) {
-      x(i) = BVPT3Problem<Real, System, Integrator>::exact_solution(t(i));
+      x(i) = BVPT9Problem<Real, System, Integrator>::exact_solution(t(i));
     }
     return x;
   }
@@ -298,4 +294,4 @@ class BVPT3Problem : public BoundaryValueProblem<Real, 2, 0, Integrator> {
 
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-#endif  // TESTS_PROBLEMS_BVPT3_HH
+#endif  // TESTS_PROBLEMS_BVPT9_HH

@@ -606,7 +606,7 @@ namespace Sandals {
         }
 
         // Check convergence
-        if (b_sys.norm() < this->m_tolerance * this->m_tolerance) {
+        if (b_sys.norm() < this->m_tolerance) {
           return true;
         }
 

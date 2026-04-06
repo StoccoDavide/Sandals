@@ -11,7 +11,7 @@
 #include <gtest/gtest.h>
 
 #include "Sandals.hh"
-#include "Sandals/RungeKutta/LobattoIIIA2.hh"
+#include "Sandals/RungeKutta/GaussLegendre4.hh"
 #include "TWPBVPC.hh"
 
 using namespace Sandals;
@@ -27,17 +27,17 @@ void test(const bool reverse) {
   problem.integrator()->reverse_mode(reverse);
   problem.tolerance(1.0e-8);
   problem.max_iterations(100);
-  problem.subintervals(4);
+  problem.subintervals(1);
 
   // Set time mesh
-  constexpr Integer num_points{100};
+  constexpr Integer num_points{500};
   Eigen::Vector<Real, Eigen::Dynamic> time(
       Eigen::Vector<Real, Eigen::Dynamic>::LinSpaced(num_points,
                                                      problem.time_start(),
                                                      problem.time_end()));
 
   // Set initial guess
-  Eigen::Matrix<Real, 2, Eigen::Dynamic> guess(problem.guess(time));
+  auto guess(problem.guess(time));
 
   // Solve the problem with different lambda values
   std::vector<Real> lambda_vec{1.0e-0, 1.0e-1, 1.0e-2, 1.0e-3};
@@ -46,81 +46,90 @@ void test(const bool reverse) {
     EXPECT_TRUE(problem.multiple_shooting(time, guess));
   }
 
-  // Get the numerical and analytical solutions
-  auto sol_n{problem.solution()};
-  auto sol_a{
-    problem.exact_solution(reverse ? sol_n.t.reverse().eval() : sol_n.t)};
-
-  // Check the solutions
-  EXPECT_NEAR((sol_n.eigen_x(0) - sol_a).array().abs().maxCoeff(), 0.0, 0.5);
+  // Check the exact solutions
+  if (problem.has_exact_solution()) {
+    auto sol_n(problem.solution());
+    auto sol_e(
+        problem.exact_solution(reverse ? sol_n.t.reverse().eval() : sol_n.t));
+    EXPECT_NEAR((sol_n.eigen_x(0) - sol_e).array().abs().maxCoeff(), 0.0, 0.5);
+  }
 }
 
 #ifndef GENERATE_TEST
-#define GENERATE_TEST(PROBLEM, INTEGRATOR)                                     \
-  TEST(PROBLEM##Forward, INTEGRATOR##Explicit) {                               \
-    test<PROBLEM##Problem<Real, PROBLEM##Explicit<Real>, INTEGRATOR<Real, 2>>, \
-         PROBLEM##Explicit<Real>>(false);                                      \
-  }                                                                            \
-  TEST(PROBLEM##Forward, INTEGRATOR##Implicit) {                               \
-    test<PROBLEM##Problem<Real, PROBLEM##Implicit<Real>, INTEGRATOR<Real, 2>>, \
-         PROBLEM##Implicit<Real>>(false);                                      \
-  }                                                                            \
-  TEST(PROBLEM##Forward, INTEGRATOR##SemiExplicit) {                           \
-    test<PROBLEM##Problem<Real,                                                \
-                          PROBLEM##SemiExplicit<Real>,                         \
-                          INTEGRATOR<Real, 2>>,                                \
-         PROBLEM##SemiExplicit<Real>>(false);                                  \
-  }                                                                            \
-  TEST(PROBLEM##Reverse, INTEGRATOR##Explicit) {                               \
-    test<PROBLEM##Problem<Real, PROBLEM##Explicit<Real>, INTEGRATOR<Real, 2>>, \
-         PROBLEM##Explicit<Real>>(true);                                       \
-  }                                                                            \
-  TEST(PROBLEM##Reverse, INTEGRATOR##Implicit) {                               \
-    test<PROBLEM##Problem<Real, PROBLEM##Implicit<Real>, INTEGRATOR<Real, 2>>, \
-         PROBLEM##Implicit<Real>>(true);                                       \
-  }                                                                            \
-  TEST(PROBLEM##Reverse, INTEGRATOR##SemiExplicit) {                           \
-    test<PROBLEM##Problem<Real,                                                \
-                          PROBLEM##SemiExplicit<Real>,                         \
-                          INTEGRATOR<Real, 2>>,                                \
-         PROBLEM##SemiExplicit<Real>>(true);                                   \
+#define GENERATE_TEST(PROBLEM, INTEGRATOR)                                   \
+  constexpr Integer PROBLEM##D{PROBLEM##Explicit<Real>::equations_number()}; \
+  TEST(PROBLEM##Forward, INTEGRATOR##Explicit) {                             \
+    test<PROBLEM##Problem<Real,                                              \
+                          PROBLEM##Explicit<Real>,                           \
+                          INTEGRATOR<Real, PROBLEM##D, 0>>,                  \
+         PROBLEM##Explicit<Real>>(false);                                    \
+  }                                                                          \
+  TEST(PROBLEM##Forward, INTEGRATOR##Implicit) {                             \
+    test<PROBLEM##Problem<Real,                                              \
+                          PROBLEM##Implicit<Real>,                           \
+                          INTEGRATOR<Real, PROBLEM##D, 0>>,                  \
+         PROBLEM##Implicit<Real>>(false);                                    \
+  }                                                                          \
+  TEST(PROBLEM##Forward, INTEGRATOR##SemiExplicit) {                         \
+    test<PROBLEM##Problem<Real,                                              \
+                          PROBLEM##SemiExplicit<Real>,                       \
+                          INTEGRATOR<Real, PROBLEM##D, 0>>,                  \
+         PROBLEM##SemiExplicit<Real>>(false);                                \
+  }                                                                          \
+  TEST(PROBLEM##Reverse, INTEGRATOR##Explicit) {                             \
+    test<PROBLEM##Problem<Real,                                              \
+                          PROBLEM##Explicit<Real>,                           \
+                          INTEGRATOR<Real, PROBLEM##D, 0>>,                  \
+         PROBLEM##Explicit<Real>>(true);                                     \
+  }                                                                          \
+  TEST(PROBLEM##Reverse, INTEGRATOR##Implicit) {                             \
+    test<PROBLEM##Problem<Real,                                              \
+                          PROBLEM##Implicit<Real>,                           \
+                          INTEGRATOR<Real, PROBLEM##D, 0>>,                  \
+         PROBLEM##Implicit<Real>>(true);                                     \
+  }                                                                          \
+  TEST(PROBLEM##Reverse, INTEGRATOR##SemiExplicit) {                         \
+    test<PROBLEM##Problem<Real,                                              \
+                          PROBLEM##SemiExplicit<Real>,                       \
+                          INTEGRATOR<Real, PROBLEM##D, 0>>,                  \
+         PROBLEM##SemiExplicit<Real>>(true);                                 \
   }
 #endif
 
 // Generate the tests
-GENERATE_TEST(BVPT1, LobattoIIIA2)
-GENERATE_TEST(BVPT2, LobattoIIIA2)
-GENERATE_TEST(BVPT3, LobattoIIIA2)
-GENERATE_TEST(BVPT4, LobattoIIIA2)
-// GENERATE_TEST(BVPT5, LobattoIIIA2)
-// GENERATE_TEST(BVPT6, LobattoIIIA2)
-// GENERATE_TEST(BVPT7, LobattoIIIA2)
-// GENERATE_TEST(BVPT8, LobattoIIIA2)
-// GENERATE_TEST(BVPT9, LobattoIIIA2)
-// GENERATE_TEST(BVPT10, LobattoIIIA2)
-// GENERATE_TEST(BVPT11, LobattoIIIA2)
-// GENERATE_TEST(BVPT12, LobattoIIIA2)
-// GENERATE_TEST(BVPT13, LobattoIIIA2)
-// GENERATE_TEST(BVPT14, LobattoIIIA2)
-// GENERATE_TEST(BVPT15, LobattoIIIA2)
-// GENERATE_TEST(BVPT16, LobattoIIIA2)
-// GENERATE_TEST(BVPT17, LobattoIIIA2)
-// GENERATE_TEST(BVPT18, LobattoIIIA2)
-// GENERATE_TEST(BVPT19, LobattoIIIA2)
-// GENERATE_TEST(BVPT20, LobattoIIIA2)
-// GENERATE_TEST(BVPT21, LobattoIIIA2)
-// GENERATE_TEST(BVPT22, LobattoIIIA2)
-// GENERATE_TEST(BVPT23, LobattoIIIA2)
-// GENERATE_TEST(BVPT24, LobattoIIIA2)
-// GENERATE_TEST(BVPT25, LobattoIIIA2)
-// GENERATE_TEST(BVPT26, LobattoIIIA2)
-// GENERATE_TEST(BVPT27, LobattoIIIA2)
-// GENERATE_TEST(BVPT28, LobattoIIIA2)
-// GENERATE_TEST(BVPT29, LobattoIIIA2)
-// GENERATE_TEST(BVPT30, LobattoIIIA2)
-// GENERATE_TEST(BVPT31, LobattoIIIA2)
-// GENERATE_TEST(BVPT32, LobattoIIIA2)
-// GENERATE_TEST(BVPT33, LobattoIIIA2)
+GENERATE_TEST(BVPT1, GaussLegendre4)
+GENERATE_TEST(BVPT2, GaussLegendre4)
+GENERATE_TEST(BVPT3, GaussLegendre4)
+GENERATE_TEST(BVPT4, GaussLegendre4)
+GENERATE_TEST(BVPT5, GaussLegendre4)
+GENERATE_TEST(BVPT6, GaussLegendre4)
+GENERATE_TEST(BVPT7, GaussLegendre4)
+GENERATE_TEST(BVPT8, GaussLegendre4)
+GENERATE_TEST(BVPT9, GaussLegendre4)
+GENERATE_TEST(BVPT10, GaussLegendre4)
+GENERATE_TEST(BVPT11, GaussLegendre4)
+GENERATE_TEST(BVPT12, GaussLegendre4)
+GENERATE_TEST(BVPT13, GaussLegendre4)
+GENERATE_TEST(BVPT14, GaussLegendre4)
+GENERATE_TEST(BVPT15, GaussLegendre4)
+GENERATE_TEST(BVPT16, GaussLegendre4)
+GENERATE_TEST(BVPT17, GaussLegendre4)
+GENERATE_TEST(BVPT18, GaussLegendre4)
+GENERATE_TEST(BVPT19, GaussLegendre4)
+GENERATE_TEST(BVPT20, GaussLegendre4)
+GENERATE_TEST(BVPT21, GaussLegendre4)
+GENERATE_TEST(BVPT22, GaussLegendre4)
+GENERATE_TEST(BVPT23, GaussLegendre4)
+GENERATE_TEST(BVPT24, GaussLegendre4)
+GENERATE_TEST(BVPT25, GaussLegendre4)
+GENERATE_TEST(BVPT26, GaussLegendre4)
+GENERATE_TEST(BVPT27, GaussLegendre4)
+GENERATE_TEST(BVPT28, GaussLegendre4)
+GENERATE_TEST(BVPT29, GaussLegendre4)
+GENERATE_TEST(BVPT30, GaussLegendre4)
+GENERATE_TEST(BVPT31, GaussLegendre4)
+GENERATE_TEST(BVPT32, GaussLegendre4)
+GENERATE_TEST(BVPT33, GaussLegendre4)
 
 // Run all the tests
 int main(int argc, char **argv) {

@@ -11,7 +11,7 @@
 #include <memory>
 
 #include "Sandals.hh"
-#include "Sandals/RungeKutta/GaussLegendre6.hh"
+#include "Sandals/RungeKutta/GaussLegendre4.hh"
 #include "TWPBVPC.hh"
 
 #ifdef SANDALS_ENABLE_PLOTTING
@@ -48,14 +48,136 @@ using namespace Sandals;
 using Real = double;
 
 #ifndef PROBLEM_INIT
-#define PROBLEM_INIT(PROBLEM, INTEGRATOR)                                  \
-  constexpr Integer D{PROBLEM##Explicit<Real>::equations_number()};        \
-  PROBLEM##Problem<Real, PROBLEM##Explicit<Real>, INTEGRATOR<Real, D>>     \
-      problem_explicit;                                                    \
-  PROBLEM##Problem<Real, PROBLEM##Implicit<Real>, INTEGRATOR<Real, D>>     \
-      problem_implicit;                                                    \
-  PROBLEM##Problem<Real, PROBLEM##SemiExplicit<Real>, INTEGRATOR<Real, D>> \
-      problem_semiexplicit;
+#define PROBLEM_INIT(PROBLEM, INTEGRATOR)                                     \
+  constexpr Integer D{PROBLEM##Explicit<Real>::equations_number()};           \
+  PROBLEM##Problem<Real, PROBLEM##Explicit<Real>, INTEGRATOR<Real, D, 0>>     \
+      PROBLEM##_explicit;                                                     \
+  PROBLEM##Problem<Real, PROBLEM##Implicit<Real>, INTEGRATOR<Real, D, 0>>     \
+      PROBLEM##_implicit;                                                     \
+  PROBLEM##Problem<Real, PROBLEM##SemiExplicit<Real>, INTEGRATOR<Real, D, 0>> \
+      PROBLEM##_semiexplicit;
+#endif
+
+#ifndef PROBLEM_SOLVE
+#define PROBLEM_SOLVE(PROBLEM)                                \
+  /* Set stiffness parameter */                               \
+  constexpr Real lambda{1.0e-3};                              \
+  static_cast<PROBLEM##Explicit<Real> *>(                     \
+      PROBLEM##_explicit.integrator()->system())              \
+      ->lambda(lambda);                                       \
+  static_cast<PROBLEM##Implicit<Real> *>(                     \
+      PROBLEM##_implicit.integrator()->system())              \
+      ->lambda(lambda);                                       \
+  static_cast<PROBLEM##SemiExplicit<Real> *>(                 \
+      PROBLEM##_semiexplicit.integrator()->system())          \
+      ->lambda(lambda);                                       \
+  /* Set verbose mode */                                      \
+  constexpr bool verbose{false};                              \
+  PROBLEM##_explicit.verbose_mode(verbose);                   \
+  PROBLEM##_implicit.verbose_mode(verbose);                   \
+  PROBLEM##_semiexplicit.verbose_mode(verbose);               \
+  PROBLEM##_explicit.integrator()->verbose_mode(false);       \
+  PROBLEM##_implicit.integrator()->verbose_mode(false);       \
+  PROBLEM##_semiexplicit.integrator()->verbose_mode(false);   \
+  /* Set reverse mode */                                      \
+  constexpr bool reverse{true};                               \
+  PROBLEM##_explicit.integrator()->reverse_mode(reverse);     \
+  PROBLEM##_implicit.integrator()->reverse_mode(reverse);     \
+  PROBLEM##_semiexplicit.integrator()->reverse_mode(reverse); \
+  /* Set solver tolerance */                                  \
+  PROBLEM##_explicit.tolerance(1.0e-8);                       \
+  PROBLEM##_implicit.tolerance(1.0e-8);                       \
+  PROBLEM##_semiexplicit.tolerance(1.0e-8);                   \
+  /* Set solver maximum number of iterations */               \
+  PROBLEM##_explicit.max_iterations(100);                     \
+  PROBLEM##_implicit.max_iterations(100);                     \
+  PROBLEM##_semiexplicit.max_iterations(100);                 \
+  /* Set solution parameters */                               \
+  constexpr Integer num_subintervals{1};                      \
+  PROBLEM##_explicit.subintervals(num_subintervals);          \
+  PROBLEM##_implicit.subintervals(num_subintervals);          \
+  PROBLEM##_semiexplicit.subintervals(num_subintervals);      \
+  /* Set time mesh */                                         \
+  constexpr Integer num_points{500};                          \
+  Eigen::Vector<Real, Eigen::Dynamic> time(                   \
+      Eigen::Vector<Real, Eigen::Dynamic>::LinSpaced(         \
+          num_points,                                         \
+          PROBLEM##_explicit.time_start(),                    \
+          PROBLEM##_explicit.time_end()));                    \
+  /* Set initial guess */                                     \
+  Eigen::Matrix<Real, D, Eigen::Dynamic> guess(               \
+      PROBLEM##_explicit.guess(time));                        \
+  /* Solve the problems*/                                     \
+  PROBLEM##_explicit.multiple_shooting(time, guess);          \
+  PROBLEM##_implicit.multiple_shooting(time, guess);          \
+  PROBLEM##_semiexplicit.multiple_shooting(time, guess);
+#endif
+
+#ifndef PROBLEM_PLOT
+#define PROBLEM_PLOT(PROBLEM)                                       \
+  auto sol_e = PROBLEM##_explicit.solution();                       \
+  auto sol_i = PROBLEM##_implicit.solution();                       \
+  auto sol_s = PROBLEM##_semiexplicit.solution();                   \
+  auto sol_a = PROBLEM##_explicit.exact_solution(                   \
+      reverse ? sol_e.t.reverse().eval() : sol_e.t);                \
+  auto colors     = matlab_lines_colormap();                        \
+  TCanvas *canvas = new TCanvas(#PROBLEM, #PROBLEM, 1200, 400);     \
+  canvas->Divide(3, 1);                                             \
+  canvas->cd(1);                                                    \
+  TGraph *graph_e = to_TGraph(sol_e.t, sol_e.eigen_x(0));           \
+  TGraph *graph_a = to_TGraph(sol_e.t, sol_a);                      \
+  graph_e->SetTitle("Explicit vs Exact");                           \
+  graph_e->SetLineColor(colors[0]);                                 \
+  graph_e->Draw("AL");                                              \
+  graph_a->SetLineColor(colors[1]);                                 \
+  graph_a->Draw("L");                                               \
+  graph_e->GetXaxis()->SetTitle("t");                               \
+  graph_e->GetYaxis()->SetTitle("x");                               \
+  graph_e->GetXaxis()->SetLimits(time.minCoeff(), time.maxCoeff()); \
+  TLegend *legend_1 = new TLegend(0.7, 0.8, 0.9, 0.9);              \
+  legend_1->AddEntry(graph_e, "Numerical", "l");                    \
+  legend_1->AddEntry(graph_a, "Exact", "l");                        \
+  legend_1->Draw();                                                 \
+  canvas->cd(2);                                                    \
+  TGraph *graph_i = to_TGraph(sol_i.t, sol_i.eigen_x(0));           \
+  graph_i->SetTitle("Implicit vs Exact");                           \
+  graph_i->SetLineColor(colors[0]);                                 \
+  graph_i->Draw("AL");                                              \
+  graph_a->SetLineColor(colors[1]);                                 \
+  graph_a->Draw("L");                                               \
+  graph_i->GetXaxis()->SetTitle("t");                               \
+  graph_i->GetYaxis()->SetTitle("x");                               \
+  graph_i->GetXaxis()->SetLimits(time.minCoeff(), time.maxCoeff()); \
+  TLegend *legend_2 = new TLegend(0.7, 0.8, 0.9, 0.9);              \
+  legend_2->AddEntry(graph_i, "Numerical", "l");                    \
+  legend_2->AddEntry(graph_a, "Exact", "l");                        \
+  legend_2->Draw();                                                 \
+  canvas->cd(3);                                                    \
+  TGraph *graph_s = to_TGraph(sol_s.t, sol_s.eigen_x(0));           \
+  graph_s->SetTitle("Semi-Explicit vs Exact");                      \
+  graph_s->SetLineColor(colors[0]);                                 \
+  graph_s->Draw("AL");                                              \
+  graph_a->SetLineColor(colors[1]);                                 \
+  graph_a->Draw("L");                                               \
+  graph_s->GetXaxis()->SetTitle("t");                               \
+  graph_s->GetYaxis()->SetTitle("x");                               \
+  graph_s->GetXaxis()->SetLimits(time.minCoeff(), time.maxCoeff()); \
+  TLegend *legend_3 = new TLegend(0.7, 0.8, 0.9, 0.9);              \
+  legend_3->AddEntry(graph_s, "Numerical", "l");                    \
+  legend_3->AddEntry(graph_a, "Exact", "l");                        \
+  legend_3->Draw();                                                 \
+  canvas->Update();
+#endif
+
+#ifndef GENERATE_PLOT
+#define GENERATE_PLOT(PROBLEM, INTEGRATOR)                           \
+  try {                                                              \
+    PROBLEM_INIT(PROBLEM, INTEGRATOR)                                \
+    PROBLEM_SOLVE(PROBLEM)                                           \
+    PROBLEM_PLOT(PROBLEM)                                            \
+  } catch (const std::exception &e) {                                \
+    std::cerr << "Error in " #PROBLEM ": " << e.what() << std::endl; \
+  }
 #endif
 
 int main(int argc, char **argv) {
@@ -68,114 +190,41 @@ int main(int argc, char **argv) {
 #endif
 
   // Istantiate the problems
-  PROBLEM_INIT(BVPT4, GaussLegendre6)
-
-  // Set verbose mode
-  constexpr bool verbose{false};
-  problem_explicit.verbose_mode(verbose);
-  problem_implicit.verbose_mode(verbose);
-  problem_semiexplicit.verbose_mode(verbose);
-  problem_explicit.integrator()->verbose_mode(false);
-  problem_implicit.integrator()->verbose_mode(false);
-  problem_semiexplicit.integrator()->verbose_mode(false);
-
-  // Set reverse mode
-  constexpr bool reverse{true};
-  problem_explicit.integrator()->reverse_mode(reverse);
-  problem_implicit.integrator()->reverse_mode(reverse);
-  problem_semiexplicit.integrator()->reverse_mode(reverse);
-
-  // Set solver tolerance
-  problem_explicit.tolerance(1.0e-8);
-  problem_implicit.tolerance(1.0e-8);
-  problem_semiexplicit.tolerance(1.0e-8);
-
-  // Set solver maximum number of iterations
-  problem_explicit.max_iterations(100);
-  problem_implicit.max_iterations(100);
-  problem_semiexplicit.max_iterations(100);
-
-  // Set solution parameters
-  constexpr Integer num_subintervals{2};
-  problem_explicit.subintervals(num_subintervals);
-  problem_implicit.subintervals(num_subintervals);
-  problem_semiexplicit.subintervals(num_subintervals);
-
-  // Set time mesh
-  constexpr Integer num_points{100};
-  Eigen::Vector<Real, Eigen::Dynamic> time(
-      Eigen::Vector<Real, Eigen::Dynamic>::LinSpaced(
-          num_points,
-          problem_explicit.time_start(),
-          problem_explicit.time_end()));
-
-  // Set initial guess
-  Eigen::Matrix<Real, D, Eigen::Dynamic> guess(problem_explicit.guess(time));
-
-  // Solve the problems with shooting
-  problem_explicit.multiple_shooting(time, guess);
-  problem_implicit.multiple_shooting(time, guess);
-  problem_semiexplicit.multiple_shooting(time, guess);
+  GENERATE_PLOT(BVPT1, GaussLegendre4)
+  GENERATE_PLOT(BVPT2, GaussLegendre4)
+  GENERATE_PLOT(BVPT3, GaussLegendre4)
+  GENERATE_PLOT(BVPT4, GaussLegendre4)
+  GENERATE_PLOT(BVPT5, GaussLegendre4)
+  GENERATE_PLOT(BVPT6, GaussLegendre4)
+  GENERATE_PLOT(BVPT7, GaussLegendre4)
+  GENERATE_PLOT(BVPT8, GaussLegendre4)
+  GENERATE_PLOT(BVPT9, GaussLegendre4)
+  GENERATE_PLOT(BVPT10, GaussLegendre4)
+  GENERATE_PLOT(BVPT11, GaussLegendre4)
+  GENERATE_PLOT(BVPT12, GaussLegendre4)
+  GENERATE_PLOT(BVPT13, GaussLegendre4)
+  GENERATE_PLOT(BVPT14, GaussLegendre4)
+  GENERATE_PLOT(BVPT15, GaussLegendre4)
+  GENERATE_PLOT(BVPT16, GaussLegendre4)
+  GENERATE_PLOT(BVPT17, GaussLegendre4)
+  GENERATE_PLOT(BVPT18, GaussLegendre4)
+  GENERATE_PLOT(BVPT19, GaussLegendre4)
+  GENERATE_PLOT(BVPT20, GaussLegendre4)
+  GENERATE_PLOT(BVPT21, GaussLegendre4)
+  GENERATE_PLOT(BVPT22, GaussLegendre4)
+  GENERATE_PLOT(BVPT23, GaussLegendre4)
+  GENERATE_PLOT(BVPT24, GaussLegendre4)
+  GENERATE_PLOT(BVPT25, GaussLegendre4)
+  GENERATE_PLOT(BVPT26, GaussLegendre4)
+  GENERATE_PLOT(BVPT27, GaussLegendre4)
+  GENERATE_PLOT(BVPT28, GaussLegendre4)
+  GENERATE_PLOT(BVPT29, GaussLegendre4)
+  GENERATE_PLOT(BVPT30, GaussLegendre4)
+  GENERATE_PLOT(BVPT31, GaussLegendre4)
+  GENERATE_PLOT(BVPT32, GaussLegendre4)
+  GENERATE_PLOT(BVPT33, GaussLegendre4)
 
 #ifdef SANDALS_ENABLE_PLOTTING
-  auto sol_e = problem_explicit.solution();
-  auto sol_i = problem_implicit.solution();
-  auto sol_s = problem_semiexplicit.solution();
-  auto sol_a = problem_explicit.exact_solution(
-      reverse ? sol_e.t.reverse().eval() : sol_e.t);
-
-  auto colors = matlab_lines_colormap();
-
-  TCanvas *canvas = new TCanvas("canvas", "Solution Comparison", 1200, 400);
-  canvas->Divide(3, 1);
-
-  canvas->cd(1);
-  TGraph *graph_e = to_TGraph(sol_e.t, sol_e.eigen_x(0));
-  TGraph *graph_a = to_TGraph(sol_e.t, sol_a);
-  graph_e->SetTitle("Explicit vs Exact");
-  graph_e->SetLineColor(colors[0]);
-  graph_e->Draw("AL");
-  graph_a->SetLineColor(colors[1]);
-  graph_a->Draw("L SAME");
-  graph_e->GetXaxis()->SetTitle("t");
-  graph_e->GetYaxis()->SetTitle("x");
-  graph_e->GetXaxis()->SetLimits(time.minCoeff(), time.maxCoeff());
-  TLegend *legend_1 = new TLegend(0.7, 0.8, 0.9, 0.9);
-  legend_1->AddEntry(graph_e, "Numerical", "l");
-  legend_1->AddEntry(graph_a, "Exact", "l");
-  legend_1->Draw();
-
-  canvas->cd(2);
-  TGraph *graph_i = to_TGraph(sol_i.t, sol_i.eigen_x(0));
-  graph_i->SetTitle("Implicit vs Exact");
-  graph_i->SetLineColor(colors[0]);
-  graph_i->Draw("AL");
-  graph_a->SetLineColor(colors[1]);
-  graph_a->Draw("L SAME");
-  graph_i->GetXaxis()->SetTitle("t");
-  graph_i->GetYaxis()->SetTitle("x");
-  graph_i->GetXaxis()->SetLimits(time.minCoeff(), time.maxCoeff());
-  TLegend *legend_2 = new TLegend(0.7, 0.8, 0.9, 0.9);
-  legend_2->AddEntry(graph_i, "Numerical", "l");
-  legend_2->AddEntry(graph_a, "Exact", "l");
-  legend_2->Draw();
-
-  canvas->cd(3);
-  TGraph *graph_s = to_TGraph(sol_s.t, sol_s.eigen_x(0));
-  graph_s->SetTitle("Semi-Explicit vs Exact");
-  graph_s->SetLineColor(colors[0]);
-  graph_s->Draw("AL");
-  graph_a->SetLineColor(colors[1]);
-  graph_a->Draw("L SAME");
-  graph_s->GetXaxis()->SetTitle("t");
-  graph_s->GetYaxis()->SetTitle("x");
-  graph_s->GetXaxis()->SetLimits(time.minCoeff(), time.maxCoeff());
-  TLegend *legend_3 = new TLegend(0.7, 0.8, 0.9, 0.9);
-  legend_3->AddEntry(graph_s, "Numerical", "l");
-  legend_3->AddEntry(graph_a, "Exact", "l");
-  legend_3->Draw();
-
-  canvas->Update();
   app.Run();
 #endif
 

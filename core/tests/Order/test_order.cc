@@ -109,119 +109,114 @@ class GlobalTestEnvironment : public testing::Environment {
 #define ORDER_SEMIEXPLICIT_SYSTEM(RK) ORDER_SYSTEM(RK, SemiExplicit)
 #endif
 
-TEST(Symplectic, Chebyshev51){SYMPLECTIC(Chebyshev51)} TEST(Symplectic,
-                                                            ExplicitEuler){
-  SYMPLECTIC(ExplicitEuler)} TEST(Symplectic, Fehlberg45){
-  SYMPLECTIC(Fehlberg45)} TEST(Symplectic, GaussLegendre2){
-  SYMPLECTIC(GaussLegendre2)} TEST(Symplectic, GaussLegendre4){
-  SYMPLECTIC(GaussLegendre4)} TEST(Symplectic, GaussLegendre6){
-  SYMPLECTIC(GaussLegendre6)} TEST(Symplectic, Heun2){
-  SYMPLECTIC(Heun2)} TEST(Symplectic, Heun3){
-  SYMPLECTIC(Heun3)} TEST(Symplectic, LobattoIIIA2){
-  SYMPLECTIC(LobattoIIIA2)} TEST(Symplectic, LobattoIIIA4){
-  SYMPLECTIC(LobattoIIIA4)} TEST(Symplectic, ImplicitEuler){
-  SYMPLECTIC(ImplicitEuler)} TEST(Symplectic, RadauIIA3){
-  SYMPLECTIC(RadauIIA3)} TEST(Symplectic, RadauIIA5){
-  SYMPLECTIC(RadauIIA5)} TEST(Symplectic, Ralston2){
-  SYMPLECTIC(Ralston2)} TEST(Symplectic, Ralston3){
-  SYMPLECTIC(Ralston3)} TEST(Symplectic, Ralston4){
-  SYMPLECTIC(Ralston4)} TEST(Symplectic, RK4){SYMPLECTIC(RK4)} TEST(Symplectic,
-                                                                    SSPIRK33){
-  SYMPLECTIC(SSPIRK33)} TEST(Symplectic, SSPRK22){
-  SYMPLECTIC(SSPRK22)} TEST(Symplectic, SSPRK22star){
-  SYMPLECTIC(SSPRK22star)} TEST(Symplectic, SSPRK33){
-  SYMPLECTIC(SSPRK33)} TEST(Symplectic, SSPRK42){
-  SYMPLECTIC(SSPRK42)} TEST(Symplectic, SSPRK43){
-  SYMPLECTIC(SSPRK43)} TEST(Symplectic, SSPRK93){
-  SYMPLECTIC(SSPRK93)} TEST(Symplectic, SSPRK104){SYMPLECTIC(SSPRK104)}
+TEST(Symplectic, Chebyshev51){SYMPLECTIC(Chebyshev51)};
+TEST(Symplectic, ExplicitEuler){SYMPLECTIC(ExplicitEuler)};
+TEST(Symplectic, Fehlberg45){SYMPLECTIC(Fehlberg45)};
+TEST(Symplectic, GaussLegendre2){SYMPLECTIC(GaussLegendre2)};
+TEST(Symplectic, GaussLegendre4){SYMPLECTIC(GaussLegendre4)};
+TEST(Symplectic, GaussLegendre6){SYMPLECTIC(GaussLegendre6)};
+TEST(Symplectic, Heun2){SYMPLECTIC(Heun2)};
+TEST(Symplectic, Heun3){SYMPLECTIC(Heun3)};
+TEST(Symplectic, LobattoIIIA2){SYMPLECTIC(LobattoIIIA2)};
+TEST(Symplectic, LobattoIIIA4){SYMPLECTIC(LobattoIIIA4)};
+TEST(Symplectic, ImplicitEuler){SYMPLECTIC(ImplicitEuler)};
+TEST(Symplectic, RadauIIA3){SYMPLECTIC(RadauIIA3)};
+TEST(Symplectic, RadauIIA5){SYMPLECTIC(RadauIIA5)};
+TEST(Symplectic, Ralston2){SYMPLECTIC(Ralston2)};
+TEST(Symplectic, Ralston3){SYMPLECTIC(Ralston3)};
+TEST(Symplectic, Ralston4){SYMPLECTIC(Ralston4)};
+TEST(Symplectic, RK4){SYMPLECTIC(RK4)};
+TEST(Symplectic, SSPIRK33){SYMPLECTIC(SSPIRK33)};
+TEST(Symplectic, SSPRK22){SYMPLECTIC(SSPRK22)};
+TEST(Symplectic, SSPRK22star){SYMPLECTIC(SSPRK22star)};
+TEST(Symplectic, SSPRK33){SYMPLECTIC(SSPRK33)};
+TEST(Symplectic, SSPRK42){SYMPLECTIC(SSPRK42)};
+TEST(Symplectic, SSPRK43){SYMPLECTIC(SSPRK43)};
+TEST(Symplectic, SSPRK93){SYMPLECTIC(SSPRK93)};
+TEST(Symplectic, SSPRK104){SYMPLECTIC(SSPRK104)};
 
-TEST(OrderImplicit, Chebyshev51){
-  ORDER_IMPLICIT_SYSTEM(Chebyshev51)} TEST(OrderImplicit, ExplicitEuler){
-  ORDER_IMPLICIT_SYSTEM(ExplicitEuler)} TEST(OrderImplicit, Fehlberg45){
-  ORDER_IMPLICIT_SYSTEM(Fehlberg45)} TEST(OrderImplicit, GaussLegendre2){
-  ORDER_IMPLICIT_SYSTEM(GaussLegendre2)} TEST(OrderImplicit, GaussLegendre4){
-  ORDER_IMPLICIT_SYSTEM(GaussLegendre4)} TEST(OrderImplicit, GaussLegendre6){
-  ORDER_IMPLICIT_SYSTEM(GaussLegendre6)} TEST(OrderImplicit, Heun2){
-  ORDER_IMPLICIT_SYSTEM(Heun2)} TEST(OrderImplicit, Heun3){
-  ORDER_IMPLICIT_SYSTEM(Heun3)} TEST(OrderImplicit, LobattoIIIA2){
-  ORDER_IMPLICIT_SYSTEM(LobattoIIIA2)} TEST(OrderImplicit, LobattoIIIA4){
-  ORDER_IMPLICIT_SYSTEM(LobattoIIIA4)} TEST(OrderImplicit, ImplicitEuler){
-  ORDER_IMPLICIT_SYSTEM(ImplicitEuler)} TEST(OrderImplicit, RadauIIA3){
-  ORDER_IMPLICIT_SYSTEM(RadauIIA3)} TEST(OrderImplicit, RadauIIA5){
-  ORDER_IMPLICIT_SYSTEM(RadauIIA5)} TEST(OrderImplicit, Ralston2){
-  ORDER_IMPLICIT_SYSTEM(Ralston2)} TEST(OrderImplicit, Ralston3){
-  ORDER_IMPLICIT_SYSTEM(Ralston3)} TEST(OrderImplicit, Ralston4){
-  ORDER_IMPLICIT_SYSTEM(Ralston4)} TEST(OrderImplicit, RK4){
-  ORDER_IMPLICIT_SYSTEM(RK4)} TEST(OrderImplicit, SSPIRK33){
-  ORDER_IMPLICIT_SYSTEM(SSPIRK33)} TEST(OrderImplicit, SSPRK22){
-  ORDER_IMPLICIT_SYSTEM(SSPRK22)} TEST(OrderImplicit, SSPRK22star){
-  ORDER_IMPLICIT_SYSTEM(SSPRK22star)} TEST(OrderImplicit, SSPRK33){
-  ORDER_IMPLICIT_SYSTEM(SSPRK33)} TEST(OrderImplicit, SSPRK42){
-  ORDER_IMPLICIT_SYSTEM(SSPRK42)} TEST(OrderImplicit, SSPRK43){
-  ORDER_IMPLICIT_SYSTEM(SSPRK43)} TEST(OrderImplicit, SSPRK93){
-  ORDER_IMPLICIT_SYSTEM(SSPRK93)} TEST(OrderImplicit, SSPRK104){
-  ORDER_IMPLICIT_SYSTEM(SSPRK104)}
+TEST(OrderImplicit, Chebyshev51){ORDER_IMPLICIT_SYSTEM(Chebyshev51)};
+TEST(OrderImplicit, ExplicitEuler){ORDER_IMPLICIT_SYSTEM(ExplicitEuler)};
+TEST(OrderImplicit, Fehlberg45){ORDER_IMPLICIT_SYSTEM(Fehlberg45)};
+TEST(OrderImplicit, GaussLegendre2){ORDER_IMPLICIT_SYSTEM(GaussLegendre2)};
+TEST(OrderImplicit, GaussLegendre4){ORDER_IMPLICIT_SYSTEM(GaussLegendre4)};
+TEST(OrderImplicit, GaussLegendre6){ORDER_IMPLICIT_SYSTEM(GaussLegendre6)};
+TEST(OrderImplicit, Heun2){ORDER_IMPLICIT_SYSTEM(Heun2)};
+TEST(OrderImplicit, Heun3){ORDER_IMPLICIT_SYSTEM(Heun3)};
+TEST(OrderImplicit, LobattoIIIA2){ORDER_IMPLICIT_SYSTEM(LobattoIIIA2)};
+TEST(OrderImplicit, LobattoIIIA4){ORDER_IMPLICIT_SYSTEM(LobattoIIIA4)};
+TEST(OrderImplicit, ImplicitEuler){ORDER_IMPLICIT_SYSTEM(ImplicitEuler)};
+TEST(OrderImplicit, RadauIIA3){ORDER_IMPLICIT_SYSTEM(RadauIIA3)};
+TEST(OrderImplicit, RadauIIA5){ORDER_IMPLICIT_SYSTEM(RadauIIA5)};
+TEST(OrderImplicit, Ralston2){ORDER_IMPLICIT_SYSTEM(Ralston2)};
+TEST(OrderImplicit, Ralston3){ORDER_IMPLICIT_SYSTEM(Ralston3)};
+TEST(OrderImplicit, Ralston4){ORDER_IMPLICIT_SYSTEM(Ralston4)};
+TEST(OrderImplicit, RK4){ORDER_IMPLICIT_SYSTEM(RK4)};
+TEST(OrderImplicit, SSPIRK33){ORDER_IMPLICIT_SYSTEM(SSPIRK33)};
+TEST(OrderImplicit, SSPRK22){ORDER_IMPLICIT_SYSTEM(SSPRK22)};
+TEST(OrderImplicit, SSPRK22star){ORDER_IMPLICIT_SYSTEM(SSPRK22star)};
+TEST(OrderImplicit, SSPRK33){ORDER_IMPLICIT_SYSTEM(SSPRK33)};
+TEST(OrderImplicit, SSPRK42){ORDER_IMPLICIT_SYSTEM(SSPRK42)};
+TEST(OrderImplicit, SSPRK43){ORDER_IMPLICIT_SYSTEM(SSPRK43)};
+TEST(OrderImplicit, SSPRK93){ORDER_IMPLICIT_SYSTEM(SSPRK93)};
+TEST(OrderImplicit, SSPRK104){ORDER_IMPLICIT_SYSTEM(SSPRK104)};
 
-TEST(OrderExplicit, Chebyshev51){
-  ORDER_EXPLICIT_SYSTEM(Chebyshev51)} TEST(OrderExplicit, ExplicitEuler){
-  ORDER_EXPLICIT_SYSTEM(ExplicitEuler)} TEST(OrderExplicit, Fehlberg45){
-  ORDER_EXPLICIT_SYSTEM(Fehlberg45)} TEST(OrderExplicit, GaussLegendre2){
-  ORDER_EXPLICIT_SYSTEM(GaussLegendre2)} TEST(OrderExplicit, GaussLegendre4){
-  ORDER_EXPLICIT_SYSTEM(GaussLegendre4)} TEST(OrderExplicit, GaussLegendre6){
-  ORDER_EXPLICIT_SYSTEM(GaussLegendre6)} TEST(OrderExplicit, Heun2){
-  ORDER_EXPLICIT_SYSTEM(Heun2)} TEST(OrderExplicit, Heun3){
-  ORDER_EXPLICIT_SYSTEM(Heun3)} TEST(OrderExplicit, LobattoIIIA2){
-  ORDER_EXPLICIT_SYSTEM(LobattoIIIA2)} TEST(OrderExplicit, LobattoIIIA4){
-  ORDER_EXPLICIT_SYSTEM(LobattoIIIA4)} TEST(OrderExplicit, ImplicitEuler){
-  ORDER_EXPLICIT_SYSTEM(ImplicitEuler)} TEST(OrderExplicit, RadauIIA3){
-  ORDER_EXPLICIT_SYSTEM(RadauIIA3)} TEST(OrderExplicit, RadauIIA5){
-  ORDER_EXPLICIT_SYSTEM(RadauIIA5)} TEST(OrderExplicit, Ralston2){
-  ORDER_EXPLICIT_SYSTEM(Ralston2)} TEST(OrderExplicit, Ralston3){
-  ORDER_EXPLICIT_SYSTEM(Ralston3)} TEST(OrderExplicit, Ralston4){
-  ORDER_EXPLICIT_SYSTEM(Ralston4)} TEST(OrderExplicit, RK4){
-  ORDER_EXPLICIT_SYSTEM(RK4)} TEST(OrderExplicit, SSPIRK33){
-  ORDER_EXPLICIT_SYSTEM(SSPIRK33)} TEST(OrderExplicit, SSPRK22){
-  ORDER_EXPLICIT_SYSTEM(SSPRK22)} TEST(OrderExplicit, SSPRK22star){
-  ORDER_EXPLICIT_SYSTEM(SSPRK22star)} TEST(OrderExplicit, SSPRK33){
-  ORDER_EXPLICIT_SYSTEM(SSPRK33)} TEST(OrderExplicit, SSPRK42){
-  ORDER_EXPLICIT_SYSTEM(SSPRK42)} TEST(OrderExplicit, SSPRK43){
-  ORDER_EXPLICIT_SYSTEM(SSPRK43)} TEST(OrderExplicit, SSPRK93){
-  ORDER_EXPLICIT_SYSTEM(SSPRK93)} TEST(OrderExplicit, SSPRK104){
-  ORDER_EXPLICIT_SYSTEM(SSPRK104)}
+TEST(OrderExplicit, Chebyshev51){ORDER_EXPLICIT_SYSTEM(Chebyshev51)};
+TEST(OrderExplicit, ExplicitEuler){ORDER_EXPLICIT_SYSTEM(ExplicitEuler)};
+TEST(OrderExplicit, Fehlberg45){ORDER_EXPLICIT_SYSTEM(Fehlberg45)};
+TEST(OrderExplicit, GaussLegendre2){ORDER_EXPLICIT_SYSTEM(GaussLegendre2)};
+TEST(OrderExplicit, GaussLegendre4){ORDER_EXPLICIT_SYSTEM(GaussLegendre4)};
+TEST(OrderExplicit, GaussLegendre6){ORDER_EXPLICIT_SYSTEM(GaussLegendre6)};
+TEST(OrderExplicit, Heun2){ORDER_EXPLICIT_SYSTEM(Heun2)};
+TEST(OrderExplicit, Heun3){ORDER_EXPLICIT_SYSTEM(Heun3)};
+TEST(OrderExplicit, LobattoIIIA2){ORDER_EXPLICIT_SYSTEM(LobattoIIIA2)};
+TEST(OrderExplicit, LobattoIIIA4){ORDER_EXPLICIT_SYSTEM(LobattoIIIA4)};
+TEST(OrderExplicit, ImplicitEuler){ORDER_EXPLICIT_SYSTEM(ImplicitEuler)};
+TEST(OrderExplicit, RadauIIA3){ORDER_EXPLICIT_SYSTEM(RadauIIA3)};
+TEST(OrderExplicit, RadauIIA5){ORDER_EXPLICIT_SYSTEM(RadauIIA5)};
+TEST(OrderExplicit, Ralston2){ORDER_EXPLICIT_SYSTEM(Ralston2)};
+TEST(OrderExplicit, Ralston3){ORDER_EXPLICIT_SYSTEM(Ralston3)};
+TEST(OrderExplicit, Ralston4){ORDER_EXPLICIT_SYSTEM(Ralston4)};
+TEST(OrderExplicit, RK4){ORDER_EXPLICIT_SYSTEM(RK4)};
+TEST(OrderExplicit, SSPIRK33){ORDER_EXPLICIT_SYSTEM(SSPIRK33)};
+TEST(OrderExplicit, SSPRK22){ORDER_EXPLICIT_SYSTEM(SSPRK22)};
+TEST(OrderExplicit, SSPRK22star){ORDER_EXPLICIT_SYSTEM(SSPRK22star)};
+TEST(OrderExplicit, SSPRK33){ORDER_EXPLICIT_SYSTEM(SSPRK33)};
+TEST(OrderExplicit, SSPRK42){ORDER_EXPLICIT_SYSTEM(SSPRK42)};
+TEST(OrderExplicit, SSPRK43){ORDER_EXPLICIT_SYSTEM(SSPRK43)};
+TEST(OrderExplicit, SSPRK93){ORDER_EXPLICIT_SYSTEM(SSPRK93)};
+TEST(OrderExplicit, SSPRK104){ORDER_EXPLICIT_SYSTEM(SSPRK104)};
 
-TEST(OrderSemiExplicit, Chebyshev51){
-  ORDER_SEMIEXPLICIT_SYSTEM(Chebyshev51)} TEST(OrderSemiExplicit,
-                                               ExplicitEuler){
-  ORDER_SEMIEXPLICIT_SYSTEM(ExplicitEuler)} TEST(OrderSemiExplicit, Fehlberg45){
-  ORDER_SEMIEXPLICIT_SYSTEM(Fehlberg45)} TEST(OrderSemiExplicit,
-                                              GaussLegendre2){
-  ORDER_SEMIEXPLICIT_SYSTEM(GaussLegendre2)} TEST(OrderSemiExplicit,
-                                                  GaussLegendre4){
-  ORDER_SEMIEXPLICIT_SYSTEM(GaussLegendre4)} TEST(OrderSemiExplicit,
-                                                  GaussLegendre6){
-  ORDER_SEMIEXPLICIT_SYSTEM(GaussLegendre6)} TEST(OrderSemiExplicit, Heun2){
-  ORDER_SEMIEXPLICIT_SYSTEM(Heun2)} TEST(OrderSemiExplicit, Heun3){
-  ORDER_SEMIEXPLICIT_SYSTEM(Heun3)} TEST(OrderSemiExplicit, LobattoIIIA2){
-  ORDER_SEMIEXPLICIT_SYSTEM(LobattoIIIA2)} TEST(OrderSemiExplicit,
-                                                LobattoIIIA4){
-  ORDER_SEMIEXPLICIT_SYSTEM(LobattoIIIA4)} TEST(OrderSemiExplicit,
-                                                ImplicitEuler){
-  ORDER_SEMIEXPLICIT_SYSTEM(ImplicitEuler)} TEST(OrderSemiExplicit, RadauIIA3){
-  ORDER_SEMIEXPLICIT_SYSTEM(RadauIIA3)} TEST(OrderSemiExplicit, RadauIIA5){
-  ORDER_SEMIEXPLICIT_SYSTEM(RadauIIA5)} TEST(OrderSemiExplicit, Ralston2){
-  ORDER_SEMIEXPLICIT_SYSTEM(Ralston2)} TEST(OrderSemiExplicit, Ralston3){
-  ORDER_SEMIEXPLICIT_SYSTEM(Ralston3)} TEST(OrderSemiExplicit, Ralston4){
-  ORDER_SEMIEXPLICIT_SYSTEM(Ralston4)} TEST(OrderSemiExplicit, RK4){
-  ORDER_SEMIEXPLICIT_SYSTEM(RK4)} TEST(OrderSemiExplicit, SSPIRK33){
-  ORDER_SEMIEXPLICIT_SYSTEM(SSPIRK33)} TEST(OrderSemiExplicit, SSPRK22){
-  ORDER_SEMIEXPLICIT_SYSTEM(SSPRK22)} TEST(OrderSemiExplicit, SSPRK22star){
-  ORDER_SEMIEXPLICIT_SYSTEM(SSPRK22star)} TEST(OrderSemiExplicit, SSPRK33){
-  ORDER_SEMIEXPLICIT_SYSTEM(SSPRK33)} TEST(OrderSemiExplicit, SSPRK42){
-  ORDER_SEMIEXPLICIT_SYSTEM(SSPRK42)} TEST(OrderSemiExplicit, SSPRK43){
-  ORDER_SEMIEXPLICIT_SYSTEM(SSPRK43)} TEST(OrderSemiExplicit, SSPRK93){
-  ORDER_SEMIEXPLICIT_SYSTEM(SSPRK93)} TEST(OrderSemiExplicit, SSPRK104) {
-  ORDER_SEMIEXPLICIT_SYSTEM(SSPRK104)
-}
+TEST(OrderSemiExplicit, Chebyshev51){ORDER_SEMIEXPLICIT_SYSTEM(Chebyshev51)};
+TEST(OrderSemiExplicit,
+     ExplicitEuler){ORDER_SEMIEXPLICIT_SYSTEM(ExplicitEuler)};
+TEST(OrderSemiExplicit, Fehlberg45){ORDER_SEMIEXPLICIT_SYSTEM(Fehlberg45)};
+TEST(OrderSemiExplicit,
+     GaussLegendre2){ORDER_SEMIEXPLICIT_SYSTEM(GaussLegendre2)};
+TEST(OrderSemiExplicit,
+     GaussLegendre4){ORDER_SEMIEXPLICIT_SYSTEM(GaussLegendre4)};
+TEST(OrderSemiExplicit,
+     GaussLegendre6){ORDER_SEMIEXPLICIT_SYSTEM(GaussLegendre6)};
+TEST(OrderSemiExplicit, Heun2){ORDER_SEMIEXPLICIT_SYSTEM(Heun2)};
+TEST(OrderSemiExplicit, Heun3){ORDER_SEMIEXPLICIT_SYSTEM(Heun3)};
+TEST(OrderSemiExplicit, LobattoIIIA2){ORDER_SEMIEXPLICIT_SYSTEM(LobattoIIIA2)};
+TEST(OrderSemiExplicit, LobattoIIIA4){ORDER_SEMIEXPLICIT_SYSTEM(LobattoIIIA4)};
+TEST(OrderSemiExplicit,
+     ImplicitEuler){ORDER_SEMIEXPLICIT_SYSTEM(ImplicitEuler)};
+TEST(OrderSemiExplicit, RadauIIA3){ORDER_SEMIEXPLICIT_SYSTEM(RadauIIA3)};
+TEST(OrderSemiExplicit, RadauIIA5){ORDER_SEMIEXPLICIT_SYSTEM(RadauIIA5)};
+TEST(OrderSemiExplicit, Ralston2){ORDER_SEMIEXPLICIT_SYSTEM(Ralston2)};
+TEST(OrderSemiExplicit, Ralston3){ORDER_SEMIEXPLICIT_SYSTEM(Ralston3)};
+TEST(OrderSemiExplicit, Ralston4){ORDER_SEMIEXPLICIT_SYSTEM(Ralston4)};
+TEST(OrderSemiExplicit, RK4){ORDER_SEMIEXPLICIT_SYSTEM(RK4)};
+TEST(OrderSemiExplicit, SSPIRK33){ORDER_SEMIEXPLICIT_SYSTEM(SSPIRK33)};
+TEST(OrderSemiExplicit, SSPRK22){ORDER_SEMIEXPLICIT_SYSTEM(SSPRK22)};
+TEST(OrderSemiExplicit, SSPRK22star){ORDER_SEMIEXPLICIT_SYSTEM(SSPRK22star)};
+TEST(OrderSemiExplicit, SSPRK33){ORDER_SEMIEXPLICIT_SYSTEM(SSPRK33)};
+TEST(OrderSemiExplicit, SSPRK42){ORDER_SEMIEXPLICIT_SYSTEM(SSPRK42)};
+TEST(OrderSemiExplicit, SSPRK43){ORDER_SEMIEXPLICIT_SYSTEM(SSPRK43)};
+TEST(OrderSemiExplicit, SSPRK93){ORDER_SEMIEXPLICIT_SYSTEM(SSPRK93)};
+TEST(OrderSemiExplicit, SSPRK104){ORDER_SEMIEXPLICIT_SYSTEM(SSPRK104)};
 
 // Run all the tests
 int main(int argc, char **argv) {
