@@ -59,6 +59,7 @@ class BVPT7Explicit : public Explicit<Real, 2, 0> {
   using typename Explicit<Real, 2, 0>::MatrixJH;
 
  private:
+  static constexpr Real pi{static_cast<Real>(EIGEN_PI)};
   Real m_lambda{1.0e-3};
 
  public:
@@ -75,12 +76,12 @@ class BVPT7Explicit : public Explicit<Real, 2, 0> {
   }
 
   VectorF f(const VectorF &x, const Real t) const override {
-    Real pix{M_PI * t};
+    const Real tmp{static_cast<Real>(EIGEN_PI) * t};
     VectorF f;
-    f << x(1), (-t * x(1) + x(0) -
-                (1.0 + this->m_lambda * M_PI * M_PI) * std::cos(pix) -
-                M_PI * t * std::sin(pix)) /
-                   this->m_lambda;
+    f << x(1),
+        (-t * x(1) + x(0) - (1.0 + this->m_lambda * pi * pi) * std::cos(tmp) -
+         pi * t * std::sin(tmp)) /
+            this->m_lambda;
     return f;
   }
 
@@ -116,6 +117,7 @@ class BVPT7Implicit : public Implicit<Real, 2, 0> {
   using typename Implicit<Real, 2, 0>::MatrixJH;
 
  private:
+  static constexpr Real pi{static_cast<Real>(EIGEN_PI)};
   Real m_lambda{1.0e-3};
 
  public:
@@ -134,12 +136,12 @@ class BVPT7Implicit : public Implicit<Real, 2, 0> {
   VectorF F(const VectorF &x,
             const VectorF &x_dot,
             const Real t) const override {
-    Real pix{M_PI * t};
+    const Real tmp{static_cast<Real>(EIGEN_PI) * t};
     VectorF F;
     F << x_dot(0) - x(1),
         x_dot(1) - (-t * x(1) + x(0) -
-                    (1.0 + this->m_lambda * M_PI * M_PI) * std::cos(pix) -
-                    M_PI * t * std::sin(pix)) /
+                    (1.0 + this->m_lambda * pi * pi) * std::cos(tmp) -
+                    pi * t * std::sin(tmp)) /
                        this->m_lambda;
     return F;
   }
@@ -187,6 +189,7 @@ class BVPT7SemiExplicit : public SemiExplicit<Real, 2, 0> {
   using MatrixJH = typename SemiExplicit<Real, 2, 0>::MatrixJH;
 
  private:
+  static constexpr Real pi{static_cast<Real>(EIGEN_PI)};
   Real m_lambda{1.0e-3};
 
  public:
@@ -214,12 +217,12 @@ class BVPT7SemiExplicit : public SemiExplicit<Real, 2, 0> {
   }
 
   VectorB b(const VectorF &x, const Real t) const override {
-    Real pix{M_PI * t};
+    const Real tmp{pi * t};
     VectorB b;
-    b << x(1), (-t * x(1) + x(0) -
-                (1.0 + this->m_lambda * M_PI * M_PI) * std::cos(pix) -
-                M_PI * t * std::sin(pix)) /
-                   this->m_lambda;
+    b << x(1),
+        (-t * x(1) + x(0) - (1.0 + this->m_lambda * pi * pi) * std::cos(tmp) -
+         pi * t * std::sin(tmp)) /
+            this->m_lambda;
     return b;
   }
 
@@ -257,6 +260,10 @@ class BVPT7Problem : public BoundaryValueProblem<Real, 2, 0, Integrator> {
   using VectorX = Eigen::Vector<Real, Eigen::Dynamic>;
   using MatrixX = Eigen::Matrix<Real, 2, Eigen::Dynamic>;
 
+ private:
+  static constexpr Real pi{static_cast<Real>(EIGEN_PI)};
+
+ public:
   BVPT7Problem()
       : BoundaryValueProblem<Real, 2, 0, Integrator>(
             "BVPT7Problem",
@@ -306,15 +313,15 @@ class BVPT7Problem : public BoundaryValueProblem<Real, 2, 0, Integrator> {
   }
 
   Real exact_solution(const Real t) const {
-    Real lam{this->lambda()};
-    Real Aa{t * t / (2.0 * lam)};
-    Real Bb{1.0 / (2.0 * lam)};
-    Real Cc{std::exp(-Aa)};
-    Real Dd{std::exp(-Bb)};
-    Real Sqep{std::sqrt(2.0 * lam)};
-    return std::cos(M_PI * t) + t +
-           (t * std::erf(t / Sqep) + std::sqrt(2.0 * lam / M_PI) * Cc) /
-               (std::erf(1.0 / Sqep) + std::sqrt(2.0 * lam / M_PI) * Dd);
+    const Real lambda{this->lambda()};
+    const Real A{t * t / (2.0 * lambda)};
+    const Real B{1.0 / (2.0 * lambda)};
+    const Real C{std::exp(-A)};
+    const Real D{std::exp(-B)};
+    const Real S{std::sqrt(2.0 * lambda)};
+    return std::cos(pi * t) + t +
+           (t * std::erf(t / S) + std::sqrt(2.0 * lambda / pi) * C) /
+               (std::erf(1.0 / S) + std::sqrt(2.0 * lambda / pi) * D);
   }
 
   VectorX exact_solution(const VectorX &t) const {

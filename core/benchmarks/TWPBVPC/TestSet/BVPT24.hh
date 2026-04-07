@@ -45,55 +45,42 @@ class BVPT24Explicit : public Explicit<Real, 2, 0> {
   }
 
   VectorF f(const VectorF &x, const Real t) const override {
-    Real Ax{1.0 + t * t};
-    Real Apx{2.0 * t};
-    Real Ga{1.4};
-    Real Ax2{Ax * Ax};
-    Real y0{x(0)};
-    Real y1{x(1)};
-    Real S{(1.0 / Ax2) * (2.0 / (Ga - 1.0) + y0 * y0) *
-           (1.0 - Ga * y0 * y0 * Ax2)};
-    Real N{(2.0 * y0 * y1 / Ax - Apx / Ax2) * (1.0 - Ga * y0 * y0 * Ax2) -
-           (1.0 / Ax2) * (2.0 / (Ga - 1.0) + y0 * y0) * 2.0 * Ga * y0 * Ax2 *
-               Apx};
+    const Real Ax{1.0 + t * t};
+    const Real Apx{2.0 * t};
+    const Real Ga{1.4};
+    const Real y0{x(0)};
+    const Real y1{x(1)};
     VectorF f;
-    f << y1, N / (this->m_lambda * S);
+    f << y1, (((1.0 + Ga) / 2.0 - this->m_lambda * Apx) * y0 * y1 - y1 / y0 -
+              (Apx / Ax) * (1.0 - (Ga - 1.0) * y0 * y0 / 2.0)) /
+                 (this->m_lambda * Ax * y0);
     return f;
   }
 
   MatrixJF Jf_x(const VectorF &x, const Real t) const override {
-    Real Ax{1.0 + t * t};
-    Real Apx{2.0 * t};
-    Real Ga{1.4};
-    Real Ax2{Ax * Ax};
-    Real y0{x(0)};
-    Real y1{x(1)};
-    Real S{(1.0 / Ax2) * (2.0 / (Ga - 1.0) + y0 * y0) *
-           (1.0 - Ga * y0 * y0 * Ax2)};
-    Real N{(2.0 * y0 * y1 / Ax - Apx / Ax2) * (1.0 - Ga * y0 * y0 * Ax2) -
-           (1.0 / Ax2) * (2.0 / (Ga - 1.0) + y0 * y0) * 2.0 * Ga * y0 * Ax2 *
-               Apx};
-    Real DS1{2.0 * y0 / Ax2 * (1.0 - Ga * y0 * y0 * Ax2) +
-             (1.0 / Ax2) * (2.0 / (Ga - 1.0) + y0 * y0) *
-                 (-2.0 * Ga * y0 * Ax2)};
-    Real DN1{(2.0 * y1 / Ax) * (1.0 - Ga * y0 * y0 * Ax2) +
-             (2.0 * y0 * y1 / Ax - Apx / Ax2) * (-2.0 * Ga * y0 * Ax2) -
-             2.0 * y0 / Ax2 * 2.0 * Ga * y0 * Ax2 * Apx -
-             (1.0 / Ax2) * (2.0 / (Ga - 1.0) + y0 * y0) * 2.0 * Ga * Ax2 * Apx};
-    Real DN2{2.0 * y0 / Ax * (1.0 - Ga * y0 * y0 * Ax2)};
+    const Real Ax{1.0 + t * t};
+    const Real Apx{2.0 * t};
+    const Real Ga{1.4};
+    const Real y0{x(0)};
+    const Real y1{x(1)};
     MatrixJF Jf_x(MatrixJF::Zero());
     Jf_x(0, 1) = 1.0;
-    Jf_x(1, 0) = (DN1 * S - N * DS1) / (this->m_lambda * S * S);
-    Jf_x(1, 1) = DN2 / (this->m_lambda * S);
+    Jf_x(1, 0) = (2.0 * y1 / (y0 * y0 * y0) + Apx / (Ax * y0 * y0) +
+                  Apx * (Ga - 1.0) / (2.0 * Ax)) /
+                 (this->m_lambda * Ax);
+    Jf_x(1, 1) = (((1.0 + Ga) / 2.0 - this->m_lambda * Apx) * y0 - 1.0 / y0) /
+                 (this->m_lambda * Ax * y0);
     return Jf_x;
   }
 
   VectorH h(const VectorF & /*x*/, const Real /*t*/) const override {
     return VectorH::Zero();
   }
+
   MatrixJH Jh_x(const VectorF & /*x*/, const Real /*t*/) const override {
     return MatrixJH::Zero();
   }
+
   bool in_domain(const VectorF & /*x*/, const Real /*t*/) const override {
     return true;
   }
@@ -126,48 +113,34 @@ class BVPT24Implicit : public Implicit<Real, 2, 0> {
   VectorF F(const VectorF &x,
             const VectorF &x_dot,
             const Real t) const override {
-    Real Ax{1.0 + t * t};
-    Real Apx{2.0 * t};
-    Real Ga{1.4};
-    Real Ax2{Ax * Ax};
-    Real y0{x(0)};
-    Real y1{x(1)};
-    Real S{(1.0 / Ax2) * (2.0 / (Ga - 1.0) + y0 * y0) *
-           (1.0 - Ga * y0 * y0 * Ax2)};
-    Real N{(2.0 * y0 * y1 / Ax - Apx / Ax2) * (1.0 - Ga * y0 * y0 * Ax2) -
-           (1.0 / Ax2) * (2.0 / (Ga - 1.0) + y0 * y0) * 2.0 * Ga * y0 * Ax2 *
-               Apx};
+    const Real Ax{1.0 + t * t};
+    const Real Apx{2.0 * t};
+    const Real Ga{1.4};
+    const Real y0{x(0)};
+    const Real y1{x(1)};
+    const Real f1{(((1.0 + Ga) / 2.0 - this->m_lambda * Apx) * y0 * y1 -
+                   y1 / y0 - (Apx / Ax) * (1.0 - (Ga - 1.0) * y0 * y0 / 2.0)) /
+                  (this->m_lambda * Ax * y0)};
     VectorF F;
-    F << x_dot(0) - y1, x_dot(1) - N / (this->m_lambda * S);
+    F << x_dot(0) - y1, x_dot(1) - f1;
     return F;
   }
 
   MatrixJF JF_x(const VectorF &x,
                 const VectorF & /*x_dot*/,
                 const Real t) const override {
-    Real Ax{1.0 + t * t};
-    Real Apx{2.0 * t};
-    Real Ga{1.4};
-    Real Ax2{Ax * Ax};
-    Real y0{x(0)};
-    Real y1{x(1)};
-    Real S{(1.0 / Ax2) * (2.0 / (Ga - 1.0) + y0 * y0) *
-           (1.0 - Ga * y0 * y0 * Ax2)};
-    Real N{(2.0 * y0 * y1 / Ax - Apx / Ax2) * (1.0 - Ga * y0 * y0 * Ax2) -
-           (1.0 / Ax2) * (2.0 / (Ga - 1.0) + y0 * y0) * 2.0 * Ga * y0 * Ax2 *
-               Apx};
-    Real DS1{2.0 * y0 / Ax2 * (1.0 - Ga * y0 * y0 * Ax2) +
-             (1.0 / Ax2) * (2.0 / (Ga - 1.0) + y0 * y0) *
-                 (-2.0 * Ga * y0 * Ax2)};
-    Real DN1{(2.0 * y1 / Ax) * (1.0 - Ga * y0 * y0 * Ax2) +
-             (2.0 * y0 * y1 / Ax - Apx / Ax2) * (-2.0 * Ga * y0 * Ax2) -
-             2.0 * y0 / Ax2 * 2.0 * Ga * y0 * Ax2 * Apx -
-             (1.0 / Ax2) * (2.0 / (Ga - 1.0) + y0 * y0) * 2.0 * Ga * Ax2 * Apx};
-    Real DN2{2.0 * y0 / Ax * (1.0 - Ga * y0 * y0 * Ax2)};
+    const Real Ax{1.0 + t * t};
+    const Real Apx{2.0 * t};
+    const Real Ga{1.4};
+    const Real y0{x(0)};
+    const Real y1{x(1)};
     MatrixJF JF_x(MatrixJF::Zero());
     JF_x(0, 1) = -1.0;
-    JF_x(1, 0) = -(DN1 * S - N * DS1) / (this->m_lambda * S * S);
-    JF_x(1, 1) = -DN2 / (this->m_lambda * S);
+    JF_x(1, 0) = -(2.0 * y1 / (y0 * y0 * y0) + Apx / (Ax * y0 * y0) +
+                   Apx * (Ga - 1.0) / (2.0 * Ax)) /
+                 (this->m_lambda * Ax);
+    JF_x(1, 1) = -(((1.0 + Ga) / 2.0 - this->m_lambda * Apx) * y0 - 1.0 / y0) /
+                 (this->m_lambda * Ax * y0);
     return JF_x;
   }
 
@@ -180,9 +153,11 @@ class BVPT24Implicit : public Implicit<Real, 2, 0> {
   VectorH h(const VectorF & /*x*/, const Real /*t*/) const override {
     return VectorH::Zero();
   }
+
   MatrixJH Jh_x(const VectorF & /*x*/, const Real /*t*/) const override {
     return MatrixJH::Zero();
   }
+
   bool in_domain(const VectorF & /*x*/, const Real /*t*/) const override {
     return true;
   }
@@ -227,55 +202,42 @@ class BVPT24SemiExplicit : public SemiExplicit<Real, 2, 0> {
   }
 
   VectorB b(const VectorF &x, const Real t) const override {
-    Real Ax{1.0 + t * t};
-    Real Apx{2.0 * t};
-    Real Ga{1.4};
-    Real Ax2{Ax * Ax};
-    Real y0{x(0)};
-    Real y1{x(1)};
-    Real S{(1.0 / Ax2) * (2.0 / (Ga - 1.0) + y0 * y0) *
-           (1.0 - Ga * y0 * y0 * Ax2)};
-    Real N{(2.0 * y0 * y1 / Ax - Apx / Ax2) * (1.0 - Ga * y0 * y0 * Ax2) -
-           (1.0 / Ax2) * (2.0 / (Ga - 1.0) + y0 * y0) * 2.0 * Ga * y0 * Ax2 *
-               Apx};
+    const Real Ax{1.0 + t * t};
+    const Real Apx{2.0 * t};
+    const Real Ga{1.4};
+    const Real y0{x(0)};
+    const Real y1{x(1)};
     VectorB b;
-    b << y1, N / (this->m_lambda * S);
+    b << y1, (((1.0 + Ga) / 2.0 - this->m_lambda * Apx) * y0 * y1 - y1 / y0 -
+              (Apx / Ax) * (1.0 - (Ga - 1.0) * y0 * y0 / 2.0)) /
+                 (this->m_lambda * Ax * y0);
     return b;
   }
 
   MatrixJB Jb_x(const VectorF &x, const Real t) const override {
-    Real Ax{1.0 + t * t};
-    Real Apx{2.0 * t};
-    Real Ga{1.4};
-    Real Ax2{Ax * Ax};
-    Real y0{x(0)};
-    Real y1{x(1)};
-    Real S{(1.0 / Ax2) * (2.0 / (Ga - 1.0) + y0 * y0) *
-           (1.0 - Ga * y0 * y0 * Ax2)};
-    Real N{(2.0 * y0 * y1 / Ax - Apx / Ax2) * (1.0 - Ga * y0 * y0 * Ax2) -
-           (1.0 / Ax2) * (2.0 / (Ga - 1.0) + y0 * y0) * 2.0 * Ga * y0 * Ax2 *
-               Apx};
-    Real DS1{2.0 * y0 / Ax2 * (1.0 - Ga * y0 * y0 * Ax2) +
-             (1.0 / Ax2) * (2.0 / (Ga - 1.0) + y0 * y0) *
-                 (-2.0 * Ga * y0 * Ax2)};
-    Real DN1{(2.0 * y1 / Ax) * (1.0 - Ga * y0 * y0 * Ax2) +
-             (2.0 * y0 * y1 / Ax - Apx / Ax2) * (-2.0 * Ga * y0 * Ax2) -
-             2.0 * y0 / Ax2 * 2.0 * Ga * y0 * Ax2 * Apx -
-             (1.0 / Ax2) * (2.0 / (Ga - 1.0) + y0 * y0) * 2.0 * Ga * Ax2 * Apx};
-    Real DN2{2.0 * y0 / Ax * (1.0 - Ga * y0 * y0 * Ax2)};
+    const Real Ax{1.0 + t * t};
+    const Real Apx{2.0 * t};
+    const Real Ga{1.4};
+    const Real y0{x(0)};
+    const Real y1{x(1)};
     MatrixJB Jb_x(MatrixJB::Zero());
     Jb_x(0, 1) = 1.0;
-    Jb_x(1, 0) = (DN1 * S - N * DS1) / (this->m_lambda * S * S);
-    Jb_x(1, 1) = DN2 / (this->m_lambda * S);
+    Jb_x(1, 0) = (2.0 * y1 / (y0 * y0 * y0) + Apx / (Ax * y0 * y0) +
+                  Apx * (Ga - 1.0) / (2.0 * Ax)) /
+                 (this->m_lambda * Ax);
+    Jb_x(1, 1) = (((1.0 + Ga) / 2.0 - this->m_lambda * Apx) * y0 - 1.0 / y0) /
+                 (this->m_lambda * Ax * y0);
     return Jb_x;
   }
 
   VectorH h(const VectorF & /*x*/, const Real /*t*/) const override {
     return VectorH::Zero();
   }
+
   MatrixJH Jh_x(const VectorF & /*x*/, const Real /*t*/) const override {
     return MatrixJH::Zero();
   }
+
   bool in_domain(const VectorF & /*x*/, const Real /*t*/) const override {
     return true;
   }
@@ -304,6 +266,7 @@ class BVPT24Problem : public BoundaryValueProblem<Real, 2, 0, Integrator> {
   static Real time_start() {
     return 0.0;
   }
+
   static Real time_end() {
     return 1.0;
   }

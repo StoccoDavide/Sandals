@@ -65,9 +65,11 @@ class BVPT32Explicit : public Explicit<Real, 4, 0> {
   VectorH h(const VectorF & /*x*/, const Real /*t*/) const override {
     return VectorH::Zero();
   }
+
   MatrixJH Jh_x(const VectorF & /*x*/, const Real /*t*/) const override {
     return MatrixJH::Zero();
   }
+
   bool in_domain(const VectorF & /*x*/, const Real /*t*/) const override {
     return true;
   }
@@ -129,9 +131,11 @@ class BVPT32Implicit : public Implicit<Real, 4, 0> {
   VectorH h(const VectorF & /*x*/, const Real /*t*/) const override {
     return VectorH::Zero();
   }
+
   MatrixJH Jh_x(const VectorF & /*x*/, const Real /*t*/) const override {
     return MatrixJH::Zero();
   }
+
   bool in_domain(const VectorF & /*x*/, const Real /*t*/) const override {
     return true;
   }
@@ -198,9 +202,11 @@ class BVPT32SemiExplicit : public SemiExplicit<Real, 4, 0> {
   VectorH h(const VectorF & /*x*/, const Real /*t*/) const override {
     return VectorH::Zero();
   }
+
   MatrixJH Jh_x(const VectorF & /*x*/, const Real /*t*/) const override {
     return MatrixJH::Zero();
   }
+
   bool in_domain(const VectorF & /*x*/, const Real /*t*/) const override {
     return true;
   }
@@ -229,6 +235,7 @@ class BVPT32Problem : public BoundaryValueProblem<Real, 4, 0, Integrator> {
   static Real time_start() {
     return 0.0;
   }
+
   static Real time_end() {
     return 1.0;
   }

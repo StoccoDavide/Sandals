@@ -45,10 +45,10 @@ class BVPT31Explicit : public Explicit<Real, 4, 0> {
   }
 
   VectorF f(const VectorF &x, const Real /*t*/) const override {
-    Real cos_x1{std::cos(x(1))};
-    Real sin_x1{std::sin(x(1))};
-    Real tan_x1{sin_x1 / cos_x1};
-    Real sec_x1{1.0 / cos_x1};
+    const Real cos_x1{std::cos(x(1))};
+    const Real sin_x1{std::sin(x(1))};
+    const Real tan_x1{sin_x1 / cos_x1};
+    const Real sec_x1{1.0 / cos_x1};
     VectorF f;
     f << sin_x1, x(2), -x(3) / this->m_lambda,
         ((x(0) - 1.0) * cos_x1 - x(2) * sec_x1 -
@@ -58,10 +58,10 @@ class BVPT31Explicit : public Explicit<Real, 4, 0> {
   }
 
   MatrixJF Jf_x(const VectorF &x, const Real /*t*/) const override {
-    Real cos_x1{std::cos(x(1))};
-    Real sin_x1{std::sin(x(1))};
-    Real tan_x1{sin_x1 / cos_x1};
-    Real sec_x1{1.0 / cos_x1};
+    const Real cos_x1{std::cos(x(1))};
+    const Real sin_x1{std::sin(x(1))};
+    const Real tan_x1{sin_x1 / cos_x1};
+    const Real sec_x1{1.0 / cos_x1};
     MatrixJF Jf_x(MatrixJF::Zero());
     Jf_x(0, 1) = cos_x1;
     Jf_x(1, 2) = 1.0;
@@ -78,9 +78,11 @@ class BVPT31Explicit : public Explicit<Real, 4, 0> {
   VectorH h(const VectorF & /*x*/, const Real /*t*/) const override {
     return VectorH::Zero();
   }
+
   MatrixJH Jh_x(const VectorF & /*x*/, const Real /*t*/) const override {
     return MatrixJH::Zero();
   }
+
   bool in_domain(const VectorF & /*x*/, const Real /*t*/) const override {
     return true;
   }
@@ -113,10 +115,10 @@ class BVPT31Implicit : public Implicit<Real, 4, 0> {
   VectorF F(const VectorF &x,
             const VectorF &x_dot,
             const Real /*t*/) const override {
-    Real cos_x1{std::cos(x(1))};
-    Real sin_x1{std::sin(x(1))};
-    Real tan_x1{sin_x1 / cos_x1};
-    Real sec_x1{1.0 / cos_x1};
+    const Real cos_x1{std::cos(x(1))};
+    const Real sin_x1{std::sin(x(1))};
+    const Real tan_x1{sin_x1 / cos_x1};
+    const Real sec_x1{1.0 / cos_x1};
     VectorF F;
     F << x_dot(0) - sin_x1, x_dot(1) - x(2), x_dot(2) + x(3) / this->m_lambda,
         x_dot(3) - ((x(0) - 1.0) * cos_x1 - x(2) * sec_x1 -
@@ -128,10 +130,10 @@ class BVPT31Implicit : public Implicit<Real, 4, 0> {
   MatrixJF JF_x(const VectorF &x,
                 const VectorF & /*x_dot*/,
                 const Real /*t*/) const override {
-    Real cos_x1{std::cos(x(1))};
-    Real sin_x1{std::sin(x(1))};
-    Real tan_x1{sin_x1 / cos_x1};
-    Real sec_x1{1.0 / cos_x1};
+    const Real cos_x1{std::cos(x(1))};
+    const Real sin_x1{std::sin(x(1))};
+    const Real tan_x1{sin_x1 / cos_x1};
+    const Real sec_x1{1.0 / cos_x1};
     MatrixJF JF_x(MatrixJF::Zero());
     JF_x(0, 1) = -cos_x1;
     JF_x(1, 2) = -1.0;
@@ -154,9 +156,11 @@ class BVPT31Implicit : public Implicit<Real, 4, 0> {
   VectorH h(const VectorF & /*x*/, const Real /*t*/) const override {
     return VectorH::Zero();
   }
+
   MatrixJH Jh_x(const VectorF & /*x*/, const Real /*t*/) const override {
     return MatrixJH::Zero();
   }
+
   bool in_domain(const VectorF & /*x*/, const Real /*t*/) const override {
     return true;
   }
@@ -203,10 +207,10 @@ class BVPT31SemiExplicit : public SemiExplicit<Real, 4, 0> {
   }
 
   VectorB b(const VectorF &x, const Real /*t*/) const override {
-    Real cos_x1{std::cos(x(1))};
-    Real sin_x1{std::sin(x(1))};
-    Real tan_x1{sin_x1 / cos_x1};
-    Real sec_x1{1.0 / cos_x1};
+    const Real cos_x1{std::cos(x(1))};
+    const Real sin_x1{std::sin(x(1))};
+    const Real tan_x1{sin_x1 / cos_x1};
+    const Real sec_x1{1.0 / cos_x1};
     VectorB b;
     b << sin_x1, x(2), -x(3) / this->m_lambda,
         ((x(0) - 1.0) * cos_x1 - x(2) * sec_x1 -
@@ -216,10 +220,10 @@ class BVPT31SemiExplicit : public SemiExplicit<Real, 4, 0> {
   }
 
   MatrixJB Jb_x(const VectorF &x, const Real /*t*/) const override {
-    Real cos_x1{std::cos(x(1))};
-    Real sin_x1{std::sin(x(1))};
-    Real tan_x1{sin_x1 / cos_x1};
-    Real sec_x1{1.0 / cos_x1};
+    const Real cos_x1{std::cos(x(1))};
+    const Real sin_x1{std::sin(x(1))};
+    const Real tan_x1{sin_x1 / cos_x1};
+    const Real sec_x1{1.0 / cos_x1};
     MatrixJB Jb_x(MatrixJB::Zero());
     Jb_x(0, 1) = cos_x1;
     Jb_x(1, 2) = 1.0;
@@ -236,9 +240,11 @@ class BVPT31SemiExplicit : public SemiExplicit<Real, 4, 0> {
   VectorH h(const VectorF & /*x*/, const Real /*t*/) const override {
     return VectorH::Zero();
   }
+
   MatrixJH Jh_x(const VectorF & /*x*/, const Real /*t*/) const override {
     return MatrixJH::Zero();
   }
+
   bool in_domain(const VectorF & /*x*/, const Real /*t*/) const override {
     return true;
   }
@@ -267,6 +273,7 @@ class BVPT31Problem : public BoundaryValueProblem<Real, 4, 0, Integrator> {
   static Real time_start() {
     return 0.0;
   }
+
   static Real time_end() {
     return 1.0;
   }

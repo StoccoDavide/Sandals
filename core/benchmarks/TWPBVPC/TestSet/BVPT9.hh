@@ -47,14 +47,14 @@ class BVPT9Explicit : public Explicit<Real, 2, 0> {
   }
 
   VectorF f(const VectorF &x, const Real t) const override {
-    Real den{this->m_lambda + t * t};
+    const Real den{this->m_lambda + t * t};
     VectorF f;
     f << x(1), -(4.0 * t * x(1) + 2.0 * x(0)) / den;
     return f;
   }
 
   MatrixJF Jf_x(const VectorF & /*x*/, const Real t) const override {
-    Real den{this->m_lambda + t * t};
+    const Real den{this->m_lambda + t * t};
     MatrixJF Jf_x(MatrixJF::Zero());
     Jf_x(0, 1) = 1.0;
     Jf_x(1, 0) = -2.0 / den;
@@ -104,7 +104,7 @@ class BVPT9Implicit : public Implicit<Real, 2, 0> {
   VectorF F(const VectorF &x,
             const VectorF &x_dot,
             const Real t) const override {
-    Real den{this->m_lambda + t * t};
+    const Real den{this->m_lambda + t * t};
     VectorF F;
     F << x_dot(0) - x(1), x_dot(1) + (4.0 * t * x(1) + 2.0 * x(0)) / den;
     return F;
@@ -113,7 +113,7 @@ class BVPT9Implicit : public Implicit<Real, 2, 0> {
   MatrixJF JF_x(const VectorF & /*x*/,
                 const VectorF & /*x_dot*/,
                 const Real t) const override {
-    Real den{this->m_lambda + t * t};
+    const Real den{this->m_lambda + t * t};
     MatrixJF JF_x(MatrixJF::Zero());
     JF_x(0, 1) = -1.0;
     JF_x(1, 0) = 2.0 / den;
@@ -181,14 +181,14 @@ class BVPT9SemiExplicit : public SemiExplicit<Real, 2, 0> {
   }
 
   VectorB b(const VectorF &x, const Real t) const override {
-    Real den{this->m_lambda + t * t};
+    const Real den{this->m_lambda + t * t};
     VectorB b;
     b << x(1), -(4.0 * t * x(1) + 2.0 * x(0)) / den;
     return b;
   }
 
   MatrixJB Jb_x(const VectorF & /*x*/, const Real t) const override {
-    Real den{this->m_lambda + t * t};
+    const Real den{this->m_lambda + t * t};
     MatrixJB Jb_x(MatrixJB::Zero());
     Jb_x(0, 1) = 1.0;
     Jb_x(1, 0) = -2.0 / den;
@@ -247,7 +247,7 @@ class BVPT9Problem : public BoundaryValueProblem<Real, 2, 0, Integrator> {
   }
 
   VectorF b(const VectorF &x_ini, const VectorF &x_end) const override {
-    Real eta{1.0 / (1.0 + this->lambda())};
+    const Real eta{1.0 / (1.0 + this->lambda())};
     VectorF b;
     b << x_ini(0) - eta, x_end(0) - eta;
     return b;

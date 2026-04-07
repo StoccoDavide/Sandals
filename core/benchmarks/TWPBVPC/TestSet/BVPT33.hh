@@ -71,9 +71,11 @@ class BVPT33Explicit : public Explicit<Real, 6, 0> {
   VectorH h(const VectorF & /*x*/, const Real /*t*/) const override {
     return VectorH::Zero();
   }
+
   MatrixJH Jh_x(const VectorF & /*x*/, const Real /*t*/) const override {
     return MatrixJH::Zero();
   }
+
   bool in_domain(const VectorF & /*x*/, const Real /*t*/) const override {
     return true;
   }
@@ -142,9 +144,11 @@ class BVPT33Implicit : public Implicit<Real, 6, 0> {
   VectorH h(const VectorF & /*x*/, const Real /*t*/) const override {
     return VectorH::Zero();
   }
+
   MatrixJH Jh_x(const VectorF & /*x*/, const Real /*t*/) const override {
     return MatrixJH::Zero();
   }
+
   bool in_domain(const VectorF & /*x*/, const Real /*t*/) const override {
     return true;
   }
@@ -219,9 +223,11 @@ class BVPT33SemiExplicit : public SemiExplicit<Real, 6, 0> {
   VectorH h(const VectorF & /*x*/, const Real /*t*/) const override {
     return VectorH::Zero();
   }
+
   MatrixJH Jh_x(const VectorF & /*x*/, const Real /*t*/) const override {
     return MatrixJH::Zero();
   }
+
   bool in_domain(const VectorF & /*x*/, const Real /*t*/) const override {
     return true;
   }
@@ -250,6 +256,7 @@ class BVPT33Problem : public BoundaryValueProblem<Real, 6, 0, Integrator> {
   static Real time_start() {
     return 0.0;
   }
+
   static Real time_end() {
     return 1.0;
   }

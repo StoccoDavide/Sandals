@@ -163,11 +163,11 @@ class ThreeBodySemiExplicit : public SemiExplicit<Real, 12, 0> {
 #define CMD "Sandals::ThreeBodySemiExplicit::Jf_x(...): "
 
     // Compute the distances
-    Real d_12{
+    const Real d_12{
       std::sqrt(std::pow(x(0) - x(1), 2.0) + std::pow(x(3) - x(4), 2.0))};
-    Real d_13{
+    const Real d_13{
       std::sqrt(std::pow(x(0) - x(2), 2.0) + std::pow(x(3) - x(5), 2.0))};
-    Real d_23{
+    const Real d_23{
       std::sqrt(std::pow(x(1) - x(2), 2.0) + std::pow(x(4) - x(5), 2.0))};
 
     // Compute the Jacobian of the three body problem

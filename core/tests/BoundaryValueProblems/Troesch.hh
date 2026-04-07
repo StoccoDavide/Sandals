@@ -263,9 +263,9 @@ class TroeschProblem : public BoundaryValueProblem<Real, 2, 0, Integrator> {
 
   VectorF exact_solution(const Real t) const {
     VectorF x;
-    Real lambda{this->lambda()};
-    Real c{1.0 - std::sinh(lambda) / lambda};
-    x << std::sinh(t * lambda) / lambda + t * c, std::cosh(t * lambda) + c;
+    const Real c{1.0 - std::sinh(this->m_lambda) / this->m_lambda};
+    x << std::sinh(t * this->m_lambda) / this->m_lambda + t * c,
+        std::cosh(t * this->m_lambda) + c;
     return x;
   }
 

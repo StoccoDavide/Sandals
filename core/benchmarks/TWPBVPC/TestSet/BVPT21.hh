@@ -45,27 +45,27 @@ class BVPT21Explicit : public Explicit<Real, 2, 0> {
   }
 
   VectorF f(const VectorF &x, const Real t) const override {
-    Real lam2{this->m_lambda * this->m_lambda};
     VectorF f;
-    f << x(1),
-        (x(0) * (1.0 + x(0)) - std::exp(-2.0 * t / this->m_lambda)) / lam2;
+    f << x(1), (x(0) * (1.0 + x(0)) - std::exp(-2.0 * t / this->m_lambda)) /
+                   (this->m_lambda * this->m_lambda);
     return f;
   }
 
   MatrixJF Jf_x(const VectorF &x, const Real /*t*/) const override {
-    Real lam2{this->m_lambda * this->m_lambda};
     MatrixJF Jf_x(MatrixJF::Zero());
     Jf_x(0, 1) = 1.0;
-    Jf_x(1, 0) = (1.0 + 2.0 * x(0)) / lam2;
+    Jf_x(1, 0) = (1.0 + 2.0 * x(0)) / (this->m_lambda * this->m_lambda);
     return Jf_x;
   }
 
   VectorH h(const VectorF & /*x*/, const Real /*t*/) const override {
     return VectorH::Zero();
   }
+
   MatrixJH Jh_x(const VectorF & /*x*/, const Real /*t*/) const override {
     return MatrixJH::Zero();
   }
+
   bool in_domain(const VectorF & /*x*/, const Real /*t*/) const override {
     return true;
   }
@@ -98,21 +98,19 @@ class BVPT21Implicit : public Implicit<Real, 2, 0> {
   VectorF F(const VectorF &x,
             const VectorF &x_dot,
             const Real t) const override {
-    Real lam2{this->m_lambda * this->m_lambda};
     VectorF F;
     F << x_dot(0) - x(1),
-        x_dot(1) -
-            (x(0) * (1.0 + x(0)) - std::exp(-2.0 * t / this->m_lambda)) / lam2;
+        x_dot(1) - (x(0) * (1.0 + x(0)) - std::exp(-2.0 * t / this->m_lambda)) /
+                       (this->m_lambda * this->m_lambda);
     return F;
   }
 
   MatrixJF JF_x(const VectorF &x,
                 const VectorF & /*x_dot*/,
                 const Real /*t*/) const override {
-    Real lam2{this->m_lambda * this->m_lambda};
     MatrixJF JF_x(MatrixJF::Zero());
     JF_x(0, 1) = -1.0;
-    JF_x(1, 0) = -(1.0 + 2.0 * x(0)) / lam2;
+    JF_x(1, 0) = -(1.0 + 2.0 * x(0)) / (this->m_lambda * this->m_lambda);
     return JF_x;
   }
 
@@ -125,9 +123,11 @@ class BVPT21Implicit : public Implicit<Real, 2, 0> {
   VectorH h(const VectorF & /*x*/, const Real /*t*/) const override {
     return VectorH::Zero();
   }
+
   MatrixJH Jh_x(const VectorF & /*x*/, const Real /*t*/) const override {
     return MatrixJH::Zero();
   }
+
   bool in_domain(const VectorF & /*x*/, const Real /*t*/) const override {
     return true;
   }
@@ -172,27 +172,27 @@ class BVPT21SemiExplicit : public SemiExplicit<Real, 2, 0> {
   }
 
   VectorB b(const VectorF &x, const Real t) const override {
-    Real lam2{this->m_lambda * this->m_lambda};
     VectorB b;
-    b << x(1),
-        (x(0) * (1.0 + x(0)) - std::exp(-2.0 * t / this->m_lambda)) / lam2;
+    b << x(1), (x(0) * (1.0 + x(0)) - std::exp(-2.0 * t / this->m_lambda)) /
+                   (this->m_lambda * this->m_lambda);
     return b;
   }
 
   MatrixJB Jb_x(const VectorF &x, const Real /*t*/) const override {
-    Real lam2{this->m_lambda * this->m_lambda};
     MatrixJB Jb_x(MatrixJB::Zero());
     Jb_x(0, 1) = 1.0;
-    Jb_x(1, 0) = (1.0 + 2.0 * x(0)) / lam2;
+    Jb_x(1, 0) = (1.0 + 2.0 * x(0)) / (this->m_lambda * this->m_lambda);
     return Jb_x;
   }
 
   VectorH h(const VectorF & /*x*/, const Real /*t*/) const override {
     return VectorH::Zero();
   }
+
   MatrixJH Jh_x(const VectorF & /*x*/, const Real /*t*/) const override {
     return MatrixJH::Zero();
   }
+
   bool in_domain(const VectorF & /*x*/, const Real /*t*/) const override {
     return true;
   }
@@ -221,6 +221,7 @@ class BVPT21Problem : public BoundaryValueProblem<Real, 2, 0, Integrator> {
   static Real time_start() {
     return 0.0;
   }
+
   static Real time_end() {
     return 1.0;
   }
@@ -233,9 +234,8 @@ class BVPT21Problem : public BoundaryValueProblem<Real, 2, 0, Integrator> {
   }
 
   VectorF b(const VectorF &x_ini, const VectorF &x_end) const override {
-    Real lam{this->lambda()};
     VectorF b;
-    b << x_ini(0) - 1.0, x_end(0) - std::exp(-1.0 / lam);
+    b << x_ini(0) - 1.0, x_end(0) - std::exp(-1.0 / this->lambda());
     return b;
   }
 
@@ -258,8 +258,7 @@ class BVPT21Problem : public BoundaryValueProblem<Real, 2, 0, Integrator> {
   }
 
   Real exact_solution(const Real t) const {
-    Real lam{this->lambda()};
-    return std::exp(-t / lam);
+    return std::exp(-t / this->lambda());
   }
 
   VectorX exact_solution(const VectorX &t) const {

@@ -60,9 +60,11 @@ class BVPT20Explicit : public Explicit<Real, 2, 0> {
   VectorH h(const VectorF & /*x*/, const Real /*t*/) const override {
     return VectorH::Zero();
   }
+
   MatrixJH Jh_x(const VectorF & /*x*/, const Real /*t*/) const override {
     return MatrixJH::Zero();
   }
+
   bool in_domain(const VectorF & /*x*/, const Real /*t*/) const override {
     return true;
   }
@@ -118,9 +120,11 @@ class BVPT20Implicit : public Implicit<Real, 2, 0> {
   VectorH h(const VectorF & /*x*/, const Real /*t*/) const override {
     return VectorH::Zero();
   }
+
   MatrixJH Jh_x(const VectorF & /*x*/, const Real /*t*/) const override {
     return MatrixJH::Zero();
   }
+
   bool in_domain(const VectorF & /*x*/, const Real /*t*/) const override {
     return true;
   }
@@ -180,9 +184,11 @@ class BVPT20SemiExplicit : public SemiExplicit<Real, 2, 0> {
   VectorH h(const VectorF & /*x*/, const Real /*t*/) const override {
     return VectorH::Zero();
   }
+
   MatrixJH Jh_x(const VectorF & /*x*/, const Real /*t*/) const override {
     return MatrixJH::Zero();
   }
+
   bool in_domain(const VectorF & /*x*/, const Real /*t*/) const override {
     return true;
   }
@@ -211,6 +217,7 @@ class BVPT20Problem : public BoundaryValueProblem<Real, 2, 0, Integrator> {
   static Real time_start() {
     return 0.0;
   }
+
   static Real time_end() {
     return 1.0;
   }
@@ -223,13 +230,15 @@ class BVPT20Problem : public BoundaryValueProblem<Real, 2, 0, Integrator> {
   }
 
   VectorF b(const VectorF &x_ini, const VectorF &x_end) const override {
-    Real lam{this->lambda()};
-    Real X1{-0.745 / lam};
-    Real X2{0.255 / lam};
-    Real Eta0{1.0 + lam * (-X1 + std::log((std::exp(2.0 * X1) + 1.0) / 2.0))};
-    Real Eta1{1.0 + lam * (X2 + std::log((std::exp(-2.0 * X2) + 1.0) / 2.0))};
+    const Real lambda{this->lambda()};
+    const Real x1{-0.745 / lambda};
+    const Real x2{0.255 / lambda};
+    const Real eta0{
+      1.0 + lambda * (-x1 + std::log((std::exp(2.0 * x1) + 1.0) / 2.0))};
+    const Real eta1{
+      1.0 + lambda * (x2 + std::log((std::exp(-2.0 * x2) + 1.0) / 2.0))};
     VectorF b;
-    b << x_ini(0) - Eta0, x_end(0) - Eta1;
+    b << x_ini(0) - eta0, x_end(0) - eta1;
     return b;
   }
 
@@ -252,12 +261,14 @@ class BVPT20Problem : public BoundaryValueProblem<Real, 2, 0, Integrator> {
   }
 
   Real exact_solution(const Real t) const {
-    Real lam{this->lambda()};
-    Real Xx{(t - 0.745) / lam};
-    if (Xx > 0.0) {
-      return 1.0 + lam * (Xx + std::log((1.0 + std::exp(-2.0 * Xx)) / 2.0));
+    const Real lambda{this->lambda()};
+    const Real tmp{(t - 0.745) / lambda};
+    if (tmp > 0.0) {
+      return 1.0 +
+             lambda * (tmp + std::log((1.0 + std::exp(-2.0 * tmp)) / 2.0));
     } else {
-      return 1.0 + lam * (-Xx + std::log((1.0 + std::exp(2.0 * Xx)) / 2.0));
+      return 1.0 +
+             lambda * (-tmp + std::log((1.0 + std::exp(2.0 * tmp)) / 2.0));
     }
   }
 

@@ -241,8 +241,8 @@ class BVPT4Problem : public BoundaryValueProblem<Real, 2, 0, Integrator> {
   }
 
   VectorF b(const VectorF &x_ini, const VectorF &x_end) const override {
-    VectorF b;
     const Real lambda{this->lambda()};
+    VectorF b;
     b << x_ini(0) - 1.0 - std::exp(-2.0),
         x_end(0) - 1.0 - std::exp(-2.0 * (1.0 + lambda) / lambda);
     return b;
@@ -267,7 +267,7 @@ class BVPT4Problem : public BoundaryValueProblem<Real, 2, 0, Integrator> {
   }
 
   Real exact_solution(const Real t) const {
-    Real lambda{this->lambda()};
+    const Real lambda{this->lambda()};
     return std::exp(t - 1.0) + std::exp(-(1.0 + lambda) * (1.0 + t) / lambda);
   }
 

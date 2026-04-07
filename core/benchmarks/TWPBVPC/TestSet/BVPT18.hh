@@ -60,9 +60,11 @@ class BVPT18Explicit : public Explicit<Real, 2, 0> {
   VectorH h(const VectorF & /*x*/, const Real /*t*/) const override {
     return VectorH::Zero();
   }
+
   MatrixJH Jh_x(const VectorF & /*x*/, const Real /*t*/) const override {
     return MatrixJH::Zero();
   }
+
   bool in_domain(const VectorF & /*x*/, const Real /*t*/) const override {
     return true;
   }
@@ -118,9 +120,11 @@ class BVPT18Implicit : public Implicit<Real, 2, 0> {
   VectorH h(const VectorF & /*x*/, const Real /*t*/) const override {
     return VectorH::Zero();
   }
+
   MatrixJH Jh_x(const VectorF & /*x*/, const Real /*t*/) const override {
     return MatrixJH::Zero();
   }
+
   bool in_domain(const VectorF & /*x*/, const Real /*t*/) const override {
     return true;
   }
@@ -180,9 +184,11 @@ class BVPT18SemiExplicit : public SemiExplicit<Real, 2, 0> {
   VectorH h(const VectorF & /*x*/, const Real /*t*/) const override {
     return VectorH::Zero();
   }
+
   MatrixJH Jh_x(const VectorF & /*x*/, const Real /*t*/) const override {
     return MatrixJH::Zero();
   }
+
   bool in_domain(const VectorF & /*x*/, const Real /*t*/) const override {
     return true;
   }
@@ -211,6 +217,7 @@ class BVPT18Problem : public BoundaryValueProblem<Real, 2, 0, Integrator> {
   static Real time_start() {
     return 0.0;
   }
+
   static Real time_end() {
     return 0.25;
   }
@@ -223,9 +230,8 @@ class BVPT18Problem : public BoundaryValueProblem<Real, 2, 0, Integrator> {
   }
 
   VectorF b(const VectorF &x_ini, const VectorF &x_end) const override {
-    Real lam{this->lambda()};
     VectorF b;
-    b << x_ini(0) - 1.0, x_end(0) - std::exp(-1.0 / lam);
+    b << x_ini(0) - 1.0, x_end(0) - std::exp(-1.0 / this->lambda());
     return b;
   }
 
@@ -248,8 +254,7 @@ class BVPT18Problem : public BoundaryValueProblem<Real, 2, 0, Integrator> {
   }
 
   Real exact_solution(const Real t) const {
-    Real lam{this->lambda()};
-    return std::exp(-t / lam);
+    return std::exp(-t / this->lambda());
   }
 
   VectorX exact_solution(const VectorX &t) const {

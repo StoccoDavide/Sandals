@@ -31,6 +31,7 @@ class BVPT3Explicit : public Explicit<Real, 2, 0> {
   using typename Explicit<Real, 2, 0>::MatrixJH;
 
  private:
+  static constexpr Real pi{static_cast<Real>(EIGEN_PI)};
   Real m_lambda{1.0e-3};
 
  public:
@@ -49,9 +50,9 @@ class BVPT3Explicit : public Explicit<Real, 2, 0> {
   VectorF f(const VectorF &x, const Real t) const override {
     VectorF f;
     f << x(1), 1.0 / this->m_lambda *
-                   (-(2.0 + std::cos(M_PI * t)) * x(1) + x(0) -
-                    (1.0 + this->m_lambda * M_PI * M_PI) * std::cos(M_PI * t) -
-                    (2.0 + std::cos(M_PI * t)) * M_PI * std::sin(M_PI * t));
+                   (-(2.0 + std::cos(pi * t)) * x(1) + x(0) -
+                    (1.0 + this->m_lambda * pi * pi) * std::cos(pi * t) -
+                    (2.0 + std::cos(pi * t)) * pi * std::sin(pi * t));
     return f;
   }
 
@@ -59,7 +60,7 @@ class BVPT3Explicit : public Explicit<Real, 2, 0> {
     MatrixJF Jf_x(MatrixJF::Zero());
     Jf_x(0, 1) = 1.0;
     Jf_x(1, 0) = 1.0 / this->m_lambda;
-    Jf_x(1, 1) = -(2.0 + std::cos(M_PI * t)) / this->m_lambda;
+    Jf_x(1, 1) = -(2.0 + std::cos(pi * t)) / this->m_lambda;
     return Jf_x;
   }
 
@@ -87,6 +88,7 @@ class BVPT3Implicit : public Implicit<Real, 2, 0> {
   using typename Implicit<Real, 2, 0>::MatrixJH;
 
  private:
+  static constexpr Real pi{static_cast<Real>(EIGEN_PI)};
   Real m_lambda{1.0e-3};
 
  public:
@@ -107,11 +109,10 @@ class BVPT3Implicit : public Implicit<Real, 2, 0> {
             const Real t) const override {
     VectorF F;
     F << x_dot(0) - x(1),
-        x_dot(1) -
-            1.0 / this->m_lambda *
-                (-(2.0 + std::cos(M_PI * t)) * x(1) + x(0) -
-                 (1.0 + this->m_lambda * M_PI * M_PI) * std::cos(M_PI * t) -
-                 (2.0 + std::cos(M_PI * t)) * M_PI * std::sin(M_PI * t));
+        x_dot(1) - 1.0 / this->m_lambda *
+                       (-(2.0 + std::cos(pi * t)) * x(1) + x(0) -
+                        (1.0 + this->m_lambda * pi * pi) * std::cos(pi * t) -
+                        (2.0 + std::cos(pi * t)) * pi * std::sin(pi * t));
     return F;
   }
 
@@ -121,7 +122,7 @@ class BVPT3Implicit : public Implicit<Real, 2, 0> {
     MatrixJF JF_x(MatrixJF::Zero());
     JF_x(0, 1) = -1.0;
     JF_x(1, 0) = -1.0 / this->m_lambda;
-    JF_x(1, 1) = (2.0 + std::cos(M_PI * t)) / this->m_lambda;
+    JF_x(1, 1) = (2.0 + std::cos(pi * t)) / this->m_lambda;
     return JF_x;
   }
 
@@ -158,6 +159,7 @@ class BVPT3SemiExplicit : public SemiExplicit<Real, 2, 0> {
   using MatrixJH = typename SemiExplicit<Real, 2, 0>::MatrixJH;
 
  private:
+  static constexpr Real pi{static_cast<Real>(EIGEN_PI)};
   Real m_lambda{1.0e-3};
 
  public:
@@ -187,9 +189,9 @@ class BVPT3SemiExplicit : public SemiExplicit<Real, 2, 0> {
   VectorB b(const VectorF &x, const Real t) const override {
     VectorB b;
     b << x(1), 1.0 / this->m_lambda *
-                   (-(2.0 + std::cos(M_PI * t)) * x(1) + x(0) -
-                    (1.0 + this->m_lambda * M_PI * M_PI) * std::cos(M_PI * t) -
-                    (2.0 + std::cos(M_PI * t)) * M_PI * std::sin(M_PI * t));
+                   (-(2.0 + std::cos(pi * t)) * x(1) + x(0) -
+                    (1.0 + this->m_lambda * pi * pi) * std::cos(pi * t) -
+                    (2.0 + std::cos(pi * t)) * pi * std::sin(pi * t));
     return b;
   }
 
@@ -197,7 +199,7 @@ class BVPT3SemiExplicit : public SemiExplicit<Real, 2, 0> {
     MatrixJB Jb_x(MatrixJB::Zero());
     Jb_x(0, 1) = 1.0;
     Jb_x(1, 0) = 1.0 / this->m_lambda;
-    Jb_x(1, 1) = -(2.0 + std::cos(M_PI * t)) / this->m_lambda;
+    Jb_x(1, 1) = -(2.0 + std::cos(pi * t)) / this->m_lambda;
     return Jb_x;
   }
 
@@ -227,6 +229,10 @@ class BVPT3Problem : public BoundaryValueProblem<Real, 2, 0, Integrator> {
   using VectorX = Eigen::Vector<Real, Eigen::Dynamic>;
   using MatrixX = Eigen::Matrix<Real, 2, Eigen::Dynamic>;
 
+ private:
+  static constexpr Real pi{static_cast<Real>(EIGEN_PI)};
+
+ public:
   BVPT3Problem()
       : BoundaryValueProblem<Real, 2, 0, Integrator>(
             "BVPT3Problem",
@@ -276,7 +282,7 @@ class BVPT3Problem : public BoundaryValueProblem<Real, 2, 0, Integrator> {
   }
 
   Real exact_solution(const Real t) const {
-    return std::cos(M_PI * t);
+    return std::cos(pi * t);
   }
 
   VectorX exact_solution(const VectorX &t) const {

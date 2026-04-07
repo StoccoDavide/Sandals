@@ -106,6 +106,7 @@ class FalknerSkanImplicit : public Implicit<Real, 3, 0> {
         x_dot(2) + x(0) * x(2) + this->m_beta * (1.0 - x(1) * x(1));
     return F;
   }
+
   MatrixJF JF_x(const VectorF &x,
                 const VectorF & /*x_dot*/,
                 const Real /*t*/) const override {

@@ -45,26 +45,28 @@ class BVPT17Explicit : public Explicit<Real, 2, 0> {
   }
 
   VectorF f(const VectorF &x, const Real t) const override {
-    Real lt{this->m_lambda + t * t};
+    const Real tmp{this->m_lambda + t * t};
     VectorF f;
-    f << x(1), -3.0 * this->m_lambda * x(0) / (lt * lt);
+    f << x(1), -3.0 * this->m_lambda * x(0) / (tmp * tmp);
     return f;
   }
 
   MatrixJF Jf_x(const VectorF & /*x*/, const Real t) const override {
-    Real lt{this->m_lambda + t * t};
+    const Real tmp{this->m_lambda + t * t};
     MatrixJF Jf_x(MatrixJF::Zero());
     Jf_x(0, 1) = 1.0;
-    Jf_x(1, 0) = -3.0 * this->m_lambda / (lt * lt);
+    Jf_x(1, 0) = -3.0 * this->m_lambda / (tmp * tmp);
     return Jf_x;
   }
 
   VectorH h(const VectorF & /*x*/, const Real /*t*/) const override {
     return VectorH::Zero();
   }
+
   MatrixJH Jh_x(const VectorF & /*x*/, const Real /*t*/) const override {
     return MatrixJH::Zero();
   }
+
   bool in_domain(const VectorF & /*x*/, const Real /*t*/) const override {
     return true;
   }
@@ -97,19 +99,19 @@ class BVPT17Implicit : public Implicit<Real, 2, 0> {
   VectorF F(const VectorF &x,
             const VectorF &x_dot,
             const Real t) const override {
-    Real lt{this->m_lambda + t * t};
+    const Real tmp{this->m_lambda + t * t};
     VectorF F;
-    F << x_dot(0) - x(1), x_dot(1) + 3.0 * this->m_lambda * x(0) / (lt * lt);
+    F << x_dot(0) - x(1), x_dot(1) + 3.0 * this->m_lambda * x(0) / (tmp * tmp);
     return F;
   }
 
   MatrixJF JF_x(const VectorF & /*x*/,
                 const VectorF & /*x_dot*/,
                 const Real t) const override {
-    Real lt{this->m_lambda + t * t};
+    const Real tmp{this->m_lambda + t * t};
     MatrixJF JF_x(MatrixJF::Zero());
     JF_x(0, 1) = -1.0;
-    JF_x(1, 0) = 3.0 * this->m_lambda / (lt * lt);
+    JF_x(1, 0) = 3.0 * this->m_lambda / (tmp * tmp);
     return JF_x;
   }
 
@@ -122,9 +124,11 @@ class BVPT17Implicit : public Implicit<Real, 2, 0> {
   VectorH h(const VectorF & /*x*/, const Real /*t*/) const override {
     return VectorH::Zero();
   }
+
   MatrixJH Jh_x(const VectorF & /*x*/, const Real /*t*/) const override {
     return MatrixJH::Zero();
   }
+
   bool in_domain(const VectorF & /*x*/, const Real /*t*/) const override {
     return true;
   }
@@ -169,26 +173,28 @@ class BVPT17SemiExplicit : public SemiExplicit<Real, 2, 0> {
   }
 
   VectorB b(const VectorF &x, const Real t) const override {
-    Real lt{this->m_lambda + t * t};
+    const Real tmp{this->m_lambda + t * t};
     VectorB b;
-    b << x(1), -3.0 * this->m_lambda * x(0) / (lt * lt);
+    b << x(1), -3.0 * this->m_lambda * x(0) / (tmp * tmp);
     return b;
   }
 
   MatrixJB Jb_x(const VectorF & /*x*/, const Real t) const override {
-    Real lt{this->m_lambda + t * t};
+    const Real tmp{this->m_lambda + t * t};
     MatrixJB Jb_x(MatrixJB::Zero());
     Jb_x(0, 1) = 1.0;
-    Jb_x(1, 0) = -3.0 * this->m_lambda / (lt * lt);
+    Jb_x(1, 0) = -3.0 * this->m_lambda / (tmp * tmp);
     return Jb_x;
   }
 
   VectorH h(const VectorF & /*x*/, const Real /*t*/) const override {
     return VectorH::Zero();
   }
+
   MatrixJH Jh_x(const VectorF & /*x*/, const Real /*t*/) const override {
     return MatrixJH::Zero();
   }
+
   bool in_domain(const VectorF & /*x*/, const Real /*t*/) const override {
     return true;
   }
@@ -217,6 +223,7 @@ class BVPT17Problem : public BoundaryValueProblem<Real, 2, 0, Integrator> {
   static Real time_start() {
     return -0.1;
   }
+
   static Real time_end() {
     return 0.1;
   }
@@ -229,10 +236,9 @@ class BVPT17Problem : public BoundaryValueProblem<Real, 2, 0, Integrator> {
   }
 
   VectorF b(const VectorF &x_ini, const VectorF &x_end) const override {
-    Real lam{this->lambda()};
-    Real sq{std::sqrt(lam + 0.01)};
+    const Real sqrt_lambda{std::sqrt(this->lambda() + 0.01)};
     VectorF b;
-    b << x_ini(0) + 0.1 / sq, x_end(0) - 0.1 / sq;
+    b << x_ini(0) + 0.1 / sqrt_lambda, x_end(0) - 0.1 / sqrt_lambda;
     return b;
   }
 
@@ -255,8 +261,7 @@ class BVPT17Problem : public BoundaryValueProblem<Real, 2, 0, Integrator> {
   }
 
   Real exact_solution(const Real t) const {
-    Real lam{this->lambda()};
-    return t / std::sqrt(lam + t * t);
+    return t / std::sqrt(this->lambda() + t * t);
   }
 
   VectorX exact_solution(const VectorX &t) const {

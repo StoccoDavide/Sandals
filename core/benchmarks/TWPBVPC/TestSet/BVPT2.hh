@@ -262,7 +262,7 @@ class BVPT2Problem : public BoundaryValueProblem<Real, 2, 0, Integrator> {
   }
 
   Real exact_solution(const Real t) const {
-    Real lambda{this->lambda()};
+    const Real lambda{this->lambda()};
     return (1.0 - std::exp((t - 1.0) / lambda)) /
            (1.0 - std::exp(-1.0 / lambda));
   }

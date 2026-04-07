@@ -54,6 +54,7 @@ class BVPT5Explicit : public Explicit<Real, 2, 0> {
   using typename Explicit<Real, 2, 0>::MatrixJH;
 
  private:
+  static constexpr Real pi{static_cast<Real>(EIGEN_PI)};
   Real m_lambda{1.0e-3};
 
  public:
@@ -70,12 +71,12 @@ class BVPT5Explicit : public Explicit<Real, 2, 0> {
   }
 
   VectorF f(const VectorF &x, const Real t) const override {
-    Real pix{M_PI * t};
+    const Real tmp{pi * t};
     VectorF f;
-    f << x(1), (x(0) + t * x(1) -
-                (1.0 + this->m_lambda * M_PI * M_PI) * std::cos(pix) +
-                t * M_PI * std::sin(pix)) /
-                   this->m_lambda;
+    f << x(1),
+        (x(0) + t * x(1) - (1.0 + this->m_lambda * pi * pi) * std::cos(tmp) +
+         t * pi * std::sin(tmp)) /
+            this->m_lambda;
     return f;
   }
 
@@ -111,6 +112,7 @@ class BVPT5Implicit : public Implicit<Real, 2, 0> {
   using typename Implicit<Real, 2, 0>::MatrixJH;
 
  private:
+  static constexpr Real pi{static_cast<Real>(EIGEN_PI)};
   Real m_lambda{1.0e-3};
 
  public:
@@ -129,12 +131,12 @@ class BVPT5Implicit : public Implicit<Real, 2, 0> {
   VectorF F(const VectorF &x,
             const VectorF &x_dot,
             const Real t) const override {
-    Real pix{M_PI * t};
+    const Real tmp{pi * t};
     VectorF F;
     F << x_dot(0) - x(1),
         x_dot(1) - (x(0) + t * x(1) -
-                    (1.0 + this->m_lambda * M_PI * M_PI) * std::cos(pix) +
-                    t * M_PI * std::sin(pix)) /
+                    (1.0 + this->m_lambda * pi * pi) * std::cos(tmp) +
+                    t * pi * std::sin(tmp)) /
                        this->m_lambda;
     return F;
   }
@@ -182,6 +184,7 @@ class BVPT5SemiExplicit : public SemiExplicit<Real, 2, 0> {
   using MatrixJH = typename SemiExplicit<Real, 2, 0>::MatrixJH;
 
  private:
+  static constexpr Real pi{static_cast<Real>(EIGEN_PI)};
   Real m_lambda{1.0e-3};
 
  public:
@@ -209,12 +212,12 @@ class BVPT5SemiExplicit : public SemiExplicit<Real, 2, 0> {
   }
 
   VectorB b(const VectorF &x, const Real t) const override {
-    Real pix{M_PI * t};
+    const Real tmp{static_cast<Real>(EIGEN_PI) * t};
     VectorB b;
-    b << x(1), (x(0) + t * x(1) -
-                (1.0 + this->m_lambda * M_PI * M_PI) * std::cos(pix) +
-                t * M_PI * std::sin(pix)) /
-                   this->m_lambda;
+    b << x(1),
+        (x(0) + t * x(1) - (1.0 + this->m_lambda * pi * pi) * std::cos(tmp) +
+         t * pi * std::sin(tmp)) /
+            this->m_lambda;
     return b;
   }
 
@@ -252,6 +255,10 @@ class BVPT5Problem : public BoundaryValueProblem<Real, 2, 0, Integrator> {
   using VectorX = Eigen::Vector<Real, Eigen::Dynamic>;
   using MatrixX = Eigen::Matrix<Real, 2, Eigen::Dynamic>;
 
+ private:
+  static constexpr Real pi{static_cast<Real>(EIGEN_PI)};
+
+ public:
   BVPT5Problem()
       : BoundaryValueProblem<Real, 2, 0, Integrator>(
             "BVPT5Problem",
@@ -301,7 +308,7 @@ class BVPT5Problem : public BoundaryValueProblem<Real, 2, 0, Integrator> {
   }
 
   static Real exact_solution(const Real t) {
-    return std::cos(M_PI * t);
+    return std::cos(pi * t);
   }
 
   VectorX exact_solution(const VectorX &t) const {

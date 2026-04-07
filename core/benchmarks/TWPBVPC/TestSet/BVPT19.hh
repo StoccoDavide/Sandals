@@ -31,6 +31,7 @@ class BVPT19Explicit : public Explicit<Real, 2, 0> {
   using typename Explicit<Real, 2, 0>::MatrixJH;
 
  private:
+  static constexpr Real pi{static_cast<Real>(EIGEN_PI)};
   Real m_lambda{1.0e-3};
 
  public:
@@ -45,7 +46,7 @@ class BVPT19Explicit : public Explicit<Real, 2, 0> {
   }
 
   VectorF f(const VectorF &x, const Real t) const override {
-    Real pi{static_cast<Real>(EIGEN_PI)};
+    static constexpr Real pi{static_cast<Real>(EIGEN_PI)};
     VectorF f;
     f << x(1), (pi / 2.0 * std::sin(pi * t / 2.0) * std::exp(2.0 * x(0)) -
                 std::exp(x(0)) * x(1)) /
@@ -54,7 +55,7 @@ class BVPT19Explicit : public Explicit<Real, 2, 0> {
   }
 
   MatrixJF Jf_x(const VectorF &x, const Real t) const override {
-    Real pi{static_cast<Real>(EIGEN_PI)};
+    static constexpr Real pi{static_cast<Real>(EIGEN_PI)};
     MatrixJF Jf_x(MatrixJF::Zero());
     Jf_x(0, 1) = 1.0;
     Jf_x(1, 0) = (pi * std::sin(pi * t / 2.0) * std::exp(2.0 * x(0)) -
@@ -67,9 +68,11 @@ class BVPT19Explicit : public Explicit<Real, 2, 0> {
   VectorH h(const VectorF & /*x*/, const Real /*t*/) const override {
     return VectorH::Zero();
   }
+
   MatrixJH Jh_x(const VectorF & /*x*/, const Real /*t*/) const override {
     return MatrixJH::Zero();
   }
+
   bool in_domain(const VectorF & /*x*/, const Real /*t*/) const override {
     return true;
   }
@@ -86,6 +89,7 @@ class BVPT19Implicit : public Implicit<Real, 2, 0> {
   using typename Implicit<Real, 2, 0>::MatrixJH;
 
  private:
+  static constexpr Real pi{static_cast<Real>(EIGEN_PI)};
   Real m_lambda{1.0e-3};
 
  public:
@@ -102,7 +106,6 @@ class BVPT19Implicit : public Implicit<Real, 2, 0> {
   VectorF F(const VectorF &x,
             const VectorF &x_dot,
             const Real t) const override {
-    Real pi{static_cast<Real>(EIGEN_PI)};
     VectorF F;
     F << x_dot(0) - x(1),
         x_dot(1) - (pi / 2.0 * std::sin(pi * t / 2.0) * std::exp(2.0 * x(0)) -
@@ -114,7 +117,7 @@ class BVPT19Implicit : public Implicit<Real, 2, 0> {
   MatrixJF JF_x(const VectorF &x,
                 const VectorF & /*x_dot*/,
                 const Real t) const override {
-    Real pi{static_cast<Real>(EIGEN_PI)};
+    static constexpr Real pi{static_cast<Real>(EIGEN_PI)};
     MatrixJF JF_x(MatrixJF::Zero());
     JF_x(0, 1) = -1.0;
     JF_x(1, 0) = -(pi * std::sin(pi * t / 2.0) * std::exp(2.0 * x(0)) -
@@ -133,9 +136,11 @@ class BVPT19Implicit : public Implicit<Real, 2, 0> {
   VectorH h(const VectorF & /*x*/, const Real /*t*/) const override {
     return VectorH::Zero();
   }
+
   MatrixJH Jh_x(const VectorF & /*x*/, const Real /*t*/) const override {
     return MatrixJH::Zero();
   }
+
   bool in_domain(const VectorF & /*x*/, const Real /*t*/) const override {
     return true;
   }
@@ -155,6 +160,7 @@ class BVPT19SemiExplicit : public SemiExplicit<Real, 2, 0> {
   using MatrixJH = typename SemiExplicit<Real, 2, 0>::MatrixJH;
 
  private:
+  static constexpr Real pi{static_cast<Real>(EIGEN_PI)};
   Real m_lambda{1.0e-3};
 
  public:
@@ -180,7 +186,6 @@ class BVPT19SemiExplicit : public SemiExplicit<Real, 2, 0> {
   }
 
   VectorB b(const VectorF &x, const Real t) const override {
-    Real pi{static_cast<Real>(EIGEN_PI)};
     VectorB b;
     b << x(1), (pi / 2.0 * std::sin(pi * t / 2.0) * std::exp(2.0 * x(0)) -
                 std::exp(x(0)) * x(1)) /
@@ -189,7 +194,6 @@ class BVPT19SemiExplicit : public SemiExplicit<Real, 2, 0> {
   }
 
   MatrixJB Jb_x(const VectorF &x, const Real t) const override {
-    Real pi{static_cast<Real>(EIGEN_PI)};
     MatrixJB Jb_x(MatrixJB::Zero());
     Jb_x(0, 1) = 1.0;
     Jb_x(1, 0) = (pi * std::sin(pi * t / 2.0) * std::exp(2.0 * x(0)) -
@@ -202,9 +206,11 @@ class BVPT19SemiExplicit : public SemiExplicit<Real, 2, 0> {
   VectorH h(const VectorF & /*x*/, const Real /*t*/) const override {
     return VectorH::Zero();
   }
+
   MatrixJH Jh_x(const VectorF & /*x*/, const Real /*t*/) const override {
     return MatrixJH::Zero();
   }
+
   bool in_domain(const VectorF & /*x*/, const Real /*t*/) const override {
     return true;
   }
@@ -233,6 +239,7 @@ class BVPT19Problem : public BoundaryValueProblem<Real, 2, 0, Integrator> {
   static Real time_start() {
     return 0.0;
   }
+
   static Real time_end() {
     return 1.0;
   }

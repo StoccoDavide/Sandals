@@ -262,9 +262,9 @@ class BVPT8Problem : public BoundaryValueProblem<Real, 2, 0, Integrator> {
   }
 
   Real exact_solution(const Real t) const {
-    Real lam{this->lambda()};
-    Real Cc{std::exp(-1.0 / lam)};
-    return (2.0 - Cc - std::exp(-t / lam)) / (1.0 - Cc);
+    const Real lambda{this->lambda()};
+    const Real C{std::exp(-1.0 / lambda)};
+    return (2.0 - C - std::exp(-t / lambda)) / (1.0 - C);
   }
 
   VectorX exact_solution(const VectorX &t) const {
