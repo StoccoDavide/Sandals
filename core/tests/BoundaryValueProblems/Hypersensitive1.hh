@@ -225,11 +225,11 @@ class Hypersensitive1Problem
     return MatrixX::Zero(2, t.size());
   }
 
-  static VectorF guess(const Real /*t*/) {
+  VectorF guess(const Real /*t*/) {
     return VectorF::Ones();
   }
 
-  static MatrixX guess(const VectorX &t) {
+  MatrixX guess(const VectorX &t) {
     return MatrixX::Ones(2, t.size());
   }
 };

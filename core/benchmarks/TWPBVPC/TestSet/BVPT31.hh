@@ -319,11 +319,11 @@ class BVPT31Problem : public BoundaryValueProblem<Real, 4, 0, Integrator> {
     return VectorX::Zero(t.size());
   }
 
-  static VectorF guess(const Real /*t*/) {
+  VectorF guess(const Real /*t*/) {
     return VectorF::Zero();
   }
 
-  static MatrixX guess(const VectorX &t) {
+  MatrixX guess(const VectorX &t) {
     return MatrixX::Zero(4, t.size());
   }
 };

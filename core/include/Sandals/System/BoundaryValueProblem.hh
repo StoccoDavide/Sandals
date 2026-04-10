@@ -12,7 +12,6 @@
 #define SANDALS_BOUNDARY_VALUE_PROBLEM_HH
 
 // Sparse linear algebra solvers
-#include <Eigen/SparseLU>
 #include <Eigen/SparseQR>
 
 // Sandals Runge-Kutta integrator
@@ -84,8 +83,10 @@ namespace Sandals {
 
     bool m_verbose{false};                  /**< Verbose mode boolean. */
     Real m_tolerance{std::sqrt(EPSILON)};   /**< Tolerance for the solution. */
-    Real m_sigma{0.01}; /**< Invariants manifold weight for the multiple
-                           shooting method. */
+    Real m_sigma{1.0};  /**< Invariants manifold weight for the multiple
+     shooting method. */
+    Real m_lambda{0.0}; /**< Augmentation parameter for the least squares
+                           multiple shooting method. */
     Integer m_max_iterations{100}; /**< Maximum number of iterations. */
     Integer m_subintervals{
       1}; /**< Number of subintervals for the shooting methods. */
@@ -253,6 +254,25 @@ namespace Sandals {
      */
     void sigma(const Real t_sigma) {
       this->m_sigma = t_sigma;
+    }
+
+    /**
+     * Get the augmentation parameter \f$ \lambda \f$ for the least squares
+     * multiple shooting method.
+     * \return The augmentation parameter \f$ \lambda \f$.
+     */
+    Real lambda() {
+      return this->m_lambda;
+    }
+
+    /**
+     * Set the augmentation parameter \f$ \lambda \f$ for the least squares
+     * multiple shooting method.
+     * \param[in] t_lambda The augmentation parameter \f$ \lambda \f$ for the
+     * least squares multiple shooting method.
+     */
+    void lambda(const Real t_lambda) {
+      this->m_lambda = t_lambda;
     }
 
     /**
@@ -494,9 +514,15 @@ namespace Sandals {
       }
 
       // Prepare the linear system for the Newton step
-      VectorShooting b_sys(c_size + h_size + N);
-      MatrixShooting A_sys(x_size + h_size, x_size);
-      A_sys.reserve(c_size * (N + 1) + h_size * N + 2 * N * N);
+      const Integer b_size{c_size + h_size + N};
+      VectorShooting b_sys(b_size);
+      const Integer A_sys_rows{b_size}, A_sys_cols{x_size};
+      MatrixShooting A_sys(A_sys_rows, A_sys_cols);
+      MatrixShooting A_aug(A_sys_rows + A_sys_cols, A_sys_rows + A_sys_cols);
+      VectorShooting b_aug(A_sys_rows + A_sys_cols);
+      const Integer A_sys_nnz{c_size * (N + 1) + h_size * N + 2 * N * N};
+      A_sys.reserve(A_sys_nnz);
+      A_aug.reserve(2 * A_sys_nnz + A_sys_rows + A_sys_cols);
 
       // Initialize the solution
       this->m_solution->clear();
@@ -512,8 +538,9 @@ namespace Sandals {
       MatrixJX Jx;
       MatrixJH Jh;
       Eigen::SparseQR<MatrixShooting, Eigen::COLAMDOrdering<Integer>> qr;
-      std::vector<Eigen::Triplet<Real>> triplets;
-      triplets.reserve(c_size * (N + 1) + h_size * N + 2 * N * N);
+      std::vector<Eigen::Triplet<Real>> triplets_sys, triplets_aug;
+      triplets_sys.reserve(c_size * (N + 1) + h_size * N + 2 * N * N);
+      triplets_aug.reserve(4 * b_size * b_size);
       for (Integer iter{0}; iter < this->m_max_iterations; ++iter) {
         /* Multiple shooting method scheme
                 [A_sys]                   {x}  =         {b_sys}
@@ -529,7 +556,7 @@ namespace Sandals {
         */
 
         // Reset the linear system
-        triplets.clear();
+        triplets_sys.clear();
         A_sys.setZero();
         b_sys.setZero();
 
@@ -556,9 +583,11 @@ namespace Sandals {
 
           // Jacobian propagation for the current interval
           for (Integer i{0}; i < N; ++i) {
-            triplets.emplace_back(k * N + i, (k + 1) * N + i, 1.0);
+            triplets_sys.emplace_back(k * N + i, (k + 1) * N + i, 1.0);
             for (Integer j{0}; j < N; ++j) {
-              triplets.emplace_back(k * N + i, k * N + j, -Jx(i, j));
+              if (Jx(i, j) != 0.0) {
+                triplets_sys.emplace_back(k * N + i, k * N + j, -Jx(i, j));
+              }
             }
           }
 
@@ -575,9 +604,11 @@ namespace Sandals {
               // Insert the Jacobian in the linear system
               for (Integer i{0}; i < M; ++i) {
                 for (Integer j{0}; j < N; ++j) {
-                  triplets.emplace_back(c_size + k * M + i,
-                                        k * N + j,
-                                        sqrt_sigma * Jh(i, j));
+                  if (Jh(i, j) != 0.0) {
+                    triplets_sys.emplace_back(c_size + k * M + i,
+                                              k * N + j,
+                                              sqrt_sigma * Jh(i, j));
+                  }
                 }
               }
 
@@ -615,24 +646,61 @@ namespace Sandals {
         MatrixJX Jb_x_end(this->Jb_x_end(x_ini, x_end));
         for (Integer i{0}; i < N; ++i) {
           for (Integer j{0}; j < N; ++j) {
-            triplets.emplace_back(c_size + h_size + i,
-                                  idx_x_ini * N + j,
-                                  Jb_x_ini(i, j));
-            triplets.emplace_back(c_size + h_size + i,
-                                  idx_x_end * N + j,
-                                  Jb_x_end(i, j));
+            if (Jb_x_ini(i, j) != 0.0) {
+              triplets_sys.emplace_back(c_size + h_size + i,
+                                        idx_x_ini * N + j,
+                                        Jb_x_ini(i, j));
+            }
+            if (Jb_x_end(i, j) != 0.0) {
+              triplets_sys.emplace_back(c_size + h_size + i,
+                                        idx_x_end * N + j,
+                                        Jb_x_end(i, j));
+            }
           }
         }
 
-        // Solve the linear system
-        A_sys.setFromTriplets(triplets.begin(), triplets.end());
+        // Build the sparse system matrix
+        A_sys.setFromTriplets(triplets_sys.begin(), triplets_sys.end());
         A_sys.makeCompressed();
-        qr.compute(A_sys);
+
+        // Create the augmented system
+        // A^T * A * dx = A^T * b
+        // / -I    A  \ / z  \ = /   0   \
+        // |          | |    | = |       |
+        // \ A^T   λI / \ dx /   \ A^T*b /
+        triplets_aug.clear();
+        A_aug.setZero();
+        b_aug.setZero();
+
+        // Augmented system construction
+        for (Integer i{0}; i < A_sys_rows; ++i) {
+          triplets_aug.emplace_back(i, i, -1.0);
+        }
+        for (Integer i{A_sys_rows}; i < A_sys_rows + A_sys_cols; ++i) {
+          triplets_aug.emplace_back(i, i, this->m_lambda);
+        }
+        for (Integer i{0}; i < A_sys_rows; ++i) {
+          for (Integer j{0}; j < A_sys_cols; ++j) {
+            const Real A_ij{A_sys.coeff(i, j)};
+            if (A_ij != 0.0) {
+              triplets_aug.emplace_back(i, A_sys_rows + j, A_ij);
+              triplets_aug.emplace_back(A_sys_rows + j, i, A_ij);
+            }
+          }
+        }
+        b_aug.tail(A_sys_cols) = A_sys.transpose() * b_sys;
+
+        // Solve the augmented system
+        A_aug.setFromTriplets(triplets_aug.begin(), triplets_aug.end());
+        A_aug.makeCompressed();
+        qr.compute(A_aug);
         SANDALS_ASSERT(qr.info() == Eigen::Success,
                        CMD "failed to factorize the linear system.");
 
         // Update the solution
-        delta_x_sol = qr.solve(b_sys).reshaped(N, num_intervals + 1);
+        // delta_x_sol = qr.solve(b_sys).reshaped(N, num_intervals + 1);
+        delta_x_sol =
+            qr.solve(b_aug).tail(A_sys_cols).reshaped(N, num_intervals + 1);
         if (!delta_x_sol.allFinite()) {
           SANDALS_ERROR(CMD "invalid solution of the linear system.");
           return false;
@@ -657,8 +725,8 @@ namespace Sandals {
      * \param[in] t_mesh Independent variable (or time) mesh \f$ \mathbf{t}
      * \f$.
      * \param[in] ics Initial conditions \f$ \mathbf{x}(t = 0) \f$.
-     * \param[in] x_guess Initial guess for the states at the mesh nodes (only
-     * for multiple shooting).
+     * \param[in] x_guess Initial guess for the states at the mesh nodes
+     * (only for multiple shooting).
      * \tparam ShootingType Type of shooting method to use (single or
      * multiple).
      */

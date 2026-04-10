@@ -25,12 +25,14 @@ void test(const bool reverse) {
   problem.verbose_mode(false);
   problem.integrator()->verbose_mode(false);
   problem.integrator()->reverse_mode(reverse);
-  problem.tolerance(1.0e-8);
+  problem.sigma(1.0);
+  problem.lambda(1.0e-9);
+  problem.tolerance(1.0e-9);
   problem.max_iterations(100);
   problem.subintervals(1);
 
   // Set time mesh
-  constexpr Integer num_points{500};
+  constexpr Integer num_points{100};
   Eigen::Vector<Real, Eigen::Dynamic> time(
       Eigen::Vector<Real, Eigen::Dynamic>::LinSpaced(num_points,
                                                      problem.time_start(),

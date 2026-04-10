@@ -264,11 +264,11 @@ class BVPT27Problem : public BoundaryValueProblem<Real, 2, 0, Integrator> {
     return VectorX::Zero(t.size());
   }
 
-  static VectorF guess(const Real /*t*/) {
+  VectorF guess(const Real /*t*/) {
     return VectorF::Constant(0.5);
   }
 
-  static MatrixX guess(const VectorX &t) {
+  MatrixX guess(const VectorX &t) {
     return MatrixX::Constant(2, t.size(), 0.5);
   }
 };

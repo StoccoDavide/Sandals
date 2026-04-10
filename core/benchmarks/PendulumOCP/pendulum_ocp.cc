@@ -12,7 +12,7 @@
 
 #include "PendulumOCP.hh"
 #include "Sandals.hh"
-#include "Sandals/RungeKutta/RK4.hh"
+#include "Sandals/RungeKutta/GaussLegendre4.hh"
 #include "Sandals/RungeKutta/RadauIIA5.hh"
 
 #ifdef SANDALS_ENABLE_PLOTTING
@@ -50,11 +50,10 @@ using namespace Sandals;
 using Real = double;
 
 #ifndef PROBLEM_INIT
-#define PROBLEM_INIT(PROBLEM, INTEGRATOR)                               \
-  constexpr Integer N{PROBLEM##index0<Real>::equations_number()};       \
-  PROBLEM##Problem<Real, PROBLEM##index3<Real>, INTEGRATOR<Real, N, 0>> \
-      problem_index_3;                                                  \
-  PROBLEM##Problem<Real, PROBLEM##index0<Real>, INTEGRATOR<Real, N, 2>> \
+#define PROBLEM_INIT(PROBLEM, INTEGRATOR_3, INTEGRATOR_0)                  \
+  PROBLEM##Problem<Real, PROBLEM##index3<Real>, INTEGRATOR_3<Real, 10, 0>> \
+      problem_index_3;                                                     \
+  PROBLEM##Problem<Real, PROBLEM##index0<Real>, INTEGRATOR_0<Real, 10, 3>> \
       problem_index_0;
 #endif
 
@@ -68,7 +67,7 @@ int main(int argc, char **argv) {
 #endif
 
   // Istantiate the problems
-  PROBLEM_INIT(PendulumOCP, RadauIIA5)
+  PROBLEM_INIT(PendulumOCP, RadauIIA5, RadauIIA5)
 
   // Set verbose mode
   constexpr bool verbose{true};
@@ -77,22 +76,18 @@ int main(int argc, char **argv) {
   problem_index_3.integrator()->verbose_mode(false);
   problem_index_0.integrator()->verbose_mode(false);
 
-  // Set projection mode
-  problem_index_3.integrator()->projection_mode(true);
-  problem_index_0.integrator()->projection_mode(false);
-
   // Set reverse mode
   constexpr bool reverse{false};
   problem_index_3.integrator()->reverse_mode(reverse);
   problem_index_0.integrator()->reverse_mode(reverse);
 
   // Set solver tolerance
-  problem_index_3.tolerance(1.0e-8);
-  problem_index_0.tolerance(1.0e-8);
+  problem_index_3.tolerance(1.0e-9);
+  problem_index_0.tolerance(1.0e-9);
 
   // Set solver maximum number of iterations
-  problem_index_3.max_iterations(100);
-  problem_index_0.max_iterations(100);
+  problem_index_3.max_iterations(200);
+  problem_index_0.max_iterations(200);
 
   // Set solution parameters
   constexpr Integer num_subintervals{1};
@@ -100,7 +95,7 @@ int main(int argc, char **argv) {
   problem_index_0.subintervals(num_subintervals);
 
   // Set time mesh
-  constexpr Integer num_points{300};
+  constexpr Integer num_points{50};
   Eigen::Vector<Real, Eigen::Dynamic> time(
       Eigen::Vector<Real, Eigen::Dynamic>::LinSpaced(
           num_points,
@@ -108,13 +103,15 @@ int main(int argc, char **argv) {
           problem_index_3.time_end()));
 
   // Set initial guess
-  Eigen::Matrix<Real, N, Eigen::Dynamic> guess(problem_index_3.guess(time));
+  Eigen::Matrix<Real, 10, Eigen::Dynamic> guess(problem_index_3.guess(time));
 
   // Solve the problems with shooting
-  Solution<Real, N, 0> sol_index_3(time.size());
+  Solution<Real, 10, 0> sol_index_3(time.size());
   try {
     std::cout << "Solving problem with index 3..." << std::endl;
     problem_index_3.sigma(1.0);
+    problem_index_0.lambda(1e-9);
+    problem_index_3.integrator()->projection_mode(true);
     problem_index_3.multiple_shooting(time, guess);
     sol_index_3 = problem_index_3.solution();
   } catch (const std::exception &e) {
@@ -122,14 +119,29 @@ int main(int argc, char **argv) {
               << std::endl;
   }
 
-  Solution<Real, N, 2> sol_index_0(time.size());
+  Solution<Real, 10, 3> sol_index_0_lesq(time.size());
   try {
-    std::cout << "Solving problem with index 0..." << std::endl;
+    std::cout << "Solving problem with index 0 (least squares)..." << std::endl;
     problem_index_0.sigma(1.0);
+    problem_index_0.lambda(1e-9);
+    problem_index_0.integrator()->projection_mode(false);
     problem_index_0.multiple_shooting(time, guess);
-    sol_index_0 = problem_index_0.solution();
+    sol_index_0_lesq = problem_index_0.solution();
   } catch (const std::exception &e) {
-    std::cerr << "Error solving problem with index 0: " << e.what()
+    std::cerr << "Error solving problem with index 0 (least squares): "
+              << e.what() << std::endl;
+  }
+
+  Solution<Real, 10, 3> sol_index_0_proj(time.size());
+  try {
+    std::cout << "Solving problem with index 0 (projection)..." << std::endl;
+    problem_index_0.sigma(1.0);
+    problem_index_0.lambda(1e-9);
+    problem_index_0.integrator()->projection_mode(true);
+    problem_index_0.multiple_shooting(time, guess);
+    sol_index_0_proj = problem_index_0.solution();
+  } catch (const std::exception &e) {
+    std::cerr << "Error solving problem with index 0 (projection): " << e.what()
               << std::endl;
   }
 
@@ -149,27 +161,70 @@ int main(int argc, char **argv) {
   TGraph *graph_l4_3 = to_TGraph(sol_index_3.t, sol_index_3.eigen_x(8));
   TGraph *graph_l5_3 = to_TGraph(sol_index_3.t, sol_index_3.eigen_x(9));
 
-  TGraph *graph_x_0  = to_TGraph(sol_index_0.t, sol_index_0.eigen_x(0));
-  TGraph *graph_y_0  = to_TGraph(sol_index_0.t, sol_index_0.eigen_x(1));
-  TGraph *graph_u_0  = to_TGraph(sol_index_0.t, sol_index_0.eigen_x(2));
-  TGraph *graph_v_0  = to_TGraph(sol_index_0.t, sol_index_0.eigen_x(3));
-  TGraph *graph_l_0  = to_TGraph(sol_index_0.t, sol_index_0.eigen_x(4));
-  TGraph *graph_l1_0 = to_TGraph(sol_index_0.t, sol_index_0.eigen_x(5));
-  TGraph *graph_l2_0 = to_TGraph(sol_index_0.t, sol_index_0.eigen_x(6));
-  TGraph *graph_l3_0 = to_TGraph(sol_index_0.t, sol_index_0.eigen_x(7));
-  TGraph *graph_l4_0 = to_TGraph(sol_index_0.t, sol_index_0.eigen_x(8));
-  TGraph *graph_l5_0 = to_TGraph(sol_index_0.t, sol_index_0.eigen_x(9));
+  TGraph *graph_x_0_lesq =
+      to_TGraph(sol_index_0_lesq.t, sol_index_0_lesq.eigen_x(0));
+  TGraph *graph_y_0_lesq =
+      to_TGraph(sol_index_0_lesq.t, sol_index_0_lesq.eigen_x(1));
+  TGraph *graph_u_0_lesq =
+      to_TGraph(sol_index_0_lesq.t, sol_index_0_lesq.eigen_x(2));
+  TGraph *graph_v_0_lesq =
+      to_TGraph(sol_index_0_lesq.t, sol_index_0_lesq.eigen_x(3));
+  TGraph *graph_l_0_lesq =
+      to_TGraph(sol_index_0_lesq.t, sol_index_0_lesq.eigen_x(4));
+  TGraph *graph_l1_0_lesq =
+      to_TGraph(sol_index_0_lesq.t, sol_index_0_lesq.eigen_x(5));
+  TGraph *graph_l2_0_lesq =
+      to_TGraph(sol_index_0_lesq.t, sol_index_0_lesq.eigen_x(6));
+  TGraph *graph_l3_0_lesq =
+      to_TGraph(sol_index_0_lesq.t, sol_index_0_lesq.eigen_x(7));
+  TGraph *graph_l4_0_lesq =
+      to_TGraph(sol_index_0_lesq.t, sol_index_0_lesq.eigen_x(8));
+  TGraph *graph_l5_0_lesq =
+      to_TGraph(sol_index_0_lesq.t, sol_index_0_lesq.eigen_x(9));
+  TGraph *graph_h1_0_lesq =
+      to_TGraph(sol_index_0_lesq.t, sol_index_0_lesq.eigen_h(0));
+  TGraph *graph_h2_0_lesq =
+      to_TGraph(sol_index_0_lesq.t, sol_index_0_lesq.eigen_h(1));
+  TGraph *graph_h3_0_lesq =
+      to_TGraph(sol_index_0_lesq.t, sol_index_0_lesq.eigen_h(2));
+
+  TGraph *graph_x_0_proj =
+      to_TGraph(sol_index_0_proj.t, sol_index_0_proj.eigen_x(0));
+  TGraph *graph_y_0_proj =
+      to_TGraph(sol_index_0_proj.t, sol_index_0_proj.eigen_x(1));
+  TGraph *graph_u_0_proj =
+      to_TGraph(sol_index_0_proj.t, sol_index_0_proj.eigen_x(2));
+  TGraph *graph_v_0_proj =
+      to_TGraph(sol_index_0_proj.t, sol_index_0_proj.eigen_x(3));
+  TGraph *graph_l_0_proj =
+      to_TGraph(sol_index_0_proj.t, sol_index_0_proj.eigen_x(4));
+  TGraph *graph_l1_0_proj =
+      to_TGraph(sol_index_0_proj.t, sol_index_0_proj.eigen_x(5));
+  TGraph *graph_l2_0_proj =
+      to_TGraph(sol_index_0_proj.t, sol_index_0_proj.eigen_x(6));
+  TGraph *graph_l3_0_proj =
+      to_TGraph(sol_index_0_proj.t, sol_index_0_proj.eigen_x(7));
+  TGraph *graph_l4_0_proj =
+      to_TGraph(sol_index_0_proj.t, sol_index_0_proj.eigen_x(8));
+  TGraph *graph_l5_0_proj =
+      to_TGraph(sol_index_0_proj.t, sol_index_0_proj.eigen_x(9));
+  TGraph *graph_h1_0_proj =
+      to_TGraph(sol_index_0_proj.t, sol_index_0_proj.eigen_h(0));
+  TGraph *graph_h2_0_proj =
+      to_TGraph(sol_index_0_proj.t, sol_index_0_proj.eigen_h(1));
+  TGraph *graph_h3_0_proj =
+      to_TGraph(sol_index_0_proj.t, sol_index_0_proj.eigen_h(2));
 
   graph_x_3->SetLineColor(colors[0]);
   graph_y_3->SetLineColor(colors[0]);
   graph_u_3->SetLineColor(colors[0]);
   graph_v_3->SetLineColor(colors[0]);
   graph_l_3->SetLineColor(colors[0]);
-  graph_l1_3->SetLineColor(colors[1]);
-  graph_l2_3->SetLineColor(colors[2]);
-  graph_l3_3->SetLineColor(colors[3]);
-  graph_l4_3->SetLineColor(colors[4]);
-  graph_l5_3->SetLineColor(colors[5]);
+  graph_l1_3->SetLineColor(colors[0]);
+  graph_l2_3->SetLineColor(colors[0]);
+  graph_l3_3->SetLineColor(colors[0]);
+  graph_l4_3->SetLineColor(colors[0]);
+  graph_l5_3->SetLineColor(colors[0]);
   graph_x_3->SetLineWidth(2.0);
   graph_y_3->SetLineWidth(2.0);
   graph_u_3->SetLineWidth(2.0);
@@ -181,38 +236,49 @@ int main(int argc, char **argv) {
   graph_l4_3->SetLineWidth(2.0);
   graph_l5_3->SetLineWidth(2.0);
 
-  graph_x_0->SetLineColor(colors[1]);
-  graph_y_0->SetLineColor(colors[1]);
-  graph_u_0->SetLineColor(colors[1]);
-  graph_v_0->SetLineColor(colors[1]);
-  graph_l_0->SetLineColor(colors[1]);
-  graph_l1_0->SetLineColor(colors[1]);
-  graph_l2_0->SetLineColor(colors[2]);
-  graph_l3_0->SetLineColor(colors[3]);
-  graph_l4_0->SetLineColor(colors[4]);
-  graph_l5_0->SetLineColor(colors[5]);
-  graph_x_0->SetLineWidth(2.0);
-  graph_y_0->SetLineWidth(2.0);
-  graph_u_0->SetLineWidth(2.0);
-  graph_v_0->SetLineWidth(2.0);
-  graph_l_0->SetLineWidth(2.0);
-  graph_l1_0->SetLineWidth(2.0);
-  graph_l2_0->SetLineWidth(2.0);
-  graph_l3_0->SetLineWidth(2.0);
-  graph_l4_0->SetLineWidth(2.0);
-  graph_l5_0->SetLineWidth(2.0);
-  graph_x_0->SetLineStyle(2);
-  graph_y_0->SetLineStyle(2);
-  graph_u_0->SetLineStyle(2);
-  graph_v_0->SetLineStyle(2);
-  graph_l_0->SetLineStyle(2);
-  graph_l1_0->SetLineStyle(2);
-  graph_l2_0->SetLineStyle(2);
-  graph_l3_0->SetLineStyle(2);
-  graph_l4_0->SetLineStyle(2);
-  graph_l5_0->SetLineStyle(2);
+  graph_x_0_lesq->SetLineColor(colors[1]);
+  graph_y_0_lesq->SetLineColor(colors[1]);
+  graph_u_0_lesq->SetLineColor(colors[1]);
+  graph_v_0_lesq->SetLineColor(colors[1]);
+  graph_l_0_lesq->SetLineColor(colors[1]);
+  graph_l1_0_lesq->SetLineColor(colors[1]);
+  graph_l2_0_lesq->SetLineColor(colors[1]);
+  graph_l3_0_lesq->SetLineColor(colors[1]);
+  graph_l4_0_lesq->SetLineColor(colors[1]);
+  graph_l5_0_lesq->SetLineColor(colors[1]);
+  graph_x_0_lesq->SetLineWidth(2.0);
+  graph_y_0_lesq->SetLineWidth(2.0);
+  graph_u_0_lesq->SetLineWidth(2.0);
+  graph_v_0_lesq->SetLineWidth(2.0);
+  graph_l_0_lesq->SetLineWidth(2.0);
+  graph_l1_0_lesq->SetLineWidth(2.0);
+  graph_l2_0_lesq->SetLineWidth(2.0);
+  graph_l3_0_lesq->SetLineWidth(2.0);
+  graph_l4_0_lesq->SetLineWidth(2.0);
+  graph_l5_0_lesq->SetLineWidth(2.0);
 
-  canvas->Divide(2, 2);
+  graph_x_0_lesq->SetLineColor(colors[2]);
+  graph_y_0_lesq->SetLineColor(colors[2]);
+  graph_u_0_lesq->SetLineColor(colors[2]);
+  graph_v_0_lesq->SetLineColor(colors[2]);
+  graph_l_0_lesq->SetLineColor(colors[2]);
+  graph_l1_0_lesq->SetLineColor(colors[2]);
+  graph_l2_0_lesq->SetLineColor(colors[2]);
+  graph_l3_0_lesq->SetLineColor(colors[2]);
+  graph_l4_0_lesq->SetLineColor(colors[2]);
+  graph_l5_0_lesq->SetLineColor(colors[2]);
+  graph_x_0_lesq->SetLineWidth(2.0);
+  graph_y_0_lesq->SetLineWidth(2.0);
+  graph_u_0_lesq->SetLineWidth(2.0);
+  graph_v_0_lesq->SetLineWidth(2.0);
+  graph_l_0_lesq->SetLineWidth(2.0);
+  graph_l1_0_lesq->SetLineWidth(2.0);
+  graph_l2_0_lesq->SetLineWidth(2.0);
+  graph_l3_0_lesq->SetLineWidth(2.0);
+  graph_l4_0_lesq->SetLineWidth(2.0);
+  graph_l5_0_lesq->SetLineWidth(2.0);
+
+  canvas->Divide(2, 3);
 
   canvas->cd(1);
   gPad->SetGrid();
@@ -220,8 +286,10 @@ int main(int argc, char **argv) {
   mg1->SetTitle("Cartesian coordinates");
   mg1->Add(graph_x_3);
   mg1->Add(graph_y_3);
-  mg1->Add(graph_x_0);
-  mg1->Add(graph_y_0);
+  mg1->Add(graph_x_0_lesq);
+  mg1->Add(graph_y_0_lesq);
+  mg1->Add(graph_x_0_proj);
+  mg1->Add(graph_y_0_proj);
   mg1->Draw("AL");
   mg1->GetXaxis()->SetTitle("t");
   mg1->GetYaxis()->SetTitle("x, y (m)");
@@ -229,8 +297,10 @@ int main(int argc, char **argv) {
   auto legend1 = new TLegend(0.7, 0.7, 0.9, 0.9);
   legend1->AddEntry(graph_x_3, "x (index 3)", "l");
   legend1->AddEntry(graph_y_3, "y (index 3)", "l");
-  legend1->AddEntry(graph_x_0, "x (index 0)", "l");
-  legend1->AddEntry(graph_y_0, "y (index 0)", "l");
+  legend1->AddEntry(graph_x_0_lesq, "x (l.s. index 0)", "l");
+  legend1->AddEntry(graph_y_0_lesq, "y (l.s. index 0)", "l");
+  legend1->AddEntry(graph_x_0_proj, "x (proj. index 0)", "l");
+  legend1->AddEntry(graph_y_0_proj, "y (proj. index 0)", "l");
   legend1->Draw();
 
   canvas->cd(2);
@@ -239,8 +309,10 @@ int main(int argc, char **argv) {
   mg2->SetTitle("Velocities");
   mg2->Add(graph_u_3);
   mg2->Add(graph_v_3);
-  mg2->Add(graph_u_0);
-  mg2->Add(graph_v_0);
+  mg2->Add(graph_u_0_lesq);
+  mg2->Add(graph_v_0_lesq);
+  mg2->Add(graph_u_0_proj);
+  mg2->Add(graph_v_0_proj);
   mg2->Draw("AL");
   mg2->GetXaxis()->SetTitle("t");
   mg2->GetYaxis()->SetTitle("u, v (m/s)");
@@ -248,8 +320,10 @@ int main(int argc, char **argv) {
   auto legend2 = new TLegend(0.7, 0.7, 0.9, 0.9);
   legend2->AddEntry(graph_u_3, "u (index 3)", "l");
   legend2->AddEntry(graph_v_3, "v (index 3)", "l");
-  legend2->AddEntry(graph_u_0, "u (index 0)", "l");
-  legend2->AddEntry(graph_v_0, "v (index 0)", "l");
+  legend2->AddEntry(graph_u_0_lesq, "u (l.s. index 0)", "l");
+  legend2->AddEntry(graph_v_0_lesq, "v (l.s. index 0)", "l");
+  legend2->AddEntry(graph_u_0_proj, "u (proj. index 0)", "l");
+  legend2->AddEntry(graph_v_0_proj, "v (proj. index 0)", "l");
   legend2->Draw();
 
   canvas->cd(3);
@@ -257,14 +331,16 @@ int main(int argc, char **argv) {
   auto mg3 = new TMultiGraph();
   mg3->SetTitle("Lagrange multiplier (DAE)");
   mg3->Add(graph_l_3);
-  mg3->Add(graph_l_0);
+  mg3->Add(graph_l_0_lesq);
+  mg3->Add(graph_l_0_proj);
   mg3->Draw("AL");
   mg3->GetXaxis()->SetTitle("t");
   mg3->GetYaxis()->SetTitle("lambda (N)");
   mg3->GetXaxis()->SetLimits(time.minCoeff(), time.maxCoeff());
   auto legend3 = new TLegend(0.7, 0.8, 0.9, 0.9);
   legend3->AddEntry(graph_l_3, "l (index 3)", "l");
-  legend3->AddEntry(graph_l_0, "l (index 0)", "l");
+  legend3->AddEntry(graph_l_0_lesq, "l (l.s. index 0)", "l");
+  legend3->AddEntry(graph_l_0_proj, "l (proj. index 0)", "l");
   legend3->Draw();
 
   canvas->cd(4);
@@ -276,11 +352,16 @@ int main(int argc, char **argv) {
   mg4->Add(graph_l3_3);
   mg4->Add(graph_l4_3);
   mg4->Add(graph_l5_3);
-  mg4->Add(graph_l1_0);
-  mg4->Add(graph_l2_0);
-  mg4->Add(graph_l3_0);
-  mg4->Add(graph_l4_0);
-  mg4->Add(graph_l5_0);
+  mg4->Add(graph_l1_0_lesq);
+  mg4->Add(graph_l2_0_lesq);
+  mg4->Add(graph_l3_0_lesq);
+  mg4->Add(graph_l4_0_lesq);
+  mg4->Add(graph_l5_0_lesq);
+  mg4->Add(graph_l1_0_proj);
+  mg4->Add(graph_l2_0_proj);
+  mg4->Add(graph_l3_0_proj);
+  mg4->Add(graph_l4_0_proj);
+  mg4->Add(graph_l5_0_proj);
   mg4->Draw("AL");
   mg4->GetXaxis()->SetTitle("t");
   mg4->GetYaxis()->SetTitle("l1, l2, l3, l4, l5 (-)");
@@ -291,12 +372,40 @@ int main(int argc, char **argv) {
   legend4->AddEntry(graph_l3_3, "l3 (index 3)", "l");
   legend4->AddEntry(graph_l4_3, "l4 (index 3)", "l");
   legend4->AddEntry(graph_l5_3, "l5 (index 3)", "l");
-  legend4->AddEntry(graph_l1_0, "l1 (index 0)", "l");
-  legend4->AddEntry(graph_l2_0, "l2 (index 0)", "l");
-  legend4->AddEntry(graph_l3_0, "l3 (index 0)", "l");
-  legend4->AddEntry(graph_l4_0, "l4 (index 0)", "l");
-  legend4->AddEntry(graph_l5_0, "l5 (index 0)", "l");
+  legend4->AddEntry(graph_l1_0_lesq, "l1 (l.s. index 0)", "l");
+  legend4->AddEntry(graph_l2_0_lesq, "l2 (l.s. index 0)", "l");
+  legend4->AddEntry(graph_l3_0_lesq, "l3 (l.s. index 0)", "l");
+  legend4->AddEntry(graph_l4_0_lesq, "l4 (l.s. index 0)", "l");
+  legend4->AddEntry(graph_l5_0_lesq, "l5 (l.s. index 0)", "l");
+  legend4->AddEntry(graph_l1_0_proj, "l1 (proj. index 0)", "l");
+  legend4->AddEntry(graph_l2_0_proj, "l2 (proj. index 0)", "l");
+  legend4->AddEntry(graph_l3_0_proj, "l3 (proj. index 0)", "l");
+  legend4->AddEntry(graph_l4_0_proj, "l4 (proj. index 0)", "l");
+  legend4->AddEntry(graph_l5_0_proj, "l5 (proj. index 0)", "l");
   legend4->Draw();
+
+  canvas->cd(5);
+  gPad->SetGrid();
+  auto mg5 = new TMultiGraph();
+  mg5->SetTitle("Invariant manifold (index 0)");
+  mg5->Add(graph_h1_0_lesq);
+  mg5->Add(graph_h2_0_lesq);
+  mg5->Add(graph_h3_0_lesq);
+  mg5->Add(graph_h1_0_proj);
+  mg5->Add(graph_h2_0_proj);
+  mg5->Add(graph_h3_0_proj);
+  mg5->Draw("AL");
+  mg5->GetXaxis()->SetTitle("t");
+  mg5->GetYaxis()->SetTitle("h1, h2, h3 (-)");
+  mg5->GetXaxis()->SetLimits(time.minCoeff(), time.maxCoeff());
+  auto legend5 = new TLegend(0.7, 0.8, 0.9, 0.9);
+  legend5->AddEntry(graph_h1_0_lesq, "h1 (l.s. index 0)", "l");
+  legend5->AddEntry(graph_h2_0_lesq, "h2 (l.s. index 0)", "l");
+  legend5->AddEntry(graph_h3_0_lesq, "h3 (l.s. index 0)", "l");
+  legend5->AddEntry(graph_h1_0_proj, "h1 (proj. index 0)", "l");
+  legend5->AddEntry(graph_h2_0_proj, "h2 (proj. index 0)", "l");
+  legend5->AddEntry(graph_h3_0_proj, "h3 (proj. index 0)", "l");
+  legend5->Draw();
 
   canvas->Update();
   app.Run();

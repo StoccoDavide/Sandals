@@ -234,6 +234,7 @@ class BVPT13Problem : public BoundaryValueProblem<Real, 2, 0, Integrator> {
   static Real time_start() {
     return -1.0;
   }
+
   static Real time_end() {
     return 1.0;
   }
@@ -282,11 +283,11 @@ class BVPT13Problem : public BoundaryValueProblem<Real, 2, 0, Integrator> {
     return x;
   }
 
-  static VectorF guess(const Real /*t*/) {
+  VectorF guess(const Real /*t*/) {
     return VectorF::Zero();
   }
 
-  static MatrixX guess(const VectorX &t) {
+  MatrixX guess(const VectorX &t) {
     return MatrixX::Zero(2, t.size());
   }
 };

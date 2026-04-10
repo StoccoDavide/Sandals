@@ -307,23 +307,23 @@ class BVPT5Problem : public BoundaryValueProblem<Real, 2, 0, Integrator> {
     return true;
   }
 
-  static Real exact_solution(const Real t) {
+  Real exact_solution(const Real t) const {
     return std::cos(pi * t);
   }
 
   VectorX exact_solution(const VectorX &t) const {
     VectorX x(t.size());
     for (Integer i{0}; i < t.size(); ++i) {
-      x(i) = BVPT5Problem<Real, System, Integrator>::exact_solution(t(i));
+      x(i) = this->exact_solution(t(i));
     }
     return x;
   }
 
-  static VectorF guess(const Real /*t*/) {
+  VectorF guess(const Real /*t*/) {
     return VectorF::Zero();
   }
 
-  static MatrixX guess(const VectorX &t) {
+  MatrixX guess(const VectorX &t) {
     return MatrixX::Zero(2, t.size());
   }
 };

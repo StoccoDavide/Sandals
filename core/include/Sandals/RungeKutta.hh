@@ -1123,7 +1123,7 @@ namespace Sandals {
       // Compute the Jacobian with finite differences
       MatrixJX Jx_fd;
       if (Optimist::FiniteDifferences::Jacobian(fun, x, Jx_fd)) {
-        Real err{(Jx - Jx_fd).norm()};
+        const Real err{(Jx - Jx_fd).norm()};
         SANDALS_ASSERT_WARNING(err < CBRT_EPSILON,
                                CMD "ERK Jacobian propagation error = "
                                    << err << " > " << CBRT_EPSILON << ".");
@@ -1391,7 +1391,7 @@ namespace Sandals {
       // Compute the Jacobian with finite differences
       MatrixJX Jx_fd;
       if (Optimist::FiniteDifferences::Jacobian(fun, x, Jx_fd)) {
-        Real err{(Jx - Jx_fd).norm()};
+        const Real err{(Jx - Jx_fd).norm()};
         SANDALS_ASSERT_WARNING(err < CBRT_EPSILON,
                                CMD "ERK Jacobian propagation error = "
                                    << err << " > " << CBRT_EPSILON << ".");
@@ -1708,7 +1708,7 @@ namespace Sandals {
       // Compute the Jacobian with finite differences
       MatrixJX Jx_fd;
       if (Optimist::FiniteDifferences::Jacobian(fun, x, Jx_fd)) {
-        Real err{(Jx - Jx_fd).norm()};
+        const Real err{(Jx - Jx_fd).norm()};
         SANDALS_ASSERT_WARNING(err < CBRT_EPSILON,
                                CMD "IRK Jacobian propagation error = "
                                    << err << " > " << CBRT_EPSILON << ".");
@@ -1989,7 +1989,7 @@ namespace Sandals {
       // Compute the Jacobian with finite differences
       MatrixJX Jx_fd;
       if (Optimist::FiniteDifferences::Jacobian(fun, x, Jx_fd)) {
-        Real err{(Jx - Jx_fd).norm()};
+        const Real err{(Jx - Jx_fd).norm()};
         SANDALS_ASSERT_WARNING(err < CBRT_EPSILON,
                                CMD "DIRK Jacobian propagation error = "
                                    << err << " > " << CBRT_EPSILON << ".");
@@ -2717,12 +2717,13 @@ namespace Sandals {
                            MatrixJX &Jx_projection) const {
 #define CMD "Sandals::RungeKutta::project_propagate(...): "
 
+      Jx_projection.setIdentity();
       if constexpr (M > 0) {
-        using MatrixNM = Eigen::Matrix<Real, N, M>;
-        MatrixNM JhT(this->m_system->Jh_x(x_projected, t).transpose());
-        Eigen::FullPivHouseholderQR<MatrixNM> qr(JhT);
-        Jx_projection =
-            MatrixJX::Identity() - qr.matrixQ() * qr.matrixQ().transpose();
+        using MatrixJHT = Eigen::Matrix<Real, N, M>;
+        const MatrixJHT JhT(this->m_system->Jh_x(x_projected, t).transpose());
+        const Eigen::FullPivHouseholderQR<MatrixJHT> qr(JhT);
+        const MatrixJX Q(qr.matrixQ());
+        Jx_projection.noalias() -= Q * Q.transpose();
         if (!Jx_projection.allFinite()) {
           SANDALS_WARNING(CMD "in " << this->m_tableau.name
                                     << " solver, at t = " << t
@@ -2743,14 +2744,12 @@ namespace Sandals {
         if (Optimist::FiniteDifferences::Jacobian(fun,
                                                   x_projected,
                                                   Jx_projection_fd)) {
-          Real err{(Jx_projection - Jx_projection_fd).norm()};
+          const Real err{(Jx_projection - Jx_projection_fd).norm()};
           SANDALS_ASSERT_WARNING(err < CBRT_EPSILON,
                                  CMD "projection Jacobian propagation error = "
                                      << err << " > " << CBRT_EPSILON << ".");
         }
 #endif
-      } else {
-        Jx_projection.setIdentity();
       }
       return true;
 #undef CMD

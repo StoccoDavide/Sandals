@@ -276,14 +276,14 @@ class Shampine1Problem : public BoundaryValueProblem<Real, 5, 0, Integrator> {
     return MatrixX::Zero(5, t.size());
   }
 
-  static VectorF guess(const Real t) {
+  VectorF guess(const Real t) {
     VectorF x;
     x << 1.0, 1.0, -4.5 * t * t + 8.91 * t + 1.0, -10.0,
         -4.5 * t * t + 9.0 * t + 0.91;
     return x;
   }
 
-  static MatrixX guess(const VectorX &t) {
+  MatrixX guess(const VectorX &t) {
     MatrixX x(5, t.size());
     for (Integer i{0}; i < t.size(); ++i) {
       x.col(i) = Shampine1Problem<Real, System, Integrator>::guess(t(i));
