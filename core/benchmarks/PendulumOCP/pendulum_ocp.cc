@@ -12,7 +12,7 @@
 
 #include "PendulumOCP.hh"
 #include "Sandals.hh"
-#include "Sandals/RungeKutta/GaussLegendre4.hh"
+#include "Sandals/RungeKutta/RK4.hh"
 #include "Sandals/RungeKutta/RadauIIA5.hh"
 
 #ifdef SANDALS_ENABLE_PLOTTING
@@ -67,7 +67,7 @@ int main(int argc, char **argv) {
 #endif
 
   // Istantiate the problems
-  PROBLEM_INIT(PendulumOCP, RadauIIA5, RadauIIA5)
+  PROBLEM_INIT(PendulumOCP, RadauIIA5, RK4)
 
   // Set verbose mode
   constexpr bool verbose{true};
@@ -86,8 +86,8 @@ int main(int argc, char **argv) {
   problem_index_0.tolerance(1.0e-9);
 
   // Set solver maximum number of iterations
-  problem_index_3.max_iterations(200);
-  problem_index_0.max_iterations(200);
+  problem_index_3.max_iterations(100);
+  problem_index_0.max_iterations(100);
 
   // Set solution parameters
   constexpr Integer num_subintervals{1};
@@ -110,7 +110,7 @@ int main(int argc, char **argv) {
   try {
     std::cout << "Solving problem with index 3..." << std::endl;
     problem_index_3.sigma(1.0);
-    problem_index_0.lambda(1e-9);
+    problem_index_0.lambda(1.0e-3);
     problem_index_3.integrator()->projection_mode(true);
     problem_index_3.multiple_shooting(time, guess);
     sol_index_3 = problem_index_3.solution();
@@ -122,11 +122,16 @@ int main(int argc, char **argv) {
   Solution<Real, 10, 3> sol_index_0_lesq(time.size());
   try {
     std::cout << "Solving problem with index 0 (least squares)..." << std::endl;
-    problem_index_0.sigma(1.0);
-    problem_index_0.lambda(1e-9);
-    problem_index_0.integrator()->projection_mode(false);
-    problem_index_0.multiple_shooting(time, guess);
-    sol_index_0_lesq = problem_index_0.solution();
+    sol_index_0_lesq.x = guess;
+    std::vector<Real> lambda_vec{1.0e-3, 1.0e-6, 1.0e-6, 1.0e-9, 0.0};
+    std::vector<Real> sigma_vec{1.0, 10.0, 100.0, 10.0, 10.0};
+    for (Integer i{0}; i < 4; ++i) {
+      problem_index_0.sigma(sigma_vec[i]);
+      problem_index_0.lambda(lambda_vec[i]);
+      problem_index_0.integrator()->projection_mode(false);
+      problem_index_0.multiple_shooting(time, sol_index_0_lesq.x);
+      sol_index_0_lesq = problem_index_0.solution();
+    }
   } catch (const std::exception &e) {
     std::cerr << "Error solving problem with index 0 (least squares): "
               << e.what() << std::endl;
@@ -136,7 +141,7 @@ int main(int argc, char **argv) {
   try {
     std::cout << "Solving problem with index 0 (projection)..." << std::endl;
     problem_index_0.sigma(1.0);
-    problem_index_0.lambda(1e-9);
+    problem_index_0.lambda(1.0e-3);
     problem_index_0.integrator()->projection_mode(true);
     problem_index_0.multiple_shooting(time, guess);
     sol_index_0_proj = problem_index_0.solution();

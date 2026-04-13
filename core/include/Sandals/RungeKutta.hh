@@ -2119,8 +2119,8 @@ namespace Sandals {
       // Check step size
       SANDALS_ASSERT(h_old > 0.0,
                      CMD "in " << this->m_tableau.name
-                               << ", inconsistent step size detected (h = "
-                               << h_old << ").");
+                               << ", inconsistent step size (h = " << h_old
+                               << ").");
 
       // Reset the derivative propagation matrix
       if constexpr (Propagate) {
@@ -2590,8 +2590,7 @@ namespace Sandals {
 
           // Compute the solution of the linear system
           this->m_lu.compute(A);
-          SANDALS_ASSERT(this->m_lu.rank() == N + M,
-                         CMD "singular Jacobian detected.");
+          SANDALS_ASSERT(this->m_lu.rank() == N + M, CMD "singular Jacobian.");
           x_step = this->m_lu.solve(b);
 
           // Check if the step is too small
@@ -2676,7 +2675,7 @@ namespace Sandals {
 
           // Compute the solution of the linear system
           lu.compute(A);
-          SANDALS_ASSERT(lu.rank() == X + H, CMD "singular Jacobian detected.");
+          SANDALS_ASSERT(lu.rank() == X + H, CMD "singular Jacobian.");
           x_step = this->m_lu.solve(b);
 
           // Check if the step is too small
@@ -2719,11 +2718,19 @@ namespace Sandals {
 
       Jx_projection.setIdentity();
       if constexpr (M > 0) {
-        using MatrixJHT = Eigen::Matrix<Real, N, M>;
-        const MatrixJHT JhT(this->m_system->Jh_x(x_projected, t).transpose());
-        const Eigen::FullPivHouseholderQR<MatrixJHT> qr(JhT);
-        const MatrixJX Q(qr.matrixQ());
-        Jx_projection.noalias() -= Q * Q.transpose();
+        using MatrixAA = Eigen::Matrix<Real, N + M, N + M>;
+        using MatrixBB = Eigen::Matrix<Real, N + M, N>;
+        MatrixM Jh_x(this->m_system->Jh_x(x_projected, t));
+        MatrixAA A(MatrixAA::Zero());
+        A.template block<N, N>(0, 0) = MatrixN::Identity();
+        A.template block<N, M>(0, N) = Jh_x.transpose();
+        A.template block<M, N>(N, 0) = Jh_x;
+        MatrixBB b(MatrixBB::Zero());
+        b.template block<N, N>(0, 0) = MatrixN::Identity();
+        Eigen::FullPivLU<MatrixAA> lu(A);
+        SANDALS_ASSERT(lu.rank() == N + M,
+                       CMD "singular Jacobian in projection propagation.");
+        Jx_projection = lu.solve(b).template block<N, N>(0, 0);
         if (!Jx_projection.allFinite()) {
           SANDALS_WARNING(CMD "in " << this->m_tableau.name
                                     << " solver, at t = " << t

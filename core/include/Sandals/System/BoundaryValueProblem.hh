@@ -462,7 +462,7 @@ namespace Sandals {
         A_sys.makeCompressed();
         qr.compute(A_sys);
         SANDALS_ASSERT(qr.rank() == qr.cols(),
-                       CMD "singular Jacobian detected.");
+                       CMD "singular linear system in BVP solution.");
         x_sol += qr.solve(b_sys);
       }
 

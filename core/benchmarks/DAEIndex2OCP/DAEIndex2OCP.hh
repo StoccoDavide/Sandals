@@ -266,7 +266,7 @@ class DAEIndex2OCPProblem
   }
 
   VectorF guess(const Real /*t*/) {
-    return VectorF::Ones();
+    return VectorF::Constant(-3.0);
   }
 
   MatrixX guess(const VectorX &t) {

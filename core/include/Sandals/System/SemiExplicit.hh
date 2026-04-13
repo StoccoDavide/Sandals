@@ -170,9 +170,8 @@ namespace Sandals {
      */
     VectorF f(const VectorF &x, const Real t) const override {
       this->m_lu.compute(this->A(x, t));
-      SANDALS_ASSERT(
-          this->m_lu.rank() == N,
-          "Sandals:SemiExplicit::f(...): singular mass matrix A detected.");
+      SANDALS_ASSERT(this->m_lu.rank() == N,
+                     "Sandals:SemiExplicit::f(...): singular mass matrix A.");
       return this->m_lu.solve(this->b(x, t));
     }
 
@@ -205,7 +204,7 @@ namespace Sandals {
       this->m_lu.compute(this->A(x, t));
       SANDALS_ASSERT(
           this->m_lu.rank() == N,
-          "Sandals:SemiExplicit::Jf_x(...): singular mass matrix A detected.");
+          "Sandals:SemiExplicit::Jf_x(...): singular mass matrix A.");
       return this->m_lu.solve(this->Jb_x(x, t) - tAp);
     }
 
@@ -355,13 +354,13 @@ namespace Sandals {
 
     inline const static FunctionH DefaultH = [](const VectorF &, const Real) {
       return VectorH::Zero();
-    };                          /**< Default mass matrix function. */
+    }; /**< Default mass matrix function. */
     inline const static FunctionJH DefaultJH = [](const VectorF &, const Real) {
       return MatrixJH::Zero();
-    };                          /**< Default system matrix function. */
+    }; /**< Default system matrix function. */
     inline const static FunctionID DefaultID = [](const VectorF &, const Real) {
       return true;
-    };                          /**< Default in-domain function. */
+    }; /**< Default in-domain function. */
 
    private:
     FunctionA m_A{nullptr};     /**< Function for the mass matrix. */

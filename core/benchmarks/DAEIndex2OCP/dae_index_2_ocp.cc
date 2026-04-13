@@ -49,10 +49,10 @@ using namespace Sandals;
 using Real = double;
 
 #ifndef PROBLEM_INIT
-#define PROBLEM_INIT(PROBLEM, INTEGRATOR)                               \
-  PROBLEM##Problem<Real, PROBLEM##index2<Real>, INTEGRATOR<Real, 8, 0>> \
-      problem_index_2;                                                  \
-  PROBLEM##Problem<Real, PROBLEM##index0<Real>, INTEGRATOR<Real, 8, 2>> \
+#define PROBLEM_INIT(PROBLEM, INTEGRATOR_2, INTEGRATOR_0)                 \
+  PROBLEM##Problem<Real, PROBLEM##index2<Real>, INTEGRATOR_2<Real, 8, 0>> \
+      problem_index_2;                                                    \
+  PROBLEM##Problem<Real, PROBLEM##index0<Real>, INTEGRATOR_0<Real, 8, 2>> \
       problem_index_0;
 #endif
 
@@ -66,7 +66,7 @@ int main(int argc, char **argv) {
 #endif
 
   // Istantiate the problems
-  PROBLEM_INIT(DAEIndex2OCP, RadauIIA5)
+  PROBLEM_INIT(DAEIndex2OCP, RadauIIA5, RadauIIA5)
 
   // Set verbose mode
   constexpr bool verbose{true};
@@ -81,8 +81,8 @@ int main(int argc, char **argv) {
   problem_index_0.integrator()->reverse_mode(reverse);
 
   // Set solver tolerance
-  problem_index_2.tolerance(1.0e-9);
-  problem_index_0.tolerance(1.0e-9);
+  problem_index_2.tolerance(1.0e-12);
+  problem_index_0.tolerance(1.0e-12);
 
   // Set solver maximum number of iterations
   problem_index_2.max_iterations(200);
@@ -94,7 +94,7 @@ int main(int argc, char **argv) {
   problem_index_0.subintervals(num_subintervals);
 
   // Set time mesh
-  constexpr Integer num_points{50};
+  constexpr Integer num_points{100};
   Eigen::Vector<Real, Eigen::Dynamic> time(
       Eigen::Vector<Real, Eigen::Dynamic>::LinSpaced(
           num_points,
@@ -148,11 +148,23 @@ int main(int argc, char **argv) {
 
   auto colors = matlab_lines_colormap();
 
+  // Compute the invariants violations for the index 2 solutions
+
+  Solution<Real, 8, 2> sol_index_2_aug(time.size());
+  sol_index_2_aug.t = sol_index_2.t;
+  sol_index_2_aug.x = sol_index_2.x;
+  for (Integer i{0}; i < sol_index_2.t.size(); ++i) {
+    sol_index_2_aug.h.col(i) =
+        problem_index_0.system()->h(sol_index_2.x.col(i), sol_index_2.t[i]);
+  }
+
   TCanvas *canvas    = new TCanvas("canvas", "Solution Comparison", 1200, 1200);
   TGraph *graph_x1_2 = to_TGraph(sol_index_2.t, sol_index_2.eigen_x(0));
   TGraph *graph_x2_2 = to_TGraph(sol_index_2.t, sol_index_2.eigen_x(1));
   TGraph *graph_x3_2 = to_TGraph(sol_index_2.t, sol_index_2.eigen_x(2));
   TGraph *graph_x4_2 = to_TGraph(sol_index_2.t, sol_index_2.eigen_x(3));
+  TGraph *graph_h1_2 = to_TGraph(sol_index_2_aug.t, sol_index_2_aug.eigen_h(0));
+  TGraph *graph_h2_2 = to_TGraph(sol_index_2_aug.t, sol_index_2_aug.eigen_h(1));
 
   TGraph *graph_x1_0_lesq =
       to_TGraph(sol_index_0_lesq.t, sol_index_0_lesq.eigen_x(0));
@@ -295,6 +307,8 @@ int main(int argc, char **argv) {
   gPad->SetGrid();
   auto mg5 = new TMultiGraph();
   mg5->SetTitle("Invariant manifold (index 0)");
+  mg5->Add(graph_h1_2);
+  mg5->Add(graph_h2_2);
   mg5->Add(graph_h1_0_lesq);
   mg5->Add(graph_h2_0_lesq);
   mg5->Add(graph_h1_0_proj);
@@ -304,6 +318,8 @@ int main(int argc, char **argv) {
   mg5->GetYaxis()->SetTitle("h1, h2, h3 (-)");
   mg5->GetXaxis()->SetLimits(time.minCoeff(), time.maxCoeff());
   auto legend5 = new TLegend(0.7, 0.8, 0.9, 0.9);
+  legend5->AddEntry(graph_h1_2, "h1 (index 2)", "l");
+  legend5->AddEntry(graph_h2_2, "h2 (index 2)", "l");
   legend5->AddEntry(graph_h1_0_lesq, "h1 (l.s. index 0)", "l");
   legend5->AddEntry(graph_h2_0_lesq, "h2 (l.s. index 0)", "l");
   legend5->AddEntry(graph_h1_0_proj, "h1 (proj. index 0)", "l");

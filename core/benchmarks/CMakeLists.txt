@@ -38,6 +38,11 @@ add_executable(pendulum_ocp ${PENDULUM_OCP_RUN})
 target_link_libraries(pendulum_ocp PRIVATE Sandals GTest::gtest ROOT::Core ROOT::Gpad)
 target_compile_options(pendulum_ocp PRIVATE -Wno-error=cpp)
 
+file(GLOB_RECURSE PENDULUM_GGL_OCP_RUN "${CMAKE_CURRENT_SOURCE_DIR}/PendulumGGLOCP/pendulum_ggl_ocp.cc")
+add_executable(pendulum_ggl_ocp ${PENDULUM_GGL_OCP_RUN})
+target_link_libraries(pendulum_ggl_ocp PRIVATE Sandals GTest::gtest ROOT::Core ROOT::Gpad)
+target_compile_options(pendulum_ggl_ocp PRIVATE -Wno-error=cpp)
+
 file(GLOB_RECURSE RAYLEIGH_OCP_RUN "${CMAKE_CURRENT_SOURCE_DIR}/RayleighOCP/rayleigh_ocp.cc")
 add_executable(rayleigh_ocp ${RAYLEIGH_OCP_RUN})
 target_link_libraries(rayleigh_ocp PRIVATE Sandals GTest::gtest ROOT::Core ROOT::Gpad)

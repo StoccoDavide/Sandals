@@ -59,10 +59,10 @@ class PendulumOCPindex3 : public Implicit<Real, 10, 0> {
            x_dot[2];
     F[3] = (-x[0] * x[7] + 4 * x[4]) * x[1] / 2 + x[0] * x[0] * x[8] / 2 + g +
            x_dot[3];
-    F[4] = x[0] * x[0] + x[1] * x[1] - 1;
-    F[5] = (-x[8] * x[8] - 4 * x[9]) * x[0] / 2 +
+    F[4] = -x[0] * x[0] - x[1] * x[1] + 1;
+    F[5] = (-x[8] * x[8] + 4 * x[9]) * x[0] / 2 +
            (x[1] * x[8] - 4 * x[4]) * x[7] / 2 + x_dot[5];
-    F[6] = (-x[7] * x[7] - 4 * x[9]) * x[1] / 2 + x[7] * x[0] * x[8] / 2 -
+    F[6] = (-x[7] * x[7] + 4 * x[9]) * x[1] / 2 + x[7] * x[0] * x[8] / 2 -
            2 * x[4] * x[8] + x_dot[6];
     F[7] = x_dot[7] + x[5];
     F[8] = x_dot[8] + x[6];
@@ -87,20 +87,20 @@ class PendulumOCPindex3 : public Implicit<Real, 10, 0> {
     JF_x(3, 4) = 2 * x[1];
     JF_x(3, 7) = -x[1] * x[0] / 2;
     JF_x(3, 8) = x[0] * x[0] / 2;
-    JF_x(4, 0) = 2 * x[0];
-    JF_x(4, 1) = 2 * x[1];
-    JF_x(5, 0) = -x[8] * x[8] / 2 - 2 * x[9];
-    JF_x(5, 1) = x[8] * x[7] / 2;
+    JF_x(4, 0) = -2 * x[0];
+    JF_x(4, 1) = -2 * x[1];
+    JF_x(5, 0) = -x[8] * x[8] / 2 + 2 * x[9];
+    JF_x(5, 1) = x[7] * x[8] / 2;
     JF_x(5, 4) = -2 * x[7];
     JF_x(5, 7) = x[1] * x[8] / 2 - 2 * x[4];
     JF_x(5, 8) = -x[0] * x[8] + x[1] * x[7] / 2;
-    JF_x(5, 9) = -2 * x[0];
-    JF_x(6, 0) = x[8] * x[7] / 2;
-    JF_x(6, 1) = -x[7] * x[7] / 2 - 2 * x[9];
+    JF_x(5, 9) = 2 * x[0];
+    JF_x(6, 0) = x[7] * x[8] / 2;
+    JF_x(6, 1) = -x[7] * x[7] / 2 + 2 * x[9];
     JF_x(6, 4) = -2 * x[8];
     JF_x(6, 7) = -x[1] * x[7] + x[0] * x[8] / 2;
     JF_x(6, 8) = x[0] * x[7] / 2 - 2 * x[4];
-    JF_x(6, 9) = -2 * x[1];
+    JF_x(6, 9) = 2 * x[1];
     JF_x(7, 5) = 1;
     JF_x(8, 6) = 1;
     JF_x(9, 0) = -2 * x[7];
@@ -140,6 +140,291 @@ class PendulumOCPindex3 : public Implicit<Real, 10, 0> {
   }
 
 };  // PendulumOCPindex3
+
+//  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+template <typename Real = double>
+class PendulumOCPindex2 : public Implicit<Real, 10, 1> {
+ public:
+  constexpr static Integer N = 10;
+  constexpr static Integer M = 1;
+  using typename Implicit<Real, 10, 1>::VectorF;
+  using typename Implicit<Real, 10, 1>::MatrixJF;
+  using typename Implicit<Real, 10, 1>::VectorH;
+  using typename Implicit<Real, 10, 1>::MatrixJH;
+
+ private:
+  Real m_g{9.81};
+
+ public:
+  PendulumOCPindex2() : Implicit<Real, 10, 1>("PendulumOCPindex2") {}
+
+  PendulumOCPindex2(const Real g)
+      : Implicit<Real, 10, 1>("PendulumOCPindex2"), m_g(g) {}
+
+  ~PendulumOCPindex2() {}
+
+  void g(const Real g) {
+    this->m_g = g;
+  }
+
+  Real g() const {
+    return this->m_g;
+  }
+
+  VectorF F(const VectorF &x,
+            const VectorF &x_dot,
+            const Real /*t*/) const override {
+    const Real &g{this->m_g};
+    VectorF F;
+    F[0] = x_dot[0] - x[2];
+    F[1] = x_dot[1] - x[3];
+    F[2] = (-x[1] * x[8] + 4 * x[4]) * x[0] / 2 + x[1] * x[1] * x[7] / 2 +
+           x_dot[2];
+    F[3] = (-x[0] * x[7] + 4 * x[4]) * x[1] / 2 + x[0] * x[0] * x[8] / 2 + g +
+           x_dot[3];
+    F[4] = 2 * x[0] * x[2] + 2 * x[1] * x[3];
+    F[5] = (x[1] * x[8] - 4 * x[4]) * x[7] / 2 - x[0] * x[8] * x[8] / 2 -
+           2 * x[2] * x[9] + x_dot[5];
+    F[6] = (x[0] * x[7] - 4 * x[4]) * x[8] / 2 - x[1] * x[7] * x[7] / 2 -
+           2 * x[3] * x[9] + x_dot[6];
+    F[7] = -2 * x[0] * x[9] + x[5] + x_dot[7];
+    F[8] = -2 * x[1] * x[9] + x[6] + x_dot[8];
+    F[9] = -2 * x[0] * x[7] - 2 * x[1] * x[8] + x_dot[9];
+    return F;
+  }
+
+  MatrixJF JF_x(const VectorF &x,
+                const VectorF & /*x_dot*/,
+                const Real /*t*/) const override {
+    MatrixJF JF_x;
+    JF_x.setZero();
+    JF_x(0, 2) = -1;
+    JF_x(1, 3) = -1;
+    JF_x(2, 0) = 2 * x[4] - x[1] * x[8] / 2;
+    JF_x(2, 1) = -x[0] * x[8] / 2 + x[1] * x[7];
+    JF_x(2, 4) = 2 * x[0];
+    JF_x(2, 7) = x[1] * x[1] / 2;
+    JF_x(2, 8) = -x[1] * x[0] / 2;
+    JF_x(3, 0) = -x[1] * x[7] / 2 + x[0] * x[8];
+    JF_x(3, 1) = -x[0] * x[7] / 2 + 2 * x[4];
+    JF_x(3, 4) = 2 * x[1];
+    JF_x(3, 7) = -x[1] * x[0] / 2;
+    JF_x(3, 8) = x[0] * x[0] / 2;
+    JF_x(4, 0) = 2 * x[2];
+    JF_x(4, 1) = 2 * x[3];
+    JF_x(4, 2) = 2 * x[0];
+    JF_x(4, 3) = 2 * x[1];
+    JF_x(5, 0) = -x[8] * x[8] / 2;
+    JF_x(5, 1) = x[7] * x[8] / 2;
+    JF_x(5, 2) = -2 * x[9];
+    JF_x(5, 4) = -2 * x[7];
+    JF_x(5, 7) = x[1] * x[8] / 2 - 2 * x[4];
+    JF_x(5, 8) = x[1] * x[7] / 2 - x[0] * x[8];
+    JF_x(5, 9) = -2 * x[2];
+    JF_x(6, 0) = x[7] * x[8] / 2;
+    JF_x(6, 1) = -x[7] * x[7] / 2;
+    JF_x(6, 3) = -2 * x[9];
+    JF_x(6, 4) = -2 * x[8];
+    JF_x(6, 7) = x[0] * x[8] / 2 - x[1] * x[7];
+    JF_x(6, 8) = x[0] * x[7] / 2 - 2 * x[4];
+    JF_x(6, 9) = -2 * x[3];
+    JF_x(7, 0) = -2 * x[9];
+    JF_x(7, 5) = 1;
+    JF_x(7, 9) = -2 * x[0];
+    JF_x(8, 1) = -2 * x[9];
+    JF_x(8, 6) = 1;
+    JF_x(8, 9) = -2 * x[1];
+    JF_x(9, 0) = -2 * x[7];
+    JF_x(9, 1) = -2 * x[8];
+    JF_x(9, 7) = -2 * x[0];
+    JF_x(9, 8) = -2 * x[1];
+    return JF_x;
+  }
+
+  MatrixJF JF_x_dot(const VectorF & /*x*/,
+                    const VectorF & /*x_dot*/,
+                    const Real /*t*/) const override {
+    MatrixJF JF_x_dot;
+    JF_x_dot.setZero();
+    JF_x_dot(0, 0) = 1;
+    JF_x_dot(1, 1) = 1;
+    JF_x_dot(2, 2) = 1;
+    JF_x_dot(3, 3) = 1;
+    JF_x_dot(5, 5) = 1;
+    JF_x_dot(6, 6) = 1;
+    JF_x_dot(7, 7) = 1;
+    JF_x_dot(8, 8) = 1;
+    JF_x_dot(9, 9) = 1;
+    return JF_x_dot;
+  }
+
+  VectorH h(const VectorF &x, const Real /*t*/) const override {
+    VectorH h;
+    h[0] = -x[0] * x[0] - x[1] * x[1] + 1;
+    return h;
+  }
+
+  MatrixJH Jh_x(const VectorF &x, const Real /*t*/) const override {
+    MatrixJH Jh_x;
+    Jh_x.setZero();
+    Jh_x(0, 0) = -2 * x[0];
+    Jh_x(0, 1) = -2 * x[1];
+    return Jh_x;
+  }
+
+  bool in_domain(const VectorF & /*x*/, const Real /*t*/) const override {
+    return true;
+  }
+
+};  // PendulumOCPindex2
+
+//  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+template <typename Real = double>
+class PendulumOCPindex1 : public Implicit<Real, 10, 2> {
+ public:
+  constexpr static Integer N = 10;
+  constexpr static Integer M = 2;
+  using typename Implicit<Real, 10, 2>::VectorF;
+  using typename Implicit<Real, 10, 2>::MatrixJF;
+  using typename Implicit<Real, 10, 2>::VectorH;
+  using typename Implicit<Real, 10, 2>::MatrixJH;
+
+ private:
+  Real m_g{9.81};
+
+ public:
+  PendulumOCPindex1() : Implicit<Real, 10, 2>("PendulumOCPindex1") {}
+
+  PendulumOCPindex1(const Real g)
+      : Implicit<Real, 10, 2>("PendulumOCPindex1"), m_g(g) {}
+
+  ~PendulumOCPindex1() {}
+
+  void g(const Real g) {
+    this->m_g = g;
+  }
+
+  Real g() const {
+    return this->m_g;
+  }
+
+  VectorF F(const VectorF &x,
+            const VectorF &x_dot,
+            const Real /*t*/) const override {
+    const Real &g{this->m_g};
+    VectorF F;
+    F[0] = x_dot[0] - x[2];
+    F[1] = x_dot[1] - x[3];
+    F[2] = (-x[1] * x[8] + 4 * x[4]) * x[0] / 2 + x[1] * x[1] * x[7] / 2 +
+           x_dot[2];
+    F[3] = (-x[0] * x[7] + 4 * x[4]) * x[1] / 2 + x[0] * x[0] * x[8] / 2 + g +
+           x_dot[3];
+    F[4] = (4 * x[0] * x[0] + 4 * x[1] * x[1]) * x[4] + 2 * x[1] * g -
+           2 * x[2] * x[2] - 2 * x[3] * x[3];
+    F[5] = (x[1] * x[8] - 4 * x[4]) * x[7] / 2 - 8 * x[0] * x[4] * x[9] -
+           x[0] * x[8] * x[8] / 2 + x_dot[5];
+    F[6] = (x[0] * x[7] - 4 * x[4]) * x[8] / 2 +
+           (-16 * x[4] * x[9] - x[7] * x[7]) * x[1] / 2 - 2 * g * x[9] +
+           x_dot[6];
+    F[7] = 4 * x[2] * x[9] + x[5] + x_dot[7];
+    F[8] = 4 * x[3] * x[9] + x[6] + x_dot[8];
+    F[9] = -4 * x[0] * x[0] * x[9] - 4 * x[1] * x[1] * x[9] - 2 * x[0] * x[7] -
+           2 * x[1] * x[8] + x_dot[9];
+    return F;
+  }
+
+  MatrixJF JF_x(const VectorF &x,
+                const VectorF & /*x_dot*/,
+                const Real /*t*/) const override {
+    const Real &g{this->m_g};
+    MatrixJF JF_x;
+    JF_x.setZero();
+    JF_x(0, 2) = -1;
+    JF_x(1, 3) = -1;
+    JF_x(2, 0) = -x[1] * x[8] / 2 + 2 * x[4];
+    JF_x(2, 1) = -x[8] * x[0] / 2 + x[1] * x[7];
+    JF_x(2, 4) = 2 * x[0];
+    JF_x(2, 7) = x[1] * x[1] / 2;
+    JF_x(2, 8) = -x[1] * x[0] / 2;
+    JF_x(3, 0) = -x[1] * x[7] / 2 + x[8] * x[0];
+    JF_x(3, 1) = -x[0] * x[7] / 2 + 2 * x[4];
+    JF_x(3, 4) = 2 * x[1];
+    JF_x(3, 7) = -x[1] * x[0] / 2;
+    JF_x(3, 8) = x[0] * x[0] / 2;
+    JF_x(4, 0) = 8 * x[0] * x[4];
+    JF_x(4, 1) = 8 * x[4] * x[1] + 2 * g;
+    JF_x(4, 2) = -4 * x[2];
+    JF_x(4, 3) = -4 * x[3];
+    JF_x(4, 4) = 4 * x[0] * x[0] + 4 * x[1] * x[1];
+    JF_x(5, 0) = -8 * x[4] * x[9] - x[8] * x[8] / 2;
+    JF_x(5, 1) = x[8] * x[7] / 2;
+    JF_x(5, 4) = -8 * x[0] * x[9] - 2 * x[7];
+    JF_x(5, 7) = x[1] * x[8] / 2 - 2 * x[4];
+    JF_x(5, 8) = x[1] * x[7] / 2 - x[8] * x[0];
+    JF_x(5, 9) = -8 * x[0] * x[4];
+    JF_x(6, 0) = x[8] * x[7] / 2;
+    JF_x(6, 1) = -8 * x[4] * x[9] - x[7] * x[7] / 2;
+    JF_x(6, 4) = -8 * x[9] * x[1] - 2 * x[8];
+    JF_x(6, 7) = x[8] * x[0] / 2 - x[1] * x[7];
+    JF_x(6, 8) = x[0] * x[7] / 2 - 2 * x[4];
+    JF_x(6, 9) = -8 * x[4] * x[1] - 2 * g;
+    JF_x(7, 2) = 4 * x[9];
+    JF_x(7, 5) = 1;
+    JF_x(7, 9) = 4 * x[2];
+    JF_x(8, 3) = 4 * x[9];
+    JF_x(8, 6) = 1;
+    JF_x(8, 9) = 4 * x[3];
+    JF_x(9, 0) = -8 * x[0] * x[9] - 2 * x[7];
+    JF_x(9, 1) = -8 * x[9] * x[1] - 2 * x[8];
+    JF_x(9, 7) = -2 * x[0];
+    JF_x(9, 8) = -2 * x[1];
+    JF_x(9, 9) = -4 * x[0] * x[0] - 4 * x[1] * x[1];
+    return JF_x;
+  }
+
+  MatrixJF JF_x_dot(const VectorF & /*x*/,
+                    const VectorF & /*x_dot*/,
+                    const Real /*t*/) const override {
+    MatrixJF JF_x_dot;
+    JF_x_dot.setZero();
+    JF_x_dot(0, 0) = 1;
+    JF_x_dot(1, 1) = 1;
+    JF_x_dot(2, 2) = 1;
+    JF_x_dot(3, 3) = 1;
+    JF_x_dot(5, 5) = 1;
+    JF_x_dot(6, 6) = 1;
+    JF_x_dot(7, 7) = 1;
+    JF_x_dot(8, 8) = 1;
+    JF_x_dot(9, 9) = 1;
+    return JF_x_dot;
+  }
+
+  VectorH h(const VectorF &x, const Real /*t*/) const override {
+    VectorH h;
+    h[0] = x[0] * x[0] + x[1] * x[1] - 1;
+    h[1] = 2 * x[0] * x[2] + 2 * x[1] * x[3];
+    return h;
+  }
+
+  MatrixJH Jh_x(const VectorF &x, const Real /*t*/) const override {
+    MatrixJH Jh_x;
+    Jh_x.setZero();
+    Jh_x(0, 0) = 2 * x[0];
+    Jh_x(0, 1) = 2 * x[1];
+    Jh_x(1, 0) = 2 * x[2];
+    Jh_x(1, 1) = 2 * x[3];
+    Jh_x(1, 2) = 2 * x[0];
+    Jh_x(1, 3) = 2 * x[1];
+    return Jh_x;
+  }
+
+  bool in_domain(const VectorF & /*x*/, const Real /*t*/) const override {
+    return true;
+  }
+
+};  // PendulumOCPindex1
 
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -862,11 +1147,11 @@ class PendulumOCPProblem
     const Real y{std::sin(theta)};
     const Real u{-std::sin(theta) * theta_dot};
     const Real v{std::cos(theta) * theta_dot};
-    const Real lambda{-(-u * u + y * g - v * v) / (2 * (x * x + y * y))};
+    const Real lambda{(u * u + v * v - y * g) / 2.0};
 
     // Assemble the guess vector
     VectorF guess;
-    guess << x, y, u, v, lambda, 0.0, 0.0, 0.0, 0.0, 0.0;
+    guess << x, y, u, v, lambda, 0.1, 0.1, 0.1, 0.1, 0.1;
     return guess;
   }
 
