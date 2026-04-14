@@ -11,7 +11,7 @@
 #ifndef BENCHMARK_BANG_BANG_OCP_HH
 #define BENCHMARK_BANG_BANG_OCP_HH
 
-#include "Sandals/System/BoundaryValueProblem.hh"
+#include "Sandals/System/BVP.hh"
 #include "Sandals/System/Implicit.hh"
 
 using namespace Sandals;
@@ -95,21 +95,20 @@ class BangBangOCPImplicit : public Implicit<Real, 6, 0> {
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 template <typename Real, typename System, typename Integrator>
-class BangBangOCPProblem : public BoundaryValueProblem<Real, 6, 0, Integrator> {
+class BangBangOCPProblem : public BVP<Real, 6, 0, Integrator> {
  public:
-  using typename BoundaryValueProblem<Real, 6, 0, Integrator>::SystemPtr;
-  using typename BoundaryValueProblem<Real, 6, 0, Integrator>::IntegratorPtr;
-  using typename BoundaryValueProblem<Real, 6, 0, Integrator>::SolutionPtr;
-  using typename BoundaryValueProblem<Real, 6, 0, Integrator>::VectorF;
-  using typename BoundaryValueProblem<Real, 6, 0, Integrator>::MatrixJF;
+  using typename BVP<Real, 6, 0, Integrator>::SystemPtr;
+  using typename BVP<Real, 6, 0, Integrator>::IntegratorPtr;
+  using typename BVP<Real, 6, 0, Integrator>::SolutionPtr;
+  using typename BVP<Real, 6, 0, Integrator>::VectorF;
+  using typename BVP<Real, 6, 0, Integrator>::MatrixJF;
   using VectorX = Eigen::Vector<Real, Eigen::Dynamic>;
   using MatrixX = Eigen::Matrix<Real, 6, Eigen::Dynamic>;
 
   BangBangOCPProblem()
-      : BoundaryValueProblem<Real, 6, 0, Integrator>(
-            "BangBangOCPProblem",
-            std::make_unique<System>(),
-            std::make_unique<Integrator>()) {}
+      : BVP<Real, 6, 0, Integrator>("BangBangOCPProblem",
+                                    std::make_unique<System>(),
+                                    std::make_unique<Integrator>()) {}
 
   ~BangBangOCPProblem() {}
 

@@ -2740,10 +2740,8 @@ namespace Sandals {
         }
 #ifdef SANDALS_CHECK_JACOBIANS
         // Function for the finite differences
-        auto fun = [this, t](const VectorN &x) {
-          VectorN x_fd;
-          this->project(x, t, x_fd);
-          return x_fd;
+        auto fun = [this, t](const VectorN &x_fd, VectorN &x_new_fd) {
+          return this->project(x_fd, t, x_new_fd);
         };
 
         // Compute the Jacobian with finite differences

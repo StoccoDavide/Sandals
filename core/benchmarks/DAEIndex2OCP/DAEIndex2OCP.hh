@@ -11,7 +11,7 @@
 #ifndef SANDALS_DAE_INDEX_2_OCP_HH
 #define SANDALS_DAE_INDEX_2_OCP_HH
 
-#include "Sandals/System/BoundaryValueProblem.hh"
+#include "Sandals/System/BVP.hh"
 #include "Sandals/System/Implicit.hh"
 
 using namespace Sandals;
@@ -198,24 +198,18 @@ class DAEIndex2OCPindex0 : public Implicit<Real, 8, 2> {
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 template <typename Real, typename System, typename Integrator>
-class DAEIndex2OCPProblem
-    : public BoundaryValueProblem<Real, System::N, System::M, Integrator> {
+class DAEIndex2OCPProblem : public BVP<Real, System::N, System::M, Integrator> {
  public:
-  using typename BoundaryValueProblem<Real, System::N, System::M, Integrator>::
-      SystemPtr;
-  using typename BoundaryValueProblem<Real, System::N, System::M, Integrator>::
-      IntegratorPtr;
-  using typename BoundaryValueProblem<Real, System::N, System::M, Integrator>::
-      SolutionPtr;
-  using typename BoundaryValueProblem<Real, System::N, System::M, Integrator>::
-      VectorF;
-  using typename BoundaryValueProblem<Real, System::N, System::M, Integrator>::
-      MatrixJF;
+  using typename BVP<Real, System::N, System::M, Integrator>::SystemPtr;
+  using typename BVP<Real, System::N, System::M, Integrator>::IntegratorPtr;
+  using typename BVP<Real, System::N, System::M, Integrator>::SolutionPtr;
+  using typename BVP<Real, System::N, System::M, Integrator>::VectorF;
+  using typename BVP<Real, System::N, System::M, Integrator>::MatrixJF;
   using VectorX = Eigen::Vector<Real, Eigen::Dynamic>;
   using MatrixX = Eigen::Matrix<Real, System::N, Eigen::Dynamic>;
 
   DAEIndex2OCPProblem()
-      : BoundaryValueProblem<Real, System::N, System::M, Integrator>(
+      : BVP<Real, System::N, System::M, Integrator>(
             "DAEIndex2OCPProblem",
             std::make_unique<System>(),
             std::make_unique<Integrator>()) {}

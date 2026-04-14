@@ -25,6 +25,6 @@ target_link_libraries(test_order PRIVATE Sandals GTest::gtest)
 
 file(GLOB_RECURSE PROBLEM_TESTS "${CMAKE_CURRENT_SOURCE_DIR}/Problem/test_*.cc")
 add_executable(test_problem ${PROBLEM_TESTS})
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/BoundaryValueProblems)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/BVPs)
 target_link_libraries(test_problem PRIVATE Sandals GTest::gtest ROOT::Core ROOT::Gpad)
 target_compile_options(test_problem PRIVATE -Wno-error=cpp)

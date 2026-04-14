@@ -11,7 +11,7 @@
 #ifndef SANDALS_BENCHMARKS_BASIC_OCP_HH
 #define SANDALS_BENCHMARKS_BASIC_OCP_HH
 
-#include "Sandals/System/BoundaryValueProblem.hh"
+#include "Sandals/System/BVP.hh"
 #include "Sandals/System/Implicit.hh"
 
 using namespace Sandals;
@@ -75,21 +75,20 @@ class BasicOCPImplicit : public Implicit<Real, 4, 0> {
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 template <typename Real, typename System, typename Integrator>
-class BasicOCPProblem : public BoundaryValueProblem<Real, 4, 0, Integrator> {
+class BasicOCPProblem : public BVP<Real, 4, 0, Integrator> {
  public:
-  using typename BoundaryValueProblem<Real, 4, 0, Integrator>::SystemPtr;
-  using typename BoundaryValueProblem<Real, 4, 0, Integrator>::IntegratorPtr;
-  using typename BoundaryValueProblem<Real, 4, 0, Integrator>::SolutionPtr;
-  using typename BoundaryValueProblem<Real, 4, 0, Integrator>::VectorF;
-  using typename BoundaryValueProblem<Real, 4, 0, Integrator>::MatrixJF;
+  using typename BVP<Real, 4, 0, Integrator>::SystemPtr;
+  using typename BVP<Real, 4, 0, Integrator>::IntegratorPtr;
+  using typename BVP<Real, 4, 0, Integrator>::SolutionPtr;
+  using typename BVP<Real, 4, 0, Integrator>::VectorF;
+  using typename BVP<Real, 4, 0, Integrator>::MatrixJF;
   using VectorX = Eigen::Vector<Real, Eigen::Dynamic>;
   using MatrixX = Eigen::Matrix<Real, 4, Eigen::Dynamic>;
 
   BasicOCPProblem()
-      : BoundaryValueProblem<Real, 4, 0, Integrator>(
-            "BasicOCPProblem",
-            std::make_unique<System>(),
-            std::make_unique<Integrator>()) {}
+      : BVP<Real, 4, 0, Integrator>("BasicOCPProblem",
+                                    std::make_unique<System>(),
+                                    std::make_unique<Integrator>()) {}
 
   ~BasicOCPProblem() {}
 

@@ -11,7 +11,7 @@
 #ifndef SANDALS_BENCHMARKS_PENDULUM_OCP_HH
 #define SANDALS_BENCHMARKS_PENDULUM_OCP_HH
 
-#include "Sandals/System/BoundaryValueProblem.hh"
+#include "Sandals/System/BVP.hh"
 #include "Sandals/System/Implicit.hh"
 
 using namespace Sandals;
@@ -1057,24 +1057,18 @@ class PendulumOCPindex0 : public Implicit<Real, 10, 3> {
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 template <typename Real, typename System, typename Integrator>
-class PendulumOCPProblem
-    : public BoundaryValueProblem<Real, System::N, System::M, Integrator> {
+class PendulumOCPProblem : public BVP<Real, System::N, System::M, Integrator> {
  public:
-  using typename BoundaryValueProblem<Real, System::N, System::M, Integrator>::
-      SystemPtr;
-  using typename BoundaryValueProblem<Real, System::N, System::M, Integrator>::
-      IntegratorPtr;
-  using typename BoundaryValueProblem<Real, System::N, System::M, Integrator>::
-      SolutionPtr;
-  using typename BoundaryValueProblem<Real, System::N, System::M, Integrator>::
-      VectorF;
-  using typename BoundaryValueProblem<Real, System::N, System::M, Integrator>::
-      MatrixJF;
+  using typename BVP<Real, System::N, System::M, Integrator>::SystemPtr;
+  using typename BVP<Real, System::N, System::M, Integrator>::IntegratorPtr;
+  using typename BVP<Real, System::N, System::M, Integrator>::SolutionPtr;
+  using typename BVP<Real, System::N, System::M, Integrator>::VectorF;
+  using typename BVP<Real, System::N, System::M, Integrator>::MatrixJF;
   using VectorX = Eigen::Vector<Real, Eigen::Dynamic>;
   using MatrixX = Eigen::Matrix<Real, System::N, Eigen::Dynamic>;
 
   PendulumOCPProblem()
-      : BoundaryValueProblem<Real, System::N, System::M, Integrator>(
+      : BVP<Real, System::N, System::M, Integrator>(
             "PendulumOCPProblem",
             std::make_unique<System>(),
             std::make_unique<Integrator>()) {}

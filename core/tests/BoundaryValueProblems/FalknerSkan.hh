@@ -13,7 +13,7 @@
 #ifndef TESTS_PROBLEMS_FALKNERSKAN_HH
 #define TESTS_PROBLEMS_FALKNERSKAN_HH
 
-#include "Sandals/System/BoundaryValueProblem.hh"
+#include "Sandals/System/BVP.hh"
 #include "Sandals/System/Explicit.hh"
 #include "Sandals/System/Implicit.hh"
 #include "Sandals/System/SemiExplicit.hh"
@@ -206,21 +206,20 @@ class FalknerSkanSemiExplicit : public SemiExplicit<Real, 3, 0> {
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 template <typename Real, typename System, typename Integrator>
-class FalknerSkanProblem : public BoundaryValueProblem<Real, 3, 0, Integrator> {
+class FalknerSkanProblem : public BVP<Real, 3, 0, Integrator> {
  public:
-  using typename BoundaryValueProblem<Real, 3, 0, Integrator>::SystemPtr;
-  using typename BoundaryValueProblem<Real, 3, 0, Integrator>::IntegratorPtr;
-  using typename BoundaryValueProblem<Real, 3, 0, Integrator>::SolutionPtr;
-  using typename BoundaryValueProblem<Real, 3, 0, Integrator>::VectorF;
-  using typename BoundaryValueProblem<Real, 3, 0, Integrator>::MatrixJF;
+  using typename BVP<Real, 3, 0, Integrator>::SystemPtr;
+  using typename BVP<Real, 3, 0, Integrator>::IntegratorPtr;
+  using typename BVP<Real, 3, 0, Integrator>::SolutionPtr;
+  using typename BVP<Real, 3, 0, Integrator>::VectorF;
+  using typename BVP<Real, 3, 0, Integrator>::MatrixJF;
   using VectorX = Eigen::Vector<Real, Eigen::Dynamic>;
   using MatrixX = Eigen::Matrix<Real, 3, Eigen::Dynamic>;
 
   FalknerSkanProblem()
-      : BoundaryValueProblem<Real, 3, 0, Integrator>(
-            "FalknerSkanProblem",
-            std::make_unique<System>(),
-            std::make_unique<Integrator>()) {}
+      : BVP<Real, 3, 0, Integrator>("FalknerSkanProblem",
+                                    std::make_unique<System>(),
+                                    std::make_unique<Integrator>()) {}
 
   ~FalknerSkanProblem() {}
 

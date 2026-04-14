@@ -13,7 +13,7 @@
 #ifndef TESTS_PROBLEMS_BVPT32_HH
 #define TESTS_PROBLEMS_BVPT32_HH
 
-#include "Sandals/System/BoundaryValueProblem.hh"
+#include "Sandals/System/BVP.hh"
 #include "Sandals/System/Explicit.hh"
 #include "Sandals/System/Implicit.hh"
 #include "Sandals/System/SemiExplicit.hh"
@@ -215,21 +215,20 @@ class BVPT32SemiExplicit : public SemiExplicit<Real, 4, 0> {
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 template <typename Real, typename System, typename Integrator>
-class BVPT32Problem : public BoundaryValueProblem<Real, 4, 0, Integrator> {
+class BVPT32Problem : public BVP<Real, 4, 0, Integrator> {
  public:
-  using typename BoundaryValueProblem<Real, 4, 0, Integrator>::SystemPtr;
-  using typename BoundaryValueProblem<Real, 4, 0, Integrator>::IntegratorPtr;
-  using typename BoundaryValueProblem<Real, 4, 0, Integrator>::SolutionPtr;
-  using typename BoundaryValueProblem<Real, 4, 0, Integrator>::VectorF;
-  using typename BoundaryValueProblem<Real, 4, 0, Integrator>::MatrixJF;
+  using typename BVP<Real, 4, 0, Integrator>::SystemPtr;
+  using typename BVP<Real, 4, 0, Integrator>::IntegratorPtr;
+  using typename BVP<Real, 4, 0, Integrator>::SolutionPtr;
+  using typename BVP<Real, 4, 0, Integrator>::VectorF;
+  using typename BVP<Real, 4, 0, Integrator>::MatrixJF;
   using VectorX = Eigen::Vector<Real, Eigen::Dynamic>;
   using MatrixX = Eigen::Matrix<Real, 4, Eigen::Dynamic>;
 
   BVPT32Problem()
-      : BoundaryValueProblem<Real, 4, 0, Integrator>(
-            "BVPT32Problem",
-            std::make_unique<System>(),
-            std::make_unique<Integrator>()) {}
+      : BVP<Real, 4, 0, Integrator>("BVPT32Problem",
+                                    std::make_unique<System>(),
+                                    std::make_unique<Integrator>()) {}
   ~BVPT32Problem() {}
 
   static Real time_start() {

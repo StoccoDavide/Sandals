@@ -13,7 +13,7 @@
 #ifndef TESTS_PROBLEMS_SHAMPINE1_HH
 #define TESTS_PROBLEMS_SHAMPINE1_HH
 
-#include "Sandals/System/BoundaryValueProblem.hh"
+#include "Sandals/System/BVP.hh"
 #include "Sandals/System/Explicit.hh"
 #include "Sandals/System/Implicit.hh"
 #include "Sandals/System/SemiExplicit.hh"
@@ -217,21 +217,20 @@ class Shampine1SemiExplicit : public SemiExplicit<Real, 5, 0> {
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 template <typename Real, typename System, typename Integrator>
-class Shampine1Problem : public BoundaryValueProblem<Real, 5, 0, Integrator> {
+class Shampine1Problem : public BVP<Real, 5, 0, Integrator> {
  public:
-  using typename BoundaryValueProblem<Real, 5, 0, Integrator>::SystemPtr;
-  using typename BoundaryValueProblem<Real, 5, 0, Integrator>::IntegratorPtr;
-  using typename BoundaryValueProblem<Real, 5, 0, Integrator>::SolutionPtr;
-  using typename BoundaryValueProblem<Real, 5, 0, Integrator>::VectorF;
-  using typename BoundaryValueProblem<Real, 5, 0, Integrator>::MatrixJF;
+  using typename BVP<Real, 5, 0, Integrator>::SystemPtr;
+  using typename BVP<Real, 5, 0, Integrator>::IntegratorPtr;
+  using typename BVP<Real, 5, 0, Integrator>::SolutionPtr;
+  using typename BVP<Real, 5, 0, Integrator>::VectorF;
+  using typename BVP<Real, 5, 0, Integrator>::MatrixJF;
   using VectorX = Eigen::Vector<Real, Eigen::Dynamic>;
   using MatrixX = Eigen::Matrix<Real, 5, Eigen::Dynamic>;
 
   Shampine1Problem()
-      : BoundaryValueProblem<Real, 5, 0, Integrator>(
-            "Shampine1Problem",
-            std::make_unique<System>(),
-            std::make_unique<Integrator>()) {}
+      : BVP<Real, 5, 0, Integrator>("Shampine1Problem",
+                                    std::make_unique<System>(),
+                                    std::make_unique<Integrator>()) {}
 
   ~Shampine1Problem() {}
 
