@@ -78,7 +78,7 @@ class OscillatorExplicit : public Explicit<Real, 2, 1> {
 
   MatrixX exact_solution(const VectorX &t) const {
     MatrixX x(2, t.size());
-    for (int i = 0; i < t.size(); ++i) {
+    for (Integer i{0}; i < t.size(); ++i) {
       x.col(i) = this->exact_solution(t(i));
     }
     return x;

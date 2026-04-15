@@ -10,8 +10,8 @@
 
 #pragma once
 
-#ifndef SANDALS_LINEAR_SYSTEM_HH
-#define SANDALS_LINEAR_SYSTEM_HH
+#ifndef SANDALS_SYSTEM_LINEAR_HH
+#define SANDALS_SYSTEM_LINEAR_HH
 
 #include <Sandals.hh>
 #include <Sandals/System/Explicit.hh>
@@ -461,4 +461,4 @@ namespace Sandals {
 
 }  // namespace Sandals
 
-#endif  // SANDALS_LINEAR_SYSTEM_HH
+#endif  // SANDALS_SYSTEM_LINEAR_HH

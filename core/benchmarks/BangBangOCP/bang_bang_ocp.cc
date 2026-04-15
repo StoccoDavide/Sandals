@@ -12,7 +12,7 @@
 
 #include "BangBangOCP.hh"
 #include "Sandals.hh"
-#include "Sandals/RungeKutta/RK4.hh"
+#include "Sandals/RungeKutta/RadauIIA5.hh"
 
 #ifdef SANDALS_ENABLE_PLOTTING
 #include <TApplication.h>
@@ -65,7 +65,7 @@ int main(int argc, char **argv) {
 #endif
 
   // Istantiate the problems
-  PROBLEM_INIT(BangBangOCP, RK4)
+  PROBLEM_INIT(BangBangOCP, RadauIIA5)
 
   // Set verbose mode
   problem.verbose_mode(true);
@@ -75,7 +75,7 @@ int main(int argc, char **argv) {
   problem.integrator()->reverse_mode(false);
 
   // Set solver tolerance
-  problem.tolerance(1.0e-9);
+  problem.tolerance(1.0e-14);
 
   // Set solver maximum number of iterations
   problem.max_iterations(200);
@@ -84,7 +84,7 @@ int main(int argc, char **argv) {
   problem.subintervals(1);
 
   // Set time mesh
-  constexpr Integer num_points{50};
+  constexpr Integer num_points{100};
   Eigen::Vector<Real, Eigen::Dynamic> time(
       Eigen::Vector<Real, Eigen::Dynamic>::LinSpaced(num_points,
                                                      problem.time_start(),

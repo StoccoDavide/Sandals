@@ -143,7 +143,7 @@ class MaxTravelOCPProblem : public BVP<Real, 4, 0, Integrator> {
   MatrixX guess(const VectorX &t) {
     MatrixX guess_vec(4, t.size());
     for (Integer i{0}; i < t.size(); ++i) {
-      guess_vec.col(i) = guess(t[i]);
+      guess_vec.col(i) = this->guess(t[i]);
     }
     return guess_vec;
   }

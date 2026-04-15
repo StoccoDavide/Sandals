@@ -10,8 +10,8 @@
 
 #pragma once
 
-#ifndef SANDALS_SEMIEXPLICIT_SYSTEM_HH
-#define SANDALS_SEMIEXPLICIT_SYSTEM_HH
+#ifndef SANDALS_SYSTEM_SEMIEXPLICIT_HH
+#define SANDALS_SYSTEM_SEMIEXPLICIT_HH
 
 #include <Sandals.hh>
 #include <Sandals/System/Explicit.hh>
@@ -595,4 +595,4 @@ namespace Sandals {
 
 }  // namespace Sandals
 
-#endif  // SANDALS_SEMIEXPLICIT_SYSTEM_HH
+#endif  // SANDALS_SYSTEM_SEMIEXPLICIT_HH

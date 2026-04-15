@@ -541,13 +541,13 @@ class AlpRiderOCPProblem : public BVP<Real, 8, 0, Integrator> {
   }
 
   VectorF guess(const Real /*t*/) {
-    return VectorF::Constant(0.1);
+    return VectorF::Zero();
   }
 
   MatrixX guess(const VectorX &t) {
     MatrixX guess_vec(8, t.size());
-    for (int i = 0; i < t.size(); ++i) {
-      guess_vec.col(i) = guess(t[i]);
+    for (Integer i{0}; i < t.size(); ++i) {
+      guess_vec.col(i) = this->guess(t[i]);
     }
     return guess_vec;
   }

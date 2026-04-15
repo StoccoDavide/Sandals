@@ -27,7 +27,7 @@ void test(const bool reverse) {
   problem.integrator()->reverse_mode(reverse);
   problem.sigma(1.0);
   problem.lambda(1.0e-9);
-  problem.tolerance(1.0e-9);
+  problem.tolerance(1.0e-14);
   problem.max_iterations(100);
   problem.subintervals(1);
 

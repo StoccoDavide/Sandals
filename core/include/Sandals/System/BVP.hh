@@ -8,8 +8,8 @@
  * davide.stocco@unitn.it                         enrico.bertolazzi@unitn.it *
 \* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-#ifndef SANDALS_BOUNDARY_VALUE_PROBLEM_HH
-#define SANDALS_BOUNDARY_VALUE_PROBLEM_HH
+#ifndef SANDALS_BVP_HH
+#define SANDALS_BVP_HH
 
 // Sparse linear algebra solvers
 #include <Eigen/SparseQR>
@@ -483,7 +483,7 @@ namespace Sandals {
      * \param[in] x_guess Initial guess for the states at the mesh nodes.
      * \return True if the system is successfully solved, false otherwise.
      */
-    template <SolutionChoice SolutionMethod = SolutionChoice::GN_STANDARD>
+    template <SolutionChoice SolutionMethod = SolutionChoice::GN_AUGMENTED>
     bool multiple_shooting(const VectorX &t_mesh, const MatrixX &x_guess) {
 #define CMD "Sandals::BVP::multiple_shooting(...): "
 
@@ -514,17 +514,6 @@ namespace Sandals {
         idx_x_ini = num_intervals;
         idx_x_end = 0;
       }
-
-      // Prepare the linear system for the Newton step
-      // const Integer b_size{c_size + h_size + N};
-      // VectorShooting b_sys(b_size);
-      // const Integer A_sys_rows{b_size}, A_sys_cols{x_size};
-      // MatrixShooting A_sys(A_sys_rows, A_sys_cols);
-      // const Integer A_sys_nnz{c_size * (N + 1) + h_size * N + 2 * N * N};
-      // A_sys.reserve(A_sys_nnz);
-      // MatrixShooting A_aug(A_sys_rows + A_sys_cols, A_sys_rows + A_sys_cols);
-      // VectorShooting b_aug(A_sys_rows + A_sys_cols);
-      // A_aug.reserve(2 * A_sys_nnz + A_sys_rows + A_sys_cols);
 
       // Prepare the standard linear systems for the Gauss-Newton step
       Integer A_sys_rows{0}, A_sys_cols{0}, A_sys_nnz{0}, b_sys_size{0};
@@ -569,7 +558,7 @@ namespace Sandals {
       MatrixJX Jx;
       MatrixJH Jh;
       Eigen::SparseQR<MatrixShooting, Eigen::COLAMDOrdering<Integer>> qr;
-      const Real eps{Eigen::NumTraits<Real>::dummy_precision()};
+      static constexpr Real eps{EPSILON};
       for (Integer iter{0}; iter < this->m_max_iterations; ++iter) {
         /* Multiple shooting solution scheme
         Standard system
@@ -578,10 +567,10 @@ namespace Sandals {
          |       .        .           |           |          :          |
          |          .        .        | /  :  \ = |          :          |
          |             -Jx_n     I    | |  :  |   | x_ini_n+1 - x_sol_n |
-         |  σ½*Jh_0    0              | | dx  |   |      -σ^½*h_0       |
-         |       .        .           | |  :  |   |          :          |
-         |          .        .        | \  :  /   |          :          |
-         |         σ½*Jh_m       0    |           |     -σ^½*h_m        |
+         |  σ½*Jh_0                   | | dx  |   |      -σ^½*h_0       |
+         |            .               | |  :  |   |          :          |
+         |               .            | \  :  /   |          :          |
+         |                    σ½*Jh_m |           |     -σ^½*h_m        |
          \ Jb_x_ini          Jb_x_end /           \         -b          /
 
          Augmented system
@@ -591,7 +580,7 @@ namespace Sandals {
          \ A^T   λI / \ dx /   \ A^T*b /
          */
 
-        // Reset the linear system
+        // Reset the standard linear system
         triplets_sys.clear();
         A_sys.setZero();
         b_sys.setZero();
@@ -619,6 +608,7 @@ namespace Sandals {
 
           // Jacobian propagation for the current interval
           for (Integer i{0}; i < N; ++i) {
+            triplets_sys.emplace_back(k * N + i, (k + 1) * N + i, 1.0);
             for (Integer j{0}; j < N; ++j) {
               if (std::abs(Jx(i, j)) > eps) {
                 triplets_sys.emplace_back(k * N + i, k * N + j, -Jx(i, j));
@@ -633,30 +623,46 @@ namespace Sandals {
           // Compute the Jacobian of contraints manifold
           if constexpr (M > 0) {
             if (!this->m_integrator->projection_mode()) {
-              Jh = this->m_integrator->system()->Jh_x(
-                  this->m_solution->x.col(k + 1),
-                  t_mesh(k + 1));
-              // Insert the Jacobian in the linear system
+              if (k == 0) {
+                Jh =
+                    sqrt_sigma *
+                    this->m_integrator->system()->Jh_x(x_sol.col(0), t_mesh(0));
+                for (Integer i{0}; i < M; ++i) {
+                  for (Integer j{0}; j < N; ++j) {
+                    if (std::abs(Jh(i, j)) > eps) {
+                      triplets_sys.emplace_back(c_size + i, j, Jh(i, j));
+                    }
+                  }
+                }
+                b_sys.template segment<M>(c_size) =
+                    -sqrt_sigma *
+                    this->m_integrator->system()->h(x_sol.col(0), t_mesh(0));
+              }
+              Jh = sqrt_sigma *
+                   this->m_integrator->system()->Jh_x(x_sol.col(k + 1),
+                                                      t_mesh(k + 1));
               for (Integer i{0}; i < M; ++i) {
                 for (Integer j{0}; j < N; ++j) {
                   if (std::abs(Jh(i, j)) > eps) {
-                    triplets_sys.emplace_back(c_size + k * M + i,
-                                              k * N + j,
-                                              sqrt_sigma * Jh(i, j));
+                    triplets_sys.emplace_back(c_size + (k + 1) * M + i,
+                                              (k + 1) * N + j,
+                                              Jh(i, j));
                   }
                 }
               }
 
               // Residual for the constraints manifold
-              b_sys.template segment<M>(c_size + k * M) =
-                  -sqrt_sigma * this->m_solution->h.col(k + 1);
+              b_sys.template segment<M>(c_size + (k + 1) * M) =
+                  -sqrt_sigma *
+                  this->m_integrator->system()->h(x_sol.col(k + 1),
+                                                  t_mesh(k + 1));
             }
           }
         }
 
         // Update the boundary condition states
-        x_ini = this->m_solution->x.col(idx_x_ini);
-        x_end = this->m_solution->x.col(idx_x_end);
+        x_ini = x_sol.col(idx_x_ini);
+        x_end = x_sol.col(idx_x_end);
 
         // Boundary condition residuals
         b_sys.template tail<N>() = -this->b(x_ini, x_end);
@@ -702,11 +708,17 @@ namespace Sandals {
           // Solve the linear system
           qr.compute(A_sys);
           SANDALS_ASSERT(qr.info() == Eigen::Success,
-                         CMD "failed to factorize the standardlinear system.");
+                         CMD "failed to factorize the standard linear system.");
 
           // Update the solution
           delta_x_sol = qr.solve(b_sys).reshaped(N, num_intervals + 1);
         } else if constexpr (SolutionMethod == SolutionChoice::GN_AUGMENTED) {
+          // Reset the augmented linear system
+          triplets_aug.clear();
+          A_aug.setZero();
+          b_aug.setZero();
+
+          // Build the augmented linear system
           for (Integer i{0}; i < A_sys_rows; ++i) {
             triplets_aug.emplace_back(i, i, -1.0);
           }
@@ -717,7 +729,7 @@ namespace Sandals {
             for (typename MatrixShooting::InnerIterator it(A_sys, i); it;
                  ++it) {
               triplets_aug.emplace_back(it.row(),
-                                        A_sys_cols + it.col(),
+                                        A_sys_rows + it.col(),
                                         it.value());
               triplets_aug.emplace_back(A_sys_rows + it.col(),
                                         it.row(),
@@ -788,4 +800,4 @@ namespace Sandals {
 
 }  // namespace Sandals
 
-#endif  // SANDALS_BOUNDARY_VALUE_PROBLEM_HH
+#endif  // SANDALS_BVP_HH

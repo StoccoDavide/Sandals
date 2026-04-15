@@ -121,7 +121,7 @@ class ThreeBodySemiExplicit : public SemiExplicit<Real, 12, 0> {
 
   TensorTA TA_x(const VectorF & /*x*/, const Real /*t*/) const override {
     TensorTA TA_x;
-    for (int i = 0; i < 12; ++i) {
+    for (Integer i{0}; i < 12; ++i) {
       TA_x[i].setZero();
     }
     return TA_x;

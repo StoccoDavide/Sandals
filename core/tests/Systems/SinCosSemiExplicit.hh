@@ -79,7 +79,7 @@ class SinCosSemiExplicit : public SemiExplicit<Real, 2, 0> {
 
   static MatrixX exact_solution(const VectorX &t) {
     MatrixX x(2, t.size());
-    for (int i = 0; i < t.size(); ++i) {
+    for (Integer i{0}; i < t.size(); ++i) {
       x.col(i) = SinCosSemiExplicit::exact_solution(t(i));
     }
     return x;

@@ -84,10 +84,14 @@ using Real = double;
   PROBLEM##_explicit.integrator()->reverse_mode(reverse);     \
   PROBLEM##_implicit.integrator()->reverse_mode(reverse);     \
   PROBLEM##_semiexplicit.integrator()->reverse_mode(reverse); \
+  /* Set solver parameters */                                 \
+  PROBLEM##_explicit.sigma(1.0);                              \
+  PROBLEM##_implicit.sigma(1.0);                              \
+  PROBLEM##_semiexplicit.sigma(1.0);                          \
   /* Set solver tolerance */                                  \
-  PROBLEM##_explicit.tolerance(1.0e-8);                       \
-  PROBLEM##_implicit.tolerance(1.0e-8);                       \
-  PROBLEM##_semiexplicit.tolerance(1.0e-8);                   \
+  PROBLEM##_explicit.tolerance(1.0e-14);                      \
+  PROBLEM##_implicit.tolerance(1.0e-14);                      \
+  PROBLEM##_semiexplicit.tolerance(1.0e-14);                  \
   /* Set solver maximum number of iterations */               \
   PROBLEM##_explicit.max_iterations(100);                     \
   PROBLEM##_implicit.max_iterations(100);                     \
@@ -98,7 +102,7 @@ using Real = double;
   PROBLEM##_implicit.subintervals(num_subintervals);          \
   PROBLEM##_semiexplicit.subintervals(num_subintervals);      \
   /* Set time mesh */                                         \
-  constexpr Integer num_points{500};                          \
+  constexpr Integer num_points{100};                          \
   Eigen::Vector<Real, Eigen::Dynamic> time(                   \
       Eigen::Vector<Real, Eigen::Dynamic>::LinSpaced(         \
           num_points,                                         \

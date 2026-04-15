@@ -1152,7 +1152,7 @@ class PendulumOCPProblem : public BVP<Real, System::N, System::M, Integrator> {
   MatrixX guess(const VectorX &t) {
     MatrixX guess_vec(System::N, t.size());
     for (Integer i{0}; i < t.size(); ++i) {
-      guess_vec.col(i) = guess(t[i]);
+      guess_vec.col(i) = this->guess(t[i]);
     }
     return guess_vec;
   }

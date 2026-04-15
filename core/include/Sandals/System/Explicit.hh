@@ -10,8 +10,8 @@
 
 #pragma once
 
-#ifndef SANDALS_EXPLICIT_SYSTEM_HH
-#define SANDALS_EXPLICIT_SYSTEM_HH
+#ifndef SANDALS_SYSTEM_EXPLICIT_HH
+#define SANDALS_SYSTEM_EXPLICIT_HH
 
 #include <Sandals.hh>
 #include <Sandals/System/Implicit.hh>
@@ -308,13 +308,13 @@ namespace Sandals {
 
     inline const static FunctionH DefaultH = [](const VectorF &, const Real) {
       return VectorH::Zero();
-    };                          /**< Default mass matrix function. */
+    }; /**< Default mass matrix function. */
     inline const static FunctionJH DefaultJH = [](const VectorF &, const Real) {
       return MatrixJH::Zero();
-    };                          /**< Default system matrix function. */
+    }; /**< Default system matrix function. */
     inline const static FunctionID DefaultID = [](const VectorF &, const Real) {
       return true;
-    };                          /**< Default in-domain function. */
+    }; /**< Default in-domain function. */
 
    private:
     FunctionF m_f{nullptr};     /**< Explicit ODE system function. */
@@ -494,4 +494,4 @@ namespace Sandals {
 
 }  // namespace Sandals
 
-#endif  // SANDALS_EXPLICIT_SYSTEM_HH
+#endif  // SANDALS_SYSTEM_EXPLICIT_HH

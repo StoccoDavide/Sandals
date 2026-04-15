@@ -27,30 +27,37 @@ class BangBangOCPImplicit : public Implicit<Real, 6, 0> {
   using typename Implicit<Real, 6, 0>::MatrixJH;
 
  private:
-  Real m_mu{10.0};
-  Real m_h{0.001};
+  Real m_mu{0.1};
+  Real m_h{0.1};
 
  public:
   BangBangOCPImplicit() : Implicit<Real, 6, 0>("BangBangOCPImplicit") {}
 
   ~BangBangOCPImplicit() {}
 
-  Real u(const VectorF &x) const {
-    return sin(atan(x[2] * x[5] / this->m_h));
-  }
-
   VectorF F(const VectorF &x,
             const VectorF &x_dot,
             const Real /*t*/) const override {
     const Real &mu{this->m_mu};
+    const Real &h{this->m_h};
     VectorF F;
     F[0] = -x[2] * x[1] + x_dot[0];
-    F[1] = x_dot[1] - x[2] * this->u(x);
+    F[1] =
+        (x_dot[1] * sqrt((x[2] * x[2] * x[4] * x[4] + h * h) * pow(h, -2)) * h +
+         x[2] * x[2] * x[4]) *
+        pow((x[2] * x[2] * x[4] * x[4] + h * h) * pow(h, -2), -0.1e1 / 0.2e1) /
+        h;
     F[2] = x_dot[2];
     F[3] = x_dot[3];
     F[4] = x[2] * x[3] + x_dot[4];
-    F[5] = x_dot[5] + x[1] * x[3] + this->u(x) * x[4] -
-           2 * mu * (-2 + x[2]) / x[2] / (-4 + x[2]);
+    F[5] =
+        -2 *
+        pow((x[2] * x[2] * x[4] * x[4] + h * h) * pow(h, -2), -0.1e1 / 0.2e1) *
+        (((-x[1] * x[3] / 2 - x_dot[5] / 2) * x[2] * x[2] +
+          (2 * x[1] * x[3] + mu + 2 * x_dot[5]) * x[2] - 2 * mu) *
+             h * sqrt((x[2] * x[2] * x[4] * x[4] + h * h) * pow(h, -2)) +
+         x[2] * x[2] * x[4] * x[4] * (-4 + x[2]) / 2) /
+        h / x[2] / (-4 + x[2]);
     return F;
   }
 
@@ -58,25 +65,45 @@ class BangBangOCPImplicit : public Implicit<Real, 6, 0> {
                 const VectorF & /*x_dot*/,
                 const Real /*t*/) const override {
     const Real &mu{this->m_mu};
+    const Real &h{this->m_h};
     MatrixJF JF_x;
     JF_x.setZero();
     JF_x(0, 1) = -x[2];
     JF_x(0, 2) = -x[1];
-    JF_x(1, 2) = -u(x);
+    JF_x(1, 2) =
+        pow((x[2] * x[2] * x[4] * x[4] + h * h) * pow(h, -2), -0.3e1 / 0.2e1) *
+        (x[2] * x[2] * x[4] * x[4] + 2 * h * h) * x[2] * x[4] * pow(h, -3);
+    JF_x(1, 4) =
+        x[2] * x[2] / h *
+        pow((x[2] * x[2] * x[4] * x[4] + h * h) * pow(h, -2), -0.3e1 / 0.2e1);
     JF_x(4, 2) = x[3];
     JF_x(4, 3) = x[2];
     JF_x(5, 1) = x[3];
-    JF_x(5, 2) = 2 * mu * (x[2] * x[2] - 4 * x[2] + 8) * pow(x[2], -2) *
-                 pow(-4 + x[2], -2);
+    JF_x(5, 2) =
+        2 *
+        pow((x[2] * x[2] * x[4] * x[4] + h * h) * pow(h, -2), -0.3e1 / 0.2e1) *
+        (pow((x[2] * x[2] * x[4] * x[4] + h * h) * pow(h, -2), 0.3e1 / 0.2e1) *
+             (x[2] * x[2] - 4 * x[2] + 8) * mu * h -
+         x[2] * x[2] * x[4] * x[4] * pow(-4 + x[2], 2) / 2) /
+        h * pow(-4 + x[2], -2) * pow(x[2], -2);
     JF_x(5, 3) = x[1];
-    JF_x(5, 4) = this->u(x);
+    JF_x(5, 4) =
+        -pow((x[2] * x[2] * x[4] * x[4] + h * h) * pow(h, -2), -0.3e1 / 0.2e1) *
+        (x[2] * x[2] * x[4] * x[4] + 2 * h * h) * x[2] * x[4] * pow(h, -3);
     return JF_x;
   }
 
-  MatrixJF JF_x_dot(const VectorF & /*x*/,
+  MatrixJF JF_x_dot(const VectorF &x,
                     const VectorF & /*x_dot*/,
                     const Real /*t*/) const override {
-    return MatrixJF::Identity();
+    MatrixJF JF_x_dot;
+    JF_x_dot(0, 0) = 1;
+    JF_x_dot(1, 1) = 1;
+    JF_x_dot(2, 2) = 1;
+    JF_x_dot(3, 3) = 1;
+    JF_x_dot(4, 4) = 1;
+    JF_x_dot(5, 5) = -2 * (-x[2] * x[2] / 2 + 2 * x[2]) / x[2] / (-4 + x[2]);
+    return JF_x_dot;
   }
 
   VectorH h(const VectorF & /*x*/, const Real /*t*/) const override {
@@ -153,14 +180,14 @@ class BangBangOCPProblem : public BVP<Real, 6, 0, Integrator> {
 
   VectorF guess(const Real t) {
     VectorF guess;
-    guess << t, t, 2.0, 0.0, 0.0, 0.0;
+    guess << t, t, 2.0, 0.1, 0.1, 0.1;
     return guess;
   }
 
   MatrixX guess(const VectorX &t) {
     MatrixX guess_vec(6, t.size());
-    for (int i = 0; i < t.size(); ++i) {
-      guess_vec.col(i) = guess(t[i]);
+    for (Integer i{0}; i < t.size(); ++i) {
+      guess_vec.col(i) = this->guess(t[i]);
     }
     return guess_vec;
   }

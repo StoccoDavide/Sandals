@@ -105,8 +105,7 @@ class BasicOCPProblem : public BVP<Real, 4, 0, Integrator> {
     b[0] = x_ini[0];
     b[1] = x_ini[1];
     b[2] = x_end[0] - 1;
-    b[3] = x_ini[1];
-    b[4] = -x_end[3];
+    b[3] = x_end[1];
     return b;
   }
 
@@ -116,7 +115,6 @@ class BasicOCPProblem : public BVP<Real, 4, 0, Integrator> {
     Jb_x_ini.setZero();
     Jb_x_ini(0, 0) = 1;
     Jb_x_ini(1, 1) = 1;
-    Jb_x_ini(3, 1) = 1;
     return Jb_x_ini;
   }
 
@@ -125,7 +123,7 @@ class BasicOCPProblem : public BVP<Real, 4, 0, Integrator> {
     MatrixJF Jb_x_end;
     Jb_x_end.setZero();
     Jb_x_end(2, 0) = 1;
-    Jb_x_end(4, 3) = -1;
+    Jb_x_end(3, 1) = -1;
     return Jb_x_end;
   }
 
@@ -135,8 +133,8 @@ class BasicOCPProblem : public BVP<Real, 4, 0, Integrator> {
 
   MatrixX guess(const VectorX &t) {
     MatrixX guess_vec(4, t.size());
-    for (int i = 0; i < t.size(); ++i) {
-      guess_vec.col(i) = guess(t[i]);
+    for (Integer i{0}; i < t.size(); ++i) {
+      guess_vec.col(i) = this->guess(t[i]);
     }
     return guess_vec;
   }

@@ -260,13 +260,13 @@ class DAEIndex2OCPProblem : public BVP<Real, System::N, System::M, Integrator> {
   }
 
   VectorF guess(const Real /*t*/) {
-    return VectorF::Constant(-3.0);
+    return VectorF::Constant(0.0);
   }
 
   MatrixX guess(const VectorX &t) {
     MatrixX guess_vec(System::N, t.size());
     for (Integer i{0}; i < t.size(); ++i) {
-      guess_vec.col(i) = guess(t[i]);
+      guess_vec.col(i) = this->guess(t[i]);
     }
     return guess_vec;
   }

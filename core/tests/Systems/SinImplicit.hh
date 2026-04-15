@@ -77,7 +77,7 @@ class SinImplicit : public Implicit<Real, 1, 0> {
 
   static MatrixX exact_solution(const VectorX &t) {
     MatrixX x(1, t.size());
-    for (int i = 0; i < t.size(); ++i) {
+    for (Integer i{0}; i < t.size(); ++i) {
       x.col(i) = SinImplicit::exact_solution(t(i));
     }
     return x;
