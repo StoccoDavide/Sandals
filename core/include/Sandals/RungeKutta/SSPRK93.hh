@@ -55,8 +55,8 @@ namespace Sandals {
   class SSPRK93Tableau : public Tableau<Real, 9> {
    public:
     using typename Tableau<Real, 9>::Type;
-    using typename Tableau<Real, 9>::Vector;
-    using typename Tableau<Real, 9>::Matrix;
+    using typename Tableau<Real, 9>::VectorS;
+    using typename Tableau<Real, 9>::MatrixS;
 
     /**
      * Class constructor for the 9-stage strong-stability preserving Runge-Kutta
@@ -96,7 +96,7 @@ namespace Sandals {
   template <typename Real, Integer N, Integer M = 0>
   class SSPRK93 : public RungeKutta<Real, 9, N, M> {
    public:
-    using System = typename Implicit<Real, N, M>::Pointer; /**< System type. */
+    using SystemPtr = typename Implicit<Real, N, M>::Pointer;
 
     /**
      * Class constructor for a 9-stage strong-stability preserving Runge-Kutta
@@ -109,7 +109,7 @@ namespace Sandals {
      * order 3 solver given a Tableau reference.
      * \param[in] t_system The system reference.
      */
-    SSPRK93(System t_system)
+    SSPRK93(SystemPtr t_system)
         : RungeKutta<Real, 9, N, M>(SSPRK93Tableau<Real>(),
                                     std::move(t_system)) {}
 

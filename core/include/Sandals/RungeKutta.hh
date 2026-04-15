@@ -52,70 +52,39 @@ namespace Sandals {
   template <typename Real, Integer S, Integer N, Integer M = 0>
   class RungeKutta {
    public:
-    using Scalar  = Real; /**< Scalar number type. */
-    using VectorX = Eigen::Vector<Real, Eigen::Dynamic>; /**< \f$ N \times 1 \f$
-                                                            vector d. */
-    using MatrixJX = Eigen::Matrix<Real, N, N>; /**< Templetized matrix type. */
+    using VectorX  = Eigen::Vector<Real, Eigen::Dynamic>;
+    using MatrixJX = Eigen::Matrix<Real, N, N>;
 
    private:
-    using MatrixX =
-        Eigen::Matrix<Real,
-                      Eigen::Dynamic,
-                      Eigen::Dynamic>; /**< \f$ N \times N \f$ matrix of Real
-                                          number type. */
-    using VectorK = Eigen::Vector<Real, N * S>; /**< Templetized vector type. */
-    using MatrixK = Eigen::Matrix<Real, N, S>;  /**< Templetized matrix type. */
-    using MatrixJK =
-        Eigen::Matrix<Real, N * N, S>;          /**< Templetized matrix type. */
-    using MatrixJ =
-        Eigen::Matrix<Real, N * S, N * S>;      /**< Templetized matrix type. */
-    using VectorP = Eigen::Vector<Real, N + M>; /**< Templetized vector type. */
-    using MatrixP =
-        Eigen::Matrix<Real, N + M, N + M>;      /**< Templetized matrix type. */
-    using NewtonX =
-        Optimist::RootFinder::Newton<Eigen::Vector<Real, N>>; /**< Templetized
-                                                  Newton solver for ERK and DIRK
-                                                  methods. */
-    using NewtonK =
-        Optimist::RootFinder::Newton<Eigen::Vector<Real, N * S>>; /**<
-                                                      Templetized Newton solver
-                                                      for IRK methods. */
-    using VectorS =
-        typename Tableau<Real, S>::Vector;      /**< Templetized vector type. */
-    using MatrixS =
-        typename Tableau<Real, S>::Matrix;      /**< Templetized matrix type. */
-    using VectorN =
-        typename Implicit<Real, N, M>::VectorF; /**< Templetized vector type. */
-    using MatrixN = typename Implicit<Real, N, M>::MatrixJF; /**< Templetized
-                                                                matrix type. */
-    using VectorM =
-        typename Implicit<Real, N, M>::VectorH; /**< Templetized vector type. */
-    using MatrixM = typename Implicit<Real, N, M>::MatrixJH; /**< Templetized
-                                                                matrix type. */
+    using VectorS  = typename Tableau<Real, S>::VectorS;
+    using MatrixS  = typename Tableau<Real, S>::MatrixS;
+    using VectorF  = typename Implicit<Real, N, M>::VectorF;
+    using MatrixJF = typename Implicit<Real, N, M>::MatrixJF;
+    using VectorH  = typename Implicit<Real, N, M>::VectorH;
+    using MatrixJH = typename Implicit<Real, N, M>::MatrixJH;
+
+    using MatrixX  = Eigen::Matrix<Real, Eigen::Dynamic, Eigen::Dynamic>;
+    using VectorK  = Eigen::Vector<Real, N * S>;
+    using MatrixK  = Eigen::Matrix<Real, N, S>;
+    using MatrixJK = Eigen::Matrix<Real, N * N, S>;
+    using MatrixJ  = Eigen::Matrix<Real, N * S, N * S>;
+    using VectorP  = Eigen::Vector<Real, N + M>;
+    using MatrixP  = Eigen::Matrix<Real, N + M, N + M>;
+    using NewtonX  = Optimist::RootFinder::Newton<Eigen::Vector<Real, N>>;
+    using NewtonK  = Optimist::RootFinder::Newton<Eigen::Vector<Real, N * S>>;
+
     using FunctionSC =
-        std::function<void(const Integer,
-                           const VectorX &,
-                           const Real)>; /**< Step callback function type. */
+        std::function<void(const Integer, const VectorX &, const Real)>;
 
    public:
-    SANDALS_BASIC_CONSTANTS(Real)        /**< Basic constants. */
-    const Real SQRT_EPSILON{
-      std::sqrt(EPSILON)}; /**< Square root of machine epsilon epsilon static
-                              constant value. */
-    const Real CBRT_EPSILON{
-      std::cbrt(EPSILON)}; /**< Cube root of machine epsilon epsilon static
-                              constant value. */
+    SANDALS_BASIC_CONSTANTS(Real)
+    const Real SQRT_EPSILON{std::sqrt(EPSILON)};
+    const Real CBRT_EPSILON{std::cbrt(EPSILON)};
 
-    using System = Implicit<Real, N, M>;        /**< Implicit ODE/DAE system. */
-    using SystemPtr =
-        typename Implicit<Real, N, M>::Pointer; /**< Unique pointer to an
-                                                   implicit ODE/DAE system. */
-    using Type =
-        typename Tableau<Real, S>::Type; /**< Runge-Kutta type enumeration. */
-    using Time =
-        Eigen::Vector<Real,
-                      Eigen::Dynamic>;   /**< Templetized vector type for the
-                                            independent variable (or time). */
+    using System    = Implicit<Real, N, M>;
+    using SystemPtr = typename Implicit<Real, N, M>::Pointer;
+    using Type      = typename Tableau<Real, S>::Type;
+    using Time      = Eigen::Vector<Real, Eigen::Dynamic>;
 
    private:
     mutable NewtonX m_newtonX; /**< Newton solver for ERK and DIRK methods. */
@@ -137,12 +106,12 @@ namespace Sandals {
     Real m_max_safety_factor{
       10.0}; /**< Maximum safety factor for adaptive step \f$ f_{\min} \f$. */
     Real m_min_step{
-      EPSILON_HIGH}; /**< Minimum step for advancing \f$ h_{\min} \f$. */
-    Integer m_max_substeps{5};           /**< Maximum number of substeps. */
-    bool m_adaptive{true};               /**< Adaptive step mode boolean. */
-    bool m_verbose{false};               /**< Verbose mode boolean. */
-    bool m_reverse{false};               /**< Time reverse mode boolean. */
-    FunctionSC m_step_callback{nullptr}; /**< Step callback function. */
+      EPSILON_HIGH};           /**< Minimum advancing step \f$ h_{\min} \f$. */
+    Integer m_max_substeps{5}; /**< Maximum number of substeps. */
+    bool m_adaptive{true};     /**< Adaptive step mode boolean. */
+    bool m_verbose{false};     /**< Verbose mode boolean. */
+    bool m_reverse{false};     /**< Time reverse mode boolean. */
+    FunctionSC m_step_callback{nullptr};       /**< Step callback function. */
 
     Real m_projection_tolerance{EPSILON_HIGH}; /**< Projection tolerance \f$
                                                   \epsilon_{\text{proj}} \f$. */
@@ -191,7 +160,7 @@ namespace Sandals {
      * Get the number of equations of the ODE/DAE system.
      * \return The number of equations of the ODE/DAE system.
      */
-    static constexpr Integer equations_number() {
+    static constexpr Integer equations() {
       return N;
     }
 
@@ -199,7 +168,7 @@ namespace Sandals {
      * Get the number of invariants of the ODE/DAE system.
      * \return The number of invariants of the ODE/DAE system.
      */
-    static constexpr Integer invariants_number() {
+    static constexpr Integer invariants() {
       return M;
     }
 
@@ -916,8 +885,8 @@ namespace Sandals {
      * \return The suggested step for the next integration step \f$
      * h_{k+1}^\star \f$.
      */
-    Real estimate_step(const VectorN &x,
-                       const VectorN &x_e,
+    Real estimate_step(const VectorF &x,
+                       const VectorF &x_e,
                        const Real h_k) const {
       Real desired_error{
         this->m_absolute_tolerance +
@@ -1001,10 +970,10 @@ namespace Sandals {
      * \param[out] K The \f$ \mathbf{K} \f$ variables of the Runge-Kutta method.
      * \return True if the step is successfully computed, false otherwise.
      */
-    bool erk_explicit_step(const VectorN &x_old,
+    bool erk_explicit_step(const VectorF &x_old,
                            const Real t_old,
                            const Real h_old,
-                           VectorN &x_new,
+                           VectorF &x_new,
                            Real &h_new,
                            MatrixK &K) const {
       using Eigen::seqN;
@@ -1012,7 +981,7 @@ namespace Sandals {
 
       // Compute the K variables in the case of an explicit method and explicit
       // system
-      VectorN x_node;
+      VectorF x_node;
       for (Integer i{0}; i < S; ++i) {
         x_node = x_old + K(all, seqN(0, i)) *
                              this->m_tableau.A(i, seqN(0, i)).transpose();
@@ -1037,7 +1006,7 @@ namespace Sandals {
 
       // Adapt next step
       if (this->m_adaptive && this->m_tableau.is_embedded) {
-        VectorN x_emb(x_old + K * this->m_tableau.b_e);
+        VectorF x_emb(x_old + K * this->m_tableau.b_e);
         h_new = this->estimate_step(x_new, x_emb, h_old);
       }
       return true;
@@ -1062,7 +1031,7 @@ namespace Sandals {
      * \return True if the propagation is successfully computed, false
      * otherwise.
      */
-    bool erk_explicit_propagate(const VectorN &x,
+    bool erk_explicit_propagate(const VectorF &x,
                                 const Real t,
                                 const Real h,
                                 const MatrixK &K,
@@ -1072,9 +1041,9 @@ namespace Sandals {
       using Eigen::seqN;
       using Eigen::placeholders::all;
 
-      VectorN x_node;
-      MatrixN Jf_x;
-      std::array<MatrixN, S> dK_dx;
+      VectorF x_node;
+      MatrixJF Jf_x;
+      std::array<MatrixJF, S> dK_dx;
       for (Integer i{0}; i < S; ++i) {
         // Compute the node
         x_node = x + K(all, seqN(0, i)) *
@@ -1114,7 +1083,7 @@ namespace Sandals {
 
 #ifdef SANDALS_CHECK_JACOBIANS
       // Function for the finite differences
-      auto fun = [this, t, h](const VectorN &x_fd, VectorN &x_new_fd) -> bool {
+      auto fun = [this, t, h](const VectorF &x_fd, VectorF &x_new_fd) -> bool {
         Real h_fd;
         MatrixK K_fd;
         return this->erk_explicit_step(x_fd, t, h, x_new_fd, h_fd, K_fd);
@@ -1160,14 +1129,14 @@ namespace Sandals {
      * \param[out] fun The residual of system to be solved.
      */
     void erk_implicit_function(const Integer s,
-                               const VectorN &x,
+                               const VectorF &x,
                                const Real t,
                                const Real h,
                                const MatrixK &K,
-                               VectorN &fun) const {
+                               VectorF &fun) const {
       using Eigen::seqN;
       using Eigen::placeholders::all;
-      VectorN x_node(x + K(all, seqN(0, s)) *
+      VectorF x_node(x + K(all, seqN(0, s)) *
                              this->m_tableau.A(s, seqN(0, s)).transpose());
       if (this->m_reverse) {
         fun = this->m_system->F_reverse(x_node,
@@ -1215,14 +1184,14 @@ namespace Sandals {
      * \param[out] jac The Jacobian of system to be solved.
      */
     void erk_implicit_jacobian(const Integer s,
-                               const VectorN &x,
+                               const VectorF &x,
                                const Real t,
                                const Real h,
                                const MatrixK &K,
-                               MatrixN &jac) const {
+                               MatrixJF &jac) const {
       using Eigen::seqN;
       using Eigen::placeholders::all;
-      VectorN x_node(x + K(all, seqN(0, s)) *
+      VectorF x_node(x + K(all, seqN(0, s)) *
                              this->m_tableau.A(s, seqN(0, s)).transpose());
       if (this->m_reverse) {
         jac = this->m_system->JF_x_dot_reverse(x_node,
@@ -1256,26 +1225,26 @@ namespace Sandals {
      * \param[out] K The \f$ \mathbf{K} \f$ variables of the Runge-Kutta method.
      * \return True if the step is successfully computed, false otherwise.
      */
-    bool erk_implicit_step(const VectorN &x_old,
+    bool erk_implicit_step(const VectorF &x_old,
                            const Real t_old,
                            const Real h_old,
-                           VectorN &x_new,
+                           VectorF &x_new,
                            Real &h_new,
                            MatrixK &K) const {
-      VectorN K_sol;
-      VectorN K_ini(VectorN::Zero());
+      VectorF K_sol;
+      VectorF K_ini(VectorF::Zero());
 
       // Check if the solver converged
       for (Integer s{0}; s < S; ++s) {
         if (this->m_newtonX.solve(
-                [this, s, &K, &x_old, t_old, h_old](const VectorN &K_fun,
-                                                    VectorN &fun) -> bool {
+                [this, s, &K, &x_old, t_old, h_old](const VectorF &K_fun,
+                                                    VectorF &fun) -> bool {
                   K.col(s) = K_fun;
                   this->erk_implicit_function(s, x_old, t_old, h_old, K, fun);
                   return fun.allFinite();
                 },
-                [this, s, &K, &x_old, t_old, h_old](const VectorN &K_jac,
-                                                    MatrixN &jac) -> bool {
+                [this, s, &K, &x_old, t_old, h_old](const VectorF &K_jac,
+                                                    MatrixJF &jac) -> bool {
                   K.col(s) = K_jac;
                   this->erk_implicit_jacobian(s, x_old, t_old, h_old, K, jac);
                   return jac.allFinite();
@@ -1293,7 +1262,7 @@ namespace Sandals {
 
       // Adapt next step
       if (this->m_adaptive && this->m_tableau.is_embedded) {
-        VectorN x_emb(x_old + K * this->m_tableau.b_e);
+        VectorF x_emb(x_old + K * this->m_tableau.b_e);
         h_new = this->estimate_step(x_new, x_emb, h_old);
       }
       return true;
@@ -1318,7 +1287,7 @@ namespace Sandals {
      * \return True if the propagation is successfully computed, false
      * otherwise.
      */
-    bool erk_implicit_propagate(const VectorN &x,
+    bool erk_implicit_propagate(const VectorF &x,
                                 const Real t,
                                 const Real h,
                                 const MatrixK &K,
@@ -1328,10 +1297,10 @@ namespace Sandals {
       using Eigen::seqN;
       using Eigen::placeholders::all;
 
-      VectorN x_node, x_dot_node;
-      MatrixN JF_x, JF_x_dot, A, b;
-      std::array<MatrixN, S> dK_dx;
-      Eigen::FullPivLU<MatrixN> lu;
+      VectorF x_node, x_dot_node;
+      MatrixJF JF_x, JF_x_dot, A, b;
+      std::array<MatrixJF, S> dK_dx;
+      Eigen::FullPivLU<MatrixJF> lu;
       for (Integer i{0}; i < S; ++i) {
         // Compute the node
         x_node = x + K(all, seqN(0, i)) *
@@ -1382,7 +1351,7 @@ namespace Sandals {
 
 #ifdef SANDALS_CHECK_JACOBIANS
       // Function for the finite differences
-      auto fun = [this, t, h](const VectorN &x_fd, VectorN &x_new_fd) -> bool {
+      auto fun = [this, t, h](const VectorF &x_fd, VectorF &x_new_fd) -> bool {
         Real h_fd;
         MatrixK K_fd;
         return this->erk_implicit_step(x_fd, t, h, x_new_fd, h_fd, K_fd);
@@ -1443,12 +1412,12 @@ namespace Sandals {
      * system to be solved.
      * \param[out] fun The residual of system to be solved.
      */
-    void irk_function(const VectorN &x,
+    void irk_function(const VectorF &x,
                       const Real t,
                       const Real h,
                       const VectorK &K,
                       VectorK &fun) const {
-      VectorN x_node;
+      VectorF x_node;
       MatrixK K_mat{K.reshaped(N, S)};
       MatrixK fun_mat;
       for (Integer i{0}; i < S; ++i) {
@@ -1510,7 +1479,7 @@ namespace Sandals {
      * \param[in] K Variables \f$ h \mathbf{K} \f$ of the system to be solved.
      * \param[out] jac The Jacobian of system to be solved.
      */
-    void irk_jacobian(const VectorN &x,
+    void irk_jacobian(const VectorF &x,
                       const Real t,
                       const Real h,
                       const VectorK &K,
@@ -1523,8 +1492,8 @@ namespace Sandals {
       // Loop through each equation of the system
       MatrixK K_mat{K.reshaped(N, S)};
       Real t_node;
-      VectorN x_node, x_dot_node;
-      MatrixN JF_x, JF_x_dot;
+      VectorF x_node, x_dot_node;
+      MatrixJF JF_x, JF_x_dot;
       auto idx = seqN(0, N), jdx = seqN(0, N);
       for (Integer i{0}; i < S; ++i) {
         t_node = t + h * this->m_tableau.c(i);
@@ -1574,10 +1543,10 @@ namespace Sandals {
      * \param[out] K The \f$ \mathbf{K} \f$ variables of the Runge-Kutta method.
      * \return True if the step is successfully computed, false otherwise.
      */
-    bool irk_step(const VectorN &x_old,
+    bool irk_step(const VectorF &x_old,
                   const Real t_old,
                   const Real h_old,
-                  VectorN &x_new,
+                  VectorF &x_new,
                   Real &h_new,
                   MatrixK &K) const {
       VectorK K_vec;
@@ -1611,7 +1580,7 @@ namespace Sandals {
 
       // Adapt next step
       if (this->m_adaptive && this->m_tableau.is_embedded) {
-        VectorN x_emb(x_old + K * this->m_tableau.b_e);
+        VectorF x_emb(x_old + K * this->m_tableau.b_e);
         h_new = this->estimate_step(x_new, x_emb, h_old);
       }
       return true;
@@ -1636,7 +1605,7 @@ namespace Sandals {
      * \return True if the propagation is successfully computed, false
      * otherwise.
      */
-    bool irk_propagate(const VectorN &x,
+    bool irk_propagate(const VectorF &x,
                        const Real t,
                        const Real h,
                        const MatrixK &K,
@@ -1647,8 +1616,8 @@ namespace Sandals {
       using Eigen::placeholders::all;
 
       // Propagate the derivative of K with respect to x
-      VectorN x_node, x_dot_node;
-      MatrixN JF_x, JF_x_dot;
+      VectorF x_node, x_dot_node;
+      MatrixJF JF_x, JF_x_dot;
       Eigen::Matrix<Real, N * S, N * S> A;
       Eigen::Matrix<Real, N * S, N> b;
       Eigen::FullPivLU<Eigen::Matrix<Real, N * S, N * S>> lu;
@@ -1699,7 +1668,7 @@ namespace Sandals {
 
 #ifdef SANDALS_CHECK_JACOBIANS
       // Function for the finite differences
-      auto fun = [this, t, h](const VectorN &x_fd, VectorN &x_new_fd) -> bool {
+      auto fun = [this, t, h](const VectorF &x_fd, VectorF &x_new_fd) -> bool {
         Real h_fd;
         MatrixK K_fd;
         return this->irk_step(x_fd, t, h, x_new_fd, h_fd, K_fd);
@@ -1754,14 +1723,14 @@ namespace Sandals {
      * \param[out] fun The residual of system to be solved.
      */
     void dirk_function(Integer n,
-                       const VectorN &x,
+                       const VectorF &x,
                        const Real t,
                        const Real h,
                        const MatrixK &K,
-                       VectorN &fun) const {
+                       VectorF &fun) const {
       using Eigen::seqN;
       using Eigen::placeholders::all;
-      VectorN x_node(x + K(all, seqN(0, n + 1)) *
+      VectorF x_node(x + K(all, seqN(0, n + 1)) *
                              this->m_tableau.A(n, seqN(0, n + 1)).transpose());
       if (this->m_reverse) {
         fun = this->m_system->F_reverse(x_node,
@@ -1812,17 +1781,17 @@ namespace Sandals {
      * \param[out] jac The Jacobian of system to be solved.
      */
     void dirk_jacobian(Integer n,
-                       const VectorN &x,
+                       const VectorF &x,
                        const Real t,
                        const Real h,
                        const MatrixK &K,
-                       MatrixN &jac) const {
+                       MatrixJF &jac) const {
       using Eigen::seqN;
       using Eigen::placeholders::all;
       Real t_node{t + h * this->m_tableau.c(n)};
-      VectorN x_node(x + K(all, seqN(0, n + 1)) *
+      VectorF x_node(x + K(all, seqN(0, n + 1)) *
                              this->m_tableau.A(n, seqN(0, n + 1)).transpose());
-      VectorN x_dot_node(K.col(n) / h);
+      VectorF x_dot_node(K.col(n) / h);
       if (this->m_reverse) {
         jac = this->m_tableau.A(n, n) *
                   this->m_system->JF_x_reverse(x_node, x_dot_node, t_node) +
@@ -1853,26 +1822,26 @@ namespace Sandals {
      * \param[out] K The \f$ \mathbf{K} \f$ variables of the Runge-Kutta method.
      * \return True if the step is successfully computed, false otherwise.
      */
-    bool dirk_step(const VectorN &x_old,
+    bool dirk_step(const VectorF &x_old,
                    const Real t_old,
                    const Real h_old,
-                   VectorN &x_new,
+                   VectorF &x_new,
                    Real &h_new,
                    MatrixK &K) const {
-      VectorN K_sol;
-      VectorN K_ini(VectorN::Zero());
+      VectorF K_sol;
+      VectorF K_ini(VectorF::Zero());
 
       // Check if the solver converged at each step
       for (Integer n{0}; n < S; ++n) {
         if (this->m_newtonX.solve(
-                [this, n, &K, &x_old, t_old, h_old](const VectorN &K_fun,
-                                                    VectorN &fun) -> bool {
+                [this, n, &K, &x_old, t_old, h_old](const VectorF &K_fun,
+                                                    VectorF &fun) -> bool {
                   K.col(n) = K_fun;
                   this->dirk_function(n, x_old, t_old, h_old, K, fun);
                   return fun.allFinite();
                 },
-                [this, n, &K, &x_old, t_old, h_old](const VectorN &K_jac,
-                                                    MatrixN &jac) -> bool {
+                [this, n, &K, &x_old, t_old, h_old](const VectorF &K_jac,
+                                                    MatrixJF &jac) -> bool {
                   K.col(n) = K_jac;
                   this->dirk_jacobian(n, x_old, t_old, h_old, K, jac);
                   return jac.allFinite();
@@ -1890,7 +1859,7 @@ namespace Sandals {
 
       // Adapt next step
       if (this->m_adaptive && this->m_tableau.is_embedded) {
-        VectorN x_emb(x_old + K * this->m_tableau.b_e);
+        VectorF x_emb(x_old + K * this->m_tableau.b_e);
         h_new = this->estimate_step(x_new, x_emb, h_old);
       }
       return true;
@@ -1915,7 +1884,7 @@ namespace Sandals {
      * \return True if the propagation is successfully computed, false
      * otherwise.
      */
-    bool dirk_propagate(const VectorN &x,
+    bool dirk_propagate(const VectorF &x,
                         const Real t,
                         const Real h,
                         const MatrixK &K,
@@ -1926,10 +1895,10 @@ namespace Sandals {
       using Eigen::placeholders::all;
 
       // Propagate the derivative of K with respect to x for DIRK methods
-      VectorN x_node, x_dot_node;
-      MatrixN JF_x, JF_x_dot, A, b;
-      std::array<MatrixN, S> dK_dx;
-      Eigen::FullPivLU<MatrixN> lu;
+      VectorF x_node, x_dot_node;
+      MatrixJF JF_x, JF_x_dot, A, b;
+      std::array<MatrixJF, S> dK_dx;
+      Eigen::FullPivLU<MatrixJF> lu;
       for (Integer i{0}; i < S; ++i) {
         // Compute the node
         x_node = x + K(all, seqN(0, i + 1)) *
@@ -1980,7 +1949,7 @@ namespace Sandals {
 
 #ifdef SANDALS_CHECK_JACOBIANS
       // Function for the finite differences
-      auto fun = [this, t, h](const VectorN &x_fd, VectorN &x_new_fd) -> bool {
+      auto fun = [this, t, h](const VectorF &x_fd, VectorF &x_new_fd) -> bool {
         Real h_fd;
         MatrixK K_fd;
         return this->dirk_step(x_fd, t, h, x_new_fd, h_fd, K_fd);
@@ -2016,10 +1985,10 @@ namespace Sandals {
      * \param[out] K The \f$ \mathbf{K} \f$ variables of the Runge-Kutta method.
      * \return True if the step is successfully computed, false otherwise.
      */
-    bool step(const VectorN &x_old,
+    bool step(const VectorF &x_old,
               const Real t_old,
               const Real h_old,
-              VectorN &x_new,
+              VectorF &x_new,
               Real &h_new,
               MatrixK &K) const {
 #define CMD "Sandals::RungeKutta::step(...): "
@@ -2063,7 +2032,7 @@ namespace Sandals {
      * \return True if the propagation is successfully computed, false
      * otherwise.
      */
-    bool propagate(const VectorN &x,
+    bool propagate(const VectorF &x,
                    const Real t,
                    const Real h,
                    const MatrixK &K,
@@ -2108,10 +2077,10 @@ namespace Sandals {
      * \return True if the step is successfully computed, false otherwise.
      */
     template <bool Propagate = true>
-    bool advance(const VectorN &x_old,
+    bool advance(const VectorF &x_old,
                  const Real t_old,
                  Real h_old,
-                 VectorN &x_new,
+                 VectorF &x_new,
                  Real &h_new,
                  MatrixJX &Jx) const {
 #define CMD "Sandals::RungeKutta::advance(...): "
@@ -2131,7 +2100,7 @@ namespace Sandals {
       MatrixK K;
       if (!this->step(x_old, t_old, h_old, x_new, h_new, K)) {
         // Store temporary variables
-        VectorN x_tmp(x_old);
+        VectorF x_tmp(x_old);
         Real t_tmp{t_old}, h_tmp{h_old / 2.0};
 
         // Substepping logic
@@ -2219,7 +2188,7 @@ namespace Sandals {
 
       // Project intermediate solution on the invariants
       if (this->m_projection) {
-        VectorN x_projected;
+        VectorF x_projected;
         if (this->project(x_new, t_old + h_new, x_projected)) {
           x_new = x_projected;
           if constexpr (Propagate) {
@@ -2262,7 +2231,7 @@ namespace Sandals {
      */
     template <bool Propagate = true>
     bool solve(const VectorX &t_mesh,
-               const VectorN &ics,
+               const VectorF &ics,
                Solution<Real, N, M> &sol,
                MatrixJX &Jx) const {
       using Eigen::placeholders::last;
@@ -2294,7 +2263,7 @@ namespace Sandals {
 
       // Update the current step
       Integer step{0};
-      VectorN x_old_step(ics), x_new_step(ics);
+      VectorF x_old_step(ics), x_new_step(ics);
       MatrixJX Jx_step;
       Real t_step{t_mesh(0)}, h_step{t_mesh(1) - t_mesh(0)}, h_tmp_step{h_step},
           h_new_step;
@@ -2375,7 +2344,7 @@ namespace Sandals {
      * avoid unpredicted behaviors.
      */
     bool solve(const VectorX &t_mesh,
-               const VectorN &ics,
+               const VectorF &ics,
                Solution<Real, N, M> &sol) const {
       MatrixJX Jx;  // Dummy variable
       return this->template solve<false>(t_mesh, ics, sol, Jx);
@@ -2403,7 +2372,7 @@ namespace Sandals {
      */
     template <bool Propagate = true>
     bool adaptive_solve(const VectorX &t_mesh,
-                        const VectorN &ics,
+                        const VectorF &ics,
                         Solution<Real, N, M> &sol,
                         MatrixJX &Jx) const {
 #define CMD "Sandals::RungeKutta::adaptive_solve(...): "
@@ -2462,7 +2431,7 @@ namespace Sandals {
 
       // Instantiate temporary variables
       Integer step{0};
-      VectorN x_old_step(ics), x_new_step(ics);
+      VectorF x_old_step(ics), x_new_step(ics);
       MatrixJX Jx_step;
 
       while (true) {
@@ -2536,7 +2505,7 @@ namespace Sandals {
      * avoid unpredicted behaviors.
      */
     bool adaptive_solve(const VectorX &t_mesh,
-                        const VectorN &ics,
+                        const VectorF &ics,
                         Solution<Real, N, M> &sol) const {
       MatrixJX Jx;  // Dummy variable
       return this->template adaptive_solve<false>(t_mesh, ics, sol, Jx);
@@ -2553,18 +2522,18 @@ namespace Sandals {
      * \f$.
      * \return True if the solution is successfully projected, false otherwise.
      */
-    bool project(const VectorN &x, const Real t, VectorN &x_projected) const {
+    bool project(const VectorF &x, const Real t, VectorF &x_projected) const {
 #define CMD "Sandals::RungeKutta::project(...): "
 
       // Check if there are any constraints
       x_projected = x;
       if constexpr (M > 0) {
-        VectorM h;
-        MatrixM Jh_x;
+        VectorH h;
+        MatrixJH Jh_x;
         VectorP b, x_step;
         MatrixP A;
         A.setZero();
-        A.template block<N, N>(0, 0) = MatrixN::Identity();
+        A.template block<N, N>(0, 0) = MatrixJF::Identity();
         for (Integer k{0}; k < this->m_max_projection_iterations; ++k) {
           /* Standard projection method
                [A]          {x}     =      {b}
@@ -2626,11 +2595,11 @@ namespace Sandals {
      * \f$.
      * \return True if the solution is successfully projected, false otherwise.
      */
-    bool project_ics(const VectorN &x,
+    bool project_ics(const VectorF &x,
                      const Real t,
                      const std::vector<Integer> &projected_equations,
                      const std::vector<Integer> &projected_invariants,
-                     VectorN &x_projected) const {
+                     VectorF &x_projected) const {
 #define CMD "Sandals::RungeKutta::project_ics(...): "
 
       Integer X{static_cast<Integer>(projected_equations.size())};
@@ -2639,8 +2608,8 @@ namespace Sandals {
       // Check if there are any constraints
       x_projected = x;
       if (H > 0) {
-        VectorM h;
-        MatrixM Jh_x;
+        VectorH h;
+        MatrixJH Jh_x;
         VectorX b(X + H), x_step(X + H);
         MatrixX A(X + H, X + H);
         A.setZero();
@@ -2711,7 +2680,7 @@ namespace Sandals {
      * \return True if the propagation is successfully computed, false
      * otherwise.
      */
-    bool project_propagate(const VectorN &x_projected,
+    bool project_propagate(const VectorF &x_projected,
                            const Real t,
                            MatrixJX &Jx_projection) const {
 #define CMD "Sandals::RungeKutta::project_propagate(...): "
@@ -2720,13 +2689,13 @@ namespace Sandals {
       if constexpr (M > 0) {
         using MatrixAA = Eigen::Matrix<Real, N + M, N + M>;
         using MatrixBB = Eigen::Matrix<Real, N + M, N>;
-        MatrixM Jh_x(this->m_system->Jh_x(x_projected, t));
+        MatrixJH Jh_x(this->m_system->Jh_x(x_projected, t));
         MatrixAA A(MatrixAA::Zero());
-        A.template block<N, N>(0, 0) = MatrixN::Identity();
+        A.template block<N, N>(0, 0) = MatrixJF::Identity();
         A.template block<N, M>(0, N) = Jh_x.transpose();
         A.template block<M, N>(N, 0) = Jh_x;
         MatrixBB b(MatrixBB::Zero());
-        b.template block<N, N>(0, 0) = MatrixN::Identity();
+        b.template block<N, N>(0, 0) = MatrixJF::Identity();
         Eigen::FullPivLU<MatrixAA> lu(A);
         SANDALS_ASSERT(lu.rank() == N + M,
                        CMD "singular Jacobian in projection propagation.");
@@ -2740,7 +2709,7 @@ namespace Sandals {
         }
 #ifdef SANDALS_CHECK_JACOBIANS
         // Function for the finite differences
-        auto fun = [this, t](const VectorN &x_fd, VectorN &x_new_fd) {
+        auto fun = [this, t](const VectorF &x_fd, VectorF &x_new_fd) {
           return this->project(x_fd, t, x_new_fd);
         };
 
@@ -2771,7 +2740,7 @@ namespace Sandals {
      * \return The estimated order of the method.
      */
     void error_step(const std::vector<VectorX> &t_mesh,
-                    const VectorN &ics,
+                    const VectorF &ics,
                     std::function<MatrixX(VectorX)> &sol,
                     VectorX &h_vec,
                     VectorX &e_vec) const {
@@ -2832,7 +2801,7 @@ namespace Sandals {
      * \return The estimated order of the method.
      */
     Real estimate_order(const std::vector<VectorX> &t_mesh,
-                        const VectorN &ics,
+                        const VectorF &ics,
                         std::function<MatrixX(VectorX)> &sol,
                         VectorX &h_vec,
                         VectorX &e_vec) const {
@@ -2855,7 +2824,7 @@ namespace Sandals {
      * \return The estimated order of the method.
      */
     Real estimate_order(const std::vector<VectorX> &t_mesh,
-                        const VectorN &ics,
+                        const VectorF &ics,
                         std::function<MatrixX(VectorX)> &sol) const {
       VectorX h_vec, e_vec;
       return this->estimate_order(t_mesh, ics, sol, h_vec, e_vec);

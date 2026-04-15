@@ -49,7 +49,7 @@ using Real = double;
 
 #ifndef PROBLEM_INIT
 #define PROBLEM_INIT(PROBLEM, INTEGRATOR)                                     \
-  constexpr Integer D{PROBLEM##Explicit<Real>::equations_number()};           \
+  constexpr Integer D{PROBLEM##Explicit<Real>::equations()};                  \
   PROBLEM##Problem<Real, PROBLEM##Explicit<Real>, INTEGRATOR<Real, D, 0>>     \
       PROBLEM##_explicit;                                                     \
   PROBLEM##Problem<Real, PROBLEM##Implicit<Real>, INTEGRATOR<Real, D, 0>>     \

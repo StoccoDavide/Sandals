@@ -49,8 +49,8 @@ namespace Sandals {
   class Ralston4Tableau : public Tableau<Real, 4> {
    public:
     using typename Tableau<Real, 4>::Type;
-    using typename Tableau<Real, 4>::Vector;
-    using typename Tableau<Real, 4>::Matrix;
+    using typename Tableau<Real, 4>::VectorS;
+    using typename Tableau<Real, 4>::MatrixS;
 
     /**
      * Class constructor for the Ralston's order 4 method.
@@ -91,7 +91,7 @@ namespace Sandals {
   template <typename Real, Integer N, Integer M = 0>
   class Ralston4 : public RungeKutta<Real, 4, N, M> {
    public:
-    using System = typename Implicit<Real, N, M>::Pointer; /**< System type. */
+    using SystemPtr = typename Implicit<Real, N, M>::Pointer;
 
     /**
      * Class constructor for a Ralston's order 4 solver given a Tableau
@@ -104,7 +104,7 @@ namespace Sandals {
      * reference.
      * \param[in] t_system The system reference.
      */
-    Ralston4(System t_system)
+    Ralston4(SystemPtr t_system)
         : RungeKutta<Real, 4, N, M>(Ralston4Tableau<Real>(),
                                     std::move(t_system)) {}
 

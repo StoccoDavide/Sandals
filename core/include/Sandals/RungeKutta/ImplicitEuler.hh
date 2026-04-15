@@ -35,8 +35,8 @@ namespace Sandals {
   class ImplicitEulerTableau : public Tableau<Real, 1> {
    public:
     using typename Tableau<Real, 1>::Type;
-    using typename Tableau<Real, 1>::Vector;
-    using typename Tableau<Real, 1>::Matrix;
+    using typename Tableau<Real, 1>::VectorS;
+    using typename Tableau<Real, 1>::MatrixS;
 
     /**
      * Class constructor for the Implicit Euler method.
@@ -63,7 +63,7 @@ namespace Sandals {
   template <typename Real, Integer N, Integer M = 0>
   class ImplicitEuler : public RungeKutta<Real, 1, N, M> {
    public:
-    using System = typename Implicit<Real, N, M>::Pointer; /**< System type. */
+    using SystemPtr = typename Implicit<Real, N, M>::Pointer;
 
     /**
      * Class constructor for a Implicit Euler solver given a Tableau reference.
@@ -74,7 +74,7 @@ namespace Sandals {
      * Class constructor for a Implicit Euler solver given a Tableau reference.
      * \param[in] t_system The system reference.
      */
-    ImplicitEuler(System t_system)
+    ImplicitEuler(SystemPtr t_system)
         : RungeKutta<Real, 1, N, M>(ImplicitEulerTableau<Real>(),
                                     std::move(t_system)) {}
 

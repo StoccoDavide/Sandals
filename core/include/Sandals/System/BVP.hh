@@ -40,10 +40,8 @@ namespace Sandals {
   template <typename Real, Integer N, Integer M, typename Integrator>
   class BVP {
    public:
-    SANDALS_BASIC_CONSTANTS(Real) /**< Basic constants. */
-    const Real SQRT_EPSILON{
-      std::sqrt(EPSILON)}; /**< Square root of machine epsilon epsilon static
-                              constant value. */
+    SANDALS_BASIC_CONSTANTS(Real)
+    const Real SQRT_EPSILON{std::sqrt(EPSILON)};
 
     using ShootingChoice = enum class ShootingChoice : Integer {
       SINGLE   = 0,
@@ -56,22 +54,13 @@ namespace Sandals {
       CONJGRAD     = 2
     }; /**< Solution method choice. */
 
-    using System =
-        Implicit<Real, N, M>; /**< Unique pointer to an ODE/DAE system. */
-    using SystemPtr =
-        typename Implicit<Real, N, M>::Pointer;        /**< Unique pointer to an
-                                                          ODE/DAE system. */
-    using IntegratorPtr = std::unique_ptr<Integrator>; /**< Unique pointer to a
-                                                          Runge-Kutta method. */
-    using SolutionPtr =
-        std::unique_ptr<Solution<Real, N, M>>;         /**< Unique pointer to a
-                                                          solution. */
+    using System        = Implicit<Real, N, M>;
+    using SystemPtr     = typename Implicit<Real, N, M>::Pointer;
+    using IntegratorPtr = std::unique_ptr<Integrator>;
+    using SolutionPtr   = std::unique_ptr<Solution<Real, N, M>>;
 
-    using VectorX = Eigen::Vector<Real, Eigen::Dynamic>; /**< Dynamic vector of
-                                                            real numbers. */
-    using MatrixX =
-        Eigen::Matrix<Real, N, Eigen::Dynamic>; /**< Dynamic matrix of real
-                                                   numbers. */
+    using VectorX  = Eigen::Vector<Real, Eigen::Dynamic>;
+    using MatrixX  = Eigen::Matrix<Real, N, Eigen::Dynamic>;
     using MatrixJX = typename Integrator::MatrixJX;
     using VectorF  = typename Implicit<Real, N, M>::VectorF;
     using MatrixJF = typename Implicit<Real, N, M>::MatrixJF;

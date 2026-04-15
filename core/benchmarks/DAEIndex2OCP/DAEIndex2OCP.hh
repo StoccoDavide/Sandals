@@ -200,9 +200,6 @@ class DAEIndex2OCPindex0 : public Implicit<Real, 8, 2> {
 template <typename Real, typename System, typename Integrator>
 class DAEIndex2OCPProblem : public BVP<Real, System::N, System::M, Integrator> {
  public:
-  using typename BVP<Real, System::N, System::M, Integrator>::SystemPtr;
-  using typename BVP<Real, System::N, System::M, Integrator>::IntegratorPtr;
-  using typename BVP<Real, System::N, System::M, Integrator>::SolutionPtr;
   using typename BVP<Real, System::N, System::M, Integrator>::VectorF;
   using typename BVP<Real, System::N, System::M, Integrator>::MatrixJF;
   using VectorX = Eigen::Vector<Real, Eigen::Dynamic>;

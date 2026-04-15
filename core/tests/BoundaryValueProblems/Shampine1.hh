@@ -219,9 +219,6 @@ class Shampine1SemiExplicit : public SemiExplicit<Real, 5, 0> {
 template <typename Real, typename System, typename Integrator>
 class Shampine1Problem : public BVP<Real, 5, 0, Integrator> {
  public:
-  using typename BVP<Real, 5, 0, Integrator>::SystemPtr;
-  using typename BVP<Real, 5, 0, Integrator>::IntegratorPtr;
-  using typename BVP<Real, 5, 0, Integrator>::SolutionPtr;
   using typename BVP<Real, 5, 0, Integrator>::VectorF;
   using typename BVP<Real, 5, 0, Integrator>::MatrixJF;
   using VectorX = Eigen::Vector<Real, Eigen::Dynamic>;

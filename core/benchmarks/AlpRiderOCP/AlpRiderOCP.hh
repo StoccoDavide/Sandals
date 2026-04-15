@@ -474,9 +474,6 @@ class AlpRiderOCPImplicit : public Implicit<Real, 8, 0> {
 template <typename Real, typename System, typename Integrator>
 class AlpRiderOCPProblem : public BVP<Real, 8, 0, Integrator> {
  public:
-  using typename BVP<Real, 8, 0, Integrator>::SystemPtr;
-  using typename BVP<Real, 8, 0, Integrator>::IntegratorPtr;
-  using typename BVP<Real, 8, 0, Integrator>::SolutionPtr;
   using typename BVP<Real, 8, 0, Integrator>::VectorF;
   using typename BVP<Real, 8, 0, Integrator>::MatrixJF;
   using VectorX = Eigen::Vector<Real, Eigen::Dynamic>;

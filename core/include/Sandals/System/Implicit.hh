@@ -41,22 +41,22 @@ namespace Sandals {
   template <typename Real, Integer N, Integer M = 0>
   class Implicit {
    public:
+    using Pointer  = std::unique_ptr<Implicit<Real, N, M>>;
+    using VectorF  = Eigen::Vector<Real, N>;
+    using MatrixJF = Eigen::Matrix<Real, N, N>;
+    using VectorH  = Eigen::Vector<Real, M>;
+    using MatrixJH = Eigen::Matrix<Real, M, N>;
+    using TensorTH = typename std::array<MatrixJH, N>;
+
     using Type = enum class Type : Integer {
       IMPLICIT     = 0,
       EXPLICIT     = 1,
       SEMIEXPLICIT = 1
     }; /**< System type enumeration. */
-    using Pointer =
-        std::unique_ptr<Implicit<Real, N, M>>;  /**< Unique pointer to an
-                                                   implicit ODE system. */
-    using VectorF  = Eigen::Vector<Real, N>;    /**< Templetized vector type. */
-    using MatrixJF = Eigen::Matrix<Real, N, N>; /**< Templetized matrix type. */
-    using VectorH  = Eigen::Vector<Real, M>;    /**< Templetized vector type. */
-    using MatrixJH = Eigen::Matrix<Real, M, N>; /**< Templetized matrix type. */
 
    private:
-    Type m_type{Type::IMPLICIT};                /**< ODE/DAE system type. */
-    std::string m_name; /**< Name of the ODE/DAE system. */
+    Type m_type{Type::IMPLICIT}; /**< ODE/DAE system type. */
+    std::string m_name;          /**< Name of the ODE/DAE system. */
 
    protected:
     /**
@@ -136,7 +136,7 @@ namespace Sandals {
      * Get the number of equations of the ODE/DAE system.
      * \return The number of equations of the ODE/DAE system.
      */
-    static constexpr Integer equations_number() {
+    static constexpr Integer equations() {
       return N;
     }
 
@@ -144,7 +144,7 @@ namespace Sandals {
      * Get the number of invariants of the ODE/DAE system.
      * \return The number of invariants of the ODE/DAE system.
      */
-    static constexpr Integer invariants_number() {
+    static constexpr Integer invariants() {
       return M;
     }
 
@@ -322,35 +322,19 @@ namespace Sandals {
   template <typename Real, Integer N, Integer M = 0>
   class ImplicitWrapper : public Implicit<Real, N, M> {
    public:
-    using Scalar = Real;                              /**< Scalar type. */
-    using Pointer =
-        std::unique_ptr<ImplicitWrapper<Real, N, M>>; /**< Unique pointer to an
-                                                         implicit ODE system. */
-    using
-        typename Implicit<Real, N, M>::VectorF; /**< Templetized vector type. */
-    using typename Implicit<Real, N, M>::MatrixJF; /**< Templetized matrix type.
-                                                    */
-    using
-        typename Implicit<Real, N, M>::VectorH; /**< Templetized vector type. */
-    using typename Implicit<Real, N, M>::MatrixJH; /**< Templetized matrix type.
-                                                    */
-    using FunctionF  = std::function<VectorF(
-        const VectorF &,
-        const VectorF &,
-        const Real)>; /**< Implicit ODE system function type. */
-    using FunctionJF = std::function<MatrixJF(
-        const VectorF &,
-        const VectorF &,
-        const Real)>; /**< Jacobian of the ODE system function function type. */
-    using FunctionH =
-        std::function<VectorH(const VectorF &,
-                              const Real)>; /**< Invariants function type. */
-    using FunctionJH = std::function<MatrixJH(
-        const VectorF &,
-        const Real)>; /**< Jacobian of the invariants function type. */
-    using FunctionID =
-        std::function<bool(const VectorF &,
-                           const Real)>; /**< In-domain function type. */
+    using typename Implicit<Real, N, M>::VectorF;
+    using typename Implicit<Real, N, M>::MatrixJF;
+    using typename Implicit<Real, N, M>::VectorH;
+    using typename Implicit<Real, N, M>::MatrixJH;
+
+    using Pointer = std::unique_ptr<ImplicitWrapper<Real, N, M>>;
+    using FunctionF =
+        std::function<VectorF(const VectorF &, const VectorF &, const Real)>;
+    using FunctionJF =
+        std::function<MatrixJF(const VectorF &, const VectorF &, const Real)>;
+    using FunctionH  = std::function<VectorH(const VectorF &, const Real)>;
+    using FunctionJH = std::function<MatrixJH(const VectorF &, const Real)>;
+    using FunctionID = std::function<bool(const VectorF &, const Real)>;
 
     inline static const FunctionH DefaultH = [](const VectorF &, const Real) {
       return VectorH::Zero();

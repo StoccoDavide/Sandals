@@ -42,24 +42,16 @@ namespace Sandals {
   template <typename Real, Integer N, Integer M = 0>
   class Linear : public Explicit<Real, N, M> {
    public:
-    using Pointer =
-        std::unique_ptr<Linear<Real, N, M>>;    /**< Unique pointer to a
-                                                         linear ODE/DAE system. */
-    using VectorF =
-        typename Explicit<Real, N, M>::VectorF; /**< Templetized vector type. */
-    using MatrixJF = typename Explicit<Real, N, M>::MatrixJF; /**< Templetized
-                                                                 matrix type. */
-    using MatrixE = typename Explicit<Real, N, M>::MatrixJF;  /**< Templetized
-                                                                 matrix type. */
-    using MatrixA = typename Explicit<Real, N, M>::MatrixJF;  /**< Templetized
-                                                                 matrix type. */
-    using VectorB =
-        typename Explicit<Real, N, M>::VectorF; /**< Templetized vector type. */
-    using Type =
-        typename Explicit<Real, N, M>::Type;    /**< System type enumeration. */
+    using Pointer  = std::unique_ptr<Linear<Real, N, M>>;
+    using VectorF  = typename Explicit<Real, N, M>::VectorF;
+    using MatrixJF = typename Explicit<Real, N, M>::MatrixJF;
+    using MatrixE  = typename Explicit<Real, N, M>::MatrixJF;
+    using MatrixA  = typename Explicit<Real, N, M>::MatrixJF;
+    using VectorB  = typename Explicit<Real, N, M>::VectorF;
+    using Type     = typename Explicit<Real, N, M>::Type;
 
    private:
-    Eigen::FullPivLU<MatrixE> m_lu;             /**< LU decomposition. */
+    Eigen::FullPivLU<MatrixE> m_lu; /**< LU decomposition. */
 
    public:
     /**
@@ -236,37 +228,21 @@ namespace Sandals {
   template <typename Real, Integer N, Integer M = 0>
   class LinearWrapper : public Linear<Real, N, M> {
    public:
-    using Pointer =
-        std::unique_ptr<LinearWrapper<Real, N, M>>; /**< Unique pointer to a
-                                                       linear ODE/DAE system. */
-    using typename Linear<Real, N, M>::VectorF; /**< Templetized vector type. */
-    using MatrixJF =
-        typename Linear<Real, N, M>::MatrixJF;  /**< Templetized matrix type. */
-    using MatrixE =
-        typename Linear<Real, N, M>::MatrixJF;  /**< Templetized matrix type. */
-    using MatrixA =
-        typename Linear<Real, N, M>::MatrixJF;  /**< Templetized matrix type. */
-    using VectorB =
-        typename Linear<Real, N, M>::VectorF;   /**< Templetized vector type. */
-    using
-        typename Explicit<Real, N, M>::VectorH; /**< Templetized vector type. */
-    using typename Explicit<Real, N, M>::MatrixJH; /**< Templetized matrix type.
-                                                    */
-    using FunctionE =
-        std::function<MatrixE(const Real)>; /**< Mass matrix function type. */
-    using FunctionA =
-        std::function<MatrixA(const Real)>; /**< System matrix function type. */
-    using FunctionB =
-        std::function<VectorB(const Real)>; /**< System vector function type. */
-    using FunctionH =
-        std::function<VectorH(const VectorF &,
-                              const Real)>; /**< Invariants function type. */
-    using FunctionJH = std::function<MatrixJH(
-        const VectorF &,
-        const Real)>; /**< Jacobian of the invariants function type. */
-    using FunctionID =
-        std::function<bool(const VectorF &,
-                           const Real)>; /**< In-domain function type. */
+    using Pointer = std::unique_ptr<LinearWrapper<Real, N, M>>;
+    using typename Linear<Real, N, M>::VectorF;
+    using typename Linear<Real, N, M>::MatrixJF;
+    using MatrixE = typename Linear<Real, N, M>::MatrixJF;
+    using MatrixA = typename Linear<Real, N, M>::MatrixJF;
+    using VectorB = typename Linear<Real, N, M>::VectorF;
+    using typename Explicit<Real, N, M>::VectorH;
+    using typename Explicit<Real, N, M>::MatrixJH;
+
+    using FunctionE  = std::function<MatrixE(const Real)>;
+    using FunctionA  = std::function<MatrixA(const Real)>;
+    using FunctionB  = std::function<VectorB(const Real)>;
+    using FunctionH  = std::function<VectorH(const VectorF &, const Real)>;
+    using FunctionJH = std::function<MatrixJH(const VectorF &, const Real)>;
+    using FunctionID = std::function<bool(const VectorF &, const Real)>;
 
     inline const static FunctionH DefaultH = [](const VectorF &, const Real) {
       return VectorH::Zero();

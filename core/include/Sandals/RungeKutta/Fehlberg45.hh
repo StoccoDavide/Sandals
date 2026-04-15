@@ -49,8 +49,8 @@ namespace Sandals {
   class Fehlberg45Tableau : public Tableau<Real, 6> {
    public:
     using typename Tableau<Real, 6>::Type;
-    using typename Tableau<Real, 6>::Vector;
-    using typename Tableau<Real, 6>::Matrix;
+    using typename Tableau<Real, 6>::VectorS;
+    using typename Tableau<Real, 6>::MatrixS;
 
     /**
      * Class constructor for the Runge-Kutta-Fehlberg 4(5) method.
@@ -86,7 +86,7 @@ namespace Sandals {
   template <typename Real, Integer N, Integer M = 0>
   class Fehlberg45 : public RungeKutta<Real, 6, N, M> {
    public:
-    using System = typename Implicit<Real, N, M>::Pointer; /**< System type. */
+    using SystemPtr = typename Implicit<Real, N, M>::Pointer;
 
     /**
      * Class constructor for a Runge-Kutta-Fehlberg 4(5) solver given a Tableau
@@ -99,7 +99,7 @@ namespace Sandals {
      * reference.
      * \param[in] t_system The system reference.
      */
-    Fehlberg45(System t_system)
+    Fehlberg45(SystemPtr t_system)
         : RungeKutta<Real, 6, N, M>(Fehlberg45Tableau<Real>(),
                                     std::move(t_system)) {}
 

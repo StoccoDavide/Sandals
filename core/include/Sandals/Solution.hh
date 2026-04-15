@@ -63,12 +63,9 @@ namespace Sandals {
    */
   template <typename Real, Integer N, Integer M = 0>
   struct Solution {
-    using Vector =
-        Eigen::Vector<Real, Eigen::Dynamic>;    /**< Templetized vector type. */
-    using MatrixN =
-        Eigen::Matrix<Real, N, Eigen::Dynamic>; /**< Templetized matrix type. */
-    using MatrixM =
-        Eigen::Matrix<Real, M, Eigen::Dynamic>; /**< Templetized matrix type. */
+    using Vector  = Eigen::Vector<Real, Eigen::Dynamic>;
+    using MatrixN = Eigen::Matrix<Real, N, Eigen::Dynamic>;
+    using MatrixM = Eigen::Matrix<Real, M, Eigen::Dynamic>;
 
     Vector t; /**< Independent variable (or time) solution vector \f$ \mathbf{t}
                  \f$. */
@@ -93,7 +90,7 @@ namespace Sandals {
      * Get the number of equations of the ODE/DAE system.
      * \return The number of equations of the ODE/DAE system.
      */
-    static constexpr Integer equations_number() {
+    static constexpr Integer equations() {
       return N;
     }
 
@@ -101,7 +98,7 @@ namespace Sandals {
      * Get the number of invariants of the ODE/DAE system.
      * \return The number of invariants of the ODE/DAE system.
      */
-    static constexpr Integer invariants_number() {
+    static constexpr Integer invariants() {
       return M;
     }
 

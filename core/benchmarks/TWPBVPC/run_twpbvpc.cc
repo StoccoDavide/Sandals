@@ -58,43 +58,43 @@ void test(const bool reverse) {
 }
 
 #ifndef GENERATE_TEST
-#define GENERATE_TEST(PROBLEM, INTEGRATOR)                                   \
-  constexpr Integer PROBLEM##D{PROBLEM##Explicit<Real>::equations_number()}; \
-  TEST(PROBLEM##Forward, INTEGRATOR##Explicit) {                             \
-    test<PROBLEM##Problem<Real,                                              \
-                          PROBLEM##Explicit<Real>,                           \
-                          INTEGRATOR<Real, PROBLEM##D, 0>>,                  \
-         PROBLEM##Explicit<Real>>(false);                                    \
-  }                                                                          \
-  TEST(PROBLEM##Forward, INTEGRATOR##Implicit) {                             \
-    test<PROBLEM##Problem<Real,                                              \
-                          PROBLEM##Implicit<Real>,                           \
-                          INTEGRATOR<Real, PROBLEM##D, 0>>,                  \
-         PROBLEM##Implicit<Real>>(false);                                    \
-  }                                                                          \
-  TEST(PROBLEM##Forward, INTEGRATOR##SemiExplicit) {                         \
-    test<PROBLEM##Problem<Real,                                              \
-                          PROBLEM##SemiExplicit<Real>,                       \
-                          INTEGRATOR<Real, PROBLEM##D, 0>>,                  \
-         PROBLEM##SemiExplicit<Real>>(false);                                \
-  }                                                                          \
-  TEST(PROBLEM##Reverse, INTEGRATOR##Explicit) {                             \
-    test<PROBLEM##Problem<Real,                                              \
-                          PROBLEM##Explicit<Real>,                           \
-                          INTEGRATOR<Real, PROBLEM##D, 0>>,                  \
-         PROBLEM##Explicit<Real>>(true);                                     \
-  }                                                                          \
-  TEST(PROBLEM##Reverse, INTEGRATOR##Implicit) {                             \
-    test<PROBLEM##Problem<Real,                                              \
-                          PROBLEM##Implicit<Real>,                           \
-                          INTEGRATOR<Real, PROBLEM##D, 0>>,                  \
-         PROBLEM##Implicit<Real>>(true);                                     \
-  }                                                                          \
-  TEST(PROBLEM##Reverse, INTEGRATOR##SemiExplicit) {                         \
-    test<PROBLEM##Problem<Real,                                              \
-                          PROBLEM##SemiExplicit<Real>,                       \
-                          INTEGRATOR<Real, PROBLEM##D, 0>>,                  \
-         PROBLEM##SemiExplicit<Real>>(true);                                 \
+#define GENERATE_TEST(PROBLEM, INTEGRATOR)                            \
+  constexpr Integer PROBLEM##D{PROBLEM##Explicit<Real>::equations()}; \
+  TEST(PROBLEM##Forward, INTEGRATOR##Explicit) {                      \
+    test<PROBLEM##Problem<Real,                                       \
+                          PROBLEM##Explicit<Real>,                    \
+                          INTEGRATOR<Real, PROBLEM##D, 0>>,           \
+         PROBLEM##Explicit<Real>>(false);                             \
+  }                                                                   \
+  TEST(PROBLEM##Forward, INTEGRATOR##Implicit) {                      \
+    test<PROBLEM##Problem<Real,                                       \
+                          PROBLEM##Implicit<Real>,                    \
+                          INTEGRATOR<Real, PROBLEM##D, 0>>,           \
+         PROBLEM##Implicit<Real>>(false);                             \
+  }                                                                   \
+  TEST(PROBLEM##Forward, INTEGRATOR##SemiExplicit) {                  \
+    test<PROBLEM##Problem<Real,                                       \
+                          PROBLEM##SemiExplicit<Real>,                \
+                          INTEGRATOR<Real, PROBLEM##D, 0>>,           \
+         PROBLEM##SemiExplicit<Real>>(false);                         \
+  }                                                                   \
+  TEST(PROBLEM##Reverse, INTEGRATOR##Explicit) {                      \
+    test<PROBLEM##Problem<Real,                                       \
+                          PROBLEM##Explicit<Real>,                    \
+                          INTEGRATOR<Real, PROBLEM##D, 0>>,           \
+         PROBLEM##Explicit<Real>>(true);                              \
+  }                                                                   \
+  TEST(PROBLEM##Reverse, INTEGRATOR##Implicit) {                      \
+    test<PROBLEM##Problem<Real,                                       \
+                          PROBLEM##Implicit<Real>,                    \
+                          INTEGRATOR<Real, PROBLEM##D, 0>>,           \
+         PROBLEM##Implicit<Real>>(true);                              \
+  }                                                                   \
+  TEST(PROBLEM##Reverse, INTEGRATOR##SemiExplicit) {                  \
+    test<PROBLEM##Problem<Real,                                       \
+                          PROBLEM##SemiExplicit<Real>,                \
+                          INTEGRATOR<Real, PROBLEM##D, 0>>,           \
+         PROBLEM##SemiExplicit<Real>>(true);                          \
   }
 #endif
 

@@ -214,9 +214,6 @@ class BVPT9SemiExplicit : public SemiExplicit<Real, 2, 0> {
 template <typename Real, typename System, typename Integrator>
 class BVPT9Problem : public BVP<Real, 2, 0, Integrator> {
  public:
-  using typename BVP<Real, 2, 0, Integrator>::SystemPtr;
-  using typename BVP<Real, 2, 0, Integrator>::IntegratorPtr;
-  using typename BVP<Real, 2, 0, Integrator>::SolutionPtr;
   using typename BVP<Real, 2, 0, Integrator>::VectorF;
   using typename BVP<Real, 2, 0, Integrator>::MatrixJF;
   using VectorX = Eigen::Vector<Real, Eigen::Dynamic>;

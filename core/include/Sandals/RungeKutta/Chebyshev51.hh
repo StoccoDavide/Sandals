@@ -41,8 +41,8 @@ namespace Sandals {
   class Chebyshev51Tableau : public Tableau<Real, 5> {
    public:
     using typename Tableau<Real, 5>::Type;
-    using typename Tableau<Real, 5>::Vector;
-    using typename Tableau<Real, 5>::Matrix;
+    using typename Tableau<Real, 5>::VectorS;
+    using typename Tableau<Real, 5>::MatrixS;
 
     /**
      * Class constructor for the 5-stage Runge-Kutta-Chebyshev order 1 method.
@@ -73,7 +73,7 @@ namespace Sandals {
   template <typename Real, Integer N, Integer M = 0>
   class Chebyshev51 : public RungeKutta<Real, 5, N, M> {
    public:
-    using System = typename Implicit<Real, N, M>::Pointer; /**< System type. */
+    using SystemPtr = typename Implicit<Real, N, M>::Pointer;
 
     /**
      * Class constructor for a 5-stage Runge-Kutta-Chebyshev order 1 solver
@@ -86,7 +86,7 @@ namespace Sandals {
      * given a Tableau reference.
      * \param[in] t_system The system reference.
      */
-    Chebyshev51(System t_system)
+    Chebyshev51(SystemPtr t_system)
         : RungeKutta<Real, 5, N, M>(Chebyshev51Tableau<Real>(),
                                     std::move(t_system)) {}
 

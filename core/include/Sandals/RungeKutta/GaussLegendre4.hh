@@ -45,8 +45,8 @@ namespace Sandals {
   class GaussLegendre4Tableau : public Tableau<Real, 2> {
    public:
     using typename Tableau<Real, 2>::Type;
-    using typename Tableau<Real, 2>::Vector;
-    using typename Tableau<Real, 2>::Matrix;
+    using typename Tableau<Real, 2>::VectorS;
+    using typename Tableau<Real, 2>::MatrixS;
 
     /**
      * Class constructor for the Gauss-Legendre order 4 method.
@@ -74,7 +74,7 @@ namespace Sandals {
   template <typename Real, Integer N, Integer M = 0>
   class GaussLegendre4 : public RungeKutta<Real, 2, N, M> {
    public:
-    using System = typename Implicit<Real, N, M>::Pointer; /**< System type. */
+    using SystemPtr = typename Implicit<Real, N, M>::Pointer;
 
     /**
      * Class constructor for a Runge-Kutta solver given a Tableau reference.
@@ -86,7 +86,7 @@ namespace Sandals {
      * Class constructor for a Runge-Kutta solver given a Tableau reference.
      * \param[in] t_system The system reference.
      */
-    GaussLegendre4(System t_system)
+    GaussLegendre4(SystemPtr t_system)
         : RungeKutta<Real, 2, N, M>(GaussLegendre4Tableau<Real>(),
                                     std::move(t_system)) {}
 

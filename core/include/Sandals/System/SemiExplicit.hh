@@ -43,27 +43,16 @@ namespace Sandals {
   template <typename Real, Integer N, Integer M = 0>
   class SemiExplicit : public Explicit<Real, N, M> {
    public:
-    using Pointer =
-        std::unique_ptr<SemiExplicit<Real, N, M>>; /**< Unique pointer to a
-                                                      semi-explicit ODE/DAE
-                                                      system. */
-    using VectorF =
-        typename Explicit<Real, N, M>::VectorF; /**< Templetized vector type. */
-    using MatrixJF = typename Explicit<Real, N, M>::MatrixJF; /**< Templetized
-                                                                 matrix type. */
-    using MatrixA = typename Explicit<Real, N, M>::MatrixJF;  /**< Templetized
-                                                                 matrix type. */
-    using TensorTA =
-        typename std::array<MatrixJF, N>;       /**< Templetized matrix type. */
-    using VectorB =
-        typename Explicit<Real, N, M>::VectorF; /**< Templetized vector type. */
-    using MatrixJB = typename Explicit<Real, N, M>::MatrixJF; /**< Templetized
-                                                                 vector type. */
-    using Type =
-        typename Explicit<Real, N, M>::Type; /**< System type enumeration. */
+    using VectorF  = typename Explicit<Real, N, M>::VectorF;
+    using MatrixJF = typename Explicit<Real, N, M>::MatrixJF;
+    using MatrixA  = typename Explicit<Real, N, M>::MatrixJF;
+    using TensorTA = typename std::array<MatrixJF, N>;
+    using VectorB  = typename Explicit<Real, N, M>::VectorF;
+    using MatrixJB = typename Explicit<Real, N, M>::MatrixJF;
+    using Type     = typename Explicit<Real, N, M>::Type;
 
    private:
-    mutable Eigen::FullPivLU<MatrixA> m_lu;  /**< LU decomposition. */
+    mutable Eigen::FullPivLU<MatrixA> m_lu; /**< LU decomposition. */
 
    public:
     /**
@@ -310,47 +299,22 @@ namespace Sandals {
   template <typename Real, Integer N, Integer M = 0>
   class SemiExplicitWrapper : public SemiExplicit<Real, N, M> {
    public:
-    using Pointer =
-        std::unique_ptr<SemiExplicitWrapper<Real, N, M>>; /**< Unique pointer to
-                                                             a semi-explicit
-                                                             ODE/DAE system. */
-    using typename SemiExplicit<Real, N, M>::VectorF;  /**< Templetized vector
-                                                          type. */
-    using typename SemiExplicit<Real, N, M>::MatrixA;  /**< Templetized matrix
-                                                          type. */
-    using typename SemiExplicit<Real, N, M>::TensorTA; /**< Templetized matrix
-                                                          type. */
-    using typename SemiExplicit<Real, N, M>::VectorB;  /**< Templetized vector
-                                                          type. */
-    using typename SemiExplicit<Real, N, M>::MatrixJB; /**< Templetized vector
-                                                          type. */
-    using
-        typename SemiExplicit<Real, N, M>::VectorH;  /**< Templetized invariants
-                                                        vector type. */
-    using
-        typename SemiExplicit<Real, N, M>::MatrixJH; /**< Templetized invariants
-                                                        Jacobian type. */
-    using FunctionA  = std::function<MatrixA(
-        const VectorF &,
-        const Real)>; /**< Function type for the mass matrix. */
-    using FunctionTA = std::function<TensorTA(
-        const VectorF &,
-        const Real)>;  /**< Function type for the mass matrix. */
-    using FunctionB  = std::function<VectorB(
-        const VectorF &,
-        const Real)>; /**< Function type for the right-hand-side. */
-    using FunctionJB = std::function<MatrixJB(
-        const VectorF &,
-        const Real)>;  /**< Function type for the right-hand-side Jacobian. */
-    using FunctionH =
-        std::function<VectorH(const VectorF &,
-                              const Real)>; /**< Invariants function type. */
-    using FunctionJH = std::function<MatrixJH(
-        const VectorF &,
-        const Real)>; /**< Jacobian of the invariants function type. */
-    using FunctionID =
-        std::function<bool(const VectorF &,
-                           const Real)>; /**< In-domain function type. */
+    using typename SemiExplicit<Real, N, M>::VectorF;
+    using typename SemiExplicit<Real, N, M>::MatrixA;
+    using typename SemiExplicit<Real, N, M>::TensorTA;
+    using typename SemiExplicit<Real, N, M>::VectorB;
+    using typename SemiExplicit<Real, N, M>::MatrixJB;
+    using typename SemiExplicit<Real, N, M>::VectorH;
+    using typename SemiExplicit<Real, N, M>::MatrixJH;
+
+    using Pointer    = std::unique_ptr<SemiExplicitWrapper<Real, N, M>>;
+    using FunctionA  = std::function<MatrixA(const VectorF &, const Real)>;
+    using FunctionTA = std::function<TensorTA(const VectorF &, const Real)>;
+    using FunctionB  = std::function<VectorB(const VectorF &, const Real)>;
+    using FunctionJB = std::function<MatrixJB(const VectorF &, const Real)>;
+    using FunctionH  = std::function<VectorH(const VectorF &, const Real)>;
+    using FunctionJH = std::function<MatrixJH(const VectorF &, const Real)>;
+    using FunctionID = std::function<bool(const VectorF &, const Real)>;
 
     inline const static FunctionH DefaultH = [](const VectorF &, const Real) {
       return VectorH::Zero();

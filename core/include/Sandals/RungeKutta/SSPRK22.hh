@@ -38,8 +38,8 @@ namespace Sandals {
   class SSPRK22Tableau : public Tableau<Real, 2> {
    public:
     using typename Tableau<Real, 2>::Type;
-    using typename Tableau<Real, 2>::Vector;
-    using typename Tableau<Real, 2>::Matrix;
+    using typename Tableau<Real, 2>::VectorS;
+    using typename Tableau<Real, 2>::MatrixS;
 
     /**
      * Class constructor for the 2-stage strong-stability preserving Runge-Kutta
@@ -69,7 +69,7 @@ namespace Sandals {
   template <typename Real, Integer N, Integer M = 0>
   class SSPRK22 : public RungeKutta<Real, 2, N, M> {
    public:
-    using System = typename Implicit<Real, N, M>::Pointer; /**< System type. */
+    using SystemPtr = typename Implicit<Real, N, M>::Pointer;
 
     /**
      * Class constructor for a 2-stage strong-stability preserving Runge-Kutta
@@ -82,7 +82,7 @@ namespace Sandals {
      * (or Heun) order 2 solver given a Tableau reference.
      * \param[in] t_system The system reference.
      */
-    SSPRK22(System t_system)
+    SSPRK22(SystemPtr t_system)
         : RungeKutta<Real, 2, N, M>(SSPRK22Tableau<Real>(),
                                     std::move(t_system)) {}
 

@@ -42,15 +42,10 @@ namespace Sandals {
   template <typename Real, Integer N, Integer M = 0>
   class Explicit : public Implicit<Real, N, M> {
    public:
-    using Pointer =
-        std::unique_ptr<Explicit<Real, N, M>>;  /**< Unique pointer to an
-                                                   explicit ODE system. */
-    using VectorF =
-        typename Implicit<Real, N, M>::VectorF; /**< Templetized vector type. */
-    using MatrixJF = typename Implicit<Real, N, M>::MatrixJF; /**< Templetized
-                                                                 matrix type. */
-    using Type =
-        typename Implicit<Real, N, M>::Type; /**< System type enumeration. */
+    using Pointer = std::unique_ptr<Explicit<Real, N, M>>;
+    using typename Implicit<Real, N, M>::VectorF;
+    using typename Implicit<Real, N, M>::MatrixJF;
+    using typename Implicit<Real, N, M>::Type;
 
    protected:
     /**
@@ -279,32 +274,17 @@ namespace Sandals {
   template <typename Real, Integer N, Integer M = 0>
   class ExplicitWrapper : public Explicit<Real, N, M> {
    public:
-    using Pointer =
-        std::unique_ptr<ExplicitWrapper<Real, N, M>>; /**< Unique pointer to an
-                                                         explicit ODE system. */
-    using
-        typename Explicit<Real, N, M>::VectorF; /**< Templetized vector type. */
-    using typename Explicit<Real, N, M>::MatrixJF; /**< Templetized matrix type.
-                                                    */
-    using
-        typename Explicit<Real, N, M>::VectorH; /**< Templetized vector type. */
-    using typename Explicit<Real, N, M>::MatrixJH; /**< Templetized matrix type.
-                                                    */
-    using FunctionF  = std::function<VectorF(
-        const VectorF &,
-        const Real)>; /**< Explicit ODE system function type. */
-    using FunctionJF = std::function<MatrixJF(
-        const VectorF &,
-        const Real)>; /**< Jacobian of the ODE system function function type. */
-    using FunctionH =
-        std::function<VectorH(const VectorF &,
-                              const Real)>; /**< Invariants function type. */
-    using FunctionJH = std::function<MatrixJH(
-        const VectorF &,
-        const Real)>; /**< Jacobian of the invariants function type. */
-    using FunctionID =
-        std::function<bool(const VectorF &,
-                           const Real)>; /**< In-domain function type. */
+    using typename Explicit<Real, N, M>::VectorF;
+    using typename Explicit<Real, N, M>::MatrixJF;
+    using typename Explicit<Real, N, M>::VectorH;
+    using typename Explicit<Real, N, M>::MatrixJH;
+
+    using Pointer    = std::unique_ptr<ExplicitWrapper<Real, N, M>>;
+    using FunctionF  = std::function<VectorF(const VectorF &, const Real)>;
+    using FunctionJF = std::function<MatrixJF(const VectorF &, const Real)>;
+    using FunctionH  = std::function<VectorH(const VectorF &, const Real)>;
+    using FunctionJH = std::function<MatrixJH(const VectorF &, const Real)>;
+    using FunctionID = std::function<bool(const VectorF &, const Real)>;
 
     inline const static FunctionH DefaultH = [](const VectorF &, const Real) {
       return VectorH::Zero();

@@ -36,8 +36,8 @@ namespace Sandals {
   class RadauIIA3Tableau : public Tableau<Real, 2> {
    public:
     using typename Tableau<Real, 2>::Type;
-    using typename Tableau<Real, 2>::Vector;
-    using typename Tableau<Real, 2>::Matrix;
+    using typename Tableau<Real, 2>::VectorS;
+    using typename Tableau<Real, 2>::MatrixS;
 
     /**
      * Class constructor for the Radau IIA order 3 method.
@@ -64,7 +64,7 @@ namespace Sandals {
   template <typename Real, Integer N, Integer M = 0>
   class RadauIIA3 : public RungeKutta<Real, 2, N, M> {
    public:
-    using System = typename Implicit<Real, N, M>::Pointer; /**< System type. */
+    using SystemPtr = typename Implicit<Real, N, M>::Pointer;
 
     /**
      * Class constructor for a Radau IIA order 3 solver given a Tableau
@@ -77,7 +77,7 @@ namespace Sandals {
      * reference.
      * \param[in] t_system The system reference.
      */
-    RadauIIA3(System t_system)
+    RadauIIA3(SystemPtr t_system)
         : RungeKutta<Real, 2, N, M>(RadauIIA3Tableau<Real>(),
                                     std::move(t_system)) {}
 
