@@ -10,8 +10,8 @@
 
 #pragma once
 
-#ifndef SANDALS_GAUSSLEGENDRE4_HH
-#define SANDALS_GAUSSLEGENDRE4_HH
+#ifndef SANDALS_RUNGE_KUTTA_GAUSSLEGENDRE4_HH
+#define SANDALS_RUNGE_KUTTA_GAUSSLEGENDRE4_HH
 
 #include <Sandals.hh>
 #include <Sandals/RungeKutta.hh>
@@ -94,4 +94,4 @@ namespace Sandals {
 
 }  // namespace Sandals
 
-#endif  // SANDALS_GAUSSLEGENDRE4_HH
+#endif  // SANDALS_RUNGE_KUTTA_GAUSSLEGENDRE4_HH

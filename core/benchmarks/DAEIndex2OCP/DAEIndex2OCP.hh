@@ -28,6 +28,7 @@ class DAEIndex2OCPindex2 : public Implicit<Real, 8, 0> {
   using typename Implicit<Real, 8, 0>::MatrixJF;
   using typename Implicit<Real, 8, 0>::VectorH;
   using typename Implicit<Real, 8, 0>::MatrixJH;
+  using typename Implicit<Real, 8, 0>::TensorTH;
 
  private:
   Real m_g{9.81};
@@ -94,19 +95,6 @@ class DAEIndex2OCPindex2 : public Implicit<Real, 8, 0> {
     JF_x_dot(7, 7) = 1;
     return JF_x_dot;
   }
-
-  VectorH h(const VectorF & /*x*/, const Real /*t*/) const override {
-    return VectorH::Zero();
-  }
-
-  MatrixJH Jh_x(const VectorF & /*x*/, const Real /*t*/) const override {
-    return MatrixJH::Zero();
-  }
-
-  bool in_domain(const VectorF & /*x*/, const Real /*t*/) const override {
-    return true;
-  }
-
 };  // DAEIndex2OCPindex2
 
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -120,6 +108,7 @@ class DAEIndex2OCPindex0 : public Implicit<Real, 8, 2> {
   using typename Implicit<Real, 8, 2>::MatrixJF;
   using typename Implicit<Real, 8, 2>::VectorH;
   using typename Implicit<Real, 8, 2>::MatrixJH;
+  using typename Implicit<Real, 8, 2>::TensorTH;
 
  public:
   DAEIndex2OCPindex0() : Implicit<Real, 8, 2>("DAEIndex2OCPindex0") {}
@@ -189,10 +178,13 @@ class DAEIndex2OCPindex0 : public Implicit<Real, 8, 2> {
     return Jh_x;
   }
 
-  bool in_domain(const VectorF & /*x*/, const Real /*t*/) const override {
-    return true;
+  TensorTH Th_x(const VectorF & /*x*/, const Real /*t*/) const override {
+    TensorTH Th_x;
+    for (MatrixJH &m : Th_x) {
+      m.setZero();
+    }
+    return Th_x;
   }
-
 };  // DAEIndex2OCPindex0
 
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

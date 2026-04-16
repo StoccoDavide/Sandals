@@ -61,18 +61,6 @@ class Shampine1Explicit : public Explicit<Real, 5, 0> {
     Jf_x(4, 4) = -100.0;
     return Jf_x;
   }
-
-  VectorH h(const VectorF & /*x*/, const Real /*t*/) const override {
-    return VectorH::Zero();
-  }
-
-  MatrixJH Jh_x(const VectorF & /*x*/, const Real /*t*/) const override {
-    return MatrixJH::Zero();
-  }
-
-  bool in_domain(const VectorF & /*x*/, const Real /*t*/) const override {
-    return true;
-  }
 };
 
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -128,18 +116,6 @@ class Shampine1Implicit : public Implicit<Real, 5, 0> {
                     const Real /*t*/) const override {
     return MatrixJF::Identity();
   }
-
-  VectorH h(const VectorF & /*x*/, const Real /*t*/) const override {
-    return VectorH::Zero();
-  }
-
-  MatrixJH Jh_x(const VectorF & /*x*/, const Real /*t*/) const override {
-    return MatrixJH::Zero();
-  }
-
-  bool in_domain(const VectorF & /*x*/, const Real /*t*/) const override {
-    return true;
-  }
 };
 
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -147,13 +123,13 @@ class Shampine1Implicit : public Implicit<Real, 5, 0> {
 template <typename Real = double>
 class Shampine1SemiExplicit : public SemiExplicit<Real, 5, 0> {
  public:
-  using VectorF  = typename SemiExplicit<Real, 5, 0>::VectorF;
-  using MatrixA  = typename SemiExplicit<Real, 5, 0>::MatrixA;
-  using TensorTA = typename SemiExplicit<Real, 5, 0>::TensorTA;
-  using VectorB  = typename SemiExplicit<Real, 5, 0>::VectorB;
-  using MatrixJB = typename SemiExplicit<Real, 5, 0>::MatrixJB;
-  using VectorH  = typename SemiExplicit<Real, 5, 0>::VectorH;
-  using MatrixJH = typename SemiExplicit<Real, 5, 0>::MatrixJH;
+  using typename SemiExplicit<Real, 5, 0>::VectorF;
+  using typename SemiExplicit<Real, 5, 0>::MatrixA;
+  using typename SemiExplicit<Real, 5, 0>::TensorTA;
+  using typename SemiExplicit<Real, 5, 0>::VectorB;
+  using typename SemiExplicit<Real, 5, 0>::MatrixJB;
+  using typename SemiExplicit<Real, 5, 0>::VectorH;
+  using typename SemiExplicit<Real, 5, 0>::MatrixJH;
 
   Shampine1SemiExplicit() : SemiExplicit<Real, 5, 0>("Shampine1SemiExplicit") {}
 
@@ -199,18 +175,6 @@ class Shampine1SemiExplicit : public SemiExplicit<Real, 5, 0> {
     Jb_x(4, 2) = 100.0;
     Jb_x(4, 4) = -100.0;
     return Jb_x;
-  }
-
-  VectorH h(const VectorF & /*x*/, const Real /*t*/) const override {
-    return VectorH::Zero();
-  }
-
-  MatrixJH Jh_x(const VectorF & /*x*/, const Real /*t*/) const override {
-    return MatrixJH::Zero();
-  }
-
-  bool in_domain(const VectorF & /*x*/, const Real /*t*/) const override {
-    return true;
   }
 };
 

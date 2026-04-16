@@ -105,18 +105,6 @@ class BangBangOCPImplicit : public Implicit<Real, 6, 0> {
     JF_x_dot(5, 5) = -2 * (-x[2] * x[2] / 2 + 2 * x[2]) / x[2] / (-4 + x[2]);
     return JF_x_dot;
   }
-
-  VectorH h(const VectorF & /*x*/, const Real /*t*/) const override {
-    return VectorH::Zero();
-  }
-
-  MatrixJH Jh_x(const VectorF & /*x*/, const Real /*t*/) const override {
-    return MatrixJH::Zero();
-  }
-
-  bool in_domain(const VectorF & /*x*/, const Real /*t*/) const override {
-    return true;
-  }
 };
 
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

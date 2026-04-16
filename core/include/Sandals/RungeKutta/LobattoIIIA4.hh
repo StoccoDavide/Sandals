@@ -8,8 +8,8 @@
  * davide.stocco@unitn.it                         enrico.bertolazzi@unitn.it *
 \* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-#ifndef SANDALS_LOBATTOIIIA4_HH
-#define SANDALS_LOBATTOIIIA4_HH
+#ifndef SANDALS_RUNGE_KUTTA_LOBATTOIIIA4_HH
+#define SANDALS_RUNGE_KUTTA_LOBATTOIIIA4_HH
 
 #include <Sandals.hh>
 #include <Sandals/RungeKutta.hh>
@@ -85,4 +85,4 @@ namespace Sandals {
 
 }  // namespace Sandals
 
-#endif  // SANDALS_LOBATTOIIIA4_HH
+#endif  // SANDALS_RUNGE_KUTTA_LOBATTOIIIA4_HH

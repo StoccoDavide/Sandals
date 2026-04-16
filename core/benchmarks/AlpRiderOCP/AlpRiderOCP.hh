@@ -455,18 +455,6 @@ class AlpRiderOCPImplicit : public Implicit<Real, 8, 0> {
                     const Real /*t*/) const override {
     return MatrixJF::Identity();
   }
-
-  VectorH h(const VectorF & /*x*/, const Real /*t*/) const override {
-    return VectorH::Zero();
-  }
-
-  MatrixJH Jh_x(const VectorF & /*x*/, const Real /*t*/) const override {
-    return MatrixJH::Zero();
-  }
-
-  bool in_domain(const VectorF & /*x*/, const Real /*t*/) const override {
-    return true;
-  }
 };
 
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

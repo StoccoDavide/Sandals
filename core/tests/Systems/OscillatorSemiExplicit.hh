@@ -19,15 +19,16 @@ using namespace Sandals;
 template <typename Real = double>
 class OscillatorSemiExplicit : public SemiExplicit<Real, 2, 1> {
  public:
-  using VectorF  = typename SemiExplicit<Real, 2, 1>::VectorF;
-  using MatrixA  = typename SemiExplicit<Real, 2, 1>::MatrixA;
-  using TensorTA = typename SemiExplicit<Real, 2, 1>::TensorTA;
-  using VectorB  = typename SemiExplicit<Real, 2, 1>::VectorB;
-  using MatrixJB = typename SemiExplicit<Real, 2, 1>::MatrixJB;
-  using VectorH  = typename SemiExplicit<Real, 2, 1>::VectorH;
-  using MatrixJH = typename SemiExplicit<Real, 2, 1>::MatrixJH;
-  using VectorX  = Eigen::Vector<Real, Eigen::Dynamic>;
-  using MatrixX  = Eigen::Matrix<Real, 2, Eigen::Dynamic>;
+  using typename SemiExplicit<Real, 2, 1>::VectorF;
+  using typename SemiExplicit<Real, 2, 1>::MatrixA;
+  using typename SemiExplicit<Real, 2, 1>::TensorTA;
+  using typename SemiExplicit<Real, 2, 1>::VectorB;
+  using typename SemiExplicit<Real, 2, 1>::MatrixJB;
+  using typename SemiExplicit<Real, 2, 1>::VectorH;
+  using typename SemiExplicit<Real, 2, 1>::MatrixJH;
+  using typename SemiExplicit<Real, 2, 1>::TensorTH;
+  using VectorX = Eigen::Vector<Real, Eigen::Dynamic>;
+  using MatrixX = Eigen::Matrix<Real, 2, Eigen::Dynamic>;
 
  private:
   Real m_m{1.0};  // Mass (kg)
@@ -78,8 +79,14 @@ class OscillatorSemiExplicit : public SemiExplicit<Real, 2, 1> {
     return Jh_x;
   }
 
-  bool in_domain(const VectorF & /*x*/, const Real /*t*/) const override {
-    return true;
+  TensorTH Th_x(const VectorF & /*x*/, const Real /*t*/) const override {
+    TensorTH Th_x;
+    for (MatrixJH &m : Th_x) {
+      m.setZero();
+    }
+    Th_x[0](0, 0) = this->m_k;
+    Th_x[1](0, 1) = this->m_m;
+    return Th_x;
   }
 
   VectorF exact_solution(Real t) const {

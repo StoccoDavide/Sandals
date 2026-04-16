@@ -17,15 +17,6 @@
 
 namespace Sandals {
 
-  /*\
-   |   ____        _       _   _
-   |  / ___|  ___ | |_   _| |_(_) ___  _ __
-   |  \___ \ / _ \| | | | | __| |/ _ \| '_ \
-   |   ___) | (_) | | |_| | |_| | (_) | | | |
-   |  |____/ \___/|_|\__,_|\__|_|\___/|_| |_|
-   |
-  \*/
-
   /**
    * \brief Class container for the numerical solution of a system of ODEs/DAEs.
    *
@@ -328,7 +319,8 @@ namespace Sandals {
       }
       return h_map;
     }
-  };
+
+  };  // struct Solution
 
 }  // namespace Sandals
 

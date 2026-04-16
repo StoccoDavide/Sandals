@@ -10,8 +10,8 @@
 
 #pragma once
 
-#ifndef TESTS_PROBLEMS_HYPERSENSITIVE1_HH
-#define TESTS_PROBLEMS_HYPERSENSITIVE1_HH
+#ifndef TESTS_PROBLEMS_FALKNERSKAN_HH
+#define TESTS_PROBLEMS_FALKNERSKAN_HH
 
 #include "Sandals/System/BVP.hh"
 #include "Sandals/System/Explicit.hh"
@@ -23,64 +23,75 @@ using namespace Sandals;
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 template <typename Real = double>
-class Hypersensitive1Explicit : public Explicit<Real, 2, 0> {
+class FalknerSkanExplicit : public Explicit<Real, 3, 0> {
  public:
-  using typename Explicit<Real, 2, 0>::VectorF;
-  using typename Explicit<Real, 2, 0>::MatrixJF;
-  using typename Explicit<Real, 2, 0>::VectorH;
-  using typename Explicit<Real, 2, 0>::MatrixJH;
+  using typename Explicit<Real, 3, 0>::VectorF;
+  using typename Explicit<Real, 3, 0>::MatrixJF;
+  using typename Explicit<Real, 3, 0>::VectorH;
+  using typename Explicit<Real, 3, 0>::MatrixJH;
 
-  Hypersensitive1Explicit() : Explicit<Real, 2, 0>("Hypersensitive1Explicit") {}
+ private:
+  Real m_beta{0.5};
 
-  ~Hypersensitive1Explicit() {}
+ public:
+  FalknerSkanExplicit() : Explicit<Real, 3, 0>("FalknerSkanExplicit") {}
+
+  ~FalknerSkanExplicit() {}
+
+  void beta(const Real beta) {
+    this->m_beta = beta;
+  }
+
+  Real beta() const {
+    return this->m_beta;
+  }
 
   VectorF f(const VectorF &x, const Real /*t*/) const override {
     VectorF f;
-    f << -x(0) * x(0) * x(0) - 0.5 * x(1),
-        -2.0 * x(0) + 3.0 * x(0) * x(0) * x(1);
+    f << x(1), x(2), -x(0) * x(2) - this->m_beta * (1.0 - x(1) * x(1));
     return f;
   }
 
   MatrixJF Jf_x(const VectorF &x, const Real /*t*/) const override {
     MatrixJF Jf_x;
-    Jf_x << -3.0 * x(0) * x(0), -0.5, -2.0 + 6.0 * x(0) * x(1),
-        3.0 * x(0) * x(0);
+    Jf_x << 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -x(2), 2.0 * this->m_beta * x(1),
+        -x(0);
     return Jf_x;
-  }
-
-  VectorH h(const VectorF & /*x*/, const Real /*t*/) const override {
-    return VectorH::Zero();
-  }
-
-  MatrixJH Jh_x(const VectorF & /*x*/, const Real /*t*/) const override {
-    return MatrixJH::Zero();
-  }
-
-  bool in_domain(const VectorF & /*x*/, const Real /*t*/) const override {
-    return true;
   }
 };
 
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 template <typename Real = double>
-class Hypersensitive1Implicit : public Implicit<Real, 2, 0> {
+class FalknerSkanImplicit : public Implicit<Real, 3, 0> {
  public:
-  using typename Implicit<Real, 2, 0>::VectorF;
-  using typename Implicit<Real, 2, 0>::MatrixJF;
-  using typename Implicit<Real, 2, 0>::VectorH;
-  using typename Implicit<Real, 2, 0>::MatrixJH;
+  using typename Implicit<Real, 3, 0>::VectorF;
+  using typename Implicit<Real, 3, 0>::MatrixJF;
+  using typename Implicit<Real, 3, 0>::VectorH;
+  using typename Implicit<Real, 3, 0>::MatrixJH;
 
-  Hypersensitive1Implicit() : Implicit<Real, 2, 0>("Hypersensitive1Implicit") {}
+ private:
+  Real m_beta{0.5};
 
-  ~Hypersensitive1Implicit() {}
+ public:
+  FalknerSkanImplicit() : Implicit<Real, 3, 0>("FalknerSkanImplicit") {}
+
+  ~FalknerSkanImplicit() {}
+
+  void beta(const Real beta) {
+    this->m_beta = beta;
+  }
+
+  Real beta() const {
+    return this->m_beta;
+  }
 
   VectorF F(const VectorF &x,
             const VectorF &x_dot,
             const Real /*t*/) const override {
     VectorF F;
-    F << x_dot(0) + x(0) * x(0) * x(0) + 0.5 * x(1),
-        x_dot(1) + 2.0 * x(0) - 3.0 * x(0) * x(0) * x(1);
+    F << x_dot(0) - x(1), x_dot(1) - x(2),
+        x_dot(2) + x(0) * x(2) + this->m_beta * (1.0 - x(1) * x(1));
     return F;
   }
 
@@ -88,7 +99,8 @@ class Hypersensitive1Implicit : public Implicit<Real, 2, 0> {
                 const VectorF & /*x_dot*/,
                 const Real /*t*/) const override {
     MatrixJF JF_x(MatrixJF::Zero());
-    JF_x << 3.0 * x(0) * x(0), 0.5, 2.0 - 6.0 * x(0) * x(1), -3.0 * x(0) * x(0);
+    JF_x << 0.0, -1.0, 0.0, 0.0, 0.0, -1.0, x(2), -2.0 * this->m_beta * x(1),
+        x(0);
     return JF_x;
   }
 
@@ -97,37 +109,37 @@ class Hypersensitive1Implicit : public Implicit<Real, 2, 0> {
                     const Real /*t*/) const override {
     return MatrixJF::Identity();
   }
-
-  VectorH h(const VectorF & /*x*/, const Real /*t*/) const override {
-    return VectorH::Zero();
-  }
-
-  MatrixJH Jh_x(const VectorF & /*x*/, const Real /*t*/) const override {
-    return MatrixJH::Zero();
-  }
-
-  bool in_domain(const VectorF & /*x*/, const Real /*t*/) const override {
-    return true;
-  }
 };
 
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 template <typename Real = double>
-class Hypersensitive1SemiExplicit : public SemiExplicit<Real, 2, 0> {
+class FalknerSkanSemiExplicit : public SemiExplicit<Real, 3, 0> {
  public:
-  using VectorF  = typename SemiExplicit<Real, 2, 0>::VectorF;
-  using MatrixA  = typename SemiExplicit<Real, 2, 0>::MatrixA;
-  using TensorTA = typename SemiExplicit<Real, 2, 0>::TensorTA;
-  using VectorB  = typename SemiExplicit<Real, 2, 0>::VectorB;
-  using MatrixJB = typename SemiExplicit<Real, 2, 0>::MatrixJB;
-  using VectorH  = typename SemiExplicit<Real, 2, 0>::VectorH;
-  using MatrixJH = typename SemiExplicit<Real, 2, 0>::MatrixJH;
+  using typename SemiExplicit<Real, 3, 0>::VectorF;
+  using typename SemiExplicit<Real, 3, 0>::MatrixA;
+  using typename SemiExplicit<Real, 3, 0>::TensorTA;
+  using typename SemiExplicit<Real, 3, 0>::VectorB;
+  using typename SemiExplicit<Real, 3, 0>::MatrixJB;
+  using typename SemiExplicit<Real, 3, 0>::VectorH;
+  using typename SemiExplicit<Real, 3, 0>::MatrixJH;
 
-  Hypersensitive1SemiExplicit()
-      : SemiExplicit<Real, 2, 0>("Hypersensitive1SemiExplicit") {}
+ private:
+  Real m_beta{0.5};
 
-  ~Hypersensitive1SemiExplicit() {}
+ public:
+  FalknerSkanSemiExplicit()
+      : SemiExplicit<Real, 3, 0>("FalknerSkanSemiExplicit") {}
+
+  ~FalknerSkanSemiExplicit() {}
+
+  void beta(const Real beta) {
+    this->m_beta = beta;
+  }
+
+  Real beta() const {
+    return this->m_beta;
+  }
 
   MatrixA A(const VectorF & /*x*/, const Real /*t*/) const override {
     return MatrixA::Identity();
@@ -137,64 +149,60 @@ class Hypersensitive1SemiExplicit : public SemiExplicit<Real, 2, 0> {
     TensorTA TA_x;
     TA_x[0].setZero();
     TA_x[1].setZero();
+    TA_x[2].setZero();
     return TA_x;
   }
 
   VectorB b(const VectorF &x, const Real /*t*/) const override {
     VectorB b;
-    b << -x(0) * x(0) * x(0) - 0.5 * x(1),
-        -2.0 * x(0) + 3.0 * x(0) * x(0) * x(1);
+    b << x(1), x(2), -x(0) * x(2) - this->m_beta * (1.0 - x(1) * x(1));
     return b;
   }
 
   MatrixJB Jb_x(const VectorF &x, const Real /*t*/) const override {
     MatrixJB Jb_x;
-    Jb_x << -3.0 * x(0) * x(0), -0.5, -2.0 + 6.0 * x(0) * x(1),
-        3.0 * x(0) * x(0);
+    Jb_x << 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, -x(2), 2.0 * this->m_beta * x(1),
+        -x(0);
     return Jb_x;
-  }
-
-  VectorH h(const VectorF & /*x*/, const Real /*t*/) const override {
-    return VectorH::Zero();
-  }
-
-  MatrixJH Jh_x(const VectorF & /*x*/, const Real /*t*/) const override {
-    return MatrixJH::Zero();
-  }
-
-  bool in_domain(const VectorF & /*x*/, const Real /*t*/) const override {
-    return true;
   }
 };
 
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 template <typename Real, typename System, typename Integrator>
-class Hypersensitive1Problem : public BVP<Real, 2, 0, Integrator> {
+class FalknerSkanProblem : public BVP<Real, 3, 0, Integrator> {
  public:
-  using typename BVP<Real, 2, 0, Integrator>::VectorF;
-  using typename BVP<Real, 2, 0, Integrator>::MatrixJF;
+  using typename BVP<Real, 3, 0, Integrator>::VectorF;
+  using typename BVP<Real, 3, 0, Integrator>::MatrixJF;
   using VectorX = Eigen::Vector<Real, Eigen::Dynamic>;
-  using MatrixX = Eigen::Matrix<Real, 2, Eigen::Dynamic>;
+  using MatrixX = Eigen::Matrix<Real, 3, Eigen::Dynamic>;
 
-  Hypersensitive1Problem()
-      : BVP<Real, 2, 0, Integrator>("Hypersensitive1Problem",
+  FalknerSkanProblem()
+      : BVP<Real, 3, 0, Integrator>("FalknerSkanProblem",
                                     std::make_unique<System>(),
                                     std::make_unique<Integrator>()) {}
 
-  ~Hypersensitive1Problem() {}
+  ~FalknerSkanProblem() {}
 
   static Real time_start() {
     return 0.0;
   }
 
   static Real time_end() {
-    return 1.0;
+    return 3.0;
+  }
+
+  void beta(const Real beta) {
+    static_cast<System *>(this->integrator()->system())->beta(beta);
+  }
+
+  Real beta() const {
+    return static_cast<const System *>(this->integrator()->system())->beta();
   }
 
   VectorF b(const VectorF &x_ini, const VectorF &x_end) const override {
     VectorF b;
-    b << x_ini(0) - 1.0, x_end(0) - 1.5;
+    b << x_ini(0), x_ini(1), x_end(1) - 1.0;
     return b;
   }
 
@@ -202,13 +210,14 @@ class Hypersensitive1Problem : public BVP<Real, 2, 0, Integrator> {
                     const VectorF & /*x_end*/) const override {
     MatrixJF Jb_x_ini(MatrixJF::Zero());
     Jb_x_ini(0, 0) = 1.0;
+    Jb_x_ini(1, 1) = 1.0;
     return Jb_x_ini;
   }
 
   MatrixJF Jb_x_end(const VectorF & /*x_ini*/,
                     const VectorF & /*x_end*/) const override {
     MatrixJF Jb_x_end(MatrixJF::Zero());
-    Jb_x_end(1, 0) = 1.0;
+    Jb_x_end(2, 1) = 1.0;
     return Jb_x_end;
   }
 
@@ -217,7 +226,7 @@ class Hypersensitive1Problem : public BVP<Real, 2, 0, Integrator> {
   }
 
   MatrixX exact_solution(const VectorX &t) const {
-    return MatrixX::Zero(2, t.size());
+    return MatrixX::Zero(3, t.size());
   }
 
   VectorF guess(const Real /*t*/) {
@@ -225,10 +234,10 @@ class Hypersensitive1Problem : public BVP<Real, 2, 0, Integrator> {
   }
 
   MatrixX guess(const VectorX &t) {
-    return MatrixX::Ones(2, t.size());
+    return MatrixX::Ones(3, t.size());
   }
 };
 
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-#endif  // TESTS_PROBLEMS_HYPERSENSITIVE1_HH
+#endif  // TESTS_PROBLEMS_FALKNERSKAN_HH

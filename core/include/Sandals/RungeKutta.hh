@@ -28,15 +28,6 @@
 
 namespace Sandals {
 
-  /*\
-   |   ____                         _  __     _   _
-   |  |  _ \ _   _ _ __   __ _  ___| |/ /   _| |_| |_ __ _
-   |  | |_) | | | | '_ \ / _` |/ _ \ ' / | | | __| __/ _` |
-   |  |  _ <| |_| | | | | (_| |  __/ . \ |_| | |_| || (_| |
-   |  |_| \_\\__,_|_| |_|\__, |\___|_|\_\__,_|\__|\__\__,_|
-   |                     |___/
-  \*/
-
   /**
    * \brief Class container for the generic \em implicit, \em explicit, and <em>
    * diagonally implicit
@@ -52,8 +43,7 @@ namespace Sandals {
   template <typename Real, Integer S, Integer N, Integer M = 0>
   class RungeKutta {
    public:
-    using VectorX  = Eigen::Vector<Real, Eigen::Dynamic>;
-    using MatrixJX = Eigen::Matrix<Real, N, N>;
+    using VectorX = Eigen::Vector<Real, Eigen::Dynamic>;
 
    private:
     using VectorS  = typename Tableau<Real, S>::VectorS;
@@ -62,6 +52,7 @@ namespace Sandals {
     using MatrixJF = typename Implicit<Real, N, M>::MatrixJF;
     using VectorH  = typename Implicit<Real, N, M>::VectorH;
     using MatrixJH = typename Implicit<Real, N, M>::MatrixJH;
+    using TensorTH = typename Implicit<Real, N, M>::TensorTH;
 
     using MatrixX  = Eigen::Matrix<Real, Eigen::Dynamic, Eigen::Dynamic>;
     using VectorK  = Eigen::Vector<Real, N * S>;
@@ -314,6 +305,8 @@ namespace Sandals {
      * \param[in] h The system's invariants.
      * \param[in] Jh_x The Jacobian of the system's invariants with respect to
      * the states.
+     * \param[in] Th_x The tensor of the system's invariants with respect to the
+     * states.
      * \param[in] in_domain The in-domain function.
      */
     void implicit_system(
@@ -324,6 +317,8 @@ namespace Sandals {
             ImplicitWrapper<Real, N, M>::DefaultH,
         typename ImplicitWrapper<Real, N, M>::FunctionJH Jh_x =
             ImplicitWrapper<Real, N, M>::DefaultJH,
+        typename ImplicitWrapper<Real, N, M>::FunctionTH Th_x =
+            ImplicitWrapper<Real, N, M>::DefaultTH,
         typename ImplicitWrapper<Real, N, M>::FunctionID in_domain =
             ImplicitWrapper<Real, N, M>::DefaultID) {
       this->m_system = std::make_unique<ImplicitWrapper<Real, N, M>>(F,
@@ -331,6 +326,7 @@ namespace Sandals {
                                                                      JF_x_dot,
                                                                      h,
                                                                      Jh_x,
+                                                                     Th_x,
                                                                      in_domain);
     }
 
@@ -345,6 +341,8 @@ namespace Sandals {
      * \param[in] h The system's invariants.
      * \param[in] Jh_x The Jacobian of the system's invariants with respect to
      * the states.
+     * \param[in] Th_x The tensor of the system's invariants with respect to the
+     * states.
      * \param[in] in_domain The in-domain function.
      */
     void implicit_system(
@@ -356,6 +354,8 @@ namespace Sandals {
             ImplicitWrapper<Real, N, M>::DefaultH,
         typename ImplicitWrapper<Real, N, M>::FunctionJH Jh_x =
             ImplicitWrapper<Real, N, M>::DefaultJH,
+        typename ImplicitWrapper<Real, N, M>::FunctionTH Th_x =
+            ImplicitWrapper<Real, N, M>::DefaultTH,
         typename ImplicitWrapper<Real, N, M>::FunctionID in_domain =
             ImplicitWrapper<Real, N, M>::DefaultID) {
       this->m_system = std::make_unique<ImplicitWrapper<Real, N, M>>(name,
@@ -364,6 +364,7 @@ namespace Sandals {
                                                                      JF_x_dot,
                                                                      h,
                                                                      Jh_x,
+                                                                     Th_x,
                                                                      in_domain);
     }
 
@@ -375,6 +376,8 @@ namespace Sandals {
      * \param[in] h The system's invariants.
      * \param[in] Jh_x The Jacobian of the system's invariants with respect to
      * the states.
+     * \param[in] Th_x The tensor of the system's invariants with respect to the
+     * states.
      * \param[in] in_domain The in-domain function.
      */
     void explicit_system(
@@ -384,12 +387,15 @@ namespace Sandals {
             ExplicitWrapper<Real, N, M>::DefaultH,
         typename ExplicitWrapper<Real, N, M>::FunctionJH Jh_x =
             ExplicitWrapper<Real, N, M>::DefaultJH,
+        typename ExplicitWrapper<Real, N, M>::FunctionTH Th_x =
+            ExplicitWrapper<Real, N, M>::DefaultTH,
         typename ExplicitWrapper<Real, N, M>::FunctionID in_domain =
             ExplicitWrapper<Real, N, M>::DefaultID) {
       this->m_system = std::make_unique<ExplicitWrapper<Real, N, M>>(f,
                                                                      Jf_x,
                                                                      h,
                                                                      Jh_x,
+                                                                     Th_x,
                                                                      in_domain);
     }
 
@@ -402,6 +408,8 @@ namespace Sandals {
      * \param[in] h The system's invariants.
      * \param[in] Jh_x The Jacobian of the system's invariants with respect to
      * the states.
+     * \param[in] Th_x The tensor of the system's invariants with respect to the
+     * states.
      * \param[in] in_domain The in-domain function.
      */
     void explicit_system(
@@ -412,6 +420,8 @@ namespace Sandals {
             ExplicitWrapper<Real, N, M>::DefaultH,
         typename ExplicitWrapper<Real, N, M>::FunctionJH Jh_x =
             ExplicitWrapper<Real, N, M>::DefaultJH,
+        typename ExplicitWrapper<Real, N, M>::FunctionTH Th_x =
+            ExplicitWrapper<Real, N, M>::DefaultTH,
         typename ExplicitWrapper<Real, N, M>::FunctionID in_domain =
             ExplicitWrapper<Real, N, M>::DefaultID) {
       this->m_system = std::make_unique<ExplicitWrapper<Real, N, M>>(name,
@@ -419,6 +429,7 @@ namespace Sandals {
                                                                      Jf_x,
                                                                      h,
                                                                      Jh_x,
+                                                                     Th_x,
                                                                      in_domain);
     }
 
@@ -429,6 +440,8 @@ namespace Sandals {
      * \param[in] b The system vector function.
      * \param[in] h The invariants function.
      * \param[in] Jh_x The Jacobian of the invariants function.
+     * \param[in] Th_x The tensor of the system's invariants with respect to the
+     * states.
      * \param[in] in_domain The in-domain function.
      */
     void linear_system(typename LinearWrapper<Real, N, M>::FunctionE E,
@@ -438,6 +451,8 @@ namespace Sandals {
                            LinearWrapper<Real, N, M>::DefaultH,
                        typename LinearWrapper<Real, N, M>::FunctionJH Jh_x =
                            LinearWrapper<Real, N, M>::DefaultJH,
+                       typename LinearWrapper<Real, N, M>::FunctionTH Th_x =
+                           LinearWrapper<Real, N, M>::DefaultTH,
                        typename LinearWrapper<Real, N, M>::FunctionID
                            in_domain = LinearWrapper<Real, N, M>::DefaultID) {
       this->m_system = std::make_unique<LinearWrapper<Real, N, M>>(E,
@@ -445,6 +460,7 @@ namespace Sandals {
                                                                    b,
                                                                    h,
                                                                    Jh_x,
+                                                                   Th_x,
                                                                    in_domain);
     }
 
@@ -456,6 +472,8 @@ namespace Sandals {
      * \param[in] b The system vector function.
      * \param[in] h The invariants function.
      * \param[in] Jh_x The Jacobian of the invariants function.
+     * \param[in] Th_x The tensor of the system's invariants with respect to the
+     * states.
      * \param[in] in_domain The in-domain function.
      */
     void linear_system(std::string name,
@@ -466,6 +484,8 @@ namespace Sandals {
                            LinearWrapper<Real, N, M>::DefaultH,
                        typename LinearWrapper<Real, N, M>::FunctionJH Jh_x =
                            LinearWrapper<Real, N, M>::DefaultJH,
+                       typename LinearWrapper<Real, N, M>::FunctionTH Th_x =
+                           LinearWrapper<Real, N, M>::DefaultTH,
                        typename LinearWrapper<Real, N, M>::FunctionID
                            in_domain = LinearWrapper<Real, N, M>::DefaultID) {
       this->m_system = std::make_unique<LinearWrapper<Real, N, M>>(name,
@@ -474,6 +494,7 @@ namespace Sandals {
                                                                    b,
                                                                    h,
                                                                    Jh_x,
+                                                                   Th_x,
                                                                    in_domain);
     }
 
@@ -485,6 +506,8 @@ namespace Sandals {
      * \param[in] Jb_x The function for the right-hand-side Jacobian.
      * \param[in] h The invariants function.
      * \param[in] Jh_x The Jacobian of the invariants function.
+     * \param[in] Th_x The tensor of the system's invariants with respect to the
+     * states.
      * \param[in] in_domain The in-domain function.
      */
     void semi_explicit_system(
@@ -496,6 +519,8 @@ namespace Sandals {
             SemiExplicitWrapper<Real, N, M>::DefaultH,
         typename SemiExplicitWrapper<Real, N, M>::FunctionJH Jh_x =
             SemiExplicitWrapper<Real, N, M>::DefaultJH,
+        typename SemiExplicitWrapper<Real, N, M>::FunctionTH Th_x =
+            SemiExplicitWrapper<Real, N, M>::DefaultTH,
         typename SemiExplicitWrapper<Real, N, M>::FunctionID in_domain =
             SemiExplicitWrapper<Real, N, M>::DefaultID) {
       this->m_system =
@@ -505,6 +530,7 @@ namespace Sandals {
                                                             Jb_x,
                                                             h,
                                                             Jh_x,
+                                                            Th_x,
                                                             in_domain);
     }
 
@@ -517,6 +543,8 @@ namespace Sandals {
      * \param[in] Jb_x The function for the right-hand-side Jacobian.
      * \param[in] h The invariants function.
      * \param[in] Jh_x The Jacobian of the invariants function.
+     * \param[in] Th_x The tensor of the system's invariants with respect to the
+     * states.
      * \param[in] in_domain The in-domain function.
      */
     void semi_explicit_system(
@@ -529,6 +557,8 @@ namespace Sandals {
             SemiExplicitWrapper<Real, N, M>::DefaultH,
         typename SemiExplicitWrapper<Real, N, M>::FunctionJH Jh_x =
             SemiExplicitWrapper<Real, N, M>::DefaultJH,
+        typename SemiExplicitWrapper<Real, N, M>::FunctionTH Th_x =
+            SemiExplicitWrapper<Real, N, M>::DefaultTH,
         typename SemiExplicitWrapper<Real, N, M>::FunctionID in_domain =
             SemiExplicitWrapper<Real, N, M>::DefaultID) {
       this->m_system =
@@ -539,6 +569,7 @@ namespace Sandals {
                                                             Jb_x,
                                                             h,
                                                             Jh_x,
+                                                            Th_x,
                                                             in_domain);
     }
 
@@ -942,15 +973,6 @@ namespace Sandals {
       os << this->info();
     }
 
-    /*\
-     |   _____ ____  _  __
-     |  | ____|  _ \| |/ /
-     |  |  _| | |_) | ' /
-     |  | |___|  _ <| . \
-     |  |_____|_| \_\_|\_\
-     |
-    \*/
-
     /**
      * Compute the new states \f$ \mathbf{x}_{k+1} \f$ at the next advancing
      * step \f$ t_{k+1} = t_k
@@ -1035,7 +1057,7 @@ namespace Sandals {
                                 const Real t,
                                 const Real h,
                                 const MatrixK &K,
-                                MatrixJX &Jx) const {
+                                MatrixJF &Jx) const {
 #define CMD "Sandals::RungeKutta::erk_explicit_propagate(...): "
 
       using Eigen::seqN;
@@ -1090,7 +1112,7 @@ namespace Sandals {
       };
 
       // Compute the Jacobian with finite differences
-      MatrixJX Jx_fd;
+      MatrixJF Jx_fd;
       if (Optimist::FiniteDifferences::Jacobian(fun, x, Jx_fd)) {
         const Real err{(Jx - Jx_fd).norm()};
         SANDALS_ASSERT_WARNING(err < CBRT_EPSILON,
@@ -1291,7 +1313,7 @@ namespace Sandals {
                                 const Real t,
                                 const Real h,
                                 const MatrixK &K,
-                                MatrixJX &Jx) const {
+                                MatrixJF &Jx) const {
 #define CMD "Sandals::RungeKutta::erk_implicit_propagate(...): "
 
       using Eigen::seqN;
@@ -1358,7 +1380,7 @@ namespace Sandals {
       };
 
       // Compute the Jacobian with finite differences
-      MatrixJX Jx_fd;
+      MatrixJF Jx_fd;
       if (Optimist::FiniteDifferences::Jacobian(fun, x, Jx_fd)) {
         const Real err{(Jx - Jx_fd).norm()};
         SANDALS_ASSERT_WARNING(err < CBRT_EPSILON,
@@ -1371,15 +1393,6 @@ namespace Sandals {
 
 #undef CMD
     }
-
-    /*\
-     |   ___ ____  _  __
-     |  |_ _|  _ \| |/ /
-     |   | || |_) | ' /
-     |   | ||  _ <| . \
-     |  |___|_| \_\_|\_\
-     |
-    \*/
 
     /**
      * Compute the residual of system to be solved, which is given by the values
@@ -1609,7 +1622,7 @@ namespace Sandals {
                        const Real t,
                        const Real h,
                        const MatrixK &K,
-                       MatrixJX &Jx) const {
+                       MatrixJF &Jx) const {
 #define CMD "Sandals::RungeKutta::irk_propagate(...): "
 
       using Eigen::seqN;
@@ -1675,7 +1688,7 @@ namespace Sandals {
       };
 
       // Compute the Jacobian with finite differences
-      MatrixJX Jx_fd;
+      MatrixJF Jx_fd;
       if (Optimist::FiniteDifferences::Jacobian(fun, x, Jx_fd)) {
         const Real err{(Jx - Jx_fd).norm()};
         SANDALS_ASSERT_WARNING(err < CBRT_EPSILON,
@@ -1688,15 +1701,6 @@ namespace Sandals {
 
 #undef CMD
     }
-
-    /*\
-     |   ____ ___ ____  _  __
-     |  |  _ \_ _|  _ \| |/ /
-     |  | | | | || |_) | ' /
-     |  | |_| | ||  _ <| . \
-     |  |____/___|_| \_\_|\_\
-     |
-    \*/
 
     /**
      * Compute the residual of system to be solved, which is given by the values
@@ -1888,7 +1892,7 @@ namespace Sandals {
                         const Real t,
                         const Real h,
                         const MatrixK &K,
-                        MatrixJX &Jx) const {
+                        MatrixJF &Jx) const {
 #define CMD "Sandals::RungeKutta::dirk_propagate(...): "
 
       using Eigen::seqN;
@@ -1956,7 +1960,7 @@ namespace Sandals {
       };
 
       // Compute the Jacobian with finite differences
-      MatrixJX Jx_fd;
+      MatrixJF Jx_fd;
       if (Optimist::FiniteDifferences::Jacobian(fun, x, Jx_fd)) {
         const Real err{(Jx - Jx_fd).norm()};
         SANDALS_ASSERT_WARNING(err < CBRT_EPSILON,
@@ -2036,7 +2040,7 @@ namespace Sandals {
                    const Real t,
                    const Real h,
                    const MatrixK &K,
-                   MatrixJX &Jx) const {
+                   MatrixJF &Jx) const {
 #define CMD "Sandals::RungeKutta::propagate(...): "
 
       if (this->is_erk() && (this->m_system->is_explicit() ||
@@ -2082,7 +2086,7 @@ namespace Sandals {
                  Real h_old,
                  VectorF &x_new,
                  Real &h_new,
-                 MatrixJX &Jx) const {
+                 MatrixJF &Jx) const {
 #define CMD "Sandals::RungeKutta::advance(...): "
 
       // Check step size
@@ -2111,7 +2115,7 @@ namespace Sandals {
           if (this->step(x_tmp, t_tmp, h_tmp, x_new, h_new_tmp, K)) {
             // Propagate the derivative of K with respect to x
             if constexpr (Propagate) {
-              MatrixJX Jx_tmp;
+              MatrixJF Jx_tmp;
               if (!this->propagate(x_tmp, t_tmp, h_tmp, K, Jx_tmp)) {
                 SANDALS_WARNING(CMD "in " << this->m_tableau.name
                                           << " solver, at t = " << t_tmp
@@ -2189,11 +2193,15 @@ namespace Sandals {
       // Project intermediate solution on the invariants
       if (this->m_projection) {
         VectorF x_projected;
-        if (this->project(x_new, t_old + h_new, x_projected)) {
+        VectorH lambda;
+        if (this->project(x_new, t_old + h_new, x_projected, lambda)) {
           x_new = x_projected;
           if constexpr (Propagate) {
-            MatrixJX Jx_projected;
-            if (!this->project_propagate(x_new, t_old + h_new, Jx_projected)) {
+            MatrixJF Jx_projected;
+            if (!this->project_propagate(x_new,
+                                         t_old + h_new,
+                                         lambda,
+                                         Jx_projected)) {
               SANDALS_WARNING(CMD "in "
                               << this->m_tableau.name
                               << " solver, at t = " << t_old + h_new
@@ -2233,7 +2241,7 @@ namespace Sandals {
     bool solve(const VectorX &t_mesh,
                const VectorF &ics,
                Solution<Real, N, M> &sol,
-               MatrixJX &Jx) const {
+               MatrixJF &Jx) const {
       using Eigen::placeholders::last;
 
 #define CMD "Sandals::RungeKutta::solve(...): "
@@ -2264,7 +2272,7 @@ namespace Sandals {
       // Update the current step
       Integer step{0};
       VectorF x_old_step(ics), x_new_step(ics);
-      MatrixJX Jx_step;
+      MatrixJF Jx_step;
       Real t_step{t_mesh(0)}, h_step{t_mesh(1) - t_mesh(0)}, h_tmp_step{h_step},
           h_new_step;
       bool mesh_point_bool, saturation_bool;
@@ -2346,7 +2354,7 @@ namespace Sandals {
     bool solve(const VectorX &t_mesh,
                const VectorF &ics,
                Solution<Real, N, M> &sol) const {
-      MatrixJX Jx;  // Dummy variable
+      MatrixJF Jx;  // Dummy variable
       return this->template solve<false>(t_mesh, ics, sol, Jx);
     }
 
@@ -2374,7 +2382,7 @@ namespace Sandals {
     bool adaptive_solve(const VectorX &t_mesh,
                         const VectorF &ics,
                         Solution<Real, N, M> &sol,
-                        MatrixJX &Jx) const {
+                        MatrixJF &Jx) const {
 #define CMD "Sandals::RungeKutta::adaptive_solve(...): "
 
       using Eigen::placeholders::all;
@@ -2432,7 +2440,7 @@ namespace Sandals {
       // Instantiate temporary variables
       Integer step{0};
       VectorF x_old_step(ics), x_new_step(ics);
-      MatrixJX Jx_step;
+      MatrixJF Jx_step;
 
       while (true) {
         // Integrate system
@@ -2507,7 +2515,7 @@ namespace Sandals {
     bool adaptive_solve(const VectorX &t_mesh,
                         const VectorF &ics,
                         Solution<Real, N, M> &sol) const {
-      MatrixJX Jx;  // Dummy variable
+      MatrixJF Jx;  // Dummy variable
       return this->template adaptive_solve<false>(t_mesh, ics, sol, Jx);
     }
 
@@ -2520,13 +2528,19 @@ namespace Sandals {
      * \param[out] x_projected The projected states \f$ \mathbf{x} \f$ closest
      * to the invariants manifold \f$ \mathbf{h} (\mathbf{x}, t) = \mathbf{0}
      * \f$.
+     * \param[out] lambda The Lagrange multipliers associated with the
+     * projection problem.
      * \return True if the solution is successfully projected, false otherwise.
      */
-    bool project(const VectorF &x, const Real t, VectorF &x_projected) const {
+    bool project(const VectorF &x,
+                 const Real t,
+                 VectorF &x_projected,
+                 VectorH &lambda) const {
 #define CMD "Sandals::RungeKutta::project(...): "
 
       // Check if there are any constraints
       x_projected = x;
+      lambda.setZero();
       if constexpr (M > 0) {
         VectorH h;
         MatrixJH Jh_x;
@@ -2570,6 +2584,7 @@ namespace Sandals {
 
           // Update the solution
           x_projected.noalias() += x_step(Eigen::seqN(0, N));
+          lambda = x_step(Eigen::seqN(N, M));
         }
         if (this->m_verbose) {
           SANDALS_WARNING(CMD "maximum number of iterations reached.");
@@ -2674,6 +2689,8 @@ namespace Sandals {
      * projection is evaluated.
      * \param[in] t The independent variable (or time) \f$ t \f$ at which the
      * states are evaluated.
+     * \param[in] lambda The Lagrange multipliers associated with the
+     * projection.
      * \param[out] Jx_projection The derivative of the projected states \f$
      * \tilde{\mathbf{x}} \f$ with respect to the unprojected states \f$
      * \mathbf{x} \f$.
@@ -2682,7 +2699,8 @@ namespace Sandals {
      */
     bool project_propagate(const VectorF &x_projected,
                            const Real t,
-                           MatrixJX &Jx_projection) const {
+                           const VectorH &lambda,
+                           MatrixJF &Jx_projection) const {
 #define CMD "Sandals::RungeKutta::project_propagate(...): "
 
       Jx_projection.setIdentity();
@@ -2690,8 +2708,13 @@ namespace Sandals {
         using MatrixAA = Eigen::Matrix<Real, N + M, N + M>;
         using MatrixBB = Eigen::Matrix<Real, N + M, N>;
         MatrixJH Jh_x(this->m_system->Jh_x(x_projected, t));
+        TensorTH Th_x(this->m_system->Th_x(x_projected, t));
+        MatrixJF Th_x_lambda(MatrixJF::Zero());
+        for (Integer i{0}; i < N; ++i) {
+          Th_x_lambda.row(i) = lambda.transpose() * Th_x[i];
+        }
         MatrixAA A(MatrixAA::Zero());
-        A.template block<N, N>(0, 0) = MatrixJF::Identity();
+        A.template block<N, N>(0, 0) = MatrixJF::Identity() + Th_x_lambda;
         A.template block<N, M>(0, N) = Jh_x.transpose();
         A.template block<M, N>(N, 0) = Jh_x;
         MatrixBB b(MatrixBB::Zero());
@@ -2710,11 +2733,12 @@ namespace Sandals {
 #ifdef SANDALS_CHECK_JACOBIANS
         // Function for the finite differences
         auto fun = [this, t](const VectorF &x_fd, VectorF &x_new_fd) {
-          return this->project(x_fd, t, x_new_fd);
+          VectorF lambda_fd;
+          return this->project(x_fd, t, x_new_fd, lambda_fd);
         };
 
         // Compute the Jacobian with finite differences
-        MatrixJX Jx_projection_fd;
+        MatrixJF Jx_projection_fd;
         if (Optimist::FiniteDifferences::Jacobian(fun,
                                                   x_projected,
                                                   Jx_projection_fd)) {

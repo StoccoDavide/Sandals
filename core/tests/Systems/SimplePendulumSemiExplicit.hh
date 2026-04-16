@@ -21,15 +21,15 @@ using namespace Sandals;
 template <typename Real = double>
 class SimplePendulumSemiExplicit : public SemiExplicit<Real, 2, 0> {
  public:
-  using VectorF  = typename SemiExplicit<double, 2, 0>::VectorF;
-  using MatrixA  = typename SemiExplicit<double, 2, 0>::MatrixA;
-  using TensorTA = typename SemiExplicit<double, 2, 0>::TensorTA;
-  using VectorB  = typename SemiExplicit<double, 2, 0>::VectorB;
-  using MatrixJB = typename SemiExplicit<double, 2, 0>::MatrixJB;
-  using VectorH  = typename SemiExplicit<double, 2, 0>::VectorH;
-  using MatrixJH = typename SemiExplicit<double, 2, 0>::MatrixJH;
-  using VectorX  = Eigen::Matrix<Real, 2, 1>;
-  using MatrixX  = Eigen::Matrix<Real, 2, Eigen::Dynamic>;
+  using typename SemiExplicit<double, 2, 0>::VectorF;
+  using typename SemiExplicit<double, 2, 0>::MatrixA;
+  using typename SemiExplicit<double, 2, 0>::TensorTA;
+  using typename SemiExplicit<double, 2, 0>::VectorB;
+  using typename SemiExplicit<double, 2, 0>::MatrixJB;
+  using typename SemiExplicit<double, 2, 0>::VectorH;
+  using typename SemiExplicit<double, 2, 0>::MatrixJH;
+  using VectorX = Eigen::Matrix<Real, 2, 1>;
+  using MatrixX = Eigen::Matrix<Real, 2, Eigen::Dynamic>;
 
  private:
   Real m_l{1.0};   // Length of the pendulum (m)
@@ -62,18 +62,6 @@ class SimplePendulumSemiExplicit : public SemiExplicit<Real, 2, 0> {
     MatrixJB Jb_x;
     Jb_x << 0.0, 1.0, -this->m_g / this->m_l * std::cos(x(0)), 0.0;
     return Jb_x;
-  }
-
-  VectorH h(const VectorF & /*x*/, const Real /*t*/) const override {
-    return VectorH::Zero();
-  }
-
-  MatrixJH Jh_x(const VectorF & /*x*/, const Real /*t*/) const override {
-    return MatrixJH::Zero();
-  }
-
-  bool in_domain(const VectorF & /*x*/, const Real /*t*/) const override {
-    return true;
   }
 
   static VectorF ics() {

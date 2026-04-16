@@ -103,10 +103,10 @@ class ThreeBodyExplicit : public Explicit<Real, 12, 0> {
   Real m_m_3{1.0};  // Body 3 mass
 
  public:
-  using VectorF  = typename Explicit<Real, 12, 0>::VectorF;
-  using MatrixJF = typename Explicit<Real, 12, 0>::MatrixJF;
-  using VectorH  = typename Explicit<Real, 12, 0>::VectorH;
-  using MatrixJH = typename Explicit<Real, 12, 0>::MatrixJH;
+  using typename Explicit<Real, 12, 0>::VectorF;
+  using typename Explicit<Real, 12, 0>::MatrixJF;
+  using typename Explicit<Real, 12, 0>::VectorH;
+  using typename Explicit<Real, 12, 0>::MatrixJH;
 
   ThreeBodyExplicit() : Explicit<Real, 12, 0>("ThreeBodyExplicit") {}
 
@@ -293,18 +293,6 @@ class ThreeBodyExplicit : public Explicit<Real, 12, 0> {
     return Jf_x;
 
 #undef CMD
-  }
-
-  VectorH h(const VectorF & /*x*/, const Real /*t*/) const override {
-    return VectorH::Zero();
-  }
-
-  MatrixJH Jh_x(const VectorF & /*x*/, const Real /*t*/) const override {
-    return MatrixJH::Zero();
-  }
-
-  bool in_domain(const VectorF & /*x*/, const Real /*t*/) const override {
-    return true;
   }
 
   static VectorF ics() {

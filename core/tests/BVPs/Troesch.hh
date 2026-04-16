@@ -10,8 +10,8 @@
 
 #pragma once
 
-#ifndef TESTS_PROBLEMS_POISSON_HH
-#define TESTS_PROBLEMS_POISSON_HH
+#ifndef TESTS_PROBLEMS_TROESCH0_HH
+#define TESTS_PROBLEMS_TROESCH0_HH
 
 #include "Sandals/System/BVP.hh"
 #include "Sandals/System/Explicit.hh"
@@ -23,65 +23,76 @@ using namespace Sandals;
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 template <typename Real = double>
-class PoissonExplicit : public Explicit<Real, 2, 0> {
+class TroeschExplicit : public Explicit<Real, 2, 0> {
  public:
   using typename Explicit<Real, 2, 0>::VectorF;
   using typename Explicit<Real, 2, 0>::MatrixJF;
   using typename Explicit<Real, 2, 0>::VectorH;
   using typename Explicit<Real, 2, 0>::MatrixJH;
 
-  PoissonExplicit() : Explicit<Real, 2, 0>("PoissonExplicit") {}
+ private:
+  Real m_lambda{1.0e-2};
 
-  ~PoissonExplicit() {}
+ public:
+  TroeschExplicit() : Explicit<Real, 2, 0>("TroeschExplicit") {}
+
+  ~TroeschExplicit() {}
+
+  void lambda(const Real lambda) {
+    this->m_lambda = lambda;
+  }
+
+  Real lambda() const {
+    return this->m_lambda;
+  }
 
   VectorF f(const VectorF &x, const Real /*t*/) const override {
     VectorF f;
-    f << x(1),
-        -5.0 * std::sin(10.0 * M_PI * x(0)) - std::sin(2.0 * M_PI * x(0));
+    f << x(1), this->m_lambda * std::sinh(this->m_lambda * x(0));
     return f;
   }
 
   MatrixJF Jf_x(const VectorF &x, const Real /*t*/) const override {
     MatrixJF Jf_x(MatrixJF::Zero());
     Jf_x(0, 1) = 1.0;
-    Jf_x(1, 0) = -50.0 * M_PI * std::cos(10.0 * M_PI * x(0)) -
-                 2.0 * M_PI * std::cos(2.0 * M_PI * x(0));
+    Jf_x(1, 0) =
+        this->m_lambda * this->m_lambda * std::cosh(this->m_lambda * x(0));
     return Jf_x;
-  }
-
-  VectorH h(const VectorF & /*x*/, const Real /*t*/) const override {
-    return VectorH::Zero();
-  }
-
-  MatrixJH Jh_x(const VectorF & /*x*/, const Real /*t*/) const override {
-    return MatrixJH::Zero();
-  }
-
-  bool in_domain(const VectorF & /*x*/, const Real /*t*/) const override {
-    return true;
   }
 };
 
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 template <typename Real = double>
-class PoissonImplicit : public Implicit<Real, 2, 0> {
+class TroeschImplicit : public Implicit<Real, 2, 0> {
  public:
   using typename Implicit<Real, 2, 0>::VectorF;
   using typename Implicit<Real, 2, 0>::MatrixJF;
   using typename Implicit<Real, 2, 0>::VectorH;
   using typename Implicit<Real, 2, 0>::MatrixJH;
 
-  PoissonImplicit() : Implicit<Real, 2, 0>("PoissonImplicit") {}
+ private:
+  Real m_lambda{1.0e-2};
 
-  ~PoissonImplicit() {}
+ public:
+  TroeschImplicit() : Implicit<Real, 2, 0>("TroeschImplicit") {}
+
+  ~TroeschImplicit() {}
+
+  void lambda(const Real lambda) {
+    this->m_lambda = lambda;
+  }
+
+  Real lambda() const {
+    return this->m_lambda;
+  }
 
   VectorF F(const VectorF &x,
             const VectorF &x_dot,
             const Real /*t*/) const override {
     VectorF F;
-    F << x_dot(0) - x(1), x_dot(1) + 5.0 * std::sin(10.0 * M_PI * x(0)) +
-                              std::sin(2.0 * M_PI * x(0));
+    F << x_dot(0) - x(1),
+        x_dot(1) - this->m_lambda * std::sinh(this->m_lambda * x(0));
     return F;
   }
 
@@ -90,8 +101,8 @@ class PoissonImplicit : public Implicit<Real, 2, 0> {
                 const Real /*t*/) const override {
     MatrixJF JF_x(MatrixJF::Zero());
     JF_x(0, 1) = -1.0;
-    JF_x(1, 0) = 50.0 * M_PI * std::cos(10.0 * M_PI * x(0)) +
-                 2.0 * M_PI * std::cos(2.0 * M_PI * x(0));
+    JF_x(1, 0) =
+        -this->m_lambda * this->m_lambda * std::cosh(this->m_lambda * x(0));
     return JF_x;
   }
 
@@ -100,36 +111,36 @@ class PoissonImplicit : public Implicit<Real, 2, 0> {
                     const Real /*t*/) const override {
     return MatrixJF::Identity();
   }
-
-  VectorH h(const VectorF & /*x*/, const Real /*t*/) const override {
-    return VectorH::Zero();
-  }
-
-  MatrixJH Jh_x(const VectorF & /*x*/, const Real /*t*/) const override {
-    return MatrixJH::Zero();
-  }
-
-  bool in_domain(const VectorF & /*x*/, const Real /*t*/) const override {
-    return true;
-  }
 };
 
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 template <typename Real = double>
-class PoissonSemiExplicit : public SemiExplicit<Real, 2, 0> {
+class TroeschSemiExplicit : public SemiExplicit<Real, 2, 0> {
  public:
-  using VectorF  = typename SemiExplicit<Real, 2, 0>::VectorF;
-  using MatrixA  = typename SemiExplicit<Real, 2, 0>::MatrixA;
-  using TensorTA = typename SemiExplicit<Real, 2, 0>::TensorTA;
-  using VectorB  = typename SemiExplicit<Real, 2, 0>::VectorB;
-  using MatrixJB = typename SemiExplicit<Real, 2, 0>::MatrixJB;
-  using VectorH  = typename SemiExplicit<Real, 2, 0>::VectorH;
-  using MatrixJH = typename SemiExplicit<Real, 2, 0>::MatrixJH;
+  using typename SemiExplicit<Real, 2, 0>::VectorF;
+  using typename SemiExplicit<Real, 2, 0>::MatrixA;
+  using typename SemiExplicit<Real, 2, 0>::TensorTA;
+  using typename SemiExplicit<Real, 2, 0>::VectorB;
+  using typename SemiExplicit<Real, 2, 0>::MatrixJB;
+  using typename SemiExplicit<Real, 2, 0>::VectorH;
+  using typename SemiExplicit<Real, 2, 0>::MatrixJH;
 
-  PoissonSemiExplicit() : SemiExplicit<Real, 2, 0>("PoissonSemiExplicit") {}
+ private:
+  Real m_lambda{1.0e-2};
 
-  ~PoissonSemiExplicit() {}
+ public:
+  TroeschSemiExplicit() : SemiExplicit<Real, 2, 0>("TroeschSemiExplicit") {}
+
+  ~TroeschSemiExplicit() {}
+
+  void lambda(const Real lambda) {
+    this->m_lambda = lambda;
+  }
+
+  Real lambda() const {
+    return this->m_lambda;
+  }
 
   MatrixA A(const VectorF & /*x*/, const Real /*t*/) const override {
     return MatrixA::Identity();
@@ -144,48 +155,35 @@ class PoissonSemiExplicit : public SemiExplicit<Real, 2, 0> {
 
   VectorB b(const VectorF &x, const Real /*t*/) const override {
     VectorB b;
-    b << x(1),
-        -5.0 * std::sin(10.0 * M_PI * x(0)) - std::sin(2.0 * M_PI * x(0));
+    b << x(1), this->m_lambda * std::sinh(this->m_lambda * x(0));
     return b;
   }
 
   MatrixJB Jb_x(const VectorF &x, const Real /*t*/) const override {
     MatrixJB Jb_x(MatrixJB::Zero());
     Jb_x(0, 1) = 1.0;
-    Jb_x(1, 0) = -50.0 * M_PI * std::cos(10.0 * M_PI * x(0)) -
-                 2.0 * M_PI * std::cos(2.0 * M_PI * x(0));
+    Jb_x(1, 0) =
+        this->m_lambda * this->m_lambda * std::cosh(this->m_lambda * x(0));
     return Jb_x;
-  }
-
-  VectorH h(const VectorF & /*x*/, const Real /*t*/) const override {
-    return VectorH::Zero();
-  }
-
-  MatrixJH Jh_x(const VectorF & /*x*/, const Real /*t*/) const override {
-    return MatrixJH::Zero();
-  }
-
-  bool in_domain(const VectorF & /*x*/, const Real /*t*/) const override {
-    return true;
   }
 };
 
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 template <typename Real, typename System, typename Integrator>
-class PoissonProblem : public BVP<Real, 2, 0, Integrator> {
+class TroeschProblem : public BVP<Real, 2, 0, Integrator> {
  public:
   using typename BVP<Real, 2, 0, Integrator>::VectorF;
   using typename BVP<Real, 2, 0, Integrator>::MatrixJF;
   using VectorX = Eigen::Vector<Real, Eigen::Dynamic>;
   using MatrixX = Eigen::Matrix<Real, 2, Eigen::Dynamic>;
 
-  PoissonProblem()
-      : BVP<Real, 2, 0, Integrator>("PoissonProblem",
+  TroeschProblem()
+      : BVP<Real, 2, 0, Integrator>("TroeschProblem",
                                     std::make_unique<System>(),
                                     std::make_unique<Integrator>()) {}
 
-  ~PoissonProblem() {}
+  ~TroeschProblem() {}
 
   static Real time_start() {
     return 0.0;
@@ -195,10 +193,17 @@ class PoissonProblem : public BVP<Real, 2, 0, Integrator> {
     return 1.0;
   }
 
+  void lambda(const Real lambda) {
+    static_cast<System *>(this->integrator()->system())->lambda(lambda);
+  }
+
+  Real lambda() const {
+    return static_cast<const System *>(this->integrator()->system())->lambda();
+  }
+
   VectorF b(const VectorF &x_ini, const VectorF &x_end) const override {
     VectorF b;
-    b(0) = x_ini(0);
-    b(1) = x_end(0);
+    b << x_ini(0), x_end(0) - 1.0;
     return b;
   }
 
@@ -216,32 +221,31 @@ class PoissonProblem : public BVP<Real, 2, 0, Integrator> {
     return Jb_x_end;
   }
 
-  static VectorF exact_solution(const Real t) {
+  VectorF exact_solution(const Real t) const {
     VectorF x;
-    x << std::sin(2.0 * M_PI * t) / (4.0 * M_PI * M_PI) +
-             std::sin(10.0 * M_PI * t) / (20.0 * M_PI * M_PI),
-        std::cos(2.0 * M_PI * t) / (2.0 * M_PI) +
-            std::cos(10.0 * M_PI * t) / (2.0 * M_PI);
+    const Real c{1.0 - std::sinh(this->m_lambda) / this->m_lambda};
+    x << std::sinh(t * this->m_lambda) / this->m_lambda + t * c,
+        std::cosh(t * this->m_lambda) + c;
     return x;
   }
 
-  static MatrixX exact_solution(const VectorX &t) {
+  MatrixX exact_solution(const VectorX &t) const {
     MatrixX x(2, t.size());
     for (Integer i{0}; i < t.size(); ++i) {
-      x.col(i) = PoissonProblem<Real, System, Integrator>::exact_solution(t(i));
+      x.col(i) = TroeschProblem<Real, System, Integrator>::exact_solution(t(i));
     }
     return x;
   }
 
   VectorF guess(const Real /*t*/) {
-    return VectorF::Ones();
+    return VectorF::Zero();
   }
 
   MatrixX guess(const VectorX &t) {
-    return MatrixX::Ones(2, t.size());
+    return MatrixX::Zero(2, t.size());
   }
 };
 
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-#endif  // TESTS_PROBLEMS_POISSON_HH
+#endif  // TESTS_PROBLEMS_TROESCH0_HH

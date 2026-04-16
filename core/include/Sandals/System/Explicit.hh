@@ -18,15 +18,6 @@
 
 namespace Sandals {
 
-  /*\
-   |   _____            _ _      _ _
-   |  | ____|_  ___ __ | (_) ___(_) |_
-   |  |  _| \ \/ / '_ \| | |/ __| | __|
-   |  | |___ >  <| |_) | | | (__| | |_
-   |  |_____/_/\_\ .__/|_|_|\___|_|\__|
-   |             |_|
-  \*/
-
   /**
    * \brief Class container for the system of explicit ODEs.
    *
@@ -250,15 +241,6 @@ namespace Sandals {
 
   };  // class Explicit
 
-  /*\
-   |   _____            _ _      _ _ __        __
-   |  | ____|_  ___ __ | (_) ___(_) |\ \      / / __ __ _ _ __  _ __   ___ _ __
-   |  |  _| \ \/ / '_ \| | |/ __| | __\ \ /\ / / '__/ _` | '_ \| '_ \ / _ \ '__|
-   |  | |___ >  <| |_) | | | (__| | |_ \ V  V /| | | (_| | |_) | |_) |  __/ |
-   |  |_____/_/\_\ .__/|_|_|\___|_|\__| \_/\_/ |_|  \__,_| .__/| .__/ \___|_|
-   |             |_|                                     |_|   |_|
-  \*/
-
   /**
    * \brief Class container for the system of explicit ODEs/DAEs wrapper.
    *
@@ -278,31 +260,40 @@ namespace Sandals {
     using typename Explicit<Real, N, M>::MatrixJF;
     using typename Explicit<Real, N, M>::VectorH;
     using typename Explicit<Real, N, M>::MatrixJH;
+    using typename Explicit<Real, N, M>::TensorTH;
 
     using Pointer    = std::unique_ptr<ExplicitWrapper<Real, N, M>>;
     using FunctionF  = std::function<VectorF(const VectorF &, const Real)>;
     using FunctionJF = std::function<MatrixJF(const VectorF &, const Real)>;
     using FunctionH  = std::function<VectorH(const VectorF &, const Real)>;
     using FunctionJH = std::function<MatrixJH(const VectorF &, const Real)>;
+    using FunctionTH = std::function<TensorTH(const VectorF &, const Real)>;
     using FunctionID = std::function<bool(const VectorF &, const Real)>;
 
     inline const static FunctionH DefaultH = [](const VectorF &, const Real) {
       return VectorH::Zero();
-    }; /**< Default mass matrix function. */
+    }; /**< Default system's invariants. */
     inline const static FunctionJH DefaultJH = [](const VectorF &, const Real) {
       return MatrixJH::Zero();
-    }; /**< Default system matrix function. */
+    }; /**< Default system's invariants Jacobian. */
+    inline const static FunctionTH DefaultTH = [](const VectorF &, const Real) {
+      TensorTH Th_x;
+      for (MatrixJH &m : Th_x) {
+        m.setZero();
+      }
+      return Th_x;
+    }; /**< Default system's invariants tensor. */
     inline const static FunctionID DefaultID = [](const VectorF &, const Real) {
       return true;
-    }; /**< Default in-domain function. */
+    }; /**< Default in-domain. */
 
    private:
     FunctionF m_f{nullptr};     /**< Explicit ODE system function. */
     FunctionJF m_Jf_x{nullptr}; /**< Jacobian of the explicit ODE system
-                                   function with respect to the states. */
+                                   function. */
     FunctionH m_h{nullptr};     /**< System invariants. */
-    FunctionJH m_Jh_x{nullptr}; /**< Jacobian of the system's invariants with
-                                   respect to the states. */
+    FunctionJH m_Jh_x{nullptr}; /**< Jacobian of the system's invariants. */
+    FunctionTH m_Th_x{nullptr}; /**< Tensor of the system's invariants. */
     FunctionID m_in_domain{nullptr}; /**< In-domain function. */
 
    public:
@@ -314,18 +305,22 @@ namespace Sandals {
      * \param[in] t_h The system's invariants.
      * \param[in] t_Jh_x The Jacobian of the system's invariants with respect to
      * the states.
+     * * \param[in] t_Th_x The tensor of the system's invariants with respect to
+     * the states.
      * \param[in] t_in_domain The in-domain function.
      */
     ExplicitWrapper(FunctionF t_f,
                     FunctionJF t_Jf_x,
                     FunctionH t_h          = DefaultH,
                     FunctionJH t_Jh_x      = DefaultJH,
+                    FunctionTH t_Th_x      = DefaultTH,
                     FunctionID t_in_domain = DefaultID)
         : Explicit<Real, N, M>(),
           m_f(t_f),
           m_Jf_x(t_Jf_x),
           m_h(t_h),
           m_Jh_x(t_Jh_x),
+          m_Th_x(t_Th_x),
           m_in_domain(t_in_domain) {}
 
     /**
@@ -337,6 +332,8 @@ namespace Sandals {
      * \param[in] t_h The system's invariants.
      * \param[in] t_Jh_x The Jacobian of the system's invariants with respect to
      * the states.
+     * \param[in] t_Th_x The tensor of the system's invariants with respect to
+     * the states.
      * \param[in] t_in_domain The in-domain function.
      */
     ExplicitWrapper(std::string t_name,
@@ -344,12 +341,14 @@ namespace Sandals {
                     FunctionJF t_Jf_x,
                     FunctionH t_h          = DefaultH,
                     FunctionJH t_Jh_x      = DefaultJH,
+                    FunctionTH t_Th_x      = DefaultTH,
                     FunctionID t_in_domain = DefaultID)
         : Explicit<Real, N, M>(t_name),
           m_f(t_f),
           m_Jf_x(t_Jf_x),
           m_h(t_h),
           m_Jh_x(t_Jh_x),
+          m_Th_x(t_Th_x),
           m_in_domain(t_in_domain) {}
 
     /**
@@ -390,6 +389,14 @@ namespace Sandals {
      */
     FunctionJH &Jh_x() {
       return this->m_Jh_x;
+    }
+
+    /**
+     * Get the tensor of the system's invariants with respect to the states.
+     * \return The tensor of the system's invariants with respect to the states.
+     */
+    FunctionTH &Th_x() {
+      return this->m_Th_x;
     }
 
     /**
@@ -456,6 +463,26 @@ namespace Sandals {
      */
     MatrixJH Jh_x(const VectorF &x, const Real t) const override {
       return this->m_Jh_x(x, t);
+    }
+
+    /**
+     * Evaluate the tensor of the Jacobian of the ODE/DAE system invariants \f$
+     * \mathbf{h}(\mathbf{x}, t) \f$ with respect to the states \f$ \mathbf{x}
+     * \f$
+     *
+     * \f[
+     * \mathbf{Th}_{\mathbf{x}\mathbf{x}}(\mathbf{x} t) =
+     * \displaystyle\frac{\partial^2\mathbf{h}(\mathbf{x},
+     * t)}{\partial\mathbf{x}\partial\mathbf{x}} \text{.}
+     * \f]
+     *
+     * \param[in] x States \f$ \mathbf{x} \f$.
+     * \param[in] t Independent variable (or time) \f$ t \f$.
+     * \return The tensor of the Jacobian \f$
+     * \mathbf{Th}_{\mathbf{x}\mathbf{x}}(\mathbf{x}, t) \f$.
+     */
+    TensorTH Th_x(const VectorF &x, const Real t) const override {
+      return this->m_Th_x(x, t);
     }
 
     /**

@@ -97,10 +97,10 @@ mass. A feasible set of initial conditions for creatinting a stable orbit
 template <typename Real = double>
 class ThreeBodyImplicit : public Implicit<Real, 12, 0> {
  public:
-  using VectorF  = typename Implicit<Real, 12, 0>::VectorF;
-  using MatrixJF = typename Implicit<Real, 12, 0>::MatrixJF;
-  using VectorH  = typename Implicit<Real, 12, 0>::VectorH;
-  using MatrixJH = typename Implicit<Real, 12, 0>::MatrixJH;
+  using typename Implicit<Real, 12, 0>::VectorF;
+  using typename Implicit<Real, 12, 0>::MatrixJF;
+  using typename Implicit<Real, 12, 0>::VectorH;
+  using typename Implicit<Real, 12, 0>::MatrixJH;
 
  private:
   Real m_g{1.0};    // Gravitational constant
@@ -311,18 +311,6 @@ class ThreeBodyImplicit : public Implicit<Real, 12, 0> {
                     const VectorF & /*x_dot*/,
                     const Real /*t*/) const override {
     return MatrixJF::Identity();
-  }
-
-  VectorH h(const VectorF & /*x*/, const Real /*t*/) const override {
-    return VectorH::Zero();
-  }
-
-  MatrixJH Jh_x(const VectorF & /*x*/, const Real /*t*/) const override {
-    return MatrixJH::Zero();
-  }
-
-  bool in_domain(const VectorF & /*x*/, const Real /*t*/) const override {
-    return true;
   }
 
   static VectorF ics() {

@@ -22,15 +22,15 @@ using namespace Eigen;
 template <typename Real = double>
 class SinSemiExplicit : public SemiExplicit<Real, 1, 0> {
  public:
-  using VectorF  = typename SemiExplicit<Real, 1, 0>::VectorF;
-  using MatrixA  = typename SemiExplicit<Real, 1, 0>::MatrixA;
-  using TensorTA = typename SemiExplicit<Real, 1, 0>::TensorTA;
-  using VectorB  = typename SemiExplicit<Real, 1, 0>::VectorB;
-  using MatrixJB = typename SemiExplicit<Real, 1, 0>::MatrixJB;
-  using VectorH  = typename SemiExplicit<Real, 1, 0>::VectorH;
-  using MatrixJH = typename SemiExplicit<Real, 1, 0>::MatrixJH;
-  using VectorX  = Eigen::Vector<Real, Eigen::Dynamic>;
-  using MatrixX  = Eigen::Matrix<Real, 1, Eigen::Dynamic>;
+  using typename SemiExplicit<Real, 1, 0>::VectorF;
+  using typename SemiExplicit<Real, 1, 0>::MatrixA;
+  using typename SemiExplicit<Real, 1, 0>::TensorTA;
+  using typename SemiExplicit<Real, 1, 0>::VectorB;
+  using typename SemiExplicit<Real, 1, 0>::MatrixJB;
+  using typename SemiExplicit<Real, 1, 0>::VectorH;
+  using typename SemiExplicit<Real, 1, 0>::MatrixJH;
+  using VectorX = Eigen::Vector<Real, Eigen::Dynamic>;
+  using MatrixX = Eigen::Matrix<Real, 1, Eigen::Dynamic>;
 
   SinSemiExplicit() : SemiExplicit<Real, 1, 0>("SinSemiExplicit") {}
 
@@ -54,18 +54,6 @@ class SinSemiExplicit : public SemiExplicit<Real, 1, 0> {
 
   MatrixJB Jb_x(const VectorF & /*x*/, const Real /*t*/) const override {
     return MatrixJB::Zero();
-  }
-
-  VectorH h(const VectorF & /*x*/, const Real /*t*/) const override {
-    return VectorH::Zero();
-  }
-
-  MatrixJH Jh_x(const VectorF & /*x*/, const Real /*t*/) const override {
-    return MatrixJH::Zero();
-  }
-
-  bool in_domain(const VectorF & /*x*/, const Real /*t*/) const override {
-    return true;
   }
 
   static VectorF ics() {

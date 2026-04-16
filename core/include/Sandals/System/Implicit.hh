@@ -17,15 +17,6 @@
 
 namespace Sandals {
 
-  /*\
-   |   ___                 _ _      _ _
-   |  |_ _|_ __ ___  _ __ | (_) ___(_) |_
-   |   | || '_ ` _ \| '_ \| | |/ __| | __|
-   |   | || | | | | | |_) | | | (__| | |_
-   |  |___|_| |_| |_| .__/|_|_|\___|_|\__|
-   |                |_|
-  \*/
-
   /**
    * \brief Class container for the system of implicit ODEs/DAEs.
    *
@@ -213,7 +204,14 @@ namespace Sandals {
      * \param[in] t Independent variable (or time) \f$ t \f$.
      * \return The system invariants \f$ \mathbf{h}(\mathbf{x}, t) \f$.
      */
-    virtual VectorH h(const VectorF &x, const Real t) const = 0;
+    virtual VectorH h(const VectorF & /*x*/, const Real /*t*/) const {
+#define CMD "Sandals::Implicit::h(...): "
+      if constexpr (M > 0) {
+        SANDALS_ERROR(CMD "invariants are not defined.");
+      }
+      return VectorH::Zero();
+#undef CMD
+    }
 
     /**
      * Evaluate the Jacobian of the ODE/DAE system invariants \f$
@@ -230,7 +228,42 @@ namespace Sandals {
      * \param[in] t Independent variable (or time) \f$ t \f$.
      * \return The Jacobian \f$ \mathbf{Jh}_{\mathbf{x}}(\mathbf{x}, t) \f$.
      */
-    virtual MatrixJH Jh_x(const VectorF &x, const Real t) const = 0;
+    virtual MatrixJH Jh_x(const VectorF & /*x*/, const Real /*t*/) const {
+#define CMD "Sandals::Implicit::Jh_x(...): "
+      if constexpr (M > 0) {
+        SANDALS_ERROR(CMD "invariants are not defined.");
+      }
+      return MatrixJH::Zero();
+#undef CMD
+    }
+
+    /**
+     * Evaluate the tensor of the Jacobian of the ODE/DAE system invariants \f$
+     * \mathbf{h}(\mathbf{x}, t) \f$ with respect to the states \f$ \mathbf{x}
+     * \f$
+     *
+     * \f[
+     * \mathbf{Th}_{\mathbf{x}\mathbf{x}}(\mathbf{x} t) =
+     * \displaystyle\frac{\partial^2\mathbf{h}(\mathbf{x},
+     * t)}{\partial\mathbf{x}\partial\mathbf{x}} \text{.}
+     * \f]
+     *
+     * \param[in] x States \f$ \mathbf{x} \f$.
+     * \param[in] t Independent variable (or time) \f$ t \f$.
+     * \return The tensor of the Jacobian \f$
+     * \mathbf{Th}_{\mathbf{x}\mathbf{x}}(\mathbf{x}, t) \f$.
+     */
+    virtual TensorTH Th_x(const VectorF & /*x*/, const Real /*t*/) const {
+#define CMD "Sandals::Implicit::Th_x(...): "
+      if constexpr (M > 0) {
+        SANDALS_ERROR(CMD "invariants are not defined.");
+      }
+      TensorTH Th_x;
+      for (MatrixJH &m : Th_x)
+        m.setZero();
+      return Th_x;
+#undef CMD
+    }
 
     /**
      * Return true if the values \f$ \mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime},
@@ -240,7 +273,9 @@ namespace Sandals {
      * \return True if \f$ \mathbf{F}(\mathbf{x}, t) \f$ is in the domain of the
      * ODE/DAE system.
      */
-    virtual bool in_domain(const VectorF &x, const Real t) const = 0;
+    virtual bool in_domain(const VectorF & /*x*/, const Real /*t*/) const {
+      return true;
+    }
 
     /**
      * Time reversal of the implicit ODE system function \f$
@@ -298,15 +333,6 @@ namespace Sandals {
 
   };  // class Implicit
 
-  /*\
-   |   ___                 _ _      _ _ __        __
-   |  |_ _|_ __ ___  _ __ | (_) ___(_) |\ \      / / __ __ _ _ __  _ __   ___ _
-  __ |   | || '_ ` _ \| '_ \| | |/ __| | _ \ \ /\ / / '__/ _` | '_ \| '_ \ / _
-  \ '__| |   | || | | | | | |_) | | | (__| | |_ \ V  V /| | | (_| | |_) | |_) |
-  __/ | |  |___|_| |_| |_| .__/|_|_|\___|_|\__| \_/\_/ |_|  \__,_| .__/| .__/
-  \___|_| |                |_|                                       |_|   |_|
-  \*/
-
   /**
    * \brief Class container for the system of implicit ODEs/DAEs wrapper.
    *
@@ -326,6 +352,7 @@ namespace Sandals {
     using typename Implicit<Real, N, M>::MatrixJF;
     using typename Implicit<Real, N, M>::VectorH;
     using typename Implicit<Real, N, M>::MatrixJH;
+    using typename Implicit<Real, N, M>::TensorTH;
 
     using Pointer = std::unique_ptr<ImplicitWrapper<Real, N, M>>;
     using FunctionF =
@@ -334,17 +361,25 @@ namespace Sandals {
         std::function<MatrixJF(const VectorF &, const VectorF &, const Real)>;
     using FunctionH  = std::function<VectorH(const VectorF &, const Real)>;
     using FunctionJH = std::function<MatrixJH(const VectorF &, const Real)>;
+    using FunctionTH = std::function<TensorTH(const VectorF &, const Real)>;
     using FunctionID = std::function<bool(const VectorF &, const Real)>;
 
-    inline static const FunctionH DefaultH = [](const VectorF &, const Real) {
+    inline const static FunctionH DefaultH = [](const VectorF &, const Real) {
       return VectorH::Zero();
-    }; /**< Default mass matrix function. */
-    inline static const FunctionJH DefaultJH = [](const VectorF &, const Real) {
+    }; /**< Default system's invariants. */
+    inline const static FunctionJH DefaultJH = [](const VectorF &, const Real) {
       return MatrixJH::Zero();
-    }; /**< Default system matrix function. */
-    inline static const FunctionID DefaultID = [](const VectorF &, const Real) {
+    }; /**< Default system's invariants Jacobian. */
+    inline const static FunctionTH DefaultTH = [](const VectorF &, const Real) {
+      TensorTH Th_x;
+      for (MatrixJH &m : Th_x) {
+        m.setZero();
+      }
+      return Th_x;
+    }; /**< Default system's invariants tensor. */
+    inline const static FunctionID DefaultID = [](const VectorF &, const Real) {
       return true;
-    }; /**< Default in-domain function. */
+    }; /**< Default in-domain. */
 
    private:
     FunctionF m_F{nullptr};     /**< Implicit ODE system function. */
@@ -355,6 +390,8 @@ namespace Sandals {
                    to the states derivative. */
     FunctionH m_h{nullptr};     /**< System's invariants. */
     FunctionJH m_Jh_x{nullptr}; /**< Jacobian of the system's invariants with
+                                   respect to the states. */
+    FunctionTH m_Th_x{nullptr}; /**< Tensor of the system's invariants with
                                    respect to the states. */
     FunctionID m_in_domain{nullptr}; /**< In-domain function. */
 
@@ -369,6 +406,8 @@ namespace Sandals {
      * \param[in] t_h The system's invariants.
      * \param[in] t_Jh_x The Jacobian of the system's invariants with respect to
      * the states.
+     * \param[in] t_Th_x The tensor of the system's invariants with respect to
+     * the states.
      * \param[in] t_in_domain The in-domain function.
      */
     ImplicitWrapper(FunctionF t_F,
@@ -376,6 +415,7 @@ namespace Sandals {
                     FunctionJF t_JF_x_dot,
                     FunctionH t_h          = DefaultH,
                     FunctionJH t_Jh_x      = DefaultJH,
+                    FunctionTH t_Th_x      = DefaultTH,
                     FunctionID t_in_domain = DefaultID)
         : Implicit<Real, N, M>(),
           m_F(t_F),
@@ -383,6 +423,7 @@ namespace Sandals {
           m_JF_x_dot(t_JF_x_dot),
           m_h(t_h),
           m_Jh_x(t_Jh_x),
+          m_Th_x(t_Th_x),
           m_in_domain(t_in_domain) {}
 
     /**
@@ -396,6 +437,8 @@ namespace Sandals {
      * \param[in] t_h The implicit ODE system invariants.
      * \param[in] t_Jh_x The Jacobian of the implicit ODE system invariants with
      * respect to the states.
+     * \param[in] t_Th_x The tensor of the Jacobian of the implicit ODE system
+     * invariants with respect to the states.
      * \param[in] t_in_domain The in-domain function.
      */
     ImplicitWrapper(std::string t_name,
@@ -404,6 +447,7 @@ namespace Sandals {
                     FunctionJF t_JF_x_dot,
                     FunctionH t_h          = DefaultH,
                     FunctionJH t_Jh_x      = DefaultJH,
+                    FunctionTH t_Th_x      = DefaultTH,
                     FunctionID t_in_domain = DefaultID)
         : Implicit<Real, N, M>(t_name),
           m_F(t_F),
@@ -411,6 +455,7 @@ namespace Sandals {
           m_JF_x_dot(t_JF_x_dot),
           m_h(t_h),
           m_Jh_x(t_Jh_x),
+          m_Th_x(t_Th_x),
           m_in_domain(t_in_domain) {}
 
     /**
@@ -461,6 +506,14 @@ namespace Sandals {
      */
     FunctionJH &Jh_x() {
       return this->m_Jh_x;
+    }
+
+    /**
+     * Get the tensor of the system's invariants with respect to the states.
+     * \return The tensor of the system's invariants with respect to the states.
+     */
+    FunctionTH &Th_x() {
+      return this->m_Th_x;
     }
 
     /**
@@ -563,6 +616,26 @@ namespace Sandals {
      */
     MatrixJH Jh_x(const VectorF &x, const Real t) const override {
       return this->m_Jh_x(x, t);
+    }
+
+    /**
+     * Evaluate the tensor of the Jacobian of the ODE/DAE system invariants \f$
+     * \mathbf{h}(\mathbf{x}, t) \f$ with respect to the states \f$ \mathbf{x}
+     * \f$
+     *
+     * \f[
+     * \mathbf{Th}_{\mathbf{x}\mathbf{x}}(\mathbf{x} t) =
+     * \displaystyle\frac{\partial^2\mathbf{h}(\mathbf{x},
+     * t)}{\partial\mathbf{x}\partial\mathbf{x}} \text{.}
+     * \f]
+     *
+     * \param[in] x States \f$ \mathbf{x} \f$.
+     * \param[in] t Independent variable (or time) \f$ t \f$.
+     * \return The tensor of the Jacobian \f$
+     * \mathbf{Th}_{\mathbf{x}\mathbf{x}}(\mathbf{x}, t) \f$.
+     */
+    TensorTH Th_x(const VectorF &x, const Real t) const override {
+      return this->m_Th_x(x, t);
     }
 
     /**

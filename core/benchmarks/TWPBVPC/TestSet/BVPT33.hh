@@ -67,18 +67,6 @@ class BVPT33Explicit : public Explicit<Real, 6, 0> {
     Jf_x(5, 5) = -x(2) / this->m_lambda;
     return Jf_x;
   }
-
-  VectorH h(const VectorF & /*x*/, const Real /*t*/) const override {
-    return VectorH::Zero();
-  }
-
-  MatrixJH Jh_x(const VectorF & /*x*/, const Real /*t*/) const override {
-    return MatrixJH::Zero();
-  }
-
-  bool in_domain(const VectorF & /*x*/, const Real /*t*/) const override {
-    return true;
-  }
 };
 
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -140,18 +128,6 @@ class BVPT33Implicit : public Implicit<Real, 6, 0> {
                     const Real /*t*/) const override {
     return MatrixJF::Identity();
   }
-
-  VectorH h(const VectorF & /*x*/, const Real /*t*/) const override {
-    return VectorH::Zero();
-  }
-
-  MatrixJH Jh_x(const VectorF & /*x*/, const Real /*t*/) const override {
-    return MatrixJH::Zero();
-  }
-
-  bool in_domain(const VectorF & /*x*/, const Real /*t*/) const override {
-    return true;
-  }
 };
 
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -159,13 +135,13 @@ class BVPT33Implicit : public Implicit<Real, 6, 0> {
 template <typename Real = double>
 class BVPT33SemiExplicit : public SemiExplicit<Real, 6, 0> {
  public:
-  using VectorF  = typename SemiExplicit<Real, 6, 0>::VectorF;
-  using MatrixA  = typename SemiExplicit<Real, 6, 0>::MatrixA;
-  using TensorTA = typename SemiExplicit<Real, 6, 0>::TensorTA;
-  using VectorB  = typename SemiExplicit<Real, 6, 0>::VectorB;
-  using MatrixJB = typename SemiExplicit<Real, 6, 0>::MatrixJB;
-  using VectorH  = typename SemiExplicit<Real, 6, 0>::VectorH;
-  using MatrixJH = typename SemiExplicit<Real, 6, 0>::MatrixJH;
+  using typename SemiExplicit<Real, 6, 0>::VectorF;
+  using typename SemiExplicit<Real, 6, 0>::MatrixA;
+  using typename SemiExplicit<Real, 6, 0>::TensorTA;
+  using typename SemiExplicit<Real, 6, 0>::VectorB;
+  using typename SemiExplicit<Real, 6, 0>::MatrixJB;
+  using typename SemiExplicit<Real, 6, 0>::VectorH;
+  using typename SemiExplicit<Real, 6, 0>::MatrixJH;
 
  private:
   Real m_lambda{1.0e-3};
@@ -218,18 +194,6 @@ class BVPT33SemiExplicit : public SemiExplicit<Real, 6, 0> {
     Jb_x(5, 2) = -x(5) / this->m_lambda;
     Jb_x(5, 5) = -x(2) / this->m_lambda;
     return Jb_x;
-  }
-
-  VectorH h(const VectorF & /*x*/, const Real /*t*/) const override {
-    return VectorH::Zero();
-  }
-
-  MatrixJH Jh_x(const VectorF & /*x*/, const Real /*t*/) const override {
-    return MatrixJH::Zero();
-  }
-
-  bool in_domain(const VectorF & /*x*/, const Real /*t*/) const override {
-    return true;
   }
 };
 

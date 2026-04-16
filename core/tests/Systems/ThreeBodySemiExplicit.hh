@@ -95,13 +95,13 @@ mass. A feasible set of initial conditions for creatinting a stable orbit
 template <typename Real = double>
 class ThreeBodySemiExplicit : public SemiExplicit<Real, 12, 0> {
  public:
-  using VectorF  = typename SemiExplicit<Real, 12, 0>::VectorF;
-  using MatrixA  = typename SemiExplicit<Real, 12, 0>::MatrixA;
-  using TensorTA = typename SemiExplicit<Real, 12, 0>::TensorTA;
-  using VectorB  = typename SemiExplicit<Real, 12, 0>::VectorB;
-  using MatrixJB = typename SemiExplicit<Real, 12, 0>::MatrixJB;
-  using VectorH  = typename SemiExplicit<Real, 12, 0>::VectorH;
-  using MatrixJH = typename SemiExplicit<Real, 12, 0>::MatrixJH;
+  using typename SemiExplicit<Real, 12, 0>::VectorF;
+  using typename SemiExplicit<Real, 12, 0>::MatrixA;
+  using typename SemiExplicit<Real, 12, 0>::TensorTA;
+  using typename SemiExplicit<Real, 12, 0>::VectorB;
+  using typename SemiExplicit<Real, 12, 0>::MatrixJB;
+  using typename SemiExplicit<Real, 12, 0>::VectorH;
+  using typename SemiExplicit<Real, 12, 0>::MatrixJH;
 
  private:
   Real m_g{1.0};    // Gravitational constant
@@ -308,18 +308,6 @@ class ThreeBodySemiExplicit : public SemiExplicit<Real, 12, 0> {
     return Jb_x;
 
 #undef CMD
-  }
-
-  VectorH h(const VectorF & /*x*/, const Real /*t*/) const override {
-    return VectorH::Zero();
-  }
-
-  MatrixJH Jh_x(const VectorF & /*x*/, const Real /*t*/) const override {
-    return MatrixJH::Zero();
-  }
-
-  bool in_domain(const VectorF & /*x*/, const Real /*t*/) const override {
-    return true;
   }
 
   static VectorF ics() {

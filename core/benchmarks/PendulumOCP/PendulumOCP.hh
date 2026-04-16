@@ -28,6 +28,7 @@ class PendulumOCPindex3 : public Implicit<Real, 10, 0> {
   using typename Implicit<Real, 10, 0>::MatrixJF;
   using typename Implicit<Real, 10, 0>::VectorH;
   using typename Implicit<Real, 10, 0>::MatrixJH;
+  using typename Implicit<Real, 10, 0>::TensorTH;
 
  private:
   Real m_g{9.81};
@@ -135,10 +136,13 @@ class PendulumOCPindex3 : public Implicit<Real, 10, 0> {
     return MatrixJH::Zero();
   }
 
-  bool in_domain(const VectorF & /*x*/, const Real /*t*/) const override {
-    return true;
+  TensorTH Th_x(const VectorF & /*x*/, const Real /*t*/) const override {
+    TensorTH Th_x;
+    for (MatrixJH &m : Th_x) {
+      m.setZero();
+    }
+    return Th_x;
   }
-
 };  // PendulumOCPindex3
 
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -152,6 +156,7 @@ class PendulumOCPindex2 : public Implicit<Real, 10, 1> {
   using typename Implicit<Real, 10, 1>::MatrixJF;
   using typename Implicit<Real, 10, 1>::VectorH;
   using typename Implicit<Real, 10, 1>::MatrixJH;
+  using typename Implicit<Real, 10, 1>::TensorTH;
 
  private:
   Real m_g{9.81};
@@ -273,10 +278,15 @@ class PendulumOCPindex2 : public Implicit<Real, 10, 1> {
     return Jh_x;
   }
 
-  bool in_domain(const VectorF & /*x*/, const Real /*t*/) const override {
-    return true;
+  TensorTH Th_x(const VectorF & /*x*/, const Real /*t*/) const override {
+    TensorTH Th_x;
+    for (MatrixJH &m : Th_x) {
+      m.setZero();
+    }
+    Th_x[0](0, 0) = 2;
+    Th_x[1](0, 1) = 2;
+    return Th_x;
   }
-
 };  // PendulumOCPindex2
 
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -290,6 +300,7 @@ class PendulumOCPindex1 : public Implicit<Real, 10, 2> {
   using typename Implicit<Real, 10, 2>::MatrixJF;
   using typename Implicit<Real, 10, 2>::VectorH;
   using typename Implicit<Real, 10, 2>::MatrixJH;
+  using typename Implicit<Real, 10, 2>::TensorTH;
 
  private:
   Real m_g{9.81};
@@ -420,10 +431,19 @@ class PendulumOCPindex1 : public Implicit<Real, 10, 2> {
     return Jh_x;
   }
 
-  bool in_domain(const VectorF & /*x*/, const Real /*t*/) const override {
-    return true;
+  TensorTH Th_x(const VectorF & /*x*/, const Real /*t*/) const override {
+    TensorTH Th_x;
+    for (MatrixJH &m : Th_x) {
+      m.setZero();
+    }
+    Th_x[0](0, 0) = 2;
+    Th_x[1](0, 1) = 2;
+    Th_x[2](1, 0) = 2;
+    Th_x[3](1, 1) = 2;
+    Th_x[0](1, 2) = 2;
+    Th_x[1](1, 3) = 2;
+    return Th_x;
   }
-
 };  // PendulumOCPindex1
 
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -437,6 +457,7 @@ class PendulumOCPindex0 : public Implicit<Real, 10, 3> {
   using typename Implicit<Real, 10, 3>::MatrixJF;
   using typename Implicit<Real, 10, 3>::VectorH;
   using typename Implicit<Real, 10, 3>::MatrixJH;
+  using typename Implicit<Real, 10, 3>::TensorTH;
 
  private:
   Real m_g{9.81};
@@ -1048,10 +1069,27 @@ class PendulumOCPindex0 : public Implicit<Real, 10, 3> {
     return Jh_x;
   }
 
-  bool in_domain(const VectorF & /*x*/, const Real /*t*/) const override {
-    return true;
+  TensorTH Th_x(const VectorF &x, const Real /*t*/) const override {
+    TensorTH Th_x;
+    for (MatrixJH &m : Th_x) {
+      m.setZero();
+    }
+    Th_x[0](0, 0) = 2;
+    Th_x[0](1, 2) = 2;
+    Th_x[0](2, 0) = -8 * x[4];
+    Th_x[0](2, 4) = -8 * x[0];
+    Th_x[1](0, 1) = 2;
+    Th_x[1](1, 3) = 2;
+    Th_x[1](2, 1) = -8 * x[4];
+    Th_x[1](2, 4) = -8 * x[1];
+    Th_x[2](1, 0) = 2;
+    Th_x[2](2, 2) = 4;
+    Th_x[3](1, 1) = 2;
+    Th_x[3](2, 3) = 4;
+    Th_x[4](2, 0) = -8 * x[0];
+    Th_x[4](2, 1) = -8 * x[1];
+    return Th_x;
   }
-
 };  // PendulumOCPindex0
 
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

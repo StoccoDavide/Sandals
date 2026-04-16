@@ -21,12 +21,12 @@ using namespace Sandals;
 template <typename Real = double>
 class SimplePendulumExplicit : public Explicit<Real, 2, 0> {
  public:
-  using VectorF  = typename Explicit<Real, 2, 0>::VectorF;
-  using MatrixJF = typename Explicit<Real, 2, 0>::MatrixJF;
-  using VectorH  = typename Explicit<Real, 2, 0>::VectorH;
-  using MatrixJH = typename Explicit<Real, 2, 0>::MatrixJH;
-  using VectorX  = Eigen::Matrix<Real, 2, 1>;
-  using MatrixX  = Eigen::Matrix<Real, 2, Eigen::Dynamic>;
+  using typename Explicit<Real, 2, 0>::VectorF;
+  using typename Explicit<Real, 2, 0>::MatrixJF;
+  using typename Explicit<Real, 2, 0>::VectorH;
+  using typename Explicit<Real, 2, 0>::MatrixJH;
+  using VectorX = Eigen::Matrix<Real, 2, 1>;
+  using MatrixX = Eigen::Matrix<Real, 2, Eigen::Dynamic>;
 
  private:
   Real m_l{1.0};   // length of the pendulum (m)
@@ -47,18 +47,6 @@ class SimplePendulumExplicit : public Explicit<Real, 2, 0> {
     MatrixJF Jf_x;
     Jf_x << 0.0, 1.0, -this->m_g / this->m_l * std::cos(x(0)), 0.0;
     return Jf_x;
-  }
-
-  VectorH h(const VectorF & /*x*/, const Real /*t*/) const override {
-    return VectorH::Zero();
-  }
-
-  MatrixJH Jh_x(const VectorF & /*x*/, const Real /*t*/) const override {
-    return MatrixJH::Zero();
-  }
-
-  bool in_domain(const VectorF & /*x*/, const Real /*t*/) const override {
-    return true;
   }
 
   static VectorF ics() {

@@ -18,15 +18,6 @@
 
 namespace Sandals {
 
-  /*\
-   |   ____                 _ _____            _ _      _ _
-   |  / ___|  ___ _ __ ___ (_) ____|_  ___ __ | (_) ___(_) |_
-   |  \___ \ / _ \ '_ ` _ \| |  _| \ \/ / '_ \| | |/ __| | __|
-   |   ___) |  __/ | | | | | | |___ >  <| |_) | | | (__| | |_
-   |  |____/ \___|_| |_| |_|_|_____/_/\_\ .__/|_|_|\___|_|\__|
-   |                                    |_|
-  \*/
-
   /**
    * \brief Class container for the system of semi-explicit ODEs/DAEs.
    *
@@ -43,13 +34,13 @@ namespace Sandals {
   template <typename Real, Integer N, Integer M = 0>
   class SemiExplicit : public Explicit<Real, N, M> {
    public:
-    using VectorF  = typename Explicit<Real, N, M>::VectorF;
-    using MatrixJF = typename Explicit<Real, N, M>::MatrixJF;
+    using typename Explicit<Real, N, M>::VectorF;
+    using typename Explicit<Real, N, M>::MatrixJF;
     using MatrixA  = typename Explicit<Real, N, M>::MatrixJF;
     using TensorTA = typename std::array<MatrixJF, N>;
     using VectorB  = typename Explicit<Real, N, M>::VectorF;
     using MatrixJB = typename Explicit<Real, N, M>::MatrixJF;
-    using Type     = typename Explicit<Real, N, M>::Type;
+    using typename Explicit<Real, N, M>::Type;
 
    private:
     mutable Eigen::FullPivLU<MatrixA> m_lu; /**< LU decomposition. */
@@ -273,16 +264,6 @@ namespace Sandals {
 
   };  // class SemiExplicit
 
-  /*\
-   |   ____                 _ _____            _ _      _ _ __        __
-   |  / ___|  ___ _ __ ___ (_) ____|_  ___ __ | (_) ___(_) |\ \      / / __ __ _
-  _ __  _ __   ___ _ __ |  \___ \ / _ \ '_ ` _ \| |  _| \ \/ / '_ \| | |/ __| |
-  __\ \ /\ / / '__/ _` | '_ \| '_ \ / _ \ '__| |   ___) |  __/ | | | | | | |___
-  >  <| |_) | | | (__| | |_ \ V  V /| | | (_| | |_) | |_) |  __/ | |  |____/
-  \___|_| |_| |_|_|_____/_/\_\ .__/|_|_|\___|_|\__| \_/\_/ |_|  \__,_| .__/|
-  .__/ \___|_| |                                    |_| |_|   |_|
-  \*/
-
   /**
    * \brief Class container for the system of semi-explicit ODEs/DAEs wrapper.
    *
@@ -306,6 +287,7 @@ namespace Sandals {
     using typename SemiExplicit<Real, N, M>::MatrixJB;
     using typename SemiExplicit<Real, N, M>::VectorH;
     using typename SemiExplicit<Real, N, M>::MatrixJH;
+    using typename SemiExplicit<Real, N, M>::TensorTH;
 
     using Pointer    = std::unique_ptr<SemiExplicitWrapper<Real, N, M>>;
     using FunctionA  = std::function<MatrixA(const VectorF &, const Real)>;
@@ -314,38 +296,55 @@ namespace Sandals {
     using FunctionJB = std::function<MatrixJB(const VectorF &, const Real)>;
     using FunctionH  = std::function<VectorH(const VectorF &, const Real)>;
     using FunctionJH = std::function<MatrixJH(const VectorF &, const Real)>;
+    using FunctionTH = std::function<TensorTH(const VectorF &, const Real)>;
     using FunctionID = std::function<bool(const VectorF &, const Real)>;
 
     inline const static FunctionH DefaultH = [](const VectorF &, const Real) {
       return VectorH::Zero();
-    }; /**< Default mass matrix function. */
+    }; /**< Default system's invariants. */
     inline const static FunctionJH DefaultJH = [](const VectorF &, const Real) {
       return MatrixJH::Zero();
-    }; /**< Default system matrix function. */
+    }; /**< Default system's invariants Jacobian. */
+    inline const static FunctionTH DefaultTH = [](const VectorF &, const Real) {
+      TensorTH Th_x;
+      for (MatrixJH &m : Th_x) {
+        m.setZero();
+      }
+      return Th_x;
+    }; /**< Default system's invariants tensor. */
     inline const static FunctionID DefaultID = [](const VectorF &, const Real) {
       return true;
-    }; /**< Default in-domain function. */
+    }; /**< Default in-domain. */
 
    private:
-    FunctionA m_A{nullptr};     /**< Function for the mass matrix. */
-    FunctionTA m_TA_x{nullptr}; /**< Function for the mass matrix. */
-    FunctionB m_b{nullptr};     /**< Function for the right-hand-side. */
-    FunctionJB m_Jb_x{
-      nullptr};             /**< Function for the right-hand-side Jacobian. */
-    FunctionH m_h{nullptr}; /**< Invariants function. */
-    FunctionJH m_Jh_x{nullptr}; /**< Jacobian of the invariants function. */
+    FunctionA m_A{nullptr};     /**< System's mass matrix. */
+    FunctionTA m_TA_x{nullptr}; /**< Jacobian of the system's mass matrix with
+                                   respect to the states. */
+    FunctionB m_b{nullptr};     /**< System's Right-hand-side. */
+    FunctionJB m_Jb_x{nullptr}; /**< Jacobian of the system's right-hand-side
+                                   with respect to the states. */
+    FunctionH m_h{nullptr};     /**< System's invariants. */
+    FunctionJH m_Jh_x{nullptr}; /**< Jacobian of the system's invariants with
+                                   respect to the states. */
+    FunctionTH m_Th_x{nullptr}; /**< Tensor of the system's invariants with
+                                   respect to the states. */
     FunctionID m_in_domain{nullptr}; /**< In-domain function. */
 
    public:
     /**
      * Class constructor for the semi-explicit ODE/DAE system wrapper.
-     * \param[in] t_A The function for the mass matrix.
-     * \param[in] t_TA_x The function for the mass matrix.
-     * \param[in] t_b The function for the right-hand-side.
-     * \param[in] t_Jb_x The function for the right-hand-side Jacobian.
-     * \param[in] t_h The invariants function.
-     * \param[in] t_Jh_x The Jacobian of the invariants function.
-     * \param[in] t_in_domain The in-domain function.
+     * \param[in] t_A The systems's mass matrix.
+     * \param[in] t_TA_x The Jacobian of the systems's mass matrix with respect
+     * to the states.
+     * \param[in] t_b The systems's right-hand-side.
+     * \param[in] t_Jb_x The Jacobian of the right-hand-side with respect to the
+     * states.
+     * \param[in] t_h The system's invariants.
+     * \param[in] t_Jh_x The Jacobian of the system's invariants with respect to
+     * the states.
+     * \param[in] t_Th_x The tensor of the system's invariants with respect to
+     * the states.
+     * \param[in] t_in_domain The in-domain.
      */
     SemiExplicitWrapper(FunctionA t_A,
                         FunctionTA t_TA_x,
@@ -353,6 +352,7 @@ namespace Sandals {
                         FunctionJB t_Jb_x,
                         FunctionH t_h          = DefaultH,
                         FunctionJH t_Jh_x      = DefaultJH,
+                        FunctionTH t_Th_x      = DefaultTH,
                         FunctionID t_in_domain = DefaultID)
         : SemiExplicit<Real, N, M>(),
           m_A(t_A),
@@ -361,18 +361,24 @@ namespace Sandals {
           m_Jb_x(t_Jb_x),
           m_h(t_h),
           m_Jh_x(t_Jh_x),
+          m_Th_x(t_Th_x),
           m_in_domain(t_in_domain) {}
 
     /**
      * Class constructor for the semi-explicit ODE/DAE system wrapper.
      * \param[in] t_name The name of the semi-explicit ODE/DAE system.
-     * \param[in] t_A The function for the mass matrix.
-     * \param[in] t_TA_x The function for the mass matrix.
-     * \param[in] t_b The function for the right-hand-side.
-     * \param[in] t_Jb_x The function for the right-hand-side Jacobian.
-     * \param[in] t_h The invariants function.
-     * \param[in] t_Jh_x The Jacobian of the invariants function.
-     * \param[in] t_in_domain The in-domain function.
+     * \param[in] t_A The systems's mass matrix.
+     * \param[in] t_TA_x The Jacobian of the systems's mass matrix with respect
+     * to the states.
+     * \param[in] t_b The systems's right-hand-side.
+     * \param[in] t_Jb_x The Jacobian of the right-hand-side with respect to the
+     * states.
+     * \param[in] t_h The system's invariants.
+     * \param[in] t_Jh_x The Jacobian of the system's invariants with respect to
+     * the states.
+     * \param[in] t_Th_x The tensor of the system's invariants with respect to
+     * the states.
+     * \param[in] t_in_domain The in-domain.
      */
     SemiExplicitWrapper(std::string t_name,
                         FunctionA t_A,
@@ -381,6 +387,7 @@ namespace Sandals {
                         FunctionJB t_Jb_x,
                         FunctionH t_h          = DefaultH,
                         FunctionJH t_Jh_x      = DefaultJH,
+                        FunctionTH t_Th_x      = DefaultTH,
                         FunctionID t_in_domain = DefaultID)
         : SemiExplicit<Real, N, M>(t_name),
           m_A(t_A),
@@ -389,6 +396,7 @@ namespace Sandals {
           m_Jb_x(t_Jb_x),
           m_h(t_h),
           m_Jh_x(t_Jh_x),
+          m_Th_x(t_Th_x),
           m_in_domain(t_in_domain) {}
 
     /**
@@ -397,33 +405,32 @@ namespace Sandals {
     ~SemiExplicitWrapper() {}
 
     /**
-     * Get the function for the mass matrix.
-     * \return The function for the mass matrix.
+     * Get the the mass matrix.
+     * \return The the mass matrix.
      */
     FunctionA &A() {
       return this->m_A;
     }
 
     /**
-     * Get the function for the mass matrix tensor with respect to the states.
-     * \return The function for the mass matrix tensor with respect to the
-     * states.
+     * Get the Jacobian of the mass matrix tensor.
+     * \return The Jacobian of the mass matrix tensor.
      */
     FunctionTA &TA_x() {
       return this->m_TA_x;
     }
 
     /**
-     * Get the function for the right-hand-side.
-     * \return The function for the right-hand-side.
+     * Get the right-hand-side.
+     * \return The right-hand-side.
      */
     FunctionB &b() {
       return this->m_b;
     }
 
     /**
-     * Get the function for the right-hand-side Jacobian.
-     * \return The function for the right-hand-side Jacobian.
+     * Get the Jacobian of the right-hand-side.
+     * \return The Jacobian of the right-hand-side.
      */
     FunctionJB &Jb_x() {
       return this->m_Jb_x;
@@ -447,6 +454,14 @@ namespace Sandals {
     }
 
     /**
+     * Get the tensor of the system's invariants with respect to the states.
+     * \return The tensor of the system's invariants with respect to the states.
+     */
+    FunctionTH &Th_x() {
+      return this->m_Th_x;
+    }
+
+    /**
      * Get the in-domain function.
      * \return The in-domain function.
      */
@@ -455,7 +470,7 @@ namespace Sandals {
     }
 
     /**
-     * Evaluate th e semi-explicit ODE/DAE system mass matrix \f$
+     * Evaluate the semi-explicit ODE/DAE system mass matrix \f$
      * \mathbf{A}(\mathbf{x}, t) \f$.
      * \param[in] x States \f$ \mathbf{x} \f$.
      * \param[in] t Independent variable (or time) \f$ t \f$.
@@ -544,12 +559,31 @@ namespace Sandals {
     }
 
     /**
+     * Evaluate the tensor of the ODE/DAE system invariants \f$
+     * \mathbf{h}(\mathbf{x}, t) \f$ with respect to the states \f$ \mathbf{x}
+     * \f$
+     *
+     * \f[
+     * \mathbf{Th}_{\mathbf{x}}(\mathbf{x}, t) =
+     * \displaystyle\frac{\partial\mathbf{h}(\mathbf{x}, t)}{\partial\mathbf{x}}
+     * \text{.}
+     * \f]
+     *
+     * \param[in] x States \f$ \mathbf{x} \f$.
+     * \param[in] t Independent variable (or time) \f$ t \f$.
+     * \return The Jacobian \f$ \mathbf{Th}_{\mathbf{x}}(\mathbf{x}, t) \f$.
+     */
+    TensorTH Th_x(const VectorF &x, const Real t) const override {
+      return this->m_Th_x(x, t);
+    }
+
+    /**
      * Return true if the values \f$ \mathbf{f}(\mathbf{x}, t) \f$ is in the
      * domain of the ODE/DAE system.
      * \param[in] x States \f$ \mathbf{x} \f$.
      * \param[in] t Independent variable (or time) \f$ t \f$.
-     * \return True if \f$ \mathbf{f}(\mathbf{x}, t) \f$ is in the domain of the
-     * ODE/DAE system.
+     * \return True if \f$ \mathbf{f}(\mathbf{x}, t) \f$ is in the domain of
+     * the ODE/DAE system.
      */
     bool in_domain(const VectorF &x, const Real t) const override {
       return this->m_in_domain(x, t);

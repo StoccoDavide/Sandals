@@ -21,12 +21,13 @@ using namespace Sandals;
 template <typename Real = double>
 class OscillatorImplicit : public Implicit<Real, 2, 1> {
  public:
-  using VectorF  = typename Implicit<Real, 2, 1>::VectorF;
-  using MatrixJF = typename Implicit<Real, 2, 1>::MatrixJF;
-  using VectorH  = typename Implicit<Real, 2, 1>::VectorH;
-  using MatrixJH = typename Implicit<Real, 2, 1>::MatrixJH;
-  using VectorX  = Eigen::Matrix<Real, 2, 1>;
-  using MatrixX  = Eigen::Matrix<Real, 2, Eigen::Dynamic>;
+  using typename Implicit<Real, 2, 1>::VectorF;
+  using typename Implicit<Real, 2, 1>::MatrixJF;
+  using typename Implicit<Real, 2, 1>::VectorH;
+  using typename Implicit<Real, 2, 1>::MatrixJH;
+  using typename Implicit<Real, 2, 1>::TensorTH;
+  using VectorX = Eigen::Matrix<Real, 2, 1>;
+  using MatrixX = Eigen::Matrix<Real, 2, Eigen::Dynamic>;
 
  private:
   Real m_m{1.0};  // Mass (kg)
@@ -75,8 +76,14 @@ class OscillatorImplicit : public Implicit<Real, 2, 1> {
     return Jh_x;
   }
 
-  bool in_domain(const VectorF & /*x*/, const Real /*t*/) const override {
-    return true;
+  TensorTH Th_x(const VectorF & /*x*/, const Real /*t*/) const override {
+    TensorTH Th_x;
+    for (MatrixJH &m : Th_x) {
+      m.setZero();
+    }
+    Th_x[0](0, 0) = this->m_k;
+    Th_x[1](0, 1) = this->m_m;
+    return Th_x;
   }
 
   VectorF exact_solution(Real t) const {

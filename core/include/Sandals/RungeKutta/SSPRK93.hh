@@ -10,8 +10,8 @@
 
 #pragma once
 
-#ifndef SANDALS_SSPRK93_HH
-#define SANDALS_SSPRK93_HH
+#ifndef SANDALS_RUNGE_KUTTA_SSPRK93_HH
+#define SANDALS_RUNGE_KUTTA_SSPRK93_HH
 
 #include <Sandals.hh>
 #include <Sandals/RungeKutta.hh>
@@ -81,6 +81,7 @@ namespace Sandals {
       this->c << 0.0, 1.0 / 6.0, 1.0 / 3.0, 1.0 / 2.0, 2.0 / 3.0, 5.0 / 6.0,
           1.0 / 2.0, 2.0 / 3.0, 5.0 / 6.0;
     }
+
   };  // class SSPRK93Tableau
 
   /**
@@ -117,4 +118,4 @@ namespace Sandals {
 
 }  // namespace Sandals
 
-#endif  // SANDALS_SSPRK93_HH
+#endif  // SANDALS_RUNGE_KUTTA_SSPRK93_HH

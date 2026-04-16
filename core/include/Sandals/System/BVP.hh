@@ -19,15 +19,6 @@
 
 namespace Sandals {
 
-  /*\
-   |   ______     ______
-   |  | __ ) \   / /  _ \
-   |  |  _ \\ \ / /| |_) |
-   |  | |_) |\ V / |  __/
-   |  |____/  \_/  |_|
-   |
-  \*/
-
   /**
    * \brief Class container for an boundary value problem (BVP) of ODEs/DAEs.
    *
@@ -61,7 +52,6 @@ namespace Sandals {
 
     using VectorX  = Eigen::Vector<Real, Eigen::Dynamic>;
     using MatrixX  = Eigen::Matrix<Real, N, Eigen::Dynamic>;
-    using MatrixJX = typename Integrator::MatrixJX;
     using VectorF  = typename Implicit<Real, N, M>::VectorF;
     using MatrixJF = typename Implicit<Real, N, M>::MatrixJF;
     using VectorH  = typename Implicit<Real, N, M>::VectorH;
@@ -393,7 +383,7 @@ namespace Sandals {
       this->m_solution->clear();
 
       // Solve the boundary value problem using a linearized Newton method
-      MatrixJX Jx(MatrixJX::Identity());
+      MatrixJF Jx(MatrixJF::Identity());
       Eigen::FullPivHouseholderQR<MatrixShooting> qr;
       for (Integer iter{0}; iter < this->m_max_iterations; ++iter) {
         /* Single shooting method scheme
@@ -544,7 +534,7 @@ namespace Sandals {
       // Solve the boundary value problem using a linearized Newton method
       VectorX t_local_mesh;
       Solution<Real, N, M> local_sol;
-      MatrixJX Jx;
+      MatrixJF Jx;
       MatrixJH Jh;
       Eigen::SparseQR<MatrixShooting, Eigen::COLAMDOrdering<Integer>> qr;
       static constexpr Real eps{EPSILON};
@@ -672,8 +662,8 @@ namespace Sandals {
         }
 
         // Update the boundary condition Jacobian blocks
-        MatrixJX Jb_x_ini(this->Jb_x_ini(x_ini, x_end));
-        MatrixJX Jb_x_end(this->Jb_x_end(x_ini, x_end));
+        MatrixJF Jb_x_ini(this->Jb_x_ini(x_ini, x_end));
+        MatrixJF Jb_x_end(this->Jb_x_end(x_ini, x_end));
         for (Integer i{0}; i < N; ++i) {
           for (Integer j{0}; j < N; ++j) {
             if (std::abs(Jb_x_ini(i, j)) > eps) {

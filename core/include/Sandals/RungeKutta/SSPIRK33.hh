@@ -10,8 +10,8 @@
 
 #pragma once
 
-#ifndef SANDALS_SSPIRK33_HH
-#define SANDALS_SSPIRK33_HH
+#ifndef SANDALS_RUNGE_KUTTA_SSPIRK33_HH
+#define SANDALS_RUNGE_KUTTA_SSPIRK33_HH
 
 #include <Sandals.hh>
 #include <Sandals/RungeKutta.hh>
@@ -100,4 +100,4 @@ namespace Sandals {
 
 }  // namespace Sandals
 
-#endif  // SANDALS_SSPIRK33_HH
+#endif  // SANDALS_RUNGE_KUTTA_SSPIRK33_HH
