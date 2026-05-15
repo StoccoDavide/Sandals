@@ -461,7 +461,7 @@ namespace Sandals {
      * \param[in] x_guess Initial guess for the states at the mesh nodes.
      * \return True if the system is successfully solved, false otherwise.
      */
-    template <SolutionChoice SolutionMethod = SolutionChoice::GN_AUGMENTED>
+    template <SolutionChoice SolutionMethod = SolutionChoice::GN_KKT>
     bool multiple_shooting_damped(const VectorX &t_mesh,
                                   const MatrixX &x_guess) {
 #define CMD "Sandals::BVP::multiple_shooting(...): "
@@ -1063,6 +1063,9 @@ namespace Sandals {
         idx_x_end = 0;
       }
 
+      constexpr Real epsilon_x{1.0e-4};
+      constexpr Real epsilon_mu{1.0e-8};
+
       // Least-squares operator
       MatrixShooting A_lsq(lsq_rows, lsq_cols);
       A_lsq.reserve(A_lsq_nnz);
@@ -1083,9 +1086,9 @@ namespace Sandals {
       // Allocate augmented system
       if constexpr (SolutionMethod == SolutionChoice::GN_AUGMENTED) {
         // Symmetric augmented KKT system
-        // / 0   Aᵀ  Bᵀ \
-        // | A   -I   0 |
-        // \ B    0   0 /
+        // / λI  Aᵀ   Bᵀ \
+        // | A   -I    0 |
+        // \ B    0  -λI /
         const Integer aug_size{x_size + lsq_rows + N};
         A_aug.resize(aug_size, aug_size);
         A_aug.reserve(2 * A_lsq_nnz + 4 * N * N + aug_size + N);
@@ -1254,7 +1257,9 @@ namespace Sandals {
 
         // Iteration information
         if (this->m_verbose) {
-          std::cout << "Iteration " << iter << ": |b| = " << b_lsq.norm()
+          std::cout << "Iteration " << iter
+                    << ": |b| = " << this->b(x_ini, x_end).norm()
+                    << ", |r| = " << (A_lsq.transpose() * b_lsq).norm()
                     << std::endl
                     << "  x(" << t_mesh(idx_x_ini)
                     << ") = " << x_ini.transpose() << std::endl
@@ -1306,12 +1311,19 @@ namespace Sandals {
 
           // λI block
           for (Integer i{0}; i < z_offset; ++i) {
-            triplets_aug.emplace_back(i, i, this->m_lambda);
+            triplets_aug.emplace_back(i, i, epsilon_x);
           }
 
           // -I block
           for (Integer i{0}; i < lsq_rows; ++i) {
             triplets_aug.emplace_back(z_offset + i, z_offset + i, -1.0);
+          }
+
+          // -λI block
+          for (Integer i{0}; i < N; ++i) {
+            triplets_aug.emplace_back(lambda_offset + i,
+                                      lambda_offset + i,
+                                      -epsilon_mu);
           }
 
           // B and Bᵀ blocks
@@ -1342,7 +1354,9 @@ namespace Sandals {
             }
           }
 
-          // Right-hand side: (0, r, -b)^T
+          // Right-hand side: (0, -r, -b)^T
+          // b_aug.head(z_offset) = A_lsq.transpose() * b_lsq;
+          b_aug.head(z_offset).setZero();
           b_aug.segment(z_offset, lsq_rows) = b_lsq;
           b_aug.tail(N)                     = -this->b(x_ini, x_end);
 

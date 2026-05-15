@@ -94,7 +94,7 @@ int main(int argc, char **argv) {
   problem_index_0.subintervals(num_subintervals);
 
   // Set time mesh
-  constexpr Integer num_points{100};
+  constexpr Integer num_points{50};
   Eigen::Vector<Real, Eigen::Dynamic> time(
       Eigen::Vector<Real, Eigen::Dynamic>::LinSpaced(
           num_points,
@@ -106,23 +106,23 @@ int main(int argc, char **argv) {
 
   // Solve the problems with shooting
   Solution<Real, 12, 0> sol_index_2(time.size());
-  try {
-    std::cout << "Solving problem with index 2..." << std::endl;
-    problem_index_2.sigma(1.0);
-    problem_index_0.lambda(1.0e-3);
-    problem_index_2.integrator()->projection_mode(true);
-    problem_index_2.multiple_shooting(time, guess);
-    sol_index_2 = problem_index_2.solution();
-  } catch (const std::exception &e) {
-    std::cerr << "Error solving problem with index 2: " << e.what()
-              << std::endl;
-  }
+  //   try {
+  //     std::cout << "Solving problem with index 2..." << std::endl;
+  //     problem_index_2.sigma(1.0);
+  //     problem_index_0.lambda(0.0);
+  //     problem_index_2.integrator()->projection_mode(true);
+  //     problem_index_2.multiple_shooting(time, guess);
+  //     sol_index_2 = problem_index_2.solution();
+  //   } catch (const std::exception &e) {
+  //     std::cerr << "Error solving problem with index 2: " << e.what()
+  //               << std::endl;
+  //   }
 
   Solution<Real, 12, 4> sol_index_0_lesq(time.size());
   try {
     std::cout << "Solving problem with index 0 (least squares)..." << std::endl;
     problem_index_0.sigma(1.0);
-    problem_index_0.lambda(1.0e-3);
+    problem_index_0.lambda(1.0e-8);
     problem_index_0.integrator()->projection_mode(false);
     problem_index_0.multiple_shooting(time, guess);
     sol_index_0_lesq = problem_index_0.solution();
@@ -132,17 +132,17 @@ int main(int argc, char **argv) {
   }
 
   Solution<Real, 12, 4> sol_index_0_proj(time.size());
-  try {
-    std::cout << "Solving problem with index 0 (projection)..." << std::endl;
-    problem_index_0.sigma(1.0);
-    problem_index_0.lambda(1.0e-3);
-    problem_index_0.integrator()->projection_mode(false);
-    problem_index_0.multiple_shooting(time, guess);
-    sol_index_0_lesq = problem_index_0.solution();
-  } catch (const std::exception &e) {
-    std::cerr << "Error solving problem with index 0 (projection): " << e.what()
-              << std::endl;
-  }
+  //   try {
+  //     std::cout << "Solving problem with index 0 (projection)..." <<
+  //     std::endl; problem_index_0.sigma(1.0); problem_index_0.lambda(0.0);
+  //     problem_index_0.integrator()->projection_mode(false);
+  //     problem_index_0.multiple_shooting(time, guess);
+  //     sol_index_0_lesq = problem_index_0.solution();
+  //   } catch (const std::exception &e) {
+  //     std::cerr << "Error solving problem with index 0 (projection): " <<
+  //     e.what()
+  //               << std::endl;
+  //   }
 
 #ifdef SANDALS_ENABLE_PLOTTING
 
