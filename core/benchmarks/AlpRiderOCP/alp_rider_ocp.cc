@@ -98,9 +98,9 @@ int main(int argc, char **argv) {
   try {
     std::cout << "Solving problem..." << std::endl;
     problem.sigma(1.0);
-    problem.lambda(1.0e-10);
+    problem.lambda(1.0e-6);
     problem.integrator()->projection_mode(false);
-    problem.multiple_shooting(time, guess);
+    problem.multiple_shooting_damped(time, guess);
     solution = problem.solution();
   } catch (const std::exception &e) {
     std::cerr << "Error solving problem: " << e.what() << std::endl;

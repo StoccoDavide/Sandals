@@ -8,10 +8,12 @@
  * davide.stocco@unitn.it                         enrico.bertolazzi@unitn.it *
 \* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+#include <fstream>
+#include <iostream>
 #include <memory>
 
 #include "Sandals.hh"
-#include "Sandals/RungeKutta/GaussLegendre4.hh"
+#include "Sandals/RungeKutta/RK4.hh"
 #include "TWPBVPC.hh"
 
 #ifdef SANDALS_ENABLE_PLOTTING
@@ -59,62 +61,84 @@ using Real = double;
 #endif
 
 #ifndef PROBLEM_SOLVE
-#define PROBLEM_SOLVE(PROBLEM)                                \
-  /* Set stiffness parameter */                               \
-  constexpr Real lambda{1.0e-3};                              \
-  static_cast<PROBLEM##Explicit<Real> *>(                     \
-      PROBLEM##_explicit.integrator()->system())              \
-      ->lambda(lambda);                                       \
-  static_cast<PROBLEM##Implicit<Real> *>(                     \
-      PROBLEM##_implicit.integrator()->system())              \
-      ->lambda(lambda);                                       \
-  static_cast<PROBLEM##SemiExplicit<Real> *>(                 \
-      PROBLEM##_semiexplicit.integrator()->system())          \
-      ->lambda(lambda);                                       \
-  /* Set verbose mode */                                      \
-  constexpr bool verbose{false};                              \
-  PROBLEM##_explicit.verbose_mode(verbose);                   \
-  PROBLEM##_implicit.verbose_mode(verbose);                   \
-  PROBLEM##_semiexplicit.verbose_mode(verbose);               \
-  PROBLEM##_explicit.integrator()->verbose_mode(false);       \
-  PROBLEM##_implicit.integrator()->verbose_mode(false);       \
-  PROBLEM##_semiexplicit.integrator()->verbose_mode(false);   \
-  /* Set reverse mode */                                      \
-  constexpr bool reverse{true};                               \
-  PROBLEM##_explicit.integrator()->reverse_mode(reverse);     \
-  PROBLEM##_implicit.integrator()->reverse_mode(reverse);     \
-  PROBLEM##_semiexplicit.integrator()->reverse_mode(reverse); \
-  /* Set solver parameters */                                 \
-  PROBLEM##_explicit.sigma(1.0);                              \
-  PROBLEM##_implicit.sigma(1.0);                              \
-  PROBLEM##_semiexplicit.sigma(1.0);                          \
-  /* Set solver tolerance */                                  \
-  PROBLEM##_explicit.tolerance(1.0e-14);                      \
-  PROBLEM##_implicit.tolerance(1.0e-14);                      \
-  PROBLEM##_semiexplicit.tolerance(1.0e-14);                  \
-  /* Set solver maximum number of iterations */               \
-  PROBLEM##_explicit.max_iterations(100);                     \
-  PROBLEM##_implicit.max_iterations(100);                     \
-  PROBLEM##_semiexplicit.max_iterations(100);                 \
-  /* Set solution parameters */                               \
-  constexpr Integer num_subintervals{1};                      \
-  PROBLEM##_explicit.subintervals(num_subintervals);          \
-  PROBLEM##_implicit.subintervals(num_subintervals);          \
-  PROBLEM##_semiexplicit.subintervals(num_subintervals);      \
-  /* Set time mesh */                                         \
-  constexpr Integer num_points{100};                          \
-  Eigen::Vector<Real, Eigen::Dynamic> time(                   \
-      Eigen::Vector<Real, Eigen::Dynamic>::LinSpaced(         \
-          num_points,                                         \
-          PROBLEM##_explicit.time_start(),                    \
-          PROBLEM##_explicit.time_end()));                    \
-  /* Set initial guess */                                     \
-  Eigen::Matrix<Real, D, Eigen::Dynamic> guess(               \
-      PROBLEM##_explicit.guess(time));                        \
-  /* Solve the problems*/                                     \
-  PROBLEM##_explicit.multiple_shooting(time, guess);          \
-  PROBLEM##_implicit.multiple_shooting(time, guess);          \
-  PROBLEM##_semiexplicit.multiple_shooting(time, guess);
+#define PROBLEM_SOLVE(PROBLEM)                                                \
+  /* Set stiffness parameter */                                               \
+  constexpr Real lambda{1.0e-3};                                              \
+  static_cast<PROBLEM##Explicit<Real> *>(                                     \
+      PROBLEM##_explicit.integrator()->system())                              \
+      ->lambda(lambda);                                                       \
+  static_cast<PROBLEM##Implicit<Real> *>(                                     \
+      PROBLEM##_implicit.integrator()->system())                              \
+      ->lambda(lambda);                                                       \
+  static_cast<PROBLEM##SemiExplicit<Real> *>(                                 \
+      PROBLEM##_semiexplicit.integrator()->system())                          \
+      ->lambda(lambda);                                                       \
+  /* Set verbose mode */                                                      \
+  constexpr bool verbose{false};                                              \
+  PROBLEM##_explicit.verbose_mode(verbose);                                   \
+  PROBLEM##_implicit.verbose_mode(verbose);                                   \
+  PROBLEM##_semiexplicit.verbose_mode(verbose);                               \
+  std::cout << "Solving " << #PROBLEM                                         \
+            << " with stiffness parameter lambda = " << lambda << std::endl;  \
+  PROBLEM##_explicit.integrator()->verbose_mode(false);                       \
+  PROBLEM##_implicit.integrator()->verbose_mode(false);                       \
+  PROBLEM##_semiexplicit.integrator()->verbose_mode(false);                   \
+  /* Set reverse mode */                                                      \
+  constexpr bool reverse{false};                                              \
+  PROBLEM##_explicit.integrator()->reverse_mode(reverse);                     \
+  PROBLEM##_implicit.integrator()->reverse_mode(reverse);                     \
+  PROBLEM##_semiexplicit.integrator()->reverse_mode(reverse);                 \
+  /* Set solver parameters */                                                 \
+  PROBLEM##_explicit.sigma(1.0);                                              \
+  PROBLEM##_implicit.sigma(1.0);                                              \
+  PROBLEM##_semiexplicit.sigma(1.0);                                          \
+  /* Set solver tolerance */                                                  \
+  PROBLEM##_explicit.tolerance(1.0e-12);                                      \
+  PROBLEM##_implicit.tolerance(1.0e-12);                                      \
+  PROBLEM##_semiexplicit.tolerance(1.0e-12);                                  \
+  /* Set solver maximum number of iterations */                               \
+  PROBLEM##_explicit.max_iterations(100);                                     \
+  PROBLEM##_implicit.max_iterations(100);                                     \
+  PROBLEM##_semiexplicit.max_iterations(100);                                 \
+  /* Set solution parameters */                                               \
+  constexpr Integer num_subintervals{4};                                      \
+  PROBLEM##_explicit.subintervals(num_subintervals);                          \
+  PROBLEM##_implicit.subintervals(num_subintervals);                          \
+  PROBLEM##_semiexplicit.subintervals(num_subintervals);                      \
+  /* Set time mesh */                                                         \
+  const std::vector<Integer> t_vec{25, 50, 100, 200, 400, 800, 1600, 3200};   \
+  /* Open output file */                                                      \
+  std::ofstream out_file("out_RK4_" + std::to_string(num_subintervals) +      \
+                         ".txt");                                             \
+  /* Set time vector */                                                       \
+  Eigen::Vector<Real, Eigen::Dynamic> time;                                   \
+  for (const auto &t : t_vec) {                                               \
+    Integer num_points{t};                                                    \
+    time = Eigen::Vector<Real, Eigen::Dynamic>(                               \
+        Eigen::Vector<Real, Eigen::Dynamic>::LinSpaced(                       \
+            num_points,                                                       \
+            PROBLEM##_explicit.time_start(),                                  \
+            PROBLEM##_explicit.time_end()));                                  \
+    /* Set initial guess */                                                   \
+    Eigen::Matrix<Real, D, Eigen::Dynamic> guess(                             \
+        PROBLEM##_explicit.guess(time));                                      \
+    /* Solve the problems*/                                                   \
+    bool success_e{false};                                                    \
+    try {                                                                     \
+      success_e = PROBLEM##_explicit.multiple_shooting(time, guess);          \
+    } catch (...) {                                                           \
+      success_e = false;                                                      \
+    }                                                                         \
+    if (success_e) {                                                          \
+      auto sol_e = PROBLEM##_explicit.solution();                             \
+      auto sol_a = PROBLEM##_explicit.exact_solution(                         \
+          reverse ? sol_e.t.reverse().eval() : sol_e.t);                      \
+      out_file << t << " " << (sol_e.eigen_x(0) - sol_a).norm() << std::endl; \
+    }                                                                         \
+  }                                                                           \
+  out_file.close();                                                           \
+  /*PROBLEM##_implicit.multiple_shooting(time, guess);*/                      \
+  /*PROBLEM##_semiexplicit.multiple_shooting(time, guess);*/
 #endif
 
 #ifndef PROBLEM_PLOT
@@ -194,39 +218,39 @@ int main(int argc, char **argv) {
 #endif
 
   // Istantiate the problems
-  GENERATE_PLOT(BVPT1, GaussLegendre4)
-  GENERATE_PLOT(BVPT2, GaussLegendre4)
-  GENERATE_PLOT(BVPT3, GaussLegendre4)
-  GENERATE_PLOT(BVPT4, GaussLegendre4)
-  GENERATE_PLOT(BVPT5, GaussLegendre4)
-  GENERATE_PLOT(BVPT6, GaussLegendre4)
-  GENERATE_PLOT(BVPT7, GaussLegendre4)
-  GENERATE_PLOT(BVPT8, GaussLegendre4)
-  GENERATE_PLOT(BVPT9, GaussLegendre4)
-  GENERATE_PLOT(BVPT10, GaussLegendre4)
-  GENERATE_PLOT(BVPT11, GaussLegendre4)
-  GENERATE_PLOT(BVPT12, GaussLegendre4)
-  GENERATE_PLOT(BVPT13, GaussLegendre4)
-  GENERATE_PLOT(BVPT14, GaussLegendre4)
-  GENERATE_PLOT(BVPT15, GaussLegendre4)
-  GENERATE_PLOT(BVPT16, GaussLegendre4)
-  GENERATE_PLOT(BVPT17, GaussLegendre4)
-  GENERATE_PLOT(BVPT18, GaussLegendre4)
-  GENERATE_PLOT(BVPT19, GaussLegendre4)
-  GENERATE_PLOT(BVPT20, GaussLegendre4)
-  GENERATE_PLOT(BVPT21, GaussLegendre4)
-  GENERATE_PLOT(BVPT22, GaussLegendre4)
-  GENERATE_PLOT(BVPT23, GaussLegendre4)
-  GENERATE_PLOT(BVPT24, GaussLegendre4)
-  GENERATE_PLOT(BVPT25, GaussLegendre4)
-  GENERATE_PLOT(BVPT26, GaussLegendre4)
-  GENERATE_PLOT(BVPT27, GaussLegendre4)
-  GENERATE_PLOT(BVPT28, GaussLegendre4)
-  GENERATE_PLOT(BVPT29, GaussLegendre4)
-  GENERATE_PLOT(BVPT30, GaussLegendre4)
-  GENERATE_PLOT(BVPT31, GaussLegendre4)
-  GENERATE_PLOT(BVPT32, GaussLegendre4)
-  GENERATE_PLOT(BVPT33, GaussLegendre4)
+  GENERATE_PLOT(BVPT1, RK4)
+  // GENERATE_PLOT(BVPT2, RK4)
+  // GENERATE_PLOT(BVPT3, RK4)
+  // GENERATE_PLOT(BVPT4, RK4)
+  // GENERATE_PLOT(BVPT5, RK4)
+  // GENERATE_PLOT(BVPT6, RK4)
+  // GENERATE_PLOT(BVPT7, RK4)
+  // GENERATE_PLOT(BVPT8, RK4)
+  // GENERATE_PLOT(BVPT9, RK4)
+  // GENERATE_PLOT(BVPT10, RK4)
+  // GENERATE_PLOT(BVPT11, RK4)
+  // GENERATE_PLOT(BVPT12, RK4)
+  // GENERATE_PLOT(BVPT13, RK4)
+  // GENERATE_PLOT(BVPT14, RK4)
+  // GENERATE_PLOT(BVPT15, RK4)
+  // GENERATE_PLOT(BVPT16, RK4)
+  // GENERATE_PLOT(BVPT17, RK4)
+  // GENERATE_PLOT(BVPT18, RK4)
+  // GENERATE_PLOT(BVPT19, RK4)
+  // GENERATE_PLOT(BVPT20, RK4)
+  // GENERATE_PLOT(BVPT21, RK4)
+  // GENERATE_PLOT(BVPT22, RK4)
+  // GENERATE_PLOT(BVPT23, RK4)
+  // GENERATE_PLOT(BVPT24, RK4)
+  // GENERATE_PLOT(BVPT25, RK4)
+  // GENERATE_PLOT(BVPT26, RK4)
+  // GENERATE_PLOT(BVPT27, RK4)
+  // GENERATE_PLOT(BVPT28, RK4)
+  // GENERATE_PLOT(BVPT29, RK4)
+  // GENERATE_PLOT(BVPT30, RK4)
+  // GENERATE_PLOT(BVPT31, RK4)
+  // GENERATE_PLOT(BVPT32, RK4)
+  // GENERATE_PLOT(BVPT33, RK4)
 
 #ifdef SANDALS_ENABLE_PLOTTING
   app.Run();

@@ -18,8 +18,8 @@
 end
 
 # Configuration of the build
-BUILD_DEBUG      = true
-BUILD_TESTS      = true
+BUILD_DEBUG      = false
+BUILD_TESTS      = false
 BUILD_EXAMPLES   = false
 BUILD_BENCHMARKS = true
 CHECK_JACOBIANS  = false

@@ -42,7 +42,7 @@ namespace Sandals {
     using SolutionChoice = enum class SolutionChoice : Integer {
       GN_STANDARD  = 0,
       GN_AUGMENTED = 1,
-      CONJGRAD     = 2
+      GN_KKT       = 2
     }; /**< Solution method choice. */
 
     using System        = Implicit<Real, N, M>;
@@ -457,8 +457,575 @@ namespace Sandals {
     /**
      * Solve the BVP using the multiple shooting method.
      * \tparam SolutionMethod The solution method choice.
-     * \param[in] t_mesh Independent variable (or time) mesh \f$ \mathbf{t} \f$.
-     * \param[in] ics Initial conditions \f$ \mathbf{x}(t = 0) \f$.
+     * \param[in] t_mesh Independent variable mesh.
+     * \param[in] x_guess Initial guess for the states at the mesh nodes.
+     * \return True if the system is successfully solved, false otherwise.
+     */
+    template <SolutionChoice SolutionMethod = SolutionChoice::GN_AUGMENTED>
+    bool multiple_shooting_damped(const VectorX &t_mesh,
+                                  const MatrixX &x_guess) {
+#define CMD "Sandals::BVP::multiple_shooting(...): "
+
+      using VectorShooting = Eigen::Vector<Real, Eigen::Dynamic>;
+      using MatrixShooting = Eigen::SparseMatrix<Real>;
+
+      // Check input dimensions
+      SANDALS_ASSERT(t_mesh.size() > 1,
+                     CMD "expected at least two mesh points.");
+      SANDALS_ASSERT(x_guess.cols() == t_mesh.size(),
+                     CMD "incompatible mesh and guess sizes.");
+
+      // Disable adaptive time-stepping
+      this->m_integrator->disable_adaptive_mode();
+
+      // Problem dimensions
+      const Integer num_intervals{static_cast<Integer>(t_mesh.size()) - 1};
+      const Integer local_intervals{std::max(1, this->m_subintervals)};
+      const Integer c_size{num_intervals * N};
+      const Integer x_size{(num_intervals + 1) * N};
+      const Integer h_size{
+        this->m_integrator->projection_mode() ? 0 : (num_intervals + 1) * M};
+      const Integer lsq_rows{c_size + h_size};
+      const Integer lsq_cols{x_size};
+      const Integer A_lsq_nnz{(c_size + h_size + 2 * N) * N + c_size};
+      const Real sqrt_sigma{std::sqrt(this->m_sigma)};
+
+      Integer idx_x_ini{0};
+      Integer idx_x_end{num_intervals};
+
+      if (this->m_integrator->reverse_mode()) {
+        idx_x_ini = num_intervals;
+        idx_x_end = 0;
+      }
+
+      // Least-squares operator
+      MatrixShooting A_lsq(lsq_rows, lsq_cols);
+      A_lsq.reserve(A_lsq_nnz);
+
+      VectorShooting b_lsq(lsq_rows);
+
+      std::vector<Eigen::Triplet<Real>> triplets_lsq;
+      triplets_lsq.reserve(A_lsq_nnz);
+
+      // Boundary constraint matrix
+      MatrixX Bmat(MatrixX::Zero(N, x_size));
+
+      // Augmented KKT system
+      MatrixShooting A_aug;
+      VectorShooting b_aug;
+      std::vector<Eigen::Triplet<Real>> triplets_aug;
+
+      // Normal-equation KKT system
+      MatrixShooting A_kkt;
+      VectorShooting b_kkt;
+      std::vector<Eigen::Triplet<Real>> triplets_kkt;
+
+      // Allocate augmented KKT system
+      if constexpr (SolutionMethod == SolutionChoice::GN_AUGMENTED) {
+        // Symmetric augmented KKT system
+        // / λI  Aᵀ  Bᵀ \
+        // |  A  -I   0 |
+        // \  B   0   0 /
+
+        const Integer aug_size{x_size + lsq_rows + N};
+
+        A_aug.resize(aug_size, aug_size);
+        A_aug.reserve(2 * A_lsq_nnz + 4 * N * N + aug_size);
+
+        b_aug.resize(aug_size);
+
+        triplets_aug.reserve(2 * A_lsq_nnz + 4 * N * N + aug_size);
+      }
+
+      // Allocate normal-equation KKT system
+      if constexpr (SolutionMethod == SolutionChoice::GN_KKT) {
+        // Symmetric normal-equation KKT system
+        // / AᵀA  Bᵀ \
+        // \  B    0 /
+
+        const Integer kkt_size{x_size + N};
+
+        A_kkt.resize(kkt_size, kkt_size);
+        A_kkt.reserve(4 * A_lsq_nnz + 4 * N * N);
+
+        b_kkt.resize(kkt_size);
+
+        triplets_kkt.reserve(4 * A_lsq_nnz + 4 * N * N);
+      }
+
+      // Initialize solution container
+      this->m_solution->clear();
+      this->m_solution->resize(t_mesh.size());
+      this->m_solution->t = t_mesh;
+
+      // State vectors
+      MatrixX x_sol(x_guess);
+      MatrixX delta_x_sol(MatrixX::Zero(N, num_intervals + 1));
+      MatrixX x_trial(MatrixX::Zero(N, num_intervals + 1));
+
+      // Temporary variables
+      VectorF x_ini, x_end;
+      VectorX t_local_mesh;
+
+      Solution<Real, N, M> local_sol;
+
+      MatrixJF Jx;
+      MatrixJF Jb_x_ini;
+      MatrixJF Jb_x_end;
+
+      MatrixJH Jh;
+
+      // Solvers
+      Eigen::SparseQR<MatrixShooting, Eigen::COLAMDOrdering<Integer>> qr;
+      // Eigen::SparseQR<MatrixShooting, Eigen::COLAMDOrdering<Integer>> ldlt;
+      Eigen::SimplicialLDLT<MatrixShooting> ldlt;
+
+      // Merit function
+      auto residual_norm = [&](const MatrixX &x_eval) -> Real {
+        Real norm2{0};
+
+        Solution<Real, N, M> sol_eval;
+        MatrixJF Jtmp;
+
+        for (Integer k{0}; k < num_intervals; ++k) {
+          VectorX t_eval =
+              VectorX::LinSpaced(local_intervals + 1, t_mesh(k), t_mesh(k + 1));
+
+          Jtmp.setIdentity();
+
+          if (!this->m_integrator->template solve<true>(t_eval,
+                                                        x_eval.col(k),
+                                                        sol_eval,
+                                                        Jtmp)) {
+            return std::numeric_limits<Real>::infinity();
+          }
+
+          VectorF continuity =
+              sol_eval.x.col(local_intervals) - x_eval.col(k + 1);
+
+          norm2 += continuity.squaredNorm();
+
+          if constexpr (M > 0) {
+            if (!this->m_integrator->projection_mode()) {
+              norm2 += this->m_sigma *
+                       this->m_integrator->system()
+                           ->h(sol_eval.x.col(local_intervals), t_mesh(k + 1))
+                           .squaredNorm();
+
+              if (k == 0) {
+                norm2 += this->m_sigma * this->m_integrator->system()
+                                             ->h(x_eval.col(0), t_mesh(0))
+                                             .squaredNorm();
+              }
+            }
+          }
+        }
+
+        norm2 +=
+            this->b(x_eval.col(idx_x_ini), x_eval.col(idx_x_end)).squaredNorm();
+
+        return 0.5 * norm2;
+      };
+
+      // Initial residual norm
+      Real residual{std::numeric_limits<Real>::infinity()};
+
+      // Newton iterations
+      for (Integer iter{0}; iter < this->m_max_iterations; ++iter) {
+        // Reset least-squares system
+        triplets_lsq.clear();
+        b_lsq.setZero();
+        Bmat.setZero();
+
+        // Assemble least-squares operator
+        // A_lsq * dx = b_lsq
+        for (Integer k{0}; k < num_intervals; ++k) {
+          // Local integration mesh
+          t_local_mesh =
+              VectorX::LinSpaced(local_intervals + 1, t_mesh(k), t_mesh(k + 1));
+
+          // Reset state transition Jacobian
+          Jx.setIdentity();
+
+          // Integrate interval
+          if (!this->m_integrator->template solve<true>(t_local_mesh,
+                                                        x_sol.col(k),
+                                                        local_sol,
+                                                        Jx)) {
+            SANDALS_ERROR(CMD "failed to integrate interval " << k << ".");
+            return false;
+          }
+
+          // Store local solution
+          if (k == 0) {
+            this->m_solution->x.col(0) = local_sol.x.col(0);
+            this->m_solution->h.col(0) = local_sol.h.col(0);
+          }
+
+          this->m_solution->x.col(k + 1) = local_sol.x.col(local_intervals);
+          this->m_solution->h.col(k + 1) = local_sol.h.col(local_intervals);
+
+          // Continuity equations
+          for (Integer i{0}; i < N; ++i) {
+            // +I block
+            triplets_lsq.emplace_back(k * N + i, (k + 1) * N + i, 1.0);
+
+            // -Jx block
+            for (Integer j{0}; j < N; ++j) {
+              if (std::abs(Jx(i, j)) > EPSILON) {
+                triplets_lsq.emplace_back(k * N + i, k * N + j, -Jx(i, j));
+              }
+            }
+          }
+
+          // Continuity residual
+          b_lsq.template segment<N>(k * N) =
+              this->m_solution->x.col(k + 1) - x_sol.col(k + 1);
+
+          // Constraint manifold equations
+          if constexpr (M > 0) {
+            if (!this->m_integrator->projection_mode()) {
+              // Initial node
+              if (k == 0) {
+                Jh =
+                    sqrt_sigma *
+                    this->m_integrator->system()->Jh_x(x_sol.col(0), t_mesh(0));
+
+                for (Integer i{0}; i < M; ++i) {
+                  for (Integer j{0}; j < N; ++j) {
+                    if (std::abs(Jh(i, j)) > EPSILON) {
+                      triplets_lsq.emplace_back(c_size + i, j, Jh(i, j));
+                    }
+                  }
+                }
+
+                b_lsq.template segment<M>(c_size) =
+                    -sqrt_sigma *
+                    this->m_integrator->system()->h(x_sol.col(0), t_mesh(0));
+              }
+
+              // Interior/final nodes
+              Jh = sqrt_sigma *
+                   this->m_integrator->system()->Jh_x(x_sol.col(k + 1),
+                                                      t_mesh(k + 1));
+
+              for (Integer i{0}; i < M; ++i) {
+                for (Integer j{0}; j < N; ++j) {
+                  if (std::abs(Jh(i, j)) > EPSILON) {
+                    triplets_lsq.emplace_back(c_size + (k + 1) * M + i,
+                                              (k + 1) * N + j,
+                                              Jh(i, j));
+                  }
+                }
+              }
+
+              // Constraint residual
+              b_lsq.template segment<M>(c_size + (k + 1) * M) =
+                  -sqrt_sigma *
+                  this->m_integrator->system()->h(x_sol.col(k + 1),
+                                                  t_mesh(k + 1));
+            }
+          }
+        }
+
+        // Boundary states
+        x_ini = x_sol.col(idx_x_ini);
+        x_end = x_sol.col(idx_x_end);
+
+        // Boundary Jacobians
+        Jb_x_ini = this->Jb_x_ini(x_ini, x_end);
+        Jb_x_end = this->Jb_x_end(x_ini, x_end);
+
+        // Assemble boundary matrix
+        for (Integer i{0}; i < N; ++i) {
+          for (Integer j{0}; j < N; ++j) {
+            Bmat(i, idx_x_ini * N + j) += Jb_x_ini(i, j);
+            Bmat(i, idx_x_end * N + j) += Jb_x_end(i, j);
+          }
+        }
+
+        // Build least-squares operator
+        A_lsq.setFromTriplets(triplets_lsq.begin(), triplets_lsq.end());
+        A_lsq.makeCompressed();
+
+        // Residual norm
+        residual = std::sqrt(2.0 * residual_norm(x_sol));
+
+        // Iteration information
+        if (this->m_verbose) {
+          std::cout << "Newton iteration " << iter << ": |r| = " << residual
+                    << std::endl
+                    << "  x(" << t_mesh(idx_x_ini)
+                    << ") = " << x_ini.transpose() << std::endl
+                    << "  x(" << t_mesh(idx_x_end)
+                    << ") = " << x_end.transpose() << std::endl;
+        }
+
+        // Convergence check
+        if (residual < this->m_tolerance) {
+          return true;
+        }
+
+        // Standard least-squares solve
+        if constexpr (SolutionMethod == SolutionChoice::GN_STANDARD) {
+          MatrixShooting A_full(lsq_rows + N, x_size);
+
+          std::vector<Eigen::Triplet<Real>> triplets_full;
+          triplets_full.reserve(A_lsq.nonZeros() + 2 * N * N);
+
+          for (Integer k{0}; k < A_lsq.outerSize(); ++k) {
+            for (typename MatrixShooting::InnerIterator it(A_lsq, k); it;
+                 ++it) {
+              triplets_full.emplace_back(it.row(), it.col(), it.value());
+            }
+          }
+
+          for (Integer i{0}; i < N; ++i) {
+            for (Integer j{0}; j < x_size; ++j) {
+              if (std::abs(Bmat(i, j)) > EPSILON) {
+                triplets_full.emplace_back(lsq_rows + i, j, Bmat(i, j));
+              }
+            }
+          }
+
+          A_full.setFromTriplets(triplets_full.begin(), triplets_full.end());
+
+          VectorShooting b_full(lsq_rows + N);
+
+          b_full.head(lsq_rows) = b_lsq;
+          b_full.tail(N)        = -this->b(x_ini, x_end);
+
+          qr.compute(A_full);
+
+          SANDALS_ASSERT(qr.info() == Eigen::Success,
+                         CMD "failed to factorize least-squares system.");
+
+          delta_x_sol = qr.solve(b_full).reshaped(N, num_intervals + 1);
+        }
+
+        // Symmetric augmented KKT solve
+        else if constexpr (SolutionMethod == SolutionChoice::GN_AUGMENTED) {
+          triplets_aug.clear();
+          b_aug.setZero();
+
+          // Unknown ordering: (dx, z, lambda)^T
+          const Integer dx_offset{0};
+          const Integer z_offset{x_size};
+          const Integer lambda_offset{x_size + lsq_rows};
+
+          // A and Aᵀ blocks
+          for (Integer k{0}; k < A_lsq.outerSize(); ++k) {
+            for (typename MatrixShooting::InnerIterator it(A_lsq, k); it;
+                 ++it) {
+              // Aᵀ block
+              triplets_aug.emplace_back(dx_offset + it.col(),
+                                        z_offset + it.row(),
+                                        it.value());
+              // A block
+              triplets_aug.emplace_back(z_offset + it.row(),
+                                        dx_offset + it.col(),
+                                        it.value());
+            }
+          }
+
+          // -I block
+          for (Integer i{0}; i < lsq_rows; ++i) {
+            triplets_aug.emplace_back(z_offset + i, z_offset + i, -1.0);
+          }
+
+          // B and Bᵀ blocks
+          for (Integer i{0}; i < N; ++i) {
+            for (Integer j{0}; j < x_size; ++j) {
+              if (std::abs(Bmat(i, j)) > EPSILON) {
+                // Bᵀ block
+                triplets_aug.emplace_back(dx_offset + j,
+                                          lambda_offset + i,
+                                          Bmat(i, j));
+                // B block
+                triplets_aug.emplace_back(lambda_offset + i,
+                                          dx_offset + j,
+                                          Bmat(i, j));
+              }
+            }
+          }
+
+          // RHS: (0, r, -b)^T
+          b_aug.segment(z_offset, lsq_rows) = b_lsq;
+          b_aug.tail(N)                     = -this->b(x_ini, x_end);
+
+          // Build system
+          A_aug.setFromTriplets(triplets_aug.begin(), triplets_aug.end());
+          A_aug.makeCompressed();
+
+          // Factorize
+          ldlt.compute(A_aug);
+
+          SANDALS_ASSERT(ldlt.info() == Eigen::Success,
+                         CMD "failed to factorize augmented KKT system.");
+
+          // Solve
+          VectorShooting sol_aug(ldlt.solve(b_aug));
+
+          SANDALS_ASSERT(ldlt.info() == Eigen::Success,
+                         CMD "failed to solve augmented KKT system.");
+
+          // Extract Newton step
+          delta_x_sol =
+              sol_aug.segment(dx_offset, x_size).reshaped(N, num_intervals + 1);
+        }
+
+        // Normal-equation KKT solve
+        else if constexpr (SolutionMethod == SolutionChoice::GN_KKT) {
+          triplets_kkt.clear();
+          b_kkt.setZero();
+
+          // Normal equations
+          MatrixShooting AtA(A_lsq.transpose() * A_lsq);
+
+          // AᵀA block
+          for (Integer k{0}; k < AtA.outerSize(); ++k) {
+            for (typename MatrixShooting::InnerIterator it(AtA, k); it; ++it) {
+              triplets_kkt.emplace_back(it.row(), it.col(), it.value());
+            }
+          }
+
+          // B and Bᵀ blocks
+          for (Integer i{0}; i < N; ++i) {
+            for (Integer j{0}; j < x_size; ++j) {
+              if (std::abs(Bmat(i, j)) > EPSILON) {
+                triplets_kkt.emplace_back(j, x_size + i, Bmat(i, j));
+
+                triplets_kkt.emplace_back(x_size + i, j, Bmat(i, j));
+              }
+            }
+          }
+
+          // RHS: (Aᵀr - λr_bar, -b)^T
+          b_kkt.head(x_size) =
+              A_lsq.transpose() * b_lsq;  // - this->m_lambda * r_bar;
+          b_kkt.tail(N) = -this->b(x_ini, x_end);
+
+          // Build KKT matrix
+          A_kkt.setFromTriplets(triplets_kkt.begin(), triplets_kkt.end());
+          A_kkt.makeCompressed();
+
+          // Factorize
+          ldlt.compute(A_kkt);
+
+          SANDALS_ASSERT(ldlt.info() == Eigen::Success,
+                         CMD "failed to factorize KKT system.");
+
+          // Solve
+          VectorShooting sol_kkt(ldlt.solve(b_kkt));
+
+          SANDALS_ASSERT(ldlt.info() == Eigen::Success,
+                         CMD "failed to solve KKT system.");
+
+          // Extract Newton step
+          delta_x_sol = sol_kkt.head(x_size).reshaped(N, num_intervals + 1);
+        }
+
+        // Invalid step
+        if (!delta_x_sol.allFinite()) {
+          SANDALS_ERROR(CMD "invalid Newton update.");
+          return false;
+        }
+
+        // Small step
+        const Real step_norm{delta_x_sol.norm()};
+        const Real x_norm{x_sol.norm()};
+        constexpr Real stagnation_factor{10.0};
+        if (step_norm < this->m_tolerance * (1.0 + x_norm)) {
+          // Accept if residual already reasonably small
+          if (residual < stagnation_factor * this->m_tolerance) {
+            if (this->m_verbose) {
+              std::cout << "Converged by small step criterion." << std::endl;
+            }
+            return true;
+          }
+          SANDALS_WARNING(CMD "Newton stagnation detected.");
+          return false;
+        }
+
+        // Backtracking line search
+        Real alpha{1.0};
+        constexpr Real alpha_min{1.0e-6};
+        constexpr Real contraction{0.5};
+        constexpr Real armijo{1.0e-4};
+
+        const Real merit_old{residual_norm(x_sol)};
+        const VectorShooting gradient{-A_lsq.transpose() * b_lsq};
+        const Real gradient_norm{gradient.norm()};
+
+        if (residual < this->m_tolerance &&
+            gradient_norm < 10.0 * this->m_tolerance) {
+          if (this->m_verbose) {
+            std::cout << "Converged: residual + gradient criteria satisfied.\n";
+          }
+          return true;
+        }
+
+        const VectorShooting delta_vec{
+          Eigen::Map<VectorShooting>(delta_x_sol.data(), x_size)};
+        const Real directional_derivative{gradient.dot(delta_vec)};
+
+        // if (directional_derivative >= 0.0) {
+        //   SANDALS_WARNING(CMD "non-descent direction detected.");
+        //   return false;
+        // }
+
+        bool accepted{false};
+        Integer iter_ls{0};
+        while (alpha > alpha_min) {
+          x_trial = x_sol + alpha * delta_x_sol;
+
+          const Real merit_new{residual_norm(x_trial)};
+
+          // Iteration information
+          if (this->m_verbose) {
+            std::cout << "  Line search iteration " << iter_ls
+                      << ": (alpha = " << alpha << "), merit = " << merit_new
+                      << std::endl;
+          }
+
+          const Real armijo_rhs{merit_old +
+                                armijo * alpha * directional_derivative};
+
+          if (std::isfinite(merit_new) && merit_new <= armijo_rhs) {
+            if (this->m_verbose) {
+              std::cout << "  Accepted step with alpha = " << alpha
+                        << std::endl;
+            }
+            // Accept the trial step
+            accepted = true;
+            break;
+          }
+          alpha *= contraction;
+          ++iter_ls;
+        }
+
+        if (!accepted) {
+          SANDALS_WARNING(CMD "line search failed.");
+          return false;
+        }
+
+        // Update solution
+        x_sol = x_trial;
+      }
+
+      // Maximum iterations reached
+      if (this->m_verbose) {
+        SANDALS_WARNING(CMD "maximum iterations reached.");
+      }
+      return false;
+
+#undef CMD
+    }
+
+    /**
+     * Solve the BVP using the multiple shooting method.
+     * \tparam SolutionMethod The solution method choice.
+     * \param[in] t_mesh Independent variable mesh.
      * \param[in] x_guess Initial guess for the states at the mesh nodes.
      * \return True if the system is successfully solved, false otherwise.
      */
@@ -469,106 +1036,113 @@ namespace Sandals {
       using VectorShooting = Eigen::Vector<Real, Eigen::Dynamic>;
       using MatrixShooting = Eigen::SparseMatrix<Real>;
 
-      // Check if the mesh and the guess have compatible sizes
+      // Check input dimensions
       SANDALS_ASSERT(t_mesh.size() > 1,
-                     CMD "expected at least two time mesh points.");
+                     CMD "expected at least two mesh points.");
       SANDALS_ASSERT(x_guess.cols() == t_mesh.size(),
-                     CMD
-                     "incompatible sizes between time mesh and states guess.");
+                     CMD "incompatible mesh and guess sizes.");
 
       // Disable adaptive time-stepping
       this->m_integrator->disable_adaptive_mode();
 
-      // Temporary variables
-      VectorF x_ini, x_end;
+      // Problem dimensions
       const Integer num_intervals{static_cast<Integer>(t_mesh.size()) - 1};
       const Integer local_intervals{std::max(1, this->m_subintervals)};
       const Integer c_size{num_intervals * N};
       const Integer x_size{(num_intervals + 1) * N};
       const Integer h_size{
         this->m_integrator->projection_mode() ? 0 : (num_intervals + 1) * M};
+      const Integer lsq_rows{c_size + h_size + N};
+      const Integer lsq_cols{x_size};
+      const Integer A_lsq_nnz{(c_size + h_size + 2 * N) * N + c_size};
       const Real sqrt_sigma{std::sqrt(this->m_sigma)};
-      Integer idx_x_ini{0}, idx_x_end{num_intervals};
+      Integer idx_x_ini{0};
+      Integer idx_x_end{num_intervals};
       if (this->m_integrator->reverse_mode()) {
         idx_x_ini = num_intervals;
         idx_x_end = 0;
       }
 
-      // Prepare the standard linear systems for the Gauss-Newton step
-      Integer A_sys_rows{0}, A_sys_cols{0}, A_sys_nnz{0}, b_sys_size{0};
-      if constexpr (SolutionMethod == SolutionChoice::GN_STANDARD ||
-                    SolutionMethod == SolutionChoice::GN_AUGMENTED) {
-        b_sys_size = c_size + h_size + N;
-        A_sys_rows = b_sys_size;
-        A_sys_cols = x_size;
-        A_sys_nnz  = (c_size + h_size + 2 * N) * N + c_size;
-      }
-      MatrixShooting A_sys(A_sys_rows, A_sys_cols);
-      A_sys.reserve(A_sys_nnz);
-      VectorShooting b_sys(b_sys_size);
-      std::vector<Eigen::Triplet<Real>> triplets_sys;
-      triplets_sys.reserve(A_sys_nnz);
+      // Least-squares operator
+      MatrixShooting A_lsq(lsq_rows, lsq_cols);
+      A_lsq.reserve(A_lsq_nnz);
+      VectorShooting b_lsq(lsq_rows);
+      std::vector<Eigen::Triplet<Real>> triplets_lsq;
+      triplets_lsq.reserve(A_lsq_nnz);
 
-      // Prepare the augmented linear systems for the Gauss-Newton step
-      Integer A_aug_rows{0}, A_aug_cols{0}, A_aug_nnz{0}, b_aug_size{0};
-      if constexpr (SolutionMethod == SolutionChoice::GN_AUGMENTED) {
-        b_aug_size = A_sys_rows + A_sys_cols;
-        A_aug_rows = b_aug_size;
-        A_aug_cols = b_aug_size;
-        A_aug_nnz  = 2 * A_sys_nnz + b_aug_size;
-      }
-      MatrixShooting A_aug(A_aug_rows, A_aug_cols);
-      A_aug.reserve(A_aug_nnz);
-      VectorShooting b_aug(b_aug_size);
+      // Augmented KKT system
+      MatrixShooting A_aug;
+      VectorShooting b_aug;
       std::vector<Eigen::Triplet<Real>> triplets_aug;
-      triplets_aug.reserve(A_aug_nnz);
+
+      // Normal-equation KKT system
+      MatrixShooting A_kkt;
+      VectorShooting b_kkt;
+      std::vector<Eigen::Triplet<Real>> triplets_kkt;
+
+      // Allocate augmented system
+      if constexpr (SolutionMethod == SolutionChoice::GN_AUGMENTED) {
+        // Symmetric augmented KKT system
+        // / 0   Aᵀ  Bᵀ \
+        // | A   -I   0 |
+        // \ B    0   0 /
+        const Integer aug_size{x_size + lsq_rows + N};
+        A_aug.resize(aug_size, aug_size);
+        A_aug.reserve(2 * A_lsq_nnz + 4 * N * N + aug_size + N);
+        b_aug.resize(aug_size);
+        triplets_aug.reserve(2 * A_lsq_nnz + 4 * N * N + aug_size + N);
+      }
+
+      // Allocate normal-equation KKT system
+      if constexpr (SolutionMethod == SolutionChoice::GN_KKT) {
+        // Symmetric normal-equation KKT system
+        // / AᵀA  Bᵀ \
+        // \  B    0 /
+        const Integer kkt_size{x_size + N};
+        A_kkt.resize(kkt_size, kkt_size);
+        A_kkt.reserve(4 * A_lsq_nnz + 4 * N * N);
+        b_kkt.resize(kkt_size);
+        triplets_kkt.reserve(4 * A_lsq_nnz + 4 * N * N);
+      }
 
       // Initialize the solution
       this->m_solution->clear();
       this->m_solution->resize(t_mesh.size());
       this->m_solution->t = t_mesh;
 
-      // Initial guess for the states as the guess at the mesh nodes
-      MatrixX x_sol(x_guess), delta_x_sol(x_guess);
+      // State vectors
+      MatrixX x_sol(x_guess);
+      MatrixX delta_x_sol(MatrixX::Zero(N, num_intervals + 1));
 
-      // Solve the boundary value problem using a linearized Newton method
+      // Temporary variables
+      VectorF x_ini, x_end;
       VectorX t_local_mesh;
       Solution<Real, N, M> local_sol;
-      MatrixJF Jx;
+      MatrixJF Jx, Jb_x_ini, Jb_x_end;
       MatrixJH Jh;
+
+      // Solvers
       Eigen::SparseQR<MatrixShooting, Eigen::COLAMDOrdering<Integer>> qr;
-      static constexpr Real eps{EPSILON};
+      // Eigen::SimplicialLDLT<MatrixShooting> ldlt;
+      Eigen::SparseQR<MatrixShooting, Eigen::COLAMDOrdering<Integer>> ldlt;
+
+      // Newton iterations
       for (Integer iter{0}; iter < this->m_max_iterations; ++iter) {
-        /* Multiple shooting solution scheme
-        Standard system
-                [A_sys]                   {x}  =         {b_sys}
-         /   -Jx_1     I              \           /  x_ini_2 - x_sol_1  \
-         |       .        .           |           |          :          |
-         |          .        .        | /  :  \ = |          :          |
-         |             -Jx_n     I    | |  :  |   | x_ini_n+1 - x_sol_n |
-         |  σ½*Jh_0                   | | dx  |   |      -σ^½*h_0       |
-         |            .               | |  :  |   |          :          |
-         |               .            | \  :  /   |          :          |
-         |                    σ½*Jh_m |           |     -σ^½*h_m        |
-         \ Jb_x_ini          Jb_x_end /           \         -b          /
+        // Reset least-squares system
+        triplets_lsq.clear();
+        b_lsq.setZero();
 
-         Augmented system
-         [A_sys]^T * [A_sys] * {dx} = [A_sys]^T * {b_sys}
-         / -I    A  \ / z  \ = /   0   \
-         |          | |    | = |       |
-         \ A^T   λI / \ dx /   \ A^T*b /
-         */
-
-        // Reset the standard linear system
-        triplets_sys.clear();
-        A_sys.setZero();
-        b_sys.setZero();
-
-        // Integrate each interval with the local mesh
+        // Assemble the rectangular least-squares operator
+        // A_lsq * dx = b_lsq
         for (Integer k{0}; k < num_intervals; ++k) {
+          // Local integration mesh
           t_local_mesh =
               VectorX::LinSpaced(local_intervals + 1, t_mesh(k), t_mesh(k + 1));
+
+          // Reset state transition Jacobian
           Jx.setIdentity();
+
+          // Integrate interval
           if (!this->m_integrator->template solve<true>(t_local_mesh,
                                                         x_sol.col(k),
                                                         local_sol,
@@ -577,7 +1151,7 @@ namespace Sandals {
             return false;
           }
 
-          // Store the local solution
+          // Store local solution
           if (k == 0) {
             this->m_solution->x.col(0) = local_sol.x.col(0);
             this->m_solution->h.col(0) = local_sol.h.col(0);
@@ -585,53 +1159,60 @@ namespace Sandals {
           this->m_solution->x.col(k + 1) = local_sol.x.col(local_intervals);
           this->m_solution->h.col(k + 1) = local_sol.h.col(local_intervals);
 
-          // Jacobian propagation for the current interval
+          // Continuity equations: x_{k+1} - Φ_k(x_k)
           for (Integer i{0}; i < N; ++i) {
-            triplets_sys.emplace_back(k * N + i, (k + 1) * N + i, 1.0);
+            // +I block
+            triplets_lsq.emplace_back(k * N + i, (k + 1) * N + i, 1.0);
+
+            // -Jx block
             for (Integer j{0}; j < N; ++j) {
-              if (std::abs(Jx(i, j)) > eps) {
-                triplets_sys.emplace_back(k * N + i, k * N + j, -Jx(i, j));
+              if (std::abs(Jx(i, j)) > EPSILON) {
+                triplets_lsq.emplace_back(k * N + i, k * N + j, -Jx(i, j));
               }
             }
           }
 
-          // Continuity residual for interior nodes
-          b_sys.template segment<N>(k * N) =
+          // Continuity residual
+          b_lsq.template segment<N>(k * N) =
               this->m_solution->x.col(k + 1) - x_sol.col(k + 1);
 
-          // Compute the Jacobian of contraints manifold
+          // Constraint manifold equations
           if constexpr (M > 0) {
             if (!this->m_integrator->projection_mode()) {
+              // Initial node
               if (k == 0) {
                 Jh =
                     sqrt_sigma *
                     this->m_integrator->system()->Jh_x(x_sol.col(0), t_mesh(0));
                 for (Integer i{0}; i < M; ++i) {
                   for (Integer j{0}; j < N; ++j) {
-                    if (std::abs(Jh(i, j)) > eps) {
-                      triplets_sys.emplace_back(c_size + i, j, Jh(i, j));
+                    if (std::abs(Jh(i, j)) > EPSILON) {
+                      triplets_lsq.emplace_back(c_size + i, j, Jh(i, j));
                     }
                   }
                 }
-                b_sys.template segment<M>(c_size) =
+                b_lsq.template segment<M>(c_size) =
                     -sqrt_sigma *
                     this->m_integrator->system()->h(x_sol.col(0), t_mesh(0));
               }
+
+              // Interior/final nodes
               Jh = sqrt_sigma *
                    this->m_integrator->system()->Jh_x(x_sol.col(k + 1),
                                                       t_mesh(k + 1));
+
               for (Integer i{0}; i < M; ++i) {
                 for (Integer j{0}; j < N; ++j) {
-                  if (std::abs(Jh(i, j)) > eps) {
-                    triplets_sys.emplace_back(c_size + (k + 1) * M + i,
+                  if (std::abs(Jh(i, j)) > EPSILON) {
+                    triplets_lsq.emplace_back(c_size + (k + 1) * M + i,
                                               (k + 1) * N + j,
                                               Jh(i, j));
                   }
                 }
               }
 
-              // Residual for the constraints manifold
-              b_sys.template segment<M>(c_size + (k + 1) * M) =
+              // Constraint residual
+              b_lsq.template segment<M>(c_size + (k + 1) * M) =
                   -sqrt_sigma *
                   this->m_integrator->system()->h(x_sol.col(k + 1),
                                                   t_mesh(k + 1));
@@ -639,16 +1220,41 @@ namespace Sandals {
           }
         }
 
-        // Update the boundary condition states
+        // Boundary states
         x_ini = x_sol.col(idx_x_ini);
         x_end = x_sol.col(idx_x_end);
 
-        // Boundary condition residuals
-        b_sys.template tail<N>() = -this->b(x_ini, x_end);
+        // Boundary Jacobians
+        Jb_x_ini = this->Jb_x_ini(x_ini, x_end);
+        Jb_x_end = this->Jb_x_end(x_ini, x_end);
 
-        // Print the iteration info
+        // Boundary residual
+        b_lsq.template tail<N>() = -this->b(x_ini, x_end);
+
+        // Boundary equations
+        // B * dx = -b
+        for (Integer i{0}; i < N; ++i) {
+          for (Integer j{0}; j < N; ++j) {
+            if (std::abs(Jb_x_ini(i, j)) > EPSILON) {
+              triplets_lsq.emplace_back(c_size + h_size + i,
+                                        idx_x_ini * N + j,
+                                        Jb_x_ini(i, j));
+            }
+            if (std::abs(Jb_x_end(i, j)) > EPSILON) {
+              triplets_lsq.emplace_back(c_size + h_size + i,
+                                        idx_x_end * N + j,
+                                        Jb_x_end(i, j));
+            }
+          }
+        }
+
+        // Build least-squares operator
+        A_lsq.setFromTriplets(triplets_lsq.begin(), triplets_lsq.end());
+        A_lsq.makeCompressed();
+
+        // Iteration information
         if (this->m_verbose) {
-          std::cout << "Iteration " << iter << ": |b| = " << b_sys.norm()
+          std::cout << "Iteration " << iter << ": |b| = " << b_lsq.norm()
                     << std::endl
                     << "  x(" << t_mesh(idx_x_ini)
                     << ") = " << x_ini.transpose() << std::endl
@@ -656,94 +1262,192 @@ namespace Sandals {
                     << ") = " << x_end.transpose() << std::endl;
         }
 
-        // Check convergence
-        if (b_sys.norm() < this->m_tolerance) {
+        // Convergence check
+        if (b_lsq.norm() < this->m_tolerance) {
           return true;
         }
 
-        // Update the boundary condition Jacobian blocks
-        MatrixJF Jb_x_ini(this->Jb_x_ini(x_ini, x_end));
-        MatrixJF Jb_x_end(this->Jb_x_end(x_ini, x_end));
-        for (Integer i{0}; i < N; ++i) {
-          for (Integer j{0}; j < N; ++j) {
-            if (std::abs(Jb_x_ini(i, j)) > eps) {
-              triplets_sys.emplace_back(c_size + h_size + i,
-                                        idx_x_ini * N + j,
-                                        Jb_x_ini(i, j));
-            }
-            if (std::abs(Jb_x_end(i, j)) > eps) {
-              triplets_sys.emplace_back(c_size + h_size + i,
-                                        idx_x_end * N + j,
-                                        Jb_x_end(i, j));
-            }
-          }
-        }
-
-        // Build the sparse system matrix
-        A_sys.setFromTriplets(triplets_sys.begin(), triplets_sys.end());
-        A_sys.makeCompressed();
-
+        // Rectangular least-squares solve
         if constexpr (SolutionMethod == SolutionChoice::GN_STANDARD) {
-          // Solve the linear system
-          qr.compute(A_sys);
-          SANDALS_ASSERT(qr.info() == Eigen::Success,
-                         CMD "failed to factorize the standard linear system.");
+          qr.compute(A_lsq);
 
-          // Update the solution
-          delta_x_sol = qr.solve(b_sys).reshaped(N, num_intervals + 1);
-        } else if constexpr (SolutionMethod == SolutionChoice::GN_AUGMENTED) {
-          // Reset the augmented linear system
-          triplets_aug.clear();
-          A_aug.setZero();
-          b_aug.setZero();
-
-          // Build the augmented linear system
-          for (Integer i{0}; i < A_sys_rows; ++i) {
-            triplets_aug.emplace_back(i, i, -1.0);
-          }
-          for (Integer i{A_sys_rows}; i < A_sys_rows + A_sys_cols; ++i) {
-            triplets_aug.emplace_back(i, i, this->m_lambda);
-          }
-          for (Integer i{0}; i < A_sys.outerSize(); ++i) {
-            for (typename MatrixShooting::InnerIterator it(A_sys, i); it;
-                 ++it) {
-              triplets_aug.emplace_back(it.row(),
-                                        A_sys_rows + it.col(),
-                                        it.value());
-              triplets_aug.emplace_back(A_sys_rows + it.col(),
-                                        it.row(),
-                                        it.value());
-            }
-          }
-          b_aug.tail(A_sys_cols) = A_sys.transpose() * b_sys;
-
-          // Solve the augmented system
-          A_aug.setFromTriplets(triplets_aug.begin(), triplets_aug.end());
-          A_aug.makeCompressed();
-          qr.compute(A_aug);
           SANDALS_ASSERT(qr.info() == Eigen::Success,
                          CMD
-                         "failed to factorize the augmented linear system.");
+                         "failed to factorize "
+                         "least-squares system.");
 
-          // Update the solution
+          delta_x_sol = qr.solve(b_lsq).reshaped(N, num_intervals + 1);
+        }
+
+        // Symmetric augmented KKT solve
+        else if constexpr (SolutionMethod == SolutionChoice::GN_AUGMENTED) {
+          triplets_aug.clear();
+          b_aug.setZero();
+
+          // Unknown ordering: (dx, z, λ)^T
+          const Integer dx_offset{0};
+          const Integer z_offset{x_size};
+          const Integer lambda_offset{x_size + lsq_rows};
+
+          // A and Aᵀ blocks
+          for (Integer k{0}; k < A_lsq.outerSize(); ++k) {
+            for (typename MatrixShooting ::InnerIterator it(A_lsq, k); it;
+                 ++it) {
+              // Aᵀ block
+              triplets_aug.emplace_back(dx_offset + it.col(),
+                                        z_offset + it.row(),
+                                        it.value());
+              // A block
+              triplets_aug.emplace_back(z_offset + it.row(),
+                                        dx_offset + it.col(),
+                                        it.value());
+            }
+          }
+
+          // λI block
+          for (Integer i{0}; i < z_offset; ++i) {
+            triplets_aug.emplace_back(i, i, this->m_lambda);
+          }
+
+          // -I block
+          for (Integer i{0}; i < lsq_rows; ++i) {
+            triplets_aug.emplace_back(z_offset + i, z_offset + i, -1.0);
+          }
+
+          // B and Bᵀ blocks
+          for (Integer i{0}; i < N; ++i) {
+            for (Integer j{0}; j < N; ++j) {
+              if (std::abs(Jb_x_ini(i, j)) > EPSILON) {
+                const Integer col{idx_x_ini * N + j};
+                // Bᵀ block
+                triplets_aug.emplace_back(dx_offset + col,
+                                          lambda_offset + i,
+                                          Jb_x_ini(i, j));
+                // B block
+                triplets_aug.emplace_back(lambda_offset + i,
+                                          dx_offset + col,
+                                          Jb_x_ini(i, j));
+              }
+              if (std::abs(Jb_x_end(i, j)) > EPSILON) {
+                const Integer col{idx_x_end * N + j};
+                // Bᵀ block
+                triplets_aug.emplace_back(dx_offset + col,
+                                          lambda_offset + i,
+                                          Jb_x_end(i, j));
+                // B block
+                triplets_aug.emplace_back(lambda_offset + i,
+                                          dx_offset + col,
+                                          Jb_x_end(i, j));
+              }
+            }
+          }
+
+          // Right-hand side: (0, r, -b)^T
+          b_aug.segment(z_offset, lsq_rows) = b_lsq;
+          b_aug.tail(N)                     = -this->b(x_ini, x_end);
+
+          // Build augmented system
+          A_aug.setFromTriplets(triplets_aug.begin(), triplets_aug.end());
+          A_aug.makeCompressed();
+
+          // Factorize
+          ldlt.compute(A_aug);
+          SANDALS_ASSERT(ldlt.info() == Eigen::Success,
+                         CMD
+                         "failed to factorize "
+                         "augmented KKT system.");
+
+          // Solve
+          VectorShooting sol_aug(ldlt.solve(b_aug));
+          SANDALS_ASSERT(ldlt.info() == Eigen::Success,
+                         CMD
+                         "failed to solve "
+                         "augmented KKT system.");
+
+          // Extract dx block
           delta_x_sol =
-              qr.solve(b_aug).tail(A_sys_cols).reshaped(N, num_intervals + 1);
+              sol_aug.segment(dx_offset, x_size).reshaped(N, num_intervals + 1);
         }
 
+        // Normal-equation KKT solve
+        else if constexpr (SolutionMethod == SolutionChoice::GN_KKT) {
+          triplets_kkt.clear();
+          b_kkt.setZero();
+
+          // Normal equations
+          MatrixShooting AtA(A_lsq.transpose() * A_lsq);
+
+          // AᵀA block
+          for (Integer k{0}; k < AtA.outerSize(); ++k) {
+            for (typename MatrixShooting ::InnerIterator it(AtA, k); it; ++it) {
+              triplets_kkt.emplace_back(it.row(), it.col(), it.value());
+            }
+          }
+
+          // B and Bᵀ blocks
+          for (Integer i{0}; i < N; ++i) {
+            for (Integer j{0}; j < N; ++j) {
+              if (std::abs(Jb_x_ini(i, j)) > EPSILON) {
+                triplets_kkt.emplace_back(j, x_size + i, Jb_x_ini(i, j));
+                triplets_kkt.emplace_back(x_size + i, j, Jb_x_ini(i, j));
+              }
+              if (std::abs(Jb_x_end(i, j)) > EPSILON) {
+                triplets_kkt.emplace_back(idx_x_end * N + j,
+                                          x_size + i,
+                                          Jb_x_end(i, j));
+                triplets_kkt.emplace_back(x_size + i,
+                                          idx_x_end * N + j,
+                                          Jb_x_end(i, j));
+              }
+            }
+          }
+
+          // Right-hand side: (Aᵀr, -b)^T
+          b_kkt.head(x_size) = A_lsq.transpose() * b_lsq;
+          b_kkt.tail(N)      = -this->b(x_ini, x_end);
+
+          // Build KKT matrix
+          A_kkt.setFromTriplets(triplets_kkt.begin(), triplets_kkt.end());
+          A_kkt.makeCompressed();
+
+          // Factorize
+          ldlt.compute(A_kkt);
+          SANDALS_ASSERT(ldlt.info() == Eigen::Success,
+                         CMD
+                         "failed to factorize "
+                         "KKT system.");
+
+          // Solve
+          VectorShooting sol_kkt(ldlt.solve(b_kkt));
+          SANDALS_ASSERT(ldlt.info() == Eigen::Success,
+                         CMD
+                         "failed to solve "
+                         "KKT system.");
+
+          // Extract dx block
+          delta_x_sol = sol_kkt.head(x_size).reshaped(N, num_intervals + 1);
+        }
+
+        // Check update validity
         if (!delta_x_sol.allFinite()) {
-          SANDALS_ERROR(CMD "invalid solution of the linear system.");
-          return false;
-        } else if (delta_x_sol.norm() < this->m_tolerance * this->m_tolerance) {
-          SANDALS_WARNING(CMD "small update step, possible convergence.");
+          SANDALS_ERROR(CMD "invalid Newton update.");
           return false;
         }
+        // Small update
+        if (delta_x_sol.norm() < this->m_tolerance) {
+          SANDALS_WARNING(CMD "small update step.");
+          return false;
+        }
+
+        // Newton update
         x_sol += delta_x_sol;
       }
 
-      // If the loop completes without returning, indicate failure
+      // Maximum iterations reached
       if (this->m_verbose) {
-        SANDALS_WARNING(CMD "maximum number of iterations reached.");
+        SANDALS_WARNING(CMD "maximum iterations reached.");
       }
+
       return false;
 
 #undef CMD

@@ -81,8 +81,8 @@ int main(int argc, char **argv) {
   problem_index_0.integrator()->reverse_mode(reverse);
 
   // Set solver tolerance
-  problem_index_2.tolerance(1.0e-12);
-  problem_index_0.tolerance(1.0e-12);
+  problem_index_2.tolerance(1.0e-13);
+  problem_index_0.tolerance(1.0e-13);
 
   // Set solver maximum number of iterations
   problem_index_2.max_iterations(200);
@@ -94,7 +94,7 @@ int main(int argc, char **argv) {
   problem_index_0.subintervals(num_subintervals);
 
   // Set time mesh
-  constexpr Integer num_points{100};
+  constexpr Integer num_points{150};
   Eigen::Vector<Real, Eigen::Dynamic> time(
       Eigen::Vector<Real, Eigen::Dynamic>::LinSpaced(
           num_points,
@@ -156,6 +156,25 @@ int main(int argc, char **argv) {
   for (Integer i{0}; i < sol_index_2.t.size(); ++i) {
     sol_index_2_aug.h.col(i) =
         problem_index_0.system()->h(sol_index_2.x.col(i), sol_index_2.t[i]);
+  }
+
+  // Print out the results
+  std::cout << "Index 2 solution:" << std::endl;
+  for (Integer i{0}; i < sol_index_2.t.size(); ++i) {
+    std::cout << sol_index_2.t[i] << "\t" << sol_index_2.x.col(i).transpose()
+              << "\t" << sol_index_2_aug.h.col(i).transpose() << std::endl;
+  }
+  std::cout << "Index 0 solution (least squares):" << std::endl;
+  for (Integer i{0}; i < sol_index_0_lesq.t.size(); ++i) {
+    std::cout << sol_index_0_lesq.t[i] << "\t"
+              << sol_index_0_lesq.x.col(i).transpose() << "\t"
+              << sol_index_0_lesq.h.col(i).transpose() << std::endl;
+  }
+  std::cout << "Index 0 solution (projection):" << std::endl;
+  for (Integer i{0}; i < sol_index_0_proj.t.size(); ++i) {
+    std::cout << sol_index_0_proj.t[i] << "\t"
+              << sol_index_0_proj.x.col(i).transpose() << "\t"
+              << sol_index_0_proj.h.col(i).transpose() << std::endl;
   }
 
   TCanvas *canvas    = new TCanvas("canvas", "Solution Comparison", 1200, 1200);
