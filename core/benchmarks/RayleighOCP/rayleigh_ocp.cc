@@ -97,7 +97,9 @@ int main(int argc, char **argv) {
   Solution<Real, 4, 0> solution(time.size());
   try {
     std::cout << "Solving problem..." << std::endl;
-    problem.sigma(1.0);
+    problem.sigma_x(1.0);
+    problem.sigma_h(1.0);
+    problem.sigma_b(1.0);
     problem.integrator()->projection_mode(false);
     problem.multiple_shooting(time, guess);
     solution = problem.solution();

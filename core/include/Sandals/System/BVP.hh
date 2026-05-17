@@ -64,10 +64,10 @@ namespace Sandals {
 
     bool m_verbose{false};                  /**< Verbose mode boolean. */
     Real m_tolerance{std::sqrt(EPSILON)};   /**< Tolerance for the solution. */
-    Real m_sigma{1.0};  /**< Invariants manifold weight for the multiple
-     shooting method. */
-    Real m_lambda{0.0}; /**< Augmentation parameter for the least squares
-                           multiple shooting method. */
+    Real m_sigma_x{1.0};                    /**< State variables weight. */
+    Real m_sigma_h{1.0};                    /**< Invariants manifold weight. */
+    Real m_sigma_b{1.0};                    /**< Boundary conditions weight. */
+    Real m_lambda{0.0};            /**< Diagonal augmentation parameter. */
     Integer m_max_iterations{100}; /**< Maximum number of iterations. */
     Integer m_subintervals{
       1}; /**< Number of subintervals for the shooting methods. */
@@ -222,8 +222,26 @@ namespace Sandals {
      * shooting method.
      * \return The weight \f$ \sigma \f$.
      */
-    Real sigma() {
-      return this->m_sigma;
+    Real sigma_h() {
+      return this->m_sigma_h;
+    }
+
+    /**
+     * Get the weight \f$ \sigma \f$ of the state variables for the multiple
+     * shooting method.
+     * \return The weight \f$ \sigma \f$.
+     */
+    Real sigma_x() {
+      return this->m_sigma_x;
+    }
+
+    /**
+     * Set the weight \f$ \sigma \f$ of the state variables for the multiple
+     * \param[in] t_sigma The weight \f$ \sigma \f$ of the state variables
+     * for the multiple shooting method.
+     */
+    void sigma_x(const Real t_sigma) {
+      this->m_sigma_x = t_sigma;
     }
 
     /**
@@ -231,8 +249,26 @@ namespace Sandals {
      * \param[in] t_sigma The weight \f$ \sigma \f$ of the invariants manifold
      * for the multiple shooting method.
      */
-    void sigma(const Real t_sigma) {
-      this->m_sigma = t_sigma;
+    void sigma_h(const Real t_sigma) {
+      this->m_sigma_h = t_sigma;
+    }
+
+    /**
+     * Get the weight \f$ \sigma \f$ of the boundary conditions for the multiple
+     * shooting method.
+     * \return The weight \f$ \sigma \f$.
+     */
+    Real sigma_b() {
+      return this->m_sigma_b;
+    }
+
+    /**
+     * Set the weight \f$ \sigma \f$ of the boundary conditions for the multiple
+     * \param[in] t_sigma The weight \f$ \sigma \f$ of the boundary conditions
+     * for the multiple shooting method.
+     */
+    void sigma_b(const Real t_sigma) {
+      this->m_sigma_b = t_sigma;
     }
 
     /**
@@ -456,7 +492,6 @@ namespace Sandals {
 
     /**
      * Solve the BVP using the multiple shooting method.
-     * \tparam SolutionMethod The solution method choice.
      * \param[in] t_mesh Independent variable (or time) mesh \f$ \mathbf{t} \f$.
      * \param[in] ics Initial conditions \f$ \mathbf{x}(t = 0) \f$.
      * \param[in] x_guess Initial guess for the states at the mesh nodes.
@@ -487,7 +522,6 @@ namespace Sandals {
       const Integer x_size{(num_intervals + 1) * N};
       const Integer h_size{
         this->m_integrator->projection_mode() ? 0 : (num_intervals + 1) * M};
-      const Real sqrt_sigma{std::sqrt(this->m_sigma)};
       Integer idx_x_ini{0}, idx_x_end{num_intervals};
       if (this->m_integrator->reverse_mode()) {
         idx_x_ini = num_intervals;
@@ -496,13 +530,10 @@ namespace Sandals {
 
       // Prepare the standard linear systems for the Gauss-Newton step
       Integer A_sys_rows{0}, A_sys_cols{0}, A_sys_nnz{0}, b_sys_size{0};
-      if constexpr (SolutionMethod == SolutionChoice::GN_STANDARD ||
-                    SolutionMethod == SolutionChoice::GN_AUGMENTED) {
-        b_sys_size = c_size + h_size + N;
-        A_sys_rows = b_sys_size;
-        A_sys_cols = x_size;
-        A_sys_nnz  = (c_size + h_size + 2 * N) * N + c_size;
-      }
+      b_sys_size = c_size + h_size + N;
+      A_sys_rows = b_sys_size;
+      A_sys_cols = x_size;
+      A_sys_nnz  = (c_size + h_size + 2 * N) * N + c_size;
       MatrixShooting A_sys(A_sys_rows, A_sys_cols);
       A_sys.reserve(A_sys_nnz);
       VectorShooting b_sys(b_sys_size);
@@ -530,6 +561,87 @@ namespace Sandals {
 
       // Initial guess for the states as the guess at the mesh nodes
       MatrixX x_sol(x_guess), delta_x_sol(x_guess);
+      const Real sqrt_sigma_x{std::sqrt(this->m_sigma_x)};
+      const Real sqrt_sigma_h{std::sqrt(this->m_sigma_h)};
+      const Real sqrt_sigma_b{std::sqrt(this->m_sigma_b)};
+
+      auto compute_residual = [this,
+                               &t_mesh,
+                               num_intervals,
+                               local_intervals,
+                               idx_x_ini,
+                               idx_x_end,
+                               sqrt_sigma_x,
+                               sqrt_sigma_h,
+                               sqrt_sigma_b,
+                               c_size,
+                               b_sys_size](const MatrixX &x_res,
+                                           VectorShooting &residual) -> bool {
+        residual.setZero();
+        residual.resize(b_sys_size);
+        (void)sqrt_sigma_h;
+        (void)c_size;
+
+        // Integrate each interval with the local mesh
+        VectorX t_local_mesh;
+        Solution<Real, N, M> local_sol;
+        Solution<Real, N, M> solution;
+        solution.clear();
+        solution.resize(t_mesh.size());
+        solution.t = t_mesh;
+        MatrixJF Jx;
+        for (Integer k{0}; k < num_intervals; ++k) {
+          t_local_mesh =
+              VectorX::LinSpaced(local_intervals + 1, t_mesh(k), t_mesh(k + 1));
+          Jx.setIdentity();
+          if (!this->m_integrator->template solve<false>(t_local_mesh,
+                                                         x_res.col(k),
+                                                         local_sol,
+                                                         Jx)) {
+            SANDALS_ERROR(CMD "failed to integrate interval " << k << ".");
+            return false;
+          }
+
+          // Store the local solution
+          if (k == 0) {
+            solution.x.col(0) = local_sol.x.col(0);
+            solution.h.col(0) = local_sol.h.col(0);
+          }
+          solution.x.col(k + 1) = local_sol.x.col(local_intervals);
+          solution.h.col(k + 1) = local_sol.h.col(local_intervals);
+
+          // Continuity residual for interior nodes
+          residual.template segment<N>(k * N) =
+              sqrt_sigma_x * (solution.x.col(k + 1) - x_res.col(k + 1));
+
+          // Compute the Jacobian of contraints manifold
+          if constexpr (M > 0) {
+            if (!this->m_integrator->projection_mode()) {
+              if (k == 0) {
+                residual.template segment<M>(c_size) =
+                    sqrt_sigma_h *
+                    this->m_integrator->system()->h(x_res.col(0), t_mesh(0));
+              }
+
+              // Residual for the constraints manifold
+              residual.template segment<M>(c_size + (k + 1) * M) =
+                  sqrt_sigma_h *
+                  this->m_integrator->system()->h(x_res.col(k + 1),
+                                                  t_mesh(k + 1));
+            }
+          }
+        }
+
+        // Boundary condition residuals
+        residual.template tail<N>() =
+            sqrt_sigma_b * this->b(x_res.col(idx_x_ini), x_res.col(idx_x_end));
+        if (residual.allFinite()) {
+          return true;
+        } else {
+          SANDALS_ERROR(CMD "non-finite residual encountered.");
+          return false;
+        }
+      };
 
       // Solve the boundary value problem using a linearized Newton method
       VectorX t_local_mesh;
@@ -537,26 +649,31 @@ namespace Sandals {
       MatrixJF Jx;
       MatrixJH Jh;
       Eigen::SparseQR<MatrixShooting, Eigen::COLAMDOrdering<Integer>> qr;
-      static constexpr Real eps{EPSILON};
+      const Real tol_residual{this->m_tolerance};
+      const Real tol_gradient{this->m_tolerance};
+      const Real tol_step{std::sqrt(this->m_tolerance)};
       for (Integer iter{0}; iter < this->m_max_iterations; ++iter) {
         /* Multiple shooting solution scheme
-        Standard system
-                [A_sys]                   {x}  =         {b_sys}
-         /   -Jx_1     I              \           /  x_ini_2 - x_sol_1  \
-         |       .        .           |           |          :          |
-         |          .        .        | /  :  \ = |          :          |
-         |             -Jx_n     I    | |  :  |   | x_ini_n+1 - x_sol_n |
-         |  σ½*Jh_0                   | | dx  |   |      -σ^½*h_0       |
-         |            .               | |  :  |   |          :          |
-         |               .            | \  :  /   |          :          |
-         |                    σ½*Jh_m |           |     -σ^½*h_m        |
-         \ Jb_x_ini          Jb_x_end /           \         -b          /
+                [A_sys]                   {x}   = -      {b_sys}
+         /   JX_0     -I              \             /   X_0 - x_1   \
+         |       .        .           |             |       :       |
+         |          .        .        | /  :  \     |       :       |
+         |           JX_n-1     -I    | |  :  |     | X_n-1 - x_n   |
+         |  Jh_0                      | | dx  | = - |      h_0      |
+         |            .               | |  :  |     |       :       |
+         |               .            | \  :  /     |       :       |
+         |                     Jh_m   |             |      h_m      |
+         \ Jb_x_ini          Jb_x_end /             \       b       /
 
-         Augmented system
-         [A_sys]^T * [A_sys] * {dx} = [A_sys]^T * {b_sys}
-         / -I    A  \ / z  \ = /   0   \
-         |          | |    | = |       |
-         \ A^T   λI / \ dx /   \ A^T*b /
+         Augmented system for the least squares solution scheme
+         [A_sys]^T * [A_sys] * {dx} = -[A_sys]^T * {b_sys}
+
+         [A_sys] * {dx} - {z} = 0
+         [A_sys]^T * {z} = -[A_sys]^T * {b_sys}
+
+         / -I    A  \ / z  \ =   /   0   \
+         |          | |    | = - |       |
+         \ A^T   λI / \ dx /     \ A^T*b /
          */
 
         // Reset the standard linear system
@@ -576,6 +693,7 @@ namespace Sandals {
             SANDALS_ERROR(CMD "failed to integrate interval " << k << ".");
             return false;
           }
+          Jx = sqrt_sigma_x * Jx;
 
           // Store the local solution
           if (k == 0) {
@@ -587,42 +705,43 @@ namespace Sandals {
 
           // Jacobian propagation for the current interval
           for (Integer i{0}; i < N; ++i) {
-            triplets_sys.emplace_back(k * N + i, (k + 1) * N + i, 1.0);
             for (Integer j{0}; j < N; ++j) {
-              if (std::abs(Jx(i, j)) > eps) {
-                triplets_sys.emplace_back(k * N + i, k * N + j, -Jx(i, j));
+              if (std::abs(Jx(i, j)) > 0.0) {
+                triplets_sys.emplace_back(k * N + i, k * N + j, Jx(i, j));
               }
             }
+            triplets_sys.emplace_back(k * N + i, (k + 1) * N + i, -1.0);
           }
 
           // Continuity residual for interior nodes
           b_sys.template segment<N>(k * N) =
-              this->m_solution->x.col(k + 1) - x_sol.col(k + 1);
+              sqrt_sigma_x *
+              (this->m_solution->x.col(k + 1) - x_sol.col(k + 1));
 
           // Compute the Jacobian of contraints manifold
           if constexpr (M > 0) {
             if (!this->m_integrator->projection_mode()) {
               if (k == 0) {
                 Jh =
-                    sqrt_sigma *
+                    sqrt_sigma_h *
                     this->m_integrator->system()->Jh_x(x_sol.col(0), t_mesh(0));
                 for (Integer i{0}; i < M; ++i) {
                   for (Integer j{0}; j < N; ++j) {
-                    if (std::abs(Jh(i, j)) > eps) {
+                    if (std::abs(Jh(i, j)) > 0.0) {
                       triplets_sys.emplace_back(c_size + i, j, Jh(i, j));
                     }
                   }
                 }
                 b_sys.template segment<M>(c_size) =
-                    -sqrt_sigma *
+                    sqrt_sigma_h *
                     this->m_integrator->system()->h(x_sol.col(0), t_mesh(0));
               }
-              Jh = sqrt_sigma *
+              Jh = sqrt_sigma_h *
                    this->m_integrator->system()->Jh_x(x_sol.col(k + 1),
                                                       t_mesh(k + 1));
               for (Integer i{0}; i < M; ++i) {
                 for (Integer j{0}; j < N; ++j) {
-                  if (std::abs(Jh(i, j)) > eps) {
+                  if (std::abs(Jh(i, j)) > 0.0) {
                     triplets_sys.emplace_back(c_size + (k + 1) * M + i,
                                               (k + 1) * N + j,
                                               Jh(i, j));
@@ -632,7 +751,7 @@ namespace Sandals {
 
               // Residual for the constraints manifold
               b_sys.template segment<M>(c_size + (k + 1) * M) =
-                  -sqrt_sigma *
+                  sqrt_sigma_h *
                   this->m_integrator->system()->h(x_sol.col(k + 1),
                                                   t_mesh(k + 1));
             }
@@ -644,34 +763,32 @@ namespace Sandals {
         x_end = x_sol.col(idx_x_end);
 
         // Boundary condition residuals
-        b_sys.template tail<N>() = -this->b(x_ini, x_end);
+        b_sys.template tail<N>() = sqrt_sigma_b * this->b(x_ini, x_end);
 
         // Print the iteration info
         if (this->m_verbose) {
-          std::cout << "Iteration " << iter << ": |b| = " << b_sys.norm()
-                    << std::endl
-                    << "  x(" << t_mesh(idx_x_ini)
-                    << ") = " << x_ini.transpose() << std::endl
-                    << "  x(" << t_mesh(idx_x_end)
-                    << ") = " << x_end.transpose() << std::endl;
-        }
-
-        // Check convergence
-        if (b_sys.norm() < this->m_tolerance) {
-          return true;
+          std::cout << "Iteration: " << iter << ": |r| = " << b_sys.norm()
+                    << ", |x| = " << b_sys.head(c_size).norm()
+                    << ", |h| = " << b_sys.segment(c_size, h_size).norm()
+                    << ", |b| = " << b_sys.template tail<N>().norm()
+                    << std::endl;
+          // << "  x(" << t_mesh(idx_x_ini)
+          // << ") = " << x_ini.transpose() << std::endl
+          // << "  x(" << t_mesh(idx_x_end)
+          // << ") = " << x_end.transpose() << std::endl;
         }
 
         // Update the boundary condition Jacobian blocks
-        MatrixJF Jb_x_ini(this->Jb_x_ini(x_ini, x_end));
-        MatrixJF Jb_x_end(this->Jb_x_end(x_ini, x_end));
+        MatrixJF Jb_x_ini(sqrt_sigma_b * this->Jb_x_ini(x_ini, x_end));
+        MatrixJF Jb_x_end(sqrt_sigma_b * this->Jb_x_end(x_ini, x_end));
         for (Integer i{0}; i < N; ++i) {
           for (Integer j{0}; j < N; ++j) {
-            if (std::abs(Jb_x_ini(i, j)) > eps) {
+            if (std::abs(Jb_x_ini(i, j)) > 0.0) {
               triplets_sys.emplace_back(c_size + h_size + i,
                                         idx_x_ini * N + j,
                                         Jb_x_ini(i, j));
             }
-            if (std::abs(Jb_x_end(i, j)) > eps) {
+            if (std::abs(Jb_x_end(i, j)) > 0.0) {
               triplets_sys.emplace_back(c_size + h_size + i,
                                         idx_x_end * N + j,
                                         Jb_x_end(i, j));
@@ -683,6 +800,30 @@ namespace Sandals {
         A_sys.setFromTriplets(triplets_sys.begin(), triplets_sys.end());
         A_sys.makeCompressed();
 
+        // Check convergence
+        const Real residual_norm{b_sys.norm()};
+        const Real gradient_norm{(A_sys.transpose() * b_sys).norm()};
+        const Real scaled_gradient{gradient_norm /
+                                   (A_sys.norm() * b_sys.norm() + EPSILON)};
+
+        // Print convergence info
+        if (this->m_verbose) {
+          std::cout << "  Residual norm: " << residual_norm
+                    << ", Gradient norm: " << gradient_norm
+                    << ", Scaled gradient: " << scaled_gradient << std::endl
+                    << "  Tol. residual: " << tol_residual
+                    << ", Tol. gradient: " << tol_gradient << std::endl;
+        }
+
+        // Check convergence
+        if (scaled_gradient < tol_gradient) {
+          if (residual_norm > tol_residual) {
+            SANDALS_WARNING(
+                CMD "least-squares stationary point with nonzero residual.");
+          }
+          return true;
+        }
+
         if constexpr (SolutionMethod == SolutionChoice::GN_STANDARD) {
           // Solve the linear system
           qr.compute(A_sys);
@@ -690,7 +831,7 @@ namespace Sandals {
                          CMD "failed to factorize the standard linear system.");
 
           // Update the solution
-          delta_x_sol = qr.solve(b_sys).reshaped(N, num_intervals + 1);
+          delta_x_sol = qr.solve(-b_sys).reshaped(N, num_intervals + 1);
         } else if constexpr (SolutionMethod == SolutionChoice::GN_AUGMENTED) {
           // Reset the augmented linear system
           triplets_aug.clear();
@@ -725,19 +866,100 @@ namespace Sandals {
                          CMD
                          "failed to factorize the augmented linear system.");
 
+          // Print QR factorization info
+          if (this->m_verbose) {
+            std::cout << "  Augmented system: rank = " << qr.rank()
+                      << ", cols = " << qr.cols() << std::endl;
+          }
+
           // Update the solution
           delta_x_sol =
-              qr.solve(b_aug).tail(A_sys_cols).reshaped(N, num_intervals + 1);
+              qr.solve(-b_aug).tail(A_sys_cols).reshaped(N, num_intervals + 1);
         }
 
         if (!delta_x_sol.allFinite()) {
           SANDALS_ERROR(CMD "invalid solution of the linear system.");
           return false;
-        } else if (delta_x_sol.norm() < this->m_tolerance * this->m_tolerance) {
-          SANDALS_WARNING(CMD "small update step, possible convergence.");
+        }
+
+        const Real step_norm{delta_x_sol.norm()};
+        if (step_norm < tol_step * (1 + x_sol.norm())) {
+          if (scaled_gradient < 10 * tol_gradient) {
+            SANDALS_WARNING(CMD "near-stationary stagnation.");
+            return true;
+          }
+          SANDALS_WARNING(CMD "stagnation detected.");
           return false;
         }
-        x_sol += delta_x_sol;
+
+        MatrixX x_trial(x_sol.rows(), x_sol.cols());
+        VectorShooting residual_trial(b_sys_size);
+
+        const Real phi0{b_sys.squaredNorm()};
+
+        Real alpha{1.0};
+        constexpr Real alpha_min{1.0e-8};
+        constexpr Real contraction{0.5};
+        constexpr Real c1{1.0e-4};
+
+        bool accepted{false};
+        Integer ls_iter{0};
+        while (alpha >= alpha_min) {
+          // Trial point
+          x_trial.noalias() = x_sol + alpha * delta_x_sol;
+
+          // Reject NaN / Inf immediately
+          if (!x_trial.allFinite()) {
+            if (this->m_verbose) {
+              std::cout << "  Line search: non-finite trial state"
+                        << ", alpha = " << alpha << std::endl;
+            }
+            alpha *= contraction;
+            ++ls_iter;
+            continue;
+          }
+
+          // Compute nonlinear residual at trial point
+          if (!compute_residual(x_trial, residual_trial)) {
+            if (this->m_verbose) {
+              std::cout << "  Line search: residual evaluation failed"
+                        << ", alpha = " << alpha << std::endl;
+            }
+            alpha *= contraction;
+            ++ls_iter;
+            continue;
+          }
+
+          // Merit function: phi(x) = ||r(x)||²
+          const Real phi_trial{residual_trial.squaredNorm()};
+
+          // Armijo sufficient decrease condition
+          const Real phi_max{(1.0 - c1 * alpha) * 0 + phi0};
+
+          if (this->m_verbose) {
+            std::cout << "  Line search: " << ls_iter << ", alpha = " << alpha
+                      << ", |dx| = " << (alpha * delta_x_sol).norm()
+                      << ", phi_trial = " << phi_trial
+                      << ", phi_max = " << phi_max << std::endl;
+          }
+
+          // Accept step
+          if (phi_trial <= phi_max) {
+            x_sol    = std::move(x_trial);
+            accepted = true;
+            break;
+          }
+
+          // Backtrack
+          alpha *= contraction;
+          ++ls_iter;
+        }
+
+        // Line search failed
+        if (!accepted) {
+          SANDALS_WARNING(CMD "line search failed.");
+          return false;
+        }
       }
 
       // If the loop completes without returning, indicate failure
@@ -745,7 +967,6 @@ namespace Sandals {
         SANDALS_WARNING(CMD "maximum number of iterations reached.");
       }
       return false;
-
 #undef CMD
     }
 
@@ -762,7 +983,6 @@ namespace Sandals {
     template <ShootingChoice ShootingType = ShootingChoice::MULTIPLE>
     bool solve(const VectorX &t_mesh, const VectorF &ics, MatrixX &x_guess) {
 #define CMD "Sandals::BVP::solve(...): "
-
       if constexpr (ShootingType == ShootingChoice::SINGLE) {
         return this->single_shooting(t_mesh, ics);
       } else if constexpr (ShootingType == ShootingChoice::MULTIPLE) {
@@ -774,7 +994,6 @@ namespace Sandals {
 
 #undef CMD
     }
-
   };  // BVP
 
 }  // namespace Sandals

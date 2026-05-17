@@ -10,7 +10,7 @@
 
 #include <memory>
 
-#include "PendulumOCP.hh"
+#include "PendulumGGLOCP.hh"
 #include "Sandals.hh"
 #include "Sandals/RungeKutta/RK4.hh"
 #include "Sandals/RungeKutta/RadauIIA5.hh"
@@ -50,10 +50,10 @@ using namespace Sandals;
 using Real = double;
 
 #ifndef PROBLEM_INIT
-#define PROBLEM_INIT(PROBLEM, INTEGRATOR_3, INTEGRATOR_0)                  \
-  PROBLEM##Problem<Real, PROBLEM##index3<Real>, INTEGRATOR_3<Real, 10, 0>> \
-      problem_index_3;                                                     \
-  PROBLEM##Problem<Real, PROBLEM##index0<Real>, INTEGRATOR_0<Real, 10, 3>> \
+#define PROBLEM_INIT(PROBLEM, INTEGRATOR_2, INTEGRATOR_0)                  \
+  PROBLEM##Problem<Real, PROBLEM##index2<Real>, INTEGRATOR_2<Real, 12, 0>> \
+      problem_index_2;                                                     \
+  PROBLEM##Problem<Real, PROBLEM##index0<Real>, INTEGRATOR_0<Real, 12, 4>> \
       problem_index_0;
 #endif
 
@@ -67,31 +67,31 @@ int main(int argc, char **argv) {
 #endif
 
   // Istantiate the problems
-  PROBLEM_INIT(PendulumOCP, RadauIIA5, RadauIIA5)
+  PROBLEM_INIT(PendulumGGLOCP, RadauIIA5, RadauIIA5)
 
   // Set verbose mode
   constexpr bool verbose{true};
-  problem_index_3.verbose_mode(verbose);
+  problem_index_2.verbose_mode(verbose);
   problem_index_0.verbose_mode(verbose);
-  problem_index_3.integrator()->verbose_mode(false);
+  problem_index_2.integrator()->verbose_mode(false);
   problem_index_0.integrator()->verbose_mode(false);
 
   // Set reverse mode
   constexpr bool reverse{false};
-  problem_index_3.integrator()->reverse_mode(reverse);
+  problem_index_2.integrator()->reverse_mode(reverse);
   problem_index_0.integrator()->reverse_mode(reverse);
 
   // Set solver tolerance
-  problem_index_3.tolerance(std::sqrt(std::numeric_limits<Real>::epsilon()));
+  problem_index_2.tolerance(std::sqrt(std::numeric_limits<Real>::epsilon()));
   problem_index_0.tolerance(std::sqrt(std::numeric_limits<Real>::epsilon()));
 
   // Set solver maximum number of iterations
-  problem_index_3.max_iterations(1000);
-  problem_index_0.max_iterations(1000);
+  problem_index_2.max_iterations(800);
+  problem_index_0.max_iterations(800);
 
   // Set solution parameters
   constexpr Integer num_subintervals{1};
-  problem_index_3.subintervals(num_subintervals);
+  problem_index_2.subintervals(num_subintervals);
   problem_index_0.subintervals(num_subintervals);
 
   // Set time mesh
@@ -99,34 +99,32 @@ int main(int argc, char **argv) {
   Eigen::Vector<Real, Eigen::Dynamic> time(
       Eigen::Vector<Real, Eigen::Dynamic>::LinSpaced(
           num_points,
-          problem_index_3.time_start(),
-          problem_index_3.time_end()));
+          problem_index_2.time_start(),
+          problem_index_2.time_end()));
 
   // Set initial guess
-  Eigen::Matrix<Real, 10, Eigen::Dynamic> guess(problem_index_3.guess(time));
+  Eigen::Matrix<Real, 12, Eigen::Dynamic> guess(problem_index_2.guess(time));
 
   // Solve the problems with shooting
-  Solution<Real, 10, 0> sol_index_3(time.size());
-  try {
-    std::cout << "Solving problem with index 3..." << std::endl;
-    problem_index_3.sigma_x(1.0);
-    problem_index_3.sigma_h(1.0);
-    problem_index_3.sigma_b(1.0);
-    problem_index_3.lambda(1.0e-3);
-    problem_index_3.integrator()->projection_mode(true);
-    problem_index_3.multiple_shooting(time, guess);
-    sol_index_3 = problem_index_3.solution();
-  } catch (const std::exception &e) {
-    std::cerr << "Error solving problem with index 3: " << e.what()
-              << std::endl;
-  }
+  Solution<Real, 12, 0> sol_index_2(time.size());
+  //   try {
+  //     std::cout << "Solving problem with index 2..." << std::endl;
+  //     problem_index_2.sigma(1.0);
+  //     problem_index_0.lambda(0.0);
+  //     problem_index_2.integrator()->projection_mode(true);
+  //     problem_index_2.multiple_shooting(time, guess);
+  //     sol_index_2 = problem_index_2.solution();
+  //   } catch (const std::exception &e) {
+  //     std::cerr << "Error solving problem with index 2: " << e.what()
+  //               << std::endl;
+  //   }
 
-  Solution<Real, 10, 3> sol_index_0_lesq(time.size());
+  Solution<Real, 12, 4> sol_index_0_lesq(time.size());
   try {
     std::cout << "Solving problem with index 0 (least squares)..." << std::endl;
     problem_index_0.sigma_x(1.0);
     problem_index_0.sigma_h(0.1);
-    problem_index_0.sigma_b(10.0);
+    problem_index_0.sigma_b(1.0);
     problem_index_0.lambda(0.0);
     problem_index_0.integrator()->projection_mode(false);
     problem_index_0.multiple_shooting(time, guess);
@@ -134,72 +132,70 @@ int main(int argc, char **argv) {
 
     problem_index_0.sigma_x(1.0);
     problem_index_0.sigma_h(1.0);
+    problem_index_0.sigma_b(1.0);
+    problem_index_0.lambda(0.0);
+    problem_index_0.integrator()->projection_mode(false);
+    problem_index_0.multiple_shooting(time, sol_index_0_lesq.x);
+    sol_index_0_lesq = problem_index_0.solution();
+
+    problem_index_0.sigma_x(1.0);
+    problem_index_0.sigma_h(10.0);
     problem_index_0.sigma_b(10.0);
     problem_index_0.lambda(0.0);
     problem_index_0.integrator()->projection_mode(false);
     problem_index_0.multiple_shooting(time, sol_index_0_lesq.x);
     sol_index_0_lesq = problem_index_0.solution();
 
-    // problem_index_0.sigma_x(1.0);
-    // problem_index_0.sigma_h(10.0);
-    // problem_index_0.sigma_b(1.0);
-    // problem_index_0.lambda(0.0);
-    // problem_index_0.integrator()->projection_mode(false);
-    // problem_index_0.multiple_shooting(time, sol_index_0_lesq.x);
-    // sol_index_0_lesq = problem_index_0.solution();
+    problem_index_0.sigma_x(1.0);
+    problem_index_0.sigma_h(100.0);
+    problem_index_0.sigma_b(100.0);
+    problem_index_0.lambda(0.0);
+    problem_index_0.integrator()->projection_mode(false);
+    problem_index_0.multiple_shooting(time, sol_index_0_lesq.x);
+    sol_index_0_lesq = problem_index_0.solution();
 
-    // problem_index_0.sigma_x(10.0);
-    // problem_index_0.sigma_h(100.0);
-    // problem_index_0.sigma_b(10.0);
-    // problem_index_0.lambda(0.0);
-    // problem_index_0.integrator()->projection_mode(false);
-    // problem_index_0.multiple_shooting(time, sol_index_0_lesq.x);
-    // sol_index_0_lesq = problem_index_0.solution();
-
-    // problem_index_0.sigma_x(10.0);
-    // problem_index_0.sigma_h(0.0001);
-    // problem_index_0.sigma_b(10.0);
-    // problem_index_0.lambda(0.0);
-    // problem_index_0.integrator()->projection_mode(false);
-    // problem_index_0.multiple_shooting(time, sol_index_0_lesq.x);
-    // sol_index_0_lesq = problem_index_0.solution();
+    problem_index_0.sigma_x(10.0);
+    problem_index_0.sigma_h(1.0);
+    problem_index_0.sigma_b(10.0);
+    problem_index_0.lambda(0.0);
+    problem_index_0.integrator()->projection_mode(false);
+    problem_index_0.multiple_shooting(time, sol_index_0_lesq.x);
+    sol_index_0_lesq = problem_index_0.solution();
   } catch (const std::exception &e) {
     std::cerr << "Error solving problem with index 0 (least squares): "
               << e.what() << std::endl;
   }
 
-  Solution<Real, 10, 3> sol_index_0_proj(time.size());
-  try {
-    std::cout << "Solving problem with index 0 (projection)..." << std::endl;
-    problem_index_0.sigma_x(1.0);
-    problem_index_0.sigma_h(1.0);
-    problem_index_0.sigma_b(1.0);
-    problem_index_0.lambda(1.0e-3);
-    problem_index_0.integrator()->projection_mode(true);
-    problem_index_0.multiple_shooting(time, guess);
-    sol_index_0_proj = problem_index_0.solution();
-  } catch (const std::exception &e) {
-    std::cerr << "Error solving problem with index 0 (projection): " << e.what()
-              << std::endl;
-  }
+  Solution<Real, 12, 4> sol_index_0_proj(time.size());
+  //   try {
+  //     std::cout << "Solving problem with index 0 (projection)..." <<
+  //     std::endl; problem_index_0.sigma(1.0); problem_index_0.lambda(0.0);
+  //     problem_index_0.integrator()->projection_mode(false);
+  //     problem_index_0.multiple_shooting(time, guess);
+  //     sol_index_0_lesq = problem_index_0.solution();
+  //   } catch (const std::exception &e) {
+  //     std::cerr << "Error solving problem with index 0 (projection): " <<
+  //     e.what()
+  //               << std::endl;
+  //   }
 
 #ifdef SANDALS_ENABLE_PLOTTING
 
   auto colors = matlab_lines_colormap();
 
-  auto control = [](Solution<Real, 10, 3>::MatrixN sol_x)
-      -> Solution<Real, 10, 3>::Vector {
+  auto control = [](Solution<Real, 12, 4>::MatrixN sol_x)
+      -> Solution<Real, 12, 4>::Vector {
     auto x  = sol_x.row(0).transpose().eval();
     auto y  = sol_x.row(1).transpose().eval();
-    auto l3 = sol_x.row(7).transpose().eval();
-    auto l4 = sol_x.row(8).transpose().eval();
+    auto l3 = sol_x.row(8).transpose().eval();
+    auto l4 = sol_x.row(9).transpose().eval();
     return x * l4 / 2.0 - y * l3 / 2.0;
   };
 
   // Interate the squared cost function
-  auto cost = [&control](Solution<Real, 10, 3>::MatrixN x,
-                         Solution<Real, 10, 3>::Vector t) {
-    Solution<Real, 10, 3>::Vector u = control(x);
+  auto cost = [&control](Solution<Real, 12, 4>::MatrixN x,
+                         Solution<Real, 12, 4>::Vector t) {
+    Solution<Real, 12, 4>::Vector u = control(x);
     Real cost{0.0};
     // Trapezoidal rule
     for (Integer i{0}; i < t.size() - 1; ++i) {
@@ -210,24 +206,24 @@ int main(int argc, char **argv) {
 
   // Print the cost of the solutions
   std::cout << "Cost of solution with index 3: "
-            << cost(sol_index_3.x, sol_index_3.t) << std::endl;
+            << cost(sol_index_2.x, sol_index_2.t) << std::endl;
   std::cout << "Cost of solution with index 0 (least squares): "
             << cost(sol_index_0_lesq.x, sol_index_0_lesq.t) << std::endl;
   std::cout << "Cost of solution with index 0 (projection): "
             << cost(sol_index_0_proj.x, sol_index_0_proj.t) << std::endl;
 
   TCanvas *canvas    = new TCanvas("canvas", "Solution Comparison", 1200, 1200);
-  TGraph *graph_x_3  = to_TGraph(sol_index_3.t, sol_index_3.eigen_x(0));
-  TGraph *graph_y_3  = to_TGraph(sol_index_3.t, sol_index_3.eigen_x(1));
-  TGraph *graph_u_3  = to_TGraph(sol_index_3.t, sol_index_3.eigen_x(2));
-  TGraph *graph_v_3  = to_TGraph(sol_index_3.t, sol_index_3.eigen_x(3));
-  TGraph *graph_l_3  = to_TGraph(sol_index_3.t, sol_index_3.eigen_x(4));
-  TGraph *graph_l1_3 = to_TGraph(sol_index_3.t, sol_index_3.eigen_x(5));
-  TGraph *graph_l2_3 = to_TGraph(sol_index_3.t, sol_index_3.eigen_x(6));
-  TGraph *graph_l3_3 = to_TGraph(sol_index_3.t, sol_index_3.eigen_x(7));
-  TGraph *graph_l4_3 = to_TGraph(sol_index_3.t, sol_index_3.eigen_x(8));
-  TGraph *graph_l5_3 = to_TGraph(sol_index_3.t, sol_index_3.eigen_x(9));
-  TGraph *graph_cn_3 = to_TGraph(sol_index_3.t, control(sol_index_3.x));
+  TGraph *graph_x_2  = to_TGraph(sol_index_2.t, sol_index_2.eigen_x(0));
+  TGraph *graph_y_2  = to_TGraph(sol_index_2.t, sol_index_2.eigen_x(1));
+  TGraph *graph_u_2  = to_TGraph(sol_index_2.t, sol_index_2.eigen_x(2));
+  TGraph *graph_v_2  = to_TGraph(sol_index_2.t, sol_index_2.eigen_x(3));
+  TGraph *graph_l_2  = to_TGraph(sol_index_2.t, sol_index_2.eigen_x(4));
+  TGraph *graph_l1_2 = to_TGraph(sol_index_2.t, sol_index_2.eigen_x(5));
+  TGraph *graph_l2_2 = to_TGraph(sol_index_2.t, sol_index_2.eigen_x(6));
+  TGraph *graph_l3_2 = to_TGraph(sol_index_2.t, sol_index_2.eigen_x(7));
+  TGraph *graph_l4_2 = to_TGraph(sol_index_2.t, sol_index_2.eigen_x(8));
+  TGraph *graph_l5_2 = to_TGraph(sol_index_2.t, sol_index_2.eigen_x(9));
+  TGraph *graph_cn_2 = to_TGraph(sol_index_2.t, control(sol_index_2.x));
 
   TGraph *graph_x_0_lesq =
       to_TGraph(sol_index_0_lesq.t, sol_index_0_lesq.eigen_x(0));
@@ -287,28 +283,28 @@ int main(int argc, char **argv) {
   TGraph *graph_cn_0_proj =
       to_TGraph(sol_index_0_proj.t, control(sol_index_0_proj.x));
 
-  graph_x_3->SetLineColor(colors[0]);
-  graph_y_3->SetLineColor(colors[0]);
-  graph_u_3->SetLineColor(colors[0]);
-  graph_v_3->SetLineColor(colors[0]);
-  graph_l_3->SetLineColor(colors[0]);
-  graph_l1_3->SetLineColor(colors[0]);
-  graph_l2_3->SetLineColor(colors[0]);
-  graph_l3_3->SetLineColor(colors[0]);
-  graph_l4_3->SetLineColor(colors[0]);
-  graph_l5_3->SetLineColor(colors[0]);
-  graph_cn_3->SetLineColor(colors[0]);
-  graph_x_3->SetLineWidth(2.0);
-  graph_y_3->SetLineWidth(2.0);
-  graph_u_3->SetLineWidth(2.0);
-  graph_v_3->SetLineWidth(2.0);
-  graph_l_3->SetLineWidth(2.0);
-  graph_l1_3->SetLineWidth(2.0);
-  graph_l2_3->SetLineWidth(2.0);
-  graph_l3_3->SetLineWidth(2.0);
-  graph_l4_3->SetLineWidth(2.0);
-  graph_l5_3->SetLineWidth(2.0);
-  graph_cn_3->SetLineWidth(2.0);
+  graph_x_2->SetLineColor(colors[0]);
+  graph_y_2->SetLineColor(colors[0]);
+  graph_u_2->SetLineColor(colors[0]);
+  graph_v_2->SetLineColor(colors[0]);
+  graph_l_2->SetLineColor(colors[0]);
+  graph_l1_2->SetLineColor(colors[0]);
+  graph_l2_2->SetLineColor(colors[0]);
+  graph_l3_2->SetLineColor(colors[0]);
+  graph_l4_2->SetLineColor(colors[0]);
+  graph_l5_2->SetLineColor(colors[0]);
+  graph_cn_2->SetLineColor(colors[0]);
+  graph_x_2->SetLineWidth(2.0);
+  graph_y_2->SetLineWidth(2.0);
+  graph_u_2->SetLineWidth(2.0);
+  graph_v_2->SetLineWidth(2.0);
+  graph_l_2->SetLineWidth(2.0);
+  graph_l1_2->SetLineWidth(2.0);
+  graph_l2_2->SetLineWidth(2.0);
+  graph_l3_2->SetLineWidth(2.0);
+  graph_l4_2->SetLineWidth(2.0);
+  graph_l5_2->SetLineWidth(2.0);
+  graph_cn_2->SetLineWidth(2.0);
 
   graph_x_0_lesq->SetLineColor(colors[1]);
   graph_y_0_lesq->SetLineColor(colors[1]);
@@ -362,8 +358,8 @@ int main(int argc, char **argv) {
   gPad->SetGrid();
   auto mg1 = new TMultiGraph();
   mg1->SetTitle("Cartesian coordinates");
-  mg1->Add(graph_x_3);
-  mg1->Add(graph_y_3);
+  mg1->Add(graph_x_2);
+  mg1->Add(graph_y_2);
   mg1->Add(graph_x_0_lesq);
   mg1->Add(graph_y_0_lesq);
   mg1->Add(graph_x_0_proj);
@@ -373,8 +369,8 @@ int main(int argc, char **argv) {
   mg1->GetYaxis()->SetTitle("x, y (m)");
   mg1->GetXaxis()->SetLimits(time.minCoeff(), time.maxCoeff());
   auto legend1 = new TLegend(0.7, 0.7, 0.9, 0.9);
-  legend1->AddEntry(graph_x_3, "x (index 3)", "l");
-  legend1->AddEntry(graph_y_3, "y (index 3)", "l");
+  legend1->AddEntry(graph_x_2, "x (index 2)", "l");
+  legend1->AddEntry(graph_y_2, "y (index 2)", "l");
   legend1->AddEntry(graph_x_0_lesq, "x (l.s. index 0)", "l");
   legend1->AddEntry(graph_y_0_lesq, "y (l.s. index 0)", "l");
   legend1->AddEntry(graph_x_0_proj, "x (proj. index 0)", "l");
@@ -385,8 +381,8 @@ int main(int argc, char **argv) {
   gPad->SetGrid();
   auto mg2 = new TMultiGraph();
   mg2->SetTitle("Velocities");
-  mg2->Add(graph_u_3);
-  mg2->Add(graph_v_3);
+  mg2->Add(graph_u_2);
+  mg2->Add(graph_v_2);
   mg2->Add(graph_u_0_lesq);
   mg2->Add(graph_v_0_lesq);
   mg2->Add(graph_u_0_proj);
@@ -396,8 +392,8 @@ int main(int argc, char **argv) {
   mg2->GetYaxis()->SetTitle("u, v (m/s)");
   mg2->GetXaxis()->SetLimits(time.minCoeff(), time.maxCoeff());
   auto legend2 = new TLegend(0.7, 0.7, 0.9, 0.9);
-  legend2->AddEntry(graph_u_3, "u (index 3)", "l");
-  legend2->AddEntry(graph_v_3, "v (index 3)", "l");
+  legend2->AddEntry(graph_u_2, "u (index 2)", "l");
+  legend2->AddEntry(graph_v_2, "v (index 2)", "l");
   legend2->AddEntry(graph_u_0_lesq, "u (l.s. index 0)", "l");
   legend2->AddEntry(graph_v_0_lesq, "v (l.s. index 0)", "l");
   legend2->AddEntry(graph_u_0_proj, "u (proj. index 0)", "l");
@@ -408,7 +404,7 @@ int main(int argc, char **argv) {
   gPad->SetGrid();
   auto mg3 = new TMultiGraph();
   mg3->SetTitle("Lagrange multiplier (DAE)");
-  mg3->Add(graph_l_3);
+  mg3->Add(graph_l_2);
   mg3->Add(graph_l_0_lesq);
   mg3->Add(graph_l_0_proj);
   mg3->Draw("AL");
@@ -416,7 +412,7 @@ int main(int argc, char **argv) {
   mg3->GetYaxis()->SetTitle("lambda (N)");
   mg3->GetXaxis()->SetLimits(time.minCoeff(), time.maxCoeff());
   auto legend3 = new TLegend(0.7, 0.8, 0.9, 0.9);
-  legend3->AddEntry(graph_l_3, "l (index 3)", "l");
+  legend3->AddEntry(graph_l_2, "l (index 2)", "l");
   legend3->AddEntry(graph_l_0_lesq, "l (l.s. index 0)", "l");
   legend3->AddEntry(graph_l_0_proj, "l (proj. index 0)", "l");
   legend3->Draw();
@@ -425,11 +421,11 @@ int main(int argc, char **argv) {
   gPad->SetGrid();
   auto mg4 = new TMultiGraph();
   mg4->SetTitle("Lagrange multipliers (OCP)");
-  mg4->Add(graph_l1_3);
-  mg4->Add(graph_l2_3);
-  mg4->Add(graph_l3_3);
-  mg4->Add(graph_l4_3);
-  mg4->Add(graph_l5_3);
+  mg4->Add(graph_l1_2);
+  mg4->Add(graph_l2_2);
+  mg4->Add(graph_l3_2);
+  mg4->Add(graph_l4_2);
+  mg4->Add(graph_l5_2);
   mg4->Add(graph_l1_0_lesq);
   mg4->Add(graph_l2_0_lesq);
   mg4->Add(graph_l3_0_lesq);
@@ -445,11 +441,11 @@ int main(int argc, char **argv) {
   mg4->GetYaxis()->SetTitle("l1, l2, l3, l4, l5 (-)");
   mg4->GetXaxis()->SetLimits(time.minCoeff(), time.maxCoeff());
   auto legend4 = new TLegend(0.7, 0.7, 0.9, 0.9);
-  legend4->AddEntry(graph_l1_3, "l1 (index 3)", "l");
-  legend4->AddEntry(graph_l2_3, "l2 (index 3)", "l");
-  legend4->AddEntry(graph_l3_3, "l3 (index 3)", "l");
-  legend4->AddEntry(graph_l4_3, "l4 (index 3)", "l");
-  legend4->AddEntry(graph_l5_3, "l5 (index 3)", "l");
+  legend4->AddEntry(graph_l1_2, "l1 (index 2)", "l");
+  legend4->AddEntry(graph_l2_2, "l2 (index 2)", "l");
+  legend4->AddEntry(graph_l3_2, "l3 (index 2)", "l");
+  legend4->AddEntry(graph_l4_2, "l4 (index 2)", "l");
+  legend4->AddEntry(graph_l5_2, "l5 (index 2)", "l");
   legend4->AddEntry(graph_l1_0_lesq, "l1 (l.s. index 0)", "l");
   legend4->AddEntry(graph_l2_0_lesq, "l2 (l.s. index 0)", "l");
   legend4->AddEntry(graph_l3_0_lesq, "l3 (l.s. index 0)", "l");
@@ -489,17 +485,17 @@ int main(int argc, char **argv) {
   gPad->SetGrid();
   auto mg6 = new TMultiGraph();
   mg6->SetTitle("Control input");
-  mg6->Add(graph_cn_3);
+  mg6->Add(graph_cn_2);
   mg6->Add(graph_cn_0_lesq);
   mg6->Add(graph_cn_0_proj);
   mg6->Draw("AL");
   mg6->GetXaxis()->SetTitle("t");
-  mg6->GetYaxis()->SetTitle("control input (N)");
+  mg6->GetYaxis()->SetTitle("u (N)");
   mg6->GetXaxis()->SetLimits(time.minCoeff(), time.maxCoeff());
   auto legend6 = new TLegend(0.7, 0.8, 0.9, 0.9);
-  legend6->AddEntry(graph_cn_3, "control (index 3)", "l");
-  legend6->AddEntry(graph_cn_0_lesq, "control (l.s. index 0)", "l");
-  legend6->AddEntry(graph_cn_0_proj, "control (proj. index 0)", "l");
+  legend6->AddEntry(graph_cn_2, "u (index 2)", "l");
+  legend6->AddEntry(graph_cn_0_lesq, "u (l.s. index 0)", "l");
+  legend6->AddEntry(graph_cn_0_proj, "u (proj. index 0)", "l");
   legend6->Draw();
 
   canvas->Update();

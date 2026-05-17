@@ -81,8 +81,8 @@ int main(int argc, char **argv) {
   problem_index_0.integrator()->reverse_mode(reverse);
 
   // Set solver tolerance
-  problem_index_2.tolerance(1.0e-12);
-  problem_index_0.tolerance(1.0e-12);
+  problem_index_2.tolerance(1.0e-10);
+  problem_index_0.tolerance(1.0e-10);
 
   // Set solver maximum number of iterations
   problem_index_2.max_iterations(200);
@@ -107,21 +107,25 @@ int main(int argc, char **argv) {
   // Solve the problems with shooting
   Solution<Real, 8, 0> sol_index_2(time.size());
   try {
-    std::cout << "Solving problem with index 3..." << std::endl;
-    problem_index_2.sigma(1.0);
-    problem_index_0.lambda(0.0);
+    std::cout << "Solving problem with index 2..." << std::endl;
+    problem_index_2.sigma_x(1.0);
+    problem_index_2.sigma_h(1.0);
+    problem_index_2.sigma_b(1.0);
+    problem_index_2.lambda(1.0e-8);
     problem_index_2.integrator()->projection_mode(true);
     problem_index_2.multiple_shooting(time, guess);
     sol_index_2 = problem_index_2.solution();
   } catch (const std::exception &e) {
-    std::cerr << "Error solving problem with index 3: " << e.what()
+    std::cerr << "Error solving problem with index 2: " << e.what()
               << std::endl;
   }
 
   Solution<Real, 8, 2> sol_index_0_lesq(time.size());
   try {
     std::cout << "Solving problem with index 0 (least squares)..." << std::endl;
-    problem_index_0.sigma(1.0);
+    problem_index_0.sigma_x(1.0);
+    problem_index_0.sigma_h(1.0);
+    problem_index_0.sigma_b(1.0);
     problem_index_0.lambda(0.0);
     problem_index_0.integrator()->projection_mode(false);
     problem_index_0.multiple_shooting(time, guess);
@@ -134,7 +138,9 @@ int main(int argc, char **argv) {
   Solution<Real, 8, 2> sol_index_0_proj(time.size());
   try {
     std::cout << "Solving problem with index 0 (projection)..." << std::endl;
-    problem_index_0.sigma(1.0);
+    problem_index_0.sigma_x(1.0);
+    problem_index_0.sigma_h(1.0);
+    problem_index_0.sigma_b(1.0);
     problem_index_0.lambda(0.0);
     problem_index_0.integrator()->projection_mode(true);
     problem_index_0.multiple_shooting(time, guess);
