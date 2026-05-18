@@ -112,7 +112,7 @@ int main(int argc, char **argv) {
     problem_index_3.sigma_x(1.0);
     problem_index_3.sigma_h(1.0);
     problem_index_3.sigma_b(1.0);
-    problem_index_3.lambda(1.0e-3);
+    problem_index_3.lambda(1.0e-8);
     problem_index_3.integrator()->projection_mode(true);
     problem_index_3.multiple_shooting(time, guess);
     sol_index_3 = problem_index_3.solution();
@@ -125,44 +125,12 @@ int main(int argc, char **argv) {
   try {
     std::cout << "Solving problem with index 0 (least squares)..." << std::endl;
     problem_index_0.sigma_x(1.0);
-    problem_index_0.sigma_h(0.1);
-    problem_index_0.sigma_b(10.0);
-    problem_index_0.lambda(0.0);
+    problem_index_0.sigma_h(1.0);
+    problem_index_0.sigma_b(1.0);
+    problem_index_0.lambda(1.0e-8);
     problem_index_0.integrator()->projection_mode(false);
     problem_index_0.multiple_shooting(time, guess);
     sol_index_0_lesq = problem_index_0.solution();
-
-    problem_index_0.sigma_x(1.0);
-    problem_index_0.sigma_h(1.0);
-    problem_index_0.sigma_b(10.0);
-    problem_index_0.lambda(0.0);
-    problem_index_0.integrator()->projection_mode(false);
-    problem_index_0.multiple_shooting(time, sol_index_0_lesq.x);
-    sol_index_0_lesq = problem_index_0.solution();
-
-    // problem_index_0.sigma_x(1.0);
-    // problem_index_0.sigma_h(10.0);
-    // problem_index_0.sigma_b(1.0);
-    // problem_index_0.lambda(0.0);
-    // problem_index_0.integrator()->projection_mode(false);
-    // problem_index_0.multiple_shooting(time, sol_index_0_lesq.x);
-    // sol_index_0_lesq = problem_index_0.solution();
-
-    // problem_index_0.sigma_x(10.0);
-    // problem_index_0.sigma_h(100.0);
-    // problem_index_0.sigma_b(10.0);
-    // problem_index_0.lambda(0.0);
-    // problem_index_0.integrator()->projection_mode(false);
-    // problem_index_0.multiple_shooting(time, sol_index_0_lesq.x);
-    // sol_index_0_lesq = problem_index_0.solution();
-
-    // problem_index_0.sigma_x(10.0);
-    // problem_index_0.sigma_h(0.0001);
-    // problem_index_0.sigma_b(10.0);
-    // problem_index_0.lambda(0.0);
-    // problem_index_0.integrator()->projection_mode(false);
-    // problem_index_0.multiple_shooting(time, sol_index_0_lesq.x);
-    // sol_index_0_lesq = problem_index_0.solution();
   } catch (const std::exception &e) {
     std::cerr << "Error solving problem with index 0 (least squares): "
               << e.what() << std::endl;
@@ -174,7 +142,7 @@ int main(int argc, char **argv) {
     problem_index_0.sigma_x(1.0);
     problem_index_0.sigma_h(1.0);
     problem_index_0.sigma_b(1.0);
-    problem_index_0.lambda(1.0e-3);
+    problem_index_0.lambda(1.0e-8);
     problem_index_0.integrator()->projection_mode(true);
     problem_index_0.multiple_shooting(time, guess);
     sol_index_0_proj = problem_index_0.solution();

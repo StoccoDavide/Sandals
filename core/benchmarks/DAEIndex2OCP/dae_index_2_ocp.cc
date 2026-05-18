@@ -85,8 +85,8 @@ int main(int argc, char **argv) {
   problem_index_0.tolerance(1.0e-10);
 
   // Set solver maximum number of iterations
-  problem_index_2.max_iterations(200);
-  problem_index_0.max_iterations(200);
+  problem_index_2.max_iterations(2000);
+  problem_index_0.max_iterations(2000);
 
   // Set solution parameters
   constexpr Integer num_subintervals{1};

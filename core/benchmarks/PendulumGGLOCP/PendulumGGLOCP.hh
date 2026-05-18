@@ -1540,11 +1540,11 @@ class PendulumGGLOCPProblem
     // Cartesian coordinates
     const Real theta{-M_PI_2 * t / (time_end() - time_start())};
     const Real theta_dot{-M_PI_2 / (time_end() - time_start())};
-    const Real x{0.0 * std::cos(theta)};
-    const Real y{0.0 * std::sin(theta)};
-    const Real u{0.0 * -std::sin(theta) * theta_dot};
-    const Real v{0.0 * std::cos(theta) * theta_dot};
-    const Real lambda{0.0 * (u * u + v * v - y * g) / 2.0};
+    const Real x{std::cos(theta)};
+    const Real y{std::sin(theta)};
+    const Real u{-std::sin(theta) * theta_dot};
+    const Real v{std::cos(theta) * theta_dot};
+    const Real lambda{(u * u + v * v - y * g) / 2.0};
 
     // Assemble the guess vector
     VectorF guess;

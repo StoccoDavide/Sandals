@@ -149,6 +149,7 @@ configure_package_config_file(
 )
 
 install(FILES
+  ${CMAKE_CURRENT_SOURCE_DIR}/cmake/FindIpopt.cmake
   ${CMAKE_CURRENT_BINARY_DIR}/SandalsConfig.cmake
   ${CMAKE_CURRENT_BINARY_DIR}/SandalsVersion.cmake
   DESTINATION lib/cmake/Sandals

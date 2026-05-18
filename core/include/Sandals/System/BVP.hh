@@ -895,12 +895,15 @@ namespace Sandals {
         MatrixX x_trial(x_sol.rows(), x_sol.cols());
         VectorShooting residual_trial(b_sys_size);
 
-        const Real phi0{b_sys.squaredNorm()};
+        const Real phi0{0.5 * b_sys.squaredNorm()};
+        const VectorShooting grad_phi{A_sys.transpose() * b_sys};
+        const VectorShooting delta_x_vec{delta_x_sol.reshaped(A_sys_cols, 1)};
+        const Real directional_derivative{grad_phi.dot(delta_x_vec)};
 
         Real alpha{1.0};
         constexpr Real alpha_min{1.0e-8};
         constexpr Real contraction{0.5};
-        constexpr Real c1{1.0e-4};
+        constexpr Real c{1.0e-4};
 
         bool accepted{false};
         Integer ls_iter{0};
@@ -930,11 +933,12 @@ namespace Sandals {
             continue;
           }
 
-          // Merit function: phi(x) = ||r(x)||²
-          const Real phi_trial{residual_trial.squaredNorm()};
+          // Merit function: phi(x) = 0.5 * ||F(x)||^2
+          const Real phi_trial{0.5 * residual_trial.squaredNorm()};
 
           // Armijo sufficient decrease condition
-          const Real phi_max{(1.0 - c1 * alpha) * 0 + phi0};
+          // phi(x + αd) ≤ phi(x) + c*α*g^T*d with g = J^T*F
+          const Real phi_max{phi0 + c * alpha * directional_derivative};
 
           if (this->m_verbose) {
             std::cout << "  Line search: " << ls_iter << ", alpha = " << alpha
