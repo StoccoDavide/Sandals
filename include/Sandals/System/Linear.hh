@@ -49,7 +49,7 @@ namespace Sandals {
     using Type = typename Explicit<Real, N, M>::Type; /**< System type enumeration. */
 
   private:
-    Eigen::FullPivLU<MatrixE> m_lu; /**< LU decomposition. */
+    mutable Eigen::FullPivLU<MatrixE> m_lu; /**< LU decomposition. */
 
   public:
     /**
@@ -158,6 +158,16 @@ namespace Sandals {
     * \param[in] t Independent variable (or time) \f$ t \f$.
     * \return The system function \f$ \mathbf{E}(t) \f$.
     */
+    /**
+    * Evaluate the Hessian of the weighted explicit system function, which is zero since the system
+    * is linear in the states.
+    * \return A zero matrix.
+    */
+    MatrixJF Hf_x_x(VectorF const &/*x*/, Real const /*t*/, VectorF const &/*lambda*/) const override
+    {
+      return MatrixJF::Zero();
+    }
+
     virtual MatrixE E(Real const t) const = 0;
 
     /**
@@ -213,6 +223,7 @@ namespace Sandals {
     using FunctionH = std::function<VectorH(VectorF const &, Real const)>; /**< Invariants function type. */
     using FunctionJH = std::function<MatrixJH(VectorF const &, Real const)>; /**< Jacobian of the invariants function type. */
     using FunctionID = std::function<bool(VectorF const &, Real const)>; /**< In-domain function type. */
+    using FunctionHH = std::function<MatrixJF(VectorF const &, Real const, VectorH const &)>; /**< Hessian of the weighted invariants function type. */
 
     inline const static FunctionH DefaultH = [](VectorF const &, Real const) {return VectorH::Zero();}; /**< Default mass matrix function. */
     inline const static FunctionJH DefaultJH = [](VectorF const &, Real const) {return MatrixJH::Zero();}; /**< Default system matrix function. */
@@ -225,6 +236,7 @@ namespace Sandals {
     FunctionH m_h{nullptr}; /**< Invariants function. */
     FunctionJH m_Jh_x{nullptr}; /**< Jacobian of the invariants function. */
     FunctionID m_in_domain{nullptr}; /**< In-domain function. */
+    FunctionHH m_Hh_x_x{nullptr}; /**< Optional Hessian of the weighted invariants (finite differences if empty). */
 
   public:
     /**
@@ -298,6 +310,12 @@ namespace Sandals {
     FunctionID & in_domain() {return this->m_in_domain;}
 
     /**
+    * Get the (optional) Hessian of the weighted invariants.
+    * \return The Hessian function, if empty finite differences are used.
+    */
+    FunctionHH & Hh_x_x() {return this->m_Hh_x_x;}
+
+    /**
     * Evaluate the linear ODE/DAE system mass matrix \f$ \mathbf{E}(t) \f$.
     * \param[in] t Independent variable (or time) \f$ t \f$.
     * \return The system function \f$ \mathbf{E}(t) \f$.
@@ -366,6 +384,12 @@ namespace Sandals {
     bool in_domain(VectorF const & x, Real const t) const override
     {
       return this->m_in_domain(x, t);
+    }
+
+    MatrixJF Hh_x_x(VectorF const & x, Real const t, VectorH const & mu) const override
+    {
+      if (this->m_Hh_x_x) {return this->m_Hh_x_x(x, t, mu);}
+      return Linear<Real, N, M>::Hh_x_x(x, t, mu);
     }
 
   }; // class LinearWrapper

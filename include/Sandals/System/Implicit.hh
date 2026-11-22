@@ -41,7 +41,7 @@ namespace Sandals
   class Implicit
   {
   public:
-    using Type = enum class Type : Integer {IMPLICIT = 0, EXPLICIT = 1, SEMIEXPLICIT = 1}; /**< System type enumeration. */
+    using Type = enum class Type : Integer {IMPLICIT = 0, EXPLICIT = 1, SEMIEXPLICIT = 1, LINEAR = 1}; /**< System type enumeration. */
     using Pointer = std::shared_ptr<Implicit<Real, N, M>>; /**< Shared pointer to an implicit ODE system. */
     using VectorF = Eigen::Vector<Real, N>; /**< Templetized vector type. */
     using MatrixJF = Eigen::Matrix<Real, N, N>; /**< Templetized matrix type. */
@@ -200,6 +200,111 @@ namespace Sandals
     virtual bool in_domain(VectorF const & x, Real const t) const = 0;
 
     /**
+    * Evaluate the Hessian of the multiplier-weighted ODE/DAE system function \f$ \boldsymbol{\lambda}
+    * ^\top\mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, t) \f$ with respect to the states \f$ \mathbf{x}
+    * \f$ twice
+    *
+    * \f[
+    * \mathbf{HF}_{\mathbf{x}\mathbf{x}}(\mathbf{x}, \mathbf{x}^{\prime}, t, \boldsymbol{\lambda}) =
+    * \displaystyle\frac{\partial^2 (\boldsymbol{\lambda}^\top\mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime},
+    * t))}{\partial\mathbf{x}^2} \text{.}
+    * \f]
+    *
+    * The default implementation uses central finite differences of the Jacobian \f$
+    * \mathbf{JF}_{\mathbf{x}} \f$, override it to provide the exact Hessian.
+    * \param[in] x States \f$ \mathbf{x} \f$.
+    * \param[in] x_dot States derivative \f$ \mathbf{x}^{\prime} \f$.
+    * \param[in] t Independent variable (or time) \f$ t \f$.
+    * \param[in] lambda Multipliers \f$ \boldsymbol{\lambda} \f$.
+    * \return The (symmetric) Hessian \f$ \mathbf{HF}_{\mathbf{x}\mathbf{x}} \f$.
+    */
+    virtual MatrixJF HF_x_x(VectorF const & x, VectorF const & x_dot, Real const t,
+      VectorF const & lambda) const
+    {
+      return symmetrize(fd_jacobian([&] (VectorF const & z)
+        {return VectorF(this->JF_x(z, x_dot, t).transpose()*lambda);}, x));
+    }
+
+    /**
+    * Evaluate the mixed Hessian of the multiplier-weighted ODE/DAE system function \f$
+    * \boldsymbol{\lambda}^\top\mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, t) \f$ with respect to the
+    * states \f$ \mathbf{x} \f$ (rows) and the states derivative \f$ \mathbf{x}^{\prime} \f$ (columns)
+    *
+    * \f[
+    * \mathbf{HF}_{\mathbf{x}\mathbf{x}^{\prime}}(\mathbf{x}, \mathbf{x}^{\prime}, t, \boldsymbol{\lambda})
+    * = \displaystyle\frac{\partial^2 (\boldsymbol{\lambda}^\top\mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime},
+    * t))}{\partial\mathbf{x}\,\partial\mathbf{x}^{\prime}} \text{.}
+    * \f]
+    *
+    * The default implementation uses central finite differences of the Jacobian \f$
+    * \mathbf{JF}_{\mathbf{x}} \f$, override it to provide the exact Hessian.
+    * \param[in] x States \f$ \mathbf{x} \f$.
+    * \param[in] x_dot States derivative \f$ \mathbf{x}^{\prime} \f$.
+    * \param[in] t Independent variable (or time) \f$ t \f$.
+    * \param[in] lambda Multipliers \f$ \boldsymbol{\lambda} \f$.
+    * \return The mixed Hessian \f$ \mathbf{HF}_{\mathbf{x}\mathbf{x}^{\prime}} \f$, whose \f$ (i,j)
+    * \f$ entry is the derivative with respect to \f$ x_i \f$ and \f$ x^{\prime}_j \f$.
+    */
+    virtual MatrixJF HF_x_x_dot(VectorF const & x, VectorF const & x_dot, Real const t,
+      VectorF const & lambda) const
+    {
+      return fd_jacobian([&] (VectorF const & z)
+        {return VectorF(this->JF_x(x, z, t).transpose()*lambda);}, x_dot);
+    }
+
+    /**
+    * Evaluate the Hessian of the multiplier-weighted ODE/DAE system function \f$ \boldsymbol{\lambda}
+    * ^\top\mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, t) \f$ with respect to the states derivative
+    * \f$ \mathbf{x}^{\prime} \f$ twice
+    *
+    * \f[
+    * \mathbf{HF}_{\mathbf{x}^{\prime}\mathbf{x}^{\prime}}(\mathbf{x}, \mathbf{x}^{\prime}, t,
+    * \boldsymbol{\lambda}) = \displaystyle\frac{\partial^2 (\boldsymbol{\lambda}^\top\mathbf{F}(
+    * \mathbf{x}, \mathbf{x}^{\prime}, t))}{\partial{\mathbf{x}^{\prime}}^2} \text{.}
+    * \f]
+    *
+    * The default implementation uses central finite differences of the Jacobian \f$
+    * \mathbf{JF}_{\mathbf{x}^{\prime}} \f$, override it to provide the exact Hessian.
+    * \param[in] x States \f$ \mathbf{x} \f$.
+    * \param[in] x_dot States derivative \f$ \mathbf{x}^{\prime} \f$.
+    * \param[in] t Independent variable (or time) \f$ t \f$.
+    * \param[in] lambda Multipliers \f$ \boldsymbol{\lambda} \f$.
+    * \return The (symmetric) Hessian \f$ \mathbf{HF}_{\mathbf{x}^{\prime}\mathbf{x}^{\prime}} \f$.
+    */
+    virtual MatrixJF HF_x_dot_x_dot(VectorF const & x, VectorF const & x_dot, Real const t,
+      VectorF const & lambda) const
+    {
+      return symmetrize(fd_jacobian([&] (VectorF const & z)
+        {return VectorF(this->JF_x_dot(x, z, t).transpose()*lambda);}, x_dot));
+    }
+
+    /**
+    * Evaluate the Hessian of the multiplier-weighted invariants \f$ \boldsymbol{\mu}^\top\mathbf{h}(
+    * \mathbf{x}, t) \f$ with respect to the states \f$ \mathbf{x} \f$ twice
+    *
+    * \f[
+    * \mathbf{Hh}_{\mathbf{x}\mathbf{x}}(\mathbf{x}, t, \boldsymbol{\mu}) = \displaystyle\frac{
+    * \partial^2 (\boldsymbol{\mu}^\top\mathbf{h}(\mathbf{x}, t))}{\partial\mathbf{x}^2} \text{.}
+    * \f]
+    *
+    * The default implementation uses central finite differences of the Jacobian \f$
+    * \mathbf{Jh}_{\mathbf{x}} \f$, override it to provide the exact Hessian.
+    * \param[in] x States \f$ \mathbf{x} \f$.
+    * \param[in] t Independent variable (or time) \f$ t \f$.
+    * \param[in] mu Multipliers \f$ \boldsymbol{\mu} \f$.
+    * \return The (symmetric) Hessian \f$ \mathbf{Hh}_{\mathbf{x}\mathbf{x}} \f$.
+    */
+    virtual MatrixJF Hh_x_x(VectorF const & x, Real const t, VectorH const & mu) const
+    {
+      if constexpr (M == 0) {
+        return MatrixJF::Zero();
+      } else {
+        return symmetrize(fd_jacobian([&] (VectorF const & z)
+          {return VectorF(this->Jh_x(z, t).transpose()*mu);}, x));
+      }
+    }
+
+    /**
     * Time reversal of the implicit ODE system function \f$ \mathbf{F}(\mathbf{x}, \mathbf{x}^{
     * \prime}, t) = -\mathbf{F}(\mathbf{x}, -\mathbf{x}^{\prime}, -t) \f$.
     * \param[in] x States \f$ \mathbf{x} \f$.
@@ -242,6 +347,85 @@ namespace Sandals
       return this->JF_x_dot(x, -x_dot, -t);
     }
 
+    /**
+    * Time reversal of the Hessian \f$ \mathbf{HF}_{\mathbf{x}\mathbf{x}} \f$, i.e., \f$
+    * -\mathbf{HF}_{\mathbf{x}\mathbf{x}}(\mathbf{x}, -\mathbf{x}^{\prime}, -t, \boldsymbol{\lambda}) \f$.
+    * \param[in] x States \f$ \mathbf{x} \f$.
+    * \param[in] x_dot States derivative \f$ \mathbf{x}^{\prime} \f$.
+    * \param[in] t Independent variable (or time) \f$ t \f$.
+    * \param[in] lambda Multipliers \f$ \boldsymbol{\lambda} \f$.
+    * \return The time-reversed Hessian.
+    */
+    MatrixJF HF_x_x_reverse(VectorF const & x, VectorF const & x_dot, Real const t,
+      VectorF const & lambda) const
+    {
+      return -this->HF_x_x(x, -x_dot, -t, lambda);
+    }
+
+    /**
+    * Time reversal of the Hessian \f$ \mathbf{HF}_{\mathbf{x}\mathbf{x}^{\prime}} \f$, i.e., \f$
+    * \mathbf{HF}_{\mathbf{x}\mathbf{x}^{\prime}}(\mathbf{x}, -\mathbf{x}^{\prime}, -t,
+    * \boldsymbol{\lambda}) \f$.
+    * \param[in] x States \f$ \mathbf{x} \f$.
+    * \param[in] x_dot States derivative \f$ \mathbf{x}^{\prime} \f$.
+    * \param[in] t Independent variable (or time) \f$ t \f$.
+    * \param[in] lambda Multipliers \f$ \boldsymbol{\lambda} \f$.
+    * \return The time-reversed Hessian.
+    */
+    MatrixJF HF_x_x_dot_reverse(VectorF const & x, VectorF const & x_dot, Real const t,
+      VectorF const & lambda) const
+    {
+      return this->HF_x_x_dot(x, -x_dot, -t, lambda);
+    }
+
+    /**
+    * Time reversal of the Hessian \f$ \mathbf{HF}_{\mathbf{x}^{\prime}\mathbf{x}^{\prime}} \f$, i.e.,
+    * \f$ -\mathbf{HF}_{\mathbf{x}^{\prime}\mathbf{x}^{\prime}}(\mathbf{x}, -\mathbf{x}^{\prime}, -t,
+    * \boldsymbol{\lambda}) \f$.
+    * \param[in] x States \f$ \mathbf{x} \f$.
+    * \param[in] x_dot States derivative \f$ \mathbf{x}^{\prime} \f$.
+    * \param[in] t Independent variable (or time) \f$ t \f$.
+    * \param[in] lambda Multipliers \f$ \boldsymbol{\lambda} \f$.
+    * \return The time-reversed Hessian.
+    */
+    MatrixJF HF_x_dot_x_dot_reverse(VectorF const & x, VectorF const & x_dot, Real const t,
+      VectorF const & lambda) const
+    {
+      return -this->HF_x_dot_x_dot(x, -x_dot, -t, lambda);
+    }
+
+  protected:
+    /**
+    * Compute the Jacobian of a vector function \f$ \mathbf{g}(\mathbf{z}) \f$ by central finite
+    * differences.
+    * \param[in] g The vector function \f$ \mathbf{g}(\mathbf{z}) \f$.
+    * \param[in] z The evaluation point \f$ \mathbf{z} \f$.
+    * \return The Jacobian matrix, whose \f$ j \f$-th column is \f$ \partial\mathbf{g}/\partial z_j \f$.
+    */
+    template <typename Function>
+    static MatrixJF fd_jacobian(Function && g, VectorF const & z)
+    {
+      static Real const eps{std::cbrt(std::numeric_limits<Real>::epsilon())};
+      MatrixJF jac;
+      VectorF z_p(z), z_m(z);
+      for (Integer j{0}; j < N; ++j) {
+        Real const delta{eps*std::max(Real(1.0), std::abs(z(j)))};
+        z_p(j) = z(j) + delta;
+        z_m(j) = z(j) - delta;
+        jac.col(j) = (g(z_p) - g(z_m)) / (z_p(j) - z_m(j));
+        z_p(j) = z(j);
+        z_m(j) = z(j);
+      }
+      return jac;
+    }
+
+    /**
+    * Return the symmetric part of a square matrix.
+    * \param[in] mat The square matrix \f$ \mathbf{A} \f$.
+    * \return The symmetric part \f$ (\mathbf{A} + \mathbf{A}^\top)/2 \f$.
+    */
+    static MatrixJF symmetrize(MatrixJF const & mat) {return Real(0.5)*(mat + mat.transpose());}
+
   }; // class Implicit
 
   /*\
@@ -277,6 +461,8 @@ namespace Sandals
     using FunctionH = std::function<VectorH(VectorF const &, Real const)>; /**< Invariants function type. */
     using FunctionJH = std::function<MatrixJH(VectorF const &, Real const)>; /**< Jacobian of the invariants function type. */
     using FunctionID = std::function<bool(VectorF const &, Real const)>; /**< In-domain function type. */
+    using FunctionHF = std::function<MatrixJF(VectorF const &, VectorF const &, Real const, VectorF const &)>; /**< Hessian of the weighted ODE system function type. */
+    using FunctionHH = std::function<MatrixJF(VectorF const &, Real const, VectorH const &)>; /**< Hessian of the weighted invariants function type. */
 
     inline static const FunctionH DefaultH = [](VectorF const &, Real const) {return VectorH::Zero();}; /**< Default mass matrix function. */
     inline static const FunctionJH DefaultJH = [](VectorF const &, Real const) {return MatrixJH::Zero();}; /**< Default system matrix function. */
@@ -289,6 +475,10 @@ namespace Sandals
     FunctionH m_h{nullptr}; /**< System's invariants. */
     FunctionJH m_Jh_x{nullptr}; /**< Jacobian of the system's invariants with respect to the states. */
     FunctionID m_in_domain{nullptr}; /**< In-domain function. */
+    FunctionHF m_HF_x_x{nullptr}; /**< Optional Hessian of the weighted system function with respect to the states (finite differences if empty). */
+    FunctionHF m_HF_x_x_dot{nullptr}; /**< Optional mixed Hessian of the weighted system function (finite differences if empty). */
+    FunctionHF m_HF_x_dot_x_dot{nullptr}; /**< Optional Hessian of the weighted system function with respect to the states derivative (finite differences if empty). */
+    FunctionHH m_Hh_x_x{nullptr}; /**< Optional Hessian of the weighted invariants (finite differences if empty). */
 
   public:
     /**
@@ -361,6 +551,30 @@ namespace Sandals
     * \return The in-domain function.
     */
     FunctionID & in_domain() {return this->m_in_domain;}
+
+    /**
+    * Get the (optional) Hessian of the weighted system function with respect to the states.
+    * \return The Hessian function, if empty finite differences are used.
+    */
+    FunctionHF & HF_x_x() {return this->m_HF_x_x;}
+
+    /**
+    * Get the (optional) mixed Hessian of the weighted system function.
+    * \return The Hessian function, if empty finite differences are used.
+    */
+    FunctionHF & HF_x_x_dot() {return this->m_HF_x_x_dot;}
+
+    /**
+    * Get the (optional) Hessian of the weighted system function with respect to the states derivative.
+    * \return The Hessian function, if empty finite differences are used.
+    */
+    FunctionHF & HF_x_dot_x_dot() {return this->m_HF_x_dot_x_dot;}
+
+    /**
+    * Get the (optional) Hessian of the weighted invariants.
+    * \return The Hessian function, if empty finite differences are used.
+    */
+    FunctionHH & Hh_x_x() {return this->m_Hh_x_x;}
 
     /**
     * Evaluate the ODE/DAE system \f$ \mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, t) \f$.
@@ -452,6 +666,30 @@ namespace Sandals
     bool in_domain(VectorF const & x, Real const t) const override
     {
       return this->m_in_domain(x, t);
+    }
+
+    MatrixJF HF_x_x(VectorF const & x, VectorF const & x_dot, Real const t, VectorF const & lambda) const override
+    {
+      if (this->m_HF_x_x) {return this->m_HF_x_x(x, x_dot, t, lambda);}
+      return Implicit<Real, N, M>::HF_x_x(x, x_dot, t, lambda);
+    }
+
+    MatrixJF HF_x_x_dot(VectorF const & x, VectorF const & x_dot, Real const t, VectorF const & lambda) const override
+    {
+      if (this->m_HF_x_x_dot) {return this->m_HF_x_x_dot(x, x_dot, t, lambda);}
+      return Implicit<Real, N, M>::HF_x_x_dot(x, x_dot, t, lambda);
+    }
+
+    MatrixJF HF_x_dot_x_dot(VectorF const & x, VectorF const & x_dot, Real const t, VectorF const & lambda) const override
+    {
+      if (this->m_HF_x_dot_x_dot) {return this->m_HF_x_dot_x_dot(x, x_dot, t, lambda);}
+      return Implicit<Real, N, M>::HF_x_dot_x_dot(x, x_dot, t, lambda);
+    }
+
+    MatrixJF Hh_x_x(VectorF const & x, Real const t, VectorH const & mu) const override
+    {
+      if (this->m_Hh_x_x) {return this->m_Hh_x_x(x, t, mu);}
+      return Implicit<Real, N, M>::Hh_x_x(x, t, mu);
     }
 
   }; // class ImplicitWrapper

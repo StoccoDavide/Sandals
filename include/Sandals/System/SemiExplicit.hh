@@ -91,9 +91,8 @@ namespace Sandals {
     * \f[
     * \mathbf{JF}_{\mathbf{x}}(\mathbf{x}, \mathbf{x}^{\prime}, t) =
     * \displaystyle\frac{\partial\mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, t)}{\partial\mathbf{x}} =
-    * -\displaystyle\frac{\partial\mathbf{f}(\mathbf{x}, \mathbf{x}^{\prime}, t)}{\partial\mathbf{x}} =
-    * -\mathbf{Jf}_{\mathbf{x}}(\mathbf{x}, t) = -\mathbf{A}(\mathbf{x}, t)^{-1}(\mathbf{Jb}_{
-    * \mathbf{x}}(\mathbf{x}, t) - \mathbf{TA}_{\mathbf{x}}(\mathbf{x}, t) \mathbf{x}^\prime) \text{.}
+    * \mathbf{TA}_{\mathbf{x}}(\mathbf{x}, t) \mathbf{x}^\prime - \mathbf{Jb}_{\mathbf{x}}(\mathbf{x},
+    * t) \text{.}
     * \f]
     *
     * \param[in] x States \f$ \mathbf{x} \f$.
@@ -103,7 +102,12 @@ namespace Sandals {
     */
     MatrixJF JF_x(VectorF const & x, VectorF const & x_dot, Real const t) const override
     {
-      return -this->Jf_x(x, x_dot, t);
+      TensorTA TA_x{this->TA_x(x, t)};
+      SANDALS_ASSERT(static_cast<Integer>(TA_x.size()) == N,
+        "Sandals:SemiExplicit::JF_x(...): mass matrix tensor size mismatch.");
+      MatrixJF tAp;
+      for (Integer i{0}; i < N; ++i) {tAp.col(i) = TA_x[i] * x_dot;}
+      return tAp - this->Jb_x(x, t);
     }
 
     /**
@@ -233,6 +237,106 @@ namespace Sandals {
     */
     virtual MatrixJB Jb_x(VectorF const & x, Real const t) const = 0;
 
+    /**
+    * Evaluate the Hessian of the weighted mass matrix product \f$ \boldsymbol{\lambda}^\top
+    * \mathbf{A}(\mathbf{x}, t)\mathbf{v} \f$, with \f$ \mathbf{v} \f$ held constant, with respect to
+    * the states \f$ \mathbf{x} \f$ twice
+    *
+    * \f[
+    * \mathbf{HA}_{\mathbf{x}\mathbf{x}}(\mathbf{x}, \mathbf{v}, t, \boldsymbol{\lambda}) =
+    * \displaystyle\frac{\partial^2 (\boldsymbol{\lambda}^\top\mathbf{A}(\mathbf{x}, t)\mathbf{v})}{
+    * \partial\mathbf{x}^2} \text{.}
+    * \f]
+    *
+    * The default implementation uses central finite differences of the tensor \f$
+    * \mathbf{TA}_{\mathbf{x}} \f$, override it to provide the exact Hessian.
+    * \param[in] x States \f$ \mathbf{x} \f$.
+    * \param[in] v Vector \f$ \mathbf{v} \f$ (typically the states derivative \f$ \mathbf{x}^{\prime} \f$).
+    * \param[in] t Independent variable (or time) \f$ t \f$.
+    * \param[in] lambda Multipliers \f$ \boldsymbol{\lambda} \f$.
+    * \return The (symmetric) Hessian \f$ \mathbf{HA}_{\mathbf{x}\mathbf{x}} \f$.
+    */
+    virtual MatrixJF HA_x_x(VectorF const & x, VectorF const & v, Real const t,
+      VectorF const & lambda) const
+    {
+      return this->symmetrize(this->fd_jacobian([&] (VectorF const & z) {
+        TensorTA TA_x{this->TA_x(z, t)};
+        VectorF grad;
+        for (Integer k{0}; k < N; ++k) {grad(k) = lambda.dot(TA_x[k] * v);}
+        return grad;
+      }, x));
+    }
+
+    /**
+    * Evaluate the Hessian of the weighted right-hand-side \f$ \boldsymbol{\lambda}^\top\mathbf{b}(
+    * \mathbf{x}, t) \f$ with respect to the states \f$ \mathbf{x} \f$ twice
+    *
+    * \f[
+    * \mathbf{Hb}_{\mathbf{x}\mathbf{x}}(\mathbf{x}, t, \boldsymbol{\lambda}) = \displaystyle\frac{
+    * \partial^2 (\boldsymbol{\lambda}^\top\mathbf{b}(\mathbf{x}, t))}{\partial\mathbf{x}^2} \text{.}
+    * \f]
+    *
+    * The default implementation uses central finite differences of the Jacobian \f$
+    * \mathbf{Jb}_{\mathbf{x}} \f$, override it to provide the exact Hessian.
+    * \param[in] x States \f$ \mathbf{x} \f$.
+    * \param[in] t Independent variable (or time) \f$ t \f$.
+    * \param[in] lambda Multipliers \f$ \boldsymbol{\lambda} \f$.
+    * \return The (symmetric) Hessian \f$ \mathbf{Hb}_{\mathbf{x}\mathbf{x}} \f$.
+    */
+    virtual MatrixJF Hb_x_x(VectorF const & x, Real const t, VectorF const & lambda) const
+    {
+      return this->symmetrize(this->fd_jacobian([&] (VectorF const & z)
+        {return VectorF(this->Jb_x(z, t).transpose()*lambda);}, x));
+    }
+
+    /**
+    * Evaluate the Hessian \f$ \mathbf{HF}_{\mathbf{x}\mathbf{x}} = \mathbf{HA}_{\mathbf{x}\mathbf{x}}(
+    * \mathbf{x}, \mathbf{x}^{\prime}, t, \boldsymbol{\lambda}) - \mathbf{Hb}_{\mathbf{x}\mathbf{x}}(
+    * \mathbf{x}, t, \boldsymbol{\lambda}) \f$ of the weighted implicit form \f$ \boldsymbol{\lambda}^\top
+    * (\mathbf{A}(\mathbf{x}, t)\mathbf{x}^{\prime} - \mathbf{b}(\mathbf{x}, t)) \f$.
+    * \param[in] x States \f$ \mathbf{x} \f$.
+    * \param[in] x_dot States derivative \f$ \mathbf{x}^{\prime} \f$.
+    * \param[in] t Independent variable (or time) \f$ t \f$.
+    * \param[in] lambda Multipliers \f$ \boldsymbol{\lambda} \f$.
+    * \return The Hessian \f$ \mathbf{HF}_{\mathbf{x}\mathbf{x}} \f$.
+    */
+    MatrixJF HF_x_x(VectorF const & x, VectorF const & x_dot, Real const t,
+      VectorF const & lambda) const override
+    {
+      return this->HA_x_x(x, x_dot, t, lambda) - this->Hb_x_x(x, t, lambda);
+    }
+
+    /**
+    * Evaluate the mixed Hessian of the weighted implicit form \f$ \boldsymbol{\lambda}^\top(\mathbf{A}(
+    * \mathbf{x}, t)\mathbf{x}^{\prime} - \mathbf{b}(\mathbf{x}, t)) \f$, whose \f$ k \f$-th row is
+    * \f$ (\mathbf{TA}_{\mathbf{x},k}^\top\boldsymbol{\lambda})^\top \f$, with \f$ \mathbf{TA}_{\mathbf{x},
+    * k} = \partial\mathbf{A}/\partial x_k \f$.
+    * \param[in] x States \f$ \mathbf{x} \f$.
+    * \param[in] x_dot States derivative \f$ \mathbf{x}^{\prime} \f$.
+    * \param[in] t Independent variable (or time) \f$ t \f$.
+    * \param[in] lambda Multipliers \f$ \boldsymbol{\lambda} \f$.
+    * \return The mixed Hessian \f$ \mathbf{HF}_{\mathbf{x}\mathbf{x}^{\prime}} \f$.
+    */
+    MatrixJF HF_x_x_dot(VectorF const & x, VectorF const &/*x_dot*/, Real const t,
+      VectorF const & lambda) const override
+    {
+      TensorTA TA_x{this->TA_x(x, t)};
+      MatrixJF hess;
+      for (Integer k{0}; k < N; ++k) {hess.row(k) = (TA_x[k].transpose() * lambda).transpose();}
+      return hess;
+    }
+
+    /**
+    * Evaluate the Hessian \f$ \mathbf{HF}_{\mathbf{x}^{\prime}\mathbf{x}^{\prime}} = \mathbf{0} \f$ of
+    * the weighted implicit form, which is linear in the states derivative.
+    * \return A zero matrix.
+    */
+    MatrixJF HF_x_dot_x_dot(VectorF const &/*x*/, VectorF const &/*x_dot*/, Real const /*t*/,
+      VectorF const &/*lambda*/) const override
+    {
+      return MatrixJF::Zero();
+    }
+
   }; // class SemiExplicit
 
   /*\
@@ -261,6 +365,7 @@ namespace Sandals {
   public:
     using Pointer = std::shared_ptr<SemiExplicitWrapper<Real, N, M>>; /**< Shared pointer to a semi-explicit ODE/DAE system. */
     using typename SemiExplicit<Real, N, M>::VectorF; /**< Templetized vector type. */
+    using typename SemiExplicit<Real, N, M>::MatrixJF; /**< Templetized matrix type. */
     using typename SemiExplicit<Real, N, M>::MatrixA; /**< Templetized matrix type. */
     using typename SemiExplicit<Real, N, M>::TensorTA; /**< Templetized matrix type. */
     using typename SemiExplicit<Real, N, M>::VectorB; /**< Templetized vector type. */
@@ -274,6 +379,9 @@ namespace Sandals {
     using FunctionH = std::function<VectorH(VectorF const &, Real const)>; /**< Invariants function type. */
     using FunctionJH = std::function<MatrixJH(VectorF const &, Real const)>; /**< Jacobian of the invariants function type. */
     using FunctionID = std::function<bool(VectorF const &, Real const)>; /**< In-domain function type. */
+    using FunctionHF = std::function<MatrixJF(VectorF const &, VectorF const &, Real const, VectorF const &)>; /**< Hessian of the weighted function type. */
+    using FunctionHH = std::function<MatrixJF(VectorF const &, Real const, VectorH const &)>; /**< Hessian of the weighted invariants function type. */
+    using FunctionHf = std::function<MatrixJF(VectorF const &, Real const, VectorF const &)>; /**< Hessian of the weighted function type. */
 
     inline const static FunctionH DefaultH = [](VectorF const &, Real const) {return VectorH::Zero();}; /**< Default mass matrix function. */
     inline const static FunctionJH DefaultJH = [](VectorF const &, Real const) {return MatrixJH::Zero();}; /**< Default system matrix function. */
@@ -287,6 +395,9 @@ namespace Sandals {
     FunctionH m_h{nullptr}; /**< Invariants function. */
     FunctionJH m_Jh_x{nullptr}; /**< Jacobian of the invariants function. */
     FunctionID m_in_domain{nullptr}; /**< In-domain function. */
+    FunctionHF m_HA_x_x{nullptr}; /**< Optional Hessian of the weighted mass matrix product (finite differences if empty). */
+    FunctionHf m_Hb_x_x{nullptr}; /**< Optional Hessian of the weighted right-hand-side (finite differences if empty). */
+    FunctionHH m_Hh_x_x{nullptr}; /**< Optional Hessian of the weighted invariants (finite differences if empty). */
 
   public:
     /**
@@ -368,6 +479,24 @@ namespace Sandals {
     * \return The in-domain function.
     */
     FunctionID & in_domain() {return this->m_in_domain;}
+
+    /**
+    * Get the (optional) Hessian of the weighted mass matrix product.
+    * \return The Hessian function, if empty finite differences are used.
+    */
+    FunctionHF & HA_x_x() {return this->m_HA_x_x;}
+
+    /**
+    * Get the (optional) Hessian of the weighted right-hand-side.
+    * \return The Hessian function, if empty finite differences are used.
+    */
+    FunctionHf & Hb_x_x() {return this->m_Hb_x_x;}
+
+    /**
+    * Get the (optional) Hessian of the weighted invariants.
+    * \return The Hessian function, if empty finite differences are used.
+    */
+    FunctionHH & Hh_x_x() {return this->m_Hh_x_x;}
 
     /**
     * Evaluate th e semi-explicit ODE/DAE system mass matrix \f$ \mathbf{A}(\mathbf{x}, t) \f$.
@@ -467,6 +596,24 @@ namespace Sandals {
     bool in_domain(VectorF const & x, Real const t) const override
     {
       return this->m_in_domain(x, t);
+    }
+
+    MatrixJF HA_x_x(VectorF const & x, VectorF const & v, Real const t, VectorF const & lambda) const override
+    {
+      if (this->m_HA_x_x) {return this->m_HA_x_x(x, v, t, lambda);}
+      return SemiExplicit<Real, N, M>::HA_x_x(x, v, t, lambda);
+    }
+
+    MatrixJF Hb_x_x(VectorF const & x, Real const t, VectorF const & lambda) const override
+    {
+      if (this->m_Hb_x_x) {return this->m_Hb_x_x(x, t, lambda);}
+      return SemiExplicit<Real, N, M>::Hb_x_x(x, t, lambda);
+    }
+
+    MatrixJF Hh_x_x(VectorF const & x, Real const t, VectorH const & mu) const override
+    {
+      if (this->m_Hh_x_x) {return this->m_Hh_x_x(x, t, mu);}
+      return SemiExplicit<Real, N, M>::Hh_x_x(x, t, mu);
     }
 
   }; // class SemiExplicitWrapper

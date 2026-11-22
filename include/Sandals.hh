@@ -17,6 +17,9 @@
 #include <iostream>
 #include <string>
 #include <cmath>
+#include <limits>
+#include <algorithm>
+#include <functional>
 #include <vector>
 #include <map>
 #include <memory>

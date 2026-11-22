@@ -71,14 +71,14 @@ namespace Sandals {
     /**
     * Class constructor for the Solution class.
     */
-    Solution() : t(0), x(Vector::Zero(N, 0)), h(Vector::Zero(M, 0)) {}
+    Solution() : t(0), x(MatrixN::Zero(N, 0)), h(MatrixM::Zero(M, 0)) {}
 
     /**
     * Class constructor for the Solution class given the independent variable (or time) and states sizes.
     * \param[in] size The size of the independent variable (or time) vector and states matrix.
     */
     Solution(Integer const size)
-      : t(size), x(Vector::Zero(N, size)), h(Vector::Zero(M, size)) {}
+      : t(size), x(MatrixN::Zero(N, size)), h(MatrixM::Zero(M, size)) {}
 
     /**
     * Resize the independent variable (or time) vector and states matrix.

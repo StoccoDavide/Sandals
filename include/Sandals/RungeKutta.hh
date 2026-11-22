@@ -794,7 +794,7 @@ namespace Sandals {
 
       // Compute the derivative of x_new with respect to x
       Jx.setIdentity();
-      for (Integer i{0}; i < S; ++i) {Jx += h * dK_dx[i] * this->m_tableau.b(i);}
+      for (Integer i{0}; i < S; ++i) {Jx += dK_dx[i] * this->m_tableau.b(i);}
 
       return true;
     }
@@ -963,10 +963,9 @@ namespace Sandals {
         for (Integer j{0}; j < i; ++j) {
           jac += dK_dx[j] * this->m_tableau.A(i, j);
         }
-        // Solve the linear system: JF_x_dot/h * dK_dx[i] + JF_x * jac = 0
-        // Rearranged: dK_dx[i] = -h * JF_x * jac * (JF_x_dot)^(-1)
-        // But since JF_x_dot/h is the Jacobian w.r.t. x_dot, we solve for dK_dx[i]
-        dK_dx[i] = -(JF_x * jac).lu().solve(JF_x_dot / h);
+        // Differentiate F(x_i, K_i/h) = 0, with x_i = x + sum_{j<i} a_ij K_j:
+        //   JF_x * jac + JF_x_dot * dK_dx[i] / h = 0  =>  JF_x_dot * dK_dx[i] = -h * JF_x * jac
+        dK_dx[i] = JF_x_dot.lu().solve(-h * JF_x * jac);
 
         // Check for NaNs or Infs
         if (!dK_dx[i].allFinite()) {return false;}
@@ -974,7 +973,7 @@ namespace Sandals {
 
       // Compute the derivative of x_new with respect to x
       Jx.setIdentity();
-      for (Integer i{0}; i < S; ++i) {Jx += h * dK_dx[i] * this->m_tableau.b(i);}
+      for (Integer i{0}; i < S; ++i) {Jx += dK_dx[i] * this->m_tableau.b(i);}
 
       return true;
     }
@@ -1170,7 +1169,7 @@ namespace Sandals {
       // Propagate the derivative of K with respect to x
       VectorN x_node, x_dot_node;
       MatrixN JF_x, JF_x_dot;
-      Eigen::Matrix<Real, N*S, N*S> A;
+      Eigen::Matrix<Real, N*S, N*S> A(Eigen::Matrix<Real, N*S, N*S>::Zero());
       Eigen::Matrix<Real, N*S, N> b;
       std::array<MatrixN, S> dK_dx;
       for (Integer i{0}; i < S; ++i) {
@@ -1207,7 +1206,7 @@ namespace Sandals {
 
       // Compute the derivative of x_new with respect to x
       Jx.setIdentity();
-      for (Integer i{0}; i < S; ++i) {Jx += h * dK_dx[i] * this->m_tableau.b(i);}
+      for (Integer i{0}; i < S; ++i) {Jx += dK_dx[i] * this->m_tableau.b(i);}
 
       return true;
     }
@@ -1391,9 +1390,10 @@ namespace Sandals {
         for (Integer j{0}; j < i; ++j) {
           jac += dK_dx[j] * this->m_tableau.A(i, j);
         }
-        // Solve the linear system: JF_x_dot/h * dK_dx[i] + JF_x * jac = 0
-        // Rearranged: dK_dx[i] = -h * JF_x * jac * (JF_x_dot)^(-1)
-        dK_dx[i] = -(JF_x * jac).lu().solve(JF_x_dot / h);
+        // Differentiate F(x_i, K_i/h) = 0, with x_i = x + sum_{j<=i} a_ij K_j:
+        //   JF_x * (jac + a_ii * dK_dx[i]) + JF_x_dot * dK_dx[i] / h = 0
+        //   =>  (JF_x_dot + h * a_ii * JF_x) * dK_dx[i] = -h * JF_x * jac
+        dK_dx[i] = (JF_x_dot + h * this->m_tableau.A(i, i) * JF_x).lu().solve(-h * JF_x * jac);
 
         // Check for NaNs or Infs
         if (!dK_dx[i].allFinite()) {return false;}
@@ -1401,7 +1401,7 @@ namespace Sandals {
 
       // Compute the derivative of x_new with respect to x
       Jx.setIdentity();
-      for (Integer i{0}; i < S; ++i) {Jx += h * dK_dx[i] * this->m_tableau.b(i);}
+      for (Integer i{0}; i < S; ++i) {Jx += dK_dx[i] * this->m_tableau.b(i);}
 
       return true;
     }
@@ -1524,11 +1524,12 @@ namespace Sandals {
                 return false;
               }
 
-              // Update the derivative propagation
-              if constexpr (Propagate) {Jx *= Jx_tmp;}
+              // Update the derivative propagation (chain rule: dx_new/dx_old = Jx_tmp * Jx)
+              Jx = Jx_tmp * Jx;
             }
 
             // Accept the step
+            x_tmp = x_new;
             h_tmp = h_new_tmp;
 
             // If substepping is enabled, double the step size
@@ -1586,6 +1587,16 @@ namespace Sandals {
       if (this->m_projection) {
         VectorN x_projected;
         if (this->project(x_new, t_old + h_new, x_projected)) {
+          // Chain the derivative of the projection with the derivative propagation
+          if constexpr (Propagate && M > 0) {
+            MatrixJX Jp;
+            if (!this->project_jacobian(x_new, x_projected, t_old + h_new, Jp)) {
+              SANDALS_WARNING(CMD "in " << this->m_tableau.name << " solver, at t = " << t_old <<
+                ", projection Jacobian computation failed, aborting.");
+              return false;
+            }
+            Jx = Jp * Jx;
+          }
           x_new = x_projected;
         } else {
           return false;
@@ -1627,14 +1638,8 @@ namespace Sandals {
       sol.x.col(0) = ics;
       sol.h.col(0) = this->m_system->h(ics, t_mesh(0));
 
-      // Check initial conditions
-      if constexpr (Propagate) {
-        if (!Jx.allFinite()) {
-          SANDALS_ERROR(CMD "in " << this->m_tableau.name << " solver, initial Jacobian " <<
-            "contains NaNs or Infs, aborting.");
-          return false;
-        }
-      }
+      // Reset the derivative propagation matrix
+      if constexpr (Propagate) {Jx.setIdentity();}
 
       // Callback on initial conditions
       if (this->m_step_callback) {this->m_step_callback(0, ics, t_mesh(0));}
@@ -1650,6 +1655,9 @@ namespace Sandals {
         // Integrate system
         if (!this->template advance<Propagate>(x_old_step, t_step, h_step, x_new_step, h_new_step, Jx_step))
         {return false;}
+
+        // Propagate the derivative of the solution with respect to the initial states
+        if constexpr (Propagate) {Jx = Jx_step * Jx;}
 
         // Update the current step
         t_step += h_step;
@@ -1681,13 +1689,10 @@ namespace Sandals {
 
           // Check if the current step is the last one
           if (std::abs(t_step - t_mesh(last)) < SQRT_EPSILON) {break;}
-
-          // Update the previous step
-          x_old_step = x_new_step;
-
-          // Propagate the derivative of the solution with respect to the states x
-          if constexpr (Propagate) {Jx *= Jx_step;}
         }
+
+        // Update the previous step (also for adaptive steps between mesh points)
+        x_old_step = x_new_step;
       }
       return true;
 
@@ -1737,22 +1742,13 @@ namespace Sandals {
 
       #define CMD "Sandals::RungeKutta::adaptive_solve(...): "
 
-      // Check initial conditions
-      if constexpr (Propagate) {
-        if (!Jx.allFinite()) {
-          SANDALS_ERROR(CMD "in " << this->m_tableau.name << " solver, initial Jacobian " <<
-            "contains NaNs or Infs, aborting.");
-          return false;
-        }
-      }
-
       // Check if the adaptive method is enabled and the method is embedded
       if (!this->is_embedded()) {
         SANDALS_WARNING(CMD "the method is not embedded, using solve(...) method.");
-        return this->solve(t_mesh, ics, sol);
+        return this->template solve<Propagate>(t_mesh, ics, sol, Jx);
       } else if (!this->m_adaptive) {
         SANDALS_WARNING(CMD "adaptive method is disabled, using solve(...) method.");
-        return this->solve(t_mesh, ics, sol);
+        return this->template solve<Propagate>(t_mesh, ics, sol, Jx);
       }
 
       // Instantiate output
@@ -1783,7 +1779,11 @@ namespace Sandals {
 
       while (true) {
         // Integrate system
-        this->template advance<Propagate>(x_old_step, t_step, h_step, x_new_step, h_new_step, Jx_step);
+        if (!this->template advance<Propagate>(x_old_step, t_step, h_step, x_new_step, h_new_step, Jx_step))
+        {return false;}
+
+        // Propagate the derivative of the solution with respect to the initial states
+        if constexpr (Propagate) {Jx = Jx_step * Jx;}
 
         // Update the current step
         t_step += h_step;
@@ -1812,13 +1812,10 @@ namespace Sandals {
 
         // Update the previous step
         x_old_step = x_new_step;
-
-        // Propagate the derivative of the solution with respect to the states x
-        if constexpr (Propagate) {Jx *= Jx_step;}
       }
 
       // Resize the output
-      sol.conservative_resize(step);
+      sol.conservative_resize(step + 1);
 
       return true;
 
@@ -1852,6 +1849,52 @@ namespace Sandals {
     * manifold \f$ \mathbf{h} (\mathbf{x}, t) = \mathbf{0} \f$.
     * \return True if the solution is successfully projected, false otherwise.
     */
+    /**
+    * Compute the derivative of the projected states \f$ \mathbf{x}_p \f$ with respect to the
+    * unprojected states \f$ \widetilde{\mathbf{x}} \f$, where \f$ \mathbf{x}_p \f$ is the closest
+    * point to \f$ \widetilde{\mathbf{x}} \f$ on the invariants manifold. Differentiating the
+    * optimality conditions \f$ \mathbf{x}_p - \widetilde{\mathbf{x}} + \mathbf{Jh}_{\mathbf{x}}^\top
+    * \boldsymbol{\mu} = \mathbf{0} \f$ and \f$ \mathbf{h}(\mathbf{x}_p, t) = \mathbf{0} \f$ yields
+    *
+    * \f[
+    * \begin{bmatrix} \mathbf{I} + \mathbf{Hh}_{\mathbf{x}\mathbf{x}}(\mathbf{x}_p, t, \boldsymbol{\mu})
+    * & \mathbf{Jh}_{\mathbf{x}}^\top \\ \mathbf{Jh}_{\mathbf{x}} & \mathbf{0} \end{bmatrix}
+    * \begin{bmatrix} \partial\mathbf{x}_p/\partial\widetilde{\mathbf{x}} \\ \partial\boldsymbol{\mu}/
+    * \partial\widetilde{\mathbf{x}} \end{bmatrix} = \begin{bmatrix} \mathbf{I} \\ \mathbf{0}
+    * \end{bmatrix} \text{.}
+    * \f]
+    *
+    * \param[in] x The unprojected states \f$ \widetilde{\mathbf{x}} \f$.
+    * \param[in] x_projected The projected states \f$ \mathbf{x}_p \f$.
+    * \param[in] t The independent variable (or time) \f$ t \f$.
+    * \param[out] Jp The derivative \f$ \partial\mathbf{x}_p/\partial\widetilde{\mathbf{x}} \f$.
+    * \return True if the derivative is successfully computed, false otherwise.
+    */
+    bool project_jacobian(VectorN const & x, VectorN const & x_projected, Real const t,
+      MatrixJX & Jp) const
+    {
+      if constexpr (M == 0) {
+        Jp.setIdentity();
+        return true;
+      } else {
+        // Recover the multipliers from x - x_p = Jh_x^T mu (least squares)
+        MatrixM Jh_x(this->m_system->Jh_x(x_projected, t));
+        VectorM mu((Jh_x * Jh_x.transpose()).ldlt().solve(Jh_x * (x - x_projected)));
+
+        // Solve the differentiated optimality conditions
+        MatrixP A(MatrixP::Zero());
+        A.template block<N, N>(0, 0) = MatrixN::Identity() + this->m_system->Hh_x_x(x_projected, t, mu);
+        A.template block<N, M>(0, N) = Jh_x.transpose();
+        A.template block<M, N>(N, 0) = Jh_x;
+        Eigen::Matrix<Real, N+M, N> b(Eigen::Matrix<Real, N+M, N>::Zero());
+        b.template block<N, N>(0, 0) = MatrixN::Identity();
+        Eigen::FullPivLU<MatrixP> lu(A);
+        if (lu.rank() < N+M) {return false;}
+        Jp = lu.solve(b).template block<N, N>(0, 0);
+        return Jp.allFinite();
+      }
+    }
+
     bool project(VectorN const & x, Real const t, VectorN & x_projected) const
     {
       #define CMD "Sandals::RungeKutta::project(...): "

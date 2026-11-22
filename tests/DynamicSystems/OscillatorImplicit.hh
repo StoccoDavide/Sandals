@@ -48,7 +48,7 @@ public:
 
   MatrixJF JF_x(VectorF const &/*x*/, VectorF const &/*x_dot*/, Real /*t*/) const override {
     MatrixJF JF_x;
-    JF_x << -1.0, 1.0, this->m_k/this->m_m, 0.0;
+    JF_x << 0.0, -1.0, this->m_k/this->m_m, 0.0;
     return JF_x;
   }
 
