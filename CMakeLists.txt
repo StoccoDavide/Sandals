@@ -54,6 +54,9 @@ target_include_directories(Sandals INTERFACE
   $<INSTALL_INTERFACE:include>
 )
 
+# Optional IPOPT interface
+include(SandalsIpopt)
+
 # INFO: Ensure this options are only available to developers. In theory we could leave them available,
 # but the call to `target_sources` breaks `fetchcontent` compatibility due to absolute paths being
 # added to `INTERFACE_SOURCES`. I tried solving it, but it seems to be poorly documented, supported, etc.

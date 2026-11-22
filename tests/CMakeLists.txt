@@ -44,3 +44,15 @@ file(GLOB_RECURSE SHOOTING_TESTS "${CMAKE_CURRENT_SOURCE_DIR}/Shooting/test_*.cc
 add_executable(test_shooting ${SHOOTING_TESTS})
 target_link_libraries(test_shooting PRIVATE Sandals GTest::gtest)
 add_test(NAME test_shooting COMMAND test_shooting)
+
+add_executable(test_collocation ${CMAKE_CURRENT_SOURCE_DIR}/OptimalControl/test_collocation.cc)
+target_include_directories(test_collocation PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/OptimalControl)
+target_link_libraries(test_collocation PRIVATE Sandals GTest::gtest)
+add_test(NAME test_collocation COMMAND test_collocation)
+
+if(TARGET Sandals::Ipopt)
+  add_executable(test_ipopt ${CMAKE_CURRENT_SOURCE_DIR}/OptimalControl/test_ipopt.cc)
+  target_include_directories(test_ipopt PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/OptimalControl)
+  target_link_libraries(test_ipopt PRIVATE Sandals::Ipopt GTest::gtest)
+  add_test(NAME test_ipopt COMMAND test_ipopt WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+endif()
