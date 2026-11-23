@@ -69,3 +69,13 @@ if(TARGET Sandals::CppAD)
   target_link_libraries(test_autodiff PRIVATE Sandals::CppAD GTest::gtest)
   add_test(NAME test_autodiff COMMAND test_autodiff)
 endif()
+
+if(TARGET Sandals::CppAD AND TARGET Sandals::Ipopt)
+  add_executable(test_dae_ocp ${CMAKE_CURRENT_SOURCE_DIR}/OptimalControl/test_dae_ocp.cc)
+  target_include_directories(test_dae_ocp PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/OptimalControl)
+  target_link_libraries(test_dae_ocp PRIVATE Sandals::CppAD Sandals::Ipopt GTest::gtest)
+  # The recorded CppAD functions are about 30 times slower without optimization: optimize this test
+  # target also in Debug builds (the assertions stay enabled)
+  target_compile_options(test_dae_ocp PRIVATE $<$<CONFIG:Debug>:-O2>)
+  add_test(NAME test_dae_ocp COMMAND test_dae_ocp)
+endif()
