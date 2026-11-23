@@ -360,6 +360,13 @@ namespace Sandals
       }
       if (!converged) {return false;}
 
+      // One more Newton step from the converged stages takes them to machine precision, so that the
+      // end point is a smooth function of the parameters (no solver noise in its differences)
+      step.lu.compute(G_K);
+      Eigen::Map<VectorK>(step.K.data()) += step.lu.solve(-G);
+      this->stage_system(step, G, G_K, G_l);
+      if (!G.allFinite()) {return false;}
+
       // Derivatives at the solution
       step.lu.compute(G_K);
       step.K_l = -step.lu.solve(G_l);
