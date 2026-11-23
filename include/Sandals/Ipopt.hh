@@ -33,6 +33,19 @@ namespace Sandals
   \*/
 
   /**
+  * \brief Progress of one IPOPT iteration.
+  */
+  struct IpoptIteration
+  {
+    Integer iteration;            /**< Iteration number. */
+    double  objective;            /**< Objective value. */
+    double  primal_infeasibility; /**< Constraints violation (unscaled). */
+    double  dual_infeasibility;   /**< Optimality error (scaled). */
+    double  barrier;              /**< Barrier parameter. */
+    bool    restoration;          /**< True during the feasibility restoration phase. */
+  };
+
+  /**
   * \brief IPOPT interface for a sparse nonlinear program (NLP).
   *
   * Thin adapter exposing an NLP as an Ipopt::TNLP. The NLP class must provide (in double precision):
@@ -60,6 +73,7 @@ namespace Sandals
     VectorX m_multipliers;               /**< Constraints multipliers at the solution. */
     Real    m_objective{0.0};            /**< Objective at the solution. */
     Ipopt::SolverReturn m_status{Ipopt::UNASSIGNED}; /**< Solver status. */
+    std::vector<IpoptIteration> m_history;           /**< Progress of the iterations. */
 
     /** View an IPOPT array as an Eigen vector. */
     static Eigen::Map<VectorX const> map(Ipopt::Index const n, Real const * x) {return Eigen::Map<VectorX const>(x, n);}
@@ -99,6 +113,17 @@ namespace Sandals
 
     /** \return The solver status. */
     Ipopt::SolverReturn status() const {return this->m_status;}
+
+    /** \return The progress of the iterations. */
+    std::vector<IpoptIteration> const & history() const {return this->m_history;}
+
+    bool intermediate_callback(Ipopt::AlgorithmMode mode, Ipopt::Index iter, Real obj_value, Real inf_pr,
+      Real inf_du, Real mu, Real /*d_norm*/, Real /*regularization_size*/, Real /*alpha_du*/, Real /*alpha_pr*/,
+      Ipopt::Index /*ls_trials*/, Ipopt::IpoptData const * /*ip_data*/, Ipopt::IpoptCalculatedQuantities * /*ip_cq*/) override
+    {
+      this->m_history.push_back({iter, obj_value, inf_pr, inf_du, mu, mode == Ipopt::RestorationPhaseMode});
+      return true;
+    }
 
     bool get_nlp_info(Ipopt::Index & n, Ipopt::Index & m, Ipopt::Index & nnz_jac_g, Ipopt::Index & nnz_h_lag,
       IndexStyleEnum & index_style) override
@@ -219,10 +244,12 @@ namespace Sandals
   * \param[in,out] nlp The nonlinear program.
   * \param[in] options IPOPT options.
   * \param[out] objective The objective value at the last iterate.
+  * \param[out] history If not null, the progress of the iterations.
   * \return The IPOPT application return status.
   */
   template <typename NLP>
-  Ipopt::ApplicationReturnStatus ipopt_solve(NLP & nlp, IpoptOptions const & options, double & objective)
+  Ipopt::ApplicationReturnStatus ipopt_solve(NLP & nlp, IpoptOptions const & options, double & objective,
+    std::vector<IpoptIteration> * history = nullptr)
   {
     #define CMD "Sandals::ipopt_solve(...): "
     Ipopt::SmartPtr<IpoptAdapter<NLP>> tnlp{new IpoptAdapter<NLP>(nlp)};
@@ -244,6 +271,7 @@ namespace Sandals
     if (status != Ipopt::Solve_Succeeded) {return status;}
     status = app->OptimizeTNLP(Ipopt::SmartPtr<Ipopt::TNLP>(GetRawPtr(tnlp)));
     objective = tnlp->objective();
+    if (history != nullptr) {*history = tnlp->history();}
     if (tnlp->solution().size() == nlp.variables_number()) {nlp.guess(tnlp->solution());}
     return status;
   }
