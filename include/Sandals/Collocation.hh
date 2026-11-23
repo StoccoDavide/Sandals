@@ -60,23 +60,50 @@ namespace Sandals
   * derivatives (Hessian of the Lagrangian, lower triangle) are exact up to the derivatives provided
   * by the system and the problem. The sparsity patterns are fixed and computed once.
   *
+  * <b>Invariants.</b> If the system has \f$ M \f$ invariants \f$ \mathbf{h}(\mathbf{x}, t) = \mathbf{0}
+  * \f$ (e.g., after an index reduction), imposing them on top of the dynamics would make the
+  * constraints overdetermined (rectangular, with redundant equations that violate the LICQ). Instead,
+  * the end point of each step is projected on the invariants manifold, as the integrators do, and
+  * the optimality conditions of the projection replace the continuity conditions
+  *
+  * \f[
+  * \mathbf{x}_k + \textstyle\sum_i b_i\mathbf{K}_{k,i} - \mathbf{x}_{k+1} - \mathbf{Jh}_{\mathbf{x}}(
+  * \mathbf{x}_{k+1}, t_{k+1})^\top\boldsymbol{\mu}_{k+1} = \mathbf{0}, \quad \mathbf{h}(\mathbf{x}_{k+1},
+  * t_{k+1}) = \mathbf{0} \text{,}
+  * \f]
+  *
+  * with the projection multipliers \f$ \boldsymbol{\mu}_{k+1} \f$ appended to the variables. The
+  * system stays square, the invariants hold exactly at the nodes \f$ t_1, \dots, t_n \f$, and \f$
+  * \boldsymbol{\mu} \to \mathbf{0} \f$ as the mesh is refined (the projection correction is of the
+  * order of the local error). The variables and constraints vectors become
+  *
+  * \f[
+  * \mathbf{z} = [\dots, \mathbf{x}_n, \boldsymbol{\mu}_1, \dots, \boldsymbol{\mu}_n], \quad
+  * \mathbf{c} = [\text{dynamics}, \text{boundary}, \text{path}, \mathbf{h}(\mathbf{x}_1), \dots,
+  * \mathbf{h}(\mathbf{x}_n)] \text{.}
+  * \f]
+  *
   * \note For DAEs the initial states must be consistent: the boundary conditions must also fix the
   * initial value of the algebraic states (e.g., by imposing the algebraic equations at \f$ t_0 \f$).
   * With stiffly accurate methods (e.g., RadauIIA) the algebraic part of \f$ \mathbf{x}_0 \f$ only
-  * enters through the stage values, so leaving it free makes the NLP singular.
+  * enters through the stage values, so leaving it free makes the NLP singular. Likewise, the
+  * invariants are not imposed at \f$ t_0 \f$: the boundary conditions must satisfy them.
   * \tparam Real The scalar number type.
   * \tparam S The number of stages of the Runge-Kutta method.
   * \tparam N The dimension of the ODE/DAE system.
   * \tparam U The number of controls.
+  * \tparam M The number of invariants of the system.
   */
-  template <typename Real, Integer S, Integer N, Integer U>
+  template <typename Real, Integer S, Integer N, Integer U, Integer M = 0>
   class Collocation
   {
   public:
-    using Problem    = OptimalControlProblem<Real, N, U>; /**< Optimal control problem type. */
+    using Problem    = OptimalControlProblem<Real, N, U, M>; /**< Optimal control problem type. */
     using ProblemPtr = std::shared_ptr<Problem>; /**< Optimal control problem shared pointer type. */
     using VectorF    = Eigen::Vector<Real, N>; /**< States vector type. */
     using VectorU    = Eigen::Vector<Real, U>; /**< Controls vector type. */
+    using VectorH    = Eigen::Vector<Real, M>; /**< Invariants (and projection multipliers) vector type. */
+    using MatrixJH   = Eigen::Matrix<Real, M, N>; /**< Invariants Jacobian type. */
     using MatrixF    = Eigen::Matrix<Real, N, N>; /**< States matrix type. */
     using MatrixK    = Eigen::Matrix<Real, N, S>; /**< Stage variables matrix type. */
     using VectorX    = Eigen::Vector<Real, Eigen::Dynamic>; /**< Dynamic vector type. */
@@ -156,10 +183,13 @@ namespace Sandals
     Integer intervals() const {return this->m_n;}
 
     /** \return The number of NLP variables. */
-    Integer variables_number() const {return this->m_n*D + N;}
+    Integer variables_number() const {return this->m_n*D + N + this->m_n*M;}
 
     /** \return The number of NLP constraints. */
-    Integer constraints_number() const {return this->m_n*C + this->m_nb + (this->m_n + 1)*this->m_ng;}
+    Integer constraints_number() const
+    {
+      return this->m_n*C + this->m_nb + (this->m_n + 1)*this->m_ng + this->m_n*M;
+    }
 
     /** \return The number of nonzeros of the constraints Jacobian. */
     Integer jacobian_nnz() const {return static_cast<Integer>(this->m_jac_rows.size());}
@@ -188,6 +218,12 @@ namespace Sandals
     /** \param[in] k Interval index. \return The index of \f$ \mathbf{u}_k \f$. */
     Integer u_index(Integer const k) const {return k*D + N + N*S;}
 
+    /**
+    * \param[in] k Interval index.
+    * \return The index of the projection multipliers \f$ \boldsymbol{\mu}_{k+1} \f$ (end of the interval).
+    */
+    Integer mu_index(Integer const k) const {return this->m_n*D + N + k*M;}
+
     /** \param[in] k Interval index. \param[in] i Stage index. \return The first row of the stage equations. */
     Integer stage_row(Integer const k, Integer const i) const {return k*C + i*N;}
 
@@ -200,11 +236,20 @@ namespace Sandals
     /** \param[in] k Mesh node index. \return The first row of the path constraints at the node. */
     Integer path_row(Integer const k) const {return this->m_n*C + this->m_nb + k*this->m_ng;}
 
+    /**
+    * \param[in] k Interval index.
+    * \return The first row of the invariants \f$ \mathbf{h}(\mathbf{x}_{k+1}) \f$ (end of the interval).
+    */
+    Integer invariants_row(Integer const k) const {return this->path_row(this->m_n + 1) + k*M;}
+
     /** \param[in] z NLP variables. \param[in] k Mesh node index. \return The states \f$ \mathbf{x}_k \f$. */
     VectorF x(VectorX const & z, Integer const k) const {return z.template segment<N>(this->x_index(k));}
 
     /** \param[in] z NLP variables. \param[in] k Interval index. \return The controls \f$ \mathbf{u}_k \f$. */
     VectorU u(VectorX const & z, Integer const k) const {return z.template segment<U>(this->u_index(k));}
+
+    /** \param[in] z NLP variables. \param[in] k Interval index. \return The multipliers \f$ \boldsymbol{\mu}_{k+1} \f$. */
+    VectorH mu(VectorX const & z, Integer const k) const {return z.template segment<M>(this->mu_index(k));}
 
     /** \param[in] z NLP variables. \param[in] k Interval index. \return The stage variables \f$ \mathbf{K}_k \f$. */
     MatrixK K(VectorX const & z, Integer const k) const
@@ -255,13 +300,15 @@ namespace Sandals
         VectorF const dx{x_guess(t_k + h_k) - x_guess(t_k)};
         for (Integer i{0}; i < S; ++i) {z.template segment<N>(this->K_index(k, i)) = dx;}
         z.template segment<U>(this->u_index(k)) = u_guess(t_k + h_k/Real(2.0));
+        z.template segment<M>(this->mu_index(k)).setZero();
       }
     }
 
     /**
     * Set the initial guess by integrating the system forward with the same Runge-Kutta method, from
-    * the given initial states and with the given (piecewise-constant) controls. The resulting guess
-    * satisfies the dynamics constraints.
+    * the given initial states and with the given (piecewise-constant) controls. If the system has
+    * invariants, the end point of each step is projected on them. The resulting guess satisfies the
+    * dynamics constraints (and the invariants).
     * \param[in] x_ini The initial states \f$ \mathbf{x}_0 \f$ (should be consistent for DAEs).
     * \param[in] u_guess The controls guess \f$ \mathbf{u}(t) \f$ (sampled at the intervals midpoints).
     * \return True if the integration succeeded, false otherwise.
@@ -287,12 +334,69 @@ namespace Sandals
         Real const t_k{this->m_t_mesh(k)}, h_k{this->m_t_mesh(k+1) - t_k};
         u_k = u_guess(t_k + h_k/Real(2.0));
         if (!rk.step(x_k, t_k, h_k, x_new, h_new, K)) {return false;}
+
+        VectorH mu(VectorH::Zero());
+        if constexpr (M > 0) {
+          VectorF x_projected;
+          if (!this->project(x_new, t_k + h_k, x_projected, mu)) {return false;}
+          x_new = x_projected;
+        }
+
         Eigen::Map<MatrixK>(z.data() + this->K_index(k, 0)) = K;
         z.template segment<U>(this->u_index(k)) = u_k;
         z.template segment<N>(this->x_index(k+1)) = x_new;
+        z.template segment<M>(this->mu_index(k)) = mu;
         x_k = x_new;
       }
       return true;
+    }
+
+    /**
+    * Project the states \f$ \widetilde{\mathbf{x}} \f$ on the invariants manifold, i.e., find the
+    * closest point \f$ \mathbf{x} \f$ with \f$ \mathbf{h}(\mathbf{x}, t) = \mathbf{0} \f$. The
+    * optimality conditions (the same imposed by the transcription)
+    *
+    * \f[
+    * \mathbf{x} - \widetilde{\mathbf{x}} + \mathbf{Jh}_{\mathbf{x}}(\mathbf{x}, t)^\top\boldsymbol{\mu}
+    * = \mathbf{0}, \quad \mathbf{h}(\mathbf{x}, t) = \mathbf{0}
+    * \f]
+    *
+    * are solved with Newton's method, including the curvature term \f$ \mathbf{Hh}_{\mathbf{x}
+    * \mathbf{x}}(\boldsymbol{\mu}) \f$ for quadratic convergence.
+    * \param[in] x_tilde The states to be projected \f$ \widetilde{\mathbf{x}} \f$.
+    * \param[in] t The independent variable (or time) \f$ t \f$.
+    * \param[out] x The projected states \f$ \mathbf{x} \f$.
+    * \param[out] mu The projection multipliers \f$ \boldsymbol{\mu} \f$.
+    * \return True if the projection converged, false otherwise.
+    */
+    bool project(VectorF const & x_tilde, Real const t, VectorF & x, VectorH & mu) const
+    {
+      using VectorKKT = Eigen::Vector<Real, N+M>;
+      using MatrixKKT = Eigen::Matrix<Real, N+M, N+M>;
+
+      auto const & sys{this->m_problem->system()};
+      Real const tolerance{1.0e-14 * std::max(Real(1.0), x_tilde.norm())};
+      Integer const max_iterations{50};
+
+      x = x_tilde;
+      mu.setZero();
+      for (Integer iteration{0}; iteration < max_iterations; ++iteration) {
+        MatrixJH const Jh{sys->Jh_x(x, t)};
+        VectorKKT residual;
+        residual << x - x_tilde + Jh.transpose()*mu, sys->h(x, t);
+        if (residual.template lpNorm<Eigen::Infinity>() <= tolerance) {return true;}
+
+        MatrixKKT jacobian(MatrixKKT::Zero());
+        jacobian.template topLeftCorner<N, N>() = MatrixF::Identity() + sys->Hh_x_x(x, t, mu);
+        jacobian.template topRightCorner<N, M>() = Jh.transpose();
+        jacobian.template bottomLeftCorner<M, N>() = Jh;
+        VectorKKT const step{jacobian.fullPivLu().solve(-residual)};
+        if (!step.allFinite()) {return false;}
+
+        x  += step.template head<N>();
+        mu += step.template tail<M>();
+      }
+      return false;
     }
 
     /*\
@@ -321,6 +425,10 @@ namespace Sandals
       }
       c_lower = VectorX::Zero(this->constraints_number());
       c_upper = VectorX::Zero(this->constraints_number());
+      if (this->m_nb > 0) {
+        c_lower.segment(this->boundary_row(), this->m_nb) = this->m_problem->boundary_conditions_lower();
+        c_upper.segment(this->boundary_row(), this->m_nb) = this->m_problem->boundary_conditions_upper();
+      }
       if (this->m_ng > 0) {
         VectorX const g_lower{this->m_problem->path_constraints_lower()};
         VectorX const g_upper{this->m_problem->path_constraints_upper()};
@@ -409,6 +517,14 @@ namespace Sandals
             sys->F(x_i, K_k.col(i)/h_k, u_k, t_k + this->m_tableau.c(i)*h_k);
         }
         c.template segment<N>(this->continuity_row(k)) = x_k + K_k * this->m_tableau.b - this->x(z, k+1);
+
+        // Projection on the invariants at the end of the interval
+        if constexpr (M > 0) {
+          Real const t_end{this->m_t_mesh(k+1)};
+          VectorF const x_end{this->x(z, k+1)};
+          c.template segment<N>(this->continuity_row(k)) -= sys->Jh_x(x_end, t_end).transpose() * this->mu(z, k);
+          c.template segment<M>(this->invariants_row(k)) = sys->h(x_end, t_end);
+        }
       }
       if (this->m_nb > 0) {
         c.segment(this->boundary_row(), this->m_nb) =
@@ -480,6 +596,13 @@ namespace Sandals
         VectorX const lambda_g{lambda.segment(this->path_row(n), this->m_ng)};
         this->accumulate(this->path_indices(n), this->m_problem->path_constraints_hessian(
           this->x(z, n), this->u(z, n-1), this->m_t_mesh(n), lambda_g), values);
+      }
+
+      // Projection on the invariants (variables x_{k+1}, mu_{k+1})
+      if constexpr (M > 0) {
+        for (Integer k{0}; k < this->m_n; ++k) {
+          this->accumulate(this->projection_indices(k), this->projection_hessian(z, k, lambda), values);
+        }
       }
 
       // Mayer term and boundary conditions (variables x_0, x_n)
@@ -603,6 +726,47 @@ namespace Sandals
     }
 
     /**
+    * Hessian of the Lagrangian terms of the projection at the end of the \f$ k \f$-th interval, in the
+    * variables \f$ (\mathbf{x}_{k+1}, \boldsymbol{\mu}_{k+1}) \f$. With the continuity multipliers \f$
+    * \boldsymbol{\lambda}_c \f$ and the invariants multipliers \f$ \boldsymbol{\lambda}_h \f$, the terms
+    * are \f$ -\boldsymbol{\mu}^\top\mathbf{Jh}_{\mathbf{x}}(\mathbf{x})\boldsymbol{\lambda}_c +
+    * \boldsymbol{\lambda}_h^\top\mathbf{h}(\mathbf{x}) \f$, whose second derivatives are
+    * - \f$ \partial^2/\partial\mathbf{x}^2 = -\mathbf{Th}_{\mathbf{x}\mathbf{x}}(\boldsymbol{\mu},
+    *   \boldsymbol{\lambda}_c) + \mathbf{Hh}_{\mathbf{x}\mathbf{x}}(\boldsymbol{\lambda}_h) \f$;
+    * - \f$ \partial^2/\partial\mathbf{x}\,\partial\mu_j = -\mathbf{Hh}_{\mathbf{x}\mathbf{x}}(
+    *   \mathbf{e}_j)\boldsymbol{\lambda}_c \f$ (the Hessian of the \f$ j \f$-th invariant times \f$
+    *   \boldsymbol{\lambda}_c \f$);
+    * - \f$ \partial^2/\partial\boldsymbol{\mu}^2 = \mathbf{0} \f$.
+    */
+    Eigen::Matrix<Real, N+M, N+M> projection_hessian(VectorX const & z, Integer const k, VectorX const & lambda) const
+    {
+      auto const & sys{this->m_problem->system()};
+      Real const t_end{this->m_t_mesh(k+1)};
+      VectorF const x_end{this->x(z, k+1)};
+      VectorF const lambda_c{lambda.template segment<N>(this->continuity_row(k))};
+      VectorH const lambda_h{lambda.template segment<M>(this->invariants_row(k))};
+
+      Eigen::Matrix<Real, N+M, N+M> H(Eigen::Matrix<Real, N+M, N+M>::Zero());
+      H.template topLeftCorner<N, N>() = sys->Hh_x_x(x_end, t_end, lambda_h)
+        - sys->Th_x_x(x_end, t_end, this->mu(z, k), lambda_c);
+      for (Integer j{0}; j < M; ++j) {
+        VectorF const column{-sys->Hh_x_x(x_end, t_end, VectorH::Unit(j)) * lambda_c};
+        H.template block<N, 1>(0, N + j) = column;
+        H.template block<1, N>(N + j, 0) = column.transpose();
+      }
+      return H;
+    }
+
+    /** \return The NLP indices of the projection variables [x_{k+1}, mu_{k+1}] of the interval k. */
+    std::vector<Integer> projection_indices(Integer const k) const
+    {
+      std::vector<Integer> idx(N+M);
+      for (Integer a{0}; a < N; ++a) {idx[a] = this->x_index(k+1) + a;}
+      for (Integer a{0}; a < M; ++a) {idx[N + a] = this->mu_index(k) + a;}
+      return idx;
+    }
+
+    /**
     * Traverse the constraints Jacobian in a fixed order, collecting the sparsity pattern and,
     * optionally, the values.
     */
@@ -639,12 +803,30 @@ namespace Sandals
           }
         }
 
-        // Continuity conditions (diagonal blocks)
+        // Continuity conditions: diagonal blocks on x_k and K_k
         for (Integer r{0}; r < N; ++r) {
           Integer const row{this->continuity_row(k) + r};
           push(row, this->x_index(k) + r, Real(1.0));
           for (Integer i{0}; i < S; ++i) {push(row, this->K_index(k, i) + r, this->m_tableau.b(i));}
-          push(row, this->x_index(k+1) + r, Real(-1.0));
+        }
+
+        // Continuity conditions on x_{k+1}: -I without invariants, otherwise the projection adds
+        // -Hh_x_x(mu) on x_{k+1} and -Jh_x^T on mu_{k+1}
+        if constexpr (M == 0) {
+          for (Integer r{0}; r < N; ++r) {push(this->continuity_row(k) + r, this->x_index(k+1) + r, Real(-1.0));}
+        } else {
+          MatrixF dc_dx(-MatrixF::Identity());
+          Eigen::Matrix<Real, N, M> dc_dmu(Eigen::Matrix<Real, N, M>::Zero());
+          if constexpr (Values) {
+            Real const t_end{this->m_t_mesh(k+1)};
+            VectorF const x_end{this->x(*z, k+1)};
+            dc_dx  -= sys->Hh_x_x(x_end, t_end, this->mu(*z, k));
+            dc_dmu  = -sys->Jh_x(x_end, t_end).transpose();
+          }
+          for (Integer r{0}; r < N; ++r) {
+            for (Integer c{0}; c < N; ++c) {push(this->continuity_row(k) + r, this->x_index(k+1) + c, dc_dx(r, c));}
+            for (Integer c{0}; c < M; ++c) {push(this->continuity_row(k) + r, this->mu_index(k) + c, dc_dmu(r, c));}
+          }
         }
       }
 
@@ -668,6 +850,17 @@ namespace Sandals
           std::vector<Integer> const idx(this->path_indices(k));
           for (Integer r{0}; r < this->m_ng; ++r) {
             for (Integer c{0}; c < N+U; ++c) {push(this->path_row(k) + r, idx[c], Jg(r, c));}
+          }
+        }
+      }
+
+      // Invariants at the end of each interval (dense blocks on x_{k+1})
+      if constexpr (M > 0) {
+        for (Integer k{0}; k < this->m_n; ++k) {
+          MatrixJH Jh(MatrixJH::Zero());
+          if constexpr (Values) {Jh = sys->Jh_x(this->x(*z, k+1), this->m_t_mesh(k+1));}
+          for (Integer r{0}; r < M; ++r) {
+            for (Integer c{0}; c < N; ++c) {push(this->invariants_row(k) + r, this->x_index(k+1) + c, Jh(r, c));}
           }
         }
       }
@@ -727,6 +920,9 @@ namespace Sandals
         this->add_hessian_block(idx);
       }
       if (this->m_ng > 0) {this->add_hessian_block(this->path_indices(this->m_n));}
+      if constexpr (M > 0) {
+        for (Integer k{0}; k < this->m_n; ++k) {this->add_hessian_block(this->projection_indices(k));}
+      }
       this->add_hessian_block(this->boundary_indices());
     }
 

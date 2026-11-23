@@ -39,13 +39,14 @@ namespace Sandals
   * \tparam S The number of stages of the Runge-Kutta method.
   * \tparam N The dimension of the ODE/DAE system.
   * \tparam U The number of controls.
+  * \tparam M The number of invariants.
   */
-  template <Integer S, Integer N, Integer U>
+  template <Integer S, Integer N, Integer U, Integer M = 0>
   class IpoptCollocation : public Ipopt::TNLP
   {
   public:
     using Real = Ipopt::Number; /**< Scalar number type (IPOPT is double precision). */
-    using NLP = Collocation<Real, S, N, U>; /**< Collocation transcription type. */
+    using NLP = Collocation<Real, S, N, U, M>; /**< Collocation transcription type. */
     using VectorX = typename NLP::VectorX; /**< Dynamic vector type. */
 
   private:
@@ -216,12 +217,12 @@ namespace Sandals
   * \param[out] objective The objective value at the last iterate.
   * \return The IPOPT application return status.
   */
-  template <Integer S, Integer N, Integer U>
-  Ipopt::ApplicationReturnStatus ipopt_solve(Collocation<double, S, N, U> & nlp, IpoptOptions const & options,
+  template <Integer S, Integer N, Integer U, Integer M>
+  Ipopt::ApplicationReturnStatus ipopt_solve(Collocation<double, S, N, U, M> & nlp, IpoptOptions const & options,
     double & objective)
   {
     #define CMD "Sandals::ipopt_solve(...): "
-    Ipopt::SmartPtr<IpoptCollocation<S, N, U>> tnlp{new IpoptCollocation<S, N, U>(nlp)};
+    Ipopt::SmartPtr<IpoptCollocation<S, N, U, M>> tnlp{new IpoptCollocation<S, N, U, M>(nlp)};
     Ipopt::SmartPtr<Ipopt::IpoptApplication> app{IpoptApplicationFactory()};
     app->RethrowNonIpoptException(false);
     // Tight default convergence tolerance, unless overridden by the options

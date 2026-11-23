@@ -19,6 +19,7 @@
 #include "Sandals/RungeKutta/RK4.hh"
 
 #include "OptimalControlProblems.hh"
+#include "PendulumProblems.hh"
 
 using namespace Sandals;
 using namespace TestOCP;
@@ -44,16 +45,18 @@ MatrixX fd(Function && g, VectorX const & z, Real const delta = 1.0e-6)
 Real rel_error(MatrixX const & a, MatrixX const & b) {return (a - b).norm() / std::max(Real(1.0), b.norm());}
 
 // Check sizes, sparsity patterns, and first/second derivatives of the transcription at a random point.
-template <Integer S, Integer N, Integer U>
-void check_transcription(std::shared_ptr<OptimalControlProblem<Real, N, U>> ocp, Tableau<Real, S> const & tableau,
+template <Integer S, Integer N, Integer U, Integer M = 0, typename Problem>
+void check_transcription(std::shared_ptr<Problem> problem, Tableau<Real, S> const & tableau,
   Integer const intervals, Real const tol)
 {
+  std::shared_ptr<OptimalControlProblem<Real, N, U, M>> const ocp{problem};
   SCOPED_TRACE(ocp->name() + " with " + tableau.name);
-  Collocation<Real, S, N, U> nlp(ocp, tableau, intervals);
+  Collocation<Real, S, N, U, M> nlp(ocp, tableau, intervals);
 
   Integer const nz{nlp.variables_number()}, nc{nlp.constraints_number()};
-  EXPECT_EQ(nz, intervals*(N + N*S + U) + N);
-  EXPECT_EQ(nc, intervals*(N*S + N) + ocp->boundary_conditions_number() + (intervals + 1)*ocp->path_constraints_number());
+  EXPECT_EQ(nz, intervals*(N + N*S + U) + N + intervals*M);
+  EXPECT_EQ(nc, intervals*(N*S + N) + ocp->boundary_conditions_number() +
+    (intervals + 1)*ocp->path_constraints_number() + intervals*M);
 
   // Jacobian pattern: in range and without duplicates
   std::set<std::pair<Integer, Integer>> jac_set;
@@ -135,7 +138,6 @@ TEST(Collocation, Index3DAEDerivatives) {
   Eigen::Vector<Real, 5> const x{Eigen::Vector<Real, 5>::Random()}, xd{Eigen::Vector<Real, 5>::Random()};
   Eigen::Vector<Real, 5> const l{Eigen::Vector<Real, 5>::Random()};
   Eigen::Vector<Real, 1> const u(0.3);
-  using Base = Controlled<Real, 5, 1>;
   EXPECT_LT(rel_error(p.HF_x_x(x, xd, u, 0.0, l), p.Base::HF_x_x(x, xd, u, 0.0, l)), 1.0e-8);
   EXPECT_LT(rel_error(p.HF_x_x_dot(x, xd, u, 0.0, l), p.Base::HF_x_x_dot(x, xd, u, 0.0, l)), 1.0e-8);
   EXPECT_LT(rel_error(p.HF_x_u(x, xd, u, 0.0, l), p.Base::HF_x_u(x, xd, u, 0.0, l)), 1.0e-8);
@@ -185,6 +187,67 @@ TEST(Collocation, SimulatedGuessSatisfiesDynamics) {
   check(std::make_shared<VanDerPolOCP>(2.0), RK4Tableau<Real>(), Eigen::Vector<Real, 2>(1.0, 0.0), 10);
   check(std::make_shared<VanDerPolOCP>(2.0), GaussLegendre4Tableau<Real>(), Eigen::Vector<Real, 2>(1.0, 0.0), 10);
   check(std::make_shared<SemiLinearDAEOCP>(), RadauIIA5Tableau<Real>(), Eigen::Vector<Real, 2>(0.5, 0.25), 10);
+}
+
+/*\
+ |  Index-reduced pendulum formulations with the projection on the invariants
+\*/
+
+// Derivatives of the transcription, including the projection multipliers and the invariants rows
+TEST(Collocation, InvariantsDerivatives) {
+  check_transcription<3, 5, 1, 1>(std::make_shared<PendulumSwingUpOCP<PendulumIndex2<1>>>(2.0), RadauIIA5Tableau<Real>(), 3, 1.0e-6);
+  check_transcription<3, 5, 1, 2>(std::make_shared<PendulumSwingUpOCP<PendulumIndex1<2>>>(2.0), RadauIIA5Tableau<Real>(), 3, 1.0e-6);
+  check_transcription<3, 4, 1, 2>(std::make_shared<PendulumSwingUpOCP<PendulumIndex0<2>>>(2.0), RadauIIA5Tableau<Real>(), 3, 1.0e-5);
+  check_transcription<2, 4, 1, 2>(std::make_shared<PendulumSwingUpOCP<PendulumIndex0<2>>>(2.0), RadauIIA3Tableau<Real>(), 4, 1.0e-5);
+}
+
+// The exact derivatives of the reduced formulations agree with the finite differences defaults
+TEST(Collocation, ReducedPendulumExactDerivatives) {
+  std::srand(5);
+  Eigen::Vector<Real, 1> const u(0.4);
+
+  PendulumIndex1<2> p1;
+  using Base1 = Controlled<Real, 5, 1, 2>;
+  Eigen::Vector<Real, 5> const x5{Eigen::Vector<Real, 5>::Random()}, xd5{Eigen::Vector<Real, 5>::Random()};
+  Eigen::Vector<Real, 5> const w5{Eigen::Vector<Real, 5>::Random()};
+  Eigen::Vector<Real, 2> const mu{Eigen::Vector<Real, 2>::Random()};
+  EXPECT_LT(rel_error(p1.HF_x_x(x5, xd5, u, 0.0, w5), p1.Base1::HF_x_x(x5, xd5, u, 0.0, w5)), 1.0e-8);
+  EXPECT_LT(rel_error(p1.HF_x_x_dot(x5, xd5, u, 0.0, w5), p1.Base1::HF_x_x_dot(x5, xd5, u, 0.0, w5)), 1.0e-8);
+  EXPECT_LT(rel_error(p1.Hh_x_x(x5, 0.0, mu), p1.Base1::Hh_x_x(x5, 0.0, mu)), 1.0e-8);
+  EXPECT_LT(p1.Base1::Th_x_x(x5, 0.0, mu, w5).norm(), 1.0e-8); // quadratic invariants
+
+  PendulumIndex2<1> p2;
+  using Base2 = Controlled<Real, 5, 1, 1>;
+  EXPECT_LT(rel_error(p2.HF_x_x(x5, xd5, u, 0.0, w5), p2.Base2::HF_x_x(x5, xd5, u, 0.0, w5)), 1.0e-8);
+
+  // Index 0: Jacobians against finite differences of f
+  PendulumIndex0<2> p0;
+  Eigen::Vector<Real, 4> x4{Eigen::Vector<Real, 4>::Random()};
+  x4(Y) -= 1.5; // keep away from the origin, where lambda is singular
+  MatrixX const Jx_fd{fd([&] (VectorX const & z) {return VectorX(p0.f(z, u, 0.0));}, VectorX(x4))};
+  MatrixX const Ju_fd{fd([&] (VectorX const & z) {return VectorX(p0.f(x4, z, 0.0));}, VectorX(u))};
+  EXPECT_LT(rel_error(p0.Jf_x(x4, u, 0.0), Jx_fd), 1.0e-8);
+  EXPECT_LT(rel_error(p0.Jf_u(x4, u, 0.0), Ju_fd), 1.0e-8);
+}
+
+// The forward simulation projects on the invariants: all the dynamics constraints, including the
+// projection and the invariants rows, are satisfied by the guess
+TEST(Collocation, SimulatedGuessWithInvariants) {
+  auto check = [] (auto ocp, auto const & x0) {
+    using Ocp = typename decltype(ocp)::element_type;
+    constexpr Integer N{Ocp::N}, M{Ocp::M}, S{3}, n{10};
+    Collocation<Real, S, N, 1, M> nlp(ocp, RadauIIA5Tableau<Real>(), n);
+    ASSERT_TRUE(nlp.simulate_guess(x0, [] (Real t) {return Eigen::Vector<Real, 1>(2.0*std::sin(3.0*t));}));
+    VectorX const c{nlp.constraints(nlp.guess())};
+    SCOPED_TRACE(ocp->name());
+    EXPECT_LT(c.head(n*(N*S + N)).lpNorm<Eigen::Infinity>(), 1.0e-11);    // stages and projected continuity
+    EXPECT_LT(c.tail(n*M).lpNorm<Eigen::Infinity>(), 1.0e-12);            // invariants
+    for (Integer k{0}; k < n; ++k) {EXPECT_GT(nlp.mu(nlp.guess(), k).norm(), 0.0);} // the projection acts
+  };
+  PendulumParameters const p;
+  check(std::make_shared<PendulumSwingUpOCP<PendulumIndex2<1>>>(2.0), p.hanging_at_rest<5>());
+  check(std::make_shared<PendulumSwingUpOCP<PendulumIndex1<2>>>(2.0), p.hanging_at_rest<5>());
+  check(std::make_shared<PendulumSwingUpOCP<PendulumIndex0<2>>>(2.0), p.hanging_at_rest<4>());
 }
 
 TEST(Collocation, Bounds) {

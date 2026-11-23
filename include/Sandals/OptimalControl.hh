@@ -39,7 +39,7 @@ namespace Sandals
   * \min & \phi(\mathbf{x}(t_0), \mathbf{x}(t_f)) + \displaystyle\int_{t_0}^{t_f} L(\mathbf{x}(t),
   * \mathbf{u}(t), t) \, \mathrm{d}t \\
   * \text{s.t.} & \mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, \mathbf{u}, t) = \mathbf{0} \\
-  * & \mathbf{b}(\mathbf{x}(t_0), \mathbf{x}(t_f)) = \mathbf{0} \\
+  * & \mathbf{b}_{\text{lo}} \leq \mathbf{b}(\mathbf{x}(t_0), \mathbf{x}(t_f)) \leq \mathbf{b}_{\text{up}} \\
   * & \mathbf{g}_{\text{lo}} \leq \mathbf{g}(\mathbf{x}, \mathbf{u}, t) \leq \mathbf{g}_{\text{up}} \\
   * & \mathbf{x}_{\text{lo}} \leq \mathbf{x} \leq \mathbf{x}_{\text{up}}, \quad
   * \mathbf{u}_{\text{lo}} \leq \mathbf{u} \leq \mathbf{u}_{\text{up}} \text{.}
@@ -49,15 +49,20 @@ namespace Sandals
   * Only the functions values are mandatory when the corresponding terms are present. All first and
   * second derivatives default to central finite differences, override them to provide the exact ones.
   * Every term defaults to "absent" (zero cost, no boundary conditions, no path constraints).
+  *
+  * The invariants of the system, if any, are enforced by the transcription at every mesh node after
+  * the first one (see Sandals::Collocation); the boundary conditions must make the initial states
+  * consistent with them.
   * \tparam Real The scalar number type.
   * \tparam N The dimension of the ODE/DAE system.
   * \tparam U The number of controls.
+  * \tparam M The number of invariants of the system.
   */
-  template <typename Real, Integer N, Integer U>
+  template <typename Real, Integer N, Integer U, Integer M = 0>
   class OptimalControlProblem
   {
   public:
-    using System   = Controlled<Real, N, U>; /**< Controlled system type. */
+    using System   = Controlled<Real, N, U, M>; /**< Controlled system type. */
     using SystemPtr = typename System::Pointer; /**< Controlled system shared pointer type. */
     using VectorF  = Eigen::Vector<Real, N>; /**< States vector type. */
     using VectorU  = Eigen::Vector<Real, U>; /**< Controls vector type. */
@@ -239,6 +244,20 @@ namespace Sandals
     */
     virtual VectorX boundary_conditions(VectorF const & /*x_ini*/, VectorF const & /*x_end*/) const
     {return VectorX::Zero(0);}
+
+    /**
+    * Get the boundary conditions lower bounds (default zero, i.e., equality conditions).
+    * \return The lower bounds (size \f$ n_b \f$).
+    */
+    virtual VectorX boundary_conditions_lower() const
+    {return VectorX::Zero(this->boundary_conditions_number());}
+
+    /**
+    * Get the boundary conditions upper bounds (default zero, i.e., equality conditions).
+    * \return The upper bounds (size \f$ n_b \f$).
+    */
+    virtual VectorX boundary_conditions_upper() const
+    {return VectorX::Zero(this->boundary_conditions_number());}
 
     /**
     * Evaluate the Jacobian of the boundary conditions with respect to \f$ [\mathbf{x}_0; \mathbf{x}_f] \f$.

@@ -38,22 +38,29 @@ namespace Sandals
   * \mathbf{F} \f$, split in blocks with respect to \f$ \mathbf{x} \f$, \f$ \mathbf{x}^{\prime} \f$,
   * and \f$ \mathbf{u} \f$. All Hessians default to central finite differences of the Jacobians,
   * override them to provide the exact ones.
+  *
+  * The system may also have \f$ M \f$ invariants \f$ \mathbf{h}(\mathbf{x}, t) = \mathbf{0} \f$, i.e.,
+  * constraints that the exact solution satisfies but the equations do not enforce, typically lost
+  * by an index reduction (e.g., the position constraint of a mechanism written at velocity level).
   * \tparam Real The scalar number type.
   * \tparam N The dimension of the ODE/DAE system.
   * \tparam U The number of controls.
+  * \tparam M The number of invariants.
   */
-  template <typename Real, Integer N, Integer U>
+  template <typename Real, Integer N, Integer U, Integer M = 0>
   class Controlled
   {
-    static_assert(N > 0 && U > 0, "Sandals::Controlled: N and U must be positive.");
+    static_assert(N > 0 && U > 0 && M >= 0, "Sandals::Controlled: N and U must be positive, M non-negative.");
 
   public:
-    using Pointer = std::shared_ptr<Controlled<Real, N, U>>; /**< Shared pointer to a controlled system. */
+    using Pointer = std::shared_ptr<Controlled<Real, N, U, M>>; /**< Shared pointer to a controlled system. */
     using VectorF = Eigen::Vector<Real, N>; /**< States vector type. */
     using VectorU = Eigen::Vector<Real, U>; /**< Controls vector type. */
     using MatrixJF = Eigen::Matrix<Real, N, N>; /**< States Jacobian (and Hessian) matrix type. */
     using MatrixJU = Eigen::Matrix<Real, N, U>; /**< Controls Jacobian (and mixed Hessian) matrix type. */
     using MatrixUU = Eigen::Matrix<Real, U, U>; /**< Controls Hessian matrix type. */
+    using VectorH = Eigen::Vector<Real, M>; /**< Invariants vector type. */
+    using MatrixJH = Eigen::Matrix<Real, M, N>; /**< Invariants Jacobian matrix type. */
 
   private:
     std::string m_name; /**< Name of the controlled system. */
@@ -87,6 +94,12 @@ namespace Sandals
     * \return The number of controls.
     */
     static constexpr Integer controls_number() {return U;}
+
+    /**
+    * Get the number of invariants of the controlled ODE/DAE system.
+    * \return The number of invariants.
+    */
+    static constexpr Integer invariants_number() {return M;}
 
     /**
     * Evaluate the controlled ODE/DAE system \f$ \mathbf{F}(\mathbf{x}, \mathbf{x}^{\prime}, \mathbf{u},
@@ -232,6 +245,75 @@ namespace Sandals
         {return VectorU(this->JF_u(x, x_dot, z, t).transpose()*lambda);}, u);
     }
 
+    /*\
+     |  Invariants (must be overridden when M > 0)
+    \*/
+
+    /**
+    * Evaluate the invariants \f$ \mathbf{h}(\mathbf{x}, t) \f$.
+    * \param[in] x States \f$ \mathbf{x} \f$.
+    * \param[in] t Independent variable (or time) \f$ t \f$.
+    * \return The invariants \f$ \mathbf{h} \f$.
+    */
+    virtual VectorH h(VectorF const & /*x*/, Real const /*t*/) const
+    {
+      if constexpr (M > 0) {SANDALS_ERROR("Sandals::Controlled::h(...): invariants not implemented.");}
+      return VectorH::Zero();
+    }
+
+    /**
+    * Evaluate the Jacobian \f$ \partial\mathbf{h}/\partial\mathbf{x} \f$ of the invariants.
+    * \param[in] x States \f$ \mathbf{x} \f$.
+    * \param[in] t Independent variable (or time) \f$ t \f$.
+    * \return The Jacobian \f$ \mathbf{Jh}_{\mathbf{x}} \f$.
+    */
+    virtual MatrixJH Jh_x(VectorF const & /*x*/, Real const /*t*/) const
+    {
+      if constexpr (M > 0) {SANDALS_ERROR("Sandals::Controlled::Jh_x(...): invariants Jacobian not implemented.");}
+      return MatrixJH::Zero();
+    }
+
+    /**
+    * Evaluate the Hessian \f$ \partial^2(\boldsymbol{\mu}^\top\mathbf{h})/\partial\mathbf{x}^2 \f$ of
+    * the weighted invariants. Defaults to finite differences of the Jacobian.
+    * \param[in] x States \f$ \mathbf{x} \f$.
+    * \param[in] t Independent variable (or time) \f$ t \f$.
+    * \param[in] mu Multipliers \f$ \boldsymbol{\mu} \f$.
+    * \return The (symmetric) Hessian.
+    */
+    virtual MatrixJF Hh_x_x(VectorF const & x, Real const t, VectorH const & mu) const
+    {
+      if constexpr (M == 0) {
+        return MatrixJF::Zero();
+      } else {
+        return finite_differences_hessian<Real, N>([&] (VectorF const & z)
+          {return VectorF(this->Jh_x(z, t).transpose()*mu);}, x);
+      }
+    }
+
+    /**
+    * Evaluate the Hessian \f$ \partial^2(\boldsymbol{\mu}^\top\mathbf{Jh}_{\mathbf{x}}\mathbf{w})/
+    * \partial\mathbf{x}^2 \f$, i.e., the third derivative of \f$ \boldsymbol{\mu}^\top\mathbf{h} \f$ in
+    * the direction \f$ \mathbf{w} \f$. It is needed by the exact Hessian of the projection on the
+    * invariants, and it is zero for invariants that are at most quadratic in the states. Defaults to
+    * finite differences of the (exact) gradient \f$ \mathbf{Hh}_{\mathbf{x}\mathbf{x}}(\boldsymbol{\mu})
+    * \mathbf{w} \f$.
+    * \param[in] x States \f$ \mathbf{x} \f$.
+    * \param[in] t Independent variable (or time) \f$ t \f$.
+    * \param[in] mu Multipliers \f$ \boldsymbol{\mu} \f$.
+    * \param[in] w Direction \f$ \mathbf{w} \f$.
+    * \return The (symmetric) Hessian.
+    */
+    virtual MatrixJF Th_x_x(VectorF const & x, Real const t, VectorH const & mu, VectorF const & w) const
+    {
+      if constexpr (M == 0) {
+        return MatrixJF::Zero();
+      } else {
+        return finite_differences_hessian<Real, N>([&] (VectorF const & z)
+          {return VectorF(this->Hh_x_x(z, t, mu)*w);}, x);
+      }
+    }
+
   }; // class Controlled
 
   /*\
@@ -254,22 +336,25 @@ namespace Sandals
   * \tparam Real The scalar number type.
   * \tparam N The dimension of the ODE system.
   * \tparam U The number of controls.
+  * \tparam M The number of invariants.
   */
-  template <typename Real, Integer N, Integer U>
-  class ControlledExplicit : public Controlled<Real, N, U>
+  template <typename Real, Integer N, Integer U, Integer M = 0>
+  class ControlledExplicit : public Controlled<Real, N, U, M>
   {
   public:
-    using typename Controlled<Real, N, U>::VectorF;
-    using typename Controlled<Real, N, U>::VectorU;
-    using typename Controlled<Real, N, U>::MatrixJF;
-    using typename Controlled<Real, N, U>::MatrixJU;
-    using typename Controlled<Real, N, U>::MatrixUU;
+    using typename Controlled<Real, N, U, M>::VectorF;
+    using typename Controlled<Real, N, U, M>::VectorU;
+    using typename Controlled<Real, N, U, M>::MatrixJF;
+    using typename Controlled<Real, N, U, M>::MatrixJU;
+    using typename Controlled<Real, N, U, M>::MatrixUU;
+    using typename Controlled<Real, N, U, M>::VectorH;
+    using typename Controlled<Real, N, U, M>::MatrixJH;
 
     /**
     * Class constructor for a controlled explicit ODE system.
     * \param[in] t_name The name of the controlled explicit ODE system.
     */
-    ControlledExplicit(std::string t_name = "(missing name)") : Controlled<Real, N, U>(t_name) {}
+    ControlledExplicit(std::string t_name = "(missing name)") : Controlled<Real, N, U, M>(t_name) {}
 
     /**
     * Evaluate the explicit ODE system \f$ \mathbf{f}(\mathbf{x}, \mathbf{u}, t) \f$.
