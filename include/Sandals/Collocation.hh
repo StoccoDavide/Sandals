@@ -465,90 +465,34 @@ namespace Sandals
     */
     VectorX hessian_values(VectorX const & z, Real const sigma, VectorX const & lambda) const
     {
-      using MatrixW = Eigen::Matrix<Real, 2*N+U, 2*N+U>;
-      using MatrixPW = Eigen::Matrix<Real, 2*N+U, D>;
-      using MatrixPL = Eigen::Matrix<Real, N+U, D>;
-      using MatrixD = Eigen::Matrix<Real, D, D>;
+      VectorX values(VectorX::Zero(this->hessian_nnz()));
 
-      VectorX vals(VectorX::Zero(this->hessian_nnz()));
-      auto const & sys{this->m_problem->system()};
-      std::vector<Integer> idx_interval(D);
-
+      // Dense block of each interval (variables x_k, K_k, u_k)
+      std::vector<Integer> interval_indices(D);
       for (Integer k{0}; k < this->m_n; ++k) {
-        Real const t_k{this->m_t_mesh(k)}, h_k{this->m_t_mesh(k+1) - t_k};
-        VectorF const x_k{this->x(z, k)};
-        VectorU const u_k{this->u(z, k)};
-        MatrixK const K_k{this->K(z, k)};
-        MatrixD H(MatrixD::Zero());
-
-        for (Integer i{0}; i < S; ++i) {
-          Real const t_i{t_k + this->m_tableau.c(i)*h_k};
-          VectorF const x_i{x_k + K_k * this->m_tableau.A.row(i).transpose()};
-          VectorF const x_dot_i{K_k.col(i)/h_k};
-
-          // Map from the interval variables to the stage arguments (x, x', u)
-          MatrixPW P(MatrixPW::Zero());
-          P.template block<N, N>(0, 0).setIdentity();
-          for (Integer j{0}; j < S; ++j) {P.template block<N, N>(0, N + j*N) = this->m_tableau.A(i, j) * MatrixF::Identity();}
-          P.template block<N, N>(N, N + i*N) = MatrixF::Identity() / h_k;
-          P.template block<U, U>(2*N, N + N*S).setIdentity();
-
-          // Stage equations contribution
-          VectorF const l_i{lambda.template segment<N>(this->stage_row(k, i))};
-          MatrixW W;
-          W.template block<N, N>(0, 0) = sys->HF_x_x(x_i, x_dot_i, u_k, t_i, l_i);
-          W.template block<N, N>(0, N) = sys->HF_x_x_dot(x_i, x_dot_i, u_k, t_i, l_i);
-          W.template block<N, N>(N, 0) = W.template block<N, N>(0, N).transpose();
-          W.template block<N, N>(N, N) = sys->HF_x_dot_x_dot(x_i, x_dot_i, u_k, t_i, l_i);
-          W.template block<N, U>(0, 2*N) = sys->HF_x_u(x_i, x_dot_i, u_k, t_i, l_i);
-          W.template block<N, U>(N, 2*N) = sys->HF_x_dot_u(x_i, x_dot_i, u_k, t_i, l_i);
-          W.template block<U, N>(2*N, 0) = W.template block<N, U>(0, 2*N).transpose();
-          W.template block<U, N>(2*N, N) = W.template block<N, U>(N, 2*N).transpose();
-          W.template block<U, U>(2*N, 2*N) = sys->HF_u_u(x_i, x_dot_i, u_k, t_i, l_i);
-          H.noalias() += P.transpose() * W * P;
-
-          // Lagrange term contribution (variables x, u)
-          if (sigma != Real(0.0)) {
-            MatrixPL Q;
-            Q.template topRows<N>() = P.template topRows<N>();
-            Q.template bottomRows<U>() = P.template bottomRows<U>();
-            H.noalias() += (sigma * h_k * this->m_tableau.b(i)) * Q.transpose() *
-              this->m_problem->lagrange_hessian(x_i, u_k, t_i) * Q;
-          }
-        }
-
-        // Path constraints contribution at the node k (variables x_k, u_k)
-        if (this->m_ng > 0) {
-          MatrixPL R(MatrixPL::Zero());
-          R.template block<N, N>(0, 0).setIdentity();
-          R.template block<U, U>(N, N + N*S).setIdentity();
-          H.noalias() += R.transpose() * this->m_problem->path_constraints_hessian(x_k, u_k, t_k,
-            lambda.segment(this->path_row(k), this->m_ng)) * R;
-        }
-
-        for (Integer a{0}; a < D; ++a) {idx_interval[a] = this->x_index(k) + a;}
-        this->accumulate(idx_interval, H, vals);
+        for (Integer a{0}; a < D; ++a) {interval_indices[a] = this->x_index(k) + a;}
+        this->accumulate(interval_indices, this->interval_hessian(z, k, sigma, lambda), values);
       }
 
       // Path constraints at the last node (variables x_n, u_{n-1})
       if (this->m_ng > 0) {
         Integer const n{this->m_n};
-        std::vector<Integer> idx(this->path_indices(n));
-        this->accumulate(idx, this->m_problem->path_constraints_hessian(this->x(z, n), this->u(z, n-1),
-          this->m_t_mesh(n), lambda.segment(this->path_row(n), this->m_ng)), vals);
+        VectorX const lambda_g{lambda.segment(this->path_row(n), this->m_ng)};
+        this->accumulate(this->path_indices(n), this->m_problem->path_constraints_hessian(
+          this->x(z, n), this->u(z, n-1), this->m_t_mesh(n), lambda_g), values);
       }
 
       // Mayer term and boundary conditions (variables x_0, x_n)
-      {
-        VectorF const x_0{this->x(z, 0)}, x_n{this->x(z, this->m_n)};
-        Eigen::Matrix<Real, 2*N, 2*N> B(sigma * this->m_problem->mayer_hessian(x_0, x_n));
-        if (this->m_nb > 0) {
-          B += this->m_problem->boundary_conditions_hessian(x_0, x_n, lambda.segment(this->boundary_row(), this->m_nb));
-        }
-        this->accumulate(this->boundary_indices(), B, vals);
+      VectorF const x_0{this->x(z, 0)};
+      VectorF const x_n{this->x(z, this->m_n)};
+      MatrixB boundary_hessian(sigma * this->m_problem->mayer_hessian(x_0, x_n));
+      if (this->m_nb > 0) {
+        VectorX const lambda_b{lambda.segment(this->boundary_row(), this->m_nb)};
+        boundary_hessian += this->m_problem->boundary_conditions_hessian(x_0, x_n, lambda_b);
       }
+      this->accumulate(this->boundary_indices(), boundary_hessian, values);
 
-      return vals;
+      return values;
     }
 
     /**
@@ -570,6 +514,94 @@ namespace Sandals
     }
 
   private:
+    using MatrixW  = Eigen::Matrix<Real, 2*N+U, 2*N+U>; /**< Hessian in the stage arguments (x, x', u). */
+    using MatrixPW = Eigen::Matrix<Real, 2*N+U, D>;     /**< Map from interval variables to stage arguments. */
+    using MatrixPL = Eigen::Matrix<Real, N+U, D>;       /**< Map from interval variables to (x, u) arguments. */
+    using MatrixD  = Eigen::Matrix<Real, D, D>;         /**< Hessian in the interval variables. */
+    using MatrixB  = Eigen::Matrix<Real, 2*N, 2*N>;     /**< Hessian in the boundary states (x_0, x_n). */
+
+    /**
+    * Linear map from the interval variables \f$ (\mathbf{x}_k, \mathbf{K}_k, \mathbf{u}_k) \f$ to the
+    * arguments of the \f$ i \f$-th stage \f$ (\mathbf{x}_k + \sum_j a_{ij}\mathbf{K}_{k,j},
+    * \mathbf{K}_{k,i}/h_k, \mathbf{u}_k) \f$.
+    */
+    MatrixPW stage_map(Integer const i, Real const h_k) const
+    {
+      MatrixPW P(MatrixPW::Zero());
+      P.template block<N, N>(0, 0).setIdentity();
+      for (Integer j{0}; j < S; ++j) {
+        P.template block<N, N>(0, N + j*N) = this->m_tableau.A(i, j) * MatrixF::Identity();
+      }
+      P.template block<N, N>(N, N + i*N) = MatrixF::Identity() / h_k;
+      P.template block<U, U>(2*N, N + N*S).setIdentity();
+      return P;
+    }
+
+    /**
+    * Full symmetric Hessian of the weighted system \f$ \boldsymbol{\lambda}^\top\mathbf{F} \f$ in the
+    * stage arguments \f$ (\mathbf{x}, \mathbf{x}^{\prime}, \mathbf{u}) \f$, assembled from the blocks.
+    */
+    MatrixW stage_hessian(VectorF const & x, VectorF const & x_dot, VectorU const & u, Real const t,
+      VectorF const & lambda) const
+    {
+      auto const & sys{this->m_problem->system()};
+      MatrixF const H_x_x{sys->HF_x_x(x, x_dot, u, t, lambda)};
+      MatrixF const H_x_xd{sys->HF_x_x_dot(x, x_dot, u, t, lambda)};
+      MatrixF const H_xd_xd{sys->HF_x_dot_x_dot(x, x_dot, u, t, lambda)};
+      auto const H_x_u{sys->HF_x_u(x, x_dot, u, t, lambda)};
+      auto const H_xd_u{sys->HF_x_dot_u(x, x_dot, u, t, lambda)};
+      auto const H_u_u{sys->HF_u_u(x, x_dot, u, t, lambda)};
+
+      MatrixW W;
+      W << H_x_x,               H_x_xd,               H_x_u,
+           H_x_xd.transpose(),  H_xd_xd,              H_xd_u,
+           H_x_u.transpose(),   H_xd_u.transpose(),   H_u_u;
+      return W;
+    }
+
+    /**
+    * Hessian of the Lagrangian restricted to the variables of the \f$ k \f$-th interval: stage
+    * equations, Lagrange term at the stages, and path constraints at the node \f$ t_k \f$.
+    */
+    MatrixD interval_hessian(VectorX const & z, Integer const k, Real const sigma, VectorX const & lambda) const
+    {
+      Real const t_k{this->m_t_mesh(k)};
+      Real const h_k{this->m_t_mesh(k+1) - t_k};
+      VectorF const x_k{this->x(z, k)};
+      VectorU const u_k{this->u(z, k)};
+      MatrixK const K_k{this->K(z, k)};
+
+      MatrixD H(MatrixD::Zero());
+      for (Integer i{0}; i < S; ++i) {
+        Real const t_i{t_k + this->m_tableau.c(i)*h_k};
+        VectorF const x_i{x_k + K_k * this->m_tableau.A.row(i).transpose()};
+        VectorF const x_dot_i{K_k.col(i)/h_k};
+        MatrixPW const P{this->stage_map(i, h_k)};
+
+        // Stage equations: chain rule through the linear map P
+        VectorF const lambda_i{lambda.template segment<N>(this->stage_row(k, i))};
+        H.noalias() += P.transpose() * this->stage_hessian(x_i, x_dot_i, u_k, t_i, lambda_i) * P;
+
+        // Lagrange term with quadrature weight h_k b_i (arguments x and u only)
+        if (sigma != Real(0.0)) {
+          MatrixPL Q;
+          Q << P.template topRows<N>(), P.template bottomRows<U>();
+          Real const weight{sigma * h_k * this->m_tableau.b(i)};
+          H.noalias() += weight * Q.transpose() * this->m_problem->lagrange_hessian(x_i, u_k, t_i) * Q;
+        }
+      }
+
+      // Path constraints at the node t_k (arguments x_k and u_k)
+      if (this->m_ng > 0) {
+        MatrixPL R(MatrixPL::Zero());
+        R.template block<N, N>(0, 0).setIdentity();
+        R.template block<U, U>(N, N + N*S).setIdentity();
+        VectorX const lambda_g{lambda.segment(this->path_row(k), this->m_ng)};
+        H.noalias() += R.transpose() * this->m_problem->path_constraints_hessian(x_k, u_k, t_k, lambda_g) * R;
+      }
+      return H;
+    }
+
     /**
     * Traverse the constraints Jacobian in a fixed order, collecting the sparsity pattern and,
     * optionally, the values.

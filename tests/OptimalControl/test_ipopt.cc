@@ -33,7 +33,7 @@ IpoptOptions quiet_options()
   IpoptOptions opts;
   opts.integers["print_level"] = 0;
   opts.strings["sb"] = "yes";
-  opts.numerics["tol"] = 1.0e-10;
+  opts.numerics["tol"] = 1.0e-12;
   return opts;
 }
 
@@ -133,7 +133,7 @@ TEST(Ipopt, VanDerPolConstraints) {
   ASSERT_TRUE(nlp_fd.simulate_guess(Vector2(1.0, 0.0), [] (Real) {return Vector1(0.0);}));
   Real J_fd;
   IpoptOptions opts_fd{quiet_options()};
-  opts_fd.numerics["tol"] = 1.0e-8;
+  opts_fd.numerics["tol"] = 1.0e-10; // finite differences derivatives
   EXPECT_EQ(ipopt_solve(nlp_fd, opts_fd, J_fd), Ipopt::Solve_Succeeded);
   EXPECT_NEAR(J_fd, J, 1.0e-5);
 
@@ -141,11 +141,113 @@ TEST(Ipopt, VanDerPolConstraints) {
   ASSERT_TRUE(nlp_lbfgs.simulate_guess(Vector2(1.0, 0.0), [] (Real) {return Vector1(0.0);}));
   IpoptOptions opts_lbfgs{quiet_options()};
   opts_lbfgs.strings["hessian_approximation"] = "limited-memory";
-  opts_lbfgs.numerics["tol"] = 1.0e-8;
+  opts_lbfgs.numerics["tol"] = 1.0e-10; // approximate Hessian
   opts_lbfgs.integers["max_iter"] = 1000;
   Real J_lbfgs;
   EXPECT_EQ(ipopt_solve(nlp_lbfgs, opts_lbfgs, J_lbfgs), Ipopt::Solve_Succeeded);
   EXPECT_NEAR(J_lbfgs, J, 1.0e-5);
+}
+
+/*\
+ |  Index-3 DAE: swing-up of the pendulum in Cartesian coordinates, validated against the angle ODE
+\*/
+
+using Vector5 = Eigen::Vector<Real, 5>;
+
+// Swing-up guess: theta from 0 to pi with zero velocity at the ends, consistent tension.
+struct SwingUpGuess
+{
+  Real T;
+  Real theta(Real t) const {return M_PI*(1.0 - std::cos(M_PI*t/T))/2.0;}
+  Real omega(Real t) const {return M_PI*M_PI/(2.0*T)*std::sin(M_PI*t/T);}
+  Vector2 angle(Real t) const {return Vector2(this->theta(t), this->omega(t));}
+  Vector5 cartesian(Real t) const
+  {
+    Real const q{this->theta(t)}, w{this->omega(t)};
+    Vector5 x;
+    x << std::sin(q), -std::cos(q), w*std::cos(q), w*std::sin(q), (9.81*std::cos(q) + w*w)/2.0;
+    return x;
+  }
+};
+
+// Replay piecewise-constant controls on the angle ODE with fine RK4 steps: returns (theta(T), omega(T)).
+Vector2 replay_on_angle_ode(Eigen::Matrix<Real, 1, Eigen::Dynamic> const & U, VectorX const & mesh)
+{
+  PendulumAngle p;
+  Vector2 x(0.0, 0.0);
+  for (Integer k{0}; k < U.cols(); ++k) {
+    Vector1 const u(U(0, k));
+    Real const h{(mesh(k+1) - mesh(k))/200.0};
+    Real t{mesh(k)};
+    for (Integer s{0}; s < 200; ++s, t += h) {
+      Vector2 const k1{p.f(x, u, t)}, k2{p.f(x + h/2.0*k1, u, t)}, k3{p.f(x + h/2.0*k2, u, t)}, k4{p.f(x + h*k3, u, t)};
+      x += h/6.0*(k1 + 2.0*k2 + 2.0*k3 + k4);
+    }
+  }
+  return x;
+}
+
+// Angle error modulo full turns (the final condition x(T) = 0 does not count revolutions).
+Real angle_error(Real const theta, Real const target) {return std::abs(std::remainder(theta - target, 2.0*M_PI));}
+
+TEST(Ipopt, Index3PendulumUnbounded) {
+  // Unbounded control: the index-3 DAE solved directly converges to the ODE optimum
+  Real const T{2.0};
+  SwingUpGuess const g{T};
+  auto dae = std::make_shared<PendulumIndex3OCP>(T);
+  auto ode = std::make_shared<PendulumAngleOCP>(T);
+  Real drift_prev{0.0};
+  for (Integer n : {20, 40, 80}) {
+    Collocation<Real, 3, 5, 1> nlp_dae(dae, RadauIIA5Tableau<Real>(), n);
+    Collocation<Real, 3, 2, 1> nlp_ode(ode, RadauIIA5Tableau<Real>(), n);
+    nlp_dae.guess([&g] (Real t) {return g.cartesian(t);}, [] (Real) {return Vector1(0.0);});
+    nlp_ode.guess([&g] (Real t) {return g.angle(t);}, [] (Real) {return Vector1(0.0);});
+    Real J_dae, J_ode;
+    ASSERT_EQ(ipopt_solve(nlp_dae, quiet_options(), J_dae), Ipopt::Solve_Succeeded) << "n = " << n;
+    ASSERT_EQ(ipopt_solve(nlp_ode, quiet_options(), J_ode), Ipopt::Solve_Succeeded) << "n = " << n;
+    if (n >= 40) {EXPECT_NEAR(J_dae, J_ode, 1.0e-4*J_ode) << "n = " << n;}
+
+    // Position constraint exact at the nodes (k >= 1), hidden velocity constraint converges as O(h^3)
+    auto const X{nlp_dae.x_mesh(nlp_dae.guess())};
+    Real drift{0.0};
+    for (Integer k{1}; k <= n; ++k) {
+      EXPECT_LT(std::abs(X(0, k)*X(0, k) + X(1, k)*X(1, k) - 1.0), 1.0e-9);
+      drift = std::max(drift, std::abs(X(0, k)*X(2, k) + X(1, k)*X(3, k)));
+    }
+    if (drift_prev > 0.0) {EXPECT_GT(drift_prev/drift, 6.0) << "n = " << n;}
+    drift_prev = drift;
+    EXPECT_NEAR(X(1, n), 1.0, 1.0e-9); // upright
+  }
+}
+
+TEST(Ipopt, Index3PendulumBoundedContinuation) {
+  // Bounded control |u| <= 4 needs several swings; continuation on the bound from the unbounded
+  // solution, warm-starting each solve. The control is validated by replaying it on the angle ODE.
+  Real const T{5.0};
+  Integer const n{80};
+  SwingUpGuess const g{T};
+  auto dae = std::make_shared<PendulumIndex3OCP>(T);
+  auto ode = std::make_shared<PendulumAngleOCP>(T);
+  Collocation<Real, 3, 5, 1> nlp_dae(dae, RadauIIA5Tableau<Real>(), n);
+  Collocation<Real, 3, 2, 1> nlp_ode(ode, RadauIIA5Tableau<Real>(), n);
+  nlp_dae.guess([&g] (Real t) {return g.cartesian(t);}, [] (Real) {return Vector1(0.0);});
+  nlp_ode.guess([&g] (Real t) {return g.angle(t);}, [] (Real) {return Vector1(0.0);});
+
+  Real J_dae{0.0}, J_ode{0.0};
+  for (Real u_max : {std::numeric_limits<Real>::infinity(), 6.0, 4.0}) {
+    dae->u_bounds(Vector1(-u_max), Vector1(u_max));
+    ode->u_bounds(Vector1(-u_max), Vector1(u_max));
+    ASSERT_EQ(ipopt_solve(nlp_dae, quiet_options(), J_dae), Ipopt::Solve_Succeeded) << "u_max = " << u_max;
+    ASSERT_EQ(ipopt_solve(nlp_ode, quiet_options(), J_ode), Ipopt::Solve_Succeeded) << "u_max = " << u_max;
+    EXPECT_NEAR(J_dae, J_ode, 1.0e-3*J_ode) << "u_max = " << u_max;
+  }
+
+  // The bound is active, and the control swings the real pendulum up
+  auto const U{nlp_dae.u_mesh(nlp_dae.guess())};
+  EXPECT_NEAR(U.cwiseAbs().maxCoeff(), 4.0, 1.0e-6);
+  Vector2 const x_end{replay_on_angle_ode(U, nlp_dae.t_mesh())};
+  EXPECT_LT(angle_error(x_end(0), M_PI), 5.0e-2);
+  EXPECT_LT(std::abs(x_end(1)), 1.0e-1);
 }
 
 TEST(Ipopt, DerivativeChecker) {

@@ -56,7 +56,22 @@ namespace Sandals
     Real    m_objective{0.0};            /**< Objective at the solution. */
     Ipopt::SolverReturn m_status{Ipopt::UNASSIGNED}; /**< Solver status. */
 
+    /** View an IPOPT array as an Eigen vector. */
     static Eigen::Map<VectorX const> map(Ipopt::Index const n, Real const * x) {return Eigen::Map<VectorX const>(x, n);}
+
+    /**
+    * Run an evaluation, reporting failure to IPOPT (which then backtracks) if it throws or produces
+    * non-finite values.
+    */
+    template <typename Evaluation>
+    static bool evaluate(Evaluation && evaluation)
+    {
+      try {
+        return evaluation();
+      } catch (std::exception const &) {
+        return false;
+      }
+    }
 
   public:
     /**
@@ -113,48 +128,60 @@ namespace Sandals
 
     bool eval_f(Ipopt::Index n, Real const * x, bool /*new_x*/, Real & obj_value) override
     {
-      try {obj_value = this->m_nlp.objective(map(n, x));} catch (std::exception const &) {return false;}
-      return std::isfinite(obj_value);
+      return evaluate([&] {
+        obj_value = this->m_nlp.objective(map(n, x));
+        return std::isfinite(obj_value);
+      });
     }
 
     bool eval_grad_f(Ipopt::Index n, Real const * x, bool /*new_x*/, Real * grad_f) override
     {
-      try {Eigen::Map<VectorX>(grad_f, n) = this->m_nlp.objective_gradient(map(n, x));}
-      catch (std::exception const &) {return false;}
-      return Eigen::Map<VectorX>(grad_f, n).allFinite();
+      return evaluate([&] {
+        Eigen::Map<VectorX> gradient(grad_f, n);
+        gradient = this->m_nlp.objective_gradient(map(n, x));
+        return gradient.allFinite();
+      });
     }
 
     bool eval_g(Ipopt::Index n, Real const * x, bool /*new_x*/, Ipopt::Index m, Real * g) override
     {
-      try {Eigen::Map<VectorX>(g, m) = this->m_nlp.constraints(map(n, x));} catch (std::exception const &) {return false;}
-      return Eigen::Map<VectorX>(g, m).allFinite();
+      return evaluate([&] {
+        Eigen::Map<VectorX> constraints(g, m);
+        constraints = this->m_nlp.constraints(map(n, x));
+        return constraints.allFinite();
+      });
     }
 
     bool eval_jac_g(Ipopt::Index n, Real const * x, bool /*new_x*/, Ipopt::Index /*m*/, Ipopt::Index nele_jac,
       Ipopt::Index * iRow, Ipopt::Index * jCol, Real * values) override
     {
+      // First call: sparsity pattern only
       if (values == nullptr) {
         std::copy(this->m_nlp.jacobian_rows().begin(), this->m_nlp.jacobian_rows().end(), iRow);
         std::copy(this->m_nlp.jacobian_cols().begin(), this->m_nlp.jacobian_cols().end(), jCol);
         return true;
       }
-      try {Eigen::Map<VectorX>(values, nele_jac) = this->m_nlp.jacobian_values(map(n, x));}
-      catch (std::exception const &) {return false;}
-      return Eigen::Map<VectorX>(values, nele_jac).allFinite();
+      return evaluate([&] {
+        Eigen::Map<VectorX> jacobian(values, nele_jac);
+        jacobian = this->m_nlp.jacobian_values(map(n, x));
+        return jacobian.allFinite();
+      });
     }
 
     bool eval_h(Ipopt::Index n, Real const * x, bool /*new_x*/, Real obj_factor, Ipopt::Index m, Real const * lambda,
       bool /*new_lambda*/, Ipopt::Index nele_hess, Ipopt::Index * iRow, Ipopt::Index * jCol, Real * values) override
     {
+      // First call: sparsity pattern only (lower triangle)
       if (values == nullptr) {
         std::copy(this->m_nlp.hessian_rows().begin(), this->m_nlp.hessian_rows().end(), iRow);
         std::copy(this->m_nlp.hessian_cols().begin(), this->m_nlp.hessian_cols().end(), jCol);
         return true;
       }
-      try {
-        Eigen::Map<VectorX>(values, nele_hess) = this->m_nlp.hessian_values(map(n, x), obj_factor, VectorX(map(m, lambda)));
-      } catch (std::exception const &) {return false;}
-      return Eigen::Map<VectorX>(values, nele_hess).allFinite();
+      return evaluate([&] {
+        Eigen::Map<VectorX> hessian(values, nele_hess);
+        hessian = this->m_nlp.hessian_values(map(n, x), obj_factor, VectorX(map(m, lambda)));
+        return hessian.allFinite();
+      });
     }
 
     void finalize_solution(Ipopt::SolverReturn status, Ipopt::Index n, Real const * x, Real const * /*z_L*/,
@@ -181,7 +208,8 @@ namespace Sandals
 
   /**
   * Solve the collocation transcription of an optimal control problem with IPOPT, starting from the
-  * current guess of the transcription. On return the guess is updated with the last iterate, so that
+  * current guess of the transcription. The default convergence tolerance is \f$ 10^{-12} \f$ (IPOPT
+  * option tol), which can be overridden through the options. On return the guess is updated with the last iterate, so that
   * successive calls (e.g., on refined problems) can be warm-started.
   * \param[in,out] nlp The collocation transcription.
   * \param[in] options IPOPT options.
@@ -196,6 +224,8 @@ namespace Sandals
     Ipopt::SmartPtr<IpoptCollocation<S, N, U>> tnlp{new IpoptCollocation<S, N, U>(nlp)};
     Ipopt::SmartPtr<Ipopt::IpoptApplication> app{IpoptApplicationFactory()};
     app->RethrowNonIpoptException(false);
+    // Tight default convergence tolerance, unless overridden by the options
+    SANDALS_ASSERT(app->Options()->SetNumericValue("tol", 1.0e-12), CMD "invalid option tol.");
     for (auto const & [name, value] : options.strings) {
       SANDALS_ASSERT(app->Options()->SetStringValue(name, value), CMD "invalid option " << name << ".");
     }

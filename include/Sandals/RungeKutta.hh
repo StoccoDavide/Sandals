@@ -101,6 +101,7 @@ namespace Sandals {
     FunctionSC m_step_callback{nullptr};           /**< Step callback function. */
 
     Real    m_projection_tolerance{EPSILON_HIGH}; /**< Projection tolerance \f$ \epsilon_{\text{proj}} \f$. */
+    Real    m_newton_tolerance{EPSILON_HIGH};     /**< Tolerance of the Newton solvers for the stage equations. */
     Integer m_max_projection_iterations{5};       /**< Maximum number of projection steps. */
     bool    m_projection{true};                   /**< Adaptive step mode boolean. */
 
@@ -122,6 +123,7 @@ namespace Sandals {
     RungeKutta(Tableau<Real, S> const & t_tableau)
       : m_tableau(t_tableau) {
       this->verbose_mode(this->m_verbose);
+      this->newton_tolerance(this->m_newton_tolerance);
     }
 
     /**
@@ -132,6 +134,7 @@ namespace Sandals {
     RungeKutta(Tableau<Real, S> const & t_tableau, System t_system)
       : m_tableau(t_tableau), m_system(t_system) {
       this->verbose_mode(this->m_verbose);
+      this->newton_tolerance(this->m_newton_tolerance);
     }
 
     /**
@@ -569,6 +572,23 @@ namespace Sandals {
     * \param[in] t_step_callback The step callback function.
     */
     void step_callback(FunctionSC const & t_step_callback) {this->m_step_callback = t_step_callback;}
+
+    /**
+    * Get the tolerance of the Newton solvers for the implicit stage equations.
+    * \return The Newton tolerance.
+    */
+    Real newton_tolerance() const {return this->m_newton_tolerance;}
+
+    /**
+    * Set the tolerance of the Newton solvers for the implicit stage equations (absolute residual norm).
+    * \param[in] t_newton_tolerance The Newton tolerance.
+    */
+    void newton_tolerance(Real const t_newton_tolerance)
+    {
+      this->m_newton_tolerance = t_newton_tolerance;
+      this->m_newtonX.tolerance(t_newton_tolerance);
+      this->m_newtonK.tolerance(t_newton_tolerance);
+    }
 
     /**
     * Get the projection tolerance.

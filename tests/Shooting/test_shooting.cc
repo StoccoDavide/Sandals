@@ -92,7 +92,7 @@ template <typename Integrator>
 void check_pendulum_bvp(bool const multiple)
 {
   PendulumBVP<Integrator> problem(std::make_shared<Integrator>());
-  problem.tolerance(1.0e-10);
+  problem.tolerance(1.0e-12);
   problem.max_iterations(20);
   VectorX const t_mesh(VectorX::LinSpaced(101, 0.0, 0.8));
   Vector2 const guess(1.0, 0.0);

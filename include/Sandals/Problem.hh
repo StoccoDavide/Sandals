@@ -57,7 +57,7 @@ namespace Sandals
     SolutionPtr   m_solution;            /**< Solution of the problem. */
 
     bool    m_verbose{false};          /**< Verbose mode boolean. */
-    Real    m_tolerance{SQRT_EPSILON}; /**< Tolerance for the solution. */
+    Real    m_tolerance{EPSILON_HIGH}; /**< Tolerance for the solution. */
     Integer m_max_iterations{100};     /**< Maximum number of iterations. */
     Integer m_subintervals{1};         /**< Number of subintervals for the shooting methods. */
 

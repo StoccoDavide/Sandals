@@ -123,6 +123,24 @@ TEST(Collocation, DAEDerivatives) {
   check_transcription<3, 2, 1>(ocp, RadauIIA5Tableau<Real>(), 3, 1.0e-6);
 }
 
+TEST(Collocation, Index3DAEDerivatives) {
+  // Cartesian pendulum (index-3 DAE) with exact Hessians, and the angle ODE with defaults
+  check_transcription<3, 5, 1>(std::make_shared<PendulumIndex3OCP>(2.0, 6.0), RadauIIA5Tableau<Real>(), 3, 1.0e-6);
+  check_transcription<2, 5, 1>(std::make_shared<PendulumIndex3OCP>(2.0), RadauIIA3Tableau<Real>(), 4, 1.0e-6);
+  check_transcription<3, 2, 1>(std::make_shared<PendulumAngleOCP>(2.0), RadauIIA5Tableau<Real>(), 3, 1.0e-5);
+
+  // The exact Hessians of the index-3 system agree with the finite differences defaults
+  PendulumIndex3 p;
+  std::srand(3);
+  Eigen::Vector<Real, 5> const x{Eigen::Vector<Real, 5>::Random()}, xd{Eigen::Vector<Real, 5>::Random()};
+  Eigen::Vector<Real, 5> const l{Eigen::Vector<Real, 5>::Random()};
+  Eigen::Vector<Real, 1> const u(0.3);
+  using Base = Controlled<Real, 5, 1>;
+  EXPECT_LT(rel_error(p.HF_x_x(x, xd, u, 0.0, l), p.Base::HF_x_x(x, xd, u, 0.0, l)), 1.0e-8);
+  EXPECT_LT(rel_error(p.HF_x_x_dot(x, xd, u, 0.0, l), p.Base::HF_x_x_dot(x, xd, u, 0.0, l)), 1.0e-8);
+  EXPECT_LT(rel_error(p.HF_x_u(x, xd, u, 0.0, l), p.Base::HF_x_u(x, xd, u, 0.0, l)), 1.0e-8);
+}
+
 TEST(Collocation, DefaultsMatchExactDerivatives) {
   // The finite differences defaults of the problem must agree with the exact derivatives
   VanDerPolOCP exact(1.0);
@@ -159,8 +177,8 @@ TEST(Collocation, SimulatedGuessSatisfiesDynamics) {
     Collocation<Real, S, N, U> nlp(ocp, tableau, n);
     ASSERT_TRUE(nlp.simulate_guess(x0, [] (Real t) {return typename Ocp::VectorU(0.3*std::sin(t));}));
     VectorX const c{nlp.constraints(nlp.guess())};
-    // Implicit stages are solved by the integrator Newton up to its tolerance
-    EXPECT_LT(c.head(n*(N*S + N)).lpNorm<Eigen::Infinity>(), 1.0e-7) << tableau.name;
+    // Implicit stages are solved by the integrator Newton up to its tolerance (1e-12)
+    EXPECT_LT(c.head(n*(N*S + N)).lpNorm<Eigen::Infinity>(), 1.0e-11) << tableau.name;
     EXPECT_LT((nlp.x(nlp.guess(), 0) - x0).norm(), 1.0e-15);
   };
   check(std::make_shared<VanDerPolOCP>(2.0), RadauIIA5Tableau<Real>(), Eigen::Vector<Real, 2>(1.0, 0.0), 10);
