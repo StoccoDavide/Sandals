@@ -102,7 +102,7 @@ namespace Sandals {
 
     Real    m_projection_tolerance{EPSILON_HIGH}; /**< Projection tolerance \f$ \epsilon_{\text{proj}} \f$. */
     Real    m_newton_tolerance{EPSILON_HIGH};     /**< Tolerance of the Newton solvers for the stage equations. */
-    Integer m_max_projection_iterations{5};       /**< Maximum number of projection steps. */
+    Integer m_max_projection_iterations{50};      /**< Maximum number of projection steps (Gauss-Newton, linear convergence). */
     bool    m_projection{true};                   /**< Adaptive step mode boolean. */
 
   public:

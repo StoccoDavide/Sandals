@@ -18,6 +18,7 @@
 #include <IpTNLP.hpp>
 
 #include <Sandals/Collocation.hh>
+#include <Sandals/LeastSquaresShooting.hh>
 
 namespace Sandals
 {
@@ -32,25 +33,28 @@ namespace Sandals
   \*/
 
   /**
-  * \brief IPOPT interface for the collocation transcription of an optimal control problem.
+  * \brief IPOPT interface for a sparse nonlinear program (NLP).
   *
-  * Thin adapter exposing a Sandals::Collocation as an Ipopt::TNLP, with exact first and second
-  * derivatives. Infinite bounds are mapped to IPOPT's infinity (\f$ \pm 10^{19} \f$ by default).
-  * \tparam S The number of stages of the Runge-Kutta method.
-  * \tparam N The dimension of the ODE/DAE system.
-  * \tparam U The number of controls.
-  * \tparam M The number of invariants.
+  * Thin adapter exposing an NLP as an Ipopt::TNLP. The NLP class must provide (in double precision):
+  * - variables_number(), constraints_number(), jacobian_nnz(), hessian_nnz();
+  * - jacobian_rows(), jacobian_cols(), hessian_rows(), hessian_cols() (lower triangle);
+  * - bounds(z_lower, z_upper, c_lower, c_upper), with infinite bounds as infinity;
+  * - guess() and guess(z), the starting point and its setter;
+  * - objective(z), objective_gradient(z), constraints(z), jacobian_values(z), and
+  *   hessian_values(z, sigma, lambda).
+  * Sandals::Collocation and Sandals::LeastSquaresShooting are such classes. Infinite bounds are mapped
+  * to IPOPT's infinity (\f$ \pm 10^{19} \f$ by default).
+  * \tparam NLP The nonlinear program type.
   */
-  template <Integer S, Integer N, Integer U, Integer M = 0>
-  class IpoptCollocation : public Ipopt::TNLP
+  template <typename NLP>
+  class IpoptAdapter : public Ipopt::TNLP
   {
   public:
     using Real = Ipopt::Number; /**< Scalar number type (IPOPT is double precision). */
-    using NLP = Collocation<Real, S, N, U, M>; /**< Collocation transcription type. */
-    using VectorX = typename NLP::VectorX; /**< Dynamic vector type. */
+    using VectorX = Eigen::Vector<Real, Eigen::Dynamic>; /**< Dynamic vector type. */
 
   private:
-    NLP &   m_nlp;                       /**< Collocation transcription. */
+    NLP &   m_nlp;                       /**< Nonlinear program. */
     Real    m_infinity{1.0e19};          /**< Value used by IPOPT as infinity. */
     VectorX m_solution;                  /**< Primal solution. */
     VectorX m_multipliers;               /**< Constraints multipliers at the solution. */
@@ -77,9 +81,9 @@ namespace Sandals
   public:
     /**
     * Class constructor.
-    * \param[in] t_nlp The collocation transcription (its guess is used as starting point).
+    * \param[in] t_nlp The nonlinear program (its guess is used as starting point).
     */
-    IpoptCollocation(NLP & t_nlp) : m_nlp(t_nlp) {}
+    IpoptAdapter(NLP & t_nlp) : m_nlp(t_nlp) {}
 
     /** \param[in] t_infinity The value used by IPOPT as infinity (option nlp_upper_bound_inf). */
     void infinity(Real const t_infinity) {this->m_infinity = t_infinity;}
@@ -195,7 +199,7 @@ namespace Sandals
       this->m_objective = obj_value;
     }
 
-  }; // class IpoptCollocation
+  }; // class IpoptAdapter
 
   /**
   * \brief Options passed to IPOPT, grouped by type.
@@ -208,21 +212,21 @@ namespace Sandals
   };
 
   /**
-  * Solve the collocation transcription of an optimal control problem with IPOPT, starting from the
-  * current guess of the transcription. The default convergence tolerance is \f$ 10^{-12} \f$ (IPOPT
+  * Solve a nonlinear program (e.g., the collocation transcription of an optimal control problem, or
+  * the least-squares shooting formulation of a boundary value problem) with IPOPT, starting from the
+  * current guess of the nonlinear program. The default convergence tolerance is \f$ 10^{-12} \f$ (IPOPT
   * option tol), which can be overridden through the options. On return the guess is updated with the last iterate, so that
   * successive calls (e.g., on refined problems) can be warm-started.
-  * \param[in,out] nlp The collocation transcription.
+  * \param[in,out] nlp The nonlinear program.
   * \param[in] options IPOPT options.
   * \param[out] objective The objective value at the last iterate.
   * \return The IPOPT application return status.
   */
-  template <Integer S, Integer N, Integer U, Integer M>
-  Ipopt::ApplicationReturnStatus ipopt_solve(Collocation<double, S, N, U, M> & nlp, IpoptOptions const & options,
-    double & objective)
+  template <typename NLP>
+  Ipopt::ApplicationReturnStatus ipopt_solve(NLP & nlp, IpoptOptions const & options, double & objective)
   {
     #define CMD "Sandals::ipopt_solve(...): "
-    Ipopt::SmartPtr<IpoptCollocation<S, N, U, M>> tnlp{new IpoptCollocation<S, N, U, M>(nlp)};
+    Ipopt::SmartPtr<IpoptAdapter<NLP>> tnlp{new IpoptAdapter<NLP>(nlp)};
     Ipopt::SmartPtr<Ipopt::IpoptApplication> app{IpoptApplicationFactory()};
     app->RethrowNonIpoptException(false);
     // Tight default convergence tolerance, unless overridden by the options
