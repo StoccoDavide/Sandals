@@ -18,7 +18,7 @@
 #include <IpTNLP.hpp>
 
 #include <Sandals/Collocation.hh>
-#include <Sandals/LeastSquaresShooting.hh>
+#include <Sandals/MultipleShooting.hh>
 
 namespace Sandals
 {
@@ -42,7 +42,7 @@ namespace Sandals
   * - guess() and guess(z), the starting point and its setter;
   * - objective(z), objective_gradient(z), constraints(z), jacobian_values(z), and
   *   hessian_values(z, sigma, lambda).
-  * Sandals::Collocation and Sandals::LeastSquaresShooting are such classes. Infinite bounds are mapped
+  * Sandals::Collocation and Sandals::MultipleShooting are such classes. Infinite bounds are mapped
   * to IPOPT's infinity (\f$ \pm 10^{19} \f$ by default).
   * \tparam NLP The nonlinear program type.
   */
@@ -212,9 +212,8 @@ namespace Sandals
   };
 
   /**
-  * Solve a nonlinear program (e.g., the collocation transcription of an optimal control problem, or
-  * the least-squares shooting formulation of a boundary value problem) with IPOPT, starting from the
-  * current guess of the nonlinear program. The default convergence tolerance is \f$ 10^{-12} \f$ (IPOPT
+  * Solve a nonlinear program (e.g., the multiple shooting or collocation transcription of an optimal
+  * control problem) with IPOPT, starting from the current guess of the nonlinear program. The default convergence tolerance is \f$ 10^{-12} \f$ (IPOPT
   * option tol), which can be overridden through the options. On return the guess is updated with the last iterate, so that
   * successive calls (e.g., on refined problems) can be warm-started.
   * \param[in,out] nlp The nonlinear program.
