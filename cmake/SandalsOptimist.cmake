@@ -19,8 +19,8 @@ if(NOT TARGET Optimist::Optimist)
     Optimist
     # URL "https://github.com/StoccoDavide/Optimist/archive/refs/tags/${OPTIMIST_REQUIRED_VERSION}.tar.gz"
     GIT_REPOSITORY "https://github.com/StoccoDavide/Optimist"
-    GIT_SHALLOW    TRUE
-    GIT_TAG        main
+    # The tested commit of the main branch (C++20, Newton<Vector> with callbacks returning bool)
+    GIT_TAG        fc88316bbf75be2b29ca22e183c88a6c7a941360
   )
 
   option(OPTIMIST_BUILD_TESTS OFF)

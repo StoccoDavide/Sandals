@@ -63,11 +63,11 @@ namespace Sandals {
     using MatrixJ = Eigen::Matrix<Real, N*S, N*S>; /**< Templetized matrix type. */
     using VectorP = Eigen::Matrix<Real, N+M, 1>; /**< Templetized vector type. */
     using MatrixP = Eigen::Matrix<Real, N+M, N+M>; /**< Templetized matrix type. */
-    using NewtonX = Optimist::RootFinder::Newton<Real, N>; /**< Templetized Newton solver for ERK and DIRK methods. */
-    using NewtonK = Optimist::RootFinder::Newton<Real, N*S>; /**< Templetized Newton solver for IRK methods. */
     using VectorS = typename Tableau<Real, S>::Vector; /**< Templetized vector type. */
     using MatrixS = typename Tableau<Real, S>::Matrix; /**< Templetized matrix type. */
     using VectorN = typename Implicit<Real, N, M>::VectorF; /**< Templetized vector type. */
+    using NewtonX = Optimist::RootFinder::Newton<VectorN>; /**< Newton solver for ERK and DIRK methods. */
+    using NewtonK = Optimist::RootFinder::Newton<VectorK>; /**< Newton solver for IRK methods. */
     using MatrixN = typename Implicit<Real, N, M>::MatrixJF; /**< Templetized matrix type. */
     using VectorM = typename Implicit<Real, N, M>::VectorH; /**< Templetized vector type. */
     using MatrixM = typename Implicit<Real, N, M>::MatrixJH; /**< Templetized matrix type. */
@@ -920,9 +920,9 @@ namespace Sandals {
       for (Integer s{0}; s < S; ++s) {
         if (this->m_newtonX.solve(
             [this, s, &K, &x_old, t_old, h_old](VectorN const & K_fun, VectorN & fun)
-              {K.col(s) = K_fun; this->erk_implicit_function(s, x_old, t_old, h_old, K, fun);},
+              {K.col(s) = K_fun; this->erk_implicit_function(s, x_old, t_old, h_old, K, fun); return fun.allFinite();},
             [this, s, &K, &x_old, t_old, h_old](VectorN const & K_jac, MatrixN & jac)
-              {K.col(s) = K_jac; this->erk_implicit_jacobian(s, x_old, t_old, h_old, K, jac);},
+              {K.col(s) = K_jac; this->erk_implicit_jacobian(s, x_old, t_old, h_old, K, jac); return jac.allFinite();},
             K_ini, K_sol)) {
           K.col(s) = K_sol;
         } else {
@@ -1146,9 +1146,9 @@ namespace Sandals {
       // Check if the solver converged
       if (!this->m_newtonK.solve(
           [this, &x_old, t_old, h_old](VectorK const & K_fun, VectorK & fun)
-            {this->irk_function(x_old, t_old, h_old, K_fun, fun);},
+            {this->irk_function(x_old, t_old, h_old, K_fun, fun); return fun.allFinite();},
           [this, &x_old, t_old, h_old](VectorK const & K_jac, MatrixJ & jac)
-            {this->irk_jacobian(x_old, t_old, h_old, K_jac, jac);},
+            {this->irk_jacobian(x_old, t_old, h_old, K_jac, jac); return jac.allFinite();},
           K_ini, K_vec))
         {return false;}
 
@@ -1347,9 +1347,9 @@ namespace Sandals {
       for (Integer n{0}; n < S; ++n) {
         if (this->m_newtonX.solve(
             [this, n, &K, &x_old, t_old, h_old](VectorN const & K_fun, VectorN & fun)
-              {K.col(n) = K_fun; this->dirk_function(n, x_old, t_old, h_old, K, fun);},
+              {K.col(n) = K_fun; this->dirk_function(n, x_old, t_old, h_old, K, fun); return fun.allFinite();},
             [this, n, &K, &x_old, t_old, h_old](VectorN const & K_jac, MatrixN & jac)
-              {K.col(n) = K_jac; this->dirk_jacobian(n, x_old, t_old, h_old, K, jac);},
+              {K.col(n) = K_jac; this->dirk_jacobian(n, x_old, t_old, h_old, K, jac); return jac.allFinite();},
             K_ini, K_sol)) {
             K.col(n) = K_sol;
           } else {
