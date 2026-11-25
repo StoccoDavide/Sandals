@@ -303,6 +303,29 @@ TEST(DerivativeChecker, GerdtsEmergencyLanding) {
     0.0, "first-order");
 }
 
+TEST(DerivativeChecker, GerdtsDegenerateAndUnsmoothed) {
+  check<Radau, 2, 1, 0>(std::make_shared<Degenerate<2>>(), 4, 2, Eigen::Vector2d(0.0, 0.0), 0.3);
+  check<Radau, 2, 1, 1>(std::make_shared<Degenerate<1>>(), 4, 2, Eigen::Vector2d(0.0, 0.0), 0.3);
+  check<Radau, 4, 2, 0>(std::make_shared<KostyukovaUnsmoothed>(), 4, 1, Eigen::Vector4d(1.0, 2.0/3.0, 1.0, 0.0), 0.3);
+}
+
+TEST(DerivativeChecker, GerdtsHalfCar) {
+  // The first interval [0, 0.75] contains the pothole, where the road terms are active. As for the
+  // landing, the forward differences of the gradients have a round-off floor of ~1e-6 on second
+  // derivatives of order 1e-4: the Hessian is checked by the central differences (1e-6)
+  check<Radau, 10, 2, 2>(std::make_shared<HalfCar<2>>(), 4, 2, HalfCar<2>::initial_states(), 0.4, 0.0, "first-order");
+  check<Radau, 10, 2, 4>(std::make_shared<HalfCar<1>>(), 4, 2, HalfCar<1>::initial_states(), 0.4, 0.0, "first-order");
+}
+
+TEST(DerivativeChecker, GerdtsStokes) {
+  // The 3 x 3 grid (8 velocities, 4 pressures): the same code as on the finer grids, at a fraction of
+  // the cost of the dense finite differences
+  using Grid = StokesGrid<3>;
+  Eigen::Vector<Real, Grid::N> const rest(Eigen::Vector<Real, Grid::N>::Zero());
+  check<Radau, Grid::N, Grid::NV, 0>(std::make_shared<Stokes<3, 2>>(), 3, 1, rest, 0.3);
+  check<Radau, Grid::N, Grid::NV, Grid::NP>(std::make_shared<Stokes<3, 1>>(), 3, 1, rest, 0.3);
+}
+
 TEST(DerivativeChecker, GerdtsChemicalReactor) {
   check<Radau, 6, 2, 0>(std::make_shared<ChemicalReactor>(), 3, 2, ChemicalReactor::initial_states(), 1.0);
 }

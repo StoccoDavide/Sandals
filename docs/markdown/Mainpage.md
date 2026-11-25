@@ -1,6 +1,6 @@
 # Sandals
 
-`Sandals` is a library for the numerical integration of Ordinary Differential Equations (ODEs) and Differential Algebraic Equations (DAEs) written in C++17.
+`Sandals` is a library for the numerical integration of Ordinary Differential Equations (ODEs) and Differential Algebraic Equations (DAEs) written in C++20.
 
 ## Installation
 

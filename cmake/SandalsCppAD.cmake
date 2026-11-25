@@ -32,7 +32,7 @@ if(SANDALS_ENABLE_CPPAD)
       set(SANDALS_CPPAD_BUILD "${SANDALS_THIRD_PARTY_DIR}/cppad-build")
       execute_process(
         COMMAND ${CMAKE_COMMAND} -S ${cppad_SOURCE_DIR} -B ${SANDALS_CPPAD_BUILD}
-          -DCMAKE_BUILD_TYPE=Release -Dcppad_prefix=${SANDALS_CPPAD_PREFIX} -Dcppad_cxx_flags=-std=c++17
+          -DCMAKE_BUILD_TYPE=Release -Dcppad_prefix=${SANDALS_CPPAD_PREFIX} -Dcppad_cxx_flags=-std=c++20
         RESULT_VARIABLE SANDALS_CPPAD_RESULT OUTPUT_QUIET
       )
       if(SANDALS_CPPAD_RESULT EQUAL 0)

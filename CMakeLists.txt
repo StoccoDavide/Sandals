@@ -31,7 +31,7 @@ endif()
 message(STATUS "Sandals: version ${SANDALS_FULL_VERSION}")
 
 set(SANDALS_THIRD_PARTY_DIR "${CMAKE_CURRENT_SOURCE_DIR}/third_party")
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 
 if(NOT CMAKE_INSTALL_PREFIX)
@@ -48,6 +48,7 @@ add_library(Sandals INTERFACE)
 add_library(Sandals::Sandals ALIAS Sandals)
 
 target_link_libraries(Sandals INTERFACE Eigen3::Eigen Optimist::Optimist)
+target_compile_features(Sandals INTERFACE cxx_std_20)
 
 target_include_directories(Sandals INTERFACE
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
