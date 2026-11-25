@@ -14,6 +14,9 @@
 #define SANDALS_IPOPT_HH
 
 // This header is optional and requires IPOPT (https://coin-or.github.io/Ipopt) to be available.
+#include <type_traits>
+#include <utility>
+
 #include <IpIpoptApplication.hpp>
 #include <IpTNLP.hpp>
 
@@ -59,6 +62,13 @@ namespace Sandals
   * to IPOPT's infinity (\f$ \pm 10^{19} \f$ by default).
   * \tparam NLP The nonlinear program type.
   */
+  /** True if the NLP provides scaling factors, scaled() and scaling(z_scale, c_scale). */
+  template <typename NLP, typename = void>
+  struct HasScaling : std::false_type {};
+
+  template <typename NLP>
+  struct HasScaling<NLP, std::void_t<decltype(std::declval<NLP const &>().scaled())>> : std::true_type {};
+
   template <typename NLP>
   class IpoptAdapter : public Ipopt::TNLP
   {
@@ -144,6 +154,25 @@ namespace Sandals
       auto clip = [inf] (Real const v) {return std::isinf(v) ? (v > 0 ? inf : -inf) : v;};
       for (Ipopt::Index i{0}; i < n; ++i) {x_l[i] = clip(z_l(i)); x_u[i] = clip(z_u(i));}
       for (Ipopt::Index i{0}; i < m; ++i) {g_l[i] = clip(c_l(i)); g_u[i] = clip(c_u(i));}
+      return true;
+    }
+
+    bool get_scaling_parameters(Real & obj_scaling, bool & use_x_scaling, Ipopt::Index n, Real * x_scaling,
+      bool & use_g_scaling, Ipopt::Index m, Real * g_scaling) override
+    {
+      obj_scaling = 1.0;
+      use_x_scaling = use_g_scaling = false;
+      if constexpr (HasScaling<NLP>::value) {
+        VectorX z_scale, c_scale;
+        this->m_nlp.scaling(z_scale, c_scale);
+        Eigen::Map<VectorX>(x_scaling, n) = z_scale;
+        Eigen::Map<VectorX>(g_scaling, m) = c_scale;
+        use_x_scaling = use_g_scaling = true;
+        // The objective as IPOPT's gradient-based scaling would, on the scaled variables: its largest
+        // gradient component at the starting point is brought to at most one
+        Real const gradient{this->m_nlp.objective_gradient(this->m_nlp.guess()).cwiseQuotient(z_scale).template lpNorm<Eigen::Infinity>()};
+        if (std::isfinite(gradient) && gradient > 1.0) {obj_scaling = 1.0/gradient;}
+      }
       return true;
     }
 
@@ -245,11 +274,13 @@ namespace Sandals
   * \param[in] options IPOPT options.
   * \param[out] objective The objective value at the last iterate.
   * \param[out] history If not null, the progress of the iterations.
+  * \param[out] multipliers If not null, the constraints multipliers at the last iterate (with the
+  * sign convention of IPOPT, i.e., of the Lagrangian \f$ f + \boldsymbol{\lambda}^\top \mathbf{c} \f$).
   * \return The IPOPT application return status.
   */
   template <typename NLP>
   Ipopt::ApplicationReturnStatus ipopt_solve(NLP & nlp, IpoptOptions const & options, double & objective,
-    std::vector<IpoptIteration> * history = nullptr)
+    std::vector<IpoptIteration> * history = nullptr, Eigen::Vector<double, Eigen::Dynamic> * multipliers = nullptr)
   {
     #define CMD "Sandals::ipopt_solve(...): "
     Ipopt::SmartPtr<IpoptAdapter<NLP>> tnlp{new IpoptAdapter<NLP>(nlp)};
@@ -257,6 +288,12 @@ namespace Sandals
     app->RethrowNonIpoptException(false);
     // Tight default convergence tolerance, unless overridden by the options
     SANDALS_ASSERT(app->Options()->SetNumericValue("tol", 1.0e-12), CMD "invalid option tol.");
+    // The NLP's own scaling (e.g., nominal magnitudes of the states), unless chosen otherwise
+    if constexpr (HasScaling<NLP>::value) {
+      if (nlp.scaled() && options.strings.count("nlp_scaling_method") == 0) {
+        SANDALS_ASSERT(app->Options()->SetStringValue("nlp_scaling_method", "user-scaling"), CMD "invalid option nlp_scaling_method.");
+      }
+    }
     for (auto const & [name, value] : options.strings) {
       SANDALS_ASSERT(app->Options()->SetStringValue(name, value), CMD "invalid option " << name << ".");
     }
@@ -272,6 +309,7 @@ namespace Sandals
     status = app->OptimizeTNLP(Ipopt::SmartPtr<Ipopt::TNLP>(GetRawPtr(tnlp)));
     objective = tnlp->objective();
     if (history != nullptr) {*history = tnlp->history();}
+    if (multipliers != nullptr) {*multipliers = tnlp->multipliers();}
     if (tnlp->solution().size() == nlp.variables_number()) {nlp.guess(tnlp->solution());}
     return status;
   }

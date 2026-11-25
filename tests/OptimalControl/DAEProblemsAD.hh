@@ -131,9 +131,10 @@ namespace TestOCP
     using VectorX = typename Base::VectorX;
 
     Real g{9.81};
-    Real y1_ini{1.0}; // initial horizontal position (different from 1 for inconsistent initial data)
+    Real y1_ini{1.0}; // initial position (y1_ini^2 + y2_ini^2 != 1 for inconsistent initial data)
+    Real y2_ini{0.0};
 
-    GerdtsPendulum() : Base("GerdtsPendulumIndex" + std::to_string(Index), 0.0, 3.0) {}
+    GerdtsPendulum(Real const t_end = 3.0) : Base("GerdtsPendulumIndex" + std::to_string(Index), 0.0, t_end) {}
 
     // The multiplier y5: a state for Index > 0, eliminated for Index = 0
     template <typename T>
@@ -178,7 +179,8 @@ namespace TestOCP
     {
       BoundaryVector<T> b;
       b(0) = y_ini(0) - y1_ini;
-      for (Integer i{1}; i < Sizes::N; ++i) {b(i) = y_ini(i);} // at rest, and y5(0) = 0 (gauge)
+      b(1) = y_ini(1) - y2_ini;
+      for (Integer i{2}; i < Sizes::N; ++i) {b(i) = y_ini(i);} // at rest, and y5(0) = 0 (gauge)
       b(Sizes::N)     = y_end(0);
       b(Sizes::N + 1) = y_end(2);
       b(Sizes::N + 2) = y_end(1);                               // y2(3) <= 0 (bottom)

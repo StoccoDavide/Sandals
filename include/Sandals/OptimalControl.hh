@@ -84,6 +84,8 @@ namespace Sandals
     VectorF     m_x_upper{VectorF::Constant(INFTY)};  /**< States upper bounds. */
     VectorU     m_u_lower{VectorU::Constant(-INFTY)}; /**< Controls lower bounds. */
     VectorU     m_u_upper{VectorU::Constant(INFTY)};  /**< Controls upper bounds. */
+    VectorF     m_x_nominal{VectorF::Ones()};         /**< Typical magnitudes of the states. */
+    VectorU     m_u_nominal{VectorU::Ones()};         /**< Typical magnitudes of the controls. */
 
     static VectorF head(VectorB const & z) {return z.template head<N>();}
     static VectorF tail(VectorB const & z) {return z.template tail<N>();}
@@ -146,6 +148,27 @@ namespace Sandals
     * \param[in] t_upper The controls upper bounds.
     */
     void u_bounds(VectorU const & t_lower, VectorU const & t_upper) {this->m_u_lower = t_lower; this->m_u_upper = t_upper;}
+
+    /**
+    * Set the typical magnitudes of the states and of the controls (default one). The transcriptions
+    * scale the variables and the constraints by them, so that the solver works on quantities of order
+    * one, and its tolerances are relative to these magnitudes.
+    * \param[in] t_x_nominal The states magnitudes (positive).
+    * \param[in] t_u_nominal The controls magnitudes (positive).
+    */
+    void nominal(VectorF const & t_x_nominal, VectorU const & t_u_nominal)
+    {
+      SANDALS_ASSERT((t_x_nominal.array() > 0.0).all() && (t_u_nominal.array() > 0.0).all(),
+        "Sandals::OptimalControlProblem::nominal(...): the magnitudes must be positive.");
+      this->m_x_nominal = t_x_nominal;
+      this->m_u_nominal = t_u_nominal;
+    }
+
+    /** \return The typical magnitudes of the states. */
+    VectorF const & x_nominal() const {return this->m_x_nominal;}
+
+    /** \return The typical magnitudes of the controls. */
+    VectorU const & u_nominal() const {return this->m_u_nominal;}
 
     /*\
      |  Mayer term

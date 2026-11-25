@@ -345,6 +345,10 @@ namespace Sandals
       MatrixKL G_l;
       step.K.setZero();
 
+      // Converged when the residual vanishes, or when the Newton step is negligible with respect to
+      // the stage states (the residual alone cannot tell: its rounding floor grows with the magnitude
+      // of the terms of the model, and with the index). The refinement step below then takes the
+      // stages to machine precision.
       bool converged{false};
       for (Integer iteration{0}; iteration < this->m_max_newton_iterations; ++iteration) {
         this->stage_system(step, G, G_K, G_l);
@@ -357,6 +361,11 @@ namespace Sandals
         VectorK const dK{step.lu.solve(-G)};
         if (!dK.allFinite()) {return false;}
         Eigen::Map<VectorK>(step.K.data()) += dK;
+        if (this->negligible(step, dK)) {
+          this->stage_system(step, G, G_K, G_l); // at the converged stages, for the refinement step
+          converged = G.allFinite();
+          break;
+        }
       }
       if (!converged) {return false;}
 
@@ -374,6 +383,17 @@ namespace Sandals
       step.phi_y = MatrixAA::Identity();
       for (Integer i{0}; i < S; ++i) {
         step.phi_y += this->m_tableau.b(i) * step.K_l.template block<A, A>(i*A, 0);
+      }
+      return true;
+    }
+
+    /** True if the Newton step is negligible (1e-10 relative) with respect to every stage state. */
+    bool negligible(Substep const & step, VectorK const & dK) const
+    {
+      Eigen::Map<MatrixK const> const step_K(dK.data());
+      for (Integer i{0}; i < S; ++i) {
+        auto const scale{Real(1.0) + step.y.array().abs() + step.K.col(i).array().abs()};
+        if ((step_K.col(i).array().abs() > Real(1.0e-10) * scale).any()) {return false;}
       }
       return true;
     }

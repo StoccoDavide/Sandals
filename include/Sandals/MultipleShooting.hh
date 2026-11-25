@@ -211,6 +211,35 @@ namespace Sandals
     /** \return The index of the states on which the initial boundary conditions act. */
     Integer boundary_start_index() const {return M > 0 ? this->X0_index() : this->x_index(0);}
 
+    /** \return True if the problem has nominal magnitudes other than one (then the NLP is scaled). */
+    bool scaled() const
+    {
+      return !(this->m_problem->x_nominal().array() == 1.0).all() || !(this->m_problem->u_nominal().array() == 1.0).all();
+    }
+
+    /**
+    * Scaling factors of the variables and of the constraints (the solver works on the scaled ones):
+    * the states and the controls by the inverse of their nominal magnitudes, and the continuity (and
+    * node least squares) rows, which are differences of states, as the states. The multipliers of the
+    * node least squares, the invariants, the boundary conditions and the path constraints are not scaled.
+    * \param[out] z_scale The variables scaling factors.
+    * \param[out] c_scale The constraints scaling factors.
+    */
+    void scaling(VectorX & z_scale, VectorX & c_scale) const
+    {
+      VectorF const x_scale{this->m_problem->x_nominal().cwiseInverse()};
+      VectorU const u_scale{this->m_problem->u_nominal().cwiseInverse()};
+      z_scale = VectorX::Ones(this->variables_number());
+      c_scale = VectorX::Ones(this->constraints_number());
+      for (Integer k{0}; k <= this->m_m; ++k) {z_scale.template segment<N>(this->x_index(k)) = x_scale;}
+      for (Integer k{0}; k < this->m_m; ++k) {z_scale.template segment<U>(this->u_index(k)) = u_scale;}
+      for (Integer k{1}; k <= this->m_m; ++k) {c_scale.template segment<N>(this->continuity_row(k)) = x_scale;}
+      if constexpr (M > 0) {
+        z_scale.template segment<N>(this->X0_index()) = x_scale;
+        c_scale.template segment<N>(this->continuity_row(0)) = x_scale;
+      }
+    }
+
     /** \param[in] z NLP variables. \param[in] k Node index. \return The states \f$ \mathbf{x}_k \f$. */
     VectorF x(VectorX const & z, Integer const k) const {return z.template segment<N>(this->x_index(k));}
 
