@@ -2002,12 +2002,10 @@ namespace Sandals {
       x_projected = x;
       if (H > Integer(0)) {
 
-        VectorM h;
-        MatrixM Jh_x;
-        VectorX b(X+H), x_step(X+H);
-        MatrixX A(X+H, X+H);
-        A.setZero();
-        A.block(0, 0, X, X) = MatrixX::Identity(X+H, X+H);
+        VectorX h(H), b(X+H), x_step(X+H);
+        MatrixX Jh_x(H, X);
+        MatrixX A(MatrixX::Zero(X+H, X+H));
+        A.block(0, 0, X, X) = MatrixX::Identity(X, X);
         Eigen::FullPivLU<MatrixX> lu;
         for (Integer k{0}; k < this->m_max_projection_iterations; ++k) {
 
@@ -2018,13 +2016,11 @@ namespace Sandals {
            \ Jh_x    0 / \ lambda /   \    -h     /
           */
 
-          // Evaluate the invariants vector and its Jacobian
-          h    = this->m_system->h(x_projected, t);
-          Jh_x = this->m_system->Jh_x(x_projected, t);
-
-          // Select only the projected invariants
-          h    = h(projected_invariants);
-          Jh_x = Jh_x(projected_invariants, projected_equations);
+          // Evaluate the projected invariants and their Jacobian with respect to the projected states
+          VectorM const h_all{this->m_system->h(x_projected, t)};
+          MatrixM const Jh_x_all{this->m_system->Jh_x(x_projected, t)};
+          h    = h_all(projected_invariants);
+          Jh_x = Jh_x_all(projected_invariants, projected_equations);
 
           // Check if the solution is found
           if (h.norm() < this->m_projection_tolerance) {return true;}
@@ -2038,13 +2034,13 @@ namespace Sandals {
           // Compute the solution of the linear system
           lu.compute(A);
           SANDALS_ASSERT(lu.rank() == X+H, CMD "singular Jacobian detected.");
-          x_step = this->m_lu.solve(b);
+          x_step = lu.solve(b);
 
           // Check if the step is too small
           if (x_step.norm() < this->m_projection_tolerance * this->m_projection_tolerance) {return false;}
 
-          // Update the solution
-          x_projected(projected_equations).noalias() += x_step;
+          // Update the projected states (the tail of the step holds the multipliers)
+          x_projected(projected_equations) += x_step.head(X);
         }
         if (this->m_verbose) {SANDALS_WARNING(CMD "maximum number of iterations reached.");}
         return false;

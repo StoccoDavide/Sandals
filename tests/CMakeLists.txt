@@ -35,6 +35,11 @@ add_executable(test_sensitivity ${SENSITIVITY_TESTS})
 target_link_libraries(test_sensitivity PRIVATE Sandals GTest::gtest)
 add_test(NAME test_sensitivity COMMAND test_sensitivity)
 
+file(GLOB_RECURSE PROJECTION_TESTS "${CMAKE_CURRENT_SOURCE_DIR}/Projection/test_*.cc")
+add_executable(test_projection ${PROJECTION_TESTS})
+target_link_libraries(test_projection PRIVATE Sandals GTest::gtest)
+add_test(NAME test_projection COMMAND test_projection)
+
 file(GLOB_RECURSE HESSIAN_TESTS "${CMAKE_CURRENT_SOURCE_DIR}/Hessian/test_*.cc")
 add_executable(test_hessian ${HESSIAN_TESTS})
 target_link_libraries(test_hessian PRIVATE Sandals GTest::gtest)
