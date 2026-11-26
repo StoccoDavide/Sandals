@@ -10,12 +10,15 @@
 
 // Application examples of M. Gerdts, Optimal Control of ODEs and DAEs (2nd edition, De Gruyter, 2023):
 // the chemical reactor, the emergency landing (free and on a prescribed path) and the Stokes flow,
-// solved by multiple shooting with IPOPT (tolerance 1e-12).
+// solved by multiple shooting with IPOPT (tolerance 1e-12), and the Arenstorf orbit, integrated with
+// fixed and adaptive steps.
 
 #include <gtest/gtest.h>
 
 #include "GerdtsProblemsAD.hh"
 #include "Gerdts/Shooting.hh"
+#include "Sandals/RungeKutta/RK4.hh"
+#include "Sandals/RungeKutta/Fehlberg45.hh"
 
 using namespace TestOCP;
 
@@ -66,6 +69,17 @@ TEST(GerdtsApplications, EmergencyLanding) {
   }
   EXPECT_NEAR(q_max, EmergencyLanding::Q_MAX, 1.0e-6*EmergencyLanding::Q_MAX);
   EXPECT_NEAR(t_max, 0.185, 0.01);
+
+  // Without the dynamic pressure constraint (Figure 1.5 of the book): a longer range, through a
+  // pressure peak well above the limit
+  auto unlimited = std::make_shared<EmergencyLanding>();
+  unlimited->pressure_limit = false;
+  Shooting<7, 2, 0> free_landing(unlimited, n);
+  ASSERT_TRUE(free_landing.solve(EmergencyLanding::initial_states(700.0), [] (Real) {return Eigen::Vector2d(0.1, 0.0);}));
+  EXPECT_LT(free_landing.J, landing.J - 5.0e-3);
+  Real q_peak{0.0};
+  for (Integer k{0}; k <= n; ++k) {q_peak = std::max(q_peak, EmergencyLanding::pressure(free_landing.x(k)(0), free_landing.x(k)(3)));}
+  EXPECT_GT(q_peak, 1.3*EmergencyLanding::Q_MAX);
 }
 
 /*\
@@ -142,6 +156,58 @@ TEST(GerdtsApplications, Stokes) {
     EXPECT_LT(index2->divergence<Real>(v).lpNorm<Eigen::Infinity>(), 1.0e-10);
     EXPECT_LT((v - s1.x(k).head<Grid::NV>()).lpNorm<Eigen::Infinity>(), 1.0e-8);
   }
+}
+
+/*\
+ |  Example 4.4.1: the Arenstorf orbit (an ODE). The classic Runge-Kutta method with fixed steps follows
+ |  the orbit only with N = 10000 steps (largest position error along the orbit 0.06, against 148 and
+ |  7.9 with 100 and 1000 steps), while the step-size control of the embedded Fehlberg 4(5) method
+ |  closes it with a few hundred steps, its error decreasing with the tolerance.
+\*/
+
+TEST(GerdtsApplications, ArenstorfOrbit) {
+  using Model = ArenstorfModel;
+  using Time = Eigen::Vector<Real, Eigen::Dynamic>;
+  Eigen::Vector4d const start{Model::initial_states()};
+  RK4<Real, 4, 0> rk4(Model::system());
+
+  // Fixed steps, against a reference with 160000 steps on 100 common points
+  Integer const fine{160000};
+  Solution<Real, 4, 0> reference;
+  ASSERT_TRUE(rk4.solve(Time::LinSpaced(fine + 1, 0.0, Model::PERIOD), start, reference));
+  auto const position_error = [&] (Integer const N) {
+    Solution<Real, 4, 0> solution;
+    EXPECT_TRUE(rk4.solve(Time::LinSpaced(N + 1, 0.0, Model::PERIOD), start, solution));
+    Real error{0.0};
+    for (Integer k{0}; k <= 100; ++k) {
+      error = std::max(error, (solution.x.col(k*N/100).head<2>() - reference.x.col(k*fine/100).head<2>()).norm());
+    }
+    return error;
+  };
+  EXPECT_GT(position_error(100), 10.0);
+  EXPECT_GT(position_error(1000), 1.0);
+  EXPECT_LT(position_error(10000), 0.1);
+
+  // Step-size control: the orbit closes (the initial states return after a period), with a small first
+  // step (the steps range from 1/100 to 100 times the first one)
+  auto const adaptive = [&] (Real const tolerance, Integer & steps) {
+    Fehlberg45<Real, 4, 0> fehlberg(Model::system());
+    fehlberg.absolute_tolerance(tolerance);
+    fehlberg.relative_tolerance(tolerance);
+    Solution<Real, 4, 0> solution;
+    EXPECT_TRUE(fehlberg.adaptive_solve(Eigen::Vector3d(0.0, 1.0e-3, Model::PERIOD), start, solution));
+    steps = solution.t.size() - 1;
+    EXPECT_NEAR(solution.t(steps), Model::PERIOD, 1.0e-12);
+    return (solution.x.col(steps) - start).norm();
+  };
+  Integer steps_6, steps_8, steps_10;
+  Real const error_6{adaptive(1.0e-6, steps_6)}, error_8{adaptive(1.0e-8, steps_8)}, error_10{adaptive(1.0e-10, steps_10)};
+  EXPECT_LT(error_8, 0.1*error_6);
+  EXPECT_LT(error_10, 0.1*error_8);
+  EXPECT_LT(error_8, 1.0e-2);
+  EXPECT_LT(steps_8, 500);    // about 6 x 400 evaluations, against 40000 for RK4 with N = 10000
+  EXPECT_LT(steps_6, steps_8);
+  EXPECT_LT(steps_8, steps_10);
 }
 
 int main(int argc, char **argv) {

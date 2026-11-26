@@ -18,6 +18,8 @@
 #include "Gerdts/Shooting.hh"
 #include "Sandals/ShootingInterval.hh"
 #include "Sandals/RungeKutta/RadauIIA3.hh"
+#include "Sandals/RungeKutta/RK4.hh"
+#include "Sandals/RungeKutta/GaussLegendre4.hh"
 
 using namespace TestOCP;
 
@@ -243,6 +245,82 @@ TEST(GerdtsMechanical, PendulumIntegrationOrder) {
   // Table 4.2, N = 320: velocities 0.767e-4, multiplier 0.872e-1
   EXPECT_NEAR(e3_fine(1), 0.767e-4, 0.03*0.767e-4);
   EXPECT_NEAR(e3_fine(2), 0.872e-1, 0.05*0.872e-1);
+}
+
+/*\
+ |  Only stiffly accurate methods (Radau IIA) integrate DAEs: the transcription refuses the others on a
+ |  system with algebraic states, and accepts them on an ODE (index 0, here with invariants).
+\*/
+
+TEST(GerdtsMechanical, DAEsNeedStifflyAccurateMethods) {
+  Eigen::Vector<Real, 1> const zero(Eigen::Vector<Real, 1>::Zero());
+  Eigen::Vector<Real, 5> const start{(Eigen::Vector<Real, 5>() << 1.0, 0.0, 0.0, 0.0, 0.0).finished()};
+  GerdtsPendulum<2> const dae(1.0);
+  GerdtsPendulum<0> const ode(1.0);
+  ShootingInterval<Real, 4, 5, 1, 1> rk4(dae, RK4Tableau<Real>(), 0.0, 0.1, 1);
+  ShootingInterval<Real, 2, 5, 1, 1> gauss(dae, GaussLegendre4Tableau<Real>(), 0.0, 0.1, 1);
+  ShootingInterval<Real, 3, 5, 1, 1> radau(dae, RadauIIA5Tableau<Real>(), 0.0, 0.1, 1);
+  ShootingInterval<Real, 4, 4, 1, 2> explicit_ode(ode, RK4Tableau<Real>(), 0.0, 0.1, 1);
+  EXPECT_THROW(rk4.integrate(start, zero), std::runtime_error);
+  EXPECT_THROW(gauss.integrate(start, zero), std::runtime_error);
+  EXPECT_TRUE(radau.integrate(start, zero));
+  EXPECT_TRUE(explicit_ode.integrate(start.head<4>(), zero));
+}
+
+/*\
+ |  Example 1.1.20: docking of two bodies, a DAE whose index changes from one (free flight, lambda = 0)
+ |  to three (docked) at tc = 2 pi. The bodies meet with the same position and velocity; the consistent
+ |  contact forces are those of the book, lambda(tc) = -m1 m2/((m1 + m2) r^2) |v1|^2 p1(tc); the docked
+ |  bodies keep their angular momentum (central force); index 3, 2 and 1 (with invariants) agree.
+\*/
+
+// The states on the nodes of a simulation from the given states (no optimization)
+template <Integer Phase, Integer M>
+std::vector<Eigen::Vector<Real, 10>> simulate_docking(Eigen::Vector<Real, 10> const & start, Integer const n)
+{
+  auto problem = std::make_shared<Docking<Phase>>();
+  problem->start = start;
+  Shooting<10, 1, M> s(problem, n, 2);
+  EXPECT_TRUE(s.nlp.simulate_guess(start, [] (Real) {return Eigen::Vector<Real, 1>::Zero().eval();}));
+  std::vector<Eigen::Vector<Real, 10>> x;
+  for (Integer k{0}; k <= n; ++k) {x.push_back(s.x(k));}
+  return x;
+}
+
+TEST(GerdtsMechanical, Docking) {
+  using Model = DockingModel;
+  Integer const n{40};
+
+  // Free flight: the bodies meet at (r, 0) with the same velocity
+  Eigen::Vector<Real, 10> const docking{simulate_docking<0, 0>(Model::initial_states(), n).back()};
+  EXPECT_NEAR((docking.segment<2>(0) - docking.segment<2>(2)).norm(), 0.0, 1.0e-7);
+  EXPECT_NEAR((docking.segment<2>(4) - docking.segment<2>(6)).norm(), 0.0, 1.0e-7);
+  EXPECT_NEAR((docking.segment<2>(0) - Eigen::Vector2d(Model::R, 0.0)).norm(), 0.0, 1.0e-7);
+
+  // The consistent contact forces of the book
+  Eigen::Vector<Real, 10> start{docking};
+  start.tail<2>() = Model::coupling(docking);
+  EXPECT_NEAR(start(8), -Model::M1*Model::M2/((Model::M1 + Model::M2)*Model::R*Model::R)*Model::V*Model::V*Model::R, 1.0e-7);
+  EXPECT_NEAR((start - Model::docked_states()).norm(), 0.0, 1.0e-7);
+
+  // Docked motion in the three formulations
+  auto const index3{simulate_docking<3, 0>(start, n)};
+  auto const index2{simulate_docking<2, 2>(start, n)};
+  auto const index1{simulate_docking<1, 4>(start, n)};
+  Real const L{Model::angular_momentum(start)};
+  for (Integer k{1}; k <= n; ++k) {
+    for (auto const * x : {&index3[k], &index2[k], &index1[k]}) {
+      EXPECT_NEAR(Model::angular_momentum(*x), L, 1.0e-8);
+    }
+    EXPECT_NEAR((index3[k].segment<2>(0) - index3[k].segment<2>(2)).norm(), 0.0, 1.0e-7);
+    EXPECT_NEAR((index2[k].segment<2>(0) - index2[k].segment<2>(2)).norm(), 0.0, 1.0e-12);
+    EXPECT_NEAR((index1[k].segment<2>(0) - index1[k].segment<2>(2)).norm(), 0.0, 1.0e-12);
+    EXPECT_NEAR((index1[k].segment<2>(4) - index1[k].segment<2>(6)).norm(), 0.0, 1.0e-12);
+    EXPECT_NEAR((index2[k].tail<2>() - Model::coupling(index2[k])).norm(), 0.0, 1.0e-10);
+    EXPECT_NEAR((index1[k].tail<2>() - Model::coupling(index1[k])).norm(), 0.0, 1.0e-10);
+    EXPECT_NEAR((index3[k].tail<2>() - Model::coupling(index3[k])).norm(), 0.0, 1.0e-4);
+    EXPECT_NEAR((index3[k].head<4>() - index1[k].head<4>()).norm(), 0.0, 1.0e-6);
+  }
 }
 
 int main(int argc, char **argv) {

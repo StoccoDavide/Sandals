@@ -1575,7 +1575,6 @@ namespace Sandals {
             k += 2;
             SANDALS_ASSERT(k < max_k, CMD "in " << this->m_tableau.name << " solver, at t = " <<
               t_tmp << ", integration failed with h = " << h_tmp << ", aborting.");
-            return false;
 
             // Otherwise, try again with a smaller step
             if (this->m_verbose) {SANDALS_WARNING(CMD "in " << this->m_tableau.name << " solver, " <<
@@ -1801,6 +1800,15 @@ namespace Sandals {
         // Integrate system
         if (!this->template advance<Propagate>(x_old_step, t_step, h_step, x_new_step, h_new_step, Jx_step))
         {return false;}
+
+        // Reject the step if the estimated local error exceeds the tolerance (the suggested step is
+        // then smaller than the safety factor times the current one), and retry with the suggested
+        // step, unless the step is already the smallest allowed
+        if (this->m_adaptive && this->m_tableau.is_embedded &&
+            h_new_step < this->m_safety_factor*h_step && h_step > h_min) {
+          h_step = std::max(h_new_step, h_min);
+          continue;
+        }
 
         // Propagate the derivative of the solution with respect to the initial states
         if constexpr (Propagate) {Jx = Jx_step * Jx;}

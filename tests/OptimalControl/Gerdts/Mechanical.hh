@@ -329,6 +329,115 @@ namespace TestOCP
     }
   };
 
+  /*\
+   |  Docking of two bodies in the plane (Example 1.1.20), a DAE whose index changes in time. Body 1
+   |  (mass m1) moves on the circle of radius r at speed v, pulled by the force -m1 |v1|^2 p1/r^2 (p1, v1
+   |  its position and velocity); body 2 (mass m2) moves on a straight line, and they meet at (r, 0) with
+   |  the same velocity at tc = 2 pi r/v. From then on they stick together, coupled by the forces lambda:
+   |    m1 p1'' = -m1 |v1|^2 p1/r^2 - lambda,  m2 p2'' = lambda,  0 = p1 - p2   (index 3, t >= tc)
+   |  and before docking lambda = 0 (index 1). The coupled bodies move under a central force, so their
+   |  angular momentum is conserved, and the consistent forces at docking are those of the book,
+   |    lambda(tc) = -m1 m2/((m1 + m2) r^2) |v1(tc)|^2 p1(tc).
+   |  The book gives no data: m1 = 1, m2 = 1/2, r = 1, v = 1 here (r = 1 makes its tc = 2 pi/v).
+   |  The template parameter Phase is 0 before docking, and the index (3, 2 or 1) of the coupled motion
+   |  after it; index reduction: 0 = v1 - v2 (index 2, invariants p1 - p2), 0 = v1' - v2' (index 1,
+   |  invariants p1 - p2 and v1 - v2). States (p1, p2, v1, v2, lambda); the transcription needs a
+   |  control: a dummy one, fixed to zero by its bounds.
+  \*/
+
+  struct DockingModel
+  {
+    static constexpr Real M1{1.0}, M2{0.5}, R{1.0}, V{1.0};
+    static constexpr Real TC{2.0*M_PI*R/V};
+
+    // The force pulling body 1 on its circle
+    template <typename T>
+    static Eigen::Vector<T, 2> pull(Eigen::Vector<T, 2> const & p1, Eigen::Vector<T, 2> const & v1)
+    {return -M1*v1.squaredNorm()/(R*R)*p1;}
+
+    // The consistent coupling forces for the states (p1, p2, v1, v2)
+    static Eigen::Vector2d coupling(Eigen::Vector<Real, 10> const & x)
+    {return M2/(M1 + M2)*pull<Real>(x.segment<2>(0), x.segment<2>(4));}
+
+    // The angular momentum of the two bodies
+    static Real angular_momentum(Eigen::Vector<Real, 10> const & x)
+    {return M1*(x(0)*x(5) - x(1)*x(4)) + M2*(x(2)*x(7) - x(3)*x(6));}
+
+    // The states at the docking time tc: both bodies at (r, 0) with the velocity (0, v), and the
+    // consistent contact forces
+    static Eigen::Vector<Real, 10> docked_states()
+    {
+      Eigen::Vector<Real, 10> x;
+      x << R, 0.0, R, 0.0, 0.0, V, 0.0, V, 0.0, 0.0;
+      x.tail<2>() = coupling(x);
+      return x;
+    }
+
+    // The states at t = 0: body 1 at (r, 0), body 2 on its line, a circumference behind
+    static Eigen::Vector<Real, 10> initial_states()
+    {
+      Eigen::Vector<Real, 10> x(Eigen::Vector<Real, 10>::Zero());
+      x << R, 0.0, R, -V*TC, 0.0, V, 0.0, V, 0.0, 0.0;
+      return x;
+    }
+  };
+
+  template <Integer Phase>
+  class Docking : public OptimalControlProblemAD<Docking<Phase>, 10, 1, Phase == 0 ? 0 : 2*(3 - Phase), 10>,
+    public DockingModel
+  {
+    static_assert(Phase >= 0 && Phase <= 3, "Docking: phase 0 (free flight) or index 1, 2, 3 (docked).");
+    using Base = OptimalControlProblemAD<Docking<Phase>, 10, 1, Phase == 0 ? 0 : 2*(3 - Phase), 10>;
+
+  public:
+    template <typename T> using StateVector     = typename Base::template StateVector<T>;
+    template <typename T> using ControlVector   = typename Base::template ControlVector<T>;
+    template <typename T> using InvariantVector = typename Base::template InvariantVector<T>;
+    template <typename T> using BoundaryVector  = typename Base::template BoundaryVector<T>;
+    using VectorF = typename Base::VectorF;
+    using VectorU = typename Base::VectorU;
+
+    VectorF start; // the states at the beginning of the phase (with consistent forces)
+
+    // Free flight on [0, tc], or docked motion on [tc, tc + duration]
+    explicit Docking(Real const duration = 2.0*M_PI)
+      : Base("DockingPhase" + std::to_string(Phase), Phase == 0 ? 0.0 : TC, Phase == 0 ? TC : TC + duration),
+        start(initial_states())
+    {this->u_bounds(VectorU(0.0), VectorU(0.0));}
+
+    template <typename T>
+    StateVector<T> dae(StateVector<T> const & x, StateVector<T> const & x_dot, ControlVector<T> const &, T const &) const
+    {
+      Eigen::Vector<T, 2> const p1{x.template segment<2>(0)}, v1{x.template segment<2>(4)}, lambda{x.template segment<2>(8)};
+      StateVector<T> F;
+      F.template head<4>() = x_dot.template head<4>() - x.template segment<4>(4);
+      F.template segment<2>(4) = M1*x_dot.template segment<2>(4) - pull<T>(p1, v1) + lambda;
+      F.template segment<2>(6) = M2*x_dot.template segment<2>(6) - lambda;
+      if constexpr (Phase == 0) {F.template tail<2>() = lambda;}
+      if constexpr (Phase == 3) {F.template tail<2>() = x.template segment<2>(0) - x.template segment<2>(2);}
+      if constexpr (Phase == 2) {F.template tail<2>() = x.template segment<2>(4) - x.template segment<2>(6);}
+      if constexpr (Phase == 1) {F.template tail<2>() = x_dot.template segment<2>(4) - x_dot.template segment<2>(6);}
+      return F;
+    }
+
+    template <typename T>
+    InvariantVector<T> invariants(StateVector<T> const & x, T const &) const
+    {
+      InvariantVector<T> h;
+      if constexpr (Phase == 1 || Phase == 2) {h.template head<2>() = x.template segment<2>(0) - x.template segment<2>(2);}
+      if constexpr (Phase == 1) {h.template tail<2>() = x.template segment<2>(4) - x.template segment<2>(6);}
+      return h;
+    }
+
+    template <typename T>
+    BoundaryVector<T> boundary(StateVector<T> const & x_ini, StateVector<T> const &) const
+    {
+      BoundaryVector<T> b;
+      for (Integer i{0}; i < 10; ++i) {b(i) = x_ini(i) - start(i);} // the forces are gauges
+      return b;
+    }
+  };
+
 } // namespace TestOCP
 
 #endif // TESTS_GERDTS_MECHANICAL_HH

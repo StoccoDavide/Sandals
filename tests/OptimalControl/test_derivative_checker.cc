@@ -317,6 +317,11 @@ TEST(DerivativeChecker, GerdtsHalfCar) {
   check<Radau, 10, 2, 4>(std::make_shared<HalfCar<1>>(), 4, 2, HalfCar<1>::initial_states(), 0.4, 0.0, "first-order");
 }
 
+TEST(DerivativeChecker, GerdtsDocking) {
+  check<Radau, 10, 1, 2>(std::make_shared<Docking<2>>(), 3, 2, DockingModel::docked_states(), 0.0);
+  check<Radau, 10, 1, 4>(std::make_shared<Docking<1>>(), 3, 2, DockingModel::docked_states(), 0.0);
+}
+
 TEST(DerivativeChecker, GerdtsStokes) {
   // The 3 x 3 grid (8 velocities, 4 pressures): the same code as on the finer grids, at a fraction of
   // the cost of the dense finite differences

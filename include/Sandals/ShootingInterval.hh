@@ -113,6 +113,7 @@ namespace Sandals
     MatrixAP               m_Y_end;
 
     Integer m_max_newton_iterations{50}; /**< Maximum number of Newton iterations per substep. */
+    bool    m_method_checked{false};     /**< True once the method has been checked against the system. */
 
   public:
     /**
@@ -145,6 +146,11 @@ namespace Sandals
       Eigen::Vector<Real, P> p;
       p << x, u;
       if (this->m_valid && p == this->m_p) {return true;}
+
+      if (!this->m_method_checked) {
+        this->check_method(x, u);
+        this->m_method_checked = true;
+      }
 
       this->m_valid = false;
       this->m_p = p;
@@ -335,6 +341,25 @@ namespace Sandals
         G_l.template block<A, A>(i*A, 0) = J_y;
         G_l.template block<A, U>(i*A, A) = J_u;
       }
+    }
+
+    /**
+    * Only stiffly accurate methods (whose last stage is the end of the step, as Radau IIA) integrate
+    * systems with algebraic states, i.e., with a singular \f$ \partial\mathbf{F}/\partial\mathbf{x}' \f$
+    * (DAEs of index one or higher): the other methods (explicit, Gauss-Legendre, ...) do not give
+    * consistent end points, and are allowed for index-0 systems (ODEs, possibly with invariants) only.
+    */
+    void check_method(VectorF const & x, VectorU const & u) const
+    {
+      Tableau<Real, S> const & T{this->m_tableau};
+      bool const stiffly_accurate{(T.A.row(S-1).transpose() - T.b).template lpNorm<Eigen::Infinity>() <= Real(1.0e-14)};
+      if (stiffly_accurate) {return;}
+      using MatrixNN = Eigen::Matrix<Real, N, N>;
+      MatrixNN const J{this->m_problem.system()->JF_x_dot(x, VectorF::Zero(), u, this->m_t_ini)};
+      bool const ode{Eigen::FullPivLU<MatrixNN>(J).isInvertible()};
+      SANDALS_ASSERT(ode,
+        "Sandals::ShootingInterval: the system has algebraic states (singular dF/dx'), the method " << T.name <<
+        " is not stiffly accurate: use a stiffly accurate method (e.g., Radau IIA) for DAEs.");
     }
 
     /** Solve the stage equations of a substep with Newton's method, and store its derivatives. */

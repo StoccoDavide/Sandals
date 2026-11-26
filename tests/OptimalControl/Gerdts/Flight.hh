@@ -81,6 +81,7 @@ namespace TestOCP
   public:
     static constexpr Real REFERENCE_TIME{726.57}, REFERENCE_COST{-0.765};
     bool free_altitude{false}; // h(0) >= 33900 instead of h(0) = 33900
+    bool pressure_limit{true}; // the dynamic pressure constraint (Figure 1.5 compares without it)
 
     EmergencyLanding() : OptimalControlProblemAD("EmergencyLanding", 0.0, 1.0)
     {
@@ -131,6 +132,8 @@ namespace TestOCP
     template <typename T>
     PathVector<T> path(StateVector<T> const & x, ControlVector<T> const &, T const &) const
     {return PathVector<T>(pressure(x(0), x(3))/Q_MAX - 1.0);}
+
+    VectorX path_constraints_upper() const override {return VectorX::Constant(1, pressure_limit ? 0.0 : INF);}
   };
 
   /*\
