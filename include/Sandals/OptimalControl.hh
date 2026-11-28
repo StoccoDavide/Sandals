@@ -376,6 +376,37 @@ namespace Sandals
         {return VectorP(this->path_constraints_jacobian(state(w), control(w), t).transpose()*lambda);}, z);
     }
 
+    /*\
+     |  Structural sparsity patterns (default dense)
+    \*/
+
+    using MatrixXb = Eigen::Matrix<bool, Eigen::Dynamic, Eigen::Dynamic>; /**< Boolean pattern type. */
+
+    /**
+    * \return The structural pattern of the Jacobian of the DAE residual in its arguments
+    * \f$ (\mathbf{x}, \mathbf{x}^{\prime}, \mathbf{u}) \f$ (\f$ N \times (2N+U) \f$, true where an entry
+    * may be nonzero). The transcriptions only store and compute the entries in the patterns.
+    */
+    virtual MatrixXb dae_jacobian_pattern() const {return MatrixXb::Constant(N, 2*N+U, true);}
+
+    /** \return The structural pattern of the Hessian of any weighted sum of the DAE residuals in \f$ (\mathbf{x}, \mathbf{x}^{\prime}, \mathbf{u}) \f$. */
+    virtual MatrixXb dae_hessian_pattern() const {return MatrixXb::Constant(2*N+U, 2*N+U, true);}
+
+    /** \return The structural pattern of the Hessian of the Lagrange term in \f$ (\mathbf{x}, \mathbf{u}) \f$. */
+    virtual MatrixXb lagrange_hessian_pattern() const {return MatrixXb::Constant(N+U, N+U, true);}
+
+    /** \return The structural pattern of the Jacobian of the path constraints in \f$ (\mathbf{x}, \mathbf{u}) \f$. */
+    virtual MatrixXb path_jacobian_pattern() const {return MatrixXb::Constant(this->path_constraints_number(), N+U, true);}
+
+    /** \return The structural pattern of the Hessian of any weighted sum of the path constraints in \f$ (\mathbf{x}, \mathbf{u}) \f$. */
+    virtual MatrixXb path_hessian_pattern() const {return MatrixXb::Constant(N+U, N+U, true);}
+
+    /** \return The structural pattern of the Jacobian of the invariants in \f$ \mathbf{x} \f$ (\f$ M \times N \f$). */
+    virtual MatrixXb invariants_jacobian_pattern() const {return MatrixXb::Constant(M, N, true);}
+
+    /** \return The structural pattern of the second (and contracted third) derivatives of the invariants in \f$ \mathbf{x} \f$. */
+    virtual MatrixXb invariants_hessian_pattern() const {return MatrixXb::Constant(N, N, true);}
+
   }; // class OptimalControlProblem
 
 } // namespace Sandals

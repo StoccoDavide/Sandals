@@ -91,6 +91,21 @@ namespace Sandals
     mutable CppAD::ADFun<double> m_function; /**< Recorded operation sequence. */
     bool m_recorded{false};                  /**< True if the function has been recorded. */
 
+    // Sparse derivatives: the sparsity patterns are computed once (they depend on the operation
+    // sequence only, conditional expressions included), then the Jacobian and the Hessian cost one
+    // sweep per color of the pattern instead of one per input
+    using SizeVector  = std::vector<std::size_t>;
+    using Pattern     = CppAD::sparse_rc<SizeVector>;
+    using SparseValues = CppAD::sparse_rcv<SizeVector, std::vector<double>>;
+    mutable bool                    m_jacobian_ready{false}; /**< The Jacobian pattern is computed. */
+    mutable Pattern                 m_jacobian_pattern;      /**< Jacobian sparsity pattern. */
+    mutable SparseValues            m_jacobian_values;       /**< Jacobian nonzeros. */
+    mutable CppAD::sparse_jac_work  m_jacobian_work;         /**< Jacobian coloring (reused). */
+    mutable bool                    m_hessian_ready{false};  /**< The Hessian pattern is computed. */
+    mutable Pattern                 m_hessian_pattern;       /**< Hessian sparsity pattern (all the outputs). */
+    mutable SparseValues            m_hessian_values;        /**< Hessian nonzeros (lower triangle). */
+    mutable CppAD::sparse_hes_work  m_hessian_work;          /**< Hessian coloring (reused). */
+
     static std::vector<double> to_std(VectorX const & x) {return std::vector<double>(x.data(), x.data() + x.size());}
 
   public:
@@ -110,6 +125,7 @@ namespace Sandals
       this->m_function.Dependent(x, y);
       this->m_function.optimize();
       this->m_recorded = true;
+      this->m_jacobian_ready = this->m_hessian_ready = false;
     }
 
     /** \return True if the function has been recorded. */
@@ -129,12 +145,75 @@ namespace Sandals
     }
 
     /** \param[in] x The point. \return The Jacobian \f$ \partial\mathbf{f}/\partial\mathbf{x} \f$ (\f$ m \times n \f$). */
+    /** \return The structural pattern of the Jacobian (\f$ m \times n \f$, true where an entry may be nonzero). */
+    Eigen::Matrix<bool, Eigen::Dynamic, Eigen::Dynamic> jacobian_pattern() const
+    {
+      this->prepare_jacobian();
+      Eigen::Matrix<bool, Eigen::Dynamic, Eigen::Dynamic> P(Eigen::Matrix<bool, Eigen::Dynamic, Eigen::Dynamic>::Constant(this->range(), this->domain(), false));
+      for (std::size_t k{0}; k < this->m_jacobian_pattern.nnz(); ++k) {P(this->m_jacobian_pattern.row()[k], this->m_jacobian_pattern.col()[k]) = true;}
+      return P;
+    }
+
+    /** \return The structural pattern of the Hessian of any weighted sum of the outputs (\f$ n \times n \f$, symmetric). */
+    Eigen::Matrix<bool, Eigen::Dynamic, Eigen::Dynamic> hessian_pattern() const
+    {
+      this->prepare_hessian();
+      Eigen::Matrix<bool, Eigen::Dynamic, Eigen::Dynamic> P(Eigen::Matrix<bool, Eigen::Dynamic, Eigen::Dynamic>::Constant(this->domain(), this->domain(), false));
+      for (std::size_t k{0}; k < this->m_hessian_pattern.nnz(); ++k) {
+        P(this->m_hessian_pattern.row()[k], this->m_hessian_pattern.col()[k]) = true;
+        P(this->m_hessian_pattern.col()[k], this->m_hessian_pattern.row()[k]) = true;
+      }
+      return P;
+    }
+
     MatrixX jacobian(VectorX const & x) const
     {
-      std::vector<double> const J{this->m_function.Jacobian(to_std(x))};
-      return Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor> const>(
-        J.data(), this->range(), this->domain());
+      std::size_t const n{this->m_function.Domain()}, m{this->m_function.Range()};
+      this->prepare_jacobian();
+      std::vector<double> const xs{to_std(x)};
+      this->m_function.sparse_jac_for(1, xs, this->m_jacobian_values, this->m_jacobian_pattern, "cppad", this->m_jacobian_work);
+      MatrixX J(MatrixX::Zero(m, n));
+      SizeVector const & row{this->m_jacobian_values.row()}, & col{this->m_jacobian_values.col()};
+      std::vector<double> const & val{this->m_jacobian_values.val()};
+      for (std::size_t k{0}; k < val.size(); ++k) {J(row[k], col[k]) = val[k];}
+      return J;
     }
+
+  private:
+    void prepare_jacobian() const
+    {
+      std::size_t const n{this->m_function.Domain()};
+      if (!this->m_jacobian_ready) {
+        Pattern identity(n, n, n);
+        for (std::size_t k{0}; k < n; ++k) {identity.set(k, k, k);}
+        this->m_function.for_jac_sparsity(identity, false, false, false, this->m_jacobian_pattern);
+        this->m_jacobian_values = SparseValues(this->m_jacobian_pattern);
+        this->m_jacobian_work.clear();
+        this->m_jacobian_ready = true;
+      }
+    }
+
+    void prepare_hessian() const
+    {
+      std::size_t const n{this->m_function.Domain()}, m{this->m_function.Range()};
+      if (!this->m_hessian_ready) {
+        // Pattern for every output (the multipliers change), lower triangle only for the values
+        std::vector<bool> const select_domain(n, true), select_range(m, true);
+        Pattern full;
+        this->m_function.for_hes_sparsity(select_domain, select_range, false, full);
+        SizeVector const & row{full.row()}, & col{full.col()};
+        std::size_t nnz{0};
+        for (std::size_t k{0}; k < full.nnz(); ++k) {if (col[k] <= row[k]) {++nnz;}}
+        Pattern lower(n, n, nnz);
+        for (std::size_t k{0}, e{0}; k < full.nnz(); ++k) {if (col[k] <= row[k]) {lower.set(e++, row[k], col[k]);}}
+        this->m_hessian_pattern = full;
+        this->m_hessian_values = SparseValues(lower);
+        this->m_hessian_work.clear();
+        this->m_hessian_ready = true;
+      }
+    }
+
+  public:
 
     /**
     * \param[in] x The point.
@@ -143,8 +222,15 @@ namespace Sandals
     */
     MatrixX hessian(VectorX const & x, VectorX const & w) const
     {
-      std::vector<double> const H{this->m_function.Hessian(to_std(x), to_std(w))};
-      return Eigen::Map<MatrixX const>(H.data(), this->domain(), this->domain());
+      std::size_t const n{this->m_function.Domain()};
+      this->prepare_hessian();
+      std::vector<double> const xs{to_std(x)}, ws{to_std(w)};
+      this->m_function.sparse_hes(xs, ws, this->m_hessian_values, this->m_hessian_pattern, "cppad.symmetric", this->m_hessian_work);
+      MatrixX H(MatrixX::Zero(n, n));
+      SizeVector const & row{this->m_hessian_values.row()}, & col{this->m_hessian_values.col()};
+      std::vector<double> const & val{this->m_hessian_values.val()};
+      for (std::size_t k{0}; k < val.size(); ++k) {H(row[k], col[k]) = val[k]; H(col[k], row[k]) = val[k];}
+      return H;
     }
   };
 

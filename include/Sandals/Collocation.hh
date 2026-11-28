@@ -127,6 +127,15 @@ namespace Sandals
     Integer          m_ng{0};    /**< Number of path constraints. */
     VectorX          m_guess;    /**< Initial guess of the NLP variables. */
 
+    bool                    m_scaling{false}; /**< Scale the NLP by the nominal magnitudes of the problem. */
+    bool                    m_sparsity{false}; /**< Use the structural patterns of the problem (otherwise dense blocks). */
+    using MatrixXb = Eigen::Matrix<bool, Eigen::Dynamic, Eigen::Dynamic>;
+    std::array<MatrixXb, S> m_stage_pattern;    /**< Pattern of each stage block of the Jacobian (N x D). */
+    MatrixXb                m_interval_pattern; /**< Pattern of the interval block of the Hessian (D x D). */
+    MatrixXb                m_path_jpattern;    /**< Pattern of the path constraints Jacobian (NG x (N+U)). */
+    MatrixXb                m_path_hpattern;    /**< Pattern of the path constraints Hessian ((N+U) x (N+U)). */
+    MatrixXb                m_inv_jpattern;     /**< Pattern of the invariants Jacobian (M x N). */
+    MatrixXb                m_cont_pattern;     /**< Pattern of the projected continuity block on x_{k+1} (N x N). */
     std::vector<Integer>    m_jac_rows;  /**< Jacobian sparsity rows. */
     std::vector<Integer>    m_jac_cols;  /**< Jacobian sparsity columns. */
     std::vector<Integer>    m_hess_rows; /**< Hessian (lower triangle) sparsity rows. */
@@ -155,6 +164,7 @@ namespace Sandals
       this->m_n  = static_cast<Integer>(this->m_t_mesh.size()) - 1;
       this->m_nb = t_problem->boundary_conditions_number();
       this->m_ng = t_problem->path_constraints_number();
+      this->build_patterns();
       this->build_jacobian_structure();
       this->build_hessian_structure();
       this->m_guess = VectorX::Zero(this->variables_number());
@@ -189,6 +199,63 @@ namespace Sandals
     Integer constraints_number() const
     {
       return this->m_n*C + this->m_nb + (this->m_n + 1)*this->m_ng + this->m_n*M;
+    }
+
+    /**
+    * Enable (or disable) the scaling of the NLP by the nominal magnitudes of the problem (see
+    * Sandals::OptimalControlProblem::nominal()). It is off by default, so that the transcription of a
+    * problem does not change with its nominal magnitudes unless asked.
+    * \param[in] t_enable Whether the NLP is scaled.
+    */
+    void enable_scaling(bool const t_enable = true) {this->m_scaling = t_enable;}
+
+    /**
+    * Enable (or disable) the structural sparsity of the problem (see
+    * Sandals::OptimalControlProblem::dae_jacobian_pattern() and the other patterns): the blocks of the
+    * Jacobian and of the Hessian store only the entries that may be nonzero. It is off by default
+    * (dense blocks): the solution is the same, but the factorization order of the KKT systems, and
+    * so the path of the solver, may change. The sparsity patterns are rebuilt.
+    * \param[in] t_enable Whether the structural sparsity is used.
+    */
+    void enable_sparsity(bool const t_enable = true)
+    {
+      this->m_sparsity = t_enable;
+      this->build_patterns();
+      this->build_jacobian_structure();
+      this->build_hessian_structure();
+    }
+
+    /** \return True if the scaling is enabled and the problem has nominal magnitudes other than one. */
+    bool scaled() const
+    {
+      return this->m_scaling && (!(this->m_problem->x_nominal().array() == 1.0).all() || !(this->m_problem->u_nominal().array() == 1.0).all());
+    }
+
+    /**
+    * Scaling factors of the variables and of the constraints (the solver works on the scaled ones),
+    * as in Sandals::MultipleShooting: the states, the stage variables (increments of the states) and
+    * the controls by the inverse of their nominal magnitudes; the stage equations (residuals of the
+    * states derivatives) and the continuity conditions (differences of states) as the states. The
+    * multipliers of the projections, the invariants, the boundary conditions and the path constraints
+    * are not scaled.
+    * \param[out] z_scale The variables scaling factors.
+    * \param[out] c_scale The constraints scaling factors.
+    */
+    void scaling(VectorX & z_scale, VectorX & c_scale) const
+    {
+      VectorF const x_scale{this->m_problem->x_nominal().cwiseInverse()};
+      VectorU const u_scale{this->m_problem->u_nominal().cwiseInverse()};
+      z_scale = VectorX::Ones(this->variables_number());
+      c_scale = VectorX::Ones(this->constraints_number());
+      for (Integer k{0}; k <= this->m_n; ++k) {z_scale.template segment<N>(this->x_index(k)) = x_scale;}
+      for (Integer k{0}; k < this->m_n; ++k) {
+        for (Integer i{0}; i < S; ++i) {
+          z_scale.template segment<N>(this->K_index(k, i)) = x_scale;
+          c_scale.template segment<N>(this->stage_row(k, i)) = x_scale;
+        }
+        z_scale.template segment<U>(this->u_index(k)) = u_scale;
+        c_scale.template segment<N>(this->continuity_row(k)) = x_scale;
+      }
     }
 
     /** \return The number of nonzeros of the constraints Jacobian. */
@@ -798,8 +865,11 @@ namespace Sandals
             B.template block<N, N>(0, N + i*N) += sys->JF_x_dot(x_i, x_dot_i, u_k, t_i) / h_k;
             B.template block<N, U>(0, N + N*S) = sys->JF_u(x_i, x_dot_i, u_k, t_i);
           }
+          MatrixXb const & pattern{this->m_stage_pattern[i]};
           for (Integer r{0}; r < N; ++r) {
-            for (Integer c{0}; c < D; ++c) {push(this->stage_row(k, i) + r, this->x_index(k) + c, B(r, c));}
+            for (Integer c{0}; c < D; ++c) {
+              if (pattern(r, c)) {push(this->stage_row(k, i) + r, this->x_index(k) + c, B(r, c));}
+            }
           }
         }
 
@@ -824,8 +894,8 @@ namespace Sandals
             dc_dmu  = -sys->Jh_x(x_end, t_end).transpose();
           }
           for (Integer r{0}; r < N; ++r) {
-            for (Integer c{0}; c < N; ++c) {push(this->continuity_row(k) + r, this->x_index(k+1) + c, dc_dx(r, c));}
-            for (Integer c{0}; c < M; ++c) {push(this->continuity_row(k) + r, this->mu_index(k) + c, dc_dmu(r, c));}
+            for (Integer c{0}; c < N; ++c) {if (this->m_cont_pattern(r, c)) {push(this->continuity_row(k) + r, this->x_index(k+1) + c, dc_dx(r, c));}}
+            for (Integer c{0}; c < M; ++c) {if (this->m_inv_jpattern(c, r)) {push(this->continuity_row(k) + r, this->mu_index(k) + c, dc_dmu(r, c));}}
           }
         }
       }
@@ -849,7 +919,7 @@ namespace Sandals
           }
           std::vector<Integer> const idx(this->path_indices(k));
           for (Integer r{0}; r < this->m_ng; ++r) {
-            for (Integer c{0}; c < N+U; ++c) {push(this->path_row(k) + r, idx[c], Jg(r, c));}
+            for (Integer c{0}; c < N+U; ++c) {if (this->m_path_jpattern(r, c)) {push(this->path_row(k) + r, idx[c], Jg(r, c));}}
           }
         }
       }
@@ -860,10 +930,56 @@ namespace Sandals
           MatrixJH Jh(MatrixJH::Zero());
           if constexpr (Values) {Jh = sys->Jh_x(this->x(*z, k+1), this->m_t_mesh(k+1));}
           for (Integer r{0}; r < M; ++r) {
-            for (Integer c{0}; c < N; ++c) {push(this->invariants_row(k) + r, this->x_index(k+1) + c, Jh(r, c));}
+            for (Integer c{0}; c < N; ++c) {if (this->m_inv_jpattern(r, c)) {push(this->invariants_row(k) + r, this->x_index(k+1) + c, Jh(r, c));}}
           }
         }
       }
+    }
+
+    /**
+    * Build the structural patterns of the blocks from those of the problem: the stage blocks of the
+    * Jacobian (the stage arguments are x_k + sum_j a_ij K_j, K_i/h and u_k), the interval block of the
+    * Hessian (the stage Hessians, the Lagrange term and the path constraints at the node, through the
+    * same linear maps), and the path, invariants and projection blocks.
+    */
+    void build_patterns()
+    {
+      if (!this->m_sparsity) { // dense blocks
+        for (Integer i{0}; i < S; ++i) {this->m_stage_pattern[i] = MatrixXb::Constant(N, D, true);}
+        this->m_interval_pattern = MatrixXb::Constant(D, D, true);
+        this->m_path_jpattern = MatrixXb::Constant(this->m_ng, N+U, true);
+        this->m_path_hpattern = MatrixXb::Constant(N+U, N+U, true);
+        this->m_inv_jpattern = MatrixXb::Constant(M, N, true);
+        this->m_cont_pattern = MatrixXb::Constant(N, N, true);
+        return;
+      }
+      using MatrixXd = Eigen::Matrix<Real, Eigen::Dynamic, Eigen::Dynamic>;
+      auto const to01 = [] (MatrixXb const & P) {return P.template cast<Real>().eval();};
+      MatrixXd const JF{to01(this->m_problem->dae_jacobian_pattern())};
+      MatrixXd const HF{to01(this->m_problem->dae_hessian_pattern())};
+      MatrixXd const HL{to01(this->m_problem->lagrange_hessian_pattern())};
+      MatrixXd Hinterval(MatrixXd::Zero(D, D));
+      for (Integer i{0}; i < S; ++i) {
+        MatrixXd const P{(this->stage_map(i, Real(1.0)).array() != Real(0.0)).template cast<Real>()};
+        this->m_stage_pattern[i] = ((JF * P).array() != Real(0.0));
+        Hinterval += P.transpose() * HF * P;
+        MatrixXd Q(N+U, D);
+        Q << P.topRows(N), P.bottomRows(U);
+        Hinterval += Q.transpose() * HL * Q;
+      }
+      this->m_path_jpattern = this->m_problem->path_jacobian_pattern();
+      this->m_path_hpattern = this->m_problem->path_hessian_pattern();
+      if (this->m_ng > 0) {
+        MatrixXd R(MatrixXd::Zero(N+U, D));
+        R.block(0, 0, N, N).setIdentity();
+        R.block(N, N + N*S, U, U).setIdentity();
+        Hinterval += R.transpose() * to01(this->m_path_hpattern) * R;
+      }
+      this->m_interval_pattern = (Hinterval.array() != Real(0.0));
+      this->m_inv_jpattern = this->m_problem->invariants_jacobian_pattern();
+      MatrixXb identity(MatrixXb::Constant(N, N, false));
+      for (Integer a{0}; a < N; ++a) {identity(a, a) = true;}
+      this->m_cont_pattern = identity.array() || this->m_problem->invariants_hessian_pattern().array();
     }
 
     /** Build the Jacobian sparsity pattern. */
@@ -893,11 +1009,13 @@ namespace Sandals
     }
 
     /** Add the lower triangle of a dense block over the given (distinct) indices to the pattern. */
-    void add_hessian_block(std::vector<Integer> const & idx)
+    void add_hessian_block(std::vector<Integer> const & idx, MatrixXb const * pattern = nullptr)
     {
-      for (Integer a : idx) {
-        for (Integer b : idx) {
-          if (a < b) {continue;}
+      Integer const size{static_cast<Integer>(idx.size())};
+      for (Integer ia{0}; ia < size; ++ia) {
+        for (Integer ib{0}; ib < size; ++ib) {
+          Integer const a{idx[ia]}, b{idx[ib]};
+          if (a < b || (pattern != nullptr && !(*pattern)(ia, ib))) {continue;}
           Index const key{a, b};
           if (this->m_hess_map.find(key) == this->m_hess_map.end()) {
             this->m_hess_map.emplace(key, static_cast<Integer>(this->m_hess_rows.size()));
@@ -917,9 +1035,9 @@ namespace Sandals
       std::vector<Integer> idx(D);
       for (Integer k{0}; k < this->m_n; ++k) {
         for (Integer a{0}; a < D; ++a) {idx[a] = this->x_index(k) + a;}
-        this->add_hessian_block(idx);
+        this->add_hessian_block(idx, &this->m_interval_pattern);
       }
-      if (this->m_ng > 0) {this->add_hessian_block(this->path_indices(this->m_n));}
+      if (this->m_ng > 0) {this->add_hessian_block(this->path_indices(this->m_n), &this->m_path_hpattern);}
       if constexpr (M > 0) {
         for (Integer k{0}; k < this->m_n; ++k) {this->add_hessian_block(this->projection_indices(k));}
       }
@@ -934,7 +1052,8 @@ namespace Sandals
       for (Integer a{0}; a < size; ++a) {
         for (Integer b{0}; b < size; ++b) {
           if (idx[a] < idx[b]) {continue;}
-          vals(this->m_hess_map.at(Index{idx[a], idx[b]})) += H(a, b);
+          auto const it{this->m_hess_map.find(Index{idx[a], idx[b]})};
+          if (it != this->m_hess_map.end()) {vals(it->second) += H(a, b);} // structurally zero otherwise
         }
       }
     }

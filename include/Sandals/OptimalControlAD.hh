@@ -131,6 +131,47 @@ namespace Sandals
     void rerecord() {this->m_tapes.reset();}
 
     /*\
+     |  Structural sparsity patterns, from the recorded functions
+    \*/
+
+    using typename Base::MatrixXb;
+
+    MatrixXb dae_jacobian_pattern() const override {return this->tapes().dae.jacobian_pattern().leftCols(2*N + U);}
+
+    MatrixXb dae_hessian_pattern() const override {return this->tapes().dae.hessian_pattern().topLeftCorner(2*N + U, 2*N + U);}
+
+    MatrixXb lagrange_hessian_pattern() const override {return this->tapes().running_cost.hessian_pattern().topLeftCorner(N + U, N + U);}
+
+    MatrixXb path_jacobian_pattern() const override
+    {
+      if constexpr (NG == 0) {return MatrixXb(0, N + U);}
+      else {return this->tapes().path.jacobian_pattern().leftCols(N + U);}
+    }
+
+    MatrixXb path_hessian_pattern() const override
+    {
+      if constexpr (NG == 0) {return MatrixXb::Constant(N + U, N + U, false);}
+      else {return this->tapes().path.hessian_pattern().topLeftCorner(N + U, N + U);}
+    }
+
+    MatrixXb invariants_jacobian_pattern() const override
+    {
+      if constexpr (M == 0) {return MatrixXb(0, N);}
+      else {return this->tapes().invariants.jacobian_pattern().leftCols(N);}
+    }
+
+    MatrixXb invariants_hessian_pattern() const override
+    {
+      if constexpr (M == 0) {return MatrixXb::Constant(N, N, false);}
+      else {
+        // second derivatives of h, and the contraction of its third derivatives (the curvature tape)
+        MatrixXb P{this->tapes().invariants.hessian_pattern().topLeftCorner(N, N)};
+        MatrixXb const T{this->tapes().curvature.hessian_pattern().topLeftCorner(N, N)};
+        return P.array() || T.array();
+      }
+    }
+
+    /*\
      |  Optimal control problem interface
     \*/
 
