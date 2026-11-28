@@ -55,7 +55,8 @@ namespace Sandals
   * \f]
   *
   * followed by the boundary conditions and the path constraints at every mesh node (at the last node
-  * the controls of the last interval are used). The Lagrange term is integrated with the quadrature
+  * the controls of the last interval are used) and, optionally (see enable_stage_path()), also at
+  * every stage point. The Lagrange term is integrated with the quadrature
   * of the tableau at the stage nodes. The first derivatives (gradient and Jacobian) and the second
   * derivatives (Hessian of the Lagrangian, lower triangle) are exact up to the derivatives provided
   * by the system and the problem. The sparsity patterns are fixed and computed once.
@@ -129,11 +130,13 @@ namespace Sandals
 
     bool                    m_scaling{false}; /**< Scale the NLP by the nominal magnitudes of the problem. */
     bool                    m_sparsity{false}; /**< Use the structural patterns of the problem (otherwise dense blocks). */
+    bool                    m_stage_path{false}; /**< Impose the path constraints also at the stage points. */
     using MatrixXb = Eigen::Matrix<bool, Eigen::Dynamic, Eigen::Dynamic>;
     std::array<MatrixXb, S> m_stage_pattern;    /**< Pattern of each stage block of the Jacobian (N x D). */
     MatrixXb                m_interval_pattern; /**< Pattern of the interval block of the Hessian (D x D). */
     MatrixXb                m_path_jpattern;    /**< Pattern of the path constraints Jacobian (NG x (N+U)). */
     MatrixXb                m_path_hpattern;    /**< Pattern of the path constraints Hessian ((N+U) x (N+U)). */
+    std::array<MatrixXb, S> m_stage_path_pattern; /**< Pattern of the path constraints at each stage point (NG x D). */
     MatrixXb                m_inv_jpattern;     /**< Pattern of the invariants Jacobian (M x N). */
     MatrixXb                m_cont_pattern;     /**< Pattern of the projected continuity block on x_{k+1} (N x N). */
     std::vector<Integer>    m_jac_rows;  /**< Jacobian sparsity rows. */
@@ -198,7 +201,7 @@ namespace Sandals
     /** \return The number of NLP constraints. */
     Integer constraints_number() const
     {
-      return this->m_n*C + this->m_nb + (this->m_n + 1)*this->m_ng + this->m_n*M;
+      return this->m_n*C + this->m_nb + (this->m_n + 1)*this->m_ng + this->stage_path_number() + this->m_n*M;
     }
 
     /**
@@ -224,6 +227,25 @@ namespace Sandals
       this->build_jacobian_structure();
       this->build_hessian_structure();
     }
+
+    /**
+    * Enable (or disable) the path constraints at the stage points \f$ t_k + c_i h_k \f$, besides the
+    * mesh nodes, with the stage values \f$ \mathbf{x}_k + \sum_j a_{ij}\mathbf{K}_{k,j} \f$ and the
+    * controls \f$ \mathbf{u}_k \f$ of the interval. It is off by default. When the path constraints
+    * involve states that vary within an interval (e.g., a bound on a thrust that depends on the
+    * algebraic states), imposing them only at the nodes lets them be violated between the nodes.
+    * \param[in] t_enable Whether the path constraints are also imposed at the stage points.
+    */
+    void enable_stage_path(bool const t_enable = true)
+    {
+      this->m_stage_path = t_enable;
+      this->build_patterns();
+      this->build_jacobian_structure();
+      this->build_hessian_structure();
+    }
+
+    /** \return The number of path constraints at the stage points (zero unless enabled). */
+    Integer stage_path_number() const {return this->m_stage_path ? this->m_n*S*this->m_ng : 0;}
 
     /** \return True if the scaling is enabled and the problem has nominal magnitudes other than one. */
     bool scaled() const
@@ -307,7 +329,13 @@ namespace Sandals
     * \param[in] k Interval index.
     * \return The first row of the invariants \f$ \mathbf{h}(\mathbf{x}_{k+1}) \f$ (end of the interval).
     */
-    Integer invariants_row(Integer const k) const {return this->path_row(this->m_n + 1) + k*M;}
+    Integer invariants_row(Integer const k) const {return this->path_row(this->m_n + 1) + this->stage_path_number() + k*M;}
+
+    /**
+    * \param[in] k Interval index. \param[in] i Stage index.
+    * \return The first row of the path constraints at the stage point (when enabled).
+    */
+    Integer stage_path_row(Integer const k, Integer const i) const {return this->path_row(this->m_n + 1) + (k*S + i)*this->m_ng;}
 
     /** \param[in] z NLP variables. \param[in] k Mesh node index. \return The states \f$ \mathbf{x}_k \f$. */
     VectorF x(VectorX const & z, Integer const k) const {return z.template segment<N>(this->x_index(k));}
@@ -503,6 +531,14 @@ namespace Sandals
           c_lower.segment(this->path_row(k), this->m_ng) = g_lower;
           c_upper.segment(this->path_row(k), this->m_ng) = g_upper;
         }
+        if (this->m_stage_path) {
+          for (Integer k{0}; k < this->m_n; ++k) {
+            for (Integer i{0}; i < S; ++i) {
+              c_lower.segment(this->stage_path_row(k, i), this->m_ng) = g_lower;
+              c_upper.segment(this->stage_path_row(k, i), this->m_ng) = g_upper;
+            }
+          }
+        }
       }
     }
 
@@ -601,6 +637,19 @@ namespace Sandals
         for (Integer k{0}; k <= this->m_n; ++k) {
           c.segment(this->path_row(k), this->m_ng) =
             this->m_problem->path_constraints(this->x(z, k), this->u(z, std::min(k, this->m_n-1)), this->m_t_mesh(k));
+        }
+        if (this->m_stage_path) {
+          for (Integer k{0}; k < this->m_n; ++k) {
+            Real const t_k{this->m_t_mesh(k)}, h_k{this->m_t_mesh(k+1) - t_k};
+            VectorF const x_k{this->x(z, k)};
+            VectorU const u_k{this->u(z, k)};
+            MatrixK const K_k{this->K(z, k)};
+            for (Integer i{0}; i < S; ++i) {
+              VectorF const x_i{x_k + K_k * this->m_tableau.A.row(i).transpose()};
+              c.segment(this->stage_path_row(k, i), this->m_ng) =
+                this->m_problem->path_constraints(x_i, u_k, t_k + this->m_tableau.c(i)*h_k);
+            }
+          }
         }
       }
       return c;
@@ -728,6 +777,19 @@ namespace Sandals
     }
 
     /**
+    * Linear map from the interval variables to the arguments \f$ (\mathbf{x}_k + \sum_j a_{ij}
+    * \mathbf{K}_{k,j}, \mathbf{u}_k) \f$ of the path constraints at the \f$ i \f$-th stage point.
+    */
+    MatrixPL stage_path_map(Integer const i) const
+    {
+      MatrixPL Q(MatrixPL::Zero());
+      Q.template block<N, N>(0, 0).setIdentity();
+      for (Integer j{0}; j < S; ++j) {Q.template block<N, N>(0, N + j*N) = this->m_tableau.A(i, j) * MatrixF::Identity();}
+      Q.template block<U, U>(N, N + N*S).setIdentity();
+      return Q;
+    }
+
+    /**
     * Full symmetric Hessian of the weighted system \f$ \boldsymbol{\lambda}^\top\mathbf{F} \f$ in the
     * stage arguments \f$ (\mathbf{x}, \mathbf{x}^{\prime}, \mathbf{u}) \f$, assembled from the blocks.
     */
@@ -788,6 +850,14 @@ namespace Sandals
         R.template block<U, U>(N, N + N*S).setIdentity();
         VectorX const lambda_g{lambda.segment(this->path_row(k), this->m_ng)};
         H.noalias() += R.transpose() * this->m_problem->path_constraints_hessian(x_k, u_k, t_k, lambda_g) * R;
+        if (this->m_stage_path) {
+          for (Integer i{0}; i < S; ++i) {
+            MatrixPL const Q{this->stage_path_map(i)};
+            VectorF const x_i{x_k + K_k * this->m_tableau.A.row(i).transpose()};
+            VectorX const lambda_gi{lambda.segment(this->stage_path_row(k, i), this->m_ng)};
+            H.noalias() += Q.transpose() * this->m_problem->path_constraints_hessian(x_i, u_k, t_k + this->m_tableau.c(i)*h_k, lambda_gi) * Q;
+          }
+        }
       }
       return H;
     }
@@ -922,6 +992,23 @@ namespace Sandals
             for (Integer c{0}; c < N+U; ++c) {if (this->m_path_jpattern(r, c)) {push(this->path_row(k) + r, idx[c], Jg(r, c));}}
           }
         }
+        // At the stage points (blocks on the interval variables x_k, K_k, u_k)
+        if (this->m_stage_path) {
+          for (Integer k{0}; k < this->m_n; ++k) {
+            for (Integer i{0}; i < S; ++i) {
+              MatrixX Jgi(MatrixX::Zero(this->m_ng, D));
+              if constexpr (Values) {
+                Real const t_k{this->m_t_mesh(k)}, h_k{this->m_t_mesh(k+1) - t_k};
+                VectorF const x_i{this->x(*z, k) + this->K(*z, k) * this->m_tableau.A.row(i).transpose()};
+                Jgi = this->m_problem->path_constraints_jacobian(x_i, this->u(*z, k), t_k + this->m_tableau.c(i)*h_k) * this->stage_path_map(i);
+              }
+              MatrixXb const & pattern{this->m_stage_path_pattern[i]};
+              for (Integer r{0}; r < this->m_ng; ++r) {
+                for (Integer c{0}; c < D; ++c) {if (pattern(r, c)) {push(this->stage_path_row(k, i) + r, this->x_index(k) + c, Jgi(r, c));}}
+              }
+            }
+          }
+        }
       }
 
       // Invariants at the end of each interval (dense blocks on x_{k+1})
@@ -949,6 +1036,7 @@ namespace Sandals
         this->m_interval_pattern = MatrixXb::Constant(D, D, true);
         this->m_path_jpattern = MatrixXb::Constant(this->m_ng, N+U, true);
         this->m_path_hpattern = MatrixXb::Constant(N+U, N+U, true);
+        for (Integer i{0}; i < S; ++i) {this->m_stage_path_pattern[i] = MatrixXb::Constant(this->m_ng, D, true);}
         this->m_inv_jpattern = MatrixXb::Constant(M, N, true);
         this->m_cont_pattern = MatrixXb::Constant(N, N, true);
         return;
@@ -974,6 +1062,11 @@ namespace Sandals
         R.block(0, 0, N, N).setIdentity();
         R.block(N, N + N*S, U, U).setIdentity();
         Hinterval += R.transpose() * to01(this->m_path_hpattern) * R;
+        for (Integer i{0}; i < S; ++i) {
+          MatrixXd const Q{(this->stage_path_map(i).array() != Real(0.0)).template cast<Real>()};
+          this->m_stage_path_pattern[i] = ((to01(this->m_path_jpattern) * Q).array() != Real(0.0));
+          if (this->m_stage_path) {Hinterval += Q.transpose() * to01(this->m_path_hpattern) * Q;}
+        }
       }
       this->m_interval_pattern = (Hinterval.array() != Real(0.0));
       this->m_inv_jpattern = this->m_problem->invariants_jacobian_pattern();

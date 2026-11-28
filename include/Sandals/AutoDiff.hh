@@ -197,10 +197,14 @@ namespace Sandals
     {
       std::size_t const n{this->m_function.Domain()}, m{this->m_function.Range()};
       if (!this->m_hessian_ready) {
-        // Pattern for every output (the multipliers change), lower triangle only for the values
-        std::vector<bool> const select_domain(n, true), select_range(m, true);
-        Pattern full;
-        this->m_function.for_hes_sparsity(select_domain, select_range, false, full);
+        // Pattern for every output (the multipliers change), lower triangle only for the values. The
+        // reverse-mode pattern is used: on tapes with conditional expressions the forward-mode one
+        // (for_hes_sparsity) was observed to miss nonzero entries
+        std::vector<bool> const select_range(m, true);
+        Pattern identity(n, n, n), jacobian, full;
+        for (std::size_t k{0}; k < n; ++k) {identity.set(k, k, k);}
+        this->m_function.for_jac_sparsity(identity, false, false, true, jacobian); // stored for the reverse sweep
+        this->m_function.rev_hes_sparsity(select_range, false, true, full);
         SizeVector const & row{full.row()}, & col{full.col()};
         std::size_t nnz{0};
         for (std::size_t k{0}; k < full.nnz(); ++k) {if (col[k] <= row[k]) {++nnz;}}

@@ -47,16 +47,18 @@ Real rel_error(MatrixX const & a, MatrixX const & b) {return (a - b).norm() / st
 // Check sizes, sparsity patterns, and first/second derivatives of the transcription at a random point.
 template <Integer S, Integer N, Integer U, Integer M = 0, typename Problem>
 void check_transcription(std::shared_ptr<Problem> problem, Tableau<Real, S> const & tableau,
-  Integer const intervals, Real const tol)
+  Integer const intervals, Real const tol, bool const stage_path = false, bool const sparsity = false)
 {
   std::shared_ptr<OptimalControlProblem<Real, N, U, M>> const ocp{problem};
-  SCOPED_TRACE(ocp->name() + " with " + tableau.name);
+  SCOPED_TRACE(ocp->name() + " with " + tableau.name + (stage_path ? " (stage path)" : "") + (sparsity ? " (sparse)" : ""));
   Collocation<Real, S, N, U, M> nlp(ocp, tableau, intervals);
+  if (sparsity) {nlp.enable_sparsity();}
+  if (stage_path) {nlp.enable_stage_path();}
 
   Integer const nz{nlp.variables_number()}, nc{nlp.constraints_number()};
   EXPECT_EQ(nz, intervals*(N + N*S + U) + N + intervals*M);
   EXPECT_EQ(nc, intervals*(N*S + N) + ocp->boundary_conditions_number() +
-    (intervals + 1)*ocp->path_constraints_number() + intervals*M);
+    (intervals + 1 + (stage_path ? intervals*S : 0))*ocp->path_constraints_number() + intervals*M);
 
   // Jacobian pattern: in range and without duplicates
   std::set<std::pair<Integer, Integer>> jac_set;
@@ -112,6 +114,58 @@ TEST(Collocation, VanDerPolDerivatives) {
   check_transcription<3, 2, 1>(ocp, RadauIIA5Tableau<Real>(), 3, 1.0e-6);
   check_transcription<2, 2, 1>(ocp, GaussLegendre4Tableau<Real>(), 3, 1.0e-6);
   check_transcription<4, 2, 1>(ocp, RK4Tableau<Real>(), 3, 1.0e-6);
+}
+
+TEST(Collocation, StagePathConstraintsDerivatives) {
+  // Path constraints also imposed at the stage points, with dense and with sparse blocks
+  auto ocp = std::make_shared<VanDerPolOCP>(1.0);
+  check_transcription<3, 2, 1>(ocp, RadauIIA5Tableau<Real>(), 3, 1.0e-6, true);
+  check_transcription<2, 2, 1>(ocp, RadauIIA3Tableau<Real>(), 4, 1.0e-6, true);
+  check_transcription<3, 2, 1>(ocp, RadauIIA5Tableau<Real>(), 3, 1.0e-6, true, true);
+}
+
+// Pendulum with invariants and a nonlinear path constraint (finite differences derivatives), to check
+// the rows of the invariants after the stage path constraints
+template <typename Base>
+class PendulumWithPath : public Base
+{
+public:
+  using Base::Base;
+  using VectorF = typename Base::VectorF;
+  using VectorU = typename Base::VectorU;
+  Integer path_constraints_number() const override {return 1;}
+  VectorX path_constraints(VectorF const & x, VectorU const & u, Real /*t*/) const override
+  {return VectorX::Constant(1, x(0)*x(1) + x(2)*x(2) + u(0)*u(0));}
+  VectorX path_constraints_lower() const override {return VectorX::Constant(1, -10.0);}
+  VectorX path_constraints_upper() const override {return VectorX::Constant(1, 10.0);}
+};
+
+TEST(Collocation, StagePathConstraintsWithInvariants) {
+  check_transcription<3, 5, 1, 2>(std::make_shared<PendulumWithPath<PendulumSwingUpOCP<PendulumIndex1<2>>>>(2.0),
+    RadauIIA5Tableau<Real>(), 3, 1.0e-5, true);
+  check_transcription<3, 5, 1, 2>(std::make_shared<PendulumWithPath<PendulumSwingUpOCP<PendulumIndex1<2>>>>(2.0),
+    RadauIIA5Tableau<Real>(), 3, 1.0e-5, true, true);
+}
+
+TEST(Collocation, StagePathConstraintsValues) {
+  // The stage path constraints are the path constraints at the stage values and the interval controls
+  auto ocp = std::make_shared<VanDerPolOCP>(1.0);
+  std::shared_ptr<OptimalControlProblem<Real, 2, 1>> const base{ocp};
+  RadauIIA5Tableau<Real> const tableau;
+  Collocation<Real, 3, 2, 1> nlp(base, tableau, 4);
+  nlp.enable_stage_path();
+  std::srand(3);
+  VectorX const z{VectorX::Random(nlp.variables_number())};
+  VectorX const c{nlp.constraints(z)};
+  Real const h{(base->t_end() - base->t_ini())/4.0};
+  for (Integer k{0}; k < 4; ++k) {
+    for (Integer i{0}; i < 3; ++i) {
+      Eigen::Vector<Real, 2> x_i{z.segment<2>(nlp.x_index(k))};
+      for (Integer j{0}; j < 3; ++j) {x_i += tableau.A(i, j)*z.segment<2>(nlp.K_index(k, j));}
+      VectorX const g{base->path_constraints(x_i, z.segment<1>(nlp.u_index(k)), base->t_ini() + (k + tableau.c(i))*h)};
+      EXPECT_NEAR(c(nlp.stage_path_row(k, i)), g(0), 1.0e-14);
+    }
+  }
 }
 
 TEST(Collocation, VanDerPolFiniteDifferencesDefaults) {

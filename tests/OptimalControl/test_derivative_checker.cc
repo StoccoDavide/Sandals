@@ -154,7 +154,9 @@ std::string derivative_check(std::shared_ptr<Problem> problem, Integer const int
   std::srand(5);
   VectorX const lambda{VectorX::Random(nlp.constraints_number())};
   EXPECT_LT(jacobian_error(nlp, z), 1.0e-7) << problem->name();
-  EXPECT_LT(lagrangian_hessian_error(nlp, z, 0.7, lambda), 1.0e-6) << problem->name();
+  // Central differences of the exact Jacobian with step 1e-6 amplify its round-off (about 1e-16
+  // relative, on entries up to 1e5 for the half car) to about 1e-6 relative on the Hessian
+  EXPECT_LT(lagrangian_hessian_error(nlp, z, 0.7, lambda), 2.0e-6) << problem->name();
 
   std::string const file{"derivative_check_" + problem->name() + ".txt"};
   IpoptOptions opts;
